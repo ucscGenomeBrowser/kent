@@ -437,7 +437,8 @@ time.sleep(3)
 driver.find_element(By.XPATH, "//a[text()='browser' and contains(@href,'chr16_KI270853v1_alt')]").click() # main chr16 hit is now listed before the alt hit
 #driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/div[2]/pre/a").click()
 time.sleep(3)
-driver.find_element(By.XPATH, "//td[@id='td_data_altSeqLiftOverPsl']/div[2]/map/area[3]").click()
+#driver.find_element(By.XPATH, "//td[@id='td_data_altSeqLiftOverPsl']/div[2]/map/area[3]").click()
+driver.find_element(By.XPATH, "//td[@id='td_data_altSeqLiftOverPsl']/div[2]/map/area[contains(@href,'hgc')][last()]").click() # alignment gap/insertion mouseovers now come before the item in the map
 time.sleep(3)
 driver.find_element(By.LINK_TEXT, "Show chr16_KI270853v1_alt placed on its chromosome").click()
 time.sleep(3)
@@ -455,7 +456,9 @@ driver.find_element(By.XPATH, "//a[text()='browser' and contains(@href,'chr1_MU2
 #driver.find_element(By.XPATH, "//div[@id='firstSection']/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/div[2]/pre/a").click()
 time.sleep(3)
 #driver.find_element(By.XPATH, "//td[@id='td_data_fixSeqLiftOverPsl']/div[2]/map/area[4]").click()
-driver.find_element(By.XPATH, "//td[@id='td_data_fixSeqLiftOverPsl']/div[2]/map/area[3]").click()
+#driver.find_element(By.XPATH, "//td[@id='td_data_fixSeqLiftOverPsl']/div[2]/map/area[3]").click()
+driver.find_element(By.XPATH, "//td[@id='td_data_fixSeqLiftOverPsl']/div[2]/map/area[contains(@href,'hgc')][last()]").click() # alignment gap/insertion mouseovers now come before the item in the map
+time.sleep(3)
 driver.find_element(By.LINK_TEXT, "Show chr1_MU273333v1_fix placed on its chromosome").click()
 time.sleep(3)
 

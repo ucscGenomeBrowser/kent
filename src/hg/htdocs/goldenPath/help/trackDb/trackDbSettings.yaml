@@ -2359,6 +2359,24 @@
   format: style <heatmap>
   examples:
   - style heatmap
+- name: heatmap_background
+  types:
+  - bigBed
+  roles:
+  - leaf
+  category: bigBed - Item or Region Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: This setting is for use with the heatmap style for bigBed tracks.
+  description: 'This setting is for use with the heatmap style for bigBed tracks. By default, the background
+    color for a heatmap is transparent and shows the page beneath. If a color is supplied with this setting
+    (either as a hex code like #FF0A2B or as a comma-separated RGB string like 255,32,120), it will be
+    used instead. The background color is shown in every cell that has no data to display, so care should
+    be taken to avoid having the background color match actual heatmap values.'
+  format: heatmap.background <color>
+  examples:
+  - heatmap.background 128,0,128
 - name: dotBracketField
   types:
   - bigBed
@@ -2489,6 +2507,14 @@
     drawn. If not set, the value will default to 200kb. In larger windows, glyphs are also drawn as 1
     pixel wide lines, except for the BarLeft/BarRight and ArrLeft/ArrRight glyphs, which already get narrower
     when zooming out.
+
+    decorator.default.maxDrawBases <integer>
+
+    This sets a maximum window size (in bases) above which the decorations are not drawn at all, and the
+    decorator file is not read. Decorations on items that are only a pixel or two wide are rarely worth
+    the space they take up, and decorations in adjacent mode can double or triple the height of the track.
+    If not set, or set to 0, there is no limit. There is also a box on the track configuration page for
+    this.
 
     The glyph of each decoration is set in the decorator bigBed file. Besides shapes like Circle or Star,
     which are drawn at the center of the decoration, the BarLeft/BarRight and ArrLeft/ArrRight glyphs

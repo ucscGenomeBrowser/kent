@@ -136,11 +136,14 @@ def h(name, kind, src, default=None, note=None, public=False, verified=False,
                 line is derived data: it is recomputed for display from the
                 harvester, so an edit above a read is not a citation to fix
     default     compiled-in default if the read supplies one
-    role        for boolean flags only: "gate" (a release gate, temporary by
+    role        for boolean flags: "gate" (a release gate, temporary by
                 intent, subject to sunsetting) or "knob" (a permanent
                 deployment switch, exempt).  Every cfgOptionBooleanDefault
                 flag in the tree must be one or the other; --reconcile
-                enforces that
+                enforces that.  A setting that is not a flag can be a gate
+                too when the code it controls is temporary, such as a
+                measurement that should come out once it has run, but it
+                must then carry an explicit sunset, since it has no flip
     sunset      release by which a gate should be gone from the tree.  Omit to
                 take the default of flipped + KEEP_AFTER_FLIP; the age cache
                 supplies the flip version
@@ -822,6 +825,17 @@ MIRROR_KNOBS = {
                "measurably faster to draw, so both positions have a "
                "constituency.  Its companions freeTypeDir and freeTypeFont "
                "are plain values and stay."),
+        h("freeTypeTuneUI", "flag", "hg/hgTracks/config.c", default="FALSE",
+          role="knob", ticket="38562", public=True, verified=True,
+          note="Shows a block of FreeType controls on the hgTracks configure "
+               "page: pixel size and baseline per text size, glyph gamma, the "
+               "fit-to-box multiplier, hinting and the anti-aliasing target, "
+               "with a Reset FreeType button.  The freeTypeTune.* cart "
+               "variables are read only while this is on, so a server without "
+               "it draws what it always drew.  A debugging aid for tuning "
+               "small text, not a feature waiting to ship, so it stays off by "
+               "default and is a knob.  Documented in ex.hg.conf and the "
+               "mirror manual."),
         h("trustTrackDb", "flag", "hg/lib/hdb.c", default="FALSE",
           role="knob", verified=True,
           note="Skip the per-track check that a trackDb row's table or file "
@@ -1480,7 +1494,8 @@ LOGGING = {
         h("logProxy", "debug", "hg/lib/cart.c", verified=True,
           family="proxy"),
         h("pngTimingSampleRate", "debug", "hg/hgTracks/hgTracks.c",
-          default="0", verified=True, ticket="38109",
+          default="0", verified=True, ticket="38109", role="gate",
+          sunset=508,
           note="One page load in this many measures how long the track image "
                "took to reach the reader.  hgTracks writes the rate into the "
                "page as a JavaScript variable and reportPngTiming() in "
@@ -1492,7 +1507,12 @@ LOGGING = {
                "can see, because apache stops timing once the kernel has the "
                "bytes.  Zero, or the setting left out, and nothing is written "
                "into the page, so the beacon is off.  It samples rather than "
-               "reporting every load because each report is another request."),
+               "reporting every load because each report is another request.  "
+               "A gate because the measurement is done: #38109 closed on "
+               "2026-11-03 keeping zlib level 6.  At its sunset, delete the "
+               "read in hgTracks.c, reportPngTiming() in hgTracks.js and "
+               "hg/utils/pngTiming, and any pngTimingSampleRate line left in "
+               "an hg.conf."),
     ],
 }
 
@@ -1898,38 +1918,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("freeTypeTuneUI", "flag", "hg/hgTracks/config.c", default="FALSE",
-          ticket="38562",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/config.c.  Came in at 05d90ce7ada, hgTracks: a "
-               "block of controls on the configure page for the FreeType "
-               "rendering itself, behind hg.conf freeTypeTuneUI, so the "
-               "settings that decide whether small text is readable can be "
-               "found by looking at the browser rather than at a demo "
-               "program.  The controls are the pixel size and baseline picked "
-               "for each text size, a gamma on each glyph pixel's coverage, "
-               "the multiplier used for text drawn to fit a box, the hinting "
-               "mode, and the anti-aliasing target, which now offers Light, "
-               "Light sub pixel and the four LCD sub-pixel targets beside the "
-               "Normal one the browser has always used; a Reset FreeType "
-               "button puts them all back.  Every control starts at what the "
-               "browser draws today and the cart is read only while the "
-               "hg.conf setting is on, so a server without it draws exactly "
-               "what it drew before: checked by rendering the same images "
-               "from this build and from a build of the same tree without the "
-               "change, with the setting absent and the cart carrying a value "
-               "for every control, and comparing them byte for byte.  Two "
-               "things had to be fixed before the knobs meant anything.  The "
-               "glyph copy assumed FreeType had packed the coverage rows when "
-               "it pads each one out to pitch, which is the same for every "
-               "glyph the browser draws today but would have skewed an LCD "
-               "render.  Subpixel positioning needs the unhinted advance, "
-               "since a hinted advance is rounded to a whole pixel and leaves "
-               "the pen with no fraction to stand on, which is why that mode "
-               "first came out identical to Light.  The setting is documented "
-               "in ex.hg.conf and in the mirror manual.  refs #38562.  Needs "
-               "a description and a gate or knob call."),
     ],
 }
 
@@ -2047,7 +2035,9 @@ def gate_lifecycle(cat, ages):
         tickets, ticket_from = ([], None)
         if hh and hasattr(hh, "ticket_for"):
             tickets, ticket_from = hh.ticket_for(name, ages)
-        shipped = v.get("default") == "TRUE"
+        # A gate that is not a flag has no default to flip.  Its code is
+        # already live, so it counts as shipped and waits for its sunset.
+        shipped = v.get("default") == "TRUE" or v.get("kind") != "flag"
         # A flip date with a FALSE default now means the flip was reverted, so
         # the flag is back to gating and the flip date must not drive a
         # deadline.
@@ -2571,8 +2561,10 @@ def check(cat, out=sys.stderr):
             print("    %-34s %s" % (n, ", ".join(s)), file=out)
 
     for v in all_vars(cat):
-        if v.get("role") == "gate" and v.get("kind") != "flag":
-            print("gate not of kind flag: %s" % v["name"], file=out)
+        if (v.get("role") == "gate" and v.get("kind") != "flag"
+                and not v.get("sunset")):
+            print("gate not of kind flag needs a sunset=: %s" % v["name"],
+                  file=out)
             problems += 1
         if v.get("sunset") and not v.get("role") == "gate":
             print("sunset on a non-gate: %s" % v["name"], file=out)

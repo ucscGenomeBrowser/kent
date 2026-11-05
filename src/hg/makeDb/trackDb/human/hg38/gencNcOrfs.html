@@ -1,7 +1,7 @@
 <h2>Description</h2>
 
 <p>
-The three Gencode ncORF tracks in the non-canonical ORF track container show
+The three GENCODE ncORF tracks in the non-canonical ORF track container show
 <b>non-canonical translated open reading frames (ncORFs)</b> identified
 from ribosome profiling (Ribo-seq) data and mapped to the GENCODE annotation by the
 <a href="https://www.gencodegenes.org/" target="_blank">GENCODE</a> / TransCODE consortium,
@@ -54,10 +54,9 @@ The default color scheme and available filter controls differ by track.
 <p><b>Kozak strength colors (default)</b></p>
 
 <p>
-The <b>Phase I</b> track colors items by <em>Kozak strength</em> by default.
-Two alternative color schemes can be selected from the track controls page
-(<b>Color by</b> dropdown): <em>Evidence type</em> and <em>HLA (Human Leukocyte Antigen)
-class</em> (see below).
+The <b>Phase I</b> track colors items by <em>Kozak strength</em> by default. The
+<b>Color by</b> dropdown on the track controls page offers two more options:
+<em>Evidence type</em> and <em>HLA class</em> (HLA = Human Leukocyte Antigen; see below).
 Kozak strength is based on two specific positions in the genomic sequence, counted
 relative to the A of the ATG start codon: position &minus;3 (three bases before the A)
 and position +4 (one base after the G).
@@ -71,7 +70,7 @@ and position +4 (one base after the G).
   </tr>
   <tr>
     <th style="background-color:#78AFE2;width:1.5em">&nbsp;</th>
-    <td><b>Steel blue</b>: Moderate match to the Kozak consensus. Only one of position
+    <td><b>Cornflower blue</b>: Moderate match to the Kozak consensus. Only one of position
         &minus;3 (A/G) or position +4 (G) matches.</td>
   </tr>
   <tr>
@@ -94,7 +93,7 @@ and position +4 (one base after the G).
 
 <p>
 Select <b>Color by</b>: <em>Evidence type</em> to color items by their peptide evidence
-from Deutsch et al. (see References). ORFs with no mass spectrometry evidence are gray.
+from Deutsch et al. (see References).
 </p>
 
 <table class="stdTbl">
@@ -103,11 +102,11 @@ from Deutsch et al. (see References). ORFs with no mass spectrometry evidence ar
     <td><b>Gold</b>: Annotated as a <b>peptidein</b> by Deutsch et al. (121 ORFs, Table S12).</td>
   </tr>
   <tr>
-    <th style="background-color:#468CB4;width:1.5em">&nbsp;</th>
+    <th style="background-color:#4682B4;width:1.5em">&nbsp;</th>
     <td><b>Steel blue</b>: Detected only by HLA immunopeptidomics (1,667 ORFs).</td>
   </tr>
   <tr>
-    <th style="background-color:#4CAF50;width:1.5em">&nbsp;</th>
+    <th style="background-color:#4C9900;width:1.5em">&nbsp;</th>
     <td><b>Forest green</b>: Detected only by non-HLA (whole-cell tryptic) proteomics
         (51 ORFs).</td>
   </tr>
@@ -131,7 +130,7 @@ were detected in HLA Class I, Class II, or both:
 
 <table class="stdTbl">
   <tr>
-    <th style="background-color:#468CB4;width:1.5em">&nbsp;</th>
+    <th style="background-color:#4682B4;width:1.5em">&nbsp;</th>
     <td><b>Steel blue</b>: Class I only (1,632 ORFs).</td>
   </tr>
   <tr>
@@ -149,18 +148,18 @@ were detected in HLA Class I, Class II, or both:
 </table>
 
 <p>
-The Phase I track can be filtered by:
+The Phase I track can be filtered by (in the order shown on the track controls page):
 </p>
 <ul>
-  <li>start codon</li>
-  <li>Kozak strength</li>
-  <li>Kozak TE</li>
-  <li>replicated status</li>
-  <li>peptidein status</li>
+  <li>Kozak translational efficiency</li>
   <li>HLA class</li>
   <li>HLA evidence tier</li>
-  <li>HPP guideline category</li>
-  <li>Ribo-seq quality</li>
+  <li>HLA HPP guideline category</li>
+  <li>peptidein flag</li>
+  <li>Kozak strength</li>
+  <li>replicated status</li>
+  <li>Ribo-seq support</li>
+  <li>start codon</li>
 </ul>
 
 <p>
@@ -172,9 +171,14 @@ replicated status, peptidein flag, HLA evidence tier, and HLA peptide count.
 
 <p>
 The Phase II Primary and Comprehensive tracks color items by Kozak strength using the
-same scheme as Phase I, but can only be filtered by start codon, Kozak strength, and
-Kozak TE, since peptide evidence fields are not included in the Phase II tracks.
+same scheme as Phase I. Peptide evidence fields are not included in the Phase II tracks,
+so they can only be filtered by:
 </p>
+<ul>
+  <li>Kozak translational efficiency</li>
+  <li>Kozak strength</li>
+  <li>start codon</li>
+</ul>
 
 <p>
 <b>Mouseover</b> for Phase II shows ORF name, host gene, start codon, and Kozak strength and TE.
@@ -186,7 +190,7 @@ Kozak TE, since peptide evidence fields are not included in the Phase II tracks.
 The raw data can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be accessed from
-scripts through our <a href="https://api.genome.ucsc.edu">API</a>; the track names are
+scripts through our <a href="https://api.genome.ucsc.edu">API</a>. The track names are
 &quot;gencNcOrfs&quot; (Phase I), &quot;gencNcOrfsPrimary&quot; (Phase II Primary),
 and &quot;gencNcOrfsComprehensive&quot; (Phase II Comprehensive).
 </p>
@@ -210,8 +214,8 @@ binary for your system. Instructions for downloading source code and binaries ca
 Mudge et al. (2022, see References) consolidated translation evidence from seven published
 ribosome profiling datasets that used harringtonine or lactimidomycin treatment to enrich
 for translation initiation sites. Ribo-seq reads were mapped to the GENCODE v35 annotation
-on GRCh38. Only ATG-initiated ORFs of at least 16 codons were retained, and redundant
-sense-overlapping ORFs were merged by taking the longest representative, yielding 7,264
+on hg38. Only ATG-initiated ORFs of at least 16 codons were retained, and redundant
+sense-overlapping ORFs were merged by taking the longest representative. This yielded 7,264
 ncORFs across seven biotype classes: upstream ORFs (uORFs), upstream overlapping ORFs
 (uoORFs), downstream ORFs (dORFs), downstream overlapping ORFs (doORFs), intronic ORFs
 (intORFs), lncRNA-embedded ORFs, and ORFs on processed transcripts.
@@ -227,7 +231,7 @@ Ribo-seq datasets across more cell types and tissues and mapping to GENCODE v45.
 ATG-start codon and 16-codon length restrictions were lifted to capture near-cognate
 initiations and micropeptides. A data-driven scoring framework using ribosome occupancy
 uniformity and P-site in-frame fraction identified a Primary subset of 10,127 ncORFs with
-translation signatures comparable to canonical coding genes; the Comprehensive set contains
+translation signatures comparable to canonical coding genes. The Comprehensive set contains
 all 28,359 mapped ORFs.
 </p>
 
@@ -236,10 +240,11 @@ all 28,359 mapped ORFs.
 <p>
 Each ORF was annotated with its Kozak consensus strength by fetching the 11-base genomic
 context around the start codon from hg38.2bit and classifying positions &minus;3 and +4
-relative to the A of the start codon: both matching (A/G at &minus;3 and G at +4) =
-Strong; one matching = Moderate; neither = Weak; non-ATG start = non-ATG. A numeric
-translational efficiency (TE) score was also assigned by looking up the 11-base context in
-the Noderer 2014 TE table (Mol Syst Biol 10:748, PMID&nbsp;25170020).
+relative to the A of the start codon. Both positions matching (A/G at &minus;3 and G at +4)
+gives Strong, one position matching gives Moderate, neither matching gives Weak, and a
+non-ATG start gives non-ATG. A numeric translational efficiency (TE) score was also assigned
+by looking up the 11-base context in the Noderer 2014 TE table (Mol Syst Biol 10:748,
+PMID&nbsp;25170020).
 </p>
 
 <h3>Peptide evidence and peptideins</h3>
@@ -248,7 +253,7 @@ the Noderer 2014 TE table (Mol Syst Biol 10:748, PMID&nbsp;25170020).
 Deutsch et al. (2026, see References) queried the 7,264 Phase I ORFs against two independent
 PeptideAtlas mass spectrometry repositories. The HLA immunopeptidomics build was constructed
 from HLA-I and HLA-II peptidomes across more than 100 HLA-typed donors spanning multiple
-tissue types and cancer cell lines; peptides were enriched by affinity purification and
+tissue types and cancer cell lines. Peptides were enriched by affinity purification and
 identified by tandem mass spectrometry. The whole-cell tryptic proteomics build used
 conventional shotgun proteomics from a broad range of cell lines and tissues. Spectra
 were manually reviewed and classified according to the Prensner et al. tier system (Tier 1B =
@@ -256,20 +261,18 @@ numerous HPP-quality HLA peptides; Tier 2B = a single qualifying HLA peptide; Ti
 additional non-HLA evidence). The study introduced the term <em>peptidein</em> for a
 translation product detectable by mass spectrometry but not yet annotatable as a protein due
 to absent functional evidence. The authors reviewed 137 of the 7,264 Phase I ORFs for
-annotation and classified 121 of them as peptideins (Table S12); a further 1,739 have HLA
+annotation and classified 121 of them as peptideins (Table S12). A further 1,739 have HLA
 or tryptic peptide evidence but were not classified as peptideins.
 </p>
 
 <p>
-The supplementary data tables (Tables S2, S3, S6, S7, and S12) from Deutsch et al. were
-downloaded from the paper's supplementary materials at
-<a href="https://doi.org/10.1038/s41586-026-10459-x" target="_blank">
-https://doi.org/10.1038/s41586-026-10459-x</a>.
+The supplementary data tables (Tables S2, S3, S6, S7, and S12) from Deutsch et al.
+(2026, see References) were downloaded from the paper's supplementary materials.
 Each table was joined to the Phase I bigGenePred by the short ORF identifier (e.g.,
 <code>c14riboseqorf80</code>) using the script
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/ncOrfs/addPeptideEvidence.py"
 target="_blank">addPeptideEvidence.py</a>.
-The script appended 14 new fields to all 7,264 Phase I items; the 5,353 ORFs that are not
+The script appended 14 new fields to all 7,264 Phase I items. The 5,353 ORFs that are not
 in any of these tables receive default empty values so they remain visible in the track and
 filterable on <code>isPeptidein</code> and related fields. Non-HLA peptides that map to known
 proteins or are too short to be informative were excluded (Table S2, <code>exclude</code>

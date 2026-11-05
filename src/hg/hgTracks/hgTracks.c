@@ -7737,6 +7737,13 @@ if (wikiTrackEnabled(database, NULL))
     wikiDisconnect(&conn);
     }
 
+// A recommended track set may connect hubs.  Connect them before the hub tracks are
+// added below, so they are drawn on this page.
+char *rtsLoad = cgiOptionalString( "rtsLoad");
+struct slName *rtsHubGroups = NULL;
+if (rtsLoad)
+    rtsHubGroups = recTrackSetConnectHubs(cart, rtsLoad);
+
 struct grp *grpList = NULL;
 if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
     { // If a single track was asked for and it is from a hub, then it is already in trackList
@@ -7780,7 +7787,6 @@ loadCustomTracks(&trackList);
 makeDupeTracks(&trackList);
 groupTracks( &trackList, pGroupList, grpList, vis);
 setSearchedTrackToPackOrFull(trackList);
-char *rtsLoad = cgiOptionalString( "rtsLoad");
 if (rtsLoad)  // load a recommended track set using the merge method
     {
     // store session name and user
@@ -7791,6 +7797,19 @@ if (rtsLoad)  // load a recommended track set using the merge method
     struct hash *excludeHash = newHash(2);
     hashStore(excludeHash, "user");
     changeTrackVisExclude(groupList, NULL, tvHide, excludeHash, FALSE);
+
+    // The set files have no visibility lines for hub tracks, so return the tracks of the
+    // set's own hubs to their defaults.  Otherwise they stay hidden.
+    struct group *group;
+    for (group = groupList; group != NULL; group = group->next)
+        {
+        struct slName *hubGroup;
+        for (hubGroup = rtsHubGroups; hubGroup != NULL; hubGroup = hubGroup->next)
+            if (sameString(group->name, hubGroup->name) ||
+                (startsWith(hubGroup->name, group->name) &&
+                 group->name[strlen(hubGroup->name)] == '_'))
+                changeTrackVisExclude(groupList, group->name, -1, NULL, FALSE);
+        }
 
     // delete any ordering we have
     char wildCard[32];
@@ -8392,6 +8411,10 @@ if (quickLiftDb != NULL)
 for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
         decoratorTdb = decoratorTdb->next)
     {
+    long maxDrawBases = decoratorUiMaxDrawnBaseCount(decoratorTdb, cart);
+    if (maxDrawBases > 0 && virtWinBaseCount > maxDrawBases)
+        continue;  // zoomed out past the point where these decorations say anything
+
     char *decoratorUrl = trackDbSetting(decoratorTdb, "bigDataUrl");
     if (!decoratorUrl)
         {
@@ -8488,7 +8511,8 @@ while(1)
 	    if (tdbHasDecorators(pfd->track))
 		{
 		loadDecorators(pfd->track);
-		decoratorMethods(pfd->track);
+		if (hasDecorators(pfd->track))  // nothing loaded if zoomed out past maxDrawBases
+		    decoratorMethods(pfd->track);
 		}
             }
 
@@ -8855,7 +8879,8 @@ else
     if (tdbHasDecorators(track))
         {
         loadDecorators(track);
-        decoratorMethods(track);
+        if (hasDecorators(track))  // nothing loaded if zoomed out past maxDrawBases
+            decoratorMethods(track);
         }
     }
 }
@@ -9734,7 +9759,7 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 		     * take the whole image down.  parallelLoadData does this for the threaded
 		     * path; the serial path needs it too, and over the same work, or the two
 		     * disagree about what a bad track does.  refs #38560 */
-		    unsigned connMark = hConnMark();
+		    unsigned connGeneration = hConnGeneration();
 		    struct errCatch *errCatch = errCatchNew();
 		    if (errCatchStart(errCatch))
 			loadOneTrackSerial(track, doLoadSummary);
@@ -9747,7 +9772,7 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 			 * connection cache holds sixteen, so without this a handful of
 			 * failing tracks fills it and every later track reports "Too many
 			 * open sqlConnections" instead of its own trouble.  refs #38560 */
-			hConnReleaseSince(connMark);
+			hConnFreeNewerThan(connGeneration);
 			}
 		    errCatchReWarn(errCatch);  // errCatchStart took the warnings, hand them back
 		    errCatchFree(&errCatch);

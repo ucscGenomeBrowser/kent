@@ -14,6 +14,7 @@
 #include "portable.h"
 #include "errAbort.h"
 #include <mysql.h>
+#include <pthread.h>
 #include "dlist.h"
 #include "dystring.h"
 #include "jksql.h"
@@ -2694,13 +2695,25 @@ struct sqlConnCacheEntry
     struct sqlProfile *profile;      /* profile for connection, can be NULL if host is explicit */
     struct sqlConnection *conn;      /* connection */
     boolean inUse;                   /* is this in use? */
-    unsigned checkout;               /* which checkout handed it out, see sqlConnCacheMark */
+    unsigned generation;             /* generation it was handed out in, see sqlConnCacheGeneration */
+    pthread_t owner;                 /* thread it was handed to */
 };
 
-static unsigned sqlConnCacheCheckouts = 0;
-/* Counts every connection any cache has handed out.  Not guarded by a lock: no cache in
- * this file is, and the threaded track loaders in hgTracks keep away from SQL for that
- * reason. */
+static unsigned sqlConnGeneration = 0;
+/* Counts connections handed out, across every cache, so that a point in time can be named
+ * and the connections handed out after it picked back out.
+ *
+ * Each connection is stamped with the counter's next value as it goes out, and that stamp
+ * is its generation.  One counter serves all caches, so the stamps order every checkout in
+ * the process against every other.  sqlConnCacheGeneration reads the counter without
+ * bumping it: the value it returns belongs to no connection and is not a handle to one, it
+ * only says how many have gone out so far.  A caller that reads it, does some work, and
+ * passes the value to sqlConnCacheFreeNewerThan is asking for the connections that went out
+ * during that work, and no others.  The counter is never reset; it wraps after four
+ * billion checkouts, which no CGI reaches.
+ *
+ * Not guarded by a lock: no cache in this file is, and the threaded track loaders in
+ * hgTracks keep away from SQL for that reason. */
 
 struct sqlConnCache *sqlConnCacheNewRemote(char *host, char *user,
                                            char *password)
@@ -2954,7 +2967,8 @@ if (scce != NULL)
     {
     assert(scce->conn->isFree);
     scce->inUse = TRUE;
-    scce->checkout = ++sqlConnCacheCheckouts;
+    scce->generation = ++sqlConnGeneration;
+    scce->owner = pthread_self();
     scce->conn->isFree = FALSE;
     return scce->conn;
     }
@@ -2994,10 +3008,12 @@ struct sqlConnection *sqlConnCacheProfileAllocMaybe(struct sqlConnCache *cache,
 return sqlConnCacheDoAlloc(cache, profileName, database, FALSE);
 }
 
-unsigned sqlConnCacheMark()
-/* The number of connections handed out so far, to pass to sqlConnCacheReleaseSince. */
+unsigned sqlConnCacheGeneration(void)
+/* The current connection generation, to pass to sqlConnCacheFreeNewerThan.  It counts the
+ * connections handed out so far and names none of them, so calling this takes nothing out
+ * of any cache and nothing has to be done with the value. */
 {
-return sqlConnCacheCheckouts;
+return sqlConnGeneration;
 }
 
 static void sqlConnFreeResults(struct sqlConnection *sc)
@@ -3020,18 +3036,25 @@ if (sc->resultList != NULL)
 sqlConnFreeResults(sc->failoverConn);
 }
 
-void sqlConnCacheReleaseSince(struct sqlConnCache *cache, unsigned mark)
-/* Put back every connection this cache has handed out since the mark.  For a caller that
- * catches an errAbort: the code that would have called sqlConnCacheDealloc never ran, and
- * nothing can still be holding those connections, since the stack that asked for them has
- * been unwound. */
+void sqlConnCacheFreeNewerThan(struct sqlConnCache *cache, unsigned generation)
+/* Put back every connection this cache handed out after the given generation.  For a
+ * caller that catches an errAbort: the code that would have called sqlConnCacheDealloc
+ * never ran, and nothing can still be holding those connections, since the stack that
+ * asked for them has been unwound.
+ *
+ * Only connections handed to the calling thread are put back.  Another thread's stack has
+ * not been unwound, so its connections are still in use however new they are.  Nothing in
+ * hgTracks hits that today, since the loader threads keep away from SQL, but there is
+ * nothing to stop one, and taking a live connection away from a running thread would be
+ * far worse than the leak this is here to clean up. */
 {
 struct sqlConnCacheEntry *scce;
 if (cache == NULL)
     return;
+pthread_t self = pthread_self();
 for (scce = cache->entries; scce != NULL; scce = scce->next)
     {
-    if (scce->inUse && (scce->checkout > mark))
+    if (scce->inUse && (scce->generation > generation) && pthread_equal(scce->owner, self))
         {
         sqlConnFreeResults(scce->conn);
         scce->inUse = FALSE;

@@ -85,6 +85,18 @@ else
 fi
 echo ""
 # Check for split lineages / sequences to prune:
+echo "Checking for split lineages"
 grep 'prune ' split_lineages.txt | cat
+# Check for lineages annotated on only one sequence (happens when the path is missing a mutation,
+# and only one sequence that reverts that mutation is annotated as the lineage)
+echo "Checking for single-sample annotations"
+tawk '$2 !~ /^node_/ && $2 != "root_id" { print $1, $2; }' clade-paths
 set -o pipefail
 set -x
+
+# Make a minimized lineageTree.pb for pangolin with the latest unreleased annotations.
+if ! $scriptDir/makeLineageTreePb.sh $today >& makeLineageTreePb.log; then
+    echo "*** makeLineageTreePb.sh failed -- debug it (see $(pwd)/makeLineageTreePb.log) ***"
+else
+    echo "makeLineageTreePb.sh ran successfully."
+fi

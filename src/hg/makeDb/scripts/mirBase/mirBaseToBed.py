@@ -280,13 +280,13 @@ def bed(gffFile, foldFile, bedOut, armsOut):
         for p in pres:
             ms = sorted(assigned.get(p["id"], []), key=lambda x: x[0]["start"])
             byArm = defaultdict(list)
-            armPos, armText = [], []
+            armPos, armText = [], defaultdict(list)
             for m, arm in ms:
                 armCount[arm] += 1
                 byArm[arm].append(m)
                 s, e = armRange(p, m["start"], m["end"])
                 armPos.append((s, e, arm))
-                armText.append("%s %s:%d-%d" % (m["name"], m["chrom"], m["start"] + 1, m["end"]))
+                armText[arm].append("%s %s:%d-%d" % (m["name"], m["chrom"], m["start"] + 1, m["end"]))
                 color, fill = ARM_COLORS[arm]
                 aOut.write("\t".join(str(x) for x in [
                     m["chrom"], m["start"], m["end"], m["name"], 0, m["strand"],
@@ -303,9 +303,9 @@ def bed(gffFile, foldFile, bedOut, armsOut):
                 dotBracket = refolded[p["id"]][0]
             out.write("\t".join([p["chrom"], str(p["start"]), str(p["end"]), p["name"], "0",
                 p["strand"], p["acc"],
-                ",".join(m["name"] for m in byArm["5p"]), ",".join(m["acc"] for m in byArm["5p"]),
-                ",".join(m["name"] for m in byArm["3p"]), ",".join(m["acc"] for m in byArm["3p"]),
-                ", ".join(armText), mfe, foldType(refolded, p["id"]), seq, dotBracket,
+                ",".join(m["name"] for m in byArm["5p"]) or "-", ",".join(m["acc"] for m in byArm["5p"]),
+                ",".join(m["name"] for m in byArm["3p"]) or "-", ",".join(m["acc"] for m in byArm["3p"]),
+                ", ".join(armText["5p"]) or "-", ", ".join(armText["3p"]) or "-", mfe, foldType(refolded, p["id"]), seq, dotBracket,
                 ",".join("%d-%d:%s" % a for a in armPos)]) + "\n")
     print("matures per arm: " + ", ".join("%s %d" % kv for kv in sorted(armCount.items())),
           file=sys.stderr)

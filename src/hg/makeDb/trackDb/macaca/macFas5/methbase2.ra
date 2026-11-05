@@ -4,7 +4,7 @@ parent dnaMethylation
 metaDataUrl /gbdb/macFas5/methBase2/mb2_macFas5_metadata.tsv
 colorSettingsUrl /gbdb/macFas5/methBase2/mb2_macFas5_colors.json
 primaryKey accession
-dataTypes hmr levels reads
+dataTypes hmr pmd levels reads
 maxCheckboxes 20
 shortLabel Methbase
 longLabel Methbase
@@ -13,7 +13,7 @@ visibility hide
 subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ study=https://www.ncbi.nlm.nih.gov/sra/$$ sample=https://www.ncbi.nlm.nih.gov/sra/$$
 
 track Methbase_ERX3247634_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247634/ERX3247634.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247634/ERX3247634.hmr.bb
 type bigBed
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247634
@@ -21,9 +21,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00001
 onlyVisibility dense
+visibility hide
 
 track Methbase_ERX3247634_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247634/ERX3247634.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247634/ERX3247634.sym_counts.bw
 type bigWig
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247634
@@ -35,12 +36,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00002
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247634_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247634/ERX3247634.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247634/ERX3247634.sym_coverage.bw
 type bigWig
-shortLabel ERS3224074
-longLabel ERS3224074 ERX3247634
+shortLabel ERS3224074 Reads
+longLabel ERS3224074 Reads ERX3247634
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -49,9 +51,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00003
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247635_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247635/ERX3247635.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247635/ERX3247635.hmr.bb
 type bigBed
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247635
@@ -59,9 +62,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00004
 onlyVisibility dense
+visibility hide
 
 track Methbase_ERX3247635_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247635/ERX3247635.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247635/ERX3247635.sym_counts.bw
 type bigWig
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247635
@@ -73,12 +77,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00005
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247635_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247635/ERX3247635.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247635/ERX3247635.sym_coverage.bw
 type bigWig
-shortLabel ERS3224074
-longLabel ERS3224074 ERX3247635
+shortLabel ERS3224074 Reads
+longLabel ERS3224074 Reads ERX3247635
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -87,9 +92,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00006
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247636_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247636/ERX3247636.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247636/ERX3247636.hmr.bb
 type bigBed
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247636
@@ -97,9 +103,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00007
 onlyVisibility dense
+visibility hide
 
 track Methbase_ERX3247636_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247636/ERX3247636.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247636/ERX3247636.sym_counts.bw
 type bigWig
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247636
@@ -111,12 +118,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00008
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247636_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247636/ERX3247636.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247636/ERX3247636.sym_coverage.bw
 type bigWig
-shortLabel ERS3224074
-longLabel ERS3224074 ERX3247636
+shortLabel ERS3224074 Reads
+longLabel ERS3224074 Reads ERX3247636
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -125,9 +133,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00009
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247637_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247637/ERX3247637.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247637/ERX3247637.hmr.bb
 type bigBed
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247637
@@ -135,9 +144,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00010
 onlyVisibility dense
+visibility hide
 
 track Methbase_ERX3247637_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247637/ERX3247637.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247637/ERX3247637.sym_counts.bw
 type bigWig
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247637
@@ -149,12 +159,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00011
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247637_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247637/ERX3247637.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247637/ERX3247637.sym_coverage.bw
 type bigWig
-shortLabel ERS3224074
-longLabel ERS3224074 ERX3247637
+shortLabel ERS3224074 Reads
+longLabel ERS3224074 Reads ERX3247637
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -163,9 +174,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00012
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247638_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247638/ERX3247638.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247638/ERX3247638.hmr.bb
 type bigBed
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247638
@@ -173,9 +185,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00013
 onlyVisibility dense
+visibility hide
 
 track Methbase_ERX3247638_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247638/ERX3247638.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247638/ERX3247638.sym_counts.bw
 type bigWig
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247638
@@ -187,12 +200,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00014
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247638_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247638/ERX3247638.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247638/ERX3247638.sym_coverage.bw
 type bigWig
-shortLabel ERS3224074
-longLabel ERS3224074 ERX3247638
+shortLabel ERS3224074 Reads
+longLabel ERS3224074 Reads ERX3247638
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -201,9 +215,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00015
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247639_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247639/ERX3247639.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247639/ERX3247639.hmr.bb
 type bigBed
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247639
@@ -211,9 +226,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00016
 onlyVisibility dense
+visibility hide
 
 track Methbase_ERX3247639_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247639/ERX3247639.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247639/ERX3247639.sym_counts.bw
 type bigWig
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247639
@@ -225,12 +241,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00017
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247639_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247639/ERX3247639.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247639/ERX3247639.sym_coverage.bw
 type bigWig
-shortLabel ERS3224074
-longLabel ERS3224074 ERX3247639
+shortLabel ERS3224074 Reads
+longLabel ERS3224074 Reads ERX3247639
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -239,9 +256,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00018
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247640_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247640/ERX3247640.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247640/ERX3247640.hmr.bb
 type bigBed
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247640
@@ -249,9 +267,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00019
 onlyVisibility dense
+visibility hide
 
 track Methbase_ERX3247640_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247640/ERX3247640.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247640/ERX3247640.sym_counts.bw
 type bigWig
 shortLabel ERS3224074
 longLabel ERS3224074 ERX3247640
@@ -263,12 +282,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00020
 onlyVisibility full
+visibility hide
 
 track Methbase_ERX3247640_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/ERP114295/ERS3224074/ERX3247640/ERX3247640.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/ERP114295/ERS3224074/ERX3247640/ERX3247640.sym_coverage.bw
 type bigWig
-shortLabel ERS3224074
-longLabel ERS3224074 ERX3247640
+shortLabel ERS3224074 Reads
+longLabel ERS3224074 Reads ERX3247640
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -277,9 +297,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00021
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX10193932_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP308665/SRS8340450/SRX10193932/SRX10193932.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP308665/SRS8340450/SRX10193932/SRX10193932.hmr.bb
 type bigBed
 shortLabel Sperm
 longLabel Sperm SRX10193932
@@ -287,9 +308,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00022
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX10193932_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP308665/SRS8340450/SRX10193932/SRX10193932.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP308665/SRS8340450/SRX10193932/SRX10193932.sym_counts.bw
 type bigWig
 shortLabel Sperm
 longLabel Sperm SRX10193932
@@ -301,12 +323,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00023
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX10193932_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP308665/SRS8340450/SRX10193932/SRX10193932.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP308665/SRS8340450/SRX10193932/SRX10193932.sym_coverage.bw
 type bigWig
-shortLabel Sperm
-longLabel Sperm SRX10193932
+shortLabel Sperm Reads
+longLabel Sperm Reads SRX10193932
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -315,9 +338,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00024
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX10193933_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP308665/SRS8340451/SRX10193933/SRX10193933.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP308665/SRS8340451/SRX10193933/SRX10193933.hmr.bb
 type bigBed
 shortLabel Sperm
 longLabel Sperm SRX10193933
@@ -325,9 +349,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00025
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX10193933_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP308665/SRS8340451/SRX10193933/SRX10193933.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP308665/SRS8340451/SRX10193933/SRX10193933.sym_counts.bw
 type bigWig
 shortLabel Sperm
 longLabel Sperm SRX10193933
@@ -339,12 +364,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00026
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX10193933_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP308665/SRS8340451/SRX10193933/SRX10193933.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP308665/SRS8340451/SRX10193933/SRX10193933.sym_coverage.bw
 type bigWig
-shortLabel Sperm
-longLabel Sperm SRX10193933
+shortLabel Sperm Reads
+longLabel Sperm Reads SRX10193933
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -353,9 +379,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00027
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038213_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455723/SRX19038213/SRX19038213.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455723/SRX19038213/SRX19038213.hmr.bb
 type bigBed
 shortLabel Placenta
 longLabel Placenta SRX19038213
@@ -363,9 +390,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00028
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038213_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455723/SRX19038213/SRX19038213.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455723/SRX19038213/SRX19038213.sym_counts.bw
 type bigWig
 shortLabel Placenta
 longLabel Placenta SRX19038213
@@ -377,12 +405,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00029
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038213_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455723/SRX19038213/SRX19038213.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455723/SRX19038213/SRX19038213.sym_coverage.bw
 type bigWig
-shortLabel Placenta
-longLabel Placenta SRX19038213
+shortLabel Placenta Reads
+longLabel Placenta Reads SRX19038213
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -391,9 +420,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00030
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038214_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455724/SRX19038214/SRX19038214.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455724/SRX19038214/SRX19038214.hmr.bb
 type bigBed
 shortLabel Placenta
 longLabel Placenta SRX19038214
@@ -401,9 +431,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00031
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038214_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455724/SRX19038214/SRX19038214.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455724/SRX19038214/SRX19038214.sym_counts.bw
 type bigWig
 shortLabel Placenta
 longLabel Placenta SRX19038214
@@ -415,12 +446,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00032
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038214_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455724/SRX19038214/SRX19038214.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455724/SRX19038214/SRX19038214.sym_coverage.bw
 type bigWig
-shortLabel Placenta
-longLabel Placenta SRX19038214
+shortLabel Placenta Reads
+longLabel Placenta Reads SRX19038214
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -429,9 +461,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00033
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038216_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455726/SRX19038216/SRX19038216.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455726/SRX19038216/SRX19038216.hmr.bb
 type bigBed
 shortLabel Placenta
 longLabel Placenta SRX19038216
@@ -439,9 +472,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00034
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038216_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455726/SRX19038216/SRX19038216.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455726/SRX19038216/SRX19038216.sym_counts.bw
 type bigWig
 shortLabel Placenta
 longLabel Placenta SRX19038216
@@ -453,12 +487,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00035
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038216_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455726/SRX19038216/SRX19038216.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455726/SRX19038216/SRX19038216.sym_coverage.bw
 type bigWig
-shortLabel Placenta
-longLabel Placenta SRX19038216
+shortLabel Placenta Reads
+longLabel Placenta Reads SRX19038216
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -467,9 +502,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00036
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038217_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455727/SRX19038217/SRX19038217.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455727/SRX19038217/SRX19038217.hmr.bb
 type bigBed
 shortLabel Placenta
 longLabel Placenta SRX19038217
@@ -477,9 +513,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00037
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038217_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455727/SRX19038217/SRX19038217.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455727/SRX19038217/SRX19038217.sym_counts.bw
 type bigWig
 shortLabel Placenta
 longLabel Placenta SRX19038217
@@ -491,12 +528,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00038
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038217_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455727/SRX19038217/SRX19038217.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455727/SRX19038217/SRX19038217.sym_coverage.bw
 type bigWig
-shortLabel Placenta
-longLabel Placenta SRX19038217
+shortLabel Placenta Reads
+longLabel Placenta Reads SRX19038217
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -505,9 +543,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00039
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038218_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455728/SRX19038218/SRX19038218.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455728/SRX19038218/SRX19038218.hmr.bb
 type bigBed
 shortLabel Placenta
 longLabel Placenta SRX19038218
@@ -515,9 +554,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00040
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038218_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455728/SRX19038218/SRX19038218.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455728/SRX19038218/SRX19038218.sym_counts.bw
 type bigWig
 shortLabel Placenta
 longLabel Placenta SRX19038218
@@ -529,12 +569,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00041
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038218_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455728/SRX19038218/SRX19038218.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455728/SRX19038218/SRX19038218.sym_coverage.bw
 type bigWig
-shortLabel Placenta
-longLabel Placenta SRX19038218
+shortLabel Placenta Reads
+longLabel Placenta Reads SRX19038218
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -543,9 +584,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00042
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038220_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455730/SRX19038220/SRX19038220.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455730/SRX19038220/SRX19038220.hmr.bb
 type bigBed
 shortLabel In Vitro Cultured Embryos
 longLabel In Vitro Cultured Embryos SRX19038220
@@ -553,9 +595,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00043
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038220_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455730/SRX19038220/SRX19038220.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455730/SRX19038220/SRX19038220.sym_counts.bw
 type bigWig
 shortLabel In Vitro Cultured Embryos
 longLabel In Vitro Cultured Embryos SRX19038220
@@ -567,12 +610,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00044
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038220_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455730/SRX19038220/SRX19038220.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455730/SRX19038220/SRX19038220.sym_coverage.bw
 type bigWig
-shortLabel In Vitro Cultured Embryos
-longLabel In Vitro Cultured Embryos SRX19038220
+shortLabel In Vitro Cultured Embryos Reads
+longLabel In Vitro Cultured Embryos Reads SRX19038220
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -581,9 +625,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00045
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038221_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455731/SRX19038221/SRX19038221.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455731/SRX19038221/SRX19038221.hmr.bb
 type bigBed
 shortLabel In Vitro Cultured Embryos
 longLabel In Vitro Cultured Embryos SRX19038221
@@ -591,9 +636,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00046
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038221_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455731/SRX19038221/SRX19038221.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455731/SRX19038221/SRX19038221.sym_counts.bw
 type bigWig
 shortLabel In Vitro Cultured Embryos
 longLabel In Vitro Cultured Embryos SRX19038221
@@ -605,12 +651,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00047
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038221_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455731/SRX19038221/SRX19038221.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455731/SRX19038221/SRX19038221.sym_coverage.bw
 type bigWig
-shortLabel In Vitro Cultured Embryos
-longLabel In Vitro Cultured Embryos SRX19038221
+shortLabel In Vitro Cultured Embryos Reads
+longLabel In Vitro Cultured Embryos Reads SRX19038221
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -619,9 +666,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00048
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038222_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455732/SRX19038222/SRX19038222.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455732/SRX19038222/SRX19038222.hmr.bb
 type bigBed
 shortLabel In Vitro Cultured Embryos
 longLabel In Vitro Cultured Embryos SRX19038222
@@ -629,9 +677,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00049
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038222_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455732/SRX19038222/SRX19038222.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455732/SRX19038222/SRX19038222.sym_counts.bw
 type bigWig
 shortLabel In Vitro Cultured Embryos
 longLabel In Vitro Cultured Embryos SRX19038222
@@ -643,12 +692,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00050
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038222_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455732/SRX19038222/SRX19038222.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455732/SRX19038222/SRX19038222.sym_coverage.bw
 type bigWig
-shortLabel In Vitro Cultured Embryos
-longLabel In Vitro Cultured Embryos SRX19038222
+shortLabel In Vitro Cultured Embryos Reads
+longLabel In Vitro Cultured Embryos Reads SRX19038222
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -657,9 +707,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00051
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038223_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455733/SRX19038223/SRX19038223.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455733/SRX19038223/SRX19038223.hmr.bb
 type bigBed
 shortLabel In Vitro Cultured Embryos
 longLabel In Vitro Cultured Embryos SRX19038223
@@ -667,9 +718,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00052
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038223_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455733/SRX19038223/SRX19038223.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455733/SRX19038223/SRX19038223.sym_counts.bw
 type bigWig
 shortLabel In Vitro Cultured Embryos
 longLabel In Vitro Cultured Embryos SRX19038223
@@ -681,12 +733,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00053
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038223_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455733/SRX19038223/SRX19038223.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455733/SRX19038223/SRX19038223.sym_coverage.bw
 type bigWig
-shortLabel In Vitro Cultured Embryos
-longLabel In Vitro Cultured Embryos SRX19038223
+shortLabel In Vitro Cultured Embryos Reads
+longLabel In Vitro Cultured Embryos Reads SRX19038223
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -695,9 +748,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00054
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038224_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455734/SRX19038224/SRX19038224.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455734/SRX19038224/SRX19038224.hmr.bb
 type bigBed
 shortLabel Placenta
 longLabel Placenta SRX19038224
@@ -705,9 +759,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00055
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038224_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455734/SRX19038224/SRX19038224.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455734/SRX19038224/SRX19038224.sym_counts.bw
 type bigWig
 shortLabel Placenta
 longLabel Placenta SRX19038224
@@ -719,12 +774,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00056
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038224_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455734/SRX19038224/SRX19038224.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455734/SRX19038224/SRX19038224.sym_coverage.bw
 type bigWig
-shortLabel Placenta
-longLabel Placenta SRX19038224
+shortLabel Placenta Reads
+longLabel Placenta Reads SRX19038224
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -733,9 +789,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00057
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038225_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455735/SRX19038225/SRX19038225.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455735/SRX19038225/SRX19038225.hmr.bb
 type bigBed
 shortLabel Placenta
 longLabel Placenta SRX19038225
@@ -743,9 +800,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00058
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038225_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455735/SRX19038225/SRX19038225.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455735/SRX19038225/SRX19038225.sym_counts.bw
 type bigWig
 shortLabel Placenta
 longLabel Placenta SRX19038225
@@ -757,12 +815,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00059
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038225_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455735/SRX19038225/SRX19038225.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455735/SRX19038225/SRX19038225.sym_coverage.bw
 type bigWig
-shortLabel Placenta
-longLabel Placenta SRX19038225
+shortLabel Placenta Reads
+longLabel Placenta Reads SRX19038225
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -771,9 +830,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00060
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038226_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455736/SRX19038226/SRX19038226.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455736/SRX19038226/SRX19038226.hmr.bb
 type bigBed
 shortLabel Placenta
 longLabel Placenta SRX19038226
@@ -781,9 +841,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00061
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX19038226_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455736/SRX19038226/SRX19038226.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455736/SRX19038226/SRX19038226.sym_counts.bw
 type bigWig
 shortLabel Placenta
 longLabel Placenta SRX19038226
@@ -795,12 +856,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00062
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX19038226_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP417565/SRS16455736/SRX19038226/SRX19038226.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP417565/SRS16455736/SRX19038226/SRX19038226.sym_coverage.bw
 type bigWig
-shortLabel Placenta
-longLabel Placenta SRX19038226
+shortLabel Placenta Reads
+longLabel Placenta Reads SRX19038226
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -809,9 +871,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00063
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX21206137_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463615/SRX21206137/SRX21206137.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463615/SRX21206137/SRX21206137.hmr.bb
 type bigBed
 shortLabel Trophoblast
 longLabel Trophoblast SRX21206137
@@ -819,9 +882,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00064
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX21206137_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463615/SRX21206137/SRX21206137.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463615/SRX21206137/SRX21206137.sym_counts.bw
 type bigWig
 shortLabel Trophoblast
 longLabel Trophoblast SRX21206137
@@ -833,12 +897,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00065
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX21206137_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463615/SRX21206137/SRX21206137.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463615/SRX21206137/SRX21206137.sym_coverage.bw
 type bigWig
-shortLabel Trophoblast
-longLabel Trophoblast SRX21206137
+shortLabel Trophoblast Reads
+longLabel Trophoblast Reads SRX21206137
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -847,9 +912,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00066
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX21206138_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463616/SRX21206138/SRX21206138.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463616/SRX21206138/SRX21206138.hmr.bb
 type bigBed
 shortLabel Trophoblast
 longLabel Trophoblast SRX21206138
@@ -857,9 +923,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00067
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX21206138_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463616/SRX21206138/SRX21206138.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463616/SRX21206138/SRX21206138.sym_counts.bw
 type bigWig
 shortLabel Trophoblast
 longLabel Trophoblast SRX21206138
@@ -871,12 +938,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00068
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX21206138_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463616/SRX21206138/SRX21206138.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463616/SRX21206138/SRX21206138.sym_coverage.bw
 type bigWig
-shortLabel Trophoblast
-longLabel Trophoblast SRX21206138
+shortLabel Trophoblast Reads
+longLabel Trophoblast Reads SRX21206138
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -885,9 +953,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00069
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX21206139_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463618/SRX21206139/SRX21206139.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463618/SRX21206139/SRX21206139.hmr.bb
 type bigBed
 shortLabel Trophoblast
 longLabel Trophoblast SRX21206139
@@ -895,9 +964,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00070
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX21206139_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463618/SRX21206139/SRX21206139.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463618/SRX21206139/SRX21206139.sym_counts.bw
 type bigWig
 shortLabel Trophoblast
 longLabel Trophoblast SRX21206139
@@ -909,12 +979,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00071
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX21206139_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463618/SRX21206139/SRX21206139.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463618/SRX21206139/SRX21206139.sym_coverage.bw
 type bigWig
-shortLabel Trophoblast
-longLabel Trophoblast SRX21206139
+shortLabel Trophoblast Reads
+longLabel Trophoblast Reads SRX21206139
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -923,9 +994,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00072
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX21206140_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463617/SRX21206140/SRX21206140.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463617/SRX21206140/SRX21206140.hmr.bb
 type bigBed
 shortLabel Trophoblast
 longLabel Trophoblast SRX21206140
@@ -933,9 +1005,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00073
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX21206140_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463617/SRX21206140/SRX21206140.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463617/SRX21206140/SRX21206140.sym_counts.bw
 type bigWig
 shortLabel Trophoblast
 longLabel Trophoblast SRX21206140
@@ -947,12 +1020,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00074
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX21206140_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP452488/SRS18463617/SRX21206140/SRX21206140.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP452488/SRS18463617/SRX21206140/SRX21206140.sym_coverage.bw
 type bigWig
-shortLabel Trophoblast
-longLabel Trophoblast SRX21206140
+shortLabel Trophoblast Reads
+longLabel Trophoblast Reads SRX21206140
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -961,9 +1035,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00075
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX9275489_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504038/SRX9275489/SRX9275489.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504038/SRX9275489/SRX9275489.sym_counts.bw
 type bigWig
 shortLabel Embryos
 longLabel Embryos SRX9275489
@@ -975,12 +1050,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00076
 onlyVisibility full
+visibility full
 
 track Methbase_SRX9275489_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504038/SRX9275489/SRX9275489.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504038/SRX9275489/SRX9275489.sym_coverage.bw
 type bigWig
-shortLabel Embryos
-longLabel Embryos SRX9275489
+shortLabel Embryos Reads
+longLabel Embryos Reads SRX9275489
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -989,9 +1065,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00077
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX9275490_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504039/SRX9275490/SRX9275490.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504039/SRX9275490/SRX9275490.hmr.bb
 type bigBed
 shortLabel Embryos
 longLabel Embryos SRX9275490
@@ -999,9 +1076,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00078
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX9275490_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504039/SRX9275490/SRX9275490.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504039/SRX9275490/SRX9275490.sym_counts.bw
 type bigWig
 shortLabel Embryos
 longLabel Embryos SRX9275490
@@ -1013,12 +1091,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00079
 onlyVisibility full
+visibility full
 
 track Methbase_SRX9275490_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504039/SRX9275490/SRX9275490.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504039/SRX9275490/SRX9275490.sym_coverage.bw
 type bigWig
-shortLabel Embryos
-longLabel Embryos SRX9275490
+shortLabel Embryos Reads
+longLabel Embryos Reads SRX9275490
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1027,9 +1106,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00080
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX9275491_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504040/SRX9275491/SRX9275491.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504040/SRX9275491/SRX9275491.hmr.bb
 type bigBed
 shortLabel Cortex
 longLabel Cortex SRX9275491
@@ -1037,9 +1117,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00081
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX9275491_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504040/SRX9275491/SRX9275491.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504040/SRX9275491/SRX9275491.sym_counts.bw
 type bigWig
 shortLabel Cortex
 longLabel Cortex SRX9275491
@@ -1051,12 +1132,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00082
 onlyVisibility full
+visibility full
 
 track Methbase_SRX9275491_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504040/SRX9275491/SRX9275491.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504040/SRX9275491/SRX9275491.sym_coverage.bw
 type bigWig
-shortLabel Cortex
-longLabel Cortex SRX9275491
+shortLabel Cortex Reads
+longLabel Cortex Reads SRX9275491
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1065,9 +1147,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00083
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX9275492_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504041/SRX9275492/SRX9275492.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504041/SRX9275492/SRX9275492.hmr.bb
 type bigBed
 shortLabel Cerebellum
 longLabel Cerebellum SRX9275492
@@ -1075,9 +1158,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00084
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX9275492_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504041/SRX9275492/SRX9275492.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504041/SRX9275492/SRX9275492.sym_counts.bw
 type bigWig
 shortLabel Cerebellum
 longLabel Cerebellum SRX9275492
@@ -1089,12 +1173,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00085
 onlyVisibility full
+visibility full
 
 track Methbase_SRX9275492_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504041/SRX9275492/SRX9275492.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504041/SRX9275492/SRX9275492.sym_coverage.bw
 type bigWig
-shortLabel Cerebellum
-longLabel Cerebellum SRX9275492
+shortLabel Cerebellum Reads
+longLabel Cerebellum Reads SRX9275492
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1103,9 +1188,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00086
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX9275493_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504042/SRX9275493/SRX9275493.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504042/SRX9275493/SRX9275493.hmr.bb
 type bigBed
 shortLabel Heart
 longLabel Heart SRX9275493
@@ -1113,9 +1199,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00087
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX9275493_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504042/SRX9275493/SRX9275493.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504042/SRX9275493/SRX9275493.sym_counts.bw
 type bigWig
 shortLabel Heart
 longLabel Heart SRX9275493
@@ -1127,12 +1214,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00088
 onlyVisibility full
+visibility full
 
 track Methbase_SRX9275493_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504042/SRX9275493/SRX9275493.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504042/SRX9275493/SRX9275493.sym_coverage.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX9275493
+shortLabel Heart Reads
+longLabel Heart Reads SRX9275493
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1141,9 +1229,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00089
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX9275494_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504043/SRX9275494/SRX9275494.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504043/SRX9275494/SRX9275494.hmr.bb
 type bigBed
 shortLabel Liver
 longLabel Liver SRX9275494
@@ -1151,9 +1240,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00090
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX9275494_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504043/SRX9275494/SRX9275494.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504043/SRX9275494/SRX9275494.sym_counts.bw
 type bigWig
 shortLabel Liver
 longLabel Liver SRX9275494
@@ -1165,12 +1255,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00091
 onlyVisibility full
+visibility full
 
 track Methbase_SRX9275494_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504043/SRX9275494/SRX9275494.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504043/SRX9275494/SRX9275494.sym_coverage.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX9275494
+shortLabel Liver Reads
+longLabel Liver Reads SRX9275494
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1179,9 +1270,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00092
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX9275495_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504044/SRX9275495/SRX9275495.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504044/SRX9275495/SRX9275495.hmr.bb
 type bigBed
 shortLabel Kidney
 longLabel Kidney SRX9275495
@@ -1189,9 +1281,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00093
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX9275495_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504044/SRX9275495/SRX9275495.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504044/SRX9275495/SRX9275495.sym_counts.bw
 type bigWig
 shortLabel Kidney
 longLabel Kidney SRX9275495
@@ -1203,12 +1296,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00094
 onlyVisibility full
+visibility full
 
 track Methbase_SRX9275495_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504044/SRX9275495/SRX9275495.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504044/SRX9275495/SRX9275495.sym_coverage.bw
 type bigWig
-shortLabel Kidney
-longLabel Kidney SRX9275495
+shortLabel Kidney Reads
+longLabel Kidney Reads SRX9275495
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1217,9 +1311,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00095
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX9275496_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504045/SRX9275496/SRX9275496.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504045/SRX9275496/SRX9275496.hmr.bb
 type bigBed
 shortLabel Small Intestine
 longLabel Small Intestine SRX9275496
@@ -1227,9 +1322,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00096
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX9275496_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504045/SRX9275496/SRX9275496.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504045/SRX9275496/SRX9275496.sym_counts.bw
 type bigWig
 shortLabel Small Intestine
 longLabel Small Intestine SRX9275496
@@ -1241,12 +1337,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00097
 onlyVisibility full
+visibility full
 
 track Methbase_SRX9275496_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504045/SRX9275496/SRX9275496.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504045/SRX9275496/SRX9275496.sym_coverage.bw
 type bigWig
-shortLabel Small Intestine
-longLabel Small Intestine SRX9275496
+shortLabel Small Intestine Reads
+longLabel Small Intestine Reads SRX9275496
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1255,9 +1352,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00098
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX9275497_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504046/SRX9275497/SRX9275497.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504046/SRX9275497/SRX9275497.hmr.bb
 type bigBed
 shortLabel Placenta
 longLabel Placenta SRX9275497
@@ -1265,9 +1363,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00099
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX9275497_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504046/SRX9275497/SRX9275497.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504046/SRX9275497/SRX9275497.sym_counts.bw
 type bigWig
 shortLabel Placenta
 longLabel Placenta SRX9275497
@@ -1279,12 +1378,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00100
 onlyVisibility full
+visibility full
 
 track Methbase_SRX9275497_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP286979/SRS7504046/SRX9275497/SRX9275497.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP286979/SRS7504046/SRX9275497/SRX9275497.sym_coverage.bw
 type bigWig
-shortLabel Placenta
-longLabel Placenta SRX9275497
+shortLabel Placenta Reads
+longLabel Placenta Reads SRX9275497
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1293,3 +1393,4 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00101
 onlyVisibility full
+visibility hide

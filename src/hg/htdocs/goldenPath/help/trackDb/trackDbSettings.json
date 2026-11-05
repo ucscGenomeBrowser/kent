@@ -1458,6 +1458,20 @@
    "desc": "BigBed tracks can be created with a variety of extra fields."
   },
   {
+   "key": "heatmap_background",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "heatmap.background <color>",
+   "ex": "heatmap.background 128,0,128",
+   "desc": "This setting is for use with the heatmap style for bigBed tracks."
+  },
+  {
    "key": "dotBracketField",
    "category": "bigBed - Item or Region Track Settings",
    "roles": [

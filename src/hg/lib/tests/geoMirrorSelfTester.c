@@ -39,16 +39,17 @@ static void readTwoNodes()
 char *node = geoMirrorNode();
 if (node == NULL)
     errAbort("browser.node is not set, so this test has nothing to ask about");
+char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");   // the table geoMirror.c reads
 struct sqlConnection *conn = hConnectCentral();
 char query[256];
-sqlSafef(query, sizeof query, "select domain from gbNode where node = '%s'", node);
+sqlSafef(query, sizeof query, "select domain from gbNode%s where node = '%s'", geoSuffix, node);
 configuredDomain = sqlQuickString(conn, query);
-sqlSafef(query, sizeof query, "select domain from gbNode where node != '%s' order by node "
-         "limit 1", node);
+sqlSafef(query, sizeof query, "select domain from gbNode%s where node != '%s' order by node "
+         "limit 1", geoSuffix, node);
 otherDomain = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 if (isEmpty(configuredDomain) || isEmpty(otherDomain))
-    errAbort("gbNode needs a row for browser.node and at least one other row");
+    errAbort("gbNode%s needs a row for browser.node and at least one other row", geoSuffix);
 }
 
 static char *nameFor(char *domain)

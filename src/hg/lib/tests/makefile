@@ -140,9 +140,9 @@ cartHubDatabaseTest: mkdirs
 # Run twice, with the collectionHubCopyOnWrite gate set on and off by name.  Outside a CGI the
 # trash directory is ".", so it runs in a fresh output/run each time, with sessionDataDir
 # there too, and it writes hubStatus rows to hgcentralregress.
-collectionHubCopyTest: mkdirs
+collectionHubCopyTest: mkdirs ${BIN_DIR}/hgConfValue
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/collectionHubCopyTester collectionHubCopyTester.c ${MYLIBS} $L
-	./makeHgCentralRegress.sh > /dev/null
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
 	rm -f output/collectionHubCopyTest
 	for gate in on off; do \
 	    echo "include ${HOME}/.hg.conf" > output/collection.$$gate.conf; \
@@ -188,9 +188,9 @@ dataVersionPathTest: mkdirs
 
 # Writes dbDb, asmAlias and genark rows to hgcentralregress, like hubSpaceKeysTest.
 # genarkHubPrefix is set by name, since isGenArk() needs it and ~/.hg.conf need not have it.
-asmAliasActiveDbTest: mkdirs
+asmAliasActiveDbTest: mkdirs ${BIN_DIR}/hgConfValue
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/asmAliasActiveDbTester asmAliasActiveDbTester.c ${MYLIBS} $L
-	./makeHgCentralRegress.sh > /dev/null
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
 	echo "include ${HOME}/.hg.conf" > output/asmAlias.conf
 	echo "central.db=hgcentralregress" >> output/asmAlias.conf
 	echo "genarkHubPrefix=/gbdb/genark" >> output/asmAlias.conf
@@ -246,9 +246,9 @@ geoMirrorSelfTest: mkdirs
 # on it; see makeHgCentralRegress.sh for the grant.  makeHgCentralRegress.sh creates it and
 # is safe to run every time.  login.cookieSalt is set because the sync signature is made with
 # it; the value is a test value and means nothing outside this run.
-hubSpaceKeysTest: mkdirs
+hubSpaceKeysTest: mkdirs ${BIN_DIR}/hgConfValue
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hubSpaceKeysTester hubSpaceKeysTester.c ${MYLIBS} $L
-	./makeHgCentralRegress.sh > /dev/null
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
 	echo "include ${HOME}/.hg.conf" > output/regress.conf
 	echo "central.db=hgcentralregress" >> output/regress.conf
 	echo "login.cookieSalt=testSaltForRegressRuns" >> output/regress.conf

@@ -167,12 +167,15 @@ struct sqlConnection *hAllocConnDbTbl(char *spec, char **tableRet, char *default
 void hFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
-unsigned hConnMark();
-/* The number of connections handed out so far, to pass to hConnReleaseSince. */
+unsigned hConnGeneration();
+/* The current connection generation, to pass to hConnFreeNewerThan.  It counts the
+ * connections handed out so far and names none of them, so nothing is taken out of the
+ * cache by asking.  See sqlConnCacheGeneration in jksql.h. */
 
-void hConnReleaseSince(unsigned mark);
-/* Put back every connection handed out since the mark.  Call it after catching an
- * errAbort, where the hFreeConn the aborted code would have made never ran. */
+void hConnFreeNewerThan(unsigned generation);
+/* Put back every connection handed out to this thread after the given generation.  Call
+ * it after catching an errAbort, where the hFreeConn the aborted code would have made
+ * never ran. */
 
 struct sqlConnection *hConnectCentral(void);
 /* Connect to central database where user info and other info

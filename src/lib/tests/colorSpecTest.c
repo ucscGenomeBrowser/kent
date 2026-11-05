@@ -19,11 +19,16 @@ static char *specs[] = {
     /* out of range, wrong count, junk */
     "", "256,0,0", "0,0", "0,0,0,0,0", "0,,255", "0,0,blue", "-1,0,0", "0,0,25.5",
     "blue2", "#0000f", "#0000fff", "#xxyyzz", "0000ff", "16711680", "rgb(0,0,255)",
+    /* an empty value, which the loose parser runs together with its neighbor */
+    "0,,0,255", ",0,0,255", "0,0,255,",
+    /* wide enough that atoi wraps it to something under 256 */
+    "4294967296,0,0", "4294967551,0,0",
 };
 
 int main(int argc, char *argv[])
 {
 int i;
+printf("colorSpecMayParse\n");
 for (i = 0; i < ArraySize(specs); i++)
     {
     unsigned color = 0xdeadbeef;
@@ -33,6 +38,23 @@ for (i = 0; i < ArraySize(specs); i++)
     else
         printf("'%s' -> not a color, retColor untouched %s\n", specs[i],
                (color == 0xdeadbeef ? "yes" : "NO"));
+    }
+
+/* The loose parser takes several of those, which is the point of having it: data written
+ * against the old hand-written parsers has to keep drawing the color it drew then. */
+printf("\ncolorSpecParseOrDefault\n");
+char *defaultSpec = "#deadbe";
+unsigned defaultColor = colorSpecParse(defaultSpec);
+for (i = 0; i < ArraySize(specs); i++)
+    {
+    unsigned color = colorSpecParseOrDefault(specs[i], defaultSpec);
+    unsigned packed = colorSpecParseOrDefaultColor(specs[i], defaultColor);
+    if (packed != color)
+        printf("'%s' -> colorSpecParseOrDefaultColor gives %08x instead\n", specs[i], packed);
+    if (color == defaultColor)
+        printf("'%s' -> default\n", specs[i]);
+    else
+        printf("'%s' -> %08x\n", specs[i], color);
     }
 return 0;
 }

@@ -11,6 +11,19 @@ export quickLiftFileList="gbdbQuickLift.fl"
 export quickLiftStat="gbdbQuickLiftStat.${machName}.${DS}"
 export liftOverStat="gbdbLiftOverStat.${machName}.${DS}"
 
+##############################################################################
+### scp a file into place on hgwdev for readers there: send it to a
+### temporary name next to the destination, then rename it, so a reader
+### never sees a partly written file
+##############################################################################
+function scpAtomic() {
+  local src="${1}"
+  local dest="${2}"
+  local tmpDest="${dest}.tmp.$$"
+  scp -p "${src}" "otto@hgwdev:${tmpDest}" > /dev/null \
+    && ssh otto@hgwdev "mv -f '${tmpDest}' '${dest}'" < /dev/null
+}
+
 find -L /gbdb/genark/GCA /gbdb/genark/GCF -type d | sort \
   | gzip -c > /dev/shm/${directoryList}.gz
 
@@ -50,12 +63,12 @@ scp -p /dev/shm/${liftOverStat}.gz \
   otto@hgwdev:/hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/ > /dev/null
 
 if [[ "${machName}" =~ ^(hgw1|hgwbeta)$ ]]; then
-  scp -p /dev/shm/${statList}.gz \
-    otto@hgwdev:/hive/data/inside/GenArk/pushRR/${machName}.todayList.gz > /dev/null
-  scp -p /dev/shm/${quickLiftStat}.gz \
-    otto@hgwdev:/hive/data/inside/GenArk/pushRR/${machName}.today.quickLiftList.gz > /dev/null
-  scp -p /dev/shm/${liftOverStat}.gz \
-    otto@hgwdev:/hive/data/inside/GenArk/pushRR/${machName}.today.liftOverList.gz > /dev/null
+  scpAtomic /dev/shm/${statList}.gz \
+    /hive/data/inside/GenArk/pushRR/${machName}.todayList.gz
+  scpAtomic /dev/shm/${quickLiftStat}.gz \
+    /hive/data/inside/GenArk/pushRR/${machName}.today.quickLiftList.gz
+  scpAtomic /dev/shm/${liftOverStat}.gz \
+    /hive/data/inside/GenArk/pushRR/${machName}.today.liftOverList.gz
 fi
 
 rm -f /dev/shm/${fileList}.gz /dev/shm/${statList}.gz \

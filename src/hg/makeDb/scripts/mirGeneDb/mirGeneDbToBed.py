@@ -29,9 +29,8 @@ from html.parser import HTMLParser
 
 # arm type -> (decorator color, fill color); Okabe-Ito
 ARM_COLORS = {
-    "dominant": ((213, 94, 0), "213,94,0,200"),      # vermillion
-    "star":     ((0, 114, 178), "0,114,178,200"),    # blue
-    "co":       ((0, 158, 115), "0,158,115,200"),    # bluish green
+    "5p": ((230, 159, 0), "230,159,0,200"),      # orange, as in mirBaseToBed.py
+    "3p": ((86, 180, 233), "86,180,233,200"),    # sky blue
 }
 
 # nucleotides on each side of the precursor in a pri region
@@ -334,23 +333,33 @@ def bed(bedFile, gffFile, browseFile, foldFile, twoBit, bedOut, armsOut):
             seq, dotBracket, mfe = folds[gene]
             if gene in refolded:
                 dotBracket = refolded[gene][0]
-            armPos, armText = [], []
+            armPos, armText, armNames = [], defaultdict(list), defaultdict(list)
+            # MirGeneDB marks only one arm of a co-mature pair with _co (always the 3p on
+            # hg38); the other is then co-mature too, not dominant
+            hasCo = any(armClass(t) == "co" for s, e, t in geneArms)
             for aStart, aEnd, armType in geneArms:
                 if aStart < start or aEnd > end:
                     sys.exit("arm %s %s outside its pri-miRNA" % (gene, armType))
                 s, e = armRange(start, end, strand, aStart, aEnd)
-                armPos.append((s, e, armType))
-                armText.append("%s %s:%d-%d" % (armType, chrom, aStart + 1, aEnd))
-                color, fill = ARM_COLORS[armClass(armType)]
+                armPos.append((s, e, armType + "_co" if hasCo and armClass(armType) == "dominant"
+                               else armType))
+                armText[armType[:2]].append("%s_%s %s:%d-%d" % (gene, armType, chrom, aStart + 1, aEnd))
+                armNames[armType[:2]].append("%s_%s" % (gene, armType))
+                color, fill = ARM_COLORS[armType[:2]]
                 aOut.write("\t".join(str(x) for x in [
                     chrom, aStart, aEnd, "%s_%s" % (gene, armType), 0, strand,
                     aStart, aEnd, "%d,%d,%d" % color, 1, "%d," % (aEnd - aStart), "0,",
                     "%s:%d-%d:%s" % (chrom, start, end, gene), "block", fill, ""]) + "\n")
             armPos.sort()
 
+            # MirGeneDB ID as "<page>|<link text>" for the urls setting: the gene page
+            # address has no species prefix
             out.write("\t".join([chrom, str(start), str(end), gene, "0", strand,
+                "%s|%s" % (gene.split("-", 1)[1], gene),
                 m["mirbaseId"], m["family"], seed, mi, m["acc5p"], m["acc3p"],
-                gene.split("-", 1)[1], ", ".join(armText), mfe, foldType(refolded, gene),
+                ", ".join(armText["5p"]) or "-", ", ".join(armText["3p"]) or "-",
+                ", ".join(armNames["5p"]) or "-", ", ".join(armNames["3p"]) or "-",
+                mfe, foldType(refolded, gene),
                 seq, dotBracket,
                 ",".join("%d-%d:%s" % a for a in armPos)]) + "\n")
     print("%d without browse table row, %d seeds differ from browse table" %

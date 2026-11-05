@@ -1,35 +1,53 @@
 kentSrc = ../../..
-include ../../../inc/common.mk
+include ${kentSrc}/inc/common.mk
 
-# Run the copy in the tree rather than an installed one, so that a plain
-# "make test" works without a preceding install and always exercises the
-# code that is about to be committed.
-reorder = ../barChartReorder
+barChartReorder = ${DESTBINDIR}/barChartReorder
 
-all:
-	mkdir -p out
-	@printf "\ntest1: reorder a bed6+5 file, rewriting the header\n"
-	${reorder} in/test.oldOrder in/test.newOrder in/test.bed out/test.bed > out/bars.txt
-	diff out/test.bed expected/test.bed
-	diff out/bars.txt expected/bars.txt
-	@printf "\ntest2: bed6+3 with a trailing comma in expScores\n"
-	${reorder} in/test.oldOrder in/test.newOrder in/simple.bed out/simple.bed > /dev/null
-	diff out/simple.bed expected/simple.bed
-	@printf "\ntest3: reorder a .categories file to match\n"
-	${reorder} in/test.oldOrder in/test.newOrder in/test.bed out/test.bed \
-	    --categories in/test.categories --outCategories out/test.categories > /dev/null
-	diff out/test.categories expected/test.categories
-	@printf "\ntest4: reordering twice returns the original file\n"
-	${reorder} in/test.oldOrder in/test.newOrder in/test.bed out/once.bed > /dev/null
-	${reorder} in/test.newOrder in/test.oldOrder out/once.bed out/twice.bed > /dev/null
-	diff out/twice.bed in/test.bed
-	@printf "\ntest5: order files naming different bars is an error\n"
-	! ${reorder} in/test.oldOrder in/bad.newOrder in/test.bed out/bad.bed 2> /dev/null
-	@printf "\ntest6: a row with the wrong number of values is an error\n"
-	! ${reorder} in/test.oldOrder in/test.newOrder in/short.bed out/bad.bed 2> /dev/null
-	@printf "\nall barChartReorder tests passed\n"
+test: test1 test2 test3 test4 test5 test6
 
-test: all
+# reorder a bed6+5 file, rewriting the header
+test1:
+	@${MKDIR} -p output
+	${barChartReorder} input/test.oldOrder input/test.newOrder input/test.bed \
+	    output/$@.bed > output/$@.bars.txt
+	diff expected/$@.bed output/$@.bed
+	diff expected/$@.bars.txt output/$@.bars.txt
+
+# bed6+3 with a trailing comma in expScores
+test2:
+	@${MKDIR} -p output
+	${barChartReorder} input/test.oldOrder input/test.newOrder input/simple.bed \
+	    output/$@.bed > /dev/null
+	diff expected/$@.bed output/$@.bed
+
+# reorder a .categories file to match
+test3:
+	@${MKDIR} -p output
+	${barChartReorder} input/test.oldOrder input/test.newOrder input/test.bed \
+	    output/$@.bed --categories input/test.categories \
+	    --outCategories output/$@.categories > /dev/null
+	diff expected/$@.categories output/$@.categories
+
+# reordering twice returns the original file
+test4:
+	@${MKDIR} -p output
+	${barChartReorder} input/test.oldOrder input/test.newOrder input/test.bed \
+	    output/$@.once.bed > /dev/null
+	${barChartReorder} input/test.newOrder input/test.oldOrder output/$@.once.bed \
+	    output/$@.twice.bed > /dev/null
+	diff input/test.bed output/$@.twice.bed
+
+# order files naming different bars is an error
+test5:
+	@${MKDIR} -p output
+	! ${barChartReorder} input/test.oldOrder input/bad.newOrder input/test.bed \
+	    output/$@.bed 2> /dev/null
+
+# a row with the wrong number of values is an error
+test6:
+	@${MKDIR} -p output
+	! ${barChartReorder} input/test.oldOrder input/test.newOrder input/short.bed \
+	    output/$@.bed 2> /dev/null
 
 clean:
-	rm -rf out
+	rm -rf output

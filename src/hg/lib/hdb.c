@@ -874,19 +874,20 @@ if (*pConn != NULL)  // don't use hdbCc if never allocated
     sqlConnCacheDealloc(hdbCc, pConn);
 }
 
-unsigned hConnMark()
-/* The number of connections handed out so far, to pass to hConnReleaseSince. */
+unsigned hConnGeneration()
+/* The current connection generation, to pass to hConnFreeNewerThan. */
 {
-return sqlConnCacheMark();
+return sqlConnCacheGeneration();
 }
 
-void hConnReleaseSince(unsigned mark)
-/* Put back every connection handed out since the mark.  Call it after catching an
- * errAbort: the hFreeConn that the code which asked for the connection would have made
- * never ran, and the cache holds only 16 connections, so a page with a few failing tracks
- * fills it and every later hAllocConn fails with "Too many open sqlConnections". */
+void hConnFreeNewerThan(unsigned generation)
+/* Put back every connection handed out after the given generation.  Call it after
+ * catching an errAbort: the hFreeConn that the code which asked for the connection would
+ * have made never ran, and the cache holds only 16 connections, so a page with a few
+ * failing tracks fills it and every later hAllocConn fails with "Too many open
+ * sqlConnections". */
 {
-sqlConnCacheReleaseSince(hdbCc, mark);
+sqlConnCacheFreeNewerThan(hdbCc, generation);
 }
 
 static void hCentralMkCache()

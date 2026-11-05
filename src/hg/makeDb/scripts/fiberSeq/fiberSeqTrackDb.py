@@ -488,6 +488,7 @@ def main():
             "longLabel Fiber-seq chromatin accessibility, regulatory elements and CpG methylation",
             "group regulation",
             "priority 2.5",
+            'pennantIcon New red ../goldenPath/newsarch.html#103026 "Released Oct. 30, 2026"',
         ]))
         f.write(accOverlay(args.gbdb_dir, samples))
         f.write(compendium(args.gbdb_dir, args.gbdb_dir, samples))

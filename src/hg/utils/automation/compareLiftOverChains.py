@@ -62,6 +62,20 @@ options:
                         written (default: a temp directory, removed after
                         the report prints unless --keep is given)
   --keep                keep --outDir's contents instead of deleting them
+  --regionBeds DIR      write target-genome common.bed (covered by every
+                        chain given) and one <label>.unique.bed per chain
+                        (covered by that chain and no other) into this
+                        directory. Target-coordinates only -- see the
+                        'targetIntervals' comment on analyzeChain() for why.
+  --failBeds DIR        write a bed6+1 file of every record that failed to
+                        lift through a chain, one file per chain per test:
+                        genePred.<chainLabel>.unmapped.bed (genePred records
+                        reduced to chrom/txStart/txEnd/name/0/strand) and
+                        <bedLabel>.<chainLabel>.unmapped.bed (BED3-BED12+
+                        normalized to the same 6 columns, name/score/strand
+                        padded with '.'/'0' if the input didn't have them)
+                        for each --bed given.  The 7th column is liftOver's
+                        own reason text for why that record failed.
 
 At least one of --genePred / --bed must be given, unless --chainStats is.
 """
@@ -139,23 +153,25 @@ def n50(lengths):
     return 0
 
 
-def mergedCoverage(intervalsByName):
-    """Total bases covered by the union of (start, end) intervals, per name."""
-    total = 0
-    for _name, ivs in intervalsByName.items():
-        ivs.sort()
-        curStart = curEnd = None
-        for s, e in ivs:
-            if curStart is None:
-                curStart, curEnd = s, e
-            elif s <= curEnd:
-                curEnd = max(curEnd, e)
+def mergeIntervalsByChrom(intervalsByName):
+    """Collapse each name's (start, end) interval list to a sorted,
+    non-overlapping list -- {name: [(s, e), ...]}."""
+    merged = {}
+    for name, ivs in intervalsByName.items():
+        out = []
+        for s, e in sorted(ivs):
+            if out and s <= out[-1][1]:
+                if e > out[-1][1]:
+                    out[-1][1] = e
             else:
-                total += curEnd - curStart
-                curStart, curEnd = s, e
-        if curStart is not None:
-            total += curEnd - curStart
-    return total
+                out.append([s, e])
+        merged[name] = [(s, e) for s, e in out]
+    return merged
+
+
+def coverageTotal(mergedByName):
+    """Total bases in an already-merged {name: [(s, e), ...]} interval dict."""
+    return sum(e - s for ivs in mergedByName.values() for s, e in ivs)
 
 
 def analyzeChain(path):
@@ -172,20 +188,31 @@ def analyzeChain(path):
         tSizes.setdefault(c['tName'], c['tSize'])
         qSizes.setdefault(c['qName'], c['qSize'])
         tSpans.append(c['tEnd'] - c['tStart'])
-        tIntervals[c['tName']].append((c['tStart'], c['tEnd']))
-        # chain format always gives qStart/qEnd in the qStrand's own
-        # coordinate frame; normalize '-' strand chains back to the
-        # query's forward strand so coverage can be merged correctly.
-        if c['qStrand'] == '-':
-            qS, qE = c['qSize'] - c['qEnd'], c['qSize'] - c['qStart']
-        else:
-            qS, qE = c['qStart'], c['qEnd']
-        qIntervals[c['qName']].append((qS, qE))
+        # (tStart, tEnd)/(qStart, qEnd) are only the chain's overall
+        # bounding span -- it can cross large unaligned stretches (indels,
+        # inversions, assembly gaps) via the blocks' own dt/dq gaps.  Walk
+        # the blocks themselves to get the actually-aligned intervals;
+        # using the span as "coverage" badly overcounts true aligned bases.
+        tPos = c['tStart']
+        qPos = c['qStart']
         for size, dt, dq in c['blocks']:
+            tIntervals[c['tName']].append((tPos, tPos + size))
+            # chain format always gives qPos in the qStrand's own
+            # coordinate frame; normalize '-' strand chains back to the
+            # query's forward strand so coverage can be merged correctly.
+            if c['qStrand'] == '-':
+                qS, qE = c['qSize'] - (qPos + size), c['qSize'] - qPos
+            else:
+                qS, qE = qPos, qPos + size
+            qIntervals[c['qName']].append((qS, qE))
             blockSizes.append(size)
             tGap += dt
             qGap += dq
+            tPos += size + dt
+            qPos += size + dq
     nBlocks = len(blockSizes)
+    targetIntervals = mergeIntervalsByChrom(tIntervals)
+    queryIntervals = mergeIntervalsByChrom(qIntervals)
     return {
         'nChains': nChains,
         'nBlocks': nBlocks,
@@ -195,10 +222,11 @@ def analyzeChain(path):
         'blockSizeN50': n50(blockSizes),
         'chainSpanN50': n50(tSpans),
         'blocksPerChain': (nBlocks / nChains) if nChains else 0,
-        'targetCovered': mergedCoverage(tIntervals),
-        'queryCovered': mergedCoverage(qIntervals),
+        'targetCovered': coverageTotal(targetIntervals),
+        'queryCovered': coverageTotal(queryIntervals),
         'tSizesSum': sum(tSizes.values()),
         'qSizesSum': sum(qSizes.values()),
+        'targetIntervals': targetIntervals,
     }
 
 
@@ -268,6 +296,94 @@ def mergeBedFile(path, outPath):
                     merged.append([s, e])
             for s, e in merged:
                 out.write(f'{chrom}\t{s}\t{e}\n')
+
+
+def sweepRegions(labeledIntervals):
+    """labeledIntervals: list of (label, {chrom: [(s, e), ...]}) -- each
+    chain's own merged, non-overlapping target intervals (as returned by
+    analyzeChain()'s 'targetIntervals'). Does a multi-way interval sweep per
+    chrom and returns (commonByChrom, uniqueByLabelByChrom):
+      commonByChrom[chrom]            -- regions covered by every label
+      uniqueByLabelByChrom[label][chrom] -- regions covered by that label
+                                            and no other label
+    Between any two consecutive breakpoints the set of active labels is
+    constant, so each such segment is already maximal -- no further merging
+    is needed."""
+    labels = [label for label, _ in labeledIntervals]
+    nLabels = len(labels)
+    chroms = set()
+    for _label, byChrom in labeledIntervals:
+        chroms.update(byChrom.keys())
+
+    commonByChrom = defaultdict(list)
+    uniqueByLabelByChrom = {label: defaultdict(list) for label in labels}
+
+    for chrom in sorted(chroms):
+        deltaAt = defaultdict(lambda: defaultdict(int))  # pos -> label -> delta
+        for label, byChrom in labeledIntervals:
+            for s, e in byChrom.get(chrom, []):
+                deltaAt[s][label] += 1
+                deltaAt[e][label] -= 1
+
+        positions = sorted(deltaAt.keys())
+        active = Counter()
+        for i, pos in enumerate(positions):
+            for label, delta in deltaAt[pos].items():
+                active[label] += delta
+            if i + 1 >= len(positions):
+                continue
+            segStart, segEnd = pos, positions[i + 1]
+            if segEnd <= segStart:
+                continue
+            activeLabels = [label for label in labels if active[label] > 0]
+            if len(activeLabels) == nLabels:
+                commonByChrom[chrom].append((segStart, segEnd))
+            elif len(activeLabels) == 1:
+                uniqueByLabelByChrom[activeLabels[0]][chrom].append((segStart, segEnd))
+
+    return commonByChrom, uniqueByLabelByChrom
+
+
+def writeBedIntervals(byChrom, outPath):
+    with open(outPath, 'w') as out:
+        for chrom in sorted(byChrom):
+            for s, e in sorted(byChrom[chrom]):
+                out.write(f'{chrom}\t{s}\t{e}\n')
+
+
+def genePredToBed6Plus1(fields, reason):
+    """Reduce one genePred (standard or extended) record's fields to a
+    bed6+1 line, the 7th column being why it failed to lift over."""
+    name, chrom, strand, txStart, txEnd = fields[0], fields[1], fields[2], fields[3], fields[4]
+    return f'{chrom}\t{txStart}\t{txEnd}\t{name}\t0\t{strand}\t{reason}\n'
+
+
+def toBed6Plus1(fields, reason):
+    """Normalize a BED record's fields (BED3 up through BED12+) to bed6,
+    padding any missing name/score/strand, then append why it failed to
+    lift over as the 7th column."""
+    chrom, start, end = fields[0], fields[1], fields[2]
+    name = fields[3] if len(fields) > 3 else '.'
+    score = fields[4] if len(fields) > 4 else '0'
+    strand = fields[5] if len(fields) > 5 else '.'
+    return f'{chrom}\t{start}\t{end}\t{name}\t{score}\t{strand}\t{reason}\n'
+
+
+def writeCleanUnmapped(unmappedPath, outPath, lineConverter):
+    """Copy an unmapped-records file, dropping liftOver's '#reason' comment
+    lines and blank lines, and converting each surviving record -- together
+    with the reason that preceded it -- to a bed6+1 line via
+    lineConverter(fields, reason)."""
+    currentReason = 'unknown'
+    with open(unmappedPath) as fh, open(outPath, 'w') as out:
+        for line in fh:
+            line = line.rstrip('\n')
+            if not line.strip():
+                continue
+            if line.startswith('#'):
+                currentReason = line.lstrip('#').strip() or 'unknown'
+                continue
+            out.write(lineConverter(line.split('\t'), currentReason))
 
 
 def parseUnmappedReasons(path):
@@ -384,6 +500,14 @@ def main():
     ap.add_argument('--minMatch', default=None, type=float)
     ap.add_argument('--outDir', default=None)
     ap.add_argument('--keep', action='store_true')
+    ap.add_argument('--regionBeds', default=None,
+                     help='write target-genome common.bed (covered by every chain '
+                          'given) and one <label>.unique.bed per chain (covered by '
+                          'that chain and no other) into this directory')
+    ap.add_argument('--failBeds', default=None,
+                     help='write a clean BED of every record that failed to lift '
+                          'through each chain (one file per chain per test) into '
+                          'this directory')
     args = ap.parse_args()
 
     if args.chainStats:
@@ -403,6 +527,8 @@ def main():
 
     outDir = args.outDir or tempfile.mkdtemp(prefix='compareLiftOverChains.')
     os.makedirs(outDir, exist_ok=True)
+    if args.failBeds:
+        os.makedirs(args.failBeds, exist_ok=True)
 
     chainSpecs = [parseLabeledArg(arg, ('.chain.gz', '.chain')) for arg in args.chains]
     for label, path in chainSpecs:
@@ -414,9 +540,12 @@ def main():
     chainRows = []
     translationRows = []
     reasonReports = []
+    targetIntervalsByLabel = []
 
     for label, path in chainSpecs:
         stats = analyzeChain(path)
+        if args.regionBeds:
+            targetIntervalsByLabel.append((label, stats['targetIntervals']))
         tDenom = sum(targetSizes.values()) if targetSizes else stats['tSizesSum']
         qDenom = sum(querySizes.values()) if querySizes else stats['qSizesSum']
 
@@ -442,6 +571,10 @@ def main():
             mappedCount = countGenePredLines(mapped)
             reasons = parseUnmappedReasons(unmapped)
             unmappedCount = sum(reasons.values())
+
+            if args.failBeds:
+                failPath = os.path.join(args.failBeds, f'genePred.{label}.unmapped.bed')
+                writeCleanUnmapped(unmapped, failPath, genePredToBed6Plus1)
 
             translationRows.append([
                 label,
@@ -473,6 +606,10 @@ def main():
             unmappedFeat, unmappedBp = bedFeatureCountAndBp(unmapped)
             reasons = parseUnmappedReasons(unmapped)
 
+            if args.failBeds:
+                failPath = os.path.join(args.failBeds, f'{bedLabel}.{chainLabel}.unmapped.bed')
+                writeCleanUnmapped(unmapped, failPath, toBed6Plus1)
+
             rows.append([
                 chainLabel,
                 mappedFeat, f"{pct(mappedFeat, totalFeat):.2f}%",
@@ -491,6 +628,8 @@ def main():
     if not querySizes:
         print("# note: no --querySizes given -- query % coverage is relative to the "
               "sequences present in each chain file, not the whole genome")
+    if args.failBeds:
+        print(f"# --failBeds: unmapped-record BED files written to {args.failBeds}")
     print()
 
     print('## Chain file structural statistics')
@@ -500,6 +639,23 @@ def main():
         chainRows,
     )
     print()
+
+    if args.regionBeds:
+        os.makedirs(args.regionBeds, exist_ok=True)
+        commonByChrom, uniqueByLabelByChrom = sweepRegions(targetIntervalsByLabel)
+
+        commonPath = os.path.join(args.regionBeds, 'common.bed')
+        writeBedIntervals(commonByChrom, commonPath)
+
+        print(f'## --regionBeds output (target-genome coordinates): {args.regionBeds}')
+        print(f"# common.bed: {coverageTotal(commonByChrom)} bp covered by all "
+              f"{len(chainSpecs)} chains -> {commonPath}")
+        for label, _path in chainSpecs:
+            uniquePath = os.path.join(args.regionBeds, f'{label}.unique.bed')
+            writeBedIntervals(uniqueByLabelByChrom[label], uniquePath)
+            print(f"# {label}.unique.bed: {coverageTotal(uniqueByLabelByChrom[label])} "
+                  f"bp covered only by {label} -> {uniquePath}")
+        print()
 
     if args.genePred:
         print(f"## genePred translation (liftOver -genePred): {args.genePred}  "
