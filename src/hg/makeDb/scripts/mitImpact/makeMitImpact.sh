@@ -21,9 +21,12 @@ twoBitToFa /hive/data/genomes/hg38/hg38.2bit:chrM chrM.fa
 
 python3 $scripts/mitImpactToBed.py $rel/$rel.csv chrM.fa mitImpact.bed
 
+# number of fields after the standard 9, from the bed file
+nf=$(head -1 mitImpact.bed | awk -F"\t" '{print NF}')
+
 # -extraIndex: the position box finds variants by HGVS name (m.3243A>G) or rs ID,
 # via the searchTable stanzas in mitImpact.ra
-bedToBigBed -tab -type=bed9+152 -as=$scripts/mitImpact.as -extraIndex=name,dbSnp \
+bedToBigBed -tab -type=bed9+$((nf-9)) -as=$scripts/mitImpact.as -extraIndex=name,dbSnp \
     mitImpact.bed $sizes mitImpact.bb
 
 # dataVersion on the details page: just the release, e.g. V059

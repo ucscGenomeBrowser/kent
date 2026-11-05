@@ -72,11 +72,10 @@ using thresholds on the probability of pathogenicity. ACMG/AMP recommends APOGEE
 computational evidence on mitochondrial missense variants.
 </p>
 <p>
-<a href="hgTrackUi?g=mitImpact">MitImpact APOGEE 2</a> shows all three possible substitutions at
-every position of the mitochondrial genome, almost 50,000 variants, with their APOGEE 2 or
-nAPOGEE class and probability, more than 30 other prediction scores, MitoTIP for tRNA
-variants, ClinVar and MITOMAP disease annotations, and allele frequencies from gnomAD,
-HelixMTdb and other databases.
+<a href="hgTrackUi?g=apogee2">APOGEE2 / nAPOGEE</a> shows the score of all three possible
+substitutions at every position of the mitochondrial genome as bars, colored by the
+APOGEE 2 or nAPOGEE class. <a href="hgTrackUi?g=mitImpact">MitImpact APOGEE 2</a> shows the
+same variants as items with their class and probability.
 </p>
 -->
 
@@ -248,12 +247,12 @@ blue = tolerated) so that cells are comparable across genes. These tracks are be
 zoomed in to a single gene or exon.</p>
 
 <!-- MitImpact is alpha only (#38617), uncomment when it is released
-<h3>MitImpact APOGEE 2</h3>
-<p>A single bigBed track on chrM with one item per variant, labeled with its HGVS name
-(e.g. m.3243A&gt;G). Items are colored from green (benign) to red (pathogenic) by their
-APOGEE 2 or nAPOGEE class; variants that neither model scores are gray. Variants can be
-filtered by class, probability, region type, effect and gene. See the per-track
-description page for details.</p>
+<h3>APOGEE2 / nAPOGEE</h3>
+<p>Bar graphs on chrM, one per substituted base, with the height following the score
+and the color the APOGEE 2 or nAPOGEE class, from green (benign) to red (pathogenic).
+A second track shows one item per variant, labeled with its HGVS name (e.g. m.3243A&gt;G),
+with filters for class, probability, region type, effect and gene. See the per-track
+description pages for details.</p>
 -->
 
 <h2>Data Access</h2>

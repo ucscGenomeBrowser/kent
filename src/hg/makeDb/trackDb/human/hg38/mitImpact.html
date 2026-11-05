@@ -13,11 +13,11 @@ such as APOGEE and MitoTIP for computational evidence.
 The MitImpact APOGEE 2 track shows data from
 <a href="https://mitimpact.mcb2lab.org" target="_blank">MitImpact</a>,
 a collection of pre-computed annotations for all three possible substitutions at every
-position of chrM, almost 50,000 variants. For each variant it gives the gene and
-predicted effect, the class and probability of pathogenicity from APOGEE 2 (missense
-variants) or nAPOGEE (rRNA and tRNA variants), more than 30 other prediction scores,
-conservation, MitoTIP for tRNAs, ClinVar and MITOMAP disease annotations, and allele
-frequencies from gnomAD, HelixMTdb, ToMMo 61KJPN and GenBank.
+position of chrM, almost 50,000 variants. This track shows the gene and predicted
+effect of each variant and the score, class and probability of pathogenicity from
+APOGEE 2 (missense variants) or nAPOGEE (rRNA and tRNA variants). The scores are also
+shown as bars in the
+<a href="hgTrackUi?g=apogee2">APOGEE2 / nAPOGEE</a> track.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -25,13 +25,13 @@ frequencies from gnomAD, HelixMTdb, ToMMo 61KJPN and GenBank.
 Each variant is a 1 bp feature labeled with its HGVS name on the rCRS (NC_012920.1),
 e.g. m.3243A&gt;G. Positions where two genes overlap (MT-ATP8/MT-ATP6, MT-ND4L/MT-ND4)
 and a few tRNA boundaries carry each variant twice, once per gene, as the scores
-differ between the two genes. Hover over a variant to see the main predictions,
-click it for all annotations, including a table of all other predictors and a table
-of allele frequencies. The details page links to the variant's page on the MitImpact
-website. Variants can be searched by HGVS name or dbSNP rs ID in the position box.
+differ between the two genes. These variants are all drawn in magenta, whatever
+their class, to show how many there are. Hover over a variant to see the APOGEE
+prediction, click it for the annotations. The details page links to the variant's
+page on the MitImpact website. Variants can be searched by HGVS name or dbSNP rs ID in the position box.
 </p>
 <p>
-Variants are colored by their APOGEE 2 class if they are missense variants and by their
+Variants in overlapping genes are magenta. Other variants are colored by their APOGEE 2 class if they are missense variants and by their
 nAPOGEE class if they are in an rRNA or tRNA gene. Both models use the same seven
 classes; the thresholds are listed in the Methods section.
 </p>
@@ -50,6 +50,8 @@ classes; the thresholds are listed in the Methods section.
       <td>Likely benign</td></tr>
   <tr><th style="background-color:#006B1B;width:2em">&nbsp;</th>
       <td>Benign</td></tr>
+  <tr><th style="background-color:#FF00FF;width:2em">&nbsp;</th>
+      <td>Variant in two overlapping genes, listed once per gene (colored like this whatever the class)</td></tr>
   <tr><th style="background-color:#BEBEBE;width:2em">&nbsp;</th>
       <td>Not scored by APOGEE 2 or nAPOGEE: synonymous, stop-gain, stop-loss and some
           start codon variants, control region (D-loop) and intergenic variants</td></tr>
@@ -63,11 +65,8 @@ tRNA, control region, intergenic), the predicted effect and the gene.
 <h2>Methods</h2>
 <p>
 MitImpact (Castellana et al. 2015, 2021) annotates every possible single-nucleotide
-substitution of the rCRS with SnpEff, gene and protein identifiers, conservation scores
-(UCSC PhyloP and PhastCons, 100 vertebrates and 470 mammals) and the scores of many
-predictors, some run by the MitImpact authors (e.g. PolyPhen-2, SIFT, PROVEAN, the
-TransFIC transforms, COVEC WMV), others taken from their sources or from dbNSFP
-(e.g. MutationTaster, DEOGEN2). APOGEE 2 (Bianco et al. 2023) is the mtDNA-specific
+substitution of the rCRS with SnpEff and gene and protein identifiers, and with the scores
+of many predictors. APOGEE 2 (Bianco et al. 2023) is the mtDNA-specific
 meta-predictor recommended for missense variants. It is a bagging ensemble of
 k-nearest-neighbor classifiers with random undersampling and SMOTE oversampling, trained
 on 1,874 manually curated missense variants (140 pathogenic or likely pathogenic
@@ -76,29 +75,22 @@ mitochondrion-specific evolutionary, structural and positional features and
 the outputs of other predictors. Its score is converted to a Bayesian probability of
 pathogenicity, which defines the classes: Benign &lt; 0.062, Likely benign 0.062-0.265,
 VUS- 0.265-0.396, VUS 0.396-0.544, VUS+ 0.544-0.716, Likely pathogenic 0.716-0.907,
-Pathogenic &ge; 0.907 (score thresholds). nAPOGEE, introduced with MitImpact 4, applies
-the same seven classes to rRNA and tRNA variants, with separate score thresholds for
-tRNAs (benign &le; 0.0914, likely benign &le; 0.4283, VUS- &le; 0.5232, VUS &le; 0.5988,
-VUS+ &le; 0.6714, likely pathogenic &le; 0.7607, pathogenic above) and rRNAs (benign
-&le; 0.4304, likely benign &le; 0.5769, VUS- &le; 0.6324, VUS &le; 0.6878, VUS+ &le;
-0.7546, likely pathogenic &le; 0.8653, pathogenic above). nAPOGEE has not been published
-yet. MitoTIP scores for tRNA variants and the disease and GenBank frequency data come
-from MITOMAP, ClinVar fields from the ClinVar VCF, population frequencies from gnomAD
-v3.1, HelixMTdb (2020-03-27) and ToMMo 61KJPN. See the
-<a href="https://mitimpact.mcb2lab.org/result_legend" target="_blank">MitImpact output
-legend</a> for the ranges and thresholds of all other predictors.
+Pathogenic &ge; 0.907 (probability thresholds). nAPOGEE, introduced with MitImpact 4, applies
+the same seven classes to rRNA and tRNA variants, with separate thresholds for
+tRNAs and rRNAs. nAPOGEE has not been published yet.
 </p>
 <p>
 The file <a href="https://mitimpact.mcb2lab.org/static/downloads/MitImpact4_V059.zip"
 target="_blank">MitImpact4_V059.zip</a> (MitImpact 4, release V059, built 2026-10-17)
 was downloaded from the <a href="https://mitimpact.mcb2lab.org/downloads"
 target="_blank">MitImpact download page</a>. A Python script converted each of its
-49,882 rows to one bigBed feature, keeping all 144 columns. The reference allele of
+49,882 rows to one bigBed feature, keeping the columns about the variant, the gene and the
+effect, the dbSNP identifier and the APOGEE 2 and nAPOGEE columns. The reference allele of
 every row was checked against chrM of hg38, which is the rCRS; all matched, including
 the four variants at position 3107, where the rCRS has an N. The APOGEE 2 and nAPOGEE
-classes were merged into one field with one spelling to color the features, and the
-predictor and frequency columns were also packed into the two tables on the details
-page. The commands are in the
+classes were merged into one field with one spelling to color the features. 174 variants
+(at 58 positions) have two rows, one for each of two overlapping genes, which are
+colored magenta. The commands are in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mitImpact.txt"
 target="_blank">makeDoc file</a>, the scripts in
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mitImpact"
@@ -110,7 +102,7 @@ target="_blank">our source repository</a>.
 The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
-spreadsheet or tab-sep tables. All 144 MitImpact columns are included. From scripts,
+spreadsheet or tab-sep tables. From scripts,
 the data can be accessed through our <a href="https://api.genome.ucsc.edu">API</a>,
 track=<i>mitImpact</i>.
 </p>
@@ -131,19 +123,16 @@ The tool can also be used to obtain features within a given range, e.g.
 <p>
 The original data can be downloaded from the
 <a href="https://mitimpact.mcb2lab.org/downloads" target="_blank">MitImpact download
-page</a>. The columns keep the licenses of their sources, which are listed on the
-<a href="https://mitimpact.mcb2lab.org/license" target="_blank">MitImpact license
-page</a>. APOGEE 1, APOGEE 2 and nAPOGEE are licensed for non-commercial use only
-(CC BY-NC 4.0), and so are the ToMMo 61KJPN, CADD, PolyPhen-2, MutationTaster, DEOGEN2,
-VEST, CHASM and LIST-S2 columns. Please cite MitImpact and the sources of the columns
-you use.
+page</a>. APOGEE 2 and nAPOGEE are licensed for non-commercial use only
+(<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>).
+Please cite MitImpact and the APOGEE 2 publication.
 </p>
 
 <h2>Credits</h2>
 <p>
 Thanks to the MitImpact team at the Computational Biology and Bioinformatics Laboratory
 (Fondazione Policlinico Universitario A. Gemelli, Rome) for making MitImpact and APOGEE
-available, and to the authors of all the tools and databases included in it.
+available.
 </p>
 
 <h2>References</h2>

@@ -5,12 +5,15 @@ their pathogenicity predictions) to a bed9+ file for bedToBigBed.
 One bed row per CSV row, so variants in the two overlapping gene pairs
 (MT-ATP8/MT-ATP6, MT-ND4L/MT-ND4) and at a few tRNA boundaries appear twice,
 once per gene. Every CSV column is kept, as a string field, for the Table
-Browser and the API; the predictor and allele frequency columns are also
-packed into two JSON tables for the details page (detailsDynamicTable).
+Browser and the API. Only the MitImpact columns about the variant, the gene
+and the effect, dbSNP, and the APOGEE 2 / nAPOGEE columns are written (KEEP);
+the other columns are checked but dropped, as their licenses may not allow
+redistribution (#38617).
 
 Items are colored by the APOGEE 2 class (missense variants) or the nAPOGEE
 class (rRNA and tRNA variants), unified into one field so a single filter
-covers both.
+covers both. Variants that are in two overlapping genes (two rows at one
+position and allele) are colored magenta instead, to see their effect.
 
 Usage: mitImpactToBed.py MitImpact4_V059.csv chrM.fa out.bed [--asOut x.as]
 """
@@ -171,7 +174,22 @@ COLUMNS = [
     ("61KJPN_AN", "jpn61kAn", "ToMMo 61KJPN AN"),
 ]
 
-# predictors for the details page table: (name, score column, prediction column)
+# CSV columns that are written to the bigBed. The rest of the CSV is checked only.
+KEEP = set([
+    "MitImpact_id", "Chr", "Start", "Ref", "Alt", "HGVS_genomic", "class", "Gene_symbol",
+    "extended_annotation", "gene_start", "gene_end", "gene_strand", "gene_position",
+    "functional_effect_general", "functional_effect_detailed", "codon_substitution",
+    "ref_aa", "alt_aa", "aa_pos", "Respiratory_Chain_complex", "Ensembl_gene_id",
+    "Ensembl_transcript_id", "Ensembl_protein_id", "Uniprot_id", "Uniprot_name",
+    "NCBI_Gene_Id", "NCBI_protein_id", "HGNC_Id_mtDNA", "OMIM_Id", "dbSNP_157",
+    "APOGEE2_score", "APOGEE2_probability", "APOGEE2",
+    "nAPOGEE_score", "nAPOGEE_probability", "nAPOGEE",
+])
+OUTCOLUMNS = [c for c in COLUMNS if c[0] in KEEP]
+
+OVERLAPCOLOR = "255,0,255"
+
+# predictors for the details page table (not used any more, see KEEP): (name, score column, prediction column)
 PREDICTORS = [
     ("APOGEE 1", "APOGEE1_score", "APOGEE1"),
     ("AlphaMissense", "AlphaMissense_score", "AlphaMissense"),
@@ -297,7 +315,7 @@ def aaChangeStr(r):
         alt = "="
     return "p.%s%s%s" % (ref, aaPos, alt)
 
-def mouseOver(r, name, acmgClass, model, prob):
+def mouseOver(r, name, acmgClass, model, prob, overlap):
     e = html.escape
     lines = []
     gene = r["Gene_symbol"]
@@ -306,18 +324,8 @@ def mouseOver(r, name, acmgClass, model, prob):
     lines.append("<b>%s</b> %s" % (e(name), e(joinNonEmpty([gene, effect, aa], " "))))
     if model:
         lines.append("<b>%s:</b> %s (probability %s)" % (model, e(acmgClass), e(prob)))
-    if r["MitoTIP_Score"]:
-        lines.append("<b>MitoTIP:</b> %s (%s)" % (e(r["MitoTIP_Score"]), e(r["Mitotip_Quartile"])))
-    if r["Clinvar_CLNSIG"]:
-        lines.append("<b>ClinVar:</b> %s" % e(r["Clinvar_CLNSIG"].replace("_", " ")))
-    if r["MITOMAP_Disease_Status"]:
-        # MITOMAP's disease lists come as "MELAS-/-Leigh-Syndrome"
-        disease = r["MITOMAP_Disease_Clinical_info"].replace("-/-", " / ")
-        lines.append("<b>MITOMAP:</b> %s" % e(joinNonEmpty([disease,
-                                                          r["MITOMAP_Disease_Status"]])))
-    if r["AF_hom_gnomad"] or r["AF_het_gnomad"]:
-        lines.append("<b>gnomAD AF:</b> homoplasmic %s, heteroplasmic %s" %
-                     (e(r["AF_hom_gnomad"] or "0"), e(r["AF_het_gnomad"] or "0")))
+    if overlap:
+        lines.append("<b>Overlapping genes:</b> listed once per gene")
     return "<br>".join(lines)
 
 def writeAs(fname):
@@ -330,22 +338,21 @@ def writeAs(fname):
         ("char[1]", "strand", "Not used, always ."),
         ("uint", "thickStart", "Same as chromStart"),
         ("uint", "thickEnd", "Same as chromEnd"),
-        ("uint", "reserved", "RGB color, from the APOGEE class"),
+        ("uint", "reserved", "RGB color, from the APOGEE class, magenta if the genes overlap"),
         ("string", "acmgClass", "APOGEE class|APOGEE 2 or nAPOGEE"),
         ("string", "apogeeModel", "APOGEE model"),
         ("string", "apogeeProb", "APOGEE probability|of pathogenicity"),
         ("string", "aaChange", "Amino acid change"),
+        ("string", "overlap", "Overlapping genes|variant is listed once per gene"),
         ("lstring", "_mouseOver", "Mouseover text"),
-        ("lstring", "_jsonPredictors", "Other pathogenicity predictors"),
-        ("lstring", "_jsonFreqs", "Allele frequencies"),
         ("string", "_mitImpactQuery", "MitImpact search query"),
     ]
-    for csvCol, asName, label in COLUMNS:
+    for csvCol, asName, label in OUTCOLUMNS:
         typ = "lstring" if asName in LONGFIELDS else "string"
         fields.append((typ, asName, label))
     with open(fname, "w") as ofh:
         ofh.write('table mitImpact\n')
-        ofh.write('"MitImpact: pathogenicity predictions for all possible chrM single-nucleotide variants"\n')
+        ofh.write('"MitImpact: APOGEE 2 and nAPOGEE for all possible chrM single-nucleotide variants"\n')
         ofh.write('    (\n')
         for typ, name, label in fields:
             ofh.write('    %s %s; "%s"\n' % (typ, name, label))
@@ -377,9 +384,13 @@ def main():
                  "or the order changed" % (sorted(missing), sorted(extra)))
 
     classCounts = Counter()
+    overlapRows = 0
     rows = []
     csvRows = 0
-    for r in reader:
+    allRows = list(reader)
+    # variants with two rows at one position and allele are in two overlapping genes
+    pairCounts = Counter((r["Start"], r["Alt"]) for r in allRows)
+    for r in allRows:
         csvRows += 1
         if r["Chr"] != "chrM":
             sys.exit("Unexpected chromosome %s in %s" % (r["Chr"], r["MitImpact_id"]))
@@ -403,13 +414,18 @@ def main():
         classCounts[(model, acmgClass)] += 1
 
         aaChange = aaChangeStr(r)
+        isOverlap = pairCounts[(r["Start"], r["Alt"])] > 1
+        color = OVERLAPCOLOR if isOverlap else CLASSCOLORS[acmgClass]
+        if isOverlap:
+            overlapRows += 1
 
         query = "%d%s%%3E%s" % (pos, r["Ref"], r["Alt"])
 
         bed = ["chrM", str(pos-1), str(pos), name, "0", ".", str(pos-1), str(pos),
-               CLASSCOLORS[acmgClass], acmgClass, model, prob, aaChange,
-               mouseOver(r, name, acmgClass, model, prob), predictorJson(r), freqJson(r), query]
-        for csvCol, asName, label in COLUMNS:
+               color, acmgClass, model, prob, aaChange,
+               "yes" if isOverlap else "",
+               mouseOver(r, name, acmgClass, model, prob, isOverlap), query]
+        for csvCol, asName, label in OUTCOLUMNS:
             val = r[csvCol]
             if "\t" in val or "\n" in val:
                 sys.exit("Tab or newline in column %s of %s" % (csvCol, r["MitImpact_id"]))
@@ -426,6 +442,9 @@ def main():
     print("%d CSV rows, %d bed rows written to %s" % (csvRows, len(rows), args.outBed))
     for (model, acmgClass), n in sorted(classCounts.items()):
         print("  %-10s %-18s %d" % (model or "-", acmgClass, n))
+    overlapPairs = [k for k, n in pairCounts.items() if n > 1]
+    print("%d (position, allele) pairs at %d positions are in overlapping genes, %d rows, colored magenta" %
+          (len(overlapPairs), len(set(k[0] for k in overlapPairs)), overlapRows))
 
 if __name__ == "__main__":
     main()
