@@ -477,27 +477,74 @@ if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
 hvGfxBox(hvg, thisX-1, thisY, 2, thisHeight, color);
 }
 
+char *aliMarkOtherSeqName(struct track *tg)
+/* What the mark mouseovers call the sequence aligned to the genome: "other assembly" for chains,
+ * "read" for BAM and CRAM, else "query". */
+{
+char *type = tg->tdb->type;
+if (startsWith("chain", type) || startsWith("bigChain", type))
+    return "other assembly";
+if (startsWith("bam", type) || startsWith("cram", type))
+    return "read";
+return "query";
+}
+
 void addAliMarkMouseOverPx(struct track *tg, struct linkedFeatures *lf,
                            struct hvGfx *hvg, int x, int y, int width, int height, char *text)
 /* Add a mouseover that explains a mismatch, insertion or gap mark at pixels x..x+width.
  * It links to the item's details page like the rest of the item, and is written before
- * the item's own map box, so it wins where the two overlap.  Not for BAM or dense mode,
- * and at most MAX_ALI_MARK_MOUSEOVERS per track: a pack-mode track of cross-species
- * mRNAs can have 100,000 marks, which made a 90 MB page. */
+ * the item's own map box, so it wins where the two overlap.  Not in dense mode, at most
+ * MAX_ALI_MARK_MOUSEOVERS per track and MAX_ALI_MARK_MOUSEOVERS_PER_ITEM per item: a
+ * pack-mode track of cross-species mRNAs can have 100,000 marks, which made a 90 MB page,
+ * and the per-item limit spreads the mouseovers over at least 15 items or reads instead of
+ * spending them all on the first ones drawn. */
 {
 #define MAX_ALI_MARK_MOUSEOVERS 300
+#define MAX_ALI_MARK_MOUSEOVERS_PER_ITEM 20
 static struct imgTrack *countedImgTrack = NULL;   // drawing is serial, one track at a time
 static int count = 0;
-if (!(theImgBox && curImgTrack) || startsWith("bam", tg->tdb->type)
-||  tg->limitedVis == tvDense)
+static struct linkedFeatures *countedLf = NULL;
+static int itemCount = 0;
+if (!(theImgBox && curImgTrack) || tg->limitedVis == tvDense)
+    return;
+// A BAM or CRAM track with more than 1500 reads has one map box for the whole track and none
+// per read (customInt, see bamTrack.c), so its marks get none either.
+if ((startsWith("bam", tg->tdb->type) || startsWith("cram", tg->tdb->type)) && tg->customInt)
     return;
 if (curImgTrack != countedImgTrack)
     {
     countedImgTrack = curImgTrack;
     count = 0;
+    countedLf = NULL;
     }
-if (++count > MAX_ALI_MARK_MOUSEOVERS)
+if (lf != countedLf)
+    {
+    countedLf = lf;
+    itemCount = 0;
+    }
+// Keep clear of the Next/Prev Exon arrows at the image edges: their map boxes are written after
+// this one, so a mark under an arrow would take its click (see genericDrawNextItemStuff).
+if (nextItemCompatible(tg) && (tg->limitedVis == tvFull || tg->limitedVis == tvPack))
+    {
+    int buttonW = tg->heightPer - 1 + 2*NEXT_ITEM_ARROW_BUFFER;
+    struct window *lastWindow = windows;
+    while (lastWindow->next)
+        lastWindow = lastWindow->next;
+    if (lf->start < winStart && currentWindow == windows && x < insideX + buttonW)
+        {
+        width -= insideX + buttonW - x;
+        x = insideX + buttonW;
+        }
+    int rightButtonX = insideX + insideWidth - buttonW;
+    if (lf->end > winEnd && currentWindow == lastWindow && x + width > rightButtonX)
+        width = rightButtonX - x;
+    if (width <= 0)
+        return;
+    }
+if (count >= MAX_ALI_MARK_MOUSEOVERS || itemCount >= MAX_ALI_MARK_MOUSEOVERS_PER_ITEM)
     return;
+count++;
+itemCount++;
 char *directUrl = trackDbSetting(tg->tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
 char *trackName = (tg->originalTrack != NULL) ? tg->originalTrack : tg->track;
@@ -575,12 +622,13 @@ static void addDiffBaseColMouseOver(struct track *tg, struct linkedFeatures *lf,
 /* Add the mouseover for the mismatch tick in one pixel column, listing the bases. */
 {
 struct dyString *dy = dyStringNew(256);
+char *other = aliMarkOtherSeqName(tg);
 if (col->count == 1)
-    dyStringPrintf(dy, "Mismatch%s, genome>query: %s:%s", colorName, chromName,
+    dyStringPrintf(dy, "Mismatch%s, genome>%s: %s:%s", colorName, other, chromName,
                    col->text->string);
 else
     {
-    dyStringPrintf(dy, "%d mismatches%s, genome>query: %s:%s", col->count, colorName,
+    dyStringPrintf(dy, "%d mismatches%s, genome>%s: %s:%s", col->count, colorName, other,
                    chromName, col->text->string);
     if (col->count > MAX_DIFFS_IN_MOUSEOVER)
         dyStringPrintf(dy, " and %d more. Zoom in to see all.",
@@ -621,9 +669,15 @@ if ( tg->itemColor && (tickColor = trackDbSetting(tg->tdb, "baseColorTickColor")
 	c = lighterShade(hvg, ci, 1.5);
     colorName = "";
     }
-int nCols = round((double)(winEnd-winStart)*scale) + 2;
+// One column per pixel of the item's visible part only: a whole-image array for every item
+// adds up on a track with thousands of items.
+int colOff = max(0, (int)round((double)(max(lf->start, winStart)-winStart)*scale) - 1);
+int colEnd = round((double)(min(lf->end, winEnd)-winStart)*scale) + 2;
+if (colEnd <= colOff)
+    return;
 struct diffBaseCol *cols;
-AllocArray(cols, nCols);
+AllocArray(cols, colEnd - colOff);
+#define DIFF_COL_COUNT(i) ((((i) >= colOff) && ((i) < colEnd)) ? cols[(i)-colOff].count : 0)
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     int s = max(winStart, sf->start);
@@ -655,9 +709,9 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		    if (scale >= 1.0)   // a base is at least a pixel: draw it at its true width
 			drawScaledBox(hvg,  s+i, s+i+1, scale, xOff, y+1, heightPer-2, c);
 		    int x = round((double)(s+i-winStart)*scale);
-		    if (x < 0 || x >= nCols)
+		    if (x < colOff || x >= colEnd)
 			continue;
-		    struct diffBaseCol *col = &cols[x];
+		    struct diffBaseCol *col = &cols[x-colOff];
 		    if (col->count == 0)
 			{
 			col->exonStartX = ex1;
@@ -678,20 +732,19 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	}
     }
 int x;
-for (x = 0; x < nCols; x++)
+for (x = colOff; x < colEnd; x++)
     {
-    struct diffBaseCol *col = &cols[x];
+    struct diffBaseCol *col = &cols[x-colOff];
     if (col->count == 0)
         continue;
     if (scale < 1.0)   // several bases per pixel: one column per pixel, widen lone ticks
         {
         int x1 = x, x2 = x + 1;
         // keep at least one clean column between this tick and the next one
-        boolean rightFree = (x+1 < col->exonEndX) && cols[x+1].count == 0
-                            && (x+2 >= nCols || cols[x+2].count == 0);
-        boolean leftFree = (x-1 >= col->exonStartX) && cols[x-1].count == 0
-                           && (x-2 < 0 || cols[x-2].count == 0)
-                           && (x-3 < 0 || cols[x-3].count == 0);
+        boolean rightFree = (x+1 < col->exonEndX) && DIFF_COL_COUNT(x+1) == 0
+                            && DIFF_COL_COUNT(x+2) == 0;
+        boolean leftFree = (x-1 >= col->exonStartX) && DIFF_COL_COUNT(x-1) == 0
+                           && DIFF_COL_COUNT(x-2) == 0 && DIFF_COL_COUNT(x-3) == 0;
         if (rightFree)
             x2++;
         else if (leftFree)
@@ -701,6 +754,7 @@ for (x = 0; x < nCols; x++)
     addDiffBaseColMouseOver(tg, lf, hvg, x + xOff, y, heightPer, col, colorName);
     dyStringFree(&col->text);
     }
+#undef DIFF_COL_COUNT
 freeMem(cols);
 }
 

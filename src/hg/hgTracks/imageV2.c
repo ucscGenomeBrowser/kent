@@ -18,6 +18,7 @@
 #include "chromAlias.h"
 #include "trackHub.h"
 #include "htmlSanitize.h"
+#include "blatShare.h"
 
 // Note: when right-click View image (or pdf output) then theImgBox==NULL, so it will be rendered as a single simple image
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
@@ -294,7 +295,7 @@ boolean isCustomComposite = trackDbSettingOn(track->tdb, CUSTOM_COMPOSITE_SETTIN
 jsonObjectAdd(ele, "isCustomComposite", newJsonBoolean(isCustomComposite));
 
 // BLAT results custom track: hgTracks.js offers "Back to BLAT results" in its right-click menu
-if (trackDbSettingOn(track->tdb, "blatResult"))
+if (blatIsResultTrack(track->tdb))
     jsonObjectAdd(ele, "blatResult", newJsonBoolean(TRUE));
 
 // check if track can have merged items, needed for context clicks in track

@@ -12,6 +12,10 @@
 #include "psl.h"
 
 struct cart;
+struct trackDb;
+
+boolean blatIsResultTrack(struct trackDb *tdb);
+/* Return TRUE if tdb is a BLAT results custom track, tagged blatResult=on by hgc's buildBigPsl. */
 
 struct psl *pslListFromBigPslFile(char *bbFileName);
 /* Read every alignment out of a bigPsl bigBed file into a psl list, in query-display order.  The

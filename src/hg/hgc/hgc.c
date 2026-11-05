@@ -24218,7 +24218,7 @@ void bigPslHandlingCtAndGeneric(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, int end)
 /* Special option to show all alignments for blat ct psl */
 {
-if (sameOk(trackDbSetting(tdb, "blatResult"), "on"))
+if (blatIsResultTrack(tdb))
     {
     char *encTrack = cgiEncode(tdb->track);
     printf("<p><a href='hgBlat?blatNewPage=1&db=%s&blatCt=%s&%s'>&lsaquo; Back to BLAT results</a></p>\n",
@@ -28402,6 +28402,8 @@ pipelineWait(pl);
 unlink(bigPslFile);
 }
 
+static char *blatCartDbBefore = NULL;   /* the cart's db, if doMiddle changed it to blatDb */
+
 static void buildBigPsl(char *fileNames)
 /* Build a custom track with a bigPsl file out of blat results.
  * Bring up the bigPsl detail page with all the alignments. */
@@ -28462,7 +28464,7 @@ if (differentString(oldTracks, "keep"))
     for (ct = ctList; ct != NULL; ct = next)
         {
         next = ct->next;
-        if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+        if (blatIsResultTrack(ct->tdb))
             {
             if (sameString(oldTracks, "hide"))
                 {
@@ -28490,7 +28492,7 @@ if (sameString(cfgOptionDefault("blatOnlyLatestCheckbox", "off"), "on")
     for (ct = ctList; ct != NULL; ct = next)
         {
         next = ct->next;
-        if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+        if (blatIsResultTrack(ct->tdb))
             {
             cartRemove(cart, ct->tdb->track);   /* no orphaned visibility for a reused ct_ id */
             continue;   /* drop it; customTracksSaveCart below writes out only the kept list */
@@ -28528,6 +28530,13 @@ if (sameOk(cartOptionalString(cart, "autoRearr"), "1"))
     cartSetString(cart, snakeVar, "1");
     }
 
+if (blatCartDbBefore != NULL)
+    {
+    if (isEmpty(blatCartDbBefore))
+        cartRemove(cart, "db");
+    else
+        cartSetString(cart, "db", blatCartDbBefore);
+    }
 }
 
 void doHPRCTable(struct trackDb *tdb, char *itemName)
@@ -28600,6 +28609,19 @@ if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
     botDelayMessage(ip, botDelayMillis);
+    }
+
+/* hgBlat builds its results track for the assembly of the search, which it sends as blatDb: the
+ * cart's db may have been changed in another tab since.  The cart's db is put back at the end of
+ * buildBigPsl, so building the track does not switch that tab's assembly either. */
+if (sameOk(track, "buildBigPsl") && cgiOptionalString("blatDb") != NULL)
+    {
+    char *blatDb = cgiString("blatDb");
+    if (hDbIsActive(blatDb) || trackHubDatabase(blatDb))
+        {
+        blatCartDbBefore = cloneString(cartUsualString(cart, "db", ""));
+        cartSetString(cart, "db", blatDb);
+        }
     }
 
 /*	database and organism are global variables used in many places	*/

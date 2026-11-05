@@ -34,6 +34,7 @@
 #include "heatmap.h"
 #include "cds.h"
 #include "dotBracketTrack.h"
+#include "blatShare.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -766,7 +767,7 @@ if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
    labelTrackAsHideEmpty(track);
 
 // a BLAT results bigPsl (hgc buildBigPsl) gets a mouseover with a query coverage bar
-boolean blatResult = trackDbSettingOn(track->tdb, "blatResult")
+boolean blatResult = blatIsResultTrack(track->tdb)
                      && startsWith("bigPsl", track->tdb->type);
 
 // mouseOvers can be built constructed via trackDb settings instead

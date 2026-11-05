@@ -505,8 +505,8 @@ function blatWireRename() {
 }
 
 // ---- Delete BLAT track ----------------------------------------------------
-// The track is removed by an hgCustom request, whose custom track parsing does the removal (the
-// variables are CT_DO_REMOVE_VAR and CT_SELECTED_TABLE_VAR in customTrack.h); its page is not used.
+// The track is removed by an hgBlat request (doDeleteCt in hgBlat.c), which answers with JSON.  An
+// error goes into the share box under the summary, where the Share a link messages also go.
 // The track name is cfg.ctName on a page reopened from the track (blatCt=), else the track this page
 // built (hgBlat.c's window.blatCtName).  On a page built from the trash files the table keeps
 // working without the track, so the button then turns into "Restore track", which rebuilds it
@@ -531,9 +531,19 @@ function blatWireDelete() {
     var btn = $('#blatDeleteBtn');
     var cfg = hgBlatData.config;
     var deleted = false;
+    var errorShown = false;
     btn.on('click', function() {
         if (deleted) {
-            window.blatRenameCt(cfg.trackName, cfg.trackDescription);
+            if (!window.blatRenameCt(cfg.trackName, cfg.trackDescription)) {
+                blatShowShareBox(document.getElementById('gbShareBox'), null,
+                    'The track could not be restored. Please try again.');
+                errorShown = true;
+                return;
+            }
+            if (errorShown) {
+                document.getElementById('gbShareBox').style.display = 'none';
+                errorShown = false;
+            }
             deleted = false;
             btn.find('.blatDeleteLabel').text('Delete track');
             blatSetTip(btn, blatDeleteTip(cfg));
@@ -544,16 +554,29 @@ function blatWireDelete() {
             (typeof window.blatCtName === 'function' ? window.blatCtName() : '');
         if (!ctName) { return; }
         btn.prop('disabled', true);
+        var box = document.getElementById('gbShareBox');
+        var showError = function(msg) {
+            btn.prop('disabled', false);
+            blatShowShareBox(box, null, msg);
+            errorShown = true;
+        };
         $.ajax({
             type: 'POST',
-            url: 'hgCustom',
-            // db: the cart's current assembly may have been changed in another tab, and hgCustom
-            // only looks for the track among the custom tracks of that assembly.
-            data: { hgsid: cfg.hgsid, db: cfg.fullDb, hgct_doRemoveCustomTrack: '1',
-                    hgct_table: ctName },
-            dataType: 'html',
+            url: 'hgBlat',
+            // blatCtDb: the cart's current assembly may have been changed in another tab.  hgBlat
+            // looks for the track among the custom tracks of this one and leaves the cart's alone.
+            data: { hgsid: cfg.hgsid, blatCtDb: cfg.fullDb, blatDeleteCt: ctName },
+            dataType: 'json',
             cache: false,
-            success: function() {
+            success: function(data) {
+                if (!data || !data.deleted) {
+                    showError((data && data.error) || 'The track could not be deleted.');
+                    return;
+                }
+                if (errorShown) {   // the message of an earlier try
+                    box.style.display = 'none';
+                    errorShown = false;
+                }
                 deleted = true;
                 // Without the track these would open the browser with nothing new in it, and a
                 // rename would quietly bring the track back.
@@ -567,8 +590,7 @@ function blatWireDelete() {
                 blatSetTip(btn, BLAT_RESTORE_TIP);
             },
             error: function() {
-                btn.prop('disabled', false);
-                blatSetTip(btn, 'The track could not be deleted. Please try again.');
+                showError(topLinks.serverUnreachableMsg);
             }
         });
     });
