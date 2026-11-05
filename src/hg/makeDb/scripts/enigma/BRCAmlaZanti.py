@@ -17,6 +17,13 @@
 #    adjacent sequence).
 #  - Zanti rows with a symbolic allele (the single <CNV> row) are dropped.
 #
+# Revision for refs #38666:
+#  - A Zanti ccLR whose suggested evidence is "No evidence*" (Supplementary
+#    Data 4 footnote h: fewer than 3 individuals combined and/or, for BRCA2,
+#    only one dataset) is treated as not informative, as the ENIGMA VCEP asked.
+#    It is still written to the caseControlLR field but left out of the
+#    combined LR and the direction-conflict check.
+#
 # hgvsToVcf mis-converts insertions with an intronic offset (refs #38469), so
 # Zanti rows are keyed from Zanti's own VCF columns, not from their HGVSc.
 #
@@ -28,7 +35,7 @@
 
 import openpyxl, re, subprocess, sys, functools
 
-WORK = "/hive/data/inside/enigmaTracksData/rm38467"
+WORK = "/hive/data/inside/enigmaTracksData/rm38666"
 XLSX = "/hive/data/inside/enigmaTracksData/zantiDraft/ZantiSuppData4.xlsx"
 CUR38 = "/hive/data/inside/enigmaTracksData/archive/v1.1/BRCAmfaHg38.bb"   # pre-Zanti track
 ASM = {"38": {"db": "hg38", "twoBit": "/hive/data/genomes/hg38/hg38.2bit",
@@ -359,11 +366,14 @@ def mergeList(lists):
 # names with separate probands, and Li's per-variant LR is a product over probands.
 SOURCE_TWICE_OK = {("NM_007294.4:c.815_824dup", "li")}
 
+# Zanti's label for a ccLR from too few carriers; not used in the combined LR (refs #38666).
+NOT_INFORMATIVE_SUGG = "No evidence*"
+
 conflicts = []
 merged = []
 sourceTwice = []
 rows = {"38": [], "19": []}
-counts = {"groups": 0, "merged": 0, "both": 0, "zanOnly": 0, "mfOnly": 0}
+counts = {"groups": 0, "merged": 0, "both": 0, "zanOnly": 0, "mfOnly": 0, "ccNotUsed": 0}
 for k, g in groups.items():
     curs = [cur[n] for n in g["cur"]]
     z = g["zan"][0] if g["zan"] else None
@@ -388,9 +398,13 @@ for k, g in groups.items():
     per = {t: product([fnum(c[t]) for c in curs]) for t in ("famHist", "cooc", "seg", "path")}
     mf = product(list(per.values()))
     cc = z["ccLR"] if z else None
-    combined = product([mf, cc])
-    if mf is not None and cc is not None:
-        if (cc >= 2.08 and mf <= 0.48) or (cc <= 0.48 and mf >= 2.08):
+    ccUsed = cc
+    if z and z["sugg"] == NOT_INFORMATIVE_SUGG:
+        ccUsed = None
+        counts["ccNotUsed"] += 1
+    combined = product([mf, ccUsed])
+    if mf is not None and ccUsed is not None:
+        if (ccUsed >= 2.08 and mf <= 0.48) or (ccUsed <= 0.48 and mf >= 2.08):
             conflicts.append((name, k, fmt(mf), fmt(cc), fmt(combined)))
 
     if len(oldNames) > 1:
@@ -451,7 +465,7 @@ AS = '''table BRCAmla
    string cooccurrenceCombinedLR;    "Combined co-occurrence LR. Blank if none."
    string segregationCombinedLR;     "Combined segregation LR. Blank if none."
    string pathologyCombinedLR;       "Combined pathology LR. Blank if none."
-   string caseControlLR;             "Case-control LR from Zanti et al. 2025 (ccLR). Blank if none."
+   string caseControlLR;             "Case-control LR from Zanti et al. 2025 (ccLR). Not used in the combined LR when Zanti's suggested evidence is No evidence*."
    string bridgesLR;                 "Zanti BRIDGES dataset ccLR"
    string carriersLR;                "Zanti CARRIERS dataset ccLR"
    string ukbLR;                     "Zanti UK Biobank ccLR"
@@ -486,6 +500,8 @@ print("Output items per assembly: %d" % counts["groups"])
 print("Merged groups (more than one name): %d   Renamed: %d" % (counts["merged"], len(renamed)))
 print("Membership: both=%d  Zanti-only=%d  multifactorial-only=%d"
       % (counts["both"], counts["zanOnly"], counts["mfOnly"]))
+print("Zanti ccLRs labeled %s, shown but not used in the combined LR: %d"
+      % (NOT_INFORMATIVE_SUGG, counts["ccNotUsed"]))
 print("Allowed groups with the same source on two items: %s" % sourceTwice)
 print("Direction conflicts (MF vs ccLR opposite): %d" % len(conflicts))
 with open(WORK + "/directionConflicts.tsv", "w") as fh:
