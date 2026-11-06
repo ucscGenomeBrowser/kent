@@ -153,8 +153,21 @@ function blatSummaryStrip(cfg, queryCount) {
     // "Show Query Sequence" opens the query FASTA in a panel (with Download / Copy). Only on a fresh
     // search, where the uploaded sequence is available (cfg.querySeqs emitted by hgBlat.c).
     if (cfg.querySeqs && cfg.querySeqs.length) {
+        // Font Awesome Free 7 "file-lines" (fontawesome.com, free icons), inlined like the icons below.
+        var seqIcon = '<svg class="blatShareIcon" viewBox="0 0 640 640" width="16" height="16" ' +
+            'fill="currentColor" aria-hidden="true"><path d="M192 112L304 112L304 200C304 239.8 ' +
+            '336.2 272 376 272L464 272L464 512C464 520.8 456.8 528 448 528L192 528C183.2 528 176 ' +
+            '520.8 176 512L176 128C176 119.2 183.2 112 192 112zM352 131.9L444.1 224L376 224C362.7 ' +
+            '224 352 213.3 352 200L352 131.9zM192 64C156.7 64 128 92.7 128 128L128 512C128 547.3 ' +
+            '156.7 576 192 576L448 576C483.3 576 512 547.3 512 512L512 250.5C512 233.5 505.3 217.2 ' +
+            '493.3 205.2L370.7 82.7C358.7 70.7 342.5 64 325.5 64L192 64zM248 320C234.7 320 224 ' +
+            '330.7 224 344C224 357.3 234.7 368 248 368L392 368C405.3 368 416 357.3 416 344C416 ' +
+            '330.7 405.3 320 392 320L248 320zM248 416C234.7 416 224 426.7 224 440C224 453.3 234.7 ' +
+            '464 248 464L392 464C405.3 464 416 453.3 416 440C416 426.7 405.3 416 392 416L248 ' +
+            '416z"/></svg>';
         actions += '<button type="button" class="gbPill" id="blatSeqBtn" ' +
-            'title="Show the sequence you searched with, in FASTA format">Show Query Sequence</button>';
+            'title="Show the sequence you searched with, in FASTA format">' + seqIcon +
+            'Show Query Sequence</button>';
     }
     // Font Awesome 6 "file-arrow-down" (fontawesome.com, free icons, CC BY 4.0), inlined because
     // the tree's font-awesome.min.css is version 4.5, which does not have it.

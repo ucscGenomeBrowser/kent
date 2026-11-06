@@ -809,6 +809,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         {
         // fill out bedRow to support mouseOver pattern replacements
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        // BLAT results honor filter.match (the search's minimum score), so the track and the
+        // results table agree, and the table page can turn it off.  Other bigPsl tracks never
+        // applied their filters here, and keep doing so.
+        if (blatResult && !bigBedFilterInterval(bbi, bedRow, filters))
+            {
+            filtered++;
+            continue;
+            }
         char *seq, *cds;
         // Under quickLift the interval came out of the other assembly's file, so the
         // alignment has to carry that assembly's sequence name:  chromName is the name on

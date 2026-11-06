@@ -8263,6 +8263,7 @@ struct paraFetchData
     struct track *track;
     boolean done;
     boolean doLoadSummary;
+    char *warnMsg;      /* warnings the worker collected, for the main thread to hand back */
     };
 
 static boolean isTrackForParallelLoad(struct track *track)
@@ -8519,10 +8520,14 @@ while(1)
 	pfd->done = TRUE;
 	}
     errCatchEnd(errCatch);
-    if (errCatch->gotWarning)
+    if (errCatch->gotWarning && !errCatch->gotError)
         {
-        // do something intelligent to permit reporting of warnings
-        // Can't pass it to warn yet - the fancy warnhandlers aren't ready
+        /* A worker thread cannot call warn: the handlers that write into the page are not
+         * ready for it.  Keep the message instead and let the main thread hand it back once
+         * the workers have joined, which is what errCatchReWarn does on the serial path.
+         * With an error there is nothing to do here, since the message carries the warnings
+         * too and goes onto the track below.  refs #38642 */
+        pfd->warnMsg = cloneString(errCatch->message->string);
         }
     if (errCatch->gotError)
 	{
@@ -8587,13 +8592,23 @@ for (pfd = pfdRunning; pfd; pfd = pfd->next)
     pfd->track->networkErrMsg = cloneString(temp);
     ++errCount;
     }
+struct dyString *warnings = dyStringNew(0);
 for (pfd = pfdDone; pfd; pfd = pfd->next)
     {
     // some done tracks may have errors
     if (pfd->track->networkErrMsg)
         ++errCount;
+    if (pfd->warnMsg)
+        {
+        dyStringAppend(warnings, pfd->warnMsg);
+        freez(&pfd->warnMsg);   // pfdDone carries over between passes, so report it once
+        }
     }
 pthread_mutex_unlock( &pfdMutex );
+/* Outside the lock and on the main thread, where warn reaches the reader.  refs #38642 */
+if (dyStringLen(warnings) > 0)
+    warn("%s", dyStringContents(warnings));
+dyStringFree(&warnings);
 return errCount;
 }
 

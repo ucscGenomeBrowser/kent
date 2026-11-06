@@ -130,18 +130,26 @@ sub needsUpdate($$) {
 # metadata needed, unlike ncbiRefSeq's NCBI-supplied $verString).
 sub archivePriorVersion {
   my $priorBb = "$buildDir/$db.ncbiGene.bb";
-  return if (! -s "$priorBb");
+  if (! -s "$priorBb") {
+    &HgAutomate::verbose(1,
+      "# ncbiGene: no previous $db.ncbiGene.bb, nothing to archive\n");
+    return;
+  }
 
   my $priorMtime = stat($priorBb)->mtime;
   my ($mday,$mon,$year) = (localtime($priorMtime))[3,4,5];
   my $priorVersion = sprintf("%04d-%02d-%02d", $year+1900, $mon+1, $mday);
-  my $archiveDir = "$buildDir/archive/$priorVersion";
 
-  if ( -d "$archiveDir" ) {
-    &HgAutomate::verbose(1,
-      "# ncbiGene: archive/$priorVersion already exists, not re-archiving\n");
-    return;
+  # a different prior version can carry the same date (two gff updates
+  # on one day), and promoteNewBuild() always replaces the live files
+  # after this returns, so never skip archiving: pick an unused name
+  my $baseVersion = $priorVersion;
+  my $suffix = 1;
+  while ( -e "$buildDir/archive/$priorVersion" ) {
+    $suffix += 1;
+    $priorVersion = "$baseVersion.$suffix";
   }
+  my $archiveDir = "$buildDir/archive/$priorVersion";
   &HgAutomate::mustMkdir($archiveDir);
   foreach my $ext (qw( bb gtf.gz ix ixx stats.txt )) {
     my $f = "$buildDir/$db.ncbiGene.$ext";
@@ -294,7 +302,7 @@ export chromSizes=$chromSizes
 
 function cleanUp() {
   rm -f \$asmId.ncbiGene.genePred.gz \$asmId.ncbiGene.genePred
-  rm -f \$asmId.geneAttrs.ncbi.txt.new
+  rm -f \$asmId.geneAttrs.ncbi.txt.new \$asmId.ncbiGene.gtf.gz.new
 }
 
 if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
@@ -305,9 +313,34 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
          -chromSizes=\$chromSizes stdin stdout \\
         $dupList | gzip -c > \$asmId.ncbiGene.genePred.gz
   genePredCheck \$asmId.ncbiGene.genePred.gz
-  zcat \$asmId.ncbiGene.genePred.gz > ncbiGene.\$asmId.gp
-  genePredToGtf -utr file ncbiGene.\$asmId.gp stdout | gzip -c > \$asmId.ncbiGene.gtf.gz.new
-  rm -f ncbiGene.\$asmId.gp
+  # genePredToGtf writes name2 as gene_id, but name2 here is the gene
+  # symbol (-useName), which separate genes can share (PGAP family
+  # symbols, tRNA genes), merging them under one gene_id.  For the GTF,
+  # take each transcript's unique GFF3 gene ID as name2 from a second
+  # translation, matched on columns 1-10, and keep the symbol for a
+  # gene_name attribute.
+  (gff3ToGenePred -warnAndContinue -useName -geneNameAttr=ID \\
+    \$gffFile stdout 2> /dev/null || true) > ncbiGene.\$asmId.geneId.gp
+  zcat \$asmId.ncbiGene.genePred.gz | awk -F'\\t' -v symOut=ncbiGene.\$asmId.geneName.tab \\
+    'BEGIN { OFS = "\\t" }
+    { k = \$1; for (i = 2; i <= 10; ++i) k = k FS \$i }
+    FNR == NR { geneId[k] = \$12; next }
+    { sym = \$12; if (k in geneId) \$12 = geneId[k]
+      print \$12, sym > symOut; print }' \\
+      ncbiGene.\$asmId.geneId.gp - > ncbiGene.\$asmId.gp
+  # genePredToGtf writes name2 as both gene_id and the trailing gene_name;
+  # put the symbol back into that trailing gene_name
+  genePredToGtf -utr -source=ncbiGene.`date -r \$gffFile +%F` \\
+      file ncbiGene.\$asmId.gp stdout \\
+    | awk -F'\\t' 'BEGIN { OFS = "\\t" }
+      FNR == NR { sym[\$1] = \$2; next }
+      { i = index(\$9, "\\"; ")
+        id = substr(\$9, 10, i - 10)
+        if ((id in sym) && match(\$9, / gene_name "[^"]*";\$/))
+          \$9 = substr(\$9, 1, RSTART - 1) " gene_name \\"" sym[id] "\\";"
+        print }' ncbiGene.\$asmId.geneName.tab - \\
+    | gzip -c > \$asmId.ncbiGene.gtf.gz.new
+  rm -f ncbiGene.\$asmId.gp ncbiGene.\$asmId.geneId.gp ncbiGene.\$asmId.geneName.tab
   export howMany=`genePredCheck \$asmId.ncbiGene.genePred.gz 2>&1 | grep "^checked" | awk '{print \$2}'`
   if [ "\${howMany}" -eq 0 ]; then
      printf "# ncbiGene: no gene definitions found in \$gffFile\\n"
@@ -374,7 +407,15 @@ _EOF_
 
   # reached only if the boss script above exited 0 -- the new build is
   # complete and validated under *.new file names, so it is now safe to
-  # archive the previous live version and promote the new one into place
+  # archive the previous live version and promote the new one into place.
+  # The boss script also exits 0 without building anything when the gff
+  # has no gene definitions; archiving then would remove the live track
+  # with nothing to replace it, so leave the live track as it is.
+  if ( ! -s "$buildDir/$db.ncbiGene.bb.new" ) {
+    &HgAutomate::verbose(1,
+      "# ncbiGene: no new $db.ncbiGene.bb.new built, live track left unchanged\n");
+    return;
+  }
   archivePriorVersion();
   promoteNewBuild();
 } # doNcbiGene
