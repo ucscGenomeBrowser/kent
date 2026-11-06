@@ -523,8 +523,10 @@ const uppy = new Uppy.Uppy({
             // checked: that hub.txt replaces the hub's definition, its genomes
             // included.
             let existing = hubCreate.uiState.filesHash[file.meta.parentDir];
+            // Older uploads stored a GenArk or curated assembly under its cart name
+            // (hub_<id>_GCF_...), new ones under the bare name, so compare without the prefix.
             if (!isSplitHub && existing && existing.genome &&
-                    existing.genome !== file.meta.genome) {
+                    trackHubSkipHubName(existing.genome) !== trackHubSkipHubName(file.meta.genome)) {
                 // If the existing hub is an assembly hub, adopt its genome
                 // automatically rather than erroring - the UI hid the picker
                 // for this case, so the mismatch is just stale metadata.
@@ -1911,9 +1913,13 @@ var hubCreate = (function() {
         let hubUrl = uiState.userUrl + cgiEncode(hubTxtPathForHub(hubName));
         let dbParam = isAssemblyHub(hubName) ? "genome" : "db";
         let genome = dirRow.genome || findHubGenome(hubName) || "";
-        // older uploads stored a hub assembly's cart name; hub_<id>_ means nothing in another cart
-        genome = genome.replace(/^hub_[0-9]+_/, "");
-        return window.location.origin + "/cgi-bin/hgTracks?" + dbParam + "=" + encodeURIComponent(genome) +
+        // A hub_<id>_ name means nothing in another cart.  For the page's own assembly
+        // dbUrlArgs() knows what to send instead, also the URL of a user assembly hub; for
+        // a GenArk or curated assembly stored under its cart name the bare name does it.
+        let dbArgs = dbParam + "=" + encodeURIComponent(trackHubSkipHubName(genome));
+        if (dbParam === "db" && genome.startsWith("hub_") && !dbUrlArgs(genome).startsWith("db=hub_"))
+            dbArgs = dbUrlArgs(genome);
+        return window.location.origin + "/cgi-bin/hgTracks?" + dbArgs +
             "&hubUrl=" + encodeURIComponent(hubUrl);
     }
 

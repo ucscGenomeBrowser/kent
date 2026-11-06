@@ -1536,20 +1536,21 @@ function dbUrlArgs(db)
 function urlWithPortableDb(url)
 {
 // Return url with its db= argument replaced by dbUrlArgs(), so the link opens the same assembly
-// in any cart.  Other arguments are kept.  url must be absolute.
-    var u;
+// in any cart.  Only that argument is touched: the others keep their order and encoding, and a
+// hubUrl= already in the url stays, since the cart connects every hubUrl it is given.
+    var m = url.match(/([?&])db=([^&#]*)/);
+    if (!m)
+        return url;
+    var db;
     try {
-        u = new URL(url);
+        db = decodeURIComponent(m[2].replace(/\+/g, " "));
     } catch (e) {
         return url;
     }
-    var db = u.searchParams.get("db");
-    if (!db)
+    var args = dbUrlArgs(db);
+    if (args === "db=" + encodeURIComponent(db))
         return url;
-    var args = new URLSearchParams(dbUrlArgs(db));
-    u.searchParams.delete("db");
-    args.forEach(function(val, name) { u.searchParams.set(name, val); });
-    return u.toString();
+    return url.replace(m[0], m[1] + args);
 }
 
 function getDb()
