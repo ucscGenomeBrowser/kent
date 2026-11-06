@@ -28557,6 +28557,8 @@ errCatchEnd(errCatch);
 blatRestoreCartDb();
 if (errCatch->gotError)
     errAbort("%s", errCatch->message->string);
+if (errCatch->gotWarning)   /* errCatch holds warnings back; pass them on as before */
+    warn("%s", errCatch->message->string);
 errCatchFree(&errCatch);
 }
 
