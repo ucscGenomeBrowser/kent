@@ -341,6 +341,9 @@ char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "transla
 char *outputList[] = {"hyperlink", "psl", "psl no header", "JSON"};
 
 int minMatchShown = 0;
+/* The minimum score of the results track a blatCt= page reopens: the track carries the search's
+ * minimum as its filter.match setting, since its file holds every hit. */
+static int blatBigPslMin = 0;
 
 struct serverTable *findServer(char *db, boolean isTrans)
 /* Return server for given database.  Db can either be database name or
@@ -696,8 +699,9 @@ if (pslName != NULL && faName != NULL)
     char *faId  = cloneString(strrchr(faName,  '/') ? strrchr(faName,  '/') + 1 : faName);
     chopSuffix(pslId);   /* drop ".pslx" -> bare token */
     chopSuffix(faId);    /* drop ".fa"   -> bare token */
-    jsonWriteStringf(jw, "shareUrl", "hgBlat?blatNewPage=1&db=%s&blatPslId=%s&blatFaId=%s",
-        database, pslId, faId);
+    /* blatMin: the search's minimum score, since the reader's cart does not have it. */
+    jsonWriteStringf(jw, "shareUrl", "hgBlat?blatNewPage=1&db=%s&blatPslId=%s&blatFaId=%s&blatMin=%d",
+        database, pslId, faId, minMatchShown);
     freeMem(pslId);
     freeMem(faId);
     }
@@ -1049,6 +1053,8 @@ else  // hyperlink
         dyStringPrintf(url, "&%s=%s",  cartSessionVarName(), cartSessionId(cart));
         /* the assembly of this search: the cart's db may change in another tab (hgc doMiddle) */
         dyStringPrintf(url, "&blatDb=%s", cgiEncode(database));
+        /* the track filters on the search's minimum score */
+        dyStringPrintf(url, "&blatTrackMin=%d", minMatchShown);
         dyStringPrintf(url, "&Submit=%s", cgiEncode("Create a stable custom track with these results"));
         if (pslIsProtein(psl))
             dyStringPrintf(url, "&isProt=on");
@@ -2556,6 +2562,7 @@ if (!allGenomes)
      * different assembly in between).  The trash PSLs carry this assembly's chrom names. */
     cartSetString(cart, "blatDb", serve->db);
     cartSetString(cart, "blatOrganism", organism);
+    cartSetInt(cart, "blatMinMatch", minMatchShown);
     showAliPlaces(pslTn.forCgi, faTn.forCgi, NULL, serve->db, qType, tType,
               organism, feelingLucky);
     }
@@ -3086,6 +3093,24 @@ if (pslList == NULL)
     cartWebEnd();
     return;
     }
+/* The track holds every hit, and carries the search's minimum score as its filter. */
+struct psl *keptList = NULL, *hit, *nextHit;
+for (hit = pslList; hit != NULL; hit = nextHit)
+    {
+    nextHit = hit->next;
+    if (hit->match >= blatBigPslMin)
+        slAddHead(&keptList, hit);
+    else
+        pslFree(&hit);
+    }
+slReverse(&keptList);
+pslList = keptList;
+if (pslList == NULL)
+    {
+    printf("<p>Sorry, no matches found (with a score of at least %d).</p>\n", blatBigPslMin);
+    cartWebEnd();
+    return;
+    }
 pslSortListByVar(&pslList, cartUsualString(cart, "sort", pslSortList[0]));
 
 struct subText *subList = NULL;
@@ -3121,7 +3146,12 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     char *bigDataUrl = trackDbSetting(ct->tdb, "bigDataUrl");
     if (blatIsResultTrack(ct->tdb) && bigDataUrl != NULL
     &&  isTrashOrSessionDataPath(bigDataUrl))
+        {
         bbFile = bigDataUrl;
+        /* cartOrTdbString: a filter.match the user set in the track's settings wins over the one
+         * the search put in the track line. */
+        blatBigPslMin = atoi(cartOrTdbString(cart, ct->tdb, "filter.match", "0"));
+        }
     break;
     }
 /* The page's "Share a link" saves blatLastBigBed, so it must name the results shown here, not
@@ -3210,6 +3240,8 @@ if (isNotEmpty(savedDb))
     if (isNotEmpty(savedOrg))
         organism = savedOrg;
     }
+/* The reopen does not run the search, so the minimum it used comes from the cart. */
+minMatchShown = cartUsualInt(cart, "blatMinMatch", 0);
 cartWebStart(cart, database, "%s (%s) BLAT Results",
     trackHubSkipHubName(organism), trackHubSkipHubName(database));
 if (pslFile == NULL || faFile == NULL ||
@@ -3258,6 +3290,8 @@ cartSetString(cart, "blatPslFile", pslPath);
 cartSetString(cart, "blatFaFile",  faPath);
 cartSetString(cart, "blatDb", database);
 cartSetString(cart, "blatOrganism", organism);
+/* the search's minimum score travels in the link (blatMin), since the recipient's cart has none */
+cartSetInt(cart, "blatMinMatch", max(0, cgiOptionalInt("blatMin", 0)));
 doReopenResults(database, organism);
 }
 
@@ -3611,7 +3645,7 @@ else
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", "blatReopen", "blatCt", "blatDeleteCt", "blatCtDb", "u", "s", NULL};
+char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", "blatReopen", "blatCt", "blatDeleteCt", "blatCtDb", "blatMin", "u", "s", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
