@@ -8872,8 +8872,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 //////////////////////////
-// Recent views dialog: the views this web browser had in the last days, opened from the note
-// after a session load or from My Data > Recent Browser Views
+// Restore Previous Session dialog: the copies of the cart made just before a session or settings
+// load replaced it, opened from the note after a load or from My Data > Restore Previous Session
 
 var sessionLoadDialog = {
 
@@ -8897,37 +8897,30 @@ var sessionLoadDialog = {
     },
 
     describe: function(s) {
-        // What a row is: the copy made just before a session load, or a view of another tab
-        if (s.prevViewOf === null || s.prevViewOf === undefined) {
-            return 'Last used ' + this.formatTimestamp(s.timestamp).toLowerCase();
-        }
+        // What a row is: the copy made just before a session load, or before a file or URL load
         var what = s.prevViewOf ? 'session <b>' + htmlEncode(s.prevViewOf) + '</b>'
                                 : 'settings from a file or URL';
         return 'Before you opened ' + what + ', ' + this.formatTimestamp(s.timestamp).toLowerCase();
     },
 
     buildSessionList: function(sessions) {
-        // Build HTML for the list of recent views, the copy made before a session load first
-        var html = '<p>These are the views you had in this web browser in the last 7 days. ' +
-                'Open one in a new tab to get it back, or save it as a named session.</p>';
+        // Build HTML for the list of saved copies, newest first
+        var html = '<p>Before you open a session or load settings from a file or URL, the ' +
+                'Genome Browser keeps a copy of your tracks and settings. These are your most ' +
+                'recent copies in this web browser from the last 7 days. Click Open to restore ' +
+                'one in a new tab, or Save to keep it as a named session.</p>';
         if (sessions.length === 0) {
-            return html + '<p>No recently used views are available yet for this internet ' +
-                    'browser. You may want to check other internet browsers or other user ' +
-                    'accounts in these, if you think there should be more. Or ' +
+            return html + '<p>There are no copies yet in this web browser. If you think there ' +
+                    'should be some, check your other web browsers, or ' +
                     '<a href="../contacts.html" target="_blank">contact us</a>.</p>';
         }
         var sorted = sessions.slice().sort(function(a, b) {
-            var aCopy = (a.prevViewOf !== null && a.prevViewOf !== undefined);
-            var bCopy = (b.prevViewOf !== null && b.prevViewOf !== undefined);
-            if (aCopy !== bCopy) {
-                return aCopy ? -1 : 1;
-            }
             return b.timestamp - a.timestamp;
         });
         html += '<div style="max-height: 300px; overflow-y: auto;">';
         html += '<table style="width: 100%; border-collapse: collapse;">';
         html += '<thead><tr style="background: #f0f0f0;">' +
-                '<th style="padding: 8px; text-align: left;">View</th>' +
+                '<th style="padding: 8px; text-align: left;">Copy</th>' +
                 '<th style="padding: 8px; text-align: left;">Assembly</th>' +
                 '<th style="padding: 8px; text-align: left;">Position</th>' +
                 '<th style="padding: 8px;"></th>' +
@@ -8945,7 +8938,7 @@ var sessionLoadDialog = {
             html += '<td style="padding: 8px; white-space: nowrap;">' +
                     '<a href="' + openUrl + '" target="_blank">Open</a> ' +
                     '<a href="' + saveUrl + '" target="_blank" ' +
-                    'title="Open the Sessions page with this view, to save it under a name">' +
+                    'title="Open the Sessions page with these settings, to save them under a name">' +
                     'Save</a></td>';
             html += '</tr>';
         }
@@ -8960,9 +8953,18 @@ var sessionLoadDialog = {
         }
         var $dialog = $('<div id="sessionLoadDialog"></div>');
         $dialog.html(this.buildSessionList(recentSessions));
+        // not wider than the window, or its right side is cut off in a narrow window
+        var dialogWidth = function() {
+            return Math.min(650, $(window).width() - 20);
+        };
+        var onResize = function() {
+            $dialog.dialog('option', 'width', dialogWidth());
+            $dialog.dialog('option', 'position', {my: 'center', at: 'center', of: window});
+        };
+        $(window).on('resize', onResize);
         $dialog.dialog({
-            title: 'Recent Browser Views',
-            width: 650,
+            title: 'Restore Previous Session',
+            width: dialogWidth(),
             modal: false,
             resizable: false,
             buttons: {
@@ -8971,9 +8973,19 @@ var sessionLoadDialog = {
                 }
             },
             close: function() {
+                $(window).off('resize', onResize);
                 $(this).dialog('destroy').remove();
             }
         });
+    },
+
+    openNewest: function() {
+        // Open the copy made just before this load: the server lists the newest first
+        if (typeof recentSessions === 'undefined' || recentSessions.length === 0) {
+            return;
+        }
+        window.open('../cgi-bin/hgTracks?hgsid=' + encodeURIComponent(recentSessions[0].hgsid),
+                '_blank');
     }
 };
 
@@ -8981,5 +8993,11 @@ var sessionLoadDialog = {
 $(document).on('click', '#recentViewsLink', function(ev) {
     ev.preventDefault();
     sessionLoadDialog.show();
+});
+
+// The "Open previous session in new tab" button in the same note
+$(document).on('click', '#openPrevSessionBtn', function(ev) {
+    ev.preventDefault();
+    sessionLoadDialog.openNewest();
 });
 

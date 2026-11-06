@@ -982,14 +982,17 @@ static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean e
 static char *cartStateBeforeRequest = NULL;
 
 static void cartKeepCopyBeforeLoad(struct cart *cart, char *loadedName)
-/* A full session load is about to replace the cart.  The cart keeps its hgsid, so the view the
- * user had is gone once the cart is saved.  Store a copy of it in a sessionDb row and put that
- * on the list of recent views.  This is only needed if the hgsid existed before this request: a
- * session link without an hgsid got a new row, and the old view is still in the row of the hgsid
- * it came from, which is on the list already.  The row is a new one, or the row of the oldest copy
- * when that is about to drop off the list, so a user has at most MAX_RECENT_SESSIONS copies. */
+/* A full session load is about to replace the cart.  Store a copy of the view the user had in a
+ * sessionDb row and put that on the list of recent views, the only way a row gets on that list.
+ * The view is the cart of the hgsid as it was before this request, or, for a request without a
+ * known hgsid (a session link, My Sessions, Public Sessions), the cart this web browser saved
+ * last.  The row is a new one, or the row of the oldest copy when that is about to drop off the
+ * list, so a user has at most MAX_RECENT_SESSIONS copies. */
 {
-if (!cartRecentSessionsEnabled() || cart->sessionInfo == NULL || cart->sessionInfo->useCount == 0)
+if (!cartRecentSessionsEnabled() || cart->sessionInfo == NULL)
+    return;
+// a new hgsid without a cart from userDb: nothing was there before
+if (cart->sessionInfo->useCount == 0 && cartStateBeforeRequest == NULL)
     return;
 struct sqlConnection *conn = cartDefaultConnector();
 struct cartDb *copy = cartReusableCopy(conn, cart);
@@ -2347,7 +2350,9 @@ char when[1024];
 safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
 
-if (trackRecent && sessionIdFound)
+// Without an hgsid, or with one that has expired, the cart came from userDb: the cart this web
+// browser saved last, so that is the view a session load is about to replace.
+if (trackRecent)
     {
     struct cgiVar *cv;
     for (cv = cgiVarList(); cv != NULL; cv = cv->next)
@@ -2355,9 +2360,14 @@ if (trackRecent && sessionIdFound)
             break;
     if (cv != NULL)
         {
+        // the list itself is only kept in userDb, it is put back below
+        cartRemove(cart, RECENT_SESSIONS_VAR);
         struct dyString *dy = dyStringNew(4096);
         cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
-        cartStateBeforeRequest = dyStringCannibalize(&dy);
+        if (dy->stringSize > 0)
+            cartStateBeforeRequest = dyStringCannibalize(&dy);
+        else
+            dyStringFree(&dy);
         }
     }
 
@@ -2462,9 +2472,6 @@ if (didSessionLoad)
     {
     cartHideDefaultTracks(cart);
     }
-if (trackRecent)
-    cartUpdateRecentSession(cart, cartSessionId(cart));
-
 return cart;
 }
 

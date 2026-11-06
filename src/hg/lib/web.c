@@ -1739,18 +1739,18 @@ if(scriptName)
     menuStr = replaceChars(menuStr, "<!-- SHARE_LINK -->", shareLi);
     }
 
-// My Data > Recent Browser Views: the views of this browser in the last days, see
-// cartUpdateRecentSession()
-// The link carries the hgsid like the other menu links: without one, every click would start a
-// new cart, which then pushes a real view off the list of recent views.
+// My Data > Restore Previous Session: the copies of the cart made in this web browser in the
+// last days just before a session or settings load replaced it, see cartKeepCopyBeforeLoad()
+// The link carries the hgsid like the other menu links, so it does not start a new cart.
 if (cartRecentSessionsEnabled())
     {
     struct dyString *dy = dyStringCreate("<li><a id='recentViewsMenuLink' "
-        "title='Go back to a view you had in this web browser in the last days, e.g. before you "
-        "opened a session' href='../cgi-bin/hgTracks?" hgsShowRecentViews "=1");
+        "title='Go back to the tracks and settings you had before you opened a session or "
+        "loaded settings, in this web browser in the last 7 days' "
+        "href='../cgi-bin/hgTracks?" hgsShowRecentViews "=1");
     if (cart)
         dyStringPrintf(dy, "&%s=%s", cartSessionVarName(), cartSessionId(cart));
-    dyStringAppend(dy, "'>Recent Browser Views</a></li>");
+    dyStringAppend(dy, "'>Restore Previous Session</a></li>");
     menuStr = replaceChars(menuStr, "<!-- RECENT_VIEWS_LINK -->", dy->string);
     dyStringFree(&dy);
     }
