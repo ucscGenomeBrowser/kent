@@ -381,7 +381,7 @@ if ( found )
         printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%s\">Browser</A>",
                 hgTracksPathAndSettings (), database, fields[0],
                 atoi(fields[6]) + 1, fields[7]);
-        char *tbl = cgiUsualString ("table", cgiString ("g"));
+        char *tbl = cgiEncode(cgiUsualString ("table", cgiString ("g")));
         // the lifted range holds none of the repeat's own sequence then
         if (!unalignedOnly)
             printf (" - <A HREF=\"%s&db=%s&o=%s&g=getDna&i=%s&c=%s&l=%s&r=%s&"
@@ -397,7 +397,7 @@ if ( found )
     }
 else
     {
-    printf("No item %s starting at %d\n", emptyForNull(item), start);
+    htmlPrintf("No item %s starting at %d\n", emptyForNull(item), start);
     }
 bbiFileClose(&bbi);
 
@@ -580,7 +580,7 @@ if ( found )
         printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%s\">Browser</A>",
                 hgTracksPathAndSettings (), database, fields[0],
                 atoi(fields[6]) + 1, fields[7]);
-        char *tbl = cgiUsualString ("table", cgiString ("g"));
+        char *tbl = cgiEncode(cgiUsualString ("table", cgiString ("g")));
         printf (" - <A HREF=\"%s&db=%s&o=%s&g=getDna&i=%s&c=%s&l=%s&r=%s&"
                 "strand=%s&table=%s\">"
                 "DNA</A>\n", hgcPathAndSettings (), database, fields[6],
@@ -594,7 +594,7 @@ if ( found )
     }
 else
     {
-    printf("No item %s starting at %d\n", emptyForNull(item), start);
+    htmlPrintf("No item %s starting at %d\n", emptyForNull(item), start);
     }
 lmCleanup(&lm);
 bbiFileClose(&bbi);

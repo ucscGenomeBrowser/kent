@@ -380,7 +380,7 @@ if (offset >= 0)
 	    printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">Browser</A>",
 		    hgTracksPathAndSettings (), database, seqName,
 		    liftedJoin->alignStart + 1, liftedJoin->alignEnd);
-	    char *tbl = cgiUsualString ("table", cgiString ("g"));
+	    char *tbl = cgiEncode(cgiUsualString ("table", cgiString ("g")));
 	    // the lifted range holds none of the repeat's own sequence when none of its
 	    // aligned blocks lifted, refs #38613
 	    if (liftedJoin->blockCount != 1)
@@ -606,7 +606,7 @@ if (offset >= 0)
 	    printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">Browser</A>",
 		    hgTracksPathAndSettings (), database, seqName,
 		    ro->genoStart + 1, ro->genoEnd);
-	    char *tbl = cgiUsualString ("table", cgiString ("g"));
+	    char *tbl = cgiEncode(cgiUsualString ("table", cgiString ("g")));
 	    printf
 		(" - <A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s%s%s%s%s&c=%s&l=%d&r=%d&"
 		 "strand=%s&table=%s\">"
