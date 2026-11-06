@@ -202,6 +202,11 @@ boolean quickLiftBarChartEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift bigBarChart tracks.  Off unless hg.conf says
  * browser.quickLiftBarChart=on, and a cart variable of the same name overrides that. */
 
+boolean quickLiftMuteTrianglesEnabled(struct cart *cart);
+/* Return TRUE if the difference triangles on a quickLift chain track are drawn in faded
+ * colors when there are more of them than fit side by side.  Off unless hg.conf says
+ * browser.quickLiftMuteTriangles=on, and a cart variable of the same name overrides that. */
+
 boolean quickLiftGtexEnabled(struct cart *cart);
 /* Return TRUE if a quickLifted GTEx gene track is drawn as GTEx, with its bar charts, from
  * genes and gene models read out of the assembly it came from through the chain.  Off, it

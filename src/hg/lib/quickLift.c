@@ -2502,6 +2502,18 @@ if (fromCart >= 0)
 return cfgOptionBooleanDefault("browser.quickLiftGtex", FALSE);
 }
 
+boolean quickLiftMuteTrianglesEnabled(struct cart *cart)
+/* Return TRUE if the difference triangles on a quickLift chain track are drawn in faded
+ * colors when there are more of them than fit side by side.  Off unless hg.conf says
+ * browser.quickLiftMuteTriangles=on, and a cart variable of the same name overrides that,
+ * the same way as quickLiftBarChartEnabled. */
+{
+int fromCart = cartGate(cart, "browser.quickLiftMuteTriangles");
+if (fromCart >= 0)
+    return fromCart;
+return cfgOptionBooleanDefault("browser.quickLiftMuteTriangles", FALSE);
+}
+
 boolean quickLiftMafSummaryEnabled(struct cart *cart)
 /* Return TRUE if a quickLifted maf track reads its summary table above the summary window
  * size, lifted from the assembly it came from, and reads its blocks with no padding around

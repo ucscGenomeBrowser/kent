@@ -48,6 +48,35 @@ if (highlightColors == NULL)
 }
 
 
+static Color muteColor(Color color, int pct)
+/* Fade a triangle color pct percent of the way to white.  The faded color stays opaque,
+ * so triangles that overlap each other do not stack back up to the full color. */
+{
+int r = COLOR_32_RED(color);
+int g = COLOR_32_GREEN(color);
+int b = COLOR_32_BLUE(color);
+r += (255 - r) * pct / 100;
+g += (255 - g) * pct / 100;
+b += (255 - b) * pct / 100;
+return MAKECOLOR_32_A(r, g, b, COLOR_32_ALPHA(color));
+}
+
+#define QUICKLIFT_MAX_MUTE_PCT 90
+
+static int triangleMutePct(int count, int fontHeight, int width)
+/* How far to fade the triangles toward white, in percent.  fill is the total width of the
+ * triangles over the width of the window.  Up to a fill of 1 they fit side by side and are
+ * not faded.  Past that the fade grows with the fill: half of the maximum at a fill of 2,
+ * three quarters at 4, nine tenths at 10. */
+{
+if (width <= 0)
+    return 0;
+double fill = (double)count * fontHeight / width;
+if (fill <= 1.0)
+    return 0;
+return QUICKLIFT_MAX_MUTE_PCT * (1.0 - 1.0 / fill);
+}
+
 static void drawTri(struct hvGfx *hvg, int x1, int x2, int y, Color color)
 /* Draw traingle. */
 {
@@ -133,6 +162,12 @@ if (drawTriangle && (hr == NULL))
     return;
     }
 
+// With more triangles than fit side by side they overlap into a solid band of color that
+// reads as one block, so draw them faded, more so the more they overlap.
+int mutePct = 0;
+if (drawTriangle && quickLiftMuteTrianglesEnabled(cart))
+    mutePct = triangleMutePct(slCount(regions), fontHeight, width);
+
 int pos = xOff;
 char * lastId = 0;
 for(; hr; hr = hr->next)
@@ -151,7 +186,7 @@ for(; hr; hr = hr->next)
         {
         startX = x1 + w/2 - fontHeight/2;
         endX = x1 + w/2 + fontHeight/2 ;
-        drawTri(hvg, startX, endX , yOff, hexColor);
+        drawTri(hvg, startX, endX , yOff, mutePct ? muteColor(hexColor, mutePct) : hexColor);
         if (drawTriangle && (x1 > pos))
             mapBoxHc(hvg, seqStart, seqEnd, pos, yOff, startX - pos,  tg->height, tg->track,  hr->id, "identical");
         pos = endX;
