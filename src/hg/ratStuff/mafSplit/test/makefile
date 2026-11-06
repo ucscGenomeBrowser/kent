@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 mafSplit=${DESTBINDIR}/mafSplit
 
-all: test1 test2
+all: test1 test2 test3
 
 test1:
 	${mafSplit} test1.bed test1 test1.maf
