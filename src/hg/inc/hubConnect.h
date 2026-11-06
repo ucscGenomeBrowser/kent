@@ -212,6 +212,13 @@ boolean hubPublicHasEmail(struct sqlConnection *conn);
 char *hubNameFromUrl(char *hubUrl);
 /* Given the URL for a hub, return its hub_# name. */
 
+char *hubConnectDbUrlArgs(char *db);
+/* Return the CGI arguments, URL-encoded and without a leading '&', that select the assembly db in
+ * any cart, also one that has never connected db's hub: "db=<name>" for a native assembly, a
+ * curated hub or a GenArk assembly, else "hubUrl=<url>&genome=<name>".  Use this for every link
+ * that can be opened outside the current cart (share links, address-bar URLs, links in email);
+ * a bare "db=hub_<id>_<name>" silently opens the default assembly there.  Free with freeMem(). */
+
 void addPublicHubsToHubStatus(struct cart *cart, struct sqlConnection *conn, char *publicTable, char  *statusTable);
 /* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
 

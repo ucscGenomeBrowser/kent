@@ -1628,6 +1628,50 @@ hDisconnectCentral(&conn);
 return name;
 }
 
+char *hubConnectDbUrlArgs(char *db)
+/* Return the CGI arguments, URL-encoded and without a leading '&', that select the assembly db in
+ * any cart, also one that has never connected db's hub: "db=<name>" for a native assembly, a
+ * curated hub such as hs1 or a GenArk assembly (the cart connects those from the name), else
+ * "hubUrl=<url>&genome=<name>".  A bare "db=hub_<id>_<name>" only works in a cart that is
+ * already connected to that hub, and hub ids differ between servers; a cart without the hub
+ * silently falls back to the default assembly.  Use this for every link that can be opened
+ * outside the current cart: share links, URLs put into the address bar, links in email.
+ * Free the result with freeMem(). */
+{
+struct dyString *dy = dyStringNew(0);
+if (!startsWith("hub_", db))
+    {
+    cgiEncodeIntoDy("db", db, dy);
+    return dyStringCannibalize(&dy);
+    }
+char *name = trackHubSkipHubName(db);
+unsigned hubId = hubIdFromTrackName(db);
+/* Only the hub's URL is needed, so read it from hubStatus rather than with hubFromId(), which
+ * fetches and re-checks the whole hub. */
+struct sqlConnection *conn = hConnectCentral();
+char query[1024];
+sqlSafef(query, sizeof query, "select hubUrl from %s where id=%u", getHubStatusTableName(), hubId);
+char *hubUrl = sqlQuickString(conn, query);
+hDisconnectCentral(&conn);
+/* The bare name is enough only when this hub is the curated or GenArk copy of that name.  A user
+ * hub may call its own assembly "hg38" or "GCF_000001405.40", and the bare name would then open
+ * ours instead of theirs. */
+char *genark = NULL;
+if (isEmpty(hubUrl))
+    cgiEncodeIntoDy("db", db, dy);    // hub no longer known here, nothing better to offer
+else if (hubConnectIsCuratedHubUrl(name, hubUrl) ||
+         ((genark = genarkUrl(name)) != NULL && sameString(genark, hubUrl)))
+    cgiEncodeIntoDy("db", name, dy);
+else
+    {
+    cgiEncodeIntoDy("hubUrl", hubUrl, dy);
+    cgiEncodeIntoDy("genome", name, dy);
+    }
+freeMem(genark);
+freeMem(hubUrl);
+return dyStringCannibalize(&dy);
+}
+
 void addPublicHubsToHubStatus(struct cart *cart, struct sqlConnection *conn, char *publicTable, char  *statusTable)
 /* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
 {
