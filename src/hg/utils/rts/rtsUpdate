@@ -273,7 +273,7 @@ def cmd_fetch(args):
 
     print()
     print(f"File written. To test in your sandbox:")
-    print(f"  cd ~/kent/src/hg/htdocs/data && make user")
+    print(f"  cd ~/kent/src/hg/htdocs && make user")
     print(f"  Then click the RTS in the dialog at https://hgwdev-{getpass.getuser()}.gi.ucsc.edu/cgi-bin/hgTracks?db={db}")
     print()
     print("Once validated, commit and push:")
