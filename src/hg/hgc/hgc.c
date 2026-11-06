@@ -37,6 +37,7 @@
 #include "cogs.h"
 #include "cogsxra.h"
 #include "bed.h"
+#include "bedCart.h"
 #include "cgh.h"
 #include "agpFrag.h"
 #include "agpGap.h"
@@ -2158,8 +2159,15 @@ if (!hFindSplitTable(db, seqName, tdb->table, table, sizeof table, &hasBin))
 
 if (liftDb)
     {
+    /* lift the way hgTracks lifts this bed, or the clicked start may not match:  block by
+     * block for bed 12 (loadGappedBed()) and for bed 8 and a bed 9 without itemRgb
+     * (loadBed8(), which has no blocks).  Lift bed 10 and 11 whole: bedLoadN() fills
+     * blockCount for them but not chromStarts, so a blocked lift would read past it.
+     * A bed 9 with itemRgb is lifted whole by loadBed9(), as are the beds under 8 fields */
+    boolean blocked = (bedSize >= 12) || (bedSize == 8) ||
+                      ((bedSize == 9) && !bedItemRgb(tdb));
     struct bed *liftedBeds = quickLiftSqlLoadBeds(tdb, trackHubSkipHubName(tdb->track), liftDb,
-        seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, FALSE);
+        seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, blocked);
     /* that is every lifted item in the window, so print only the one that was clicked,
      * matched the way the unlifted query below matches it.  refs #38591 */
     for (bed = liftedBeds; bed != NULL; bed = bed->next)
@@ -2173,6 +2181,8 @@ if (liftDb)
             htmlHorizontalLine();
         bedPrintPos(bed, bedSize, tdb);
         }
+    if (firstTime)
+        printf("The lifted item was not found at this position.<BR>\n");
 
     //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     }
@@ -10460,7 +10470,8 @@ for (ro = roList; ro != NULL; ro = ro->next)
     {
     char repStrand = ro->strand[0];
     if (!sameString(ro->repName, repeat) ||
-	!quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) ||
+	!quickLiftRmskOut(quickLiftChainHashForRange(chainHash, ro, ro->genoName, ro->genoStart,
+                                                  ro->genoEnd), ro) ||
 	!sameString(ro->genoName, seqName) || (ro->genoStart != start) || (ro->genoEnd != end))
 	continue;
     found = TRUE;

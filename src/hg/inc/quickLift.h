@@ -227,7 +227,7 @@ struct rmskOut *quickLiftSqlLoadRmsk(struct trackDb *tdb, char *trackTable, char
     int start, int end, struct hash *chainHash);
 /* Read the rows of a quickLifted rmsk track from the assembly it came from, over the source
  * ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:  lift each
- * one with quickLiftRmskOut() through quickLiftChainHashForItem(chainHash, row).  chainHash,
+ * one with quickLiftRmskOut() through quickLiftChainHashForRange(chainHash, row, ...).  chainHash,
  * from newHash(), is filled with the chains that do the lifting. */
 
 boolean quickLiftRmskOut(struct hash *chainHash, struct rmskOut *ro);
@@ -245,7 +245,7 @@ struct rmskJoined *quickLiftSqlLoadRmskJoined(struct trackDb *tdb, char *trackTa
     char *chrom, int start, int end, struct hash *chainHash);
 /* Read the rows of a quickLifted rmskJoined track from the assembly it came from, over the
  * source ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:
- * lift each one with quickLiftJoinedRepeat() through quickLiftChainHashForItem(chainHash, row).
+ * lift each one with quickLiftJoinedRepeat() through quickLiftChainHashForRange(chainHash, row, ...).
  * chainHash, from newHash(), is filled with the chains that do the lifting. */
 
 boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *pChromStart,
@@ -352,6 +352,14 @@ struct hash *quickLiftChainHashForItem(struct hash *chainHash, void *item);
  * it was loaded for, when it was loaded that way, and otherwise chainHash itself.  item must be the pointer the
  * loader returned, asked about before anything frees it;  a copy falls back to chainHash.
  * The one-chain hash is reused for the next item, so lift through it before asking again. */
+
+struct hash *quickLiftChainHashForRange(struct hash *chainHash, void *item, char *chrom,
+                                        int start, int end);
+/* The chain hash to lift an item over chrom:start-end through:  one chain, which with
+ * quickLiftMultiChain is the one item was loaded for, and otherwise the chain in chainHash
+ * with the most aligned bases in the range, as remapBlockedBed() picks it.  item may be NULL.
+ * Returns NULL if no chain covers the range.  The hash is reused for the next item, so lift
+ * through it before asking again. */
 
 char *quickLiftRemapRange(struct hash *chainHash, void *item, char *chrom, int start, int end,
                           char strand, char **retChrom, int *retStart, int *retEnd,
