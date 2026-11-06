@@ -28,6 +28,7 @@ proof:
   - "assertion-only 2026-11-06 -- written with the fix, on branch cr38630"
   - "xfail 2026-11-06 -- fails on genome-test (master without the fix) at step 10: the HIT000433755 page has no Item or Position"
   - "sandbox-ab 2026-11-06 -- park 38630 (port 48121): master hgc fails at step 10 like genome-test; hgc built with the first version of the fix (bed 8 and up lifted block by block) passes step 10 and fails at step 20, the bed 10 click crashes hgc; the cr38630 build passes"
+  - "server-flip 2026-11-06 -- failed on genome-test as an xfail at step 10, passed once 8086846836e was built there with cgi-alpha (hgTracks and hgc 12:33)"
 
 target: genome-test
 db: hg19

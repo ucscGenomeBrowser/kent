@@ -34,6 +34,7 @@ proof:
   - "assertion-only 2026-11-06 -- written with the fix, on branch cr38630"
   - "xfail 2026-11-06 -- fails on genome-test (master without the fix, quickLiftMultiChain on) at step 14: with the gate off the lifted rmsk row still has 16 boxes, MER58B among them"
   - "sandbox-ab 2026-11-06 -- park 38630 (port 48121): master hgTracks and hgc (the frozen live sandbox) fail at step 14 like genome-test; with quickLiftMultiChain=off appended to the park hg.conf they fail at step 10, no box for (CA)n at 46526273-46526440; the cr38630 build passes both ways"
+  - "server-flip 2026-11-06 -- failed on genome-test as an xfail at step 14, passed once 8086846836e was built there with cgi-alpha (hgTracks and hgc 12:33)"
 
 target: genome-test
 db: hg19
