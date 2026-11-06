@@ -1,0 +1,70 @@
+# #38630 (CR, v506 Preview I) -- hgc lifts a bed the way hgTracks does, so a click on a
+# lifted bed 12 item finds it.
+#
+# hgTracks lifts bed 8 and bed 12 block by block (loadBed8(), loadGappedBed()), and its map
+# box carries the start of that lift.  genericBedClick() in hg/hgc/hgc.c lifted every bed
+# whole, so across species, where a gapped item's blocks lift to a different start, the
+# clicked start matched no lifted item and the page had only its title.  Now hgc lifts
+# block by block for bed 12, bed 8 and a bed 9 without itemRgb, and prints "The lifted item
+# was not found at this position." when nothing matches, rather than an empty page.
+#
+# Bed 10 and 11 are lifted whole:  bedLoadN() fills blockCount for them but not
+# chromStarts.  The first version of the fix lifted them block by block and hgc crashed
+# (SIGSEGV in bedToRangeList()), so the second half clicks a lifted bed 10.
+#
+# No gate.
+#
+# What is asserted:
+#   * hg19 hinv70Coding (bed 12) lifted onto mm10, chr11:68,967,677-69,747,037.  Item
+#     HIT000433755 has one map box.  Its details page gives its Position,
+#     chr11:69045935-69051072.  Before the fix the page had only the title and the outside
+#     link:  56 of the 557 items in this window were like that, all 0 after.
+#   * hg19 affyExonProbeCore (bed 10) lifted onto hg38 at TP53.  The details page for
+#     3743906_3743908 gives Item and Position.  With bed 10 lifted block by block, hgc
+#     crashes here.
+# Not asserted:  the Position of the affy item, which has four boxes, and the click takes
+# one of them.
+proof:
+  - "assertion-only 2026-11-06 -- written with the fix, on branch cr38630"
+  - "xfail 2026-11-06 -- fails on genome-test (master without the fix) at step 10: the HIT000433755 page has no Item or Position"
+  - "sandbox-ab 2026-11-06 -- park 38630 (port 48121): master hgc fails at step 10 like genome-test; hgc built with the first version of the fix (bed 8 and up lifted block by block) passes step 10 and fails at step 20, the bed 10 click crashes hgc; the cr38630 build passes"
+
+target: genome-test
+db: hg19
+position: chr17:7400000-8200000
+reset: true
+fast: true
+steps:
+  - go: chr17:7400000-8200000
+  - hide: all
+  - track: {hinv70Coding: full}
+  - expect: {rows: [hinv70Coding], noText: "Warning/Error"}
+  - convert: {to: mm10, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr11:68967677-69747037
+  - expect:
+      rows: [hinv70Coding]
+      noText: ["Warning/Error"]
+      has: 'area[href*="i=HIT000433755"]'
+  - click: {track: hinv70Coding, item: "HIT000433755"}
+  - expect:
+      url: "hgc"
+      text: ["Item: HIT000433755", "Position:", "chr11:69045935-69051072"]
+      noText: ["Warning/Error", "The lifted item was not found"]
+
+  # A bed 10, lifted whole.
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr17%3A7570000-7600000&pix=1100"
+  - hide: all
+  - track: {affyExonProbeCore: pack}
+  - expect: {rows: [affyExonProbeCore], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr17:7666682-7696682
+  - expect:
+      rows: [affyExonProbeCore]
+      has: 'area[href*="i=3743906_3743908"]'
+  - click: {track: affyExonProbeCore, item: "3743906_3743908"}
+  - expect:
+      url: "hgc"
+      text: ["Item: 3743906_3743908", "Position:", "chr17:"]
+      noText: ["Warning/Error", "The lifted item was not found"]
