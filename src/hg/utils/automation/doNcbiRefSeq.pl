@@ -373,6 +373,31 @@ else
 fi
 genePredCheck \$asmId.gp
 
+# genePredToGtf writes name2 as gene_id, but name2 here is the gene
+# symbol (-refseqHacks turns on -useName), which separate genes can
+# share (tRNA genes, PGAP family symbols), merging them under one
+# gene_id.  For the GTF, take each transcript's unique GFF3 gene ID as
+# name2 from a second translation, matched on columns 1-10, and keep
+# the symbol for the GTF gene_name.
+if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+  zcat \$ncbiGffGz | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
+    | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
+      | gff3ToGenePred $warnOnly -refseqHacks -geneNameAttr=ID \\
+        stdin stdout 2> /dev/null > \$asmId.geneId.gp
+else
+  zcat \$ncbiGffGz \\
+    | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
+      | gff3ToGenePred $warnOnly -refseqHacks -geneNameAttr=ID \\
+        stdin stdout 2> /dev/null > \$asmId.geneId.gp
+fi
+awk -F'\\t' -v symOut=\$asmId.geneName.tab 'BEGIN { OFS = "\\t" }
+  { k = \$1; for (i = 2; i <= 10; ++i) k = k FS \$i }
+  FNR == NR { geneId[k] = \$12; next }
+  { sym = \$12; if (k in geneId) \$12 = geneId[k]
+    print \$12, sym > symOut; print }' \\
+    \$asmId.geneId.gp \$asmId.gp > \$asmId.gtf.gp
+rm -f \$asmId.geneId.gp
+
 rm -f \$asmId.refseqSelectTranscripts.txt
 zegrep 'tag=(RefSeq|MANE) Select' \$ncbiGffGz > before.cut9.txt || true
 
@@ -401,21 +426,32 @@ _EOF_
 # converting the NCBI coordinates to UCSC coordinates
 liftUp -extGenePred -type=.gp stdout $localLiftFile warn \$asmId.gp \\
   | gzip -c > \$asmId.\$db.gp.gz
+liftUp -extGenePred -type=.gp \$asmId.\$db.gtf.gp $localLiftFile warn \$asmId.gtf.gp
 _EOF_
   );
   } else {
   $bossScript->add(<<_EOF_
 # no lifting necessary
 cat \$asmId.gp | gzip -c > \$asmId.\$db.gp.gz
+cp -p \$asmId.gtf.gp \$asmId.\$db.gtf.gp
 _EOF_
   );
   }
   $bossScript->add(<<_EOF_
 $genePredCheckDb \$asmId.\$db.gp.gz
-zcat \$asmId.\$db.gp.gz > ncbiRefSeq.\$dateStamp
-genePredToGtf -utr file ncbiRefSeq.\$dateStamp stdout | gzip -c \\
-  > ../\$db.\$dateStamp.ncbiRefSeq.gtf.gz
-rm -f ncbiRefSeq.\$dateStamp
+# genePredToGtf writes name2 as both gene_id and the trailing gene_name;
+# put the symbol back into that trailing gene_name
+genePredToGtf -utr -source=ncbiRefSeq.\$dateStamp \\
+    file \$asmId.\$db.gtf.gp stdout \\
+  | awk -F'\\t' 'BEGIN { OFS = "\\t" }
+    FNR == NR { sym[\$1] = \$2; next }
+    { i = index(\$9, "\\"; ")
+      id = substr(\$9, 10, i - 10)
+      if ((id in sym) && match(\$9, / gene_name "[^"]*";\$/))
+        \$9 = substr(\$9, 1, RSTART - 1) " gene_name \\"" sym[id] "\\";"
+      print }' \$asmId.geneName.tab - \\
+  | gzip -c > ../\$db.\$dateStamp.ncbiRefSeq.gtf.gz
+rm -f \$asmId.gtf.gp \$asmId.\$db.gtf.gp \$asmId.geneName.tab
 
 # curated subset of all genes
 (zegrep "^[NY][MRP]_" \$asmId.\$db.gp.gz || true) > \$db.curated.gp
