@@ -406,7 +406,11 @@ webIncludeFile("inc/hgMyData.html");
 webIncludeResourceFile("hgMyData.css");
 
 jsInlineF("\nvar isLoggedIn = %s;\n", getUserName() ? "true" : "false");
-jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
+// The default genome of an upload, written into the hub.txt it creates and into its share link.
+// Both are read in other carts, where a hub assembly's hub_<id>_ prefix means nothing, so give the
+// bare name, which is what a track hub on a GenArk or curated assembly has to say.
+jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)),
+          trackHubSkipHubName(database));
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl());
 jsInlineF("\nvar loginHost=\"http%s://%s\";\n", loginUseHttps() ? "s" : "", wikiLinkHost());

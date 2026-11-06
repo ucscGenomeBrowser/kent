@@ -1602,6 +1602,17 @@ webIncludeResourceFile("nice_menu.css");
 
 webIncludeLocalJs();
 
+// Links that leave the cart (Share a link and the like) cannot carry a hub assembly as
+// db=hub_<id>_<name>, see hubConnectDbUrlArgs().  Give the page's JavaScript the arguments to use
+// instead; utils.js dbUrlArgs() reads them.  Only for hub assemblies, which cost a hubStatus query.
+if (db != NULL && startsWith("hub_", db))
+    {
+    char *dbArgs = hubConnectDbUrlArgs(db);
+    jsInlineF("window.hubDbUrlArgs = {db: \"%s\", args: \"%s\"};\n",
+              jsonStringEscape(db), jsonStringEscape(dbArgs));
+    freeMem(dbArgs);
+    }
+
 // Read in menu bar html
 safef(buf, sizeof(buf), "%s/%s", docRoot, navBarFile);
 fd = mustOpen(buf, "r");

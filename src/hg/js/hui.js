@@ -1845,7 +1845,7 @@ function myVariantsShareCreate() {
             return;
         }
         let shareUrl = window.location.protocol + "//" + window.location.host +
-            "/cgi-bin/hgTracks?myVarShare=" + data.token + "&db=" + getDb();
+            "/cgi-bin/hgTracks?myVarShare=" + data.token + "&" + dbUrlArgs(getDb());
         document.getElementById("shareUrlField").value = shareUrl;
         document.getElementById("shareResult").style.display = "block";
         myVariantsShareLoad();

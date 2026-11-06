@@ -13,7 +13,8 @@
 // overlay so it works on static pages too (no jQuery UI dependency).
 
 /* jshint esversion: 8 */
-/* global $, document, window, URL, navigator, getHgsid, copyToClipboard, copyButtonSaysCopied */
+/* global $, document, window, URL, navigator, getHgsid, copyToClipboard, copyButtonSaysCopied,
+          getDb, urlWithPortableDb */
 
 var topLinks = (function() {
     "use strict";
@@ -371,6 +372,8 @@ var topLinks = (function() {
         var clean = stripHgsid(url);
         if (opts.ensureDb)
             clean = ensureParam(clean, "db", opts.ensureDb);
+        // without the hgsid, a hub assembly's db=hub_<id>_<name> opens the default assembly
+        clean = urlWithPortableDb(clean);
         if (opts.superTrack) {
             var supers = opts.superTrack.split(",");
             for (var i = 0; i < supers.length; i++)
@@ -387,7 +390,7 @@ var topLinks = (function() {
         // hgTrackUi etc.: the shareable thing is just this page's URL without the hgsid.  Note
         // that it opens the page, not the user's session/tracks (like the hgc popup link).
         if (mode === "url") {
-            shareUrlDialog(window.location.href, {pageNote: true});
+            shareUrlDialog(window.location.href, {pageNote: true, ensureDb: getDb()});
             return;
         }
 

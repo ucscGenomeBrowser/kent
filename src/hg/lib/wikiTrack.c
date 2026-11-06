@@ -271,6 +271,8 @@ fputc(lastSep,f);
 #include "hCommon.h"
 #include "web.h"
 #include "hgColors.h"
+#include "hubConnect.h"
+#include "trackHub.h"
 
 #ifdef NOT
 static void savePosInTextBox(char *chrom, int start, int end)
@@ -785,11 +787,11 @@ if (!(wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2)))
     else
 	{
 	dyStringPrintf(content, "%s\n"
-"[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
+"[http://%s/cgi-bin/hgTracks?%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
 	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;",
 	category,
-	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
-		seqName, winStart+1, winEnd, database, newPos, item->name);
+	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), hubConnectDbUrlArgs(database),
+		seqName, winStart+1, winEnd, trackHubSkipHubName(database), newPos, item->name);
 	}
     dyStringPrintf(content, "''created: %s''", userSignature);
     if (extraTag)
@@ -922,11 +924,11 @@ else
     else
 	{
 	dyStringPrintf(content, "%s\n"
-"[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
+"[http://%s/cgi-bin/hgTracks?%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
 	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;",
 	category,
-	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
-		seqName, winStart+1, winEnd, database, newPos, item->name);
+	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), hubConnectDbUrlArgs(database),
+		seqName, winStart+1, winEnd, trackHubSkipHubName(database), newPos, item->name);
 	}
     dyStringPrintf(content, "''created: %s''", userSignature);
     if (extraTag)

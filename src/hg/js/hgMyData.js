@@ -1911,7 +1911,9 @@ var hubCreate = (function() {
         let hubUrl = uiState.userUrl + cgiEncode(hubTxtPathForHub(hubName));
         let dbParam = isAssemblyHub(hubName) ? "genome" : "db";
         let genome = dirRow.genome || findHubGenome(hubName) || "";
-        return window.location.origin + "/cgi-bin/hgTracks?" + dbParam + "=" + genome +
+        // older uploads stored a hub assembly's cart name; hub_<id>_ means nothing in another cart
+        genome = genome.replace(/^hub_[0-9]+_/, "");
+        return window.location.origin + "/cgi-bin/hgTracks?" + dbParam + "=" + encodeURIComponent(genome) +
             "&hubUrl=" + encodeURIComponent(hubUrl);
     }
 

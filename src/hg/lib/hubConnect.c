@@ -1639,13 +1639,18 @@ char *hubConnectDbUrlArgs(char *db)
  * Free the result with freeMem(). */
 {
 struct dyString *dy = dyStringNew(0);
-if (!startsWith("hub_", db))
+char *name = trackHubSkipHubName(db);
+/* Anything but hub_<digits>_<name> has no hub to look up.  Checked here rather than left to
+ * hubIdFromTrackName(), which errAborts, since menuBar() calls this on every page. */
+int idLen = (name != db) ? name - db - strlen("hub_") - 1 : 0;
+if (idLen <= 0 || idLen > 9 || strspn(db + strlen("hub_"), "0123456789") != idLen)
     {
     cgiEncodeIntoDy("db", db, dy);
     return dyStringCannibalize(&dy);
     }
-char *name = trackHubSkipHubName(db);
-unsigned hubId = hubIdFromTrackName(db);
+char idBuf[16];
+safencpy(idBuf, sizeof idBuf, db + strlen("hub_"), idLen);
+unsigned hubId = sqlUnsigned(idBuf);
 /* Only the hub's URL is needed, so read it from hubStatus rather than with hubFromId(), which
  * fetches and re-checks the whole hub. */
 struct sqlConnection *conn = hConnectCentral();
