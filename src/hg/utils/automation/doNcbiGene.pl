@@ -307,7 +307,7 @@ function cleanUp() {
 
 if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
   ln -sf \$gffFile ./
-  (gff3ToGenePred -warnAndContinue -useName \\
+  (gff3ToGenePred -warnAndContinue -maxConvertErrors=-1 -useName \\
     -attrsOut=\$asmId.geneAttrs.ncbi.txt.new \$gffFile stdout \\
       2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter \\
          -chromSizes=\$chromSizes stdin stdout \\
@@ -319,7 +319,7 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
   # take each transcript's unique GFF3 gene ID as name2 from a second
   # translation, matched on columns 1-10, and keep the symbol for a
   # gene_name attribute.
-  (gff3ToGenePred -warnAndContinue -useName -geneNameAttr=ID \\
+  (gff3ToGenePred -warnAndContinue -maxConvertErrors=-1 -useName -geneNameAttr=ID \\
     \$gffFile stdout 2> /dev/null || true) > ncbiGene.\$asmId.geneId.gp
   zcat \$asmId.ncbiGene.genePred.gz | awk -F'\\t' -v symOut=ncbiGene.\$asmId.geneName.tab \\
     'BEGIN { OFS = "\\t" }
