@@ -1180,7 +1180,7 @@ cartRemove(cart, "hgLogin_newPassword1");
 cartRemove(cart, "hgLogin_newPassword2");
 sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE userName='%s'", user);
 struct gbMembers *m = gbMembersLoadByQuery(conn, query);
-struct dyString *cookieJS = getLoginCookieJS(user, m->idx);
+struct dyString *cookieJS = getLoginCookieJS(m->userName, m->idx);
 jsInline(cookieJS->string);
 returnToURL(150);
 }
@@ -1827,7 +1827,8 @@ void signup(struct sqlConnection *conn)
 /* process the signup form */
 {
 char query[1024];
-char *user = cartUsualString(cart, "hgLogin_userName", "");
+char *rawUser = cloneString(cartUsualString(cart, "hgLogin_userName", ""));
+char *user = trimSpaces(rawUser);
 char *encUserName = cgiEncodeFull(user);
 if (!user || sameString(user,""))
     {
@@ -1864,7 +1865,7 @@ if (password)
     freez(&errMsg);
     errMsg = cloneString("A user with this name already exists.");
     signupPage(conn);
-    freez(&user);
+    freez(&rawUser);
     return;
     }
 
@@ -2113,7 +2114,7 @@ void displayLogin(struct sqlConnection *conn)
 {
 struct sqlResult *sr;
 char **row;
-char query[256];
+char query[512];
 char *userName = cartUsualString(cart, "hgLogin_userName", "");
 if (sameString(userName,""))
     {
@@ -2136,10 +2137,20 @@ sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE userName='%s'", user
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
-    freez(&errMsg);
-    errMsg = cloneString(incorrectUsernameOrPassword);
-    displayLoginPage(conn);
-    return;
+    // allow accounts created with leading spaces (which are saved trimmed), who then actually
+    // typed the leading space to still be able to log in
+    char *trimmedUserName = trimSpaces(userName);
+    sqlFreeResult(&sr);
+    sqlSafef(query, sizeof(query), "SELECT * FROM gbMembers WHERE userName='%s'", trimmedUserName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) == NULL)
+        {
+        sqlFreeResult(&sr);
+        freez(&errMsg);
+        errMsg = cloneString(incorrectUsernameOrPassword);
+        displayLoginPage(conn);
+        return;
+        }
     }
 struct gbMembers *m = gbMembersLoad(row);
 sqlFreeResult(&sr);
@@ -2154,12 +2165,12 @@ if (!sameString(m->accountActivated,"Y"))
     }
 if (checkPwd(password,m->password))
     {
-    hPrintf("<h2>Login successful for user %s.\n</h2>\n", userName);
-    clearNewPasswordFields(conn, userName);
+    hPrintf("<h2>Login successful for user %s.\n</h2>\n", htmlEncode(m->userName));
+    clearNewPasswordFields(conn, m->userName);
     displayLoginSuccess(m->userName, m->idx);
     return;
     } 
-else if (usingNewPassword(conn, userName, password))
+else if (usingNewPassword(conn, m->userName, password))
     {
     cartSetString(cart, "hgLogin_changeRequired", "YES");
     changePasswordPage(conn);
@@ -2608,7 +2619,7 @@ if (isEmpty(provider) || isEmpty(subject) || !pendingIdentityValid())
     displayLoginPage(conn);
     return;
     }
-char *user = cartUsualString(cart, "hgLogin_userName", "");
+char *user = trimSpaces(cloneString(cartUsualString(cart, "hgLogin_userName", "")));
 char *encUserName = cgiEncodeFull(user);
 if (isEmpty(user))
     {

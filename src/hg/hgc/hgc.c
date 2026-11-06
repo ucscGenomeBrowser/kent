@@ -28431,6 +28431,16 @@ char *extraForMismatch = "indelPolyA=on showDiffBasesAllScales=. baseColorUseSeq
 
 if (isProt)
     extraForMismatch = "";
+/* The search's minimum score (blatTrackMin, sent by hgBlat), as the track's filter on the bigPsl
+ * match field.  The file keeps every hit, and hgTracks hides those below it, so the track and the
+ * results table list the same hits. */
+int blatTrackMin = cgiOptionalInt("blatTrackMin", 0);
+if (blatTrackMin > 0)
+    {
+    char filterTag[64];
+    safef(filterTag, sizeof filterTag, " filter.match=%d", blatTrackMin);
+    extraForMismatch = catTwoStrings(extraForMismatch, filterTag);
+    }
 char buffer[4096];
 safef(buffer, sizeof buffer, customTextTemplate, groupTag, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
@@ -28530,13 +28540,36 @@ if (sameOk(cartOptionalString(cart, "autoRearr"), "1"))
     cartSetString(cart, snakeVar, "1");
     }
 
+}
+
+static void blatRestoreCartDb()
+/* Put back the cart's db that doMiddle replaced with blatDb.  Called whether or not the build
+ * worked, so a failed build cannot leave the search's assembly in the saved cart. */
+{
 if (blatCartDbBefore != NULL)
     {
     if (isEmpty(blatCartDbBefore))
         cartRemove(cart, "db");
     else
         cartSetString(cart, "db", blatCartDbBefore);
+    blatCartDbBefore = NULL;
     }
+}
+
+static void buildBigPslRestoreDb(char *fileNames)
+/* buildBigPsl, then restore the cart's db even if the build errAborts (pslToBigPsl, bedToBigBed
+ * or customFactoryParse failing); the error is then passed on as before. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    buildBigPsl(fileNames);
+errCatchEnd(errCatch);
+blatRestoreCartDb();
+if (errCatch->gotError)
+    errAbort("%s", errCatch->message->string);
+if (errCatch->gotWarning)   /* errCatch holds warnings back; pass them on as before */
+    warn("%s", errCatch->message->string);
+errCatchFree(&errCatch);
 }
 
 void doHPRCTable(struct trackDb *tdb, char *itemName)
@@ -28849,7 +28882,7 @@ else if (sameWord(table, "htcGetDnaExtended1"))
     }
 else if (sameWord(table, "buildBigPsl"))
     {
-    buildBigPsl(item);
+    buildBigPslRestoreDb(item);
     }
 else if (sameWord(table, "htcListItemsAssayed"))
     {
@@ -30095,7 +30128,7 @@ doMiddle();
 // "u"/"s" are the shared BLAT link's session selectors (loadBlatShareSessionIfAny); exclude them so
 // they are not left in the reader's cart and written into any session they later save.
 char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "aliTrack", "addp", "pred",
-                       "quickLiftCcds", "u", "s", NULL};
+                       "quickLiftCcds", "u", "s", "blatDb", "blatTrackMin", NULL};
 
 int main(int argc, char *argv[])
 {
