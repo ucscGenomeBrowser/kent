@@ -81,7 +81,8 @@ for (ro = quickLiftSqlLoadRmsk(tg->tdb, tg->table, chromName, winStart, winEnd, 
     {
     next = ro->next;
     ro->next = NULL;
-    if (quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) &&
+    if (quickLiftRmskOut(quickLiftChainHashForRange(chainHash, ro, ro->genoName, ro->genoStart,
+                                                    ro->genoEnd), ro) &&
         sameString(ro->genoName, chromName) && (ro->genoStart < winEnd) &&
         (ro->genoEnd > winStart))
         slAddHead(&liftedList, ro);
@@ -193,10 +194,13 @@ static void repeatDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 {
-if (quickLiftIsLifted(tg->tdb) && quickLiftRmskEnabled(cart))
+if (quickLiftIsLifted(tg->tdb))
     {
-    // a quickLifted rmsk reads its rows from the assembly it came from, refs #37437
-    liftedRepeatDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+    // a quickLifted rmsk reads its rows from the assembly it came from, refs #37437.  One in a
+    // quickLift hub written while browser.quickLiftRmsk was on, drawn with it off, draws
+    // nothing:  the code below would read this assembly's table of the same name.
+    if (quickLiftRmskEnabled(cart))
+        liftedRepeatDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
     return;
     }
 Color overrideColor = colorFromCart(tg, 0);

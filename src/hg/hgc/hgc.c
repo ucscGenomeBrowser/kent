@@ -10460,7 +10460,8 @@ for (ro = roList; ro != NULL; ro = ro->next)
     {
     char repStrand = ro->strand[0];
     if (!sameString(ro->repName, repeat) ||
-	!quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) ||
+	!quickLiftRmskOut(quickLiftChainHashForRange(chainHash, ro, ro->genoName, ro->genoStart,
+                                                  ro->genoEnd), ro) ||
 	!sameString(ro->genoName, seqName) || (ro->genoStart != start) || (ro->genoEnd != end))
 	continue;
     found = TRUE;

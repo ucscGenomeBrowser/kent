@@ -221,7 +221,8 @@ for (rm = rmList; rm != NULL; rm = next)
         continue;
     char *srcChrom = cloneString(rm->chrom);
     int srcStart = rm->alignStart;
-    if (quickLiftJoinedRepeat(quickLiftChainHashForItem(chainHash, rm), &rm->chrom,
+    if (quickLiftJoinedRepeat(quickLiftChainHashForRange(chainHash, rm, rm->chrom,
+                                                         rm->chromStart, rm->chromEnd), &rm->chrom,
             &rm->chromStart, &rm->chromEnd, rm->strand, &rm->alignStart, &rm->alignEnd,
             &rm->blockCount, rm->blockSizes, rm->blockRelStarts) &&
         sameString(rm->chrom, seqName) && (rm->alignStart == start))

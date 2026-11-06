@@ -307,7 +307,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     // with multi-chain lifting the same item can come back once for each chain, so take the
     // copy that lands where it was clicked
     if ( sameOk(fields[12], item) &&
-         liftFields(quickLiftChainHashForItem(chainHash, bb), fields) &&
+         liftFields(quickLiftChainHashForRange(chainHash, bb, fields[0], sqlUnsigned(fields[1]),
+                                               sqlUnsigned(fields[2])), fields) &&
          (sqlSigned(fields[6]) == start) && sameString(fields[0], chrom) )
         {
         alignChrom = cloneString(sourceChrom);
