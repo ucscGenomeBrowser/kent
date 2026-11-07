@@ -368,6 +368,7 @@ struct track *subtrack;
 
 double graphUpperLimit = -BIGDOUBLE;
 double graphLowerLimit = BIGDOUBLE;
+boolean gotLimits = FALSE;
 struct window *w;
 struct track *tgs;
 
@@ -385,9 +386,15 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		    graphUpperLimit = pre->graphUpperLimit;
 		if (pre->graphLowerLimit < graphLowerLimit)
 		    graphLowerLimit = pre->graphLowerLimit;
+		gotLimits = TRUE;
 		}
 	    }
-	break;  // can exit since the rest of the subtracks have been set to the same limits.
+	/* Stop at the first child that has data, since multiWigPreDraw gave them all the
+	 * same limits.  Stopping at the first visible one left the limits at their
+	 * starting values when that child was the one that failed to load, and every
+	 * sibling then drew entirely above its upper limit, as a clip line.  refs #38560 */
+	if (gotLimits)
+	    break;
 	}
     }
 
@@ -554,11 +561,12 @@ if (errMsgFound && currentWindow==windows)  // first window
 struct wigCartOptions *wigCart = tg->wigCartData;
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 
-if ((wigCart->aggregateFunction == wiggleAggregateAdd
-     || wigCart->aggregateFunction == wiggleAggregateSubtract) && !errMsgFound)
+boolean summing = (wigCart->aggregateFunction == wiggleAggregateAdd
+                   || wigCart->aggregateFunction == wiggleAggregateSubtract);
+if (summing && !errMsgFound)
     {
-    /* With a child missing, the sum is wrong whatever we do, so leave the rows as they
-     * are and let the failed one say so.  refs #38560 */
+    /* With a term missing the sum is wrong whatever we draw, so do not work one out; the
+     * loop below puts the message in the row instead.  refs #38560 */
     struct track *merged = mergeWiggles(tg->subtracks,
                                         wigCart->aggregateFunction == wiggleAggregateAdd);
     if (merged != NULL)
@@ -580,11 +588,22 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
 	{
-        if (!subtrack->networkErrMsg || !errMsgShown)
+        boolean drawIt = !errMsgShown;      // one message in the row is enough
+        if (!subtrack->networkErrMsg)
+            /* The children of a sum share one row, so a surviving child drawn there reads
+             * as the sum itself.  With a term missing there is no sum to show, so the row
+             * carries the message alone.  Found by Jairo.  refs #38560 */
+            drawIt = !(summing && errMsgFound);
+        if (drawIt)
 	    {
 	    if (subtrack->networkErrMsg)
 	       errMsgShown = TRUE;
-	    wgo->numTrack = numTrack++;
+	    /* Only a child that has data takes a slot.  The stacked offsets were worked
+	     * out over those children alone, so counting a warning row here puts the good
+	     * ones on the wrong baseline and their graph is drawn as a clip line.
+	     * refs #38560 */
+	    if (subtrack->preDrawContainer != NULL)
+		wgo->numTrack = numTrack++;
 	    subtrack->wigGraphOutput = wgo;
             int height;
             if (customComposite)
