@@ -14,7 +14,6 @@
 #include "portable.h"
 #include "errAbort.h"
 #include <mysql.h>
-#include <errmsg.h>
 #include <pthread.h>
 #include "dlist.h"
 #include "dystring.h"
@@ -3017,22 +3016,13 @@ unsigned sqlConnCacheGeneration(void)
 return sqlConnGeneration;
 }
 
-static void sqlConnPutBack(struct sqlConnection *sc)
-/* Get a connection ready for whoever takes it out of the cache next.  Two things can be
- * wrong with it.  A caller that was cut off part way through a query left its rows unread,
- * and the next query on that connection would fail with them still coming.  And the server
- * may have dropped the connection, which leaves it looking no different from a live one,
- * so the next caller gets a connection that fails on its first query; closing it here
- * leaves sqlConnectIfUnconnected to open a new one to the same database on first use.
- *
- * Read the error before freeing the results, since freeing them goes to the server and
- * sets a new one. */
+static void sqlConnFreeResults(struct sqlConnection *sc)
+/* Free any results the connection still has open.  A caller that was cut off part way
+ * through a query left its rows unread, and the next query on that connection would fail
+ * with them still coming. */
 {
 if (sc == NULL)
     return;
-boolean lost = (sc->conn != NULL)
-    && ((mysql_errno(sc->conn) == CR_SERVER_GONE_ERROR)
-        || (mysql_errno(sc->conn) == CR_SERVER_LOST));
 if (sc->resultList != NULL)
     {
     struct dlNode *node, *next;
@@ -3043,14 +3033,7 @@ if (sc->resultList != NULL)
         sqlFreeResult(&res);    /* takes the node out of the list */
         }
     }
-if (lost)
-    {
-    mysql_close(sc->conn);
-    sc->conn = NULL;
-    freeDlList(&sc->resultList);        /* sqlConnRemoteFillIn makes a new one */
-    sqlNumOpenConnections--;
-    }
-sqlConnPutBack(sc->failoverConn);
+sqlConnFreeResults(sc->failoverConn);
 }
 
 void sqlConnCacheFreeNewerThan(struct sqlConnCache *cache, unsigned generation)
@@ -3073,7 +3056,7 @@ for (scce = cache->entries; scce != NULL; scce = scce->next)
     {
     if (scce->inUse && (scce->generation > generation) && pthread_equal(scce->owner, self))
         {
-        sqlConnPutBack(scce->conn);
+        sqlConnFreeResults(scce->conn);
         scce->inUse = FALSE;
         scce->conn->isFree = TRUE;
         }
