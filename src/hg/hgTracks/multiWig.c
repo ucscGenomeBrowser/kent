@@ -535,6 +535,7 @@ struct track *subtrack;
 boolean errMsgShown = FALSE;
 int y = yOff;
 boolean errMsgFound = FALSE;
+boolean tooWideFound = FALSE;
 // determine if any subtracks had errors and count them up
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
@@ -542,6 +543,8 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	{
 	if (subtrack->networkErrMsg)
 	    errMsgFound = TRUE;
+	if (trackIsTooWideToDraw(subtrack))
+	    tooWideFound = TRUE;
 	}
     }
 
@@ -563,7 +566,14 @@ struct wigGraphOutput *wgo = tg->wigGraphOutput;
 
 boolean summing = (wigCart->aggregateFunction == wiggleAggregateAdd
                    || wigCart->aggregateFunction == wiggleAggregateSubtract);
-if (summing && !errMsgFound)
+/* A child the window is too wide for was never loaded, so in a sum it is the same problem
+ * as a child that failed to load: mergeWiggles skips both over a missing preDrawContainer,
+ * and the children are merged into one graph, so a skipped one leaves the row carrying a
+ * sum short a term with nothing to say so.  In every other mode each visible child is
+ * drawn in its own right and its notice is what gets drawn, so leave those alone.
+ * refs #38560 */
+boolean termMissing = errMsgFound || (summing && tooWideFound);
+if (summing && !termMissing)
     {
     /* With a term missing the sum is wrong whatever we draw, so do not work one out; the
      * loop below puts the message in the row instead.  refs #38560 */
@@ -588,12 +598,14 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
 	{
+        boolean carriesMessage = (subtrack->networkErrMsg != NULL)
+                                 || (summing && trackIsTooWideToDraw(subtrack));
         boolean drawIt = !errMsgShown;      // one message in the row is enough
-        if (!subtrack->networkErrMsg)
+        if (!carriesMessage)
             /* The children of a sum share one row, so a surviving child drawn there reads
              * as the sum itself.  With a term missing there is no sum to show, so the row
              * carries the message alone.  Found by Jairo.  refs #38560 */
-            drawIt = !(summing && errMsgFound);
+            drawIt = !(summing && termMissing);
         int height;
         if (customComposite)
             height = tg->totalHeight(tg, vis);
@@ -601,7 +613,7 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
             height = subtrack->totalHeight(subtrack, vis);
         if (drawIt)
 	    {
-	    if (subtrack->networkErrMsg)
+	    if (carriesMessage)
 	       errMsgShown = TRUE;
 	    /* Only a child that has data takes a slot.  The stacked offsets were worked
 	     * out over those children alone, so counting a warning row here puts the good
@@ -615,8 +627,8 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    if (wigCart->aggregateFunction != wiggleAggregateNone)
 		subtrack->lineHeight = tg->lineHeight;
 	    subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
-	    // a subtrack that failed to load is drawn as a warning and has no values
-	    if (doMouseOver && subtrack->networkErrMsg == NULL)
+	    // a child that took the row to show a message has no values to report
+	    if (doMouseOver && !carriesMessage)
 		{
 		struct mwMouseSub *sub;
 		AllocVar(sub);

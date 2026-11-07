@@ -8198,6 +8198,14 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     }
 }
 
+boolean trackIsTooWideToDraw(struct track *tg)
+/* Did checkMaxWindowToDraw turn this track over to its zoom in notice?  Such a track was
+ * never loaded, so it has no values, but unlike one that failed to load it carries its own
+ * message and has no networkErrMsg.  refs #38560 */
+{
+return (tg->drawItems == drawMaxWindowWarning);
+}
+
 void printTrackInitJavascript(struct track *trackList)
 {
 hPrintf("<input type='hidden' id='%s' name='%s' value=''>\n", hgtJsCommand, hgtJsCommand);
@@ -8939,9 +8947,10 @@ if (sharedErrMsg)
 	 * labelled.  A serial load runs checkIfWiggling before loadItems, so a track set
 	 * to draw as a density graph already has wigLeftLabels installed when the load
 	 * aborts, and that reads wigCartData, which a bed-like track never filled in.
-	 * refs #38560 */
+	 * Leave mapsSelf alone: clearing it sends doMapItems through the item loop, and a
+	 * track that aborted after loadItems had filled the list would get a click box per
+	 * item laid over the message.  refs #38560 */
 	tg->drawLeftLabels = NULL;
-	tg->mapsSelf = FALSE;
 	}
     }
 
