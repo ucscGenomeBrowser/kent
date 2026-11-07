@@ -368,7 +368,6 @@ struct track *subtrack;
 
 double graphUpperLimit = -BIGDOUBLE;
 double graphLowerLimit = BIGDOUBLE;
-boolean gotLimits = FALSE;
 struct window *w;
 struct track *tgs;
 
@@ -386,15 +385,9 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		    graphUpperLimit = pre->graphUpperLimit;
 		if (pre->graphLowerLimit < graphLowerLimit)
 		    graphLowerLimit = pre->graphLowerLimit;
-		gotLimits = TRUE;
 		}
 	    }
-	/* Stop at the first child that has data, since multiWigPreDraw gave them all the
-	 * same limits.  Stopping at the first visible one left the limits at their
-	 * starting values when that child was the one that failed to load, and every
-	 * sibling then drew entirely above its upper limit, as a clip line.  refs #38560 */
-	if (gotLimits)
-	    break;
+	break;  // can exit since the rest of the subtracks have been set to the same limits.
 	}
     }
 
@@ -535,7 +528,6 @@ struct track *subtrack;
 boolean errMsgShown = FALSE;
 int y = yOff;
 boolean errMsgFound = FALSE;
-boolean tooWideFound = FALSE;
 // determine if any subtracks had errors and count them up
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
@@ -543,8 +535,6 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	{
 	if (subtrack->networkErrMsg)
 	    errMsgFound = TRUE;
-	if (trackIsTooWideToDraw(subtrack))
-	    tooWideFound = TRUE;
 	}
     }
 
@@ -564,19 +554,11 @@ if (errMsgFound && currentWindow==windows)  // first window
 struct wigCartOptions *wigCart = tg->wigCartData;
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 
-boolean summing = (wigCart->aggregateFunction == wiggleAggregateAdd
-                   || wigCart->aggregateFunction == wiggleAggregateSubtract);
-/* A child the window is too wide for was never loaded, so in a sum it is the same problem
- * as a child that failed to load: mergeWiggles skips both over a missing preDrawContainer,
- * and the children are merged into one graph, so a skipped one leaves the row carrying a
- * sum short a term with nothing to say so.  In every other mode each visible child is
- * drawn in its own right and its notice is what gets drawn, so leave those alone.
- * refs #38560 */
-boolean termMissing = errMsgFound || (summing && tooWideFound);
-if (summing && !termMissing)
+if ((wigCart->aggregateFunction == wiggleAggregateAdd
+     || wigCart->aggregateFunction == wiggleAggregateSubtract) && !errMsgFound)
     {
-    /* With a term missing the sum is wrong whatever we draw, so do not work one out; the
-     * loop below puts the message in the row instead.  refs #38560 */
+    /* With a child missing, the sum is wrong whatever we do, so leave the rows as they
+     * are and let the failed one say so.  refs #38560 */
     struct track *merged = mergeWiggles(tg->subtracks,
                                         wigCart->aggregateFunction == wiggleAggregateAdd);
     if (merged != NULL)
@@ -598,37 +580,24 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
 	{
-        boolean carriesMessage = (subtrack->networkErrMsg != NULL)
-                                 || (summing && trackIsTooWideToDraw(subtrack));
-        boolean drawIt = !errMsgShown;      // one message in the row is enough
-        if (!carriesMessage)
-            /* The children of a sum share one row, so a surviving child drawn there reads
-             * as the sum itself.  With a term missing there is no sum to show, so the row
-             * carries the message alone.  Found by Jairo.  refs #38560 */
-            drawIt = !(summing && termMissing);
-        int height;
-        if (customComposite)
-            height = tg->totalHeight(tg, vis);
-        else
-            height = subtrack->totalHeight(subtrack, vis);
-        if (drawIt)
+        if (!subtrack->networkErrMsg || !errMsgShown)
 	    {
-	    if (carriesMessage)
+	    if (subtrack->networkErrMsg)
 	       errMsgShown = TRUE;
-	    /* Only a child that has data takes a slot.  The stacked offsets were worked
-	     * out over those children alone, so counting a warning row here puts the good
-	     * ones on the wrong baseline and their graph is drawn as a clip line.
-	     * refs #38560 */
-	    if (subtrack->preDrawContainer != NULL)
-		wgo->numTrack = numTrack++;
+	    wgo->numTrack = numTrack++;
 	    subtrack->wigGraphOutput = wgo;
+            int height;
+            if (customComposite)
+                height = tg->totalHeight(tg, vis);
+            else
+                height = subtrack->totalHeight(subtrack, vis);
 
 	    hvGfxSetClip(hvg, xOff, y, width, height);
 	    if (wigCart->aggregateFunction != wiggleAggregateNone)
 		subtrack->lineHeight = tg->lineHeight;
 	    subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
-	    // a child that took the row to show a message has no values to report
-	    if (doMouseOver && !carriesMessage)
+	    // a subtrack that failed to load is drawn as a warning and has no values
+	    if (doMouseOver && subtrack->networkErrMsg == NULL)
 		{
 		struct mwMouseSub *sub;
 		AllocVar(sub);
@@ -637,16 +606,12 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		sub->height = height;
 		slAddHead(&mouseSubList, sub);
 		}
+	    if (wigCart->aggregateFunction == wiggleAggregateNone)
+		{
+		y += height + 1;
+		wgo->yOff = y;
+		}
 	    hvGfxUnclip(hvg);
-	    }
-	/* Keep the row whether it was drawn or not.  With no overlay every visible child
-	 * has a row of its own, and multiWigTotalHeight and multiWigLeftLabels both count
-	 * all of them, so skipping the advance for a child whose message was suppressed
-	 * drew every later child beside the wrong label.  refs #38560 */
-	if (wigCart->aggregateFunction == wiggleAggregateNone)
-	    {
-	    y += height + 1;
-	    wgo->yOff = y;
 	    }
 	}
     }
@@ -661,8 +626,8 @@ if (doMouseOver)
     {
     // the list is in reverse draw order.  multiWigPreDraw reversed the
     // subtracks for stacked mode, so leave that one as it is, and the popup
-    // lists the subtracks in trackDb order in every mode: the order of the
-    // rows top to bottom when there is no overlay.
+    // lists the subtracks in the order of tg->subtracks in every mode: the
+    // order of the rows top to bottom when there is no overlay.
     if (wigCart->aggregateFunction != wiggleAggregateStacked)
         slReverse(&mouseSubList);
     multiWigMouseOverJson(tg, hvg, wigCart, mouseSubList);

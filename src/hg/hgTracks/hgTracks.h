@@ -1603,9 +1603,6 @@ void makeContainerTrack(struct track *track, struct trackDb *tdb);
 bool isSubtrackVisible(struct track *tg);
 /* Should this subtrack be displayed? */
 
-boolean trackIsTooWideToDraw(struct track *tg);
-/* Did checkMaxWindowToDraw turn this track over to its zoom in notice? */
-
 void compositeTrackVis(struct track *track);
 /* set visibilities of subtracks */
 

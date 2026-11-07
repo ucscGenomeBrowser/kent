@@ -8198,14 +8198,6 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     }
 }
 
-boolean trackIsTooWideToDraw(struct track *tg)
-/* Did checkMaxWindowToDraw turn this track over to its zoom in notice?  Such a track was
- * never loaded, so it has no values, but unlike one that failed to load it carries its own
- * message and has no networkErrMsg.  refs #38560 */
-{
-return (tg->drawItems == drawMaxWindowWarning);
-}
-
 void printTrackInitJavascript(struct track *trackList)
 {
 hPrintf("<input type='hidden' id='%s' name='%s' value=''>\n", hgtJsCommand, hgtJsCommand);
