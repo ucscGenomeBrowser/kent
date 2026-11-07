@@ -8523,8 +8523,8 @@ while(1)
     if (errCatch->gotWarning && !errCatch->gotError)
         {
         /* A worker thread cannot call warn: the handlers that write into the page are not
-         * ready for it.  Keep the message instead and let the main thread hand it back once
-         * the workers have joined, which is what errCatchReWarn does on the serial path.
+         * ready for it.  Keep the message instead and let the main thread hand it back when
+         * it collects this pfd, which is what errCatchReWarn does on the serial path.
          * With an error there is nothing to do here, since the message carries the warnings
          * too and goes onto the track below.  refs #38642 */
         pfd->warnMsg = cloneString(errCatch->message->string);
@@ -8880,7 +8880,7 @@ static void loadOneTrackSerial(struct track *track, boolean doLoadSummary)
 /* Everything the main thread does to get one track ready to draw.  The checks come first
  * because they can change what is drawn, then either the summary or the items.  It is a
  * function so that the caller can put the whole of it inside one errCatch, the way
- * parallelLoadData does for a worker thread.  Not quite the same work as that one:
+ * remoteParallelLoad does for a worker thread.  Not quite the same work as that one:
  * checkIfWiggling has always been serial only.  refs #38560 */
 {
 checkMaxWindowToDraw(track);
@@ -8935,6 +8935,13 @@ if (sharedErrMsg)
 	tg->networkErrMsg = sharedErrMsg;
 	tg->drawItems = bigDrawWarning;
 	tg->totalHeight = bigWarnTotalHeight;
+	/* The row carries a message now, so the wiggle left axis goes with the graph it
+	 * labelled.  A serial load runs checkIfWiggling before loadItems, so a track set
+	 * to draw as a density graph already has wigLeftLabels installed when the load
+	 * aborts, and that reads wigCartData, which a bed-like track never filled in.
+	 * refs #38560 */
+	tg->drawLeftLabels = NULL;
+	tg->mapsSelf = FALSE;
 	}
     }
 
@@ -9771,7 +9778,7 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 			lastTime = clock1000();
 
 		    /* Keep an errAbort to the track that caused it rather than letting it
-		     * take the whole image down.  parallelLoadData does this for the threaded
+		     * take the whole image down.  remoteParallelLoad does this for the threaded
 		     * path; the serial path needs it too, and over the same work, or the two
 		     * disagree about what a bad track does.  refs #38560 */
 		    unsigned connGeneration = hConnGeneration();
