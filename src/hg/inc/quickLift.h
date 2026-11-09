@@ -61,6 +61,14 @@ struct bed *quickLiftIntervalsToBedClip(struct bbiFile *bbi, struct hash *chainH
  * to what they cover rather than dropped.  Callers that need the item's true extent (the
  * details page) should use quickLiftIntervalsToBed instead. */
 
+struct bed *quickLiftIntervalsToBedKeepIntron(struct bbiFile *bbi, struct hash *chainHash,
+                                              struct bigBedInterval *bb, boolean *retOutside);
+/* Like quickLiftIntervalsToBedClip, for a multi-region space:  an item whose only part in
+ * the space is between its blocks comes back with no blocks, which draws as an intron
+ * line, where the other lifts drop it.  An item with no aligned base anywhere in its range
+ * lies outside the space:  it comes back NULL with *retOutside set, and is not a failed
+ * lift.  With multiRegionSpaces off it is quickLiftIntervalsToBedClip. */
+
 struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chromName, int winStart, int winEnd,  char *query, char *extraWhere, ItemLoader2 loader, int numFields, struct hash *chainHash);
 /* Load a list of items (usually beds) from another database in a region that corresponds to chromName:winStart-winEnd in the reference database.
  * Fill a hash with the chains that were used to map the desired range.  These chains will be used to map the query side items back to the reference. */
@@ -286,6 +294,22 @@ struct bed *quickLiftSqlLoadBeds(struct trackDb *tdb, char *trackTable, char *li
  * and return the lifted beds that overlap chrom:start-end.  Handles custom track table
  * resolution internally.  Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
 
+struct slList *quickLiftSqlLoadItems(struct trackDb *tdb, char *trackTable,
+    char *chrom, int start, int end, char *extraWhere,
+    struct slList *(*loader)(char **row),
+    void (*adjust)(void *item, boolean flipped, int clippedStart), boolean keepSize);
+/* Load items of any type whose struct begins like a struct bed3 (next, chrom, chromStart,
+ * chromEnd) from the track's quickLiftDb, and lift those three fields in place to the
+ * reference.  The rest of each item is left as loaded, so a track with its own loader
+ * and drawing keeps both.  Items that do not lift, or lift outside chrom:start-end, are
+ * dropped.  The list is not sorted.
+ * An item is normally clipped to what lifts.  With keepSize it is instead placed whole
+ * through the first aligned block it has in the window, so that positions counted from
+ * its chromStart (blocks, an aligned part) stay right where it runs past a region's edge;
+ * only a start before 0 is clipped, by clippedStart bases.
+ * If adjust is not NULL it is called on each lifted item, with flipped TRUE when the lift
+ * turned the item around, as one placed in reverse in a multi-region space is. */
+
 boolean quickLiftLiftPos(char *sourceDb, char *destDb,
     char *chrom, int start, int end,
     char **retChrom, int *retStart, int *retEnd);
@@ -300,6 +324,7 @@ boolean quickLiftHubRemoveTrack(struct cart *cart, char *sourceDb, char *trackNa
 boolean quickLiftMultiChainEnabled();
 /* Lift an item through every chain it overlaps, rather than only the best one.  hg.conf
  * quickLiftMultiChain, off by default. */
+/* Where multiRegionSpaces is on, the default is on. */
 
 /* With quickLiftSplitRanges the exact source ranges are cut wherever the chain skips more
  * than this many source bases.  A gap smaller than this is cheaper to read across than to
@@ -314,6 +339,7 @@ boolean quickLiftSplitRangesEnabled();
 /* Cut each chain's source range at large gaps, merge the ranges where they overlap, and
  * read an item only once when it crosses from one range into the next.  hg.conf
  * quickLiftSplitRanges, off by default. */
+/* Where multiRegionSpaces is on, the default is on. */
 
 struct quickLiftQueryRange
 /* A source range to read items from, and the chain it is read for (0 when the ranges of
@@ -374,5 +400,29 @@ void quickLiftCalcGenePreds(struct genePred *gpList, struct hash *chainHash,
 /* calcLiftOverGenePreds() for genePreds read by quickLiftGenePreds():  each one is lifted
  * through the chain it was read for when that is known, and through chainHash otherwise.
  * As there, a genePred that does not lift comes back with a NULL chrom. */
+
+boolean quickLiftSnappedSpan(struct hash *chainHash, void *item, char *chrom, int start,
+                             int end, char strand, char **retChrom, int *retStart, int *retEnd,
+                             char *retStrand);
+/* In a multi-region space:  pull chrom:start-end in to its first and last aligned base on
+ * the chain item lifts through, and lift that span.  For an item that runs out of a region,
+ * this is how far its line reaches in the space.  Return FALSE if no part of the range is
+ * aligned, or multiRegionSpaces or quickLiftMultiChain is off. */
+
+boolean quickLiftIntronOnlyGenePred(struct hash *chainHash, struct genePred *gp);
+/* Before quickLiftCalcGenePreds() in a multi-region space:  if no exon of gp has an aligned
+ * base but part of the span between its exons does, lift that part by itself and leave gp
+ * with no exons, which draws as an intron line.  Return TRUE if gp was lifted here:  it is
+ * then in the space's coordinates and must not go through quickLiftCalcGenePreds().
+ * Always FALSE when multiRegionSpaces or quickLiftMultiChain is off. */
+
+int *quickLiftClipGenePredToBlocks(struct hash *chainHash, struct genePred *gp);
+/* Before quickLiftCalcGenePreds() in a multi-region space:  pull each exon's ends in to the
+ * nearest aligned base of the chain gp lifts through, and drop the exons with nothing aligned.
+ * A region can end inside an exon, and liftOver places only an exon whose two ends are both
+ * aligned.  Not for a caller that needs a gene's true extent, such as a details page.
+ * Return, for each exon kept, how many coding bases of the whole gene lie 5' of its first
+ * coding base (-1 for an exon with none), so that codons can keep their numbers;  NULL if
+ * nothing was clipped, or multiRegionSpaces is off. */
 
 #endif

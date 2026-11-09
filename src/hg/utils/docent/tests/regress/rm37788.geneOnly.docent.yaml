@@ -1,0 +1,41 @@
+# #37788 -- Example 2, Gene-only mode: DKC1, MPP1 and F8 on hg19 chrX, padding 6.
+#
+# One of five scripts, one per example on multiRegionHelp.html, so that each example can
+# be timed and pixel-compared on its own between genome-test and a build of the
+# multiviewQuickLift branch.  Each loads the help page's own session file from
+# genome.ucsc.edu, which is the link a user clicks on that page, and asserts what the
+# example's text says the user will see.
+#
+# The checks are the region boxes and the gene names, not the full list of rows.  On the
+# branch a multi-region view is a synthetic assembly, and it hides tracks that quickLift
+# cannot carry (rmsk, phyloP100way and others), so `exact: true` would fail there for a
+# reason this script does not watch.  Each region of the view gets a map box whose
+# data-tooltip is its source range, so `area[data-tooltip="chrN:a-b"]` is present only
+# when that region really is in the view.  noText is the warning the branch prints when
+# a saved position cannot be placed in the view.
+#
+# The branch needs `multiRegionSpaces=on` in hg.conf.  With it off the branch takes the
+# old virtual-chromosome path, and the script then tests that path instead.
+proof:
+  - "assertion-only 2026-10-06 -- written from multiRegionHelp.html; passes on genome-test, not yet watched to fail for its own reason"
+
+target: genome-test
+db: hg19
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - loadSession: https://genome.ucsc.edu/goldenPath/help/examples/sessions/geneOnlySession.txt
+  - expect:
+      rows: [ruler, knownGene]
+      noText: "is not in this multi-region view"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chrX:153990601-154005978"]'
+        - 'area[data-tooltip="chrX:154006953-154049320"]'
+        - 'area[data-tooltip="chrX:154051617-154062943"]'
+        - 'area[data-tooltip="chrX:154064057-154064824"]'
+        - 'area[data-tooltip*="DKC1"]'
+        - 'area[data-tooltip*="MPP1"]'
+        - 'area[data-tooltip*="F8"]'
+  - shot: geneOnly

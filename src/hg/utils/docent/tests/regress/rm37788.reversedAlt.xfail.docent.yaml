@@ -1,0 +1,55 @@
+# #37788 -- an alt haplotype placed on its chromosome in reverse is drawn reversed in a
+# multi-region space, so it reads the same way as the chromosome around it.
+#
+# altLocations says only where an alt goes.  Its alignment to the chromosome
+# (altSeqLiftOverPsl) says which way:  hg38 has 58 alts aligned only on the minus strand.
+# chr7_KI270805v1_alt is the largest of them.  Its copy of PTPRN2 is on + while chr7's is
+# on -, so laid down forward, singleAltHaplo showed the gene pointing the wrong way and
+# joined the chromosome's flank to the wrong end of the alt.  initSingleAltHaplotype() now
+# marks such an alt '-', and regionsToChain lays it down as a minus-strand chain.
+#
+# What each check asserts:
+#   * the alt's region box covers all of it (chr7_KI270805v1_alt:1-209988), so the space
+#     really holds the alt and this is not some other view;
+#   * the alt's PTPRN2 transcript ENST00000632665.1 is drawn on the minus strand, read
+#     from its per-exon mouseover at a 300 kb window.  knownGene.show.set=all because
+#     GENCODE's default filter hides this transcript even on the plain alt;
+#   * a 30-base window at multi:158330001-158330030 is alt bases 147,453-147,482 in the
+#     position box.  Laid down forward the same window would be 62,507-62,536.  The bases
+#     drawn there were checked by eye on 2026-10-07:  GGTTAAGGAACTTGCTCAGAGTTGGCCTGG, the
+#     reverse complement of the alt's forward sequence.  Docent cannot read bases out of
+#     the image, so the position box stands in for them.
+#
+# Deliberately not asserted:  the ruler's descending numbers (pixels only).
+#
+# XFAIL.  The old virtual-chromosome path, which genome-test runs, ignores the strand, and
+# that is not going to change:  this flips when the multi-region space reaches
+# genome-test.  It needs multiRegionSpaces=on there.
+proof:
+  - "xfail 2026-10-07 -- fails on genome-test (old path:  Strand + and the window at 62,507-62,536);  passes on hgwdev-demo6 with the reversed-alt change"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hideTracks=1&knownGene=pack&knownGene.show.set=all&virtModeType=singleAltHaplo&singleAltHaploId=chr7_KI270805v1_alt&position=chr7%3A158267495-158477174"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      noText: "is not in this multi-region view"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr7_KI270805v1_alt:1-209988"]'
+
+  # The strand is in the per-exon mouseover, which is drawn at 300 kb but not at the
+  # 630 kb the mode opens on, where the whole transcript is one box saying "PTPRN2".
+  - goto: "/cgi-bin/hgTracks?pix=1100&position=multi%3A158200000-158500000"
+  - expect:
+      has: 'area[href*="hgg_gene=ENST00000632665"][data-tooltip*="Strand:</b> -"]'
+      noHas: 'area[href*="hgg_gene=ENST00000632665"][data-tooltip*="Strand:</b> +"]'
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&position=multi%3A158330001-158330030"
+  - expect:
+      text: "chr7_KI270805v1_alt:147,453-147,482"
+      noText: "chr7_KI270805v1_alt:62,507-62,536"
