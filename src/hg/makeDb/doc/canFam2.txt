@@ -3406,3 +3406,47 @@ real	478m44.165s
 user	0m2.752s
 sys	0m3.409s
 ##############################################################################
+# LIFTOVER TO canFam4 (DONE - 2021-05-13 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam2/bed/blat.canFam5.2021-05-13
+    cd /hive/data/genomes/canFam2/bed/blat.canFam5.2021-05-13
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam2/jkStuff/canFam2.11.ooc \
+         canFam2 canFam5
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam2/jkStuff/canFam2.11.ooc \
+         canFam2 canFam5) > doLiftOverToCanFam5.log 2>&1
+    # real    179m37.613s
+
+    # see if the liftOver menus function in the browser from canFam2 to canFam5
+
+##############################################################################
+# LIFTOVER TO canFam4 (DONE - 2025-10-16 - Hiram)
+    screen -S rm36483
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam2/bed/blat.canFam4.2025-10-16
+    cd /hive/data/genomes/canFam2/bed/blat.canFam4.2025-10-16
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/canFam2/canFam2.2bit \
+        -targetSizes=/hive/data/genomes/canFam2/chrom.sizes \
+        -query2Bit=/hive/data/genomes/canFam4/canFam4.2bit \
+        -querySizes=/hive/data/genomes/canFam4/chrom.sizes \
+        -ooc=/hive/data/genomes/canFam2/11.ooc \
+         canFam2 canFam4
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/canFam2/canFam2.2bit \
+        -targetSizes=/hive/data/genomes/canFam2/chrom.sizes \
+        -query2Bit=/hive/data/genomes/canFam4/canFam4.2bit \
+        -querySizes=/hive/data/genomes/canFam4/chrom.sizes \
+        -ooc=/hive/data/genomes/canFam2/11.ooc \
+         canFam2 canFam4) > doLiftOverToCanFam4.log 2>&1
+XXX - running Thu Oct 16 12:00:18 PDT 2025
+    # real    4625m38.987s
+
+    # see if the liftOver menus function in the browser from canFam2 to canFam4
+
+##############################################################################

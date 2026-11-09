@@ -18,6 +18,7 @@ proof:
   - "assertion-only 2026-11-05 -- written with the fix"
   - "xfail 2026-11-05 -- fails on genome-test at step 6 (v506 code without the fix): rows none, page contains \"Couldn't set connection database\""
   - "sandbox-ab 2026-11-05 -- passes on park 38694, port 48121 (branch ql38694, hgTracks with the fix); fails at step 6 on park 38693, port 48120 (qlMuteTriangles, without it): rows none, page contains \"Couldn't set connection database\""
+  - "server-flip 2026-11-05 -- failed on genome-test at step 6 (rows none, page contains \"Couldn't set connection database\"); passed there once 12c6ac42e2f was built with cgi-alpha (hgTracks 14:40)"
 
 target: genome-test
 db: hg38

@@ -7409,4 +7409,56 @@ ln -sf /hive/data/outside/cosmic/hg38/v101/cosmic.bb
 #Updated human/hg38/trackDb.ra and human/hg38/cosmicMuts.html
 
 
+#########################################################################
+# construct liftOver to hg18 (DONE - 2026-01-24 - Hiram)
+    # it turns out it doesn't matter if the query or target 2bit files
+    # are masked.  This procedure can be done on completely unmasked sequences
+    # for both, same result masked or not masked
+    screen -S hg38	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/hg38/bed/blat.hg18.2026-01-24
+    cd /hive/data/genomes/hg38/bed/blat.hg18.2026-01-24
+    # check it with -debug first to see if it is going to work:
 
+    doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=hgwdev \
+      -dbHost=hgwdev -workhorse=hgwdev -fileServer=hgwdev -debug \
+      -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+      -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+      -query2Bit=/hive/data/genomes/hg18/hg18.2bit \
+      -querySizes=/hive/data/genomes/hg18/chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.11.ooc  hg38 hg18
+
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=hgwdev \
+      -dbHost=hgwdev -workhorse=hgwdev -fileServer=hgwdev \
+      -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+      -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+      -query2Bit=/hive/data/genomes/hg18/hg18.2bit \
+      -querySizes=/hive/data/genomes/hg18/chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.11.ooc  hg38 hg18) > do.log 2>&1
+
+#       -ooc=/hive/data/genomes/hg38/11.ooc  hg38 hg18
+#       -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc hg38 hg18
+
+    # the debug step doesn't actually construct enough files to run the
+    # steps manually.  The chaining has an extra procedure that is performed
+    # while not in 'debug' mode
+    # the run.blat was operated manually, then chaining:
+    time doSameSpeciesLiftOver.pl -continue=chain -stop=net -buildDir=`pwd` \
+      -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev \
+           -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc \
+             hg38 hg18 > chain.log 2>&1
+    # real    22m31.635s
+    # loading is only a few seconds:
+    doSameSpeciesLiftOver.pl -continue=load -buildDir=`pwd` \
+     -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc \
+             hg38 hg18 > load.log 2>&1
+
+    # verify this file exists:
+    #	/gbdb/hg38/liftOver/hg38ToHg18.over.chain.gz
+    # and try out the conversion on genome-test from hg38 to hg18
+    # same file should exist for downloads:
+    #  /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/liftOver/hg38ToHg18.over.chain.gz
+
+############################################################################
