@@ -740,6 +740,34 @@ RELEASE_GATES = {
                "chain's whole source range is read in one piece, as before.  "
                "Sibling of quickLiftMultiChain.  hgwdev's hg.conf turns it "
                "on."),
+        h("multiRegionSpaces", "flag", "hg/lib/multiRegionSpace.c",
+          default="FALSE", role="gate", verified=True, ticket="37788",
+          note="Draw a multi-region view (exon view, gene view, custom "
+               "regions, alt haplotype) as a synthetic assembly:  "
+               "loader/regionsToChain lays the regions end to end into a "
+               "bigChain in trash/mrSpace, tracks are lifted into it with "
+               "quickLift, and the ruler is numbered in source coordinates.  "
+               "Read once, in multiRegionSpacesEnabled(), which "
+               "enterMultiRegionSpace() and the other space entry points in "
+               "hgTracks.c ask first;  every other test of the space "
+               "(multiRegionSpaceForDb(), liftedInSpace()) is FALSE until "
+               "one of them installs a space.  Off, the old virtual-"
+               "chromosome path draws the view, as before.  Needs the "
+               "hgcentral table from hg/lib/multiRegionSpaceKey.sql.  "
+               "hgwdev's hg.conf turns it on."),
+        h("multiRegionSpaceMaxRegions", "limit", "hg/lib/multiRegionSpace.c",
+          default="500000", verified=True, ticket="37788",
+          note="The most regions a multi-region space is built for.  A view "
+               "with more warns and is drawn by the old virtual-chromosome "
+               "path.  Read in multiRegionSpaceMaxRegions();  only asked "
+               "when multiRegionSpaces is on."),
+        h("multiRegionSpaceKeyName", "table", "hg/lib/multiRegionSpace.c",
+          default='"multiRegionSpaceKey"', verified=True, ticket="37788",
+          note="The hgcentral table that maps a multi-region view's "
+               "conditions to the SHA1 of its region list, so a view built "
+               "once is found again without rebuilding the list.  Read in "
+               "multiRegionSpaceKeyTable();  only asked when "
+               "multiRegionSpaces is on."),
         h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
           default="FALSE", role="gate", verified=True, ticket="38490",
           note="Let quickLift lift bigBarChart tracks.  Read in "

@@ -15,6 +15,11 @@
 #include "rangeTree.h"
 #include "hdb.h"
 #include "chromInfo.h"
+#include "trackDb.h"
+#include "trackHub.h"
+#include "chromAlias.h"
+#include "bPlusTree.h"
+#include "errCatch.h"
 
 
 struct genePred *genePredLoad(char **row)
@@ -2214,6 +2219,94 @@ gp->type = cloneString(row[13]);
 gp->geneName = cloneString(row[14]);
 gp->geneName2 = cloneString(row[15]);
 
+return gp;
+}
+
+static struct genePred *bigGenePredForName(char *db, struct trackDb *tdb, char *name,
+                                           char *chrom)
+/* The bigGenePred half of genePredForTrackItem().  Can errAbort:  the file may be
+ * missing, have no name index, or not have the bigGenePred columns. */
+{
+struct genePred *gp = NULL;
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(db))
+    conn = hAllocConn(db);
+char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+hFreeConn(&conn);
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+/* genePredFromBigGenePred() asserts on a row with fewer columns, and a hub file
+ * can be anything. */
+if (bbi->fieldCount < 20)
+    errAbort("%s does not have the columns of a bigGenePred", fileName);
+int fieldIx;
+struct bptFile *bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bbList = bigBedNameQuery(bbi, bpt, fieldIx, name, lm);
+if (bbList)
+    {
+    char chromBuf[bbi->chromBpt->keySize+1];
+    struct bigBedInterval *bb, *match = bbList;
+    int lastChromId = -1;
+    for (bb = bbList; bb != NULL; bb = bb->next)
+        {
+        bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromBuf, sizeof chromBuf);
+        lastChromId = bb->chromId;
+        if (sameString(chromBuf, chrom))
+            {
+            match = bb;
+            break;
+            }
+        }
+    bbiCachedChromLookup(bbi, match->chromId, lastChromId, chromBuf, sizeof chromBuf);
+    gp = (struct genePred *)genePredFromBigGenePred(cloneString(chromBuf), match);
+    }
+lmCleanup(&lm);
+bptFileDetach(&bpt);
+bigBedFileClose(&bbi);
+return gp;
+}
+
+struct genePred *genePredForTrackItem(char *db, struct trackDb *tdb, char *name, char *chrom)
+/* Load one item of a genePred or bigGenePred track by name, or NULL if there is no such
+ * item, the track is of another type, or its file cannot be read.  A name can be on two
+ * chroms (the chrX/chrY PAR copies), so the copy on chrom is taken when there is one,
+ * and otherwise the first copy, the same rule for both kinds of track:  a caller in
+ * multi-region view may only know the virtual chrom.  The chrom in the answer is always
+ * the item's own.  Free with genePredFree(). */
+{
+struct genePred *gp = NULL;
+if (startsWithWord("genePred", tdb->type))
+    {
+    /* The type often names the peptide and mRNA tables as well:
+     * "genePred refPep refMrna".  The name is matched exactly, as the bigGenePred name
+     * index matches it:  MySQL alone ignores case and trailing spaces.  The plain
+     * comparison is kept so that the index on name is used. */
+    struct sqlConnection *conn = hAllocConn(db);
+    struct dyString *query = sqlDyStringCreate("select name, chrom, strand, txStart, txEnd, "
+             "cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s' "
+             "and binary name = '%s' order by chrom = '%s' desc, chrom, txStart limit 1",
+             tdb->table, name, name, chrom);
+    struct sqlResult *sr = sqlGetResult(conn, query->string);
+    dyStringFree(&query);
+    char **row;
+    if ((row = sqlNextRow(sr)) != NULL)
+        gp = genePredLoad(row);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+else if (startsWith("bigGenePred", tdb->type))
+    {
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        gp = bigGenePredForName(db, tdb, name, chrom);
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        {
+        warn("%s", errCatch->message->string);
+        genePredFree(&gp);
+        }
+    errCatchFree(&errCatch);
+    }
 return gp;
 }
 

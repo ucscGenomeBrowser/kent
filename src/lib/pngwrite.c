@@ -62,11 +62,14 @@ png_init_io(png, png_file);
 png_set_IHDR(png, info, mg->width, mg->height, 8, // 8=bit_depth
              PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE,
              PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-// Pin the row filter to UP instead of letting libpng try all five filters on
-// every row.  UP was picked by measuring speed and output size on real browser
-// images (refs #38107).  A row filter is a lossless per-row transform, so the
+// Let libpng choose between the NONE and UP row filters for each row, instead
+// of trying all five.  Trying all five was slow (refs #38107).  UP alone is
+// fast, but NONE is smaller on many rows of large images.  Choosing between the
+// two makes the image about 4% smaller for about 3 ms more encode time, which
+// is a net gain for most readers at the connection speeds we measured
+// (refs #38109, #38611).  A row filter is a lossless per-row transform, so the
 // decoded image is unchanged.
-png_set_filter(png, PNG_FILTER_TYPE_BASE, PNG_FILTER_UP);
+png_set_filter(png, PNG_FILTER_TYPE_BASE, PNG_FILTER_NONE | PNG_FILTER_UP);
 
 // Write header/params, write pixels, close and clean up.
 // PNG wants a 2D array of pointers to byte offsets into palette/colorMap.

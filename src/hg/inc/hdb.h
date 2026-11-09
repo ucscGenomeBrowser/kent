@@ -262,6 +262,10 @@ void hParseDbDotTable(char *dbIn, char *dbDotTable, char *dbOut, size_t dbOutSiz
 int hChromSize(char *db, char *chromName);
 /* Return size of chromosome. */
 
+void hClearChromInfoCache(char *db);
+/* Forget every chromosome this process has looked up for db.  Needed when the
+ * meaning of db's coordinates changes under us. */
+
 struct chromInfo *hGetChromInfo(char *db, char *chrom);
 /* Get chromInfo for named chromosome (case-insens.) from db.
  * Return NULL if no such chrom. */
