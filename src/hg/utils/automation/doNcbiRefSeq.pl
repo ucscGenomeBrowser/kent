@@ -361,13 +361,13 @@ echo "\$annotationRelease (\$versionDate)" > ncbiRefSeqVersion.txt
 if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
   zcat \$ncbiGffGz | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
     | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-      | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+      | gff3ToGenePred $warnOnly -maxConvertErrors=-1 -refseqHacks -attrsOut=\$asmId.attrs.txt \\
         -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin stdout \\
       | genePredFilter -chromSizes=\$chromSizes stdin \$asmId.gp
 else
   zcat \$ncbiGffGz \\
     | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-      | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+      | gff3ToGenePred $warnOnly -maxConvertErrors=-1 -refseqHacks -attrsOut=\$asmId.attrs.txt \\
         -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin stdout \\
       | genePredFilter -chromSizes=\$chromSizes stdin \$asmId.gp
 fi
@@ -382,12 +382,12 @@ genePredCheck \$asmId.gp
 if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
   zcat \$ncbiGffGz | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
     | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-      | gff3ToGenePred $warnOnly -refseqHacks -geneNameAttr=ID \\
+      | gff3ToGenePred $warnOnly -maxConvertErrors=-1 -refseqHacks -geneNameAttr=ID \\
         stdin stdout 2> /dev/null > \$asmId.geneId.gp
 else
   zcat \$ncbiGffGz \\
     | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-      | gff3ToGenePred $warnOnly -refseqHacks -geneNameAttr=ID \\
+      | gff3ToGenePred $warnOnly -maxConvertErrors=-1 -refseqHacks -geneNameAttr=ID \\
         stdin stdout 2> /dev/null > \$asmId.geneId.gp
 fi
 awk -F'\\t' -v symOut=\$asmId.geneName.tab 'BEGIN { OFS = "\\t" }
