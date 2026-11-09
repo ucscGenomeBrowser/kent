@@ -18,7 +18,7 @@
 # The branch needs `multiRegionSpaces=on` in hg.conf.  With it off the branch takes the
 # old virtual-chromosome path, and the script then tests that path instead.
 #
-# XFAIL.  The help page says the view shows four regions, two on chr22 and two on chr21.
+# Was XFAIL until 2026-11-09.  The help page says the view shows four regions, two on chr22 and two on chr21.
 # genome-test AND genome.ucsc.edu (checked 2026-10-06) build all four:  the virtual
 # chromosome is 283,981 bp, and position=multi:1-283981 draws them.  But they open the
 # session on multi:1-112,554, the chr22 half, and not on the saved virt:1-283981, so
@@ -27,6 +27,7 @@
 # fix on top of a41191def6b), so this script flips when the branch reaches genome-test.
 proof:
   - "xfail 2026-10-06 -- written from multiRegionHelp.html; fails on genome-test for the chr21 regions, passes on demo6, see above"
+  - "server-flip 2026-11-09 -- passes on genome-test since #37788 was pushed and installed there (cgi-alpha 13:02, multiRegionSpaces=on), having failed there as an xfail on 2026-10-06"
 
 target: genome-test
 db: hg38

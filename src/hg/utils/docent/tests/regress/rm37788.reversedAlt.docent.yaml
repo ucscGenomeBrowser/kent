@@ -22,11 +22,12 @@
 #
 # Deliberately not asserted:  the ruler's descending numbers (pixels only).
 #
-# XFAIL.  The old virtual-chromosome path, which genome-test runs, ignores the strand, and
+# Was XFAIL until 2026-11-09.  The old virtual-chromosome path, which genome-test runs, ignores the strand, and
 # that is not going to change:  this flips when the multi-region space reaches
 # genome-test.  It needs multiRegionSpaces=on there.
 proof:
   - "xfail 2026-10-07 -- fails on genome-test (old path:  Strand + and the window at 62,507-62,536);  passes on hgwdev-demo6 with the reversed-alt change"
+  - "server-flip 2026-11-09 -- passes on genome-test since #37788 was pushed and installed there (cgi-alpha 13:02, multiRegionSpaces=on), having failed there as an xfail on 2026-10-07"
 
 target: genome-test
 db: hg38
