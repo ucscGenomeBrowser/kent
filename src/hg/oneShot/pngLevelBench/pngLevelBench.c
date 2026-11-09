@@ -6,7 +6,8 @@
  * This measures both on real track images.
  *
  * The encode here is the same one lib/pngwrite.c does: RGBA, 8 bits, no
- * interlace, and by default the row filter pinned to UP (refs #38107).  At
+ * interlace, and by default libpng choosing the NONE or UP row filter for each
+ * row (refs #38611; before that the browser pinned UP, refs #38107).  At
  * level 6, which is what libpng's default resolves to, the byte count must
  * equal the size of the input file; -check reports that comparison, and it is
  * what makes this tool's numbers stand for what hgTracks really does.
@@ -40,10 +41,11 @@ errAbort(
   "   -base=N       the level the summary compares against (default 6, which is\n"
   "                 what libpng's default resolves to)\n"
   "   -filters=LIST comma separated row filters to try, from none, sub, up, avg,\n"
-  "                 paeth and all (default up, which is what the browser uses;\n"
+  "                 paeth, noneup and all (default noneup, which is what the\n"
+  "                 browser uses since #38611; up was its setting from #38107;\n"
   "                 all is libpng's own per row choice, which was the browser's\n"
   "                 behaviour before #38107)\n"
-  "   -baseFilter=F the filter the summary compares against (default up)\n"
+  "   -baseFilter=F the filter the summary compares against (default noneup)\n"
   "   -tab          one tab separated row per file per setting, no summary\n"
   "   -check        also print whether the base setting matches the file size\n"
   );
@@ -81,6 +83,7 @@ static struct filterSpec allFilters[] = {
     {"up", PNG_FILTER_UP},
     {"avg", PNG_FILTER_AVG},
     {"paeth", PNG_FILTER_PAETH},
+    {"noneup", PNG_FILTER_NONE | PNG_FILTER_UP},
     {"all", PNG_ALL_FILTERS},
 };
 
@@ -349,8 +352,8 @@ maxLevel = optionInt("maxLevel", maxLevel);
 baseLevel = optionInt("base", baseLevel);
 tabOut = optionExists("tab");
 checkOut = optionExists("check");
-parseFilters(optionVal("filters", "up"));
-char *baseFilter = optionVal("baseFilter", "up");
+parseFilters(optionVal("filters", "noneup"));
+char *baseFilter = optionVal("baseFilter", "noneup");
 int fi;
 baseFilterIx = -1;
 for (fi = 0;  fi < filterCount;  fi++)
