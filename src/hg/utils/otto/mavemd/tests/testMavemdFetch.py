@@ -174,12 +174,12 @@ class TestFetchResilience(unittest.TestCase):
         fetch.Api = self.realApi
         shutil.rmtree(self.dir)
 
-    def run_(self, failRecord=()):
+    def run_(self, failRecord=(), refetch=False):
         api = FakeWholeApi(self.urns, failRecord)
         fetch.Api = lambda log=None: api
         log = open(os.devnull, 'w')
         try:
-            return fetch.fetch(self.dir, log=log)
+            return fetch.fetch(self.dir, refetch=refetch, log=log)
         finally:
             log.close()
 
@@ -223,6 +223,125 @@ class TestFetchResilience(unittest.TestCase):
         self.run_()
         with self.assertRaises(fetch.FetchError):
             self.run_(failRecord=self.urns[:5])
+
+    def testABadRecordIsNotQueuedOnAQuarterlyRefetch(self):
+        # It is carried forward in current so the pruning leaves it alone, but there is
+        # no record to download it with; queuing it used to raise KeyError and take the
+        # whole run down, which made every quarterly rebuild a coin toss.
+        self.run_()
+        summary = self.run_(failRecord=[self.urns[1]], refetch=True)
+        self.assertIn(self.urns[1], summary['failed'])
+        self.assertNotIn(self.urns[1], summary['fetched'])
+
+    def testABadRecordIsNotQueuedWhenItsCachedFileIsMissing(self):
+        self.run_()
+        os.remove(os.path.join(self.dir, 'variants',
+                               fetch.fileStem(self.urns[1]) + '.csv'))
+        summary = self.run_(failRecord=[self.urns[1]])
+        self.assertIn(self.urns[1], summary['failedNew'])
+
+    def testAMalformedRecordIsThatScoreSetsProblem(self):
+        self.run_()
+        api = FakeWholeApi(self.urns)
+        realJson = api.json
+
+        def noUrn(url, delay=None):
+            out = realJson(url, delay)
+            if isinstance(out, dict) and out.get('urn') == self.urns[2]:
+                del out['urn']
+            return out
+        api.json = noUrn
+        fetch.Api = lambda log=None: api
+        log = open(os.devnull, 'w')
+        try:
+            summary = fetch.fetch(self.dir, log=log)
+        finally:
+            log.close()
+        self.assertIn(self.urns[2], summary['failed'])
+
+    def testTheRecordIsNotWrittenWhenItsVariantsFail(self):
+        # The new metadata beside the old CSV is a pairing no build should ever see.
+        self.run_()
+        recordPath = os.path.join(self.dir, 'scoreSets',
+                                  fetch.fileStem(self.urns[1]) + '.json')
+        before = open(recordPath).read()
+        api = FakeWholeApi(self.urns)
+        api.rows = 9                      # a changed count, so this one is re-downloaded
+
+        def boom(url, delay=None, timeout=None):
+            if fetch.quote(self.urns[1]) in url:
+                raise fetch.FetchError('variants: HTTP 500')
+            return FakeWholeApi.request(api, url)
+        api.request = boom
+        fetch.Api = lambda log=None: api
+        log = open(os.devnull, 'w')
+        try:
+            fetch.fetch(self.dir, log=log)
+        except fetch.FetchError:
+            pass
+        finally:
+            log.close()
+        self.assertEqual(open(recordPath).read(), before)
+
+
+class TestPruneGuard(unittest.TestCase):
+    """A collection that comes back short is a bad response, not a curation change."""
+
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        self.realApi = fetch.Api
+        self.urns = ['urn:mavedb:%08d-a-1' % i for i in range(1, 26)]
+
+    def tearDown(self):
+        fetch.Api = self.realApi
+        shutil.rmtree(self.dir)
+
+    def run_(self, urns):
+        fetch.Api = lambda log=None: FakeWholeApi(urns)
+        log = open(os.devnull, 'w')
+        try:
+            return fetch.fetch(self.dir, log=log)
+        finally:
+            log.close()
+
+    def testAnEmptyCollectionIsRefused(self):
+        self.run_(self.urns)
+        with self.assertRaises(fetch.FetchError):
+            self.run_([])
+        self.assertTrue(os.path.exists(os.path.join(
+            self.dir, 'variants', fetch.fileStem(self.urns[0]) + '.csv')))
+
+    def testHalfTheCollectionVanishingIsRefused(self):
+        self.run_(self.urns)
+        with self.assertRaises(fetch.FetchError):
+            self.run_(self.urns[:12])
+
+    def testAnOrdinaryCurationChangeStillPrunes(self):
+        # The seven superseded members swapped on 2026-10-21 were 8% of 84.
+        self.run_(self.urns)
+        summary = self.run_(self.urns[:23])
+        self.assertEqual(summary['dropped'], sorted(self.urns[23:]))
+
+
+class TestCatalogueOnlyWritesNothing(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        self.realApi = fetch.Api
+
+    def tearDown(self):
+        fetch.Api = self.realApi
+        shutil.rmtree(self.dir)
+
+    def testNothingLandsInTheCache(self):
+        # -n runs without the lock, so it must not touch files a real run is writing.
+        fetch.Api = lambda log=None: FakeWholeApi(['urn:mavedb:00000001-a-1'])
+        log = open(os.devnull, 'w')
+        try:
+            summary = fetch.fetch(self.dir, catalogueOnly=True, log=log)
+        finally:
+            log.close()
+        self.assertEqual(os.listdir(self.dir), [])
+        self.assertIn('urn:mavedb:00000001-a-1', summary['catalogue'])
 
 
 class TestVariantPaging(unittest.TestCase):

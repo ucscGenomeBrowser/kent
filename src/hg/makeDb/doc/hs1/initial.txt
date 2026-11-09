@@ -55,3 +55,36 @@ insert into dbDb values('hs1','hs1 - t2t chm13','hub:/gbdb/hs1/hubs','Human','ch
   for f in ixIxx/* ; do ln -s $(realpath $f) ixIxx.new/$(basename $f) ;done
   rm ixIxx
   mv ixIxx.new ixIxx
+
+##############################################################################
+# create 11.ooc file for use with doSameSpeciesLiftover.pl
+
+cd /hive/data/genomes/hs1
+time blat hs1.unmasked.2bit /dev/null /dev/null \
+     -tileSize=11 -makeOoc=hs1.11.ooc -repMatch=1024
+Loading hs1.unmasked.2bit
+Counting hs1.unmasked.2bit
+Writing hs1.11.ooc
+Wrote 39188 overused 11-mers to hs1.11.ooc
+Done making hs1.11.ooc
+
+real    0m12.945s
+
+### for comparison, this measurement on hg19:
+    #	Wrote 30675 overused 11-mers to 11.ooc
+
+##############################################################################
+# experiment doSameSpecies.pl with hg38
+
+mkdir /hive/data/genomes/hs1/bed/blat.hg38.2026-10-22
+cd /hive/data/genomes/hs1/bed/blat.hg38.2026-10-22
+
+time (doSameSpeciesLiftOver.pl -verbose=2 -stop=net -buildDir=`pwd` \
+   -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+    -target2Bit=/hive/data/genomes/hs1/hs1.2bit \
+     -targetSizes=/hive/data/genomes/hs1/chrom.sizes \
+      -query2Bit=/hive/data/genomes/hg38/hg38.2bit \
+       -querySizes=/hive/data/genomes/hg38/chrom.sizes \
+        -ooc=/hive/data/genomes/hs1/hs1.11.ooc \
+         hs1 hg38) > do.log 2>&1
+##############################################################################

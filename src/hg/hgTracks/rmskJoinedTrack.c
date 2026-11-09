@@ -375,7 +375,8 @@ for (rm = rmList; rm != NULL; rm = next)
     {
     next = rm->next;
     rm->next = NULL;
-    if (quickLiftJoinedRepeat(quickLiftChainHashForItem(chainHash, rm), &rm->chrom,
+    if (quickLiftJoinedRepeat(quickLiftChainHashForRange(chainHash, rm, rm->chrom,
+                                                         rm->chromStart, rm->chromEnd), &rm->chrom,
             &rm->chromStart, &rm->chromEnd, rm->strand, &rm->alignStart, &rm->alignEnd,
             &rm->blockCount, rm->blockSizes, rm->blockRelStarts) &&
         sameString(rm->chrom, chromName) && (rm->chromStart < winEnd) &&

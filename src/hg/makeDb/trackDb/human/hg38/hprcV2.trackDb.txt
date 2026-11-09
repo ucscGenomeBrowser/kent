@@ -16,7 +16,7 @@ type bed 3
 sortOrder view=+
 html hprcV2.html
 
-    track chainNetHg38Viewchain
+    track chainNetHprcHg38Viewchain
     shortLabel Chain
     view chain
     visibility pack
@@ -24,7 +24,7 @@ html hprcV2.html
     spectrum on
 
         track chainLiftOverGCA_018466835.2
-        parent chainNetHg38Viewchain
+        parent chainNetHprcHg38Viewchain
         subGroups view=chain
         shortLabel GCA_018466835.2 loChain
         longLabel HPRCv2 Lift Over Chain from GCA_018466835.2 to GRCh38/hg38
@@ -34,7 +34,7 @@ html hprcV2.html
         priority 1
 
         track chainLiftOverGCA_018466845.2
-        parent chainNetHg38Viewchain
+        parent chainNetHprcHg38Viewchain
         subGroups view=chain
         shortLabel GCA_018466845.2 loChain
         longLabel HPRCv2 Lift Over Chain from GCA_018466845.2 to GRCh38/hg38

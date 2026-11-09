@@ -1,0 +1,36 @@
+# #38694 -- a quickLifted wig with a sequence logo stopped hgTracks at base level.
+#
+# wigLogoMafCheck() in hg/hgTracks/wigTrack.c reads the track's `logoMaf` alignment to size
+# the letters of the logo.  On a lifted track it read it with the hub assembly's name and hs1
+# coordinates.  phyloP100way names a TABLE, multiz100way, and the hub assembly has no such
+# database, so hgTracks stopped with "Couldn't set connection database to hub_<n>_hs1" and
+# drew no rows.  Fixed by 12c6ac42e2f:  a track with quickLiftUrl does not read the
+# alignment.  With no base probabilities the logo draws the hs1 base at each position, sized
+# by the score.  The bigMaf form of the same bug (phyloP241wayBW) is rm38694bigMaf.
+#
+# hg38 chr7:155,799,529-155,812,871 lifts to hs1 chr7:156,982,676-156,996,015;  the script
+# zooms to the first 141 bases there, which is small enough for the logo.
+#
+# The positive check is the rows:  the broken build draws none.  Not asserted:  the letters
+# themselves, since their colour changes with the base and the score.
+# browser.quickLiftWig is a cart gate as well as an hg.conf one, so the first URL turns it on.
+proof:
+  - "assertion-only 2026-11-05 -- written with the fix"
+  - "xfail 2026-11-05 -- fails on genome-test at step 6 (v506 code without the fix): rows none, page contains \"Couldn't set connection database\""
+  - "sandbox-ab 2026-11-05 -- passes on park 38694, port 48121 (branch ql38694, hgTracks with the fix); fails at step 6 on park 38693, port 48120 (qlMuteTriangles, without it): rows none, page contains \"Couldn't set connection database\""
+  - "server-flip 2026-11-05 -- failed on genome-test at step 6 (rows none, page contains \"Couldn't set connection database\"); passed there once 12c6ac42e2f was built with cgi-alpha (hgTracks 14:40)"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7%3A155799529-155812871&hideTracks=1&cons100way=full&phyloP100way=full&pix=1100&browser.quickLiftWig=on"
+  - expect: {rows: [phyloP100way], noText: "Warning/Error"}
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr7:156982676-156982816
+  - expect:
+      rows: [quickLiftChain, phyloP100way, multiz100way]
+      noText: ["Couldn't set connection database", "Warning/Error"]

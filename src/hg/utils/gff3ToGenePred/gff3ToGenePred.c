@@ -41,10 +41,11 @@ errAbort(
   "   corresponding start_stop codon records\n"
   "  -defaultCdsStatusToUnknown - default the CDS status to unknown rather\n"
   "   than complete.\n"
-  "  -allowMinimalGenes - normally this programs assumes that genes contains\n"
-  "   transcripts which contain exons.  If this option is specified, genes with exons\n"
-  "   as direct children of genes and stand alone genes with no exon or transcript\n"
-  "   children will be converted.\n"
+  "  -allowMinimalGenes - genes with exons or CDS as direct children are converted\n"
+  "   as a single transcript even when they also have transcript children, and genes\n"
+  "   with no exon or transcript children are converted as a single block.\n"
+  "   Without this option, only genes with exon and no transcript children, or\n"
+  "   with no children at all, are converted this way.\n"
   "  -refseqHacks - enable various hacks to make RefSeq conversion work:\n"
   "     This turns on -useName, -allowMinimalGenes, and -processAllGeneChildren.\n"
   "     It try harder to find an accession in attributes\n"
@@ -60,8 +61,14 @@ errAbort(
   "   - top-level transcript records\n"
   "   - transcript records that contain:\n"
   "       - exon\n"
+  "   - any other child of a gene record that has exon children\n"
+  "     (e.g. piRNA, pseudogenic_tRNA)\n"
+  "   - gene records with exon children and no transcript children,\n"
+  "     as a single transcript\n"
+  "   - gene records with no children, as a single block\n"
   "where RNA can be mRNA, ncRNA, or rRNA, and transcript can be either\n"
-  "transcript or primary_transcript\n"
+  "transcript or primary_transcript, and gene can be gene, pseudogene,\n"
+  "or ncRNA_gene\n"
   "The first step is to parse GFF3 file, up to 50 errors are reported before\n"
   "aborting.  If the GFF3 files is successfully parse, it is converted to gene,\n"
   "annotation.  Up to 50 conversion errors are reported before aborting.\n"
@@ -107,6 +114,10 @@ static FILE *outUnprocessedRootsFp = NULL;
 
 static char **cdsFeatures[] = {
     &gff3FeatCDS,
+    NULL
+};
+static char **exonFeatures[] = {
+    &gff3FeatExon,
     NULL
 };
 static char **cdsExonFeatures[] = {
@@ -623,6 +634,13 @@ slSort(&cdsUtrBlks, gff3AnnRefLocCmp);
 return cdsUtrBlks;
 }
 
+static boolean isCdsPart(struct gff3Ann *ann)
+/* is this a CDS record that is part of a discontinuous CDS feature? */
+{
+return sameString(ann->type, gff3FeatCDS)
+    && ((ann->prevPart != NULL) || (ann->nextPart != NULL));
+}
+
 static struct genePred *mrnaToGenePred(struct gff3Ann *gene, struct gff3Ann *mrna)
 /* construct a genePred from an mRNA or transript record, return NULL if there is an error.
  * The gene argument maybe null if there isn't a gene parent */
@@ -637,7 +655,17 @@ struct gff3AnnRef *useExons = (exons != NULL) ? exons : cdsUtrBlks;
 
 if (useExons == NULL) // if we don't have any exons, just use the feature
     {
-    useExons = gff3AnnRefNew(mrna);
+    if (isCdsPart(mrna))
+        {
+        // multi-exon CDS that is a direct child of a gene: one record per
+        // exon, all with the same ID, linked by nextPart starting at the head.
+        struct gff3Ann *part;
+        for (part = mrna; part != NULL; part = part->nextPart)
+            slAddHead(&useExons, gff3AnnRefNew(part));
+        slSort(&useExons, gff3AnnRefLocCmp);
+        }
+    else
+        useExons = gff3AnnRefNew(mrna);
     if (sameString(mrna->type, gff3FeatCDS))
 	cdsBlks = useExons;
     }
@@ -697,9 +725,10 @@ static boolean shouldProcessAsTranscript(struct gff3Ann *node)
  * genePred. */
 {
 char *parentType = node->parents ? node->parents->ann->type : NULL;
-return (processAllGeneChildren
-        && (node->parents != NULL)
-        && featTypeMatch(parentType, geneFeatures))
+boolean geneChild = (node->parents != NULL) && featTypeMatch(parentType, geneFeatures);
+// a child of a gene with exons of its own is a transcript, whatever its
+// type (piRNA, pseudogenic_tRNA, Y_RNA, ...)
+return (geneChild && (processAllGeneChildren || haveChildTypeMatch(node, exonFeatures)))
     || featTypeMatch(node->type, transFeatures);
 }
 
@@ -720,7 +749,11 @@ static boolean shouldProcessGeneAsTranscript(struct gff3Ann *gene)
 /* should this gene be processed as a transcripts? */
 {
 // check for any exon children
-return allowMinimalGenes && haveChildTypeMatch(gene, cdsExonFeatures);
+if (allowMinimalGenes)
+    return haveChildTypeMatch(gene, cdsExonFeatures);
+// exons directly under a gene, with no transcript level between them
+// (e.g. OR4G4P on GRCh38): the gene is the transcript
+return haveChildTypeMatch(gene, exonFeatures) && !shouldProcessGeneAsStandard(gene);
 }
 
 static void processTranscript(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna,
@@ -729,6 +762,8 @@ static void processTranscript(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *
    increment on error and genePred discarded */
 {
 recProcessed(processed, mrna);
+if (isCdsPart(mrna) && (mrna->prevPart != NULL))
+    return;  // not the first part, all parts are converted with the first one
 
 struct genePred *gp = mrnaToGenePred(gene, mrna);
 if (gp != NULL)
@@ -776,7 +811,7 @@ if (shouldProcessGeneAsTranscript(gene))
     processTranscript(gpFh, NULL, gene, processed);
 else if (shouldProcessGeneAsStandard(gene))
     processGeneTranscripts(gpFh, gene, processed);
-else if (allowMinimalGenes)
+else if (allowMinimalGenes || (gene->children == NULL))
     processGeneStandalone(gpFh, gene, processed);
 }
 

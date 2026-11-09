@@ -3,10 +3,10 @@
 Tracks showing chain/liftOver comparisons for different alignment methods.
 Target assembly: GRCh38/hg38, Query assembly: hs1/T2T-CHM13.
 <ol>
-<ul>The liftOver chain from the T2T project</ul>
-<ul>The liftOver chain from the UCSC procedure 'Same Species' BLAT alignment</ul>
-<ul>The liftOver chain from the UCSC procedure lastz/chain/net alignment</ul>
-<ul>The liftOver chain from the miniMap2 alignment</ul>
+<li>The liftOver chain from the T2T project</li>
+<li>The liftOver chain from the UCSC procedure 'Same Species' BLAT alignment</li>
+<li>The liftOver chain from the UCSC procedure lastz/chain/net alignment</li>
+<li>The liftOver chain from the miniMap2 alignment</li>
 </ol>
 
 Tracks shown for each type of alignment procedure:
@@ -21,7 +21,7 @@ Tracks shown for each type of alignment procedure:
    liftOver file.  mouseOver shows the 'reason' for the failed lift.</li>
 <li>Intersections of the liftOver files, a 'common' track showing what
     each of the 4 lift over chain files had in common, and a 'unique'
-    track for each method showing what it has unique from the others.
+    track for each method showing what it has unique from the others.</li>
 </ul>
 
 <h2>Methods</h2>
@@ -54,13 +54,13 @@ script in the kent source tree:
 <hr>
 <p>
 The liftOver <em>failures</em> track items are colored for their unmapped reason:
+</p>
 <ul>
 <li>Deleted in new - red 255,0,0,</li>
 <li>Partially deleted in new - light red 128,0,0,</li>
 <li>Boundary problem - blue 0,0,255,</li>
 <li>Can't find thickStart/thickEnd - green 0,255,0,</li>
 </ul>
-</p>
 <p>
 And in the table below, the large counts for <b>Deleted in new</b> are
 almost all because of the chrUn/_alt/_fix/_random contigs, there are only
@@ -73,10 +73,69 @@ almost all because of the chrUn/_alt/_fix/_random contigs, there are only
 </thead>
 <tbody>
 <tr><th>T2T</th><td style='text-align:right'>26,378</td><td style='text-align:right'>5,048</td><td style='text-align:right'>2,273</td><td style='text-align:right'>7</td></tr>
-<tr><th>blat</th><td style='text-align:right'>4,665</td><td style='text-align:right'>1,869</td><td style='text-align:right'>27</td><td style='text-align:right'>4</td></tr>
+<tr><th>blat</th><td style='text-align:right'>4</td><td style='text-align:right'>4,665</td><td style='text-align:right'>1,869</td><td style='text-align:right'>27</td></tr>
 <tr><th>lastz</th><td style='text-align:right'>4,052</td><td style='text-align:right'>2,664</td><td style='text-align:right'>2,273</td><td style='text-align:right'>8</td></tr>
 <tr><th>miniMap2</th><td style='text-align:right'>9,434</td><td style='text-align:right'>5,790</td><td style='text-align:right'>1,943</td><td style='text-align:right'>23</td></tr>
-</tbody>
+</tbody></table>
+
+<hr>
+<p>
+If just the items from the Gencode annotations on only the
+primary chrN chromosomes are used for the liftOver test, all the chain
+files perform very similar and very well:
+</p>
+<table border=1 width=800>
+<caption>genePred&nbsp;translation&nbsp;(liftOver&nbsp;-genePred):&nbsp;hg38.gencodeV50.gp&nbsp;&nbsp;(644,292&nbsp;transcripts)</caption>
+<thead>
+<tr><th>lift type</th><th>items mapped</th><th>mapped %</th><th>items unmapped</th><th>unmapped %</th></tr>
+</thead><tbody>
+<tr><th>T2T</th><td style='text-align:right'>636,964</td><td style='text-align:right'>98.86%</td><td style='text-align:right'>7,328</td><td style='text-align:right'>1.14%</td></tr>
+<tr><th>blat</th><td style='text-align:right'>638,625</td><td style='text-align:right'>99.12%</td><td style='text-align:right'>5,667</td><td style='text-align:right'>0.88%</td></tr>
+<tr><th>lastz</th><td style='text-align:right'>638,605</td><td style='text-align:right'>99.12%</td><td style='text-align:right'>5,687</td><td style='text-align:right'>0.88%</td></tr>
+<tr><th>miniMap2</th><td style='text-align:right'>637,569</td><td style='text-align:right'>98.96%</td><td style='text-align:right'>6,723</td><td style='text-align:right'>1.04%</td></tr>
+</tbody></table>
+
+<hr>
+<table border=1>
+<caption>genePred unmapped reason breakdown</caption>
+<thead>
+<tr><th>lift type</th><th>Deleted<br>in new</th><th>Partially<br>deleted in new</th><th>Boundary<br>problem</th><th>Can't find<br>thickStart/thickEnd</th></tr>
+</thead>
+<tbody>
+<tr><th>T2T</th><td style='text-align:right'>0</td><td style='text-align:right'>5,048</td><td style='text-align:right'>2,273</td><td style='text-align:right'>7</td></tr>
+<tr><th>blat</th><td style='text-align:right'>1</td><td style='text-align:right'>3,895</td><td style='text-align:right'>1,745</td><td style='text-align:right'>26</td></tr>
+<tr><th>lastz</th><td style='text-align:right'>0</td><td style='text-align:right'>3,614</td><td style='text-align:right'>2,070</td><td style='text-align:right'>3</td></tr>
+<tr><th>miniMap2</th><td style='text-align:right'>6</td><td style='text-align:right'>4,819</td><td style='text-align:right'>1,876</td><td style='text-align:right'>22</td></tr>
+</tbody></table>
+
+<hr>
+<p>
+And if using just the items in Gencode that are on chrUn/_alt/_fix/_random
+chromosomes are used, the results are quite varied:
+</p>
+<table border=1 width=800>
+<caption>genePred&nbsp;translation&nbsp;(liftOver&nbsp;-genePred):&nbsp;hg38.gencodeV50.gp&nbsp;&nbsp;(26,378&nbsp;transcripts)</caption>
+<thead>
+<tr><th>lift type</th><th>items mapped</th><th>mapped %</th><th>items unmapped</th><th>unmapped %</th></tr>
+</thead><tbody>
+<tr><th>T2T</th><td style='text-align:right'>0</td><td style='text-align:right'>0.00%</td><td style='text-align:right'>26,378</td><td style='text-align:right'>100.00%</td></tr>
+<tr><th>blat</th><td style='text-align:right'>25,480</td><td style='text-align:right'>96.60%</td><td style='text-align:right'>898</td><td style='text-align:right'>3.40%</td></tr>
+<tr><th>lastz</th><td style='text-align:right'>23,068</td><td style='text-align:right'>87.45%</td><td style='text-align:right'>3,310</td><td style='text-align:right'>12.55%</td></tr>
+<tr><th>miniMap2</th><td style='text-align:right'>15,911</td><td style='text-align:right'>60.32%</td><td style='text-align:right'>10,467</td><td style='text-align:right'>39.68%</td></tr>
+</tbody></table>
+
+<hr>
+<table border=1>
+<caption>genePred unmapped reason breakdown</caption>
+<thead>
+<tr><th>lift type</th><th>Deleted<br>in new</th><th>Partially<br>deleted in new</th><th>Boundary<br>problem</th><th>Can't find<br>thickStart/thickEnd</th></tr>
+</thead>
+<tbody>
+<tr><th>T2T</th><td style='text-align:right'>26,378</td><td style='text-align:right'>0</td><td style='text-align:right'>0</td><td style='text-align:right'>0</td></tr>
+<tr><th>blat</th><td style='text-align:right'>3</td><td style='text-align:right'>770</td><td style='text-align:right'>124</td><td style='text-align:right'>1</td></tr>
+<tr><th>lastz</th><td style='text-align:right'>2,664</td><td style='text-align:right'>438</td><td style='text-align:right'>203</td><td style='text-align:right'>5</td></tr>
+<tr><th>miniMap2</th><td style='text-align:right'>9,428</td><td style='text-align:right'>971</td><td style='text-align:right'>67</td><td style='text-align:right'>1</td></tr>
+</tbody></table>
 
 <hr>
 <table border=1>

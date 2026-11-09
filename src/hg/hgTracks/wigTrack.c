@@ -2283,6 +2283,12 @@ void wigLogoMafCheck(struct track *tg,  int start, int end)
 {
 char *logoMaf = trackDbSetting(tg->tdb, "logoMaf");
 
+// A quickLifted track's alignment is in the assembly it came from, in that assembly's
+// coordinates, so it is not read here.  With no base probabilities the logo draws this
+// assembly's own base at each position, sized by the value.
+if (trackDbSetting(tg->tdb, "quickLiftUrl") != NULL)
+    return;
+
 if (logoMaf != NULL)
     {
     struct wigCartOptions *wigCart = tg->wigCartData;

@@ -49,15 +49,18 @@ METADATA_DELAY = 1
 METADATA_WORKERS = 2
 BACKOFF_5XX = (60, 300, 900)
 MAX_429 = 5
-# More than this share of the score sets tried failing means something is wrong at their
-# end or ours, rather than one score set MaveDB cannot serve.
+# More than this share of the collection failing means something is wrong at their end or
+# ours, rather than one score set MaveDB cannot serve.
 MAX_FAILED_FRACTION = 0.05
+# The share of the cached score sets the collection may stop naming in one run before we
+# treat the response as wrong rather than the curation as changed. The seven superseded
+# members swapped on 2026-10-21 were 8% of 84.
+MAX_COLLECTION_DROP = 0.25
 USER_AGENT = 'UCSC-Genome-Browser-otto/mavemd (genome-www@soe.ucsc.edu)'
 
-# 'vep' is requested even though MaveDB leaves vep_functional_consequence empty for every
-# variant in this collection today. Keeping the upstream column means the track picks the
-# values up automatically if MaveDB starts populating it, rather than needing a schema
-# change.
+# 'vep' carries vep_functional_consequence, which MaveDB left empty in this collection
+# until late 2026 and now fills on about a quarter of the rows; the track has a filter on
+# it.
 FIXED_NAMESPACES = ['scores', 'mavedb', 'clingen', 'gnomad', 'vep', 'score_set']
 
 FINGERPRINT_FIELDS = ('urn', 'modificationDate', 'numVariants',
@@ -240,14 +243,17 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
           log=sys.stderr):
     """Update the cache; returns a summary dict (see the end of this function)."""
     api = Api(log)
-    for sub in ('scoreSets', 'variants'):
-        os.makedirs(os.path.join(cacheDir, sub), exist_ok=True)
+    if not catalogueOnly:
+        for sub in ('scoreSets', 'variants'):
+            os.makedirs(os.path.join(cacheDir, sub), exist_ok=True)
     version = apiVersion(api)
-    writeAtomic(os.path.join(cacheDir, 'apiVersion.txt'), (version + '\n').encode())
+    if not catalogueOnly:
+        writeAtomic(os.path.join(cacheDir, 'apiVersion.txt'), (version + '\n').encode())
 
     coll = api.json('%s/collections/%s' % (API, quote(collection)))
-    writeAtomic(os.path.join(cacheDir, 'collection.json'),
-                json.dumps(coll, indent=1).encode())
+    if not catalogueOnly:
+        writeAtomic(os.path.join(cacheDir, 'collection.json'),
+                    json.dumps(coll, indent=1).encode())
     urns = list(coll['scoreSetUrns'])
     log.write('collection %s: %d score sets, modified %s\n'
               % (coll.get('name'), len(urns), coll.get('modificationDate')))
@@ -271,9 +277,17 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
         try:
             record = api.json('%s/score-sets/%s' % (API, quote(urn)))
             wanted, offered = namespacesFor(api, urn)
+            if not record.get('urn'):
+                raise FetchError('%s record: no urn field' % urn)
             return urn, record, wanted, offered, None
         except FetchError as e:
+            if 'consecutive 429' in str(e):
+                raise       # as the download loop does: stop asking rather than press on
             return urn, None, None, None, e
+        except Exception as e:  # pylint: disable=broad-except
+            # A record shaped in a way we do not expect is that score set's problem, not
+            # the run's; it is counted as a failure like any other.
+            return urn, None, None, None, FetchError('%s record: %s' % (urn, e))
 
     current, records, wantedNs, failedMeta = {}, {}, {}, {}
     with concurrent.futures.ThreadPoolExecutor(METADATA_WORKERS) as pool:
@@ -290,7 +304,8 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
             sup = supersededBy(record)
             if sup:
                 summary['superseded'].append('%s superseded by %s' % (urn, sup))
-    writeFingerprints(os.path.join(cacheDir, 'catalogue.tsv'), current)
+    if not catalogueOnly:
+        writeFingerprints(os.path.join(cacheDir, 'catalogue.tsv'), current)
     summary['superseded'].sort()
 
     def paths(urn):
@@ -298,6 +313,8 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
                 os.path.join(cacheDir, 'variants', fileStem(urn) + '.csv'))
 
     if catalogueOnly:
+        # A dry run reads; it does not touch the cache a real run may be writing.
+        summary['catalogue'] = current
         return summary
 
     # A score set the collection no longer names must leave the cache, because the
@@ -306,6 +323,15 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
     # which is exactly this case. This is judged on the collection itself, never on which
     # records happened to download, so a failed metadata read cannot evict anything.
     inCollection = set(urns)
+    # A collection that comes back empty or much shorter than what we hold is far more
+    # likely to be a bad response than a real curation change, and acting on it costs a
+    # full sequential redownload. tooManyFailures() cannot see this, because it measures
+    # against the same shortened list.
+    goneCount = len(set(fetched) - inCollection)
+    if fetched and (not inCollection or goneCount > MAX_COLLECTION_DROP * len(fetched)):
+        raise FetchError('the collection lists %d score sets and the cache holds %d, so '
+                         '%d would be dropped; refusing to prune on a collection that '
+                         'short' % (len(inCollection), len(fetched), goneCount))
     for urn in sorted(set(fetched) - inCollection):
         for path in paths(urn):
             if os.path.exists(path):
@@ -325,8 +351,14 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
         log.write('removed from the cache, no longer in the collection: %s\n'
                   % ' '.join(summary['dropped']))
 
+    # Only score sets we have a record for. One we could not describe is in current,
+    # carried forward so it is not pruned, but there is nothing to download it with: a
+    # refetch or a missing cached file would otherwise queue it and then fail on its
+    # absent record, which took the whole run down.
     want = []
     for urn in sorted(current):
+        if urn in failedMeta:
+            continue
         recordPath, csvPath = paths(urn)
         if refetch or fetched.get(urn) != current[urn] \
                 or not os.path.exists(csvPath) or not os.path.exists(recordPath):
@@ -340,9 +372,12 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
             recordPath, csvPath = paths(urn)
             expected = records[urn].get('numVariants')
             try:
-                writeAtomic(recordPath, json.dumps(records[urn], indent=1).encode())
+                # Variants first: writing the record ahead of them would leave the new
+                # metadata beside the old CSV if the download failed, and the next build
+                # would pair the two.
                 fetchVariants(api, urn, csvPath, wantedNs[urn],
                               int(expected) if expected else None)
+                writeAtomic(recordPath, json.dumps(records[urn], indent=1).encode())
                 done.add(urn)
                 log.write('  %d/%d %s (%.0f s)\n' % (i, len(want), urn, time.time() - t0))
             except FetchError as e:
@@ -398,7 +433,7 @@ def main():
     ap.add_argument('--refetch', action='store_true',
                     help='download every score set again, not only the changed ones')
     ap.add_argument('--catalogueOnly', action='store_true',
-                    help='read the collection and the records, download no variants')
+                    help='read the collection and the records, write and download nothing')
     args = ap.parse_args()
     summary = fetch(args.cacheDir, refetch=args.refetch, collection=args.collection,
                     catalogueOnly=args.catalogueOnly)

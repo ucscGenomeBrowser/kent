@@ -6,13 +6,17 @@ Files mailing-list email (genome@, genome-mirror@, genome-www@) into Redmine MLQ
 tickets. The design is in the RM #38234 plan; this file grows one build step at a
 time (section 9 of the plan).
 
-Step 0, this version: the skeleton. It reads the last few days of list mail and
-the Google Groups pending queue, records every message it has not seen before in
-its own state file and decision log, and does nothing else. Only --shadow mode
-exists: it never writes to Gmail or Redmine. Live mode arrives at cutover.
+It reads the last few days of list mail and the Google Groups pending queue and, for
+every message it has not handled before: looks up its ticket exactly (thread, reply
+headers), classifies and cleans it (Stage 1), matches it by subject when needed
+(Stage 2), decides any reopen (Stage 3) and hub routing (Stage 4), drafts a reply for
+a new ticket, and records all of it in a state file and a decision log.
+  --shadow  writes nothing to Gmail or Redmine, and compares itself with mlqAutomate.py
+  --live    approves or holds, files tickets and comments, reopens, posts drafts
 
 Run as qateam (Gmail token, Redmine key and Claude token come from qateam's files):
     mlqTriage.py --shadow                 # one shadow pass
+    mlqTriage.py --live                   # one live pass (after cutover)
     mlqTriage.py --shadow --selftest      # check Gmail, Redmine and claude -p, then exit
 """
 
@@ -220,7 +224,10 @@ create table if not exists messages (
     oldTicketId integer,
     oldReopened integer,
     oldRef text,                    -- 'issue:<id>' or 'journal:<id>' it was matched to
-    observedAt text
+    observedAt text,
+    moderationDone text,            -- live: 'approved' or 'held', once done
+    writtenTicket integer,          -- live: the ticket this message was filed on, once done
+    writeAttempts integer default 0
 );
 create table if not exists threads (
     gmailThreadId text primary key,
@@ -254,7 +261,8 @@ def openState(stateDir):
     for column, ctype in (('attempts', 'integer default 0'),
                           ('oldAction', 'text'), ('oldTicketId', 'integer'),
                           ('oldReopened', 'integer'), ('oldRef', 'text'),
-                          ('observedAt', 'text')):
+                          ('observedAt', 'text'), ('moderationDone', 'text'),
+                          ('writtenTicket', 'integer'), ('writeAttempts', 'integer default 0')):
         if column not in have:
             conn.execute(f"alter table messages add column {column} {ctype}")
     conn.commit()
@@ -329,6 +337,7 @@ STATE_CONN = None
 ALERT_TO_OVERRIDE = None
 STATE_DIR = None
 INDEX_OK = False
+ACCOUNTS_OK = False
 
 
 def sendAlert(key, subject, body):
@@ -472,7 +481,7 @@ def gmailAttachmentInfo(payload):
         if body.get('attachmentId') and part.get('filename'):
             headers = {h['name'].lower(): h['value'] for h in part.get('headers', [])}
             found.append({'filename': part['filename'], 'mimeType': part.get('mimeType', ''),
-                          'size': body.get('size', 0),
+                          'size': body.get('size', 0), 'attachmentId': body['attachmentId'],
                           'contentId': headers.get('content-id', '').strip('<>')})
         for sub in part.get('parts', []):
             walk(sub)
@@ -627,6 +636,13 @@ def fetchPending(service, listAddr):
             record = messageRecord(headers, gmailId, msg['threadId'], int(msg['internalDate']),
                                    listAddr, 'pending', text, html, attachments)
             record['notificationGmailId'] = gmailId
+            # What approving needs: the +msgappr@ address and the notification's own
+            # subject and Message-Id, so the approval threads as a reply (as mlqAutomate.py).
+            note = headerDict(msg['payload']['headers'])
+            m = re.search(r'<([^>]+\+msgappr@[^>]+)>', note.get('From', ''))
+            record['approveAddr'] = m.group(1) if m else ''
+            record['notificationSubject'] = note.get('Subject', '')
+            record['notificationMessageId'] = note.get('Message-Id', '')
             records.append(record)
             break
     return records
@@ -794,7 +810,7 @@ def exactMatch(conn, rec):
 def ticketFacts(ticketId):
     """Status, opener and duplicate target of an MLQ ticket, from the database."""
     rows = dbQuery("select i.id, i.status_id, s.name status, s.is_closed, i.description, "
-                   "i.subject, cv.value email from issues i "
+                   "i.subject, i.created_on, cv.value email from issues i "
                    "join issue_statuses s on s.id=i.status_id "
                    "left join custom_values cv on cv.customized_id=i.id "
                    "  and cv.customized_type='Issue' and cv.custom_field_id=40 "
@@ -807,7 +823,8 @@ def ticketFacts(ticketId):
     if not opener and r['email']:
         opener = r['email'].split(',')[0].strip().lower()
     facts = {'ticketId': r['id'], 'status': r['status'], 'isClosed': bool(r['is_closed']),
-             'statusId': r['status_id'], 'opener': opener, 'subject': r['subject']}
+             'statusId': r['status_id'], 'opener': opener, 'subject': r['subject'],
+             'created': str(r['created_on'])}
     if r['status_id'] == STATUS_REJECTED:
         dup = dbQuery("select issue_to_id from issue_relations where issue_from_id=%s "
                       "and relation_type='duplicates'", (ticketId,))
@@ -1369,8 +1386,8 @@ def listTag(rec):
 def decideAction(rec, verdict, facts):
     """What the script does with one classified message (Stage 1 action table).
 
-    Thread matching by subject (Stage 2), the reopen judgment (Stage 3) and hub
-    routing (Stage 4) are later steps; where they would decide, the action says so."""
+    Called after Stage 2, so a message with no ticket here is a new ticket. The
+    reopen (Stage 3) and hub routing (Stage 4) are added to the result afterwards."""
     d = verdict['disposition']
     moderated = any(l in CONFIG['MODERATED_LISTS'] for l in rec['lists'])
     unsure = verdict['confidence'] < UNSURE_BELOW
@@ -1407,10 +1424,7 @@ def decideAction(rec, verdict, facts):
         act['render'] = (f"--- New Email Update ---\n\nFrom: {rec['fromAddr']}\n\n"
                          f"{verdict['cleanBodyTextile']}")
         return act
-    if d in ('reply', 'digest_reply', 'acknowledgement'):
-        act['ticket'] = 'Stage 2 subject match (step 6), else new ticket'
-    else:
-        act['ticket'] = 'new ticket (Stage 2 subject check in step 6)'
+    act['ticket'] = 'new ticket'
     act['newSubject'] = f"{listTag(rec)} {verdict['canonicalSubject']}".strip()
     act['render'] = (f"*Summary:* {verdict['summaryLine']}\n\n*From:* {rec['fromAddr']}\n\n"
                      f"{verdict['cleanBodyTextile']}")
@@ -1437,9 +1451,13 @@ def stage1(conn, rec, facts):
     if not ok:
         # Fall back to the raw text, never to a body that may have been reworded.
         verdict['cleanBodyTextile'] = '<pre>\n' + rec['bodyText'].strip() + '\n</pre>'
+    if not facts['ticketId'] and verdict['disposition'] not in NOT_FILED:
+        facts = subjectMatchStage(conn, rec, verdict, facts)
     act = decideAction(rec, verdict, facts)
     if act['reopen'].startswith('Stage 3'):
         reopenStage(rec, verdict, facts, act)
+    if verdict['hubName'] or verdict['hubUrl']:
+        hubStage(conn, rec, verdict, facts, act)
     logDecision('disposition', rec['messageId'], fromAddr=rec['fromAddr'],
                 subject=rec['subject'], lists=rec['lists'], source=rec['source'],
                 disposition=verdict['disposition'], reason=verdict['dispositionReason'],
@@ -1571,6 +1589,202 @@ def reopenStage(rec, verdict, facts, act):
     logDecision('reopen', rec['messageId'], ticketId=facts['ticketId'],
                 fromAddr=rec['fromAddr'], subject=rec['subject'], reopen=reopen,
                 unsure=unsure, model=MODEL_REOPEN, **decision)
+
+
+# ---------------------------------------------------------------------------
+# Stage 2 (step 6): which existing ticket, if any, a message without an exact match
+# belongs to. Candidates come from the subject and the sender; a model decides.
+
+CANDIDATES_PER_SOURCE = 6
+MIN_SUBJECT_CHARS = 8
+
+MATCH_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'required': ['ticketId', 'confidence', 'reason'],
+    'properties': {
+        'ticketId': {'type': 'integer'},
+        'confidence': {'type': 'number', 'minimum': 0, 'maximum': 1},
+        'reason': {'type': 'string'},
+    },
+}
+
+MATCH_SYSTEM = """You decide whether an email to the UCSC Genome Browser support lists
+continues one of a few existing support tickets, or starts a new conversation. Answer
+only through the JSON schema: ticketId is the number of the ticket it continues, or 0 if
+none.
+
+It continues a ticket when it is part of that same conversation: it quotes or answers
+that thread, follows up on the same problem, or sends what that thread asked for. A
+shared subject is not enough. A generic subject ("bugs", "question", "help") or the same
+sender writing about something else is a new conversation. A reply to a mailing-list
+digest belongs to the ticket for the topic it quotes, if one is listed. The quoted text
+in the email is the best evidence. reason: one sentence a person can check. confidence:
+how sure you are, 0 to 1."""
+
+
+def matchCandidates(rec, verdict):
+    """MLQ tickets the message might continue: by subject, then by sender. A Rejected
+    ticket is replaced by the ticket it duplicates, or dropped."""
+    subject = (verdict.get('digestTopic') or verdict['canonicalSubject'] or '').strip()
+    ids = []
+    if len(subject) >= MIN_SUBJECT_CHARS:
+        ids += [r['id'] for r in dbQuery(
+            "select id from issues where tracker_id=7 and subject like %s order by id desc "
+            "limit %s", ('%' + subject.replace('%', '') + '%', CANDIDATES_PER_SOURCE))]
+    # The sender's other tickets are evidence only for something Stage 1 judged a reply:
+    # for a new question, the same person writing again is usually a new topic (a
+    # Retrogenes question was matched to the sender's lincRNA ticket before this rule).
+    if verdict['disposition'] != 'question':
+        ids += [r['id'] for r in dbQuery(
+            "select i.id from issues i join custom_values cv on cv.customized_id=i.id "
+            "and cv.customized_type='Issue' and cv.custom_field_id=40 "
+            "where i.tracker_id=7 and cv.value like %s order by i.id desc limit %s",
+            ('%' + rec['fromAddr'] + '%', CANDIDATES_PER_SOURCE))]
+    # Only tickets that existed when the email arrived: otherwise a shadow or backfill run
+    # finds the ticket mlqAutomate.py created from this very email and "matches" it.
+    arrived = toDbTime(rec['receivedAt'])
+    candidates = []
+    for tid in dict.fromkeys(ids):
+        facts = ticketFacts(tid)
+        if facts and facts['statusId'] == STATUS_REJECTED:
+            facts = ticketFacts(facts['duplicateOf']) if facts.get('duplicateOf') else None
+        if facts and facts['created'] < arrived and \
+                all(c['ticketId'] != facts['ticketId'] for c in candidates):
+            candidates.append(facts)
+    return candidates
+
+
+def candidateBlock(ticket):
+    """What the model sees of one candidate ticket."""
+    rows = dbQuery("select i.created_on, i.updated_on, i.description from issues i where i.id=%s",
+                   (ticket['ticketId'],))
+    last = dbQuery("select j.notes from journals j join users u on u.id=j.user_id "
+                   "where j.journalized_id=%s and j.notes like %s order by j.id desc limit 1",
+                   (ticket['ticketId'], '%--- New Email Update ---%'))
+    r = rows[0]
+    return (f"#{ticket['ticketId']} [{ticket['status']}, opened {str(r['created_on'])[:10]}, "
+            f"last activity {str(r['updated_on'])[:10]}] {ticket['subject']}\n"
+            f"Opened by: {ticket['opener']}\n"
+            f"Question: {questionText(r['description'])[:600]}\n"
+            + (f"Latest email: {last[0]['notes'][:400]}" if last else ''))
+
+
+def subjectMatchStage(conn, rec, verdict, facts):
+    """Stage 2: return facts for the ticket this message continues, or the facts
+    unchanged when it is new. Every subject-only match is checked by the model,
+    however many candidates there are and however old they are (plan section 3)."""
+    candidates = matchCandidates(rec, verdict)
+    if not candidates:
+        logDecision('match', rec['messageId'], candidates=[], ticketId=None,
+                    reason='no candidate tickets', fromAddr=rec['fromAddr'],
+                    subject=rec['subject'])
+        return facts
+    prompt = ("CANDIDATE TICKETS:\n\n" + '\n\n'.join(candidateBlock(c) for c in candidates)
+              + f"\n\nEMAIL\nFrom: {rec['from']}\nSubject: {rec['subject']}\nDate: {rec['date']}\n"
+              + (f"Digest topic: {verdict['digestTopic']}\n" if verdict.get('digestTopic') else '')
+              + f"Triage judged it: {verdict['disposition']}, about: {verdict['summaryLine']}\n"
+              + f"\n{rec['bodyText'][:4000]}")
+    try:
+        verdictMatch = ask(prompt, MATCH_SCHEMA, CONFIG['MODEL_JUDGE'],
+                           CONFIG['MODEL_JUDGE_FALLBACK'], MATCH_SYSTEM)
+    except (AskAuthError, AskLimitError, CallCapReached):
+        raise
+    except AskError as e:
+        logDecision('match', rec['messageId'], error=str(e),
+                    candidates=[c['ticketId'] for c in candidates])
+        return facts
+    chosen = next((c for c in candidates if c['ticketId'] == verdictMatch['ticketId']), None)
+    logDecision('match', rec['messageId'], candidates=[c['ticketId'] for c in candidates],
+                ticketId=chosen['ticketId'] if chosen else None,
+                modelTicketId=verdictMatch['ticketId'], confidence=verdictMatch['confidence'],
+                reason=verdictMatch['reason'], fromAddr=rec['fromAddr'], subject=rec['subject'],
+                model=CONFIG['MODEL_JUDGE'])
+    if not chosen:
+        return facts
+    return factsForTicket(conn, rec, chosen, 'subjectMatch', facts['notes'], ACCOUNTS_OK)
+
+
+# ---------------------------------------------------------------------------
+# Stage 4 (step 6): hub routing. A message about a hub that has a ticket on the GB Hub
+# tracker also goes to that ticket (Lou, 2026-09-21): update it, relate the two, leave
+# a pointer on the MLQ, keep the MLQ. Shadow mode only logs what would be done.
+
+HUB_TRACKER = 45
+HUB_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'required': ['hubTicketId', 'confidence', 'reason'],
+    'properties': {
+        'hubTicketId': {'type': 'integer'},
+        'confidence': {'type': 'number', 'minimum': 0, 'maximum': 1},
+        'reason': {'type': 'string'},
+    },
+}
+
+HUB_SYSTEM = """You match an email about a UCSC Genome Browser track hub or assembly hub to
+the team's Hub tracker ticket for that same hub, if there is one. Answer only through the
+JSON schema: hubTicketId is the ticket number, or 0 if none of the listed tickets is about
+this hub. Match on the hub itself (its name, its hub.txt URL, the group running it), not on
+a general topic. A request for a new GenArk assembly is not a hub ticket. reason: one
+sentence a person can check. confidence: 0 to 1."""
+
+
+def hubTickets():
+    """Every Hub tracker ticket: number, subject and any hub.txt URLs in its description."""
+    out = []
+    for r in dbQuery("select i.id, i.subject, i.description, s.name status from issues i "
+                     "join issue_statuses s on s.id=i.status_id where i.tracker_id=%s "
+                     "order by i.id desc", (HUB_TRACKER,)):
+        urls = sorted(set(re.findall(r'https?://\S+?hub\.txt', r['description'] or '')))[:3]
+        out.append(f"#{r['id']} [{r['status']}] {r['subject']}"
+                   + (f"  hubs: {' '.join(urls)}" if urls else ''))
+    return out
+
+
+def hubStage(conn, rec, verdict, facts, act):
+    """Stage 4: find the Hub ticket for a hub-related message and log what would be done.
+    The returned ticket must exist and be on the Hub tracker before anything is planned
+    (plan section 5, the two cross-tracker guards)."""
+    prompt = (f"HUB TRACKER TICKETS:\n" + '\n'.join(hubTickets())
+              + f"\n\nEMAIL\nFrom: {rec['from']}\nSubject: {rec['subject']}\n"
+              f"Hub named: {verdict['hubName']}\nHub URL: {verdict['hubUrl']}\n\n"
+              f"{verdict['cleanBodyTextile'][:3000]}")
+    try:
+        hub = ask(prompt, HUB_SCHEMA, CONFIG['MODEL_JUDGE'], CONFIG['MODEL_JUDGE_FALLBACK'],
+                  HUB_SYSTEM)
+    except (AskAuthError, AskLimitError, CallCapReached):
+        raise
+    except AskError as e:
+        logDecision('hub', rec['messageId'], error=str(e))
+        return
+    plan = []
+    hubId = hub['hubTicketId']
+    if hubId:
+        row = dbQuery("select tracker_id from issues where id=%s", (hubId,))
+        if not row or row[0]['tracker_id'] != HUB_TRACKER:
+            logDecision('hub', rec['messageId'], hubTicketId=hubId, refused=True,
+                        reason=f"#{hubId} is not a Hub tracker ticket", modelReason=hub['reason'])
+            return
+        plan.append(f"post the message on Hub ticket #{hubId}")
+        mlq = facts.get('ticketId')
+        if mlq:
+            related = dbQuery("select 1 from issue_relations where (issue_from_id=%s and "
+                              "issue_to_id=%s) or (issue_from_id=%s and issue_to_id=%s)",
+                              (mlq, hubId, hubId, mlq))
+            if not related:
+                plan.append(f"relate MLQ #{mlq} to Hub #{hubId}")
+            pointer = dbQuery("select 1 from journals where journalized_id=%s and notes like %s",
+                              (mlq, f'%#{hubId}%'))
+            if not pointer:
+                plan.append(f"leave a pointer to Hub #{hubId} on MLQ #{mlq}")
+        else:
+            plan.append(f"relate the new MLQ to Hub #{hubId} and leave a pointer on it")
+        act['hub'] = '; '.join(plan)
+        act['hubTicketId'] = hubId
+    logDecision('hub', rec['messageId'], hubTicketId=hubId or None, plan=plan,
+                confidence=hub['confidence'], reason=hub['reason'], hubName=verdict['hubName'],
+                hubUrl=verdict['hubUrl'], fromAddr=rec['fromAddr'], subject=rec['subject'])
 
 
 # ---------------------------------------------------------------------------
@@ -1823,15 +2037,47 @@ def draftPrompt(playbook, email, pastTickets, withDump):
     return '\n\n'.join(parts)
 
 
-def urlLoads(url):
-    """True if a URL the draft cites answers with a success status."""
+MAX_URLS_CHECKED = 15
+MAX_REDIRECTS = 5
+
+
+def publicHost(host):
+    """True only if every address the host resolves to is a public one. The link check
+    runs on hgwdev, inside UCSC's network, and the URLs come from model output that
+    read a stranger's email, so it must never be steered at loopback, private,
+    link-local or reserved addresses."""
+    import ipaddress
     try:
-        resp = requests.get(url, timeout=20, allow_redirects=True, stream=True,
-                            headers={'User-Agent': 'mlqTriage link check'})
-        resp.close()
-        return resp.status_code < 400
-    except requests.exceptions.RequestException:
+        infos = socket.getaddrinfo(host, None)
+    except (socket.gaierror, UnicodeError):
         return False
+    for info in infos:
+        ip = ipaddress.ip_address(info[4][0])
+        if not ip.is_global or ip.is_multicast:
+            return False
+    return bool(infos)
+
+
+def urlLoads(url):
+    """True if a URL the draft cites answers with a success status. Only public hosts
+    are fetched, and redirects are followed by hand so each hop is checked too."""
+    from urllib.parse import urlsplit, urljoin
+    for _ in range(MAX_REDIRECTS + 1):
+        parts = urlsplit(url)
+        if parts.scheme not in ('http', 'https') or not parts.hostname or \
+                not publicHost(parts.hostname):
+            return False
+        try:
+            resp = requests.get(url, timeout=20, allow_redirects=False, stream=True,
+                                headers={'User-Agent': 'mlqTriage link check'})
+            resp.close()
+        except requests.exceptions.RequestException:
+            return False
+        if resp.is_redirect and resp.headers.get('Location'):
+            url = urljoin(url, resp.headers['Location'])
+            continue
+        return resp.status_code < 400
+    return False
 
 
 def draftProblems(draft, email):
@@ -1841,10 +2087,17 @@ def draftProblems(draft, email):
     for host in set(m.group(0) for m in INTERNAL_HOSTS.finditer(text)):
         if host.lower() not in email['body'].lower():
             problems.append(f"names an internal host or path the email did not: {host}")
-    for url in set(re.findall(r'https?://[^\s<>"\')\]]+', text)):
-        url = url.rstrip('.,;:')
+    # The check is for URLs the model may have made up, so links copied from the email
+    # itself are not fetched; the rest are capped per draft.
+    urls = sorted({u.rstrip('.,;:') for u in re.findall(r'https?://[^\s<>"\')\]]+', text)})
+    # Internal hosts (hgwdev, genome-test, ...) have public UCSC addresses, so the IP
+    # check would let them through; they are never fetched, only flagged above.
+    urls = [u for u in urls if u not in email['body'] and not INTERNAL_HOSTS.search(u)]
+    for url in urls[:MAX_URLS_CHECKED]:
         if not urlLoads(url):
             problems.append(f"URL does not load: {url}")
+    if len(urls) > MAX_URLS_CHECKED:
+        problems.append(f"cites {len(urls)} links; keep it to the ones that matter")
     # "# " starts a Textile numbered list, so only ** and backticks mark Markdown.
     if re.search(r'\*\*|`', text):
         problems.append("uses Markdown (** or backticks); write Textile")
@@ -1882,9 +2135,9 @@ PLAYBOOK_FILES = {
     'LiftOver': 'liftOver.md', 'Login': 'login.md', 'User Accounts': 'userAccounts.md',
     'IP blocked': 'ipBlocked.md', 'Sessions': 'sessions.md', 'CAPTCHA': 'captcha.md',
 }
-# Only new questions get a draft for now. A reply with no exact match nearly always
-# belongs to an existing ticket; once Stage 2 (step 6) decides it is new, it gets one too.
-DRAFTED = {'question'}
+# New questions get a draft, and so do replies and digest replies that Stage 2 found
+# belong to no existing ticket.
+DRAFTED = {'question', 'reply', 'digest_reply'}
 
 
 def ensureIndex(stateDir):
@@ -1949,7 +2202,9 @@ def draftStage(conn, stateDir, rec, verdict, act):
     playbook, playbooksUsed = loadPlaybooks([verdict['category']] + verdict.get('playbooks', []))
     queryText = '\n'.join([verdict['canonicalSubject'], verdict['summaryLine'],
                            verdict['cleanBodyTextile'][:1500]])
-    past = similarTickets(stateDir, queryText, verdict['category'], DRAFT_PAST_TICKETS)
+    # As of the email's arrival, so a backfill or test cannot draw on tickets opened later.
+    past = similarTickets(stateDir, queryText, verdict['category'], DRAFT_PAST_TICKETS,
+                          before=toDbTime(rec['receivedAt']))
     email = {'from': rec['from'], 'subject': verdict['canonicalSubject'] or rec['subject'],
              'body': verdict['cleanBodyTextile']}
     try:
@@ -1963,6 +2218,7 @@ def draftStage(conn, stateDir, rec, verdict, act):
     used = [t for t in draft['ticketsUsed'] if t in {p['id'] for p in past}]
     post = ("--- AI Suggested Response (Draft) ---\n\n" + draft['draftTextile']
             + relatedTicketsBlock(stateDir, used))
+    act['_draftPost'] = post
     logDecision('draft', rec['messageId'], fromAddr=rec['fromAddr'], subject=rec['subject'],
                 category=verdict['category'], playbooksUsed=playbooksUsed,
                 pastGiven=[p['id'] for p in past], ticketsUsed=used,
@@ -2061,12 +2317,305 @@ def firstStaffReply(ticketId):
 
 
 # ---------------------------------------------------------------------------
+# Live writer: carries out the decided action on Gmail and Redmine. Only --live
+# reaches here. Each step is recorded in the state file as soon as it succeeds, so a
+# rerun after a crash or failure never approves or posts twice; every write, done or
+# failed, is a 'write' line in the decision log.
+
+TRACKER_MLQ = 7
+PRIORITY_UNPRIORITIZED = 12
+STATUS_NEW = 1
+CF_CATEGORY, CF_EMAIL, CF_MLM = 28, 40, 9
+NO_SUBJECT = '<No Subject>'
+MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
+UPLOAD_ROLES = {'content', 'calendar_invite', 'other'}
+WRITE_ATTEMPTS = 3
+
+_mlm = {'name': None, 'looked': False}
+
+
+class WriteError(Exception):
+    """A Gmail or Redmine write failed after its retries."""
+
+
+def noFourByte(text):
+    """This Redmine stores utf8, not utf8mb4: drop emoji and other 4-byte characters."""
+    return re.sub(r'[\U00010000-\U0010FFFF]', '', text or '')
+
+
+def mlmOnDuty():
+    """This run's MLM from the calendar, looked up once. None means unknown."""
+    if not _mlm['looked']:
+        _mlm['looked'] = True
+        try:
+            _mlm['name'] = currentMlm()
+        except Exception as e:
+            logger.error(f"MLM calendar lookup failed: {e}")
+        if not _mlm['name']:
+            sendAlert('mlm', 'No MLM on duty found',
+                      'The calendar gave no MLM; tickets are filed with the MLM field empty.')
+    return _mlm['name']
+
+
+def logWrite(rec, kind, ok, **fields):
+    logDecision('write', rec['messageId'], write=kind, ok=ok, fromAddr=rec['fromAddr'],
+                subject=rec['subject'], **fields)
+    (logger.info if ok else logger.error)(
+        f"  write {kind}: {'ok' if ok else 'FAILED'} "
+        + ' '.join(f"{k}={v}" for k, v in fields.items() if k != 'body')[:200])
+
+
+def redmineWrite(method, path, **kwargs):
+    """POST/PUT to Redmine, retrying server and network errors (not 4xx).
+    Returns the parsed JSON body ({} for an empty 2xx); raises WriteError."""
+    url = f"{CONFIG['REDMINE_URL']}{path}"
+    headers = {'X-Redmine-API-Key': CONFIG['REDMINE_API_KEY']}
+    headers.update(kwargs.pop('headers', {}))
+    delay, err = 5, ''
+    for attempt in range(1, 4):
+        try:
+            resp = requests.request(method, url, headers=headers, timeout=60, **kwargs)
+            if resp.status_code < 300:
+                return resp.json() if resp.content.strip() else {}
+            err = f"HTTP {resp.status_code}: {resp.text[:300]}"
+            if resp.status_code < 500:
+                break
+        except requests.exceptions.RequestException as e:
+            err = f"network error: {e}"
+        if attempt < 3:
+            time.sleep(delay)
+            delay *= 2
+    raise WriteError(f"{method} {path}: {err}")
+
+
+def approveMessage(rec):
+    """Approve a pending message the way mlqAutomate.py does: an empty reply to the
+    +msgappr@ address, threaded on the notification."""
+    if not rec.get('approveAddr'):
+        raise WriteError("no +msgappr@ address on the pending notification")
+    message = MIMEText('')
+    message['To'] = rec['approveAddr']
+    message['From'] = 'gbauto@ucsc.edu'
+    subject = rec.get('notificationSubject') or 'Moderation'
+    message['Subject'] = subject if subject.startswith('Re:') else f"Re: {subject}"
+    if rec.get('notificationMessageId'):
+        message['In-Reply-To'] = rec['notificationMessageId']
+        message['References'] = rec['notificationMessageId']
+    raw = base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
+    try:
+        gmailService().users().messages().send(userId='me', body={'raw': raw}).execute()
+    except Exception as e:
+        raise WriteError(f"approval send failed: {e}")
+
+
+def trashNotification(rec):
+    try:
+        gmailService().users().messages().trash(userId='me', id=rec['notificationGmailId']).execute()
+    except Exception as e:
+        raise WriteError(f"trash failed: {e}")
+
+
+def existingDigests(ticketId):
+    """SHA-256 and MD5 digests of the files already on a ticket."""
+    if not ticketId:
+        return set()
+    issue = redmineGet(f"/issues/{ticketId}.json", {'include': 'attachments'})['issue']
+    return {a.get('digest', '').split(':')[-1] for a in issue.get('attachments', []) if a.get('digest')}
+
+
+def uploadAttachments(rec, verdict, ticketId):
+    """Download this message's attachments and upload the ones worth keeping.
+
+    Skips what Stage 1 called a signature, logo, disclaimer image or cryptographic
+    signature, anything over 10 MB, and any file already on the ticket (by digest),
+    which stops the same quoted image being re-attached on every reply (1c #6).
+    Returns Redmine upload dicts; a failed file is logged and skipped, not fatal."""
+    import hashlib
+    roles = {r['filename']: r['role'] for r in verdict.get('attachmentRoles', [])}
+    have = existingDigests(ticketId)
+    uploads = []
+    service = gmailService()
+    for att in rec['attachments']:
+        name, role = att['filename'], roles.get(att['filename'], 'content')
+        if role not in UPLOAD_ROLES or att['size'] > MAX_ATTACHMENT_BYTES or \
+                att['mimeType'] in ('application/pkcs7-signature', 'application/x-pkcs7-signature'):
+            logWrite(rec, 'attachment-skipped', True, filename=name, role=role, size=att['size'])
+            continue
+        try:
+            data = service.users().messages().attachments().get(
+                userId='me', messageId=rec['gmailId'], id=att['attachmentId']).execute()
+            blob = base64.urlsafe_b64decode(data['data'])
+            if hashlib.sha256(blob).hexdigest() in have or hashlib.md5(blob).hexdigest() in have:
+                logWrite(rec, 'attachment-skipped', True, filename=name, reason='already on ticket')
+                continue
+            token = redmineWrite('POST', '/uploads.json', params={'filename': noFourByte(name)},
+                                 data=blob,
+                                 headers={'Content-Type': 'application/octet-stream'})['upload']['token']
+            uploads.append({'token': token, 'filename': noFourByte(name),
+                            'content_type': att['mimeType'], 'contentId': att['contentId']})
+            logWrite(rec, 'attachment-uploaded', True, filename=name, size=len(blob))
+        except Exception as e:
+            logWrite(rec, 'attachment-upload', False, filename=name, error=str(e)[:300])
+    return uploads
+
+
+def placeImages(text, uploads):
+    """{{image:ID}} placeholders from Stage 1 become Redmine inline images when the
+    file was uploaded (matched by Content-Id, then file name); otherwise [image]."""
+    byKey = {}
+    for u in uploads:
+        byKey[u['filename'].lower()] = u['filename']
+        if u.get('contentId'):
+            byKey[u['contentId'].lower()] = u['filename']
+
+    def sub(m):
+        key = m.group(1).strip().lower()
+        name = byKey.get(key) or byKey.get(key.split('@')[0])
+        return f"!{name}!" if name else '[image]'
+    return re.sub(r'\{\{image:([^}]*)\}\}', sub, text or '')
+
+
+def uploadField(uploads):
+    return [{'token': u['token'], 'filename': u['filename'], 'content_type': u['content_type']}
+            for u in uploads]
+
+
+def createTicket(rec, verdict, act, uploads):
+    subject = noFourByte(act.get('newSubject') or '').strip()
+    if not verdict.get('canonicalSubject'):
+        subject = NO_SUBJECT
+    issue = {'project_id': CONFIG['REDMINE_PROJECT'], 'tracker_id': TRACKER_MLQ,
+             'priority_id': PRIORITY_UNPRIORITIZED, 'status_id': STATUS_NEW,
+             'subject': subject[:255],
+             'description': noFourByte(placeImages(act['render'], uploads)),
+             'custom_fields': [{'id': CF_CATEGORY, 'value': verdict['category']},
+                               {'id': CF_EMAIL, 'value': rec['fromAddr']},
+                               {'id': CF_MLM, 'value': mlmOnDuty() or ''}]}
+    if uploads:
+        issue['uploads'] = uploadField(uploads)
+    return redmineWrite('POST', '/issues.json', json={'issue': issue})['issue']['id']
+
+
+def postNote(ticketId, notes, uploads=None, reopen=False):
+    issue = {'notes': noFourByte(notes)}
+    if uploads:
+        issue['uploads'] = uploadField(uploads)
+    if reopen:
+        # A real reopen sets this week's MLM and clears the assignee (Lou, 2026-11-03).
+        issue['status_id'] = STATUS_NEW
+        issue['assigned_to_id'] = ''
+        issue['custom_fields'] = [{'id': CF_MLM, 'value': mlmOnDuty() or ''}]
+    redmineWrite('PUT', f"/issues/{ticketId}.json", json={'issue': issue})
+
+
+def hubWrites(rec, act, mlqId):
+    """Stage 4's plan, done idempotently: the message on the Hub ticket, the relation,
+    and one pointer on the MLQ. Each is checked again here, just before it is done."""
+    hubId = act.get('hubTicketId')
+    if not hubId or not mlqId:
+        return
+    row = dbQuery("select tracker_id from issues where id=%s", (hubId,))
+    if not row or row[0]['tracker_id'] != HUB_TRACKER:
+        logWrite(rec, 'hub', False, hubTicketId=hubId, error='not a Hub tracker ticket')
+        return
+    body = act.get('render', '').split('\n\n', 2)[-1]
+    try:
+        postNote(hubId, f"--- Email on MLQ #{mlqId} ---\n\nFrom: {rec['fromAddr']}\n\n{body}")
+        logWrite(rec, 'hub-post', True, hubTicketId=hubId, ticketId=mlqId)
+        if not dbQuery("select 1 from issue_relations where (issue_from_id=%s and issue_to_id=%s) "
+                       "or (issue_from_id=%s and issue_to_id=%s)", (mlqId, hubId, hubId, mlqId)):
+            redmineWrite('POST', f"/issues/{mlqId}/relations.json",
+                         json={'relation': {'issue_to_id': hubId, 'relation_type': 'relates'}})
+            logWrite(rec, 'hub-relate', True, hubTicketId=hubId, ticketId=mlqId)
+        if not dbQuery("select 1 from journals where journalized_id=%s and notes like %s",
+                       (mlqId, f'%Hub ticket #{hubId}%')):
+            postNote(mlqId, f"This conversation is also on Hub ticket #{hubId}.")
+            logWrite(rec, 'hub-pointer', True, hubTicketId=hubId, ticketId=mlqId)
+    except WriteError as e:
+        logWrite(rec, 'hub', False, hubTicketId=hubId, ticketId=mlqId, error=str(e))
+
+
+def writeMessage(conn, rec, act):
+    """Carry out one message's action. Returns True when everything that matters is
+    done (moderation, and the ticket or note); False to retry on a later run."""
+    verdict = act['_verdict']
+    row = conn.execute("select moderationDone, writtenTicket from messages where messageId=?",
+                       (rec['messageId'],)).fetchone()
+    moderationDone, writtenTicket = row if row else (None, None)
+
+    # 1. Moderation: only a message still on the Google Groups queue.
+    if rec['source'] == 'pending' and not moderationDone:
+        try:
+            if act['moderation'] == 'approve':
+                approveMessage(rec)
+            trashNotification(rec)
+            moderationDone = 'approved' if act['moderation'] == 'approve' else 'held'
+            conn.execute("update messages set moderationDone=? where messageId=?",
+                         (moderationDone, rec['messageId']))
+            conn.commit()
+            logWrite(rec, 'moderation', True, result=moderationDone, why=act.get('why', ''))
+        except WriteError as e:
+            logWrite(rec, 'moderation', False, error=str(e))
+            return False
+    # A held message is not filed, except a recall, which still gets its note.
+    if act['ticket'].startswith('none') or \
+            (act['moderation'] == 'hold' and not act['ticket'].startswith('note on')):
+        logWrite(rec, 'not-filed', True, ticket=act['ticket'], why=act.get('why', ''))
+        return True
+    if writtenTicket:
+        return True
+
+    # 2. The ticket: create, append, or a recall note.
+    try:
+        if act['ticket'] == 'new ticket':
+            uploads = uploadAttachments(rec, verdict, None)
+            ticketId = createTicket(rec, verdict, act, uploads)
+            kind = 'create'
+        else:
+            ticketId = int(re.search(r'#(\d+)', act['ticket']).group(1))
+            if act['ticket'].startswith('note on'):
+                uploads, kind = [], 'recall-note'
+                postNote(ticketId, f"--- Recall request ---\n\nFrom: {rec['fromAddr']}\n\n"
+                                   f"The sender asked to recall an earlier message.")
+            else:
+                uploads = uploadAttachments(rec, verdict, ticketId)
+                reopen = act['reopen'].startswith('reopen')
+                postNote(ticketId, placeImages(act['render'], uploads), uploads, reopen)
+                kind = 'append-reopen' if reopen else 'append'
+    except (WriteError, AttributeError, ValueError) as e:
+        logWrite(rec, 'ticket', False, action=act['ticket'], error=str(e))
+        return False
+    conn.execute("update messages set writtenTicket=?, ticketId=? where messageId=?",
+                 (ticketId, ticketId, rec['messageId']))
+    conn.execute("insert or replace into threads(gmailThreadId, ticketId) values (?,?)",
+                 (rec['gmailThreadId'], ticketId))
+    conn.commit()
+    logWrite(rec, kind, True, ticketId=ticketId, attachments=len(uploads), reopen=act['reopen'])
+
+    # 3. Extras that must not block or repeat the filing: the draft and hub routing.
+    if kind == 'create' and act.get('_draftPost'):
+        try:
+            postNote(ticketId, act['_draftPost'])
+            logWrite(rec, 'draft', True, ticketId=ticketId)
+        except WriteError as e:
+            logWrite(rec, 'draft', False, ticketId=ticketId, error=str(e))
+    hubWrites(rec, act, ticketId)
+    return True
+
+
+# ---------------------------------------------------------------------------
 # One run
 
 def messageFacts(conn, rec, accountsOk):
     """Step 1: the facts about one new message, and what they alone decide."""
-    login = staffLogin(conn, rec['fromAddr'])
     ticket, matchedBy, notes = resolveTicket(conn, rec)
+    return factsForTicket(conn, rec, ticket, matchedBy, notes, accountsOk)
+
+
+def factsForTicket(conn, rec, ticket, matchedBy, notes, accountsOk):
+    """What the facts decide for a message once its ticket is known, whether it was
+    found exactly (step 1) or by subject (Stage 2)."""
+    login = staffLogin(conn, rec['fromAddr'])
     facts = {'staffLogin': login, 'matchedBy': matchedBy, 'notes': notes,
              'ticketId': ticket['ticketId'] if ticket else None,
              'ticketStatus': ticket['status'] if ticket else None,
@@ -2092,16 +2641,31 @@ def messageFacts(conn, rec, accountsOk):
 
 def runStage1(conn, rec, facts, counts):
     """Run Stage 1 on one message and record the outcome in the state file."""
-    act = stage1(conn, rec, facts)      # a limit or auth failure raises before counting
-    conn.execute("update messages set attempts=coalesce(attempts, 0)+1 where messageId=?",
-                 (rec['messageId'],))
+    # A usage-limit, login or call-cap failure in any model call (Stages 1-4 or the draft)
+    # raises before the attempt is counted, so it never spends this message's retries.
+    act = stage1(conn, rec, facts)
     drafted = None
     if act and INDEX_OK:
         drafted = draftStage(conn, STATE_DIR, rec, act['_verdict'], act)
         if drafted:
             counts['drafts'] = counts.get('drafts', 0) + 1
-    conn.execute("update messages set action=? where messageId=?",
-                 ('classified' if act else 'error', rec['messageId']))
+    conn.execute("update messages set attempts=coalesce(attempts, 0)+1 where messageId=?",
+                 (rec['messageId'],))
+    status = 'classified' if act else 'error'
+    if act and not SHADOW:
+        conn.execute("update messages set writeAttempts=coalesce(writeAttempts, 0)+1 "
+                     "where messageId=?", (rec['messageId'],))
+        if writeMessage(conn, rec, act):
+            status = 'written'
+            counts['written'] = counts.get('written', 0) + 1
+        else:
+            status = 'write-error'
+            counts['writeFailed'] = counts.get('writeFailed', 0) + 1
+            sendAlert(f"write:{rec['messageId']}", 'A message could not be filed',
+                      f"From {rec['fromAddr']}, subject {rec['subject']!r}: the write failed "
+                      f"and will be retried on the next runs (up to {WRITE_ATTEMPTS}). See the "
+                      f"'write' lines in the decision log.")
+    conn.execute("update messages set action=? where messageId=?", (status, rec['messageId']))
     conn.commit()
     counts['done' if act else 'failed'] += 1
     if act:
@@ -2128,8 +2692,10 @@ def runShadow(conn, days, started):
 def runShadowInner(conn, days, started):
     """Steps 0-2: record each new message with its facts, classify it (Stage 1),
     log what would be done, then see what the old script did with earlier ones."""
+    global ACCOUNTS_OK
     refreshAccounts(conn)
     accountsOk, accountsWhy = accountsUsable(conn)
+    ACCOUNTS_OK = accountsOk
     if not accountsOk:
         logger.error(f"Active-account list not trusted ({accountsWhy}): no reopens this run")
         sendAlert('accounts', 'Active-account list not trusted',
@@ -2140,13 +2706,17 @@ def runShadowInner(conn, days, started):
     observedNow = {'created': 0, 'appended': 0, 'none': 0, 'waiting': 0}
     classified = {'done': 0, 'failed': 0, 'retried': 0}
     for rec in messages:
-        row = conn.execute("select action, attempts from messages where messageId=?",
-                           (rec['messageId'],)).fetchone()
+        row = conn.execute("select action, attempts, writeAttempts, oldAction from messages "
+                           "where messageId=?", (rec['messageId'],)).fetchone()
         if row:
             known += 1
             # Retry Stage 1 for a message whose classification failed (or that was
             # recorded before Stage 1 existed), up to 3 attempts.
-            if row[0] in ('seen', 'facts', 'error') and (row[1] or 0) < 3:
+            # At cutover: a message the shadow classified but mlqAutomate.py never acted
+            # on (it arrived after the old script's last run) is filed now.
+            cutoverGap = not SHADOW and row[0] == 'classified' and row[3] is None
+            if (row[0] in ('seen', 'facts', 'error') and (row[1] or 0) < 3) or cutoverGap or \
+                    (row[0] == 'write-error' and (row[2] or 0) < WRITE_ATTEMPTS):
                 classified['retried'] += 1
                 runStage1(conn, rec, messageFacts(conn, rec, accountsOk), classified)
             continue
@@ -2161,7 +2731,8 @@ def runShadowInner(conn, days, started):
         facts = messageFacts(conn, rec, accountsOk)
         # Observe right away (on a first or backfill run the old script acted long
         # ago), so later messages in this same run can match through this one.
-        observedNow[observeOne(conn, rec['messageId'])] += 1
+        if SHADOW:
+            observedNow[observeOne(conn, rec['messageId'])] += 1
         logDecision('seen', rec['messageId'],
                     hasMessageId=rec['hasMessageId'], lists=rec['lists'], source=rec['source'],
                     fromAddr=rec['fromAddr'], subject=rec['subject'],
@@ -2175,7 +2746,7 @@ def runShadowInner(conn, days, started):
                     + (f" #{facts['ticketId']} via {facts['matchedBy']}" if facts['ticketId']
                        else ''))
         runStage1(conn, rec, facts, classified)
-    observed = observeOldScript(conn)
+    observed = observeOldScript(conn) if SHADOW else {k: 0 for k in observedNow}
     for k, v in observedNow.items():
         observed[k] += v
     observed['waiting'] = conn.execute("select count(*) from messages "
@@ -2244,9 +2815,36 @@ def report(conn, sinceDays):
             print(f"  {s['receivedAt'][:16]} {s['fromAddr'][:30]:30} {s['subject'][:45]:45} "
                   f"{old}; {new}")
     reportStage1(conn, seen)
+    reportMatches(conn, seen)
     reportReopens(conn, seen)
     reportDrafts(conn, seen)
     print(f"\n{len(seen)} message(s) in the last {sinceDays} day(s)")
+
+
+def reportMatches(conn, seen):
+    """Stage 2 subject matches next to the ticket the old script used, and Stage 4 hub plans."""
+    matches = [r for r in readDecisions({'match'}) if r['messageId'] in seen]
+    print(f"\nSubject matching (Stage 2): {len(matches)} message(s) without an exact match")
+    for m in matches:
+        row = conn.execute("select oldAction, oldTicketId from messages where messageId=?",
+                           (m['messageId'],)).fetchone()
+        old = (f"old {row[0]} #{row[1]}" if row and row[1] else
+               f"old {row[0]}" if row and row[0] else 'old not observed yet')
+        new = 'ERROR' if 'error' in m else (f"#{m['ticketId']}" if m.get('ticketId') else 'new ticket')
+        same = row and row[1] and m.get('ticketId') == row[1]
+        flag = '' if same or (not m.get('ticketId') and row and row[0] == 'created') else '  <--'
+        print(f"  {m.get('fromAddr', '')[:28]:28} {m.get('subject', '')[:42]:42} new={new:10} "
+              f"{old}{flag}")
+        if m.get('reason') and m.get('candidates'):
+            print(f"      candidates {m['candidates']}: {m['reason'][:130]}")
+    hubs = [r for r in readDecisions({'hub'}) if r['messageId'] in seen]
+    print(f"\nHub routing (Stage 4): {len(hubs)} hub-related message(s)")
+    for h in hubs:
+        print(f"  {h.get('subject', '')[:50]:50} "
+              + (f"Hub #{h['hubTicketId']}: {'; '.join(h.get('plan', []))}" if h.get('hubTicketId')
+                 else 'no Hub ticket' if 'error' not in h else 'ERROR'))
+        if h.get('reason'):
+            print(f"      {h['reason'][:140]}")
 
 
 def reportReopens(conn, seen):
@@ -2303,7 +2901,10 @@ def reportStage1(conn, seen):
     dispositions = {r['messageId']: r for r in readDecisions({'disposition'})
                     if r['messageId'] in seen and 'disposition' in r}
     actions = {r['messageId']: r for r in readDecisions({'action'}) if r['messageId'] in seen}
-    errors = [r for r in readDecisions({'disposition'}) if r['messageId'] in seen and 'error' in r]
+    # Only messages whose Stage 1 never succeeded: a failure later retried successfully
+    # (a usage limit, say) is not an outstanding error.
+    errors = [r for r in readDecisions({'disposition'}) if r['messageId'] in seen and 'error' in r
+              and r['messageId'] not in dispositions]
     counts = {}
     for d in dispositions.values():
         counts[d['disposition']] = counts.get(d['disposition'], 0) + 1
@@ -2343,7 +2944,9 @@ def main():
     parser = argparse.ArgumentParser(description='File mailing-list email into Redmine MLQ '
                                      'tickets (RM #38234). Step 0: shadow skeleton only.')
     parser.add_argument('--shadow', action='store_true',
-                        help='Read-only: never write to Gmail or Redmine (required for now)')
+                        help='Read-only: never write to Gmail or Redmine; compare with mlqAutomate.py')
+    parser.add_argument('--live', action='store_true',
+                        help='Approve, hold and file for real (replaces mlqAutomate.py at cutover)')
     parser.add_argument('--state-dir', default=os.path.expanduser('~/mlqTriage'),
                         help='Where the state file, logs and lock live (default ~/mlqTriage)')
     parser.add_argument('--days', type=int, default=CONFIG['FETCH_DAYS'],
@@ -2365,9 +2968,9 @@ def main():
     parser.add_argument('--verbose', action='store_true')
     args = parser.parse_args()
 
-    if not args.shadow:
-        sys.exit("Only --shadow mode exists in this build step; live mode comes at cutover.")
-    SHADOW = True
+    if args.shadow == args.live:
+        sys.exit("Give exactly one of --shadow or --live.")
+    SHADOW = args.shadow
     ALERT_TO_OVERRIDE = args.alert_to
     CONFIG['CALL_CAP'] = args.call_cap
     CONFIG['PLAYBOOK_DIR'] = args.playbooks
@@ -2387,7 +2990,8 @@ def main():
         return 0
     STATE_CONN = openState(args.state_dir)
     started = time.time()
-    logger.info(f"=== mlqTriage shadow run, {datetime.now(PST):%Y-%m-%d %H:%M %Z} ===")
+    logger.info(f"=== mlqTriage {'shadow' if SHADOW else 'LIVE'} run, "
+                f"{datetime.now(PST):%Y-%m-%d %H:%M %Z} ===")
     try:
         if args.selftest:
             return 0 if selftest() else 1

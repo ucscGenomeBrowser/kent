@@ -219,11 +219,15 @@ Color baseColorMuteBarbColor(struct hvGfx *hvg, enum baseColorDrawOpt drawOpt,
  * item color and barbColor, so the marks stand out more than the chevrons.
  * Otherwise return barbColor unchanged. */
 
+char *aliMarkOtherSeqName(struct track *tg);
+/* What the mark mouseovers call the sequence aligned to the genome: "other assembly" for chains,
+ * "read" for BAM and CRAM, else "query". */
+
 void addAliMarkMouseOverPx(struct track *tg, struct linkedFeatures *lf,
                            struct hvGfx *hvg, int x, int y, int width, int height, char *text);
 /* Add a mouseover that explains a mismatch, insertion or gap mark at pixels x..x+width.
  * It links to the item's details page.  Call it before the item's own map box is
- * written.  Not for BAM or dense mode, and capped per track. */
+ * written.  Not in dense mode, and capped per track and per item. */
 
 void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
 			      struct hvGfx *hvg, int xOff,

@@ -17,7 +17,6 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
-    $opt_unmaskedSeq
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -84,7 +83,6 @@ sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
-		      'unmaskedSeq=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   usage(1) if (!$ok);
@@ -116,7 +114,6 @@ sub doSetup {
   my $bossScript = newBash HgRemoteScript("$runDir/setup.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
-  my $tmpDir = HgAutomate::tmpDir();
   $bossScript->add(<<_EOF_
 rm -fr unmasked.2bit listFiles
 ln -s "$unmaskedSeq" unmasked.2bit
@@ -255,7 +252,7 @@ sub doCleanup {
   my $bossScript = newBash HgRemoteScript("$runDir/cleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -fr tmp result liftFiles err part.list chrom.sizes
+rm -fr tmp result listFiles err part.list chrom.sizes
 _EOF_
   );
   $bossScript->execute() if (! $opt_debug);

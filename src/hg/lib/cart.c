@@ -973,25 +973,39 @@ assert(hashNumEntries(hash) == 0);
 static void updateOne(struct sqlConnection *conn,
 	char *table, struct cartDb *cdb, char *contents, int contentSize);
 static void cartUpdateRecentSession(struct cart *cart, char *id);
+static struct cartDb *cartReusableCopy(struct sqlConnection *conn, struct cart *cart);
 static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean encodeNames,
                                char *skipPrefix);
 
+/* The cart as it was stored, before the variables of this request were applied to it.  cartNew
+ * sets it only for a request with hgSession variables, as only those can load a session. */
+static char *cartStateBeforeRequest = NULL;
+
 static void cartKeepCopyBeforeLoad(struct cart *cart, char *loadedName)
 /* A full session load is about to replace the cart.  The cart keeps its hgsid, so the view the
- * user had is gone once the cart is saved.  Store a copy of it in a new sessionDb row and put that
+ * user had is gone once the cart is saved.  Store a copy of it in a sessionDb row and put that
  * on the list of recent views.  This is only needed if the hgsid existed before this request: a
  * session link without an hgsid got a new row, and the old view is still in the row of the hgsid
- * it came from, which is on the list already. */
+ * it came from, which is on the list already.  The row is a new one, or the row of the oldest copy
+ * when that is about to drop off the list, so a user has at most MAX_RECENT_SESSIONS copies. */
 {
 if (!cartRecentSessionsEnabled() || cart->sessionInfo == NULL || cart->sessionInfo->useCount == 0)
     return;
 struct sqlConnection *conn = cartDefaultConnector();
-boolean found;
-struct cartDb *copy = loadDb(conn, sessionDbTable(), NULL, &found);
+struct cartDb *copy = cartReusableCopy(conn, cart);
+if (copy == NULL)
+    {
+    boolean found;
+    copy = loadDb(conn, sessionDbTable(), NULL, &found);
+    }
 struct dyString *dy = dyStringNew(4096);
-// The cart already has the variables of this request, among them the hgS_ ones that ask for the
-// session load: keeping those would load the session again when the copy is opened.
-cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
+// Keep the view from before this request: the variables of a session link (position,
+// hideTracks, ...) belong to the session being loaded.  The hgS_ ones that ask for the load are
+// never kept, as they would load the session again when the copy is opened.
+if (cartStateBeforeRequest != NULL)
+    dyStringAppend(dy, cartStateBeforeRequest);
+else
+    cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
 char *encName = cgiEncode(loadedName);
 dyStringPrintf(dy, "%s%s=%s", (dy->stringSize > 0) ? "&" : "", hgsPrevViewOf, encName);
 // updateOne writes useCount+1.  At 2 hgcentralTidy keeps the row for 14 days if it is not
@@ -2154,7 +2168,7 @@ setUdcCacheDir();
 netSetTimeoutErrorMsg("Connection timeout: either the server is offline or any firewall between UCSC and the server blocks the connection.");
 }
 
-#define MAX_RECENT_SESSIONS 10
+#define MAX_RECENT_SESSIONS 20
 #define RECENT_SESSION_MAX_AGE (7 * 24 * 60 * 60)
 
 boolean cartRecentSessionsEnabled()
@@ -2214,6 +2228,37 @@ cartSetString(cart, RECENT_SESSIONS_VAR, encoded);
 freeMem(encoded);
 slPairFreeValsAndList(&list);
 slPairFreeValsAndList(&newList);
+}
+
+static struct cartDb *cartReusableCopy(struct sqlConnection *conn, struct cart *cart)
+/* Return the sessionDb row of a copy made by cartKeepCopyBeforeLoad that is about to drop off the
+ * list of recent views, or NULL if there is none.  Writing the next copy into that row keeps the
+ * number of copies per user at MAX_RECENT_SESSIONS, however many sessions are loaded. */
+{
+struct cartDb *reuse = NULL;
+time_t now = time(NULL);
+struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+int kept = 0;
+for (struct slPair *el = list; el != NULL && reuse == NULL; el = el->next)
+    {
+    // cartUpdateRecentSession keeps MAX_RECENT_SESSIONS-1 entries that are not too old
+    if (now - sqlLongLong(el->val) <= RECENT_SESSION_MAX_AGE && ++kept < MAX_RECENT_SESSIONS)
+        continue;
+    if (sameString(el->name, cartSessionId(cart)))
+        continue;
+    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
+    if (cdb == NULL)
+        continue;
+    // Opening a copy removes the marker, so a copy someone went back to is left alone.
+    char *mark = cartContentsVal(cdb->contents, hgsPrevViewOf);
+    if (mark != NULL)
+        reuse = cdb;
+    else
+        cartDbFree(&cdb);
+    freeMem(mark);
+    }
+slPairFreeValsAndList(&list);
+return reuse;
 }
 
 void cartSetHubDatabase(struct cart *cart, struct hash *oldVars, char *newDatabase)
@@ -2301,6 +2346,20 @@ else
 char when[1024];
 safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
+
+if (trackRecent && sessionIdFound)
+    {
+    struct cgiVar *cv;
+    for (cv = cgiVarList(); cv != NULL; cv = cv->next)
+        if (startsWith(hgSessionPrefix, cv->name))
+            break;
+    if (cv != NULL)
+        {
+        struct dyString *dy = dyStringNew(4096);
+        cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
+        cartStateBeforeRequest = dyStringCannibalize(&dy);
+        }
+    }
 
 loadCgiOverHash(cart, oldVars);
 

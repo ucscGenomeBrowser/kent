@@ -37,6 +37,7 @@
 #include "cogs.h"
 #include "cogsxra.h"
 #include "bed.h"
+#include "bedCart.h"
 #include "cgh.h"
 #include "agpFrag.h"
 #include "agpGap.h"
@@ -2158,8 +2159,15 @@ if (!hFindSplitTable(db, seqName, tdb->table, table, sizeof table, &hasBin))
 
 if (liftDb)
     {
+    /* lift the way hgTracks lifts this bed, or the clicked start may not match:  block by
+     * block for bed 12 (loadGappedBed()) and for bed 8 and a bed 9 without itemRgb
+     * (loadBed8(), which has no blocks).  Lift bed 10 and 11 whole: bedLoadN() fills
+     * blockCount for them but not chromStarts, so a blocked lift would read past it.
+     * A bed 9 with itemRgb is lifted whole by loadBed9(), as are the beds under 8 fields */
+    boolean blocked = (bedSize >= 12) || (bedSize == 8) ||
+                      ((bedSize == 9) && !bedItemRgb(tdb));
     struct bed *liftedBeds = quickLiftSqlLoadBeds(tdb, trackHubSkipHubName(tdb->track), liftDb,
-        seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, FALSE);
+        seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, blocked);
     /* that is every lifted item in the window, so print only the one that was clicked,
      * matched the way the unlifted query below matches it.  refs #38591 */
     for (bed = liftedBeds; bed != NULL; bed = bed->next)
@@ -2173,6 +2181,8 @@ if (liftDb)
             htmlHorizontalLine();
         bedPrintPos(bed, bedSize, tdb);
         }
+    if (firstTime)
+        printf("The lifted item was not found at this position.<BR>\n");
 
     //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     }
@@ -10460,7 +10470,8 @@ for (ro = roList; ro != NULL; ro = ro->next)
     {
     char repStrand = ro->strand[0];
     if (!sameString(ro->repName, repeat) ||
-	!quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) ||
+	!quickLiftRmskOut(quickLiftChainHashForRange(chainHash, ro, ro->genoName, ro->genoStart,
+                                                  ro->genoEnd), ro) ||
 	!sameString(ro->genoName, seqName) || (ro->genoStart != start) || (ro->genoEnd != end))
 	continue;
     found = TRUE;
@@ -24218,7 +24229,7 @@ void bigPslHandlingCtAndGeneric(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, int end)
 /* Special option to show all alignments for blat ct psl */
 {
-if (sameOk(trackDbSetting(tdb, "blatResult"), "on"))
+if (blatIsResultTrack(tdb))
     {
     char *encTrack = cgiEncode(tdb->track);
     printf("<p><a href='hgBlat?blatNewPage=1&db=%s&blatCt=%s&%s'>&lsaquo; Back to BLAT results</a></p>\n",
@@ -28402,6 +28413,8 @@ pipelineWait(pl);
 unlink(bigPslFile);
 }
 
+static char *blatCartDbBefore = NULL;   /* the cart's db, if doMiddle changed it to blatDb */
+
 static void buildBigPsl(char *fileNames)
 /* Build a custom track with a bigPsl file out of blat results.
  * Bring up the bigPsl detail page with all the alignments. */
@@ -28429,6 +28442,16 @@ char *extraForMismatch = "indelPolyA=on showDiffBasesAllScales=. baseColorUseSeq
 
 if (isProt)
     extraForMismatch = "";
+/* The search's minimum score (blatTrackMin, sent by hgBlat), as the track's filter on the bigPsl
+ * match field.  The file keeps every hit, and hgTracks hides those below it, so the track and the
+ * results table list the same hits. */
+int blatTrackMin = cgiOptionalInt("blatTrackMin", 0);
+if (blatTrackMin > 0)
+    {
+    char filterTag[64];
+    safef(filterTag, sizeof filterTag, " filter.match=%d", blatTrackMin);
+    extraForMismatch = catTwoStrings(extraForMismatch, filterTag);
+    }
 char buffer[4096];
 safef(buffer, sizeof buffer, customTextTemplate, groupTag, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
@@ -28462,7 +28485,7 @@ if (differentString(oldTracks, "keep"))
     for (ct = ctList; ct != NULL; ct = next)
         {
         next = ct->next;
-        if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+        if (blatIsResultTrack(ct->tdb))
             {
             if (sameString(oldTracks, "hide"))
                 {
@@ -28490,7 +28513,7 @@ if (sameString(cfgOptionDefault("blatOnlyLatestCheckbox", "off"), "on")
     for (ct = ctList; ct != NULL; ct = next)
         {
         next = ct->next;
-        if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+        if (blatIsResultTrack(ct->tdb))
             {
             cartRemove(cart, ct->tdb->track);   /* no orphaned visibility for a reused ct_ id */
             continue;   /* drop it; customTracksSaveCart below writes out only the kept list */
@@ -28528,6 +28551,36 @@ if (sameOk(cartOptionalString(cart, "autoRearr"), "1"))
     cartSetString(cart, snakeVar, "1");
     }
 
+}
+
+static void blatRestoreCartDb()
+/* Put back the cart's db that doMiddle replaced with blatDb.  Called whether or not the build
+ * worked, so a failed build cannot leave the search's assembly in the saved cart. */
+{
+if (blatCartDbBefore != NULL)
+    {
+    if (isEmpty(blatCartDbBefore))
+        cartRemove(cart, "db");
+    else
+        cartSetString(cart, "db", blatCartDbBefore);
+    blatCartDbBefore = NULL;
+    }
+}
+
+static void buildBigPslRestoreDb(char *fileNames)
+/* buildBigPsl, then restore the cart's db even if the build errAborts (pslToBigPsl, bedToBigBed
+ * or customFactoryParse failing); the error is then passed on as before. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    buildBigPsl(fileNames);
+errCatchEnd(errCatch);
+blatRestoreCartDb();
+if (errCatch->gotError)
+    errAbort("%s", errCatch->message->string);
+if (errCatch->gotWarning)   /* errCatch holds warnings back; pass them on as before */
+    warn("%s", errCatch->message->string);
+errCatchFree(&errCatch);
 }
 
 void doHPRCTable(struct trackDb *tdb, char *itemName)
@@ -28600,6 +28653,19 @@ if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
     botDelayMessage(ip, botDelayMillis);
+    }
+
+/* hgBlat builds its results track for the assembly of the search, which it sends as blatDb: the
+ * cart's db may have been changed in another tab since.  The cart's db is put back at the end of
+ * buildBigPsl, so building the track does not switch that tab's assembly either. */
+if (sameOk(track, "buildBigPsl") && cgiOptionalString("blatDb") != NULL)
+    {
+    char *blatDb = cgiString("blatDb");
+    if (hDbIsActive(blatDb) || trackHubDatabase(blatDb))
+        {
+        blatCartDbBefore = cloneString(cartUsualString(cart, "db", ""));
+        cartSetString(cart, "db", blatDb);
+        }
     }
 
 /*	database and organism are global variables used in many places	*/
@@ -28827,7 +28893,7 @@ else if (sameWord(table, "htcGetDnaExtended1"))
     }
 else if (sameWord(table, "buildBigPsl"))
     {
-    buildBigPsl(item);
+    buildBigPslRestoreDb(item);
     }
 else if (sameWord(table, "htcListItemsAssayed"))
     {
@@ -30073,7 +30139,7 @@ doMiddle();
 // "u"/"s" are the shared BLAT link's session selectors (loadBlatShareSessionIfAny); exclude them so
 // they are not left in the reader's cart and written into any session they later save.
 char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "aliTrack", "addp", "pred",
-                       "quickLiftCcds", "u", "s", NULL};
+                       "quickLiftCcds", "u", "s", "blatDb", "blatTrackMin", NULL};
 
 int main(int argc, char *argv[])
 {

@@ -1434,6 +1434,7 @@ CREATE TABLE ucscToEnsembl (
     # tab
 ##############################################################################
 # LIFTOVER TO mm9 (DONE - 2022-10-25 - Hiram)
+    ### NOTE ! ! ! - this is backward here, query and target
     ssh hgwdev
     mkdir /hive/data/genomes/mm39/bed/blat.mm9.2022-10-25
     cd /hive/data/genomes/mm39/bed/blat.mm9.2022-10-25
@@ -1456,6 +1457,34 @@ CREATE TABLE ucscToEnsembl (
     # real    246m16.388s
 
     # see if the liftOver menus function in the browser from mm39 to mm9
+
+##############################################################################
+# LIFTOVER TO mm9 (RE-DONE - 2025-10-27 - Hiram)
+    ### Fixing this from the backwards run above:
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm39/bed/blat.mm9.2025-10-27
+    cd /hive/data/genomes/mm39/bed/blat.mm9.2025-10-27
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/mm39/mm39.2bit \
+        -targetSizes=/hive/data/genomes/mm39/chrom.sizes \
+        -query2Bit=/hive/data/genomes/mm9/mm9.2bit \
+        -querySizes=/hive/data/genomes/mm9/chrom.sizes \
+        -ooc=/hive/data/genomes/mm39/jkStuff/mm39.11.ooc \
+         mm39 mm9
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/mm39/mm39.2bit \
+        -targetSizes=/hive/data/genomes/mm39/chrom.sizes \
+        -query2Bit=/hive/data/genomes/mm9/mm9.2bit \
+        -querySizes=/hive/data/genomes/mm9/chrom.sizes \
+        -ooc=/hive/data/genomes/mm39/jkStuff/mm39.11.ooc \
+         mm39 mm9) > doLiftOverToMm9.log 2>&1 &
+    # real    246m16.388s
+
+    # see if the liftOver menus function in the browser from mm39 to mm9
+
+##############################################################################
 
 ##############################################################################
 ##  CYTOBAND - ideogram track (DONE - 2024-12-30 - Hiram)

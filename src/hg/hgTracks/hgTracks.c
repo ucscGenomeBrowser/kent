@@ -9549,6 +9549,7 @@ struct paraFetchData
     struct track *track;
     boolean done;
     boolean doLoadSummary;
+    char *warnMsg;      /* warnings the worker collected, for the main thread to hand back */
     };
 
 static boolean isTrackForParallelLoad(struct track *track)
@@ -9805,10 +9806,14 @@ while(1)
 	pfd->done = TRUE;
 	}
     errCatchEnd(errCatch);
-    if (errCatch->gotWarning)
+    if (errCatch->gotWarning && !errCatch->gotError)
         {
-        // do something intelligent to permit reporting of warnings
-        // Can't pass it to warn yet - the fancy warnhandlers aren't ready
+        /* A worker thread cannot call warn: the handlers that write into the page are not
+         * ready for it.  Keep the message instead and let the main thread hand it back when
+         * it collects this pfd, which is what errCatchReWarn does on the serial path.
+         * With an error there is nothing to do here, since the message carries the warnings
+         * too and goes onto the track below.  refs #38642 */
+        pfd->warnMsg = cloneString(errCatch->message->string);
         }
     if (errCatch->gotError)
 	{
@@ -9873,13 +9878,23 @@ for (pfd = pfdRunning; pfd; pfd = pfd->next)
     pfd->track->networkErrMsg = cloneString(temp);
     ++errCount;
     }
+struct dyString *warnings = dyStringNew(0);
 for (pfd = pfdDone; pfd; pfd = pfd->next)
     {
     // some done tracks may have errors
     if (pfd->track->networkErrMsg)
         ++errCount;
+    if (pfd->warnMsg)
+        {
+        dyStringAppend(warnings, pfd->warnMsg);
+        freez(&pfd->warnMsg);   // pfdDone carries over between passes, so report it once
+        }
     }
 pthread_mutex_unlock( &pfdMutex );
+/* Outside the lock and on the main thread, where warn reaches the reader.  refs #38642 */
+if (dyStringLen(warnings) > 0)
+    warn("%s", dyStringContents(warnings));
+dyStringFree(&warnings);
 return errCount;
 }
 
@@ -10151,7 +10166,7 @@ static void loadOneTrackSerial(struct track *track, boolean doLoadSummary)
 /* Everything the main thread does to get one track ready to draw.  The checks come first
  * because they can change what is drawn, then either the summary or the items.  It is a
  * function so that the caller can put the whole of it inside one errCatch, the way
- * parallelLoadData does for a worker thread.  Not quite the same work as that one:
+ * remoteParallelLoad does for a worker thread.  Not quite the same work as that one:
  * checkIfWiggling has always been serial only.  refs #38560 */
 {
 checkMaxWindowToDraw(track);
@@ -10206,6 +10221,14 @@ if (sharedErrMsg)
 	tg->networkErrMsg = sharedErrMsg;
 	tg->drawItems = bigDrawWarning;
 	tg->totalHeight = bigWarnTotalHeight;
+	/* The row carries a message now, so the wiggle left axis goes with the graph it
+	 * labelled.  A serial load runs checkIfWiggling before loadItems, so a track set
+	 * to draw as a density graph already has wigLeftLabels installed when the load
+	 * aborts, and that reads wigCartData, which a bed-like track never filled in.
+	 * Leave mapsSelf alone: clearing it sends doMapItems through the item loop, and a
+	 * track that aborted after loadItems had filled the list would get a click box per
+	 * item laid over the message.  refs #38560 */
+	tg->drawLeftLabels = NULL;
 	}
     }
 
@@ -11055,7 +11078,7 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 			lastTime = clock1000();
 
 		    /* Keep an errAbort to the track that caused it rather than letting it
-		     * take the whole image down.  parallelLoadData does this for the threaded
+		     * take the whole image down.  remoteParallelLoad does this for the threaded
 		     * path; the serial path needs it too, and over the same work, or the two
 		     * disagree about what a bad track does.  refs #38560 */
 		    unsigned connGeneration = hConnGeneration();

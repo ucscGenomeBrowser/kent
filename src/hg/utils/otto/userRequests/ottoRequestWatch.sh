@@ -560,18 +560,23 @@ Chain coverage (% of genome covered by alignments):
 "
   fi
 
+  # arg 1: reqId
+  # arg 2: subject
+  # arg 3: msgBody
   sendNotification "${reqId}" \
 "from UCSC: ${fromDb}<->${toDb} liftOverRequest complete" \
 "Your lift over request is complete:
-     From:     ${fromDb}
-       To:     ${toDb}
-  comment:     ${comment}
-submitted:     ${requestTime}
-${coverageInfo}
+
 The lift.over files are available at these links:
 
   ${fromUrl}
   ${toUrl}
+${coverageInfo}
+Your request:
+     From:     ${fromDb}
+       To:     ${toDb}
+  comment:     ${comment}
+submitted:     ${requestTime}
 "
 
   /cluster/bin/x86_64/${hgSql} -N -e \

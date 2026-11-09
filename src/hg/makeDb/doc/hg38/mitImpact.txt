@@ -1,0 +1,49 @@
+# MitImpact track: APOGEE 2 and nAPOGEE for all chrM SNVs, #38617
+# 2026-10-25 (Claude, max)
+mkdir -p /hive/data/genomes/hg38/bed/mitimpact
+cd /hive/data/genomes/hg38/bed/mitimpact
+
+# Downloads https://mitimpact.mcb2lab.org/static/downloads/MitImpact4_V059.zip
+# into MitImpact4_V059/ (CSV + LICENSES.md), unless already there, then converts
+# the CSV to bed9+152 and builds mitImpact.bb. The script checks every reference
+# allele against hg38 chrM (rCRS) and stops if the CSV columns change.
+~/kent/src/hg/makeDb/scripts/mitImpact/makeMitImpact.sh MitImpact4_V059
+# 49882 CSV rows, 49882 bed rows written to mitImpact.bed. Only the variant, gene, effect, dbSNP
+# and APOGEE 2 / nAPOGEE columns are kept: the other columns have other licenses (#38421).
+#   -          Not scored         13627
+#   APOGEE 2   Benign             3239
+#   APOGEE 2   Likely benign      6298
+#   APOGEE 2   Likely pathogenic  3809
+#   APOGEE 2   Pathogenic         117
+#   APOGEE 2   VUS                3423
+#   APOGEE 2   VUS+               4481
+#   APOGEE 2   VUS-               2828
+#   nAPOGEE    Benign             4225
+#   nAPOGEE    Likely benign      3393
+#   nAPOGEE    Likely pathogenic  840
+#   nAPOGEE    Pathogenic         605
+#   nAPOGEE    VUS                956
+#   nAPOGEE    VUS+               867
+#   nAPOGEE    VUS-               1174
+# 49882 = 16569 positions x 3 alleles, plus 1 for the N at position 3107 (4 alleles),
+# plus 174 rows for variants that are in two overlapping genes (MT-ATP8/MT-ATP6,
+# MT-ND4L/MT-ND4, and at a few tRNA boundaries). Nothing is skipped.
+
+# The autoSql file mitImpact.as in the scripts directory was written by the
+# converter; after a change to the column list, regenerate it with
+#   python3 ~/kent/src/hg/makeDb/scripts/mitImpact/mitImpactToBed.py \
+#       MitImpact4_V059/MitImpact4_V059.csv chrM.fa /dev/null \
+#       --asOut ~/kent/src/hg/makeDb/scripts/mitImpact/mitImpact.as
+
+# Variants in two overlapping genes have two rows at one position and allele. They are
+# colored magenta in the bigBed. The converter reports the numbers:
+#   174 (position, allele) pairs at 58 positions are in overlapping genes, 348 rows
+
+# APOGEE2 / nAPOGEE bigWig track (apogee2): one bigWig per alternative allele with the
+# raw score as bar height, and one bigBed per allele with the class color (setColorWith).
+# Run in the same directory, after the CSV is there.
+~/kent/src/hg/makeDb/scripts/mitImpact/makeApogee.sh MitImpact4_V059
+# 49882 CSV rows, 13627 without a score, 36172 (position, allele) pairs with a score
+#   A 8619, C 8982, G 10203, T 8368 scored variants
+# 83 of the pairs have two rows (overlapping genes), 80 of them with different scores;
+# the highest score is used, as a bigWig has one value per base

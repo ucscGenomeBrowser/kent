@@ -407,23 +407,35 @@ if (chain == NULL)
 return oneChainHash(qm, chain);
 }
 
-char *quickLiftRemapRange(struct hash *chainHash, void *item, char *chrom, int start, int end,
-                          char strand, char **retChrom, int *retStart, int *retEnd,
-                          char *retStrand)
-/* Lift chrom:start-end through one chain:  with quickLiftMultiChain the one item was loaded
- * for, and otherwise the chain in chainHash with the most aligned bases in the range.  Given
- * all of the chains, liftOverRemapRange() drops a range as "Duplicated in new" when two of
- * them each cover a little of it, which the short chains beside a long one in a duplicated
- * region do.  remapBlockedBed() picks the best chain instead, and so does this. */
+struct hash *quickLiftChainHashForRange(struct hash *chainHash, void *item, char *chrom,
+                                        int start, int end)
+/* The chain hash to lift an item over chrom:start-end through:  one chain, which with
+ * quickLiftMultiChain is the one item was loaded for, and otherwise the chain in chainHash
+ * with the most aligned bases in the range.  Given all of the chains, liftOverRemapRange()
+ * drops a range as "Duplicated in new" when two of them each cover a little of it, which the
+ * short chains beside a long one in a duplicated region do.  remapBlockedBed() picks the best
+ * chain instead, and so does this.  item may be NULL.  Returns NULL if no chain covers the
+ * range.  The hash is reused for the next item, as with quickLiftChainHashForItem(). */
 {
 struct hash *liftHash = quickLiftChainHashForItem(chainHash, item);
 if ((chainHash != NULL) && (liftHash == chainHash))
     {
     struct chain *best = liftOverChainForRange(chainHash, chrom, start, max(end, start + 1));
     if (best == NULL)
-        return "Deleted in new";
+        return NULL;
     liftHash = oneChainHash(quickLiftMultiFor(chainHash), best);
     }
+return liftHash;
+}
+
+char *quickLiftRemapRange(struct hash *chainHash, void *item, char *chrom, int start, int end,
+                          char strand, char **retChrom, int *retStart, int *retEnd,
+                          char *retStrand)
+/* Lift chrom:start-end through the one chain quickLiftChainHashForRange() picks. */
+{
+struct hash *liftHash = quickLiftChainHashForRange(chainHash, item, chrom, start, end);
+if (liftHash == NULL)
+    return "Deleted in new";
 return liftOverRemapRange(liftHash, 0.0, chrom, start, end, strand, 0.001,
                           retChrom, retStart, retEnd, retStrand);
 }
@@ -2877,8 +2889,9 @@ boolean quickLiftRmskOut(struct hash *chainHash, struct rmskOut *ro)
 char *liftedChrom;
 int liftedStart, liftedEnd;
 char liftedStrand;
-if (liftOverRemapRange(chainHash, 0.0, ro->genoName, ro->genoStart, ro->genoEnd, ro->strand[0],
-                       0.001, &liftedChrom, &liftedStart, &liftedEnd, &liftedStrand) != NULL)
+if ((chainHash == NULL) ||
+    (liftOverRemapRange(chainHash, 0.0, ro->genoName, ro->genoStart, ro->genoEnd, ro->strand[0],
+                        0.001, &liftedChrom, &liftedStart, &liftedEnd, &liftedStrand) != NULL))
     return FALSE;
 // liftOverRemapRange hands back its own copy of the chrom name
 freeMem(ro->genoName);
@@ -2944,7 +2957,7 @@ boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *p
  * nothing of the item maps, or the aligned blocks land out of order:  drop the item then. */
 {
 int blockCount = *pBlockCount;
-if (blockCount <= 0)
+if ((chainHash == NULL) || (blockCount <= 0))
     return FALSE;
 // the unaligned flanks are drawn past the aligned part:  keep whatever they reach beyond
 // their own sizes, which is how far the item's ends sit from the aligned part

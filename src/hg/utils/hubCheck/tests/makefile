@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 hubCheck = ${DESTBINDIR}/hubCheck
 
-test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent parentLoop superParentLoop dotInName fieldCountMismatch fieldCountTooFew relPath missingFile
+test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent parentLoop superParentLoop dotInName fieldCountMismatch fieldCountTooFew relPath missingFile shownSuperNoVisible
 
 one:	mkout
 	-${hubCheck} input/hub1.txt > output/output1.txt
@@ -105,6 +105,13 @@ relPath: mkout
 missingFile: mkout
 	-${hubCheck} input/relPath/missingFile.txt > output/missingFile.output.txt 2>/dev/null
 	diff expected/missingFile.output.txt output/missingFile.output.txt
+
+# A superTrack set to show with no visible tracks, including nested superTracks.
+# allHidden, innerAllHidden and outerHiddenInner should warn; oneVisible, notShown
+# and outerOk should not.
+shownSuperNoVisible: mkout
+	-cd input && ${hubCheck} shownSuperNoVisible.txt > ../output/shownSuperNoVisible.output.txt 2>/dev/null
+	diff expected/shownSuperNoVisible.output.txt output/shownSuperNoVisible.output.txt
 
 mkout::
 	@mkdir -p output
