@@ -312,7 +312,7 @@ for (name = nameList; name != NULL; name = name->next)
         }
     if (tdb != NULL)
 	if ((curTrack == NULL) || differentWord(tdb->shortLabel, curTrack->shortLabel))
-	    hPrintf(">%s (%s)", tdb->shortLabel, name->name);
+	    hPrintf(">%s (%s)", htmlEncode(tdb->shortLabel), name->name);
 	else
 	    hPrintf(">%s", name->name);
     else
