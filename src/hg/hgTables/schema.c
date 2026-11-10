@@ -53,10 +53,11 @@ return val;
 }
 
 static char *cleanExample(char *val)
-/* Abbreviate example if necessary and add non-breaking space if need be */
+/* Abbreviate example if necessary, HTML-encode it, and add non-breaking space
+ * if need be */
 {
 val = abbreviateInPlace(val, 30);
-val = nbForNothing(val);
+val = nbForNothing(htmlEncode(val));
 return val;
 }
 
@@ -80,9 +81,11 @@ return list;
 }
 
 void describeFields(char *db, char *table,
-                    struct asObject *asObj, struct sqlConnection *conn)
+                    struct asObject *asObj, struct sqlConnection *conn, char *whereClause)
 /* Print out an HTML table showing table fields and types, and optionally
- * offering histograms for the text/enum fields. */
+ * offering histograms for the text/enum fields.  whereClause, if given, is a
+ * NOSQLINJ-safe fragment limiting the example row to the part of the table the
+ * page is about. */
 {
 struct sqlResult *sr;
 char **row;
@@ -95,7 +98,10 @@ boolean showItemRgb = FALSE;
 showItemRgb=bedItemRgb(findTdbForTable(db, curTrack, table, ctLookupName));
 // should we expect itemRgb instead of "reserved"
 
-sqlSafef(query, sizeof(query), "select * from %s limit 1", table);
+if (isNotEmpty(whereClause))
+    sqlSafef(query, sizeof(query), "select * from %s where %-s limit 1", table, whereClause);
+else
+    sqlSafef(query, sizeof(query), "select * from %s limit 1", table);
 exampleList = storeRow(conn, query);
 sqlSafef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
@@ -209,8 +215,10 @@ printf("<br>\nTo download this table in different text formats or to intersect o
         database, tdb->grp, tdb->track, table);
 }
 
-static void printSampleRows(int sampleCount, struct sqlConnection *conn, char *table)
-/* Put up sample values. */
+static void printSampleRows(int sampleCount, struct sqlConnection *conn, char *table,
+                            char *whereClause)
+/* Put up sample values.  whereClause, if given, is a NOSQLINJ-safe fragment
+ * limiting the rows sampled; pass NULL to sample the whole table. */
 {
 char query[256];
 struct sqlResult *sr;
@@ -242,8 +250,12 @@ hPrintf("</TR>");
 sqlFreeResult(&sr);
 
 /* Get some sample fields. */
-sqlSafef(query, sizeof(query), "select * from %s limit %d", table, sampleCount);
-sr = sqlGetResult(conn, query);
+struct dyString *sampleQuery = sqlDyStringCreate("select * from %s", table);
+if (isNotEmpty(whereClause))
+    sqlDyStringPrintf(sampleQuery, " where %-s", whereClause);
+sqlDyStringPrintf(sampleQuery, " limit %d", sampleCount);
+sr = sqlGetResult(conn, dyStringContents(sampleQuery));
+dyStringFree(&sampleQuery);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hPrintf("<TR>");
@@ -344,7 +356,8 @@ void printTrackHtml(struct trackDb *tdb)
 if (tdb != NULL && isNotEmpty(tdb->html))
     {
     // shortLabel comes from trackDb, which a track hub controls
-    webNewSection("%s (%s) Track Description", htmlEncode(tdb->shortLabel), tdb->track);
+    webNewSection("%s (%s) Track Description", htmlEncode(tdb->shortLabel),
+        htmlEncode(tdb->track));
     char *browserVersion;
     if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
         puts(tdb->html);
@@ -426,7 +439,7 @@ else
         }
     }
 
-describeFields(db, splitTable, asObj, conn);
+describeFields(db, splitTable, asObj, conn, NULL);
 
 if (tdbForConn && sameString(tdbForConn->track, table))
     {
@@ -487,7 +500,7 @@ if (jpList != NULL)
 	}
     }
 webNewSection("Sample Rows");
-printSampleRows(10, conn, splitTable);
+printSampleRows(10, conn, splitTable, NULL);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -518,7 +531,7 @@ hPrintf("format.");
 
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 webNewSection("Sample Rows");
-printSampleRows(10, conn, ct->dbTableName);
+printSampleRows(10, conn, ct->dbTableName, NULL);
 printTrackHtml(ct->tdb);
 hFreeConn(&conn);
 }
@@ -545,7 +558,7 @@ if (ct->dbTrack)
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     webNewSection("Sample Rows");
-    printSampleRows(10, conn, ct->dbTableName);
+    printSampleRows(10, conn, ct->dbTableName, NULL);
     printTrackHtml(ct->tdb);
     hFreeConn(&conn);
     }
@@ -583,7 +596,7 @@ if (ct->dbTrack)
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     webNewSection("Sample Rows");
-    printSampleRows(10, conn, ct->dbTableName);
+    printSampleRows(10, conn, ct->dbTableName, NULL);
     printTrackHtml(ct->tdb);
     hFreeConn(&conn);
     }
@@ -598,8 +611,11 @@ else
 }
 
 static void showSchemaWithAsObj(char *db, char *trackId, struct customTrack *ct,
-                                struct asObject *asObj)
-/* Show schema on custom track using autoSqlString defined for this track type. */
+                                struct asObject *asObj, char *whereClause)
+/* Show schema on custom track using autoSqlString defined for this track type.
+ * whereClause, if given, is a NOSQLINJ-safe fragment limiting the count and the
+ * sample rows to the part of the table this page is about; pass NULL for a
+ * table the page covers in full. */
 {
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 char *table = ct->dbTableName;
@@ -608,14 +624,22 @@ hPrintf("<B>Genome Database:</B> %s ", db);
 hPrintf("<B>Track ID:</B> %s ", trackId);
 hPrintf("<B>MySQL table:</B> %s", table);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
-printLongWithCommas(stdout, sqlTableSize(conn, table));
+if (isNotEmpty(whereClause))
+    {
+    struct dyString *countQuery = sqlDyStringCreate(
+        "select count(*) from %s where %-s", table, whereClause);
+    printLongWithCommas(stdout, sqlQuickLongLong(conn, dyStringContents(countQuery)));
+    dyStringFree(&countQuery);
+    }
+else
+    printLongWithCommas(stdout, sqlTableSize(conn, table));
 hPrintf("<BR>\n");
 if (asObj != NULL)
     hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
-describeFields(CUSTOM_TRASH, table, asObj, conn);
+describeFields(CUSTOM_TRASH, table, asObj, conn, whereClause);
 
 webNewSection("Sample Rows");
-printSampleRows(10, conn, ct->dbTableName);
+printSampleRows(10, conn, ct->dbTableName, whereClause);
 printTrackHtml(ct->tdb);
 hFreeConn(&conn);
 }
@@ -623,7 +647,7 @@ hFreeConn(&conn);
 static void showSchemaCt(char *db, char *table)
 /* Show schema on custom track. */
 {
-/* Accept the qualified myVariants storage form ("customDataNN.myVariants_<user>")
+/* Accept the qualified storage form ("customDataNN.myVariants_<user>_<suffix>")
  * as well as the bare track name; the ct list is keyed on the bare track name. */
 char *dot = strchr(table, '.');
 char *trackName = (dot != NULL && isMyVariantsTrack(dot + 1)) ? dot + 1 : table;
@@ -643,36 +667,36 @@ else if (startsWithWord("array", type))
     showSchemaCtArray(table, ct);
 else if (isMyVariantsType(type))
     {
-    if (ct->dbTableName == NULL)
-        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
-    if (ct->dbTableName == NULL)
-        errAbort("Cannot access myVariants track %s; the share may have been revoked.", trackName);
     struct asObject *asObj = myVariantsAsObj();
-    showSchemaWithAsObj(db, trackName, ct, asObj);
+    /* A project's table holds every assembly, so scope the count and the sample
+     * rows the same way the Table Browser output is scoped. */
+    char *whereClause = myVariantsScopeWhere(db, trackName);
+    showSchemaWithAsObj(db, trackName, ct, asObj, whereClause);
+    freeMem(whereClause);
     asObjectFree(&asObj);
     }
 else if (sameWord("bedDetail", type))
     {
     struct asObject *asObj = bedDetailAsObj();
-    showSchemaWithAsObj(db, table, ct, asObj);
+    showSchemaWithAsObj(db, table, ct, asObj, NULL);
     asObjectFree(&asObj);
     }
 else if (sameWord("pgSnp", type))
     {
     struct asObject *asObj = pgSnpAsObj();
-    showSchemaWithAsObj(db, table, ct, asObj);
+    showSchemaWithAsObj(db, table, ct, asObj, NULL);
     asObjectFree(&asObj);
     }
 else if (sameWord("barChart", type))
     {
     struct asObject *asObj = barChartAsObj();
-    showSchemaWithAsObj(db, table, ct, asObj);
+    showSchemaWithAsObj(db, table, ct, asObj, NULL);
     asObjectFree(&asObj);
     }
 else if (sameWord("interact", type))
     {
     struct asObject *asObj = interactAsObj();
-    showSchemaWithAsObj(db, table, ct, asObj);
+    showSchemaWithAsObj(db, table, ct, asObj, NULL);
     asObjectFree(&asObj);
     }
 else

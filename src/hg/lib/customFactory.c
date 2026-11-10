@@ -55,6 +55,7 @@
 #include "cgiApoptosis.h"
 #include "chromAlias.h"
 #include "bedMethyl.h"
+#include "hVarSubst.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -3377,112 +3378,6 @@ static struct customFactory vcfTabixFactory =
     vcfTabixLoader,
     };
 
-/*** myVariants Factory - for track where user interactively creates items. ***/
-
-static boolean myVariantsRecognizer(struct customFactory *fac,	struct customPp *cpp, char *type,
-			     struct customTrack *track)
-/* Return TRUE if looks like we're handling a myVariants track */
-{
-return isMyVariantsType(type);
-}
-
-struct myVariants *myVariantsFromRow(char **row, int rowSize)
-/* Create a myVariants from a row of uncertain length. */
-{
-if (rowSize < 3)
-    errAbort("err: need at least %d fields in a myVariants row, got %d", 3, rowSize);
-struct myVariants *item;
-AllocVar(item);
-item->chrom = cloneString(row[0]);
-item->chromStart = sqlUnsigned(row[1]);
-item->chromEnd = sqlUnsigned(row[2]);
-item->bin = binFromRange(item->chromStart, item->chromEnd);
-if (rowSize > 3)
-    item->name = cloneString(row[3]);
-else
-    item->name = cloneString("");
-if (rowSize > 4)
-    item->score = sqlSigned(row[4]);
-if (rowSize > 5)
-    item->strand[0] = row[5][0];
-else
-    item->strand[0] = '.';
-if (rowSize > 6)
-    item->thickStart = sqlUnsigned(row[6]);
-else
-    item->thickStart = item->chromStart;
-if (rowSize > 7)
-    item->thickEnd = sqlUnsigned(row[7]);
-else
-    item->thickEnd = item->chromEnd;
-if (rowSize > 8)
-    item->itemRgb = bedParseRgb(row[8]);
-if (rowSize > 9)
-    item->description = cloneString(row[9]);
-else
-    item->description = cloneString("");
-return item;
-}
-
-static struct customTrack *myVariantsLoader(struct customFactory *fac, struct hash *chromHash,
-				     struct customPp *cpp, struct customTrack *track,
-				     boolean dbRequested)
-/* Process the myVariants track line. The data will already be loaded by jsCommandDispatch
- * so not much to do here */
-{
-char *ctDb = ctGenomeOrCurrent(track);
-struct myVariants *list = NULL;
-int fieldCount = 0;
-char *line;
-while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
-    {
-    char *row[8];
-    int wordCount = chopLine(line, row);
-    struct lineFile *lf = cpp->fileStack;
-    lineFileExpectAtLeast(lf, 3, wordCount);
-    if (fieldCount == 0)
-        fieldCount = wordCount;
-    else if (fieldCount != wordCount)
-        {
-	errAbort("error: some lines in myVariants type custom track have %d fields, others have %d",
-		fieldCount, wordCount);
-	}
-    struct myVariants *item = myVariantsFromRow(row, wordCount);
-    customFactoryCheckChromNameDb(ctDb, item->chrom, lf);
-    slAddHead(&list, item);
-    }
-track->dbTrackType = cloneString(MYVARIANTS_TYPE);
-track->tdb->type = cloneString(MYVARIANTS_TYPE);
-if (isEmpty(track->tdb->html))
-    {
-    char descPath[PATH_LEN];
-    safef(descPath, sizeof descPath, "%s/inc/myVariantsDesc.html", hDocumentRoot());
-    if (fileExists(descPath))
-        readInGulp(descPath, &track->tdb->html, NULL);
-    }
-/* tdb->shortLabel holds the name= value from the track line at this point.
- * Use it for track/table identity, then override the display labels
- * from the shortLabel/longLabel settings if present. */
-track->tdb->table = track->tdb->shortLabel;
-track->tdb->track = track->tdb->shortLabel;
-char *sl = trackDbSetting(track->tdb, "shortLabel");
-if (isNotEmpty(sl))
-    track->tdb->shortLabel = cloneString(sl);
-char *ll = trackDbSetting(track->tdb, "longLabel");
-if (isNotEmpty(ll))
-    track->tdb->longLabel = cloneString(ll);
-return track;
-}
-
-static struct customFactory myVariantsFactory =
-/* Factory for myVariants tracks */
-    {
-    NULL,
-    MYVARIANTS_TYPE,
-    myVariantsRecognizer,
-    myVariantsLoader,
-    };
-
 
 /*** VCF Factory - for Variant Call Format tracks ***/
 
@@ -3733,7 +3628,6 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &adjacencyFactory);
     slAddTail(&factoryList, &bamFactory);
     slAddTail(&factoryList, &vcfTabixFactory);
-    slAddTail(&factoryList, &myVariantsFactory);
     slAddTail(&factoryList, &bigDataOopsFactory);
     slAddTail(&factoryList, &barChartFactory);
     slAddTail(&factoryList, &bigBarChartFactory);

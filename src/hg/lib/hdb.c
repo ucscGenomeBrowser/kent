@@ -52,6 +52,7 @@
 #include "chromAlias.h"
 #include "asmEquivalent.h"
 #include "genark.h"
+#include "myVariants.h"
 
 
 #ifdef LOWELAB
@@ -4216,8 +4217,11 @@ if (bigDataUrl != NULL)
     }
 else
     {
-    // if it's copied from a custom track, wait to find data later
-    if (isCustomTrack(tdb->table))
+    // if it's copied from a custom track, wait to find data later.  myVariants
+    // tracks are custom tracks whose names carry no ct_ prefix, and their rows
+    // live in customTrash rather than in database.
+    if (isCustomTrack(tdb->table)
+        || (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(tdb->table)))
         return TRUE;
     return (hTableForTrack(database, tdb->table) != NULL);
     }

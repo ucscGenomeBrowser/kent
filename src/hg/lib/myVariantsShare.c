@@ -7,14 +7,13 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "myVariantsShare.h"
+#include "hdb.h"
 #include "htmshell.h"
-#include "jsonParse.h"
 #include "jsonWrite.h"
-#include "errCatch.h"
 
 
 
-char *myVariantsShareCommaSepFieldNames = "id,ownerUser,shareToken,project,db,permission,targetUser,label,createdAt";
+char *myVariantsShareCommaSepFieldNames = "id,ownerUser,shareToken,projectId,permission,createdAt";
 
 void myVariantsShareStaticLoad(char **row, struct myVariantsShare *ret)
 /* Load a row from myVariantsShare table into ret.  The contents of ret will
@@ -24,48 +23,9 @@ void myVariantsShareStaticLoad(char **row, struct myVariantsShare *ret)
 ret->id = sqlUnsigned(row[0]);
 ret->ownerUser = row[1];
 ret->shareToken = row[2];
-ret->project = row[3];
-ret->db = row[4];
-ret->permission = sqlUnsigned(row[5]);
-ret->targetUser = row[6];
-ret->label = row[7];
-ret->createdAt = row[8];
-}
-
-struct myVariantsShare *myVariantsShareLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all myVariantsShare from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with myVariantsShareFreeList(). */
-{
-struct myVariantsShare *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = myVariantsShareLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-return list;
-}
-
-void myVariantsShareSaveToDb(struct sqlConnection *conn, struct myVariantsShare *el, char *tableName, int updateSize)
-/* Save myVariantsShare as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. This function automatically escapes quoted strings for mysql. */
-{
-struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s',%u,'%s','%s','%s')", 
-	tableName,  el->id,  el->ownerUser,  el->shareToken,  el->project,  el->db,  el->permission,  el->targetUser,  el->label,  el->createdAt);
-sqlUpdate(conn, update->string);
-dyStringFree(&update);
+ret->projectId = sqlUnsigned(row[3]);
+ret->permission = sqlUnsigned(row[4]);
+ret->createdAt = row[5];
 }
 
 struct myVariantsShare *myVariantsShareLoad(char **row)
@@ -78,12 +38,9 @@ AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
 ret->ownerUser = cloneString(row[1]);
 ret->shareToken = cloneString(row[2]);
-ret->project = cloneString(row[3]);
-ret->db = cloneString(row[4]);
-ret->permission = sqlUnsigned(row[5]);
-ret->targetUser = cloneString(row[6]);
-ret->label = cloneString(row[7]);
-ret->createdAt = cloneString(row[8]);
+ret->projectId = sqlUnsigned(row[3]);
+ret->permission = sqlUnsigned(row[4]);
+ret->createdAt = cloneString(row[5]);
 return ret;
 }
 
@@ -93,7 +50,7 @@ struct myVariantsShare *myVariantsShareLoadAll(char *fileName)
 {
 struct myVariantsShare *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -111,7 +68,7 @@ struct myVariantsShare *myVariantsShareLoadAllByChar(char *fileName, char choppe
 {
 struct myVariantsShare *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[6];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -135,11 +92,8 @@ if (ret == NULL)
 ret->id = sqlUnsignedComma(&s);
 ret->ownerUser = sqlStringComma(&s);
 ret->shareToken = sqlStringComma(&s);
-ret->project = sqlStringComma(&s);
-ret->db = sqlStringComma(&s);
+ret->projectId = sqlUnsignedComma(&s);
 ret->permission = sqlUnsignedComma(&s);
-ret->targetUser = sqlStringComma(&s);
-ret->label = sqlStringComma(&s);
 ret->createdAt = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -154,10 +108,6 @@ struct myVariantsShare *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->ownerUser);
 freeMem(el->shareToken);
-freeMem(el->project);
-freeMem(el->db);
-freeMem(el->targetUser);
-freeMem(el->label);
 freeMem(el->createdAt);
 freez(pEl);
 }
@@ -188,23 +138,9 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->shareToken);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->project);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->db);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->projectId);
 fputc(sep,f);
 fprintf(f, "%u", el->permission);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->targetUser);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->label);
-if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->createdAt);
@@ -214,40 +150,113 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct myVariantsShare *myVariantsCreateShare(struct sqlConnection *conn,
-    char *ownerUser, char *project, char *db, int permission,
-    char *targetUser, char *label)
-/* Create a new share record. Returns the share with token and id filled in.
- * Free with myVariantsShareFree. */
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+struct myVariantsShare *myVariantsShareLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all myVariantsShare from table that satisfy the query given.
+ * Dispose of this with myVariantsShareFreeList(). */
 {
+struct myVariantsShare *list = NULL, *el;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = myVariantsShareLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+struct myVariantsShare *myVariantsGetShareForProject(struct sqlConnection *conn,
+    unsigned projectId)
+/* Return the share on this project, or NULL if it has never been shared.  A
+ * project has at most one share; the unique key on projectId is what enforces
+ * that. */
+{
+char query[512];
+sqlSafef(query, sizeof(query),
+    "SELECT * FROM " MYVARIANTS_SHARE_TABLE " WHERE projectId=%u", projectId);
+return myVariantsShareLoadByQuery(conn, query);
+}
+
+struct myVariantsShare *myVariantsCreateShare(struct sqlConnection *conn,
+    char *ownerUser, unsigned projectId, int permission)
+/* Create the share link for a project, or return the one it already has with
+ * its permission set to the one asked for.  One link per project, so a second
+ * call does not mint a second token: the owner flips the permission on the
+ * link they already handed out.  Returns NULL on a bad permission.  Free with
+ * myVariantsShareFree. */
+{
+if (permission != MYVAR_PERM_READONLY && permission != MYVAR_PERM_READWRITE)
+    return NULL;
+struct myVariantsShare *existing = myVariantsGetShareForProject(conn, projectId);
+if (existing != NULL)
+    {
+    if (!sameString(existing->ownerUser, ownerUser))
+        {
+        myVariantsShareFreeList(&existing);
+        return NULL;
+        }
+    if (existing->permission != permission)
+        {
+        /* If the row went away between the read and the update, fall through and
+         * mint a new one rather than handing back a token that resolves to
+         * nothing. */
+        if (myVariantsSetSharePermission(conn, existing->shareToken, ownerUser, permission))
+            {
+            existing->permission = permission;
+            return existing;
+            }
+        myVariantsShareFreeList(&existing);
+        }
+    else
+        return existing;
+    }
+
 char *token = makeRandomKey(288);  /* 288 bits -> 48 base64 URL-safe chars */
-struct dyString *dy = sqlDyStringCreate(
-    "INSERT INTO myVariantsShares (ownerUser, shareToken, project, db, permission, targetUser, label)"
-    " VALUES ('%s', '%s', '%s', '%s', %d,",
-    ownerUser, token, project, db, permission);
-if (targetUser != NULL)
-    sqlDyStringPrintf(dy, " '%s',", targetUser);
-else
-    sqlDyStringPrintf(dy, " NULL,");
-if (label != NULL)
-    sqlDyStringPrintf(dy, " '%s')", label);
-else
-    sqlDyStringPrintf(dy, " NULL)");
-sqlUpdate(conn, dy->string);
-dyStringFree(&dy);
+char query[1024];
+/* One link per project is a unique key: two requests can both pass a check
+ * beforehand, and only one can insert. */
+sqlSafef(query, sizeof(query),
+    "INSERT IGNORE INTO " MYVARIANTS_SHARE_TABLE
+    " (ownerUser, shareToken, projectId, permission)"
+    " VALUES ('%s', '%s', %u, %d)", ownerUser, token, projectId, permission);
+sqlUpdate(conn, query);
+if (sqlAffectedRows(conn) == 0)
+    {
+    /* Another request created it first; return theirs so both callers show the
+     * same link. */
+    freeMem(token);
+    return myVariantsGetShareForProject(conn, projectId);
+    }
 
 struct myVariantsShare *share;
 AllocVar(share);
 share->id = sqlLastAutoId(conn);
 share->ownerUser = cloneString(ownerUser);
 share->shareToken = token;
-share->project = cloneString(project);
-share->db = cloneString(db);
+share->projectId = projectId;
 share->permission = permission;
-share->targetUser = cloneString(targetUser);
-share->label = cloneString(label);
 share->createdAt = cloneString("");
 return share;
+}
+
+boolean myVariantsIsShareToken(char *token)
+/* TRUE if token has the length and the characters makeRandomKey produces.  A
+ * token reaches us as part of a cart variable name, which anyone can set to
+ * anything, so check it before it is copied into a buffer or a query. */
+{
+if (token == NULL || strlen(token) != MYVAR_TOKEN_LENGTH)
+    return FALSE;
+char *c;
+for (c = token; *c != 0; c++)
+    {
+    if (!isalnum((unsigned char)*c) && *c != '-' && *c != '_')
+        return FALSE;
+    }
+return TRUE;
 }
 
 struct myVariantsShare *myVariantsGetShareByToken(struct sqlConnection *conn,
@@ -257,38 +266,23 @@ struct myVariantsShare *myVariantsGetShareByToken(struct sqlConnection *conn,
 if (token == NULL || strlen(token) != MYVAR_TOKEN_LENGTH)
     return NULL;
 char query[512];
+/* BINARY, because the column's collation ignores case and a token must not. */
 sqlSafef(query, sizeof(query),
-    "SELECT * FROM myVariantsShares WHERE shareToken='%s'", token);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row = sqlNextRow(sr);
-struct myVariantsShare *share = NULL;
-if (row != NULL)
-    share = myVariantsShareLoad(row);
-sqlFreeResult(&sr);
-return share;
-}
-
-struct myVariantsShare *myVariantsGetSharesForOwner(struct sqlConnection *conn,
-    char *ownerUser, char *db)
-/* Get all shares created by this user for the given assembly. */
-{
-char query[512];
-sqlSafef(query, sizeof(query),
-    "SELECT * FROM myVariantsShares WHERE ownerUser='%s' AND db='%s'"
-    " ORDER BY createdAt DESC", ownerUser, db);
+    "SELECT * FROM " MYVARIANTS_SHARE_TABLE " WHERE shareToken=BINARY '%s'", token);
 return myVariantsShareLoadByQuery(conn, query);
 }
 
-struct myVariantsShare *myVariantsGetSharesForUser(struct sqlConnection *conn,
-    char *userName, char *db)
-/* Get all shares targeted at this user for the given assembly. The targetUser
- * column holds a normalized comma-separated list, so match with FIND_IN_SET.
- * BINARY forces a case-sensitive match, matching myVariantsShareAllowsUser. */
+struct myVariantsShare *myVariantsGetSharesForOwner(struct sqlConnection *conn,
+    char *ownerUser)
+/* Get every share this user has created, newest first.  A share covers its
+ * project on every assembly the project has annotations on, so there is
+ * nothing to filter by assembly.  A share the owner cannot see is a share the
+ * owner cannot revoke, so this lists all of them. */
 {
 char query[512];
 sqlSafef(query, sizeof(query),
-    "SELECT * FROM myVariantsShares WHERE FIND_IN_SET(BINARY '%s', targetUser) AND db='%s'"
-    " ORDER BY createdAt DESC", userName, db);
+    "SELECT * FROM " MYVARIANTS_SHARE_TABLE " WHERE ownerUser='%s'"
+    " ORDER BY createdAt DESC", ownerUser);
 return myVariantsShareLoadByQuery(conn, query);
 }
 
@@ -299,107 +293,65 @@ boolean myVariantsRevokeShare(struct sqlConnection *conn,
 {
 char query[512];
 sqlSafef(query, sizeof(query),
-    "SELECT count(*) FROM myVariantsShares WHERE shareToken='%s' AND ownerUser='%s'",
-    shareToken, ownerUser);
-int count = sqlQuickNum(conn, query);
-if (count == 0)
-    return FALSE;
-sqlSafef(query, sizeof(query),
-    "DELETE FROM myVariantsShares WHERE shareToken='%s' AND ownerUser='%s'",
-    shareToken, ownerUser);
+    "DELETE FROM " MYVARIANTS_SHARE_TABLE
+    " WHERE shareToken=BINARY '%s' AND ownerUser='%s'", shareToken, ownerUser);
 sqlUpdate(conn, query);
-return TRUE;
+return sqlAffectedRows(conn) > 0;
 }
 
-static boolean shareOwnedBy(struct sqlConnection *conn, char *shareToken, char *ownerUser)
-/* Return TRUE if a share with this token exists and is owned by ownerUser. */
+boolean myVariantsRevokeSharesForProject(struct sqlConnection *conn,
+    unsigned projectId, char *ownerUser)
+/* Delete the share on a project, if it has one.  ownerUser must match.
+ * Returns TRUE if a row was deleted.  Called when a project is deleted, so
+ * the link stops working with the project it pointed at. */
 {
+/* Deleted by projectId alone: an id is only meaningful with its owner, so once
+ * the project is going, a row naming it must not survive whatever the owner
+ * column says. */
 char query[512];
 sqlSafef(query, sizeof(query),
-    "SELECT count(*) FROM myVariantsShares WHERE shareToken='%s' AND ownerUser='%s'",
-    shareToken, ownerUser);
-return sqlQuickNum(conn, query) != 0;
+    "DELETE FROM " MYVARIANTS_SHARE_TABLE " WHERE projectId=%u", projectId);
+sqlUpdate(conn, query);
+return sqlAffectedRows(conn) > 0;
 }
 
 boolean myVariantsSetSharePermission(struct sqlConnection *conn,
     char *shareToken, char *ownerUser, int permission)
-/* Update a share's permission (0=read-only, 1=read-write). ownerUser must
- * match the share's owner. Returns TRUE if a row was updated, FALSE if not
- * found or not owner. */
+/* Update a share's permission (0=view, 1=edit). ownerUser must match the
+ * share's owner. Returns TRUE if a row was updated, FALSE if not found or not
+ * owner.  There is one link per project, so this changes what everyone who
+ * already holds that link can do. */
 {
 if (permission != MYVAR_PERM_READONLY && permission != MYVAR_PERM_READWRITE)
     return FALSE;
-if (!shareOwnedBy(conn, shareToken, ownerUser))
-    return FALSE;
 char query[512];
 sqlSafef(query, sizeof(query),
-    "UPDATE myVariantsShares SET permission=%d WHERE shareToken='%s' AND ownerUser='%s'",
-    permission, shareToken, ownerUser);
+    "UPDATE " MYVARIANTS_SHARE_TABLE " SET permission=%d"
+    " WHERE shareToken=BINARY '%s' AND ownerUser='%s'", permission, shareToken, ownerUser);
 sqlUpdate(conn, query);
-return TRUE;
-}
-
-boolean myVariantsSetShareTargets(struct sqlConnection *conn,
-    char *shareToken, char *ownerUser, char *targetUser)
-/* Update a share's targetUser list (NULL for anyone with link). ownerUser
- * must match the share's owner. Returns TRUE if a row was updated, FALSE if
- * not found or not owner. */
-{
-if (!shareOwnedBy(conn, shareToken, ownerUser))
-    return FALSE;
-struct dyString *dy = sqlDyStringCreate("UPDATE myVariantsShares SET targetUser=");
-if (isNotEmpty(targetUser))
-    sqlDyStringPrintf(dy, "'%s'", targetUser);
-else
-    sqlDyStringPrintf(dy, "NULL");
-sqlDyStringPrintf(dy, " WHERE shareToken='%s' AND ownerUser='%s'", shareToken, ownerUser);
-sqlUpdate(conn, dy->string);
-dyStringFree(&dy);
-return TRUE;
-}
-
-boolean myVariantsShareAllowsUser(struct myVariantsShare *share, char *userName)
-/* Return TRUE if userName may access share. TRUE when targetUser is empty
- * (anyone with link); otherwise TRUE only if userName is non-empty and
- * appears in the comma-separated targetUser list. NULL-safe. */
-{
-if (share == NULL)
-    return FALSE;
-if (isEmpty(share->targetUser))
+if (sqlAffectedRows(conn) > 0)
     return TRUE;
-if (isEmpty(userName))
-    return FALSE;
-boolean allowed = FALSE;
-struct slName *names = slNameListFromComma(share->targetUser);
-struct slName *name;
-for (name = names; name != NULL; name = name->next)
-    {
-    trimSpaces(name->name);
-    if (sameString(name->name, userName))
-        {
-        allowed = TRUE;
-        break;
-        }
-    }
-slNameFreeList(&names);
-return allowed;
+/* An UPDATE that writes the value already there changes no rows, so check for
+ * that before calling it a failure. */
+sqlSafef(query, sizeof(query),
+    "SELECT count(*) FROM " MYVARIANTS_SHARE_TABLE
+    " WHERE shareToken=BINARY '%s' AND ownerUser='%s' AND permission=%d",
+    shareToken, ownerUser, permission);
+return sqlQuickNum(conn, query) != 0;
 }
 
 char *myVariantsShareCartValue(struct myVariantsShare *share)
-/* Build JSON cart value string from a share record.
- * Caller must freeMem the result. */
+/* Build the JSON cart value recording that this session was given a share
+ * token.  Authorization always re-reads the share row, so this is a record,
+ * not a credential in its own right.  Caller must freeMem the result. */
 {
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "owner", share->ownerUser);
-jsonWriteString(jw, "project", share->project);
-jsonWriteString(jw, "db", share->db);
+jsonWriteNumber(jw, "projectId", share->projectId);
 jsonWriteNumber(jw, "permission", share->permission);
-if (isNotEmpty(share->label))
-    jsonWriteString(jw, "label", share->label);
 jsonWriteObjectEnd(jw);
 char *result = cloneString(jw->dy->string);
 jsonWriteFree(&jw);
 return result;
 }
-

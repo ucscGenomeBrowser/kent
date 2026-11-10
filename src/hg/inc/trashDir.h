@@ -38,8 +38,9 @@ boolean isTrashOrSessionDataPath(char *path);
 
 boolean isServerUserFilePath(char *path);
 /* Return TRUE if path is under one of the directories where the server keeps files it made
- * for a user: the trash directory, the session-data directories, or a per-feature data
- * directory such as myVariantsDataDir.
+ * for a user: the trash directory or the session-data directories.  Kept separate from
+ * isTrashOrSessionDataPath so a per-feature data directory can be added here without
+ * touching every caller.
  *
  * Use this on any file name that comes back out of the cart before opening, reading, writing
  * or deleting it.  Cart values are not ours: they arrive from CGI parameters, from an uploaded

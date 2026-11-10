@@ -406,6 +406,11 @@ var hgSearch = (function() {
                         url += url[url.length-1] !== '&' ? '&' : '';
                         url += "addHighlight=" + encodeURIComponent(match.highlight);
                     }
+                    // hgTracks offers to save the search as a My Annotations item.
+                    if (uiState.search) {
+                        url += url[url.length-1] !== '&' ? '&' : '';
+                        url += "myVarSearchTerm=" + encodeURIComponent(uiState.search);
+                    }
                 } else {
                     url = "hgc?db=" + db + "&g=" + hgcTitle + "&i=" + match.position + "&c=0&o=0&l=0&r=0" ;
                 }

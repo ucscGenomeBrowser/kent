@@ -17,7 +17,6 @@ CREATE TABLE myVariants (
     db varchar(255) not null,        # database name of this annotation
     ref varchar(255) not null,       # reference allele
     alt varchar(255) not null,       # alternate allele
-    project varchar(255) not null,   # project name for grouping variants
     mouseover varchar(255) not null, # short mouseover text for hover display
     itemType varchar(16) not null default 'snv',  # transcript|snv|cnv
     cnvType varchar(32) not null default '',      # gnomAD term, empty for snv/transcript
@@ -25,6 +24,5 @@ CREATE TABLE myVariants (
               #Indices
     PRIMARY KEY(id),
     INDEX(chrom(16),bin),
-    INDEX(db),
-    INDEX(project)
+    INDEX(db)
 ) ENGINE=InnoDB;

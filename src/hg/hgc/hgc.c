@@ -109,6 +109,7 @@
 #include "softPromoter.h"
 #include "customTrack.h"
 #include "myVariants.h"
+#include "wikiLink.h"
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "sage.h"
@@ -24275,12 +24276,33 @@ fileName = nextWord(&fileItem);
 for (ct = ctList; ct != NULL; ct = ct->next)
     if (sameString(trackId, ct->tdb->track))
 	break;
+if (ct == NULL && isMyVariantsTrack(trackId))
+    {
+    /* My Annotations tracks come from the signed-in account or an accepted
+     * share, not a file, so say which of those is missing. */
+    cartWebStart(cart, database, "My Annotations");
+    if (getUserName() == NULL)
+        {
+        char *retUrl = wikiLinkEncodeReturnUrl(cartSessionId(cart), "hgTracks", "");
+        char *loginUrl = wikiLinkUserLoginUrlReturning(cartSessionId(cart), retUrl);
+        htmlPrintf("<p>This annotation is in a My Annotations track. "
+            "<a href='%s|attr|'>Log in</a> to see your own annotations, or open the share "
+            "link again for one shared with you.</p>\n", loginUrl);
+        freez(&retUrl);
+        freez(&loginUrl);
+        }
+    else
+        printf("<p>This My Annotations track is no longer available. It may have been "
+               "deleted, or its share link revoked.</p>\n");
+    return;
+    }
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
 type = ct->tdb->type;
-cartWebStart(cart, database, "Custom Track: %s", ct->tdb->shortLabel);
+cartWebStart(cart, database, "%s: %s",
+    isMyVariantsType(ct->tdb->type) ? "My Annotations" : "Custom Track", ct->tdb->shortLabel);
 itemName = skipLeadingSpaces(fileItem);
-printf("<H2>%s</H2>\n", ct->tdb->longLabel);
+printf("<H2>%s</H2>\n", htmlEncode(ct->tdb->longLabel));
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
 else if ( startsWith( "bedMethyl", type))
@@ -28805,7 +28827,7 @@ if (isDup)
     {
     struct dupTrack *dupList = dupTrackListFromCart(cart);
     struct dupTrack *dup = dupTrackFindInList(dupList, dupWholeName);
-    if (dup != NULL)
+    if (dup != NULL && tdb != NULL)
 	{
 	tdb = dupTdbFrom(tdb, dup);
 	track = dupWholeName;
