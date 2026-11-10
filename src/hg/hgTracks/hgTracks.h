@@ -1894,6 +1894,11 @@ boolean sourceToSyntheticRange(char *chainFile, char *srcChrom, int srcStart, in
 /* Map a source-coordinate range onto this synthetic assembly, FALSE if nothing
  * covers it.  The inverse of sourceSpanPosition(). */
 
+boolean sourceToNearestSyntheticRange(char *chainFile, char *srcChrom, int srcStart, int srcEnd,
+                                      int *retStart, int *retEnd);
+/* For a source range that nothing in the space covers, a window of the same width at
+ * the nearest block from the same source sequence.  FALSE when there is none. */
+
 char *sourceSpanPosition(char *chainFile, char *chrom, int start, int end);
 /* The source-coordinate span of this window, "chrom:start+1-end", or NULL when it
  * maps back to more than one source sequence.  The counterpart of

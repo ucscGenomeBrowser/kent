@@ -6523,6 +6523,14 @@ var imageV2 = {
                         hgTracks = newJson;
                         genomePos.original = undefined;
                         genomePos.setByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd); // MOVED HERE GALT
+                        if (hgTracks.spaceSourcePosition) {
+                            // A multi-region space:  the position is a multi: one, the
+                            // reader is shown the source span.  refs #37788
+                            var srcPos = parsePosition(hgTracks.spaceSourcePosition);
+                            if (srcPos)
+                                $('#positionDisplay').text(srcPos.chrom + ":" + commify(srcPos.start) +
+                                                           "-" + commify(srcPos.end));
+                        }
                         initVars();
                         imageV2.afterReload();
                     }

@@ -2493,7 +2493,8 @@ int synStart = 0, synEnd = 0;
 if (!sourceToSyntheticRange(chainFile, h->chrom, h->chromStart, h->chromEnd,
                             &synChrom, &synStart, &synEnd))
     return FALSE;
-h->chrom = synChrom;
+/* Named as the page names the space, which is what both drawers compare against. */
+h->chrom = MULTI_REGION_CHROM;
 h->chromStart = synStart;
 h->chromEnd = synEnd;
 return TRUE;
@@ -3926,6 +3927,24 @@ if (sqlQuickQuery(conn, query, strand, sizeof strand) == NULL)
 return (strand[0] == '-');
 }
 
+static char *singleAltHaploPlacedOn(char *haplotypeId)
+/* The chromosome this alt or fix sequence is placed on, or NULL if the placement table
+ * does not list it.  refs #37788 */
+{
+if (isEmpty(haplotypeId))
+    return NULL;
+char *table = endsWith(haplotypeId, "_fix") ? "fixLocations" : "altLocations";
+if (!hTableExists(database, table))
+    return NULL;
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+sqlSafef(query, sizeof(query), "select chrom from %s where name rlike '^%s(:[0-9-]+)?'",
+         table, haplotypeId);
+char *chrom = sqlQuickString(conn, query);
+hFreeConn(&conn);
+return chrom;
+}
+
 static boolean initSingleAltHaplotypeInPlace(char *haplotypeId)
 /* Show one alt haplotype in place:  the chromosome it is placed on, with the alt spliced
  * in where the placement says it belongs, and nothing else.
@@ -5286,6 +5305,10 @@ if (sameString(mode, "customUrl"))
 return TRUE;
 }
 
+static char *requestedVirtPosition = NULL;
+/* The multi: position this request arrived with, before exon and gene view replace it
+ * with nonVirtPosition.  In a space it is a position on the space.  refs #37788 */
+
 static void installMultiRegionSpace(char *chainFile, char *conditions)
 /* Draw in the synthetic coordinate space this chain describes.
  *
@@ -5365,8 +5388,11 @@ int synStart = 0, synEnd = 0;
 boolean inView = FALSE;
 char *virtChrom = NULL;
 int virtStart = 0, virtEnd = 0;
-if (startsWith(MULTI_REGION_CHROM, position) &&
-    hgParseChromRange(NULL, position, &virtChrom, &virtStart, &virtEnd) &&
+/* Exon and gene view swap a multi: position for nonVirtPosition before this runs, so
+ * read the one the request asked for. */
+char *virtPosition = (requestedVirtPosition != NULL) ? requestedVirtPosition : position;
+if (startsWith(MULTI_REGION_CHROM, virtPosition) &&
+    hgParseChromRange(NULL, virtPosition, &virtChrom, &virtStart, &virtEnd) &&
     sameString(virtChrom, MULTI_REGION_CHROM) &&
     virtEnd <= hChromSize(database, multiRegionSpaceSoleChrom(chainFile)))
     {
@@ -5427,17 +5453,41 @@ else
     else
         {
         /* Nothing of the window is in the view, which is ordinary:  the user was
-         * somewhere else when they turned multi-region on.  Land at the start of the
-         * synthetic sequence.
+         * somewhere else when they turned multi-region on, or typed a position between
+         * the regions.  Do what the virtual chromosome did:  the nearest region on the
+         * same chromosome, and failing that 10 kb from the middle of the view, with the
+         * same message.
          *
          * chromName is still the SOURCE name here, and a space holds only the sequences
          * its own regions came from, so asking hChromSize() about it would reach
-         * mustGetChromInfo() and abort:  the user would get this warning followed by a
-         * dead end.  The space has exactly one sequence;  go there. */
-        warn("%s:%d-%d is not in this multi-region view.", srcChrom, srcStart+1, srcEnd);
+         * mustGetChromInfo() and abort.  The space has exactly one sequence;  go there. */
         chromName = multiRegionSpaceSoleChrom(chainFile);
-        winStart = 0;
-        winEnd = min(10000, hChromSize(database, chromName));
+        int nearStart = 0, nearEnd = 0;
+        if (sourceToNearestSyntheticRange(chainFile, srcChrom, srcStart, srcEnd,
+                                          &nearStart, &nearEnd))
+            {
+            winStart = nearStart;
+            winEnd = nearEnd;
+            }
+        else
+            {
+            /* A view that fits in the window is shown whole, with nothing to explain
+             * (#24033:  three 1 kb regions, all on screen).  A bigger one gets the
+             * middle, and the message the virtual chromosome gave (#18006). */
+            int synSize = hChromSize(database, chromName);
+            if (synSize <= 10000)
+                {
+                winStart = 0;
+                winEnd = synSize;
+                }
+            else
+                {
+                warn("Your new regions are not near previous location. "
+                     "Using middle of new coordinates.");
+                winStart = synSize / 2 - 5000;
+                winEnd = winStart + 10000;
+                }
+            }
         }
     }
 
@@ -11202,6 +11252,15 @@ outCollectionsToJson();
 jsonObjectAdd(jsonForClient, "winStart", newJsonNumber(virtWinStart));
 jsonObjectAdd(jsonForClient, "winEnd", newJsonNumber(virtWinEnd));
 jsonObjectAdd(jsonForClient, "chromName", newJsonString(virtChromName));
+/* In a space the page names the window "multi:", which means nothing to the reader.
+ * The position line shows the source span instead, and an in-place update has to keep
+ * doing so.  refs #37788 */
+if (coordRulerUrl != NULL)
+    {
+    char *srcSpan = sourceSpanPosition(coordRulerUrl, chromName, winStart, winEnd);
+    if (srcSpan != NULL)
+        jsonObjectAdd(jsonForClient, "spaceSourcePosition", newJsonString(srcSpan));
+    }
 
 // Tell javascript about multiple windows info
 if (virtMode)
@@ -12605,6 +12664,7 @@ if (NULL == position)
 	{
 	position = stripCommas(position); // sometimes the position string arrives with commas in it.
 	positionIsVirt = TRUE;
+	requestedVirtPosition = cloneString(position);
 	}
     }
 
@@ -12650,6 +12710,28 @@ if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMost
     }
 
 lastVirtModeType = cartUsualString(cart, "lastVirtModeType", lastVirtModeType);
+
+/* A space for one alt holds only the chromosome the alt is placed on, and the alt.  A
+ * position typed on any other sequence has no place in it, so leave the alt view and go
+ * there.  On the virtual chromosome the whole genome was laid out, so the user stayed in
+ * the mode;  a space cannot hold that, it is wider than an int.  refs #37788 #17412 */
+if (multiRegionSpacesEnabled() && !positionIsVirt &&
+    sameString(virtModeType, "singleAltHaplo") && sameOk(lastVirtModeType, "singleAltHaplo"))
+    {
+    /* Only a move inside the alt already on screen.  Asking for another alt is entering
+     * a new view, and the position it arrives with is the old one. */
+    char *altId = cartUsualString(cart, "singleAltHaploId", singleAltHaploId);
+    char sameAltState[1024];
+    safef(sameAltState, sizeof sameAltState, "singleAltHaploId=%s", altId);
+    char *altChrom = NULL;
+    if (sameOk(cartOptionalString(cart, "lastVirtModeExtraState"), sameAltState))
+        altChrom = singleAltHaploPlacedOn(altId);
+    if ((altChrom != NULL) && !sameString(chromName, altChrom) && !sameString(chromName, altId))
+        {
+        virtModeType = "default";
+        cartSetString(cart, "virtModeType", virtModeType);
+        }
+    }
 
 /* A view that has been drawn before is found from the cart or from the conditions
  * table, and then the region list is never built.  That is the whole saving:  in exon
@@ -12897,7 +12979,11 @@ else
 
     }
 
-if (virtMode)
+/* A space is named "multi" on the page too.  Its one sequence is named after the source
+ * chromosome whenever every region came from it, so a link written as "chr7:7595150-..."
+ * would come back as a SOURCE position and land on another gene.  "multi:" is read as a
+ * position on the space, the way it was on the virtual chromosome.  refs #37788 */
+if (virtMode || (multiRegionSpaceForDb(database) != NULL))
     virtChromName = MULTI_REGION_CHROM;
 else
     virtChromName = displayChromName;

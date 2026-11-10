@@ -465,6 +465,68 @@ if (!gotOne)
 return TRUE;
 }
 
+boolean sourceToNearestSyntheticRange(char *chainFile, char *srcChrom, int srcStart, int srcEnd,
+                                      int *retStart, int *retEnd)
+/* For a source range that nothing in the space covers:  a window of the same width on
+ * the space, at the block from the same source sequence that comes nearest to it.  The
+ * window starts at that block's edge and runs into the block, the rule the virtual
+ * chromosome used (virtChromSearchForPosition() with findNearest).  FALSE when no block
+ * came from that sequence. */
+{
+if (chainFile == NULL || srcChrom == NULL)
+    return FALSE;
+char *synChrom = multiRegionSpaceSoleChrom(chainFile);
+if (synChrom == NULL)
+    return FALSE;
+struct baseRange *range, *nearest = NULL;
+unsigned nearestBase = 0, nearestDist = 0;
+for (range = wholeSequenceRanges(chainFile, synChrom); range != NULL; range = range->next)
+    {
+    if (!sameOk(range->chrom, srcChrom))
+        continue;
+    unsigned dist, base;
+    if (range->qStart >= (unsigned)srcEnd)
+        {
+        dist = range->qStart - srcEnd;
+        base = range->qStart;
+        }
+    else if (range->qEnd <= (unsigned)srcStart)
+        {
+        dist = srcStart - range->qEnd;
+        base = range->qEnd - 1;
+        }
+    else
+        continue;   /* overlaps:  sourceToSyntheticRange() would have found it */
+    if (nearest == NULL || dist < nearestDist)
+        {
+        nearest = range;
+        nearestDist = dist;
+        nearestBase = base;
+        }
+    }
+if (nearest == NULL)
+    return FALSE;
+unsigned lo, hi;
+rangeSrcToSyn(nearest, nearestBase, nearestBase + 1, &lo, &hi);
+int width = srcEnd - srcStart;
+int synSize = hChromSize(database, synChrom);
+int start, end;
+if (lo == nearest->start)
+    {
+    /* the block's first synthetic base:  run forward into it */
+    start = lo;
+    end = min(synSize, start + width);
+    }
+else
+    {
+    end = hi;
+    start = max(0, end - width);
+    }
+*retStart = start;
+*retEnd = end;
+return TRUE;
+}
+
 static char *sourceSpan(char *chainFile, char *chrom, int start, int end, boolean firstSeqOnly)
 /* The source-coordinate span of this window, "chrom:start+1-end".  A window that maps
  * back to more than one source sequence gives NULL, or with firstSeqOnly the span on
