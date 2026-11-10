@@ -23,6 +23,7 @@
 # same class as the known snp125-handler difference in a space.
 proof:
   - "assertion-only 2026-10-06 -- written from the ticket"
+  - "sandbox-ab 2026-11-10 -- failed at step 4 on genome-test (lifted GENCODE ignored the filter, #38735), passed on ts park 38735 with the fix"
 
 target: genome-test
 db: hg38
