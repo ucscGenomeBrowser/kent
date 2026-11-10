@@ -29,6 +29,68 @@ var geneExonExp = /^[\s]*([A-Za-z][A-Za-z0-9._-]*)[\s]+exon[\s]+([0-9]+)[\s]*$/i
 // compact exon notation: "TP53:e.5", "NM_000546:e.5+2", "BRCA2:e.10-3"
 var geneExonCoordExp = /^[\s]*([A-Za-z0-9._-]+):e\.([0-9]+)([+-][0-9]+)?[\s]*$/i;
 
+// The largest coordinate a genome position can carry: the browser stores them
+// in 32 bit signed ints, so a bigger number is not a position at all.
+var maxBedCoord = 2147483647;
+
+function bedRangeParts(spec) {
+    /* The chrom, start and end a position string names, still as text, or null
+     * when it is not shaped like a position. A single base gives start == end. */
+    if (!spec) {
+        return null;
+    }
+    var match = canonicalRangeExp.exec(spec);
+    if (match) {
+        return {chrom: match[1], start: match[2], end: match[3]};
+    }
+    match = singleBaseExp.exec(spec);
+    if (match) {
+        return {chrom: match[1], start: match[2], end: match[2]};
+    }
+    return null;
+}
+
+function bedRangeProblem(spec) {
+    /* Say why spec cannot be used as a genome position, or return null when it
+     * can. Wording is for someone typing into a position box, and names the
+     * thing that is actually wrong rather than restating the format. Whether
+     * the sequence exists is a question only the server can answer. */
+    var parts = bedRangeParts(spec);
+    var format = "Write the position as chr1:1000-2000, or chr1:1000 for a single base.";
+    if (parts === null) {
+        return format;
+    }
+    var start = parseInt(parts.start.replace(/,/g, ""), 10);
+    var end = parseInt(parts.end.replace(/,/g, ""), 10);
+    if (isNaN(start) || isNaN(end)) {
+        return format;
+    }
+    if (start > maxBedCoord || end > maxBedCoord) {
+        return "Position out of range on " + parts.chrom + ".";
+    }
+    if (start < 1) {
+        return "Positions count from base 1, so " + parts.start + " is not a start.";
+    }
+    if (end < start) {
+        return "The end has to come after the start. Swap the two numbers.";
+    }
+    return null;
+}
+
+function parseBedRange(spec) {
+    /* Read a browser position string into a BED range {chrom, start, end}, or
+     * return null when spec cannot be one. A single base is taken as a one base
+     * range, and the start comes back 0-based. bedRangeProblem says why a
+     * string was turned down. */
+    if (bedRangeProblem(spec) !== null) {
+        return null;
+    }
+    var parts = bedRangeParts(spec);
+    return {chrom: parts.chrom,
+            start: parseInt(parts.start.replace(/,/g, ""), 10) - 1,
+            end: parseInt(parts.end.replace(/,/g, ""), 10)};
+}
+
 function createInfoIcon(text) {
     /* Create an info icon (i in circle) with tooltip text.
      * Returns a span element containing the SVG icon.
