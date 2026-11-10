@@ -5,6 +5,7 @@ featureBits coverage percentages used by ottoRequestView.cgi.
 
 For every (fromDb, toDb) pair in hgcentraltest.ottoRequest, reads the
 fb.<src>.chain<Qry>Link.txt produced by the lastz/chain/net pipeline
+(lastz.<qry> link) or the minimap2 pipeline (miniMap2.<qry> link)
 and records its "(X.Y%)" value in
   /data/apache/trash/ottoRequestFeatureBitsPct.json
 keyed as "<src>\\t<qry>".  Once a pair is recorded the value never
@@ -160,13 +161,21 @@ def measurePct(src, qry, genarkAsmName):
         return None
     sub = "trackData" if "/asmHubs/" in bdir else "bed"
     Qry = qry[:1].upper() + qry[1:]
-    path = "%s/%s/lastz.%s/fb.%s.chain%sLink.txt" % (
-        bdir, sub, qry, src, Qry,
-    )
-    try:
-        with open(path) as f:
-            txt = f.read()
-    except OSError:
+    # the dateless link is lastz.<qry> for lastz/KegAlign builds and
+    # miniMap2.<qry> for minimap2 builds; same fb file name in both.
+    # lastz first, so values already recorded don't change.
+    txt = None
+    for kind in ("lastz", "miniMap2"):
+        path = "%s/%s/%s.%s/fb.%s.chain%sLink.txt" % (
+            bdir, sub, kind, qry, src, Qry,
+        )
+        try:
+            with open(path) as f:
+                txt = f.read()
+            break
+        except OSError:
+            continue
+    if txt is None:
         return None
     m = pctRegex.search(txt)
     return (m.group(1) + "%") if m else None
