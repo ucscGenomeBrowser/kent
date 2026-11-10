@@ -22,7 +22,8 @@ use warnings;
 use strict;
 use FindBin qw($Bin);
 use lib "$Bin";
-use File::Basename qw(basename);
+use File::Basename qw(basename dirname);
+use Cwd qw(abs_path);
 use HgAutomate;
 use HgRemoteScript;
 use HgStepManager;
@@ -811,15 +812,28 @@ _EOF_
     my $accessionPath = &asmIdToPath($tAccession) . "/$tAccession";
     my $accLevelDir = "$HgAutomate::clusterData/asmHubs/$accessionPath";
     my $gbdbGenarkDir = "/gbdb/genark/$accessionPath";
+    # The links inside the hub-build directory are relative, so they stay
+    # correct wherever that tree is mounted or copied.  That only works
+    # when this build sits directly in $tBuildDir/trackData/, which is
+    # always the case for the default build directory and for the -swap
+    # directory:
+    my $trackData = "$tBuildDir/trackData";
+    my $buildParent = dirname($buildDir);
+    if ((abs_path($buildParent) // $buildParent) ne
+        (abs_path($trackData) // $trackData)) {
+      die "doLoad: build directory $buildDir is not in $trackData -- " .
+	"the relative liftOver/quickLift links in $tBuildDir need it there\n";
+    }
+    my $relRunDir = "../trackData/" . basename($buildDir) . "/axtChain";
     $bossScript->add(&linkToBash());
     $bossScript->add(<<_EOF_
-# GenArk assembly: link into the hub-build directory, then the
-# accession-level convenience symlinks, then the public gbdb symlinks --
+# GenArk assembly: link into the hub-build directory (relative links), then
+# the accession-level convenience symlinks, then the public gbdb symlinks --
 # same three-tier chain installLinks() uses.
 mkdir -p $tBuildDir/liftOver $tBuildDir/quickLift
-linkTo $runDir/$liftOverChainFile $tBuildDir/liftOver/$liftOverChainFile
-linkTo $runDir/$tDb.$qDb.quick.bb $tBuildDir/quickLift/$qDb.bb
-linkTo $runDir/$tDb.$qDb.quickLink.bb $tBuildDir/quickLift/$qDb.link.bb
+linkTo $relRunDir/$liftOverChainFile $tBuildDir/liftOver/$liftOverChainFile
+linkTo $relRunDir/$tDb.$qDb.quick.bb $tBuildDir/quickLift/$qDb.bb
+linkTo $relRunDir/$tDb.$qDb.quickLink.bb $tBuildDir/quickLift/$qDb.link.bb
 
 mkdir -p $accLevelDir
 linkTo $tBuildDir/liftOver $accLevelDir/liftOver
