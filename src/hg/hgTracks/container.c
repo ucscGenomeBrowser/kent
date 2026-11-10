@@ -13,6 +13,7 @@
 #include "hgTracks.h"
 #include "errCatch.h"
 #include "container.h"
+#include "multiRegionSpace.h"
 
 
 void containerLoadItems(struct track *track)
@@ -110,7 +111,12 @@ for (subtdb = tdb->subtracks; subtdb != NULL; subtdb = subtdb->next)
     struct track *subtrack = trackFromTrackDb(subtdb);
     TrackHandler handler = lookupTrackHandlerClosestToHome(subtdb);
     if (handler != NULL)
+        {
+        if (multiRegionSpacesEnabled())
+            applyTrackHandler(subtrack, handler);
+        else
 	handler(subtrack);
+        }
     slAddHead(&track->subtracks, subtrack);
     subtrack->parent = track;
     if (subtdb->subtracks != NULL)

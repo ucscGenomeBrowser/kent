@@ -322,6 +322,9 @@ struct track
     boolean limitWiggle;       /* TRUE if this track is drawing in coverage mode because of limited visibility */
     boolean isColorBigBed;      /* True if this track is a fake track used for wiggle coloring. */
     void (*loadSummary)(struct track *tg); /* loadSumary data for bigBed etc.   */
+    void (*nameHandler)(struct track *tg); /* The handler found for the track's name that
+                                            * set its methods, or NULL if none ran. */
+    boolean nameHandlerLifts;   /* TRUE if nameHandler's loader reads through the quickLift stamp. */
     };
 
 struct window  // window in multiwindow image
@@ -442,6 +445,10 @@ struct linkedFeatures
     int qSize;				/* Query size for chain/bigChain */
     double squishyPackVal;              /* the squishyPoint value for this item. */
     struct snakeInfo *snakeInfo;           /* if we're in snake mode, here's the deets */
+    int *exonCodonBase;                 /* For a gene clipped to a multi-region space, the
+                                         * coding bases of the whole gene 5' of each exon's
+                                         * first coding base (-1 for none), so codons keep
+                                         * their numbers.  NULL otherwise. */
     };
 
 struct linkedFeaturesSeries
@@ -549,6 +556,12 @@ extern int demo2StepSize;
 
 // singleTrans (single transcript)
 extern char *singleTransId; 
+/* The track and chrom of the item singleTrans shows when it was picked from the
+ * right-click menu ("Make this my coordinate system").  refs #37788 */
+#define SINGLE_TRANS_TABLE_VAR "singleTransTable"
+#define SINGLE_TRANS_CHROM_VAR "singleTransChrom"
+/* When on, only the coding part of each exon goes into the view. */
+#define SINGLE_TRANS_CDS_VAR "singleTransCds"
 
 // singleAltHaplos (one alternate haplotype)
 extern char *singleAltHaploId; 
@@ -578,6 +591,10 @@ extern struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
 extern char *displayChromName;	  /* Name of chromosome sequence to display . */
 extern char *database;	  /* Name of database we're using. */
+
+extern char *coordRulerUrl;  /* Set by installMultiRegionSpace():  the chain mapping a
+                              * multi-region space back to its source assembly.  NULL
+                              * outside a space.  refs #37788 */
 extern char *organism;	  /* Name of organism we're working on. */
 extern char *browserName;              /* Test or public browser */
 extern char *organization;             /* UCSC or MGC */
@@ -985,6 +1002,16 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
+void loadLinkedFeaturesWithLoadersLift(struct track *tg, struct slList *(*itemLoader)(char **row),
+				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
+				   char *scoreColumn, char *moreWhere,
+                                   boolean (*itemFilter)(struct slList *item),
+                                   void (*liftAdjust)(void *item, boolean flipped,
+                                                      int clippedStart));
+/* loadLinkedFeaturesWithLoaders() as it works with multiRegionSpaces on.  A quickLifted */
+/* track places each item whole (see quickLiftSqlLoadItems) and then calls liftAdjust, */
+/* if not NULL, to fix up the rest of the item.  refs #37788 */
+
 struct paraFetchData;
 void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary);
 /* Find leaves of track tree that are remote network resources for parallel-fetch loading, and
@@ -1164,8 +1191,14 @@ void contigMethods(struct track *tg);
 void goldMethods(struct track *tg);
 /* Make track for golden path (assembly track). */
 
+boolean goldIsLoader(void (*loadItems)(struct track *tg));
+/* Is loadItems the golden path loader?  refs #37788 */
+
 void cgapSageMethods(struct track *tg);
 /* Make CGAP SAGE track. */
+
+void cgapSageLoadItems(struct track *tg);
+/* Load the CGAP SAGE tags in the window into a linkedFeatures list. */
 
 #define CGAP_SAGE_DENSE_GOVERNOR 3000000
 /* Size of browser window to dense the CGAP SAGE track at. */
@@ -1178,6 +1211,9 @@ void cytoBandIdeoMethods(struct track *tg);
 
 void cytoBandMethods(struct track *tg);
 /* Make track for simple repeats. */
+
+boolean cytoBandsIsLoader(void (*loadItems)(struct track *tg));
+/* Is loadItems the cytoBand loader?  refs #37788 */
 
 #ifdef USE_HAL
 void halSnakeMethods(struct track *track, struct trackDb *tdb,
@@ -1363,6 +1399,9 @@ int wigTotalHeight(struct track *tg, enum trackVisibility vis);
 
 void rnaSecStrMethods(struct track *tg);
 /* Make track which visualizes RNA secondary structure annotation. */
+
+void loadRnaSecStr(struct track *tg);
+/* Load up rnaSecStr from database table to track items. */
 
 void sampleMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
 /* Load up methods for a generic sample type track. */
@@ -1728,6 +1767,16 @@ TrackHandler lookupTrackHandlerClosestToHome(struct trackDb *tdb);
 /* Lookup handler for track of give name.  Try parents if
  * subtrack has a NULL handler.  Return NULL if none. */
 
+boolean liftedInSpace(struct track *tg);
+/* Is this track lifted into a multi-region space? */
+
+boolean applyTrackHandler(struct track *track, TrackHandler handler);
+/* Run the name handler on track and remember it, so that a multi-region space can run
+ * it again once the track is stamped.  Return FALSE if the handler was left out. */
+
+boolean trackHandlerOkInSpace(struct track *track);
+/* Can the name handler that set this track's methods be trusted in a multi-region space? */
+
 void registerTrackHandlers();
 /* Register tracks that include some non-standard methods. */
 
@@ -1799,6 +1848,9 @@ void messageLineMethods(struct track *track);
 void rmskJoinedMethods(struct track *track);
 /* construct track for detailed repeat visualization */
 
+boolean rmskJoinedIsLoader(void (*loadItems)(struct track *tg));
+/* Is loadItems the rmskJoined loader?  refs #37788 */
+
 void lrgMethods(struct track *tg);
 /* Locus Reference Genomic (bigBed 12 +) handlers. */
 
@@ -1824,6 +1876,59 @@ void instaPortMethods(struct track *track, struct trackDb *tdb,
 void bigBaseViewMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* bigBaseView track type methods */
+
+struct baseRange;
+
+struct baseRange *loadBaseRangesFromChain(char *chainFile, char *chrom, int start, int end);
+
+char *sourceChromForWindow(char *chainFile, char *chrom, int start, int end);
+/* The source sequence this window maps back to, or NULL when it spans more than one. */
+
+boolean sourceToSyntheticRange(char *chainFile, char *srcChrom, int srcStart, int srcEnd,
+                               char **retChrom, int *retStart, int *retEnd);
+/* Map a source-coordinate range onto this synthetic assembly, FALSE if nothing
+ * covers it.  The inverse of sourceSpanPosition(). */
+
+char *sourceSpanPosition(char *chainFile, char *chrom, int start, int end);
+/* The source-coordinate span of this window, "chrom:start+1-end", or NULL when it
+ * maps back to more than one source sequence.  The counterpart of
+ * windowsSpanPosition() for a synthetic assembly. */
+
+char *sourceFirstSeqPosition(char *chainFile, char *chrom, int start, int end);
+/* The source-coordinate span of this window on the first source sequence it shows, or
+ * NULL when it shows none.  The counterpart of nonVirtPositionFromWindows(). */
+
+void drawSourceRangeSeparators(struct hvGfx *hvg, char *chainFile, char *chrom,
+                               int start, int end, int insideX, int width, int height,
+                               boolean altShade);
+/* Draw a light red vertical line at each boundary between two source ranges, the same
+ * separator multi-region view puts between its windows.  With altShade, shade every
+ * other region light blue instead. */
+
+boolean syntheticToSourceRange(char *chainFile, char *chrom, int start, int end,
+                               char **retChrom, int *retStart, int *retEnd);
+/* Map a synthetic range back to the source.  FALSE when no block covers it or it
+ * reaches more than one source sequence.  An empty range, as an insertion has, is
+ * mapped at its position. */
+
+void multiRegionSpaceLinkPosition(char **pChrom, int *pWinStart, int *pWinEnd,
+                                  int *pStart, int *pEnd);
+/* In a multi-region space, rewrite the chrom, window and item coordinates a details link
+ * carries into source coordinates, so hgc is asked about the item where it really is.
+ * hgc knows nothing of spaces:  given the synthetic sequence it rejects the request
+ * before any track's handler runs.  Leaves everything alone outside a space, and when
+ * the item does not map back to exactly one source sequence. */
+
+void mapSourceRangePositions(struct imgTrack *imgTrack, char *chainFile, char *chrom,
+                             int start, int end, int insideX, int width, int y1, int y2);
+/* Put a map box over the ruler for each source range in the window, whose mouseover is
+ * the source position of the part on screen. */
+/* Open a baseView bigBed by url and return source-coordinate ranges overlapping
+ * [start,end).  Used to drive the main base position ruler in source coords. */
+
+void drawSourceCoordRuler(struct hvGfx *hvg, struct baseRange *rangeList,
+                          int seqStart, int seqEnd, int yOff, int rulerHeight, MgFont *font);
+/* Draw a ruler numbering in source coordinates, using a baseView range list. */
 
 void lollyMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);

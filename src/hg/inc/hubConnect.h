@@ -234,4 +234,10 @@ boolean hubConnectIdIsCuratedHub(char *db, unsigned hubId);
 /* Return TRUE if the hub with this hubStatus id is a curated copy of the assembly
  * hub for db.  Only reads the hub's URL, never fetches the hub. */
 
+void quickLiftAssignChainOne(struct trackDb *tdb, char *quickLiftChain, char *db);
+/* Give ONE track the quickLiftUrl/quickLiftDb pair that makes it lift through this
+ * chain.  A quickLift hub stamps every track, subtrack and parent;  this is for a
+ * caller that has already decided which tracks it wants lifted, such as a synthetic
+ * multi-region coordinate space, which stamps the NATIVE trackDb.  refs #37788 */
+
 #endif /* HUBCONNECT_H */

@@ -2134,6 +2134,11 @@ var dragSelect = {
         var currDb = getDb();
         if (hgTracks.highlight) {
             var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
+            // Same list the drawer used, so the index it returns indexes hgTracks.highlight
+            // too:  highlightSpace is one entry per cart entry, in cart order.  The server
+            // sends it only in a multi-region space.  refs #37788
+            if (hgTracks.highlightSpace)
+                hlArray = hgTracks.highlightSpace.split("|");
             for (var i = 0; i < hlArray.length; i++) {
                 hlString = hlArray[i];
                 pos = parsePositionWithDb(hlString);
@@ -3648,6 +3653,15 @@ var rightClick = {
                         }
                     }
                 }
+        } else if (cmd === 'itemCoordSystem') {
+            // A full page load:  the whole view changes, not just the image.  refs #37788
+            jQuery('body').css('cursor', 'wait');
+            window.location.assign("../cgi-bin/hgTracks?" +
+                cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
+                                     'virtModeType': 'singleTrans', 'singleTransId': args.name,
+                                     'singleTransTable': args.table,
+                                     'singleTransChrom': args.chrom,
+                                     'singleTransCds': args.cds }));
         } else if (cmd === 'zoomCodon' || cmd === 'zoomExon') {
             var num, ajaxCmd, msg;
             if (cmd === 'zoomCodon') {
@@ -4675,6 +4689,24 @@ var rightClick = {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                             "zoomExon",
                                                             {name: name, table: table, 'chrom': chrom});
+                                                return true;}
+                                        };
+                                    }
+                                    // Make this item's exons a multi-region space, whether or
+                                    // not the view is already in one.  refs #37788
+                                    if (hgTracks.multiRegionSpaces) {
+                                        o[rightClick.makeImgTag("magnify.png")+" Make this my coordinate system"] =
+                                        {   onclick: function(menuItemClicked, menuObject) {
+                                                rightClick.hit(menuItemClicked, menuObject,
+                                                            "itemCoordSystem",
+                                                            {name: name, table: table, 'chrom': chrom, cds: 0});
+                                                return true;}
+                                        };
+                                        o[rightClick.makeImgTag("magnify.png")+" Make this my coordinate system (coding exons only)"] =
+                                        {   onclick: function(menuItemClicked, menuObject) {
+                                                rightClick.hit(menuItemClicked, menuObject,
+                                                            "itemCoordSystem",
+                                                            {name: name, table: table, 'chrom': chrom, cds: 1});
                                                 return true;}
                                         };
                                     }
@@ -6719,6 +6751,13 @@ var imageV2 = {
 
         if (hgTracks.highlight) {
             var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
+            // In a multi-region space the cart holds SOURCE coordinates and the image is
+            // synthetic, so the server sends the same list mapped, entry for entry, as
+            // highlightSpace.  Draw from that; every edit path below still works on
+            // hgTracks.highlight, so what gets written back stays in source coordinates.
+            // refs #37788
+            if (hgTracks.highlightSpace)
+                hlArray = hgTracks.highlightSpace.split("|");
             for (var i = 0; i < hlArray.length; i++) {
                 hlString = hlArray[i];
                 pos = parsePositionWithDb(hlString);

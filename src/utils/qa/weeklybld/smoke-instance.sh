@@ -20,6 +20,10 @@
 #     A release instance names its own version, so kent-v503 is checked against
 #     v503 with no --version needed. refs #38377
 #
+# Before the checks it waits up to SMOKE_READY_WAIT seconds (default 180) for
+# the gateway to serve a clean page, since a just-restarted container returns
+# error pages until its MariaDB is up.
+#
 # Exit status is 0 only if every check on every instance passed. refs #37655
 #
 set -u
@@ -53,6 +57,8 @@ port_of() {
 
 # generous timeout: the arm64 instance runs emulated (QEMU) and is slow.
 CURL="curl -s -m 90"
+# seconds to wait for a freshly started instance to serve a clean gateway page
+READY_WAIT="${SMOKE_READY_WAIT:-180}"
 overall=0
 
 # check <label> <url> <positive-grep-ERE> [min-bytes]
@@ -113,7 +119,29 @@ for name in "${instances[@]}"; do
     fi
     printf '    ok    %-16s running\n' "container"
 
-    check gateway    "$base/cgi-bin/hgGateway"                                "Genome Browser Gateway"
+    # A container that was just (re)started answers HTTP before MariaDB inside
+    # it is up, so every CGI returns an HGERROR page for a while.  The emulated
+    # arm64 one takes longest: v506's smoke ran 2 s after refresh-beta-arm64 and
+    # failed every check, then passed on a re-run.  So wait for the gateway to
+    # serve a clean page first.  A healthy instance passes on the first try; one
+    # still not ready after the wait falls through to the checks, which report
+    # what is wrong.
+    waited=0
+    while (( waited < READY_WAIT )); do
+        page="$($CURL "$base/cgi-bin/hgGateway" 2>/dev/null)"
+        if grep -q "Genome Browser Gateway" <<<"$page" \
+           && ! grep -qE 'HGERROR-START|Very Early Error' <<<"$page"; then
+            break
+        fi
+        sleep 5; waited=$(( waited + 5 ))
+    done
+    if (( waited >= READY_WAIT )); then
+        printf '    WARN  %-16s gateway still not ready after %ss\n' "ready" "$READY_WAIT"
+    elif (( waited > 0 )); then
+        printf '    ok    %-16s gateway ready after %ss\n' "ready" "$waited"
+    fi
+
+    check gateway   "$base/cgi-bin/hgGateway"                                "Genome Browser Gateway"
     # full render: real drawn image (hgt/hgt_*.png) + a known track from the DB
     check hgTracks-hg38 "$base/cgi-bin/hgTracks?db=hg38&pix=1200&hgt.reset=1" "hgt/hgt_[a-z0-9_]+\.png" 50000
     check hgTracks-hg38-trk "$base/cgi-bin/hgTracks?db=hg38&pix=1200"         "side_knownGene|side_ncbiRefSeq" 50000

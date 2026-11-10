@@ -79,6 +79,8 @@ quickLiftTest: ${BIN_DIR}/quickLiftTester mkdirs
 	        input/quickLift/lift.bb input/quickLift/items.bb > output/quickLiftIntervals.$$g \
 	        && diff expected/quickLiftIntervals.$$g output/quickLiftIntervals.$$g || exit 1; \
 	done
+	HGDB_CONF=input/quickLift/snap.hg.conf ${BIN_DIR}/quickLiftTester snap > output/quickLiftSnap
+	diff expected/quickLiftSnap output/quickLiftSnap
 
 quickLiftJoinedTest: ${BIN_DIR}/quickLiftJoinedTester mkdirs
 	${BIN_DIR}/quickLiftJoinedTester input/quickLift/joined.chain > output/quickLiftJoinedTest

@@ -336,7 +336,10 @@ else
     *splitTableName = sqlTableName;	/* return to caller */
     }
 
-if (! sqlTableExists(conn, sqlTableName))
+/* MySQL table names are limited to 64 characters, a longer name can not
+ * be a table, and sqlTableExists() would errAbort on it
+ */
+if (strlen(sqlTableName) > 64 || ! sqlTableExists(conn, sqlTableName))
     returnChrom = NULL;
 /* may need to extend this in the future for other track types */
 else if (sqlColumnExists(conn, sqlTableName, "chrom"))	/* standard bed tables */
@@ -501,7 +504,8 @@ char *bigDataUrl = NULL;
 char query[4096];
 char quickReturn[2048];
 
-if (sqlColumnExists(conn, table, "fileName"))
+/* MySQL table names are limited to 64 characters */
+if (strlen(table) <= 64 && sqlColumnExists(conn, table, "fileName"))
     {
     sqlSafef(query, sizeof(query), "select fileName from %s", table);
     if (sqlQuickQuery(conn, query, quickReturn, sizeof(quickReturn)))

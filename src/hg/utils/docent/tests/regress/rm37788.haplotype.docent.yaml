@@ -1,0 +1,42 @@
+# #37788 -- Example 5, Haplotype: chr1_KI270762v1_alt drawn in place on hg38 chr1.
+#
+# One of five scripts, one per example on multiRegionHelp.html, so that each example can
+# be timed and pixel-compared on its own between genome-test and a build of the
+# multiviewQuickLift branch.  Each loads the help page's own session file from
+# genome.ucsc.edu, which is the link a user clicks on that page, and asserts what the
+# example's text says the user will see.
+#
+# The checks are the region boxes and the gene names, not the full list of rows.  On the
+# branch a multi-region view is a synthetic assembly, and it hides tracks that quickLift
+# cannot carry (rmsk, phyloP100way and others), so `exact: true` would fail there for a
+# reason this script does not watch.  Each region of the view gets a map box whose
+# data-tooltip is its source range, so `area[data-tooltip="chrN:a-b"]` is present only
+# when that region really is in the view.  noText is the warning the branch prints when
+# a saved position cannot be placed in the view.
+#
+# The branch needs `multiRegionSpaces=on` in hg.conf.  With it off the branch takes the
+# old virtual-chromosome path, and the script then tests that path instead.
+#
+# The session stores `position virt:2094367-3157698`.  Before the 2026-10-06 fix the
+# branch could not place it, warned "(null):1-0 is not in this multi-region view." and
+# landed on chr1:1-10000, with no knownGene item and no alt.  See rm37788.bed3.
+proof:
+  - "sandbox-ab 2026-10-06 -- fails on demo6 at a41191def6b (the (null) warning), passes on demo6 with the virt: position fix in installMultiRegionSpace()"
+  - "assertion-only 2026-10-06 -- written from multiRegionHelp.html; passes on genome-test, not yet watched to fail for its own reason"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - loadSession: https://genome.ucsc.edu/goldenPath/help/examples/sessions/haplotypeSession.txt
+  - expect:
+      rows: [ruler, knownGene]
+      noText: "is not in this multi-region view"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr1:2094367-2448810"]'
+        - 'area[data-tooltip="chr1_KI270762v1_alt:1-354444"]'
+        - 'area[data-tooltip="chr1:2791271-3145714"]'
+  - shot: haplotype
