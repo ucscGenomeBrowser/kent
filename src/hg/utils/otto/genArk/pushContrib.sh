@@ -11,13 +11,13 @@
 ###   1. find the accessions with /contrib/<contribName>/ files in the
 ###      daily hgwdev listing dev.todayList.gz
 ###   2. check the release lists in the otto kent tree:
-###        beta:   contribName must already be in betaGenArk.txt
+###        beta:   contribName is added to betaGenArk.txt when it is not
+###                already there
 ###        public: contribName must be in publicGenArk.txt; when it is
-###                only in betaGenArk.txt it is added to publicGenArk.txt,
-###                committed with 'refs #<redmine>' and pushed to origin.
-###                The push must happen before step 3, since
-###                ottoBuildGenArkHub.py resets the otto kent tree to
-###                origin/master.
+###                only in betaGenArk.txt it is added to publicGenArk.txt
+###      A name added to a list is committed with 'refs #<redmine>' and
+###      pushed to origin.  The push must happen before step 3, since
+###      ottoBuildGenArkHub.py resets the otto kent tree to origin/master.
 ###   3. ottoBuildGenArkHub.py rebuilds trackDb.txt, hub.txt,
 ###      beta.hub.txt and public.hub.txt for those accessions
 ###   4. pushAccessions.sh pushes them (with -rr for 'public'); by default
@@ -42,7 +42,8 @@ fi
 function usage() {
   cat <<EOF 1>&2
 usage: $(basename "$0") [-fullPush] [-verbose] <contribName> <redmine #> <beta|public>
-  beta      : push to hgwbeta, contribName must be in betaGenArk.txt
+  beta      : push to hgwbeta, contribName is added to betaGenArk.txt
+              when not already there
   public    : push to hgwbeta and the RR machines, contribName is
               added to publicGenArk.txt when only in betaGenArk.txt
   -fullPush : push the whole assembly directories, not only
@@ -162,33 +163,44 @@ function inList() {
   grep -s -q -x -F -- "${1}" "${2}"
 }
 
+##############################################################################
+### addToList <listName> <tier> - add contribName to
+###   ${listDir}/<listName> in the otto kent tree, commit it with
+###   'refs #<redmine>' and push it to origin
+##############################################################################
+function addToList() {
+  local listName="${1}"
+  local tier="${2}"
+  local listFile="${ottoKentTree}/${listDir}/${listName}"
+  printf "### adding '%s' to %s refs #%s\n" "${contribName}" "${listFile}" "${redmineNumber}" 1>&2
+  # make sure the new name starts on its own line
+  if [ -s "${listFile}" ] && [ -n "$(tail -c 1 "${listFile}")" ]; then
+    printf "\n" >> "${listFile}"
+  fi
+  printf "%s\n" "${contribName}" >> "${listFile}"
+  git -C "${ottoKentTree}" add -- "${listDir}/${listName}"
+  git -C "${ottoKentTree}" commit \
+    -m "${contribName} GenArk contrib tracks released to ${tier} refs #${redmineNumber}" \
+    -- "${listDir}/${listName}"
+  if ! git -C "${ottoKentTree}" push origin master; then
+    printf "ERROR: git push of %s failed in %s\n" "${listName}" "${ottoKentTree}" 1>&2
+    printf "  ottoBuildGenArkHub.py would reset the tree and lose the commit, not continuing\n" 1>&2
+    exit 255
+  fi
+}
+
 git -C "${ottoKentTree}" pull --ff-only
 
 if [ "${releaseTier}" = "beta" ]; then
   if ! inList "${contribName}" "${betaGenArkList}"; then
-    printf "ERROR: '%s' is not in %s\n" "${contribName}" "${betaGenArkList}" 1>&2
-    exit 255
+    addToList "betaGenArk.txt" "beta"
   fi
 elif ! inList "${contribName}" "${publicGenArkList}"; then
   if ! inList "${contribName}" "${betaGenArkList}"; then
     printf "ERROR: '%s' is in neither %s nor %s\n" "${contribName}" "${publicGenArkList}" "${betaGenArkList}" 1>&2
     exit 255
   fi
-  printf "### adding '%s' to %s refs #%s\n" "${contribName}" "${publicGenArkList}" "${redmineNumber}" 1>&2
-  # make sure the new name starts on its own line
-  if [ -s "${publicGenArkList}" ] && [ -n "$(tail -c 1 "${publicGenArkList}")" ]; then
-    printf "\n" >> "${publicGenArkList}"
-  fi
-  printf "%s\n" "${contribName}" >> "${publicGenArkList}"
-  git -C "${ottoKentTree}" add -- "${listDir}/publicGenArk.txt"
-  git -C "${ottoKentTree}" commit \
-    -m "${contribName} GenArk contrib tracks released to public refs #${redmineNumber}" \
-    -- "${listDir}/publicGenArk.txt"
-  if ! git -C "${ottoKentTree}" push origin master; then
-    printf "ERROR: git push of publicGenArk.txt failed in %s\n" "${ottoKentTree}" 1>&2
-    printf "  ottoBuildGenArkHub.py would reset the tree and lose the commit, not continuing\n" 1>&2
-    exit 255
-  fi
+  addToList "publicGenArk.txt" "public"
 fi
 
 ##############################################################################
