@@ -17,8 +17,9 @@ Each entry may be either the bare 'GCA_000001405.15' or the full
 the asmName is looked up in the hgcentraltest.genark table along
 with the clade.
 
-This script shares the ottoRequestPush.lock with the live cron, so a
-manual run will exit non-zero if the cron is currently building.
+This script shares ottoLib.buildLockPath with the ottoRequestPush.py
+cron, so a manual run will exit non-zero if the cron is currently
+building.  Installed in /cluster/bin/scripts/ for everyone to use.
 """
 
 import argparse
@@ -27,10 +28,11 @@ import sys
 
 import ottoLib
 
-scriptDir = os.path.dirname(os.path.abspath(__file__))
-lockPath = os.path.join(scriptDir, "ottoRequestPush.lock")
-# match ottoRequestWatch.sh's log location for doTrackDb output
-doTdbLog = os.path.join(scriptDir, "doTdb.log")
+lockPath = ottoLib.buildLockPath
+# doTrackDb output, next to the otto kent tree where every user can
+# append to it (not next to this script, which is installed in
+# /cluster/bin/scripts/)
+doTdbLog = os.path.join(os.path.dirname(ottoLib.kentTree), "doTdb.log")
 
 
 def parseAccession(arg):

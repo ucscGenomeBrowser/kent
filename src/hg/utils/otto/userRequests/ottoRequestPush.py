@@ -24,10 +24,10 @@ import atexit
 
 import ottoLib
 
-scriptDir = os.path.dirname(os.path.abspath(__file__))
-# share the live cron's lock so the two scripts cannot run concurrently
-# in the same cladeAsmHub directories
-lockPath = os.path.join(scriptDir, "ottoRequestPush.lock")
+# the one lock for the clade make chain in the otto kent tree, shared with
+# ottoBuildGenArkHub.py (and so pushContrib.sh) whoever runs them, so they
+# cannot run concurrently in the same cladeAsmHub directories
+lockPath = ottoLib.buildLockPath
 
 # UCSC native .over.chain.gz files get rsync'd to both hgdownload hosts.
 pushUser = "qateam"

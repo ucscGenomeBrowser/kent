@@ -28,6 +28,9 @@
 #############################################################################
 
 set -beEu -o pipefail
+# several users share the otto kent tree this writes into (git pull,
+# publicGenArk.txt commit), keep what is left there group-writable
+umask 002
 
 export expectHost="hgwdev"
 export hostName=$(hostname -s)
@@ -93,7 +96,9 @@ export devTodayList="/hive/data/inside/GenArk/pushRR/dev.todayList.gz"
 export ottoBuild="/cluster/bin/scripts/ottoBuildGenArkHub.py"
 export scriptDir=$(dirname "$(readlink -f "$0")")
 export pushAccessions="${scriptDir}/pushAccessions.sh"
-export ottoBuildLock="/cluster/bin/scripts/ottoRequestPush.lock"
+# the one clade make chain lock, ottoLib.buildLockPath, held by
+# ottoBuildGenArkHub.py and the ottoRequestPush.py cron
+export ottoBuildLock="/dev/shm/ottoGenArkBuild.lock"
 # shared with pushAccessions.sh; on local disk, since flock on an NFS file
 # is emulated with per-process POSIX locks and a child process could not
 # share the lock this script holds
