@@ -4,6 +4,10 @@ kentSrc = ../../../..
 # own directory, and ottoBuildGenArkHub.py from /cluster/bin/scripts,
 # which is installed by the makefile in ../userRequests/
 
+# always /cluster/bin/scripts, where everyone runs these from; set before
+# common.mk, which only defaults an empty SCRIPTS
+SCRIPTS = /cluster/bin/scripts
+
 include ../../../../inc/common.mk
 
 SCRIPT_FILES = \
