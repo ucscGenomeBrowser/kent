@@ -32,9 +32,13 @@
 # drawn in the custom-regions view, with "has bad slice".  hgwdev-demo6
 # (multiRegionSpaces=on) fails too, worse: neither rmskJoined row is drawn.  The 50 kb
 # regions of the first draft pass on both.  So the file is named .xfail.
+#
+# Since 2026-11-10 this passes on genome-test, which draws multi-region views as a
+# synthetic assembly (multiRegionSpaces=on, #37788).  With that gate off it fails again.
 proof:
   - "assertion-only 2026-10-06 -- written from the ticket"
   - "xfail 2026-10-06 -- genome-test (v504) drops rmskJoinedBaseline from a custom-regions view of four 500 bp regions with has bad slice; hgwdev-demo6 drops both rmskJoined rows"
+  - "server-flip 2026-11-10 -- passes on genome-test since #37788 (2f2540a3596) was pushed and installed there (cgi-alpha 2026-11-09 13:02) with multiRegionSpaces=on in its hg.conf, having failed there as an xfail on 2026-11-09"
 
 target: genome-test
 db: hg38

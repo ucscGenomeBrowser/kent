@@ -16,9 +16,13 @@
 # source range, so the check is that all three boxes are present.  noText is the
 # redirect message.  The ticket quoted it from memory as "not near your current
 # position"; the server says "Your new regions are not near previous location."
+#
+# Since 2026-11-10 this passes on genome-test, which draws multi-region views as a
+# synthetic assembly (multiRegionSpaces=on, #37788).  With that gate off it fails again.
 proof:
   - "assertion-only 2026-10-06 -- written from the ticket"
   - "xfail 2026-10-06 -- fails on genome-test: only chr3:4001-5000 is in view, with the not-near-previous-location warning; passes on hgwdev-demo6 (multiRegionSpaces=on)"
+  - "server-flip 2026-11-10 -- passes on genome-test since #37788 (2f2540a3596) was pushed and installed there (cgi-alpha 2026-11-09 13:02) with multiRegionSpaces=on in its hg.conf, having failed there as an xfail on 2026-11-09; on park 37788 it also passes with 2393bef55a8, which shows a custom-regions view of 10 kb or less whole"
 
 target: genome-test
 db: hg38
