@@ -25,6 +25,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "hgConfig.h"
+#include "myVariants.h"
 #include "jsHelper.h"
 
 
@@ -312,11 +313,11 @@ for (name = nameList; name != NULL; name = name->next)
         }
     if (tdb != NULL)
 	if ((curTrack == NULL) || differentWord(tdb->shortLabel, curTrack->shortLabel))
-	    hPrintf(">%s (%s)", htmlEncode(tdb->shortLabel), name->name);
+	    hPrintf(">%s (%s)", htmlEncode(tdb->shortLabel), htmlEncode(name->name));
 	else
-	    hPrintf(">%s", name->name);
+	    hPrintf(">%s", htmlEncode(name->name));
     else
-	hPrintf(">%s", name->name);
+	hPrintf(">%s", htmlEncode(name->name));
     hPrintf("</OPTION>\n");
     }
 hPrintf("</SELECT>\n");
@@ -966,7 +967,7 @@ if (correlateTrackTableOK(tdb, curTable))
         cgiMakeButton(hgtaDoCorrelatePage, "Calculate");
         cgiMakeButton(hgtaDoClearCorrelate, "Clear");
         if (tdb2 && tdb2->shortLabel)
-            hPrintf("&nbsp;(with:&nbsp;&nbsp;%s)", tdb2->shortLabel);
+            hPrintf("&nbsp;(with:&nbsp;&nbsp;%s)", htmlEncode(tdb2->shortLabel));
 
 #ifdef NOT_YET
         /* debugging 	dbg	vvvvv	*/
@@ -1037,7 +1038,7 @@ hPrintf("</TABLE>\n");
 	extern char *maxOutMenu[];
 	char *maxOutput = maxOutMenu[0];
 
-	if (isCustomTrack(curTable))
+	if (isCustomTrack(curTable) || isMyVariantsTrack(curTable))
 	    name=filterFieldVarName("ct", curTable, "_", filterMaxOutputVar);
 	else
 	    name=filterFieldVarName(database,curTable, "_",filterMaxOutputVar);

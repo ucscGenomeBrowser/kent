@@ -231,7 +231,6 @@ static char *fileNameCartVars[] =
 static char *fileNameCartVarPrefixes[] =
 {
     CT_FILE_VAR_PREFIX,                 // ctfile_<db>, ctfile_hub_<id>: custom tracks
-    MYVARIANTS_FILE_VAR_PREFIX,         // mvCtfile_<db>: myVariants custom track
     customCompositeCartName "-",        // customComposite-<db>: track collection hub
     quickLiftCartName "-",              // hubQuickLift-<db>: quickLift hub
 };

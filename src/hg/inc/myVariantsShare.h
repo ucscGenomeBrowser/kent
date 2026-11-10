@@ -6,43 +6,26 @@
 #define MYVARIANTSSHARE_H
 
 #include "jksql.h"
-#define MYVARIANTSSHARE_NUM_COLS 9
-#define MYVAR_TOKEN_LENGTH 48
+
+#define MYVARIANTSSHARE_NUM_COLS 6
 
 extern char *myVariantsShareCommaSepFieldNames;
 
 struct myVariantsShare
-/* A share record linking an owner's myVariants project to a recipient. */
+/* A share link giving anyone who holds it access to one My Annotations project. */
     {
     struct myVariantsShare *next;  /* Next in singly linked list. */
     unsigned id;	/* Auto-increment primary key */
-    char *ownerUser;	/* Owner who created the share */
-    char *shareToken;	/* 48-char URL-safe token */
-    char *project;	/* Project name, or * for all */
-    char *db;	/* Assembly (hg38, mm39, etc.) */
-    unsigned char permission;	/* 0=read-only, 1=read-write */
-    char *targetUser;	/* Specific user, or NULL for anyone with link */
-    char *label;	/* Optional human-readable label */
+    char *ownerUser;	/* Login of the project's owner */
+    char *shareToken;	/* 48-char URL-safe token; holding it is what grants access */
+    unsigned projectId;	/* myVariantsProjects.id of the shared project */
+    unsigned char permission;	/* 0=view, 1=edit */
     char *createdAt;	/* Timestamp of creation */
     };
 
 void myVariantsShareStaticLoad(char **row, struct myVariantsShare *ret);
 /* Load a row from myVariantsShare table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
-
-struct myVariantsShare *myVariantsShareLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all myVariantsShare from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with myVariantsShareFreeList(). */
-
-void myVariantsShareSaveToDb(struct sqlConnection *conn, struct myVariantsShare *el, char *tableName, int updateSize);
-/* Save myVariantsShare as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct myVariantsShare *myVariantsShareLoad(char **row);
 /* Load a myVariantsShare from row fetched with select * from myVariantsShare
@@ -83,55 +66,78 @@ void myVariantsShareOutput(struct myVariantsShare *el, FILE *f, char sep, char l
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+/* Share links live in hgcentral.  One row per project: a project has at most
+ * one link, and the owner flips that link between view and edit rather than
+ * handing out a second one.  Holding the token is what grants access; there is
+ * no recipient list. */
+#define MYVARIANTS_SHARE_TABLE "myVariantsShares"
+#define MYVAR_TOKEN_LENGTH 48
+
 #define MYVAR_PERM_READONLY   0
 #define MYVAR_PERM_READWRITE  1
 
+boolean myVariantsIsShareToken(char *token);
+/* TRUE if token has the length and the characters makeRandomKey produces.  A
+ * token reaches us as part of a cart variable name, which anyone can set to
+ * anything, so check it before it is copied into a buffer or a query. */
+
+struct myVariantsShare *myVariantsShareLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all myVariantsShare from table that satisfy the query given.
+ * Dispose of this with myVariantsShareFreeList(). */
+
+struct myVariantsShare *myVariantsGetShareForProject(struct sqlConnection *conn,
+    unsigned projectId);
+/* Return the share on this project, or NULL if it has never been shared.  A
+ * project has at most one share; the unique key on projectId is what enforces
+ * that. */
+
 struct myVariantsShare *myVariantsCreateShare(struct sqlConnection *conn,
-    char *ownerUser, char *project, char *db, int permission,
-    char *targetUser, char *label);
-/* Create a new share record. Returns the share with token and id filled in.
- * Free with myVariantsShareFree. */
+    char *ownerUser, unsigned projectId, int permission);
+/* Create the share link for a project, or return the one it already has with
+ * its permission set to the one asked for.  One link per project, so a second
+ * call does not mint a second token: the owner flips the permission on the
+ * link they already handed out.  Returns NULL on a bad permission.  Free with
+ * myVariantsShareFree. */
 
 struct myVariantsShare *myVariantsGetShareByToken(struct sqlConnection *conn,
     char *token);
-/* Look up a single share by token. Returns NULL if not found. */
+/* Look up a single share by token. Returns NULL if not found or token is malformed. */
 
 struct myVariantsShare *myVariantsGetSharesForOwner(struct sqlConnection *conn,
-    char *ownerUser, char *db);
-/* Get all shares created by this user for the given assembly. */
-
-struct myVariantsShare *myVariantsGetSharesForUser(struct sqlConnection *conn,
-    char *targetUser, char *db);
-/* Get all shares targeted at this user for the given assembly. */
+    char *ownerUser);
+/* Get every share this user has created, newest first.  A share covers its
+ * project on every assembly the project has annotations on, so there is
+ * nothing to filter by assembly.  A share the owner cannot see is a share the
+ * owner cannot revoke, so this lists all of them. */
 
 boolean myVariantsRevokeShare(struct sqlConnection *conn,
     char *shareToken, char *ownerUser);
 /* Delete a share record. ownerUser must match the share's owner.
  * Returns TRUE if a row was deleted, FALSE if not found or not owner. */
 
+boolean myVariantsRevokeSharesForProject(struct sqlConnection *conn,
+    unsigned projectId, char *ownerUser);
+/* Delete the share on a project, if it has one.  ownerUser must match.
+ * Returns TRUE if a row was deleted.  Called when a project is deleted, so
+ * the link stops working with the project it pointed at. */
+
 boolean myVariantsSetSharePermission(struct sqlConnection *conn,
     char *shareToken, char *ownerUser, int permission);
-/* Update a share's permission (0=read-only, 1=read-write). ownerUser must
- * match the share's owner. Returns TRUE if a row was updated, FALSE if not
- * found or not owner. */
-
-boolean myVariantsSetShareTargets(struct sqlConnection *conn,
-    char *shareToken, char *ownerUser, char *targetUser);
-/* Update a share's targetUser list (NULL for anyone with link). ownerUser
- * must match the share's owner. Returns TRUE if a row was updated, FALSE if
- * not found or not owner. */
-
-boolean myVariantsShareAllowsUser(struct myVariantsShare *share, char *userName);
-/* Return TRUE if userName may access share. TRUE when targetUser is empty
- * (anyone with link); otherwise TRUE only if userName is non-empty and
- * appears in the comma-separated targetUser list. NULL-safe. */
+/* Update a share's permission (0=view, 1=edit). ownerUser must match the
+ * share's owner. Returns TRUE if a row was updated, FALSE if not found or not
+ * owner.  There is one link per project, so this changes what everyone who
+ * already holds that link can do. */
 
 #define MYVAR_SHARE_CGI_VAR "myVarShare"
 #define MYVAR_SHARED_CART_PREFIX "myVarShared_"
+#define MYVAR_RESOLVE_CGI_VAR "myVarResolveInput"
 
 char *myVariantsShareCartValue(struct myVariantsShare *share);
-/* Build JSON cart value string from a share record.
- * Caller must freeMem the result. */
+/* Build the JSON cart value recording that this session was given a share
+ * token.  Authorization always re-reads the share row, so this is a record,
+ * not a credential in its own right.  Caller must freeMem the result. */
 
 #endif /* MYVARIANTSSHARE_H */
 

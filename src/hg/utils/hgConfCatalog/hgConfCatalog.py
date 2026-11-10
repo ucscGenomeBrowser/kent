@@ -1292,8 +1292,6 @@ PATHS = {
         h("hubSpaceTusdEndpoint", "url",
           "hg/hgHubConnect/trackHubWizard.c", default="NULL",
           verified=True, family="hubSpace"),
-        h("myVariantsDataDir", "path", "hg/lib/myVariants.c",
-          verified=True, note="Goes with the doMyVariants gate."),
         h("hgPhyloPlaceServerDir", "path", "hg/hgPhyloPlace/runUsher.c",
           verified=True),
         h("browser.documentRoot", "path", "hg/lib/hui.c",

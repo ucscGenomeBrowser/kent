@@ -32,6 +32,7 @@
 #include "chromGraph.h"
 #include "hgConfig.h"
 #include "customTrack.h"
+#include "customFactory.h"
 #include "myVariants.h"
 #include "wikiLink.h"
 #include "dupTrack.h"
@@ -3424,10 +3425,97 @@ slPairFreeValsAndList(&dataTypes);
 hashFree(&defaultOn);
 }
 
-static void myVariantsShareUi(struct trackDb *tdb)
-/* Render the inline share management section on hgTrackUi for a user's own
- * myVariants track. Emits HTML + calls into hui.js via jsInline to wire up
- * the create/list/revoke API calls. */
+static void myVariantsDownloadLink(char *db, boolean allDbs, char *trackName,
+    boolean forExcel, char *label)
+/* Print one download link for a myVariants track, limited to trackName unless
+ * it is NULL. These go straight to the hgTracks download endpoint rather than
+ * through the Table Browser: the annotations are read from the user's table by
+ * name, so the link works on an assembly holding none of them, and an
+ * every-assembly download is not limited to the chromosomes of the assembly
+ * being browsed. Excel downloads are comma separated with a .csv name, which
+ * Excel opens without complaint. */
+{
+printf("<a href=\"../cgi-bin/hgTracks?db=%s&amp;" MYVARIANTS_DOWNLOAD_CGI_VAR "=%s"
+       "&amp;" MYVARIANTS_DOWNLOAD_SEP_VAR "=%s",
+    db, allDbs ? MYVARIANTS_DOWNLOAD_ALL : "assembly", forExcel ? "csv" : "tab");
+if (trackName != NULL)
+    printf("&amp;" MYVARIANTS_DOWNLOAD_TRACK_VAR "=%s", cgiEncode(trackName));
+printf("\" target=\"_blank\">%s</a>", label);
+}
+
+static void myVariantsDownloadUi(char *trackName)
+/* Render the download section on hgTrackUi for a user's own myVariants track,
+ * so the downloads are visible without opening the description page. Every
+ * assembly this track has annotations on gets a row, whichever one is being
+ * browsed, so a link to another assembly's data does not require going there
+ * first. Counts also answer "where did my hg19 work go?". A last row downloads
+ * every one of the user's tracks. */
+{
+char *userName = getUserName();
+if (userName == NULL)
+    return;
+struct myVariantsProject *proj = myVariantsFindProject(userName, trackName);
+if (proj == NULL)
+    return;
+
+htmlPrintf("<h3>Download the annotations in \"%s\"</h3>\n", proj->label);
+printf("<table style=\"border-spacing:4px\"><tbody>\n");
+
+struct slPair *dbCounts = myVariantsGetDbCounts(userName), *dbCount;
+for (dbCount = dbCounts; dbCount != NULL; dbCount = dbCount->next)
+    {
+    int count = myVariantsCountForDb(proj->dbTable, dbCount->name);
+    if (count <= 0)
+        continue;
+    printf("<tr><td>%s (%d annotation%s)%s:</td><td>\n",
+        dbCount->name, count, count == 1 ? "" : "s",
+        sameString(dbCount->name, database) ? ", this assembly" : "");
+    myVariantsDownloadLink(dbCount->name, FALSE, trackName, FALSE, "Tab-separated file");
+    printf("&nbsp;&nbsp;\n");
+    myVariantsDownloadLink(dbCount->name, FALSE, trackName, TRUE, "Open in Excel");
+    printf("</td></tr>\n");
+    }
+slPairFreeList(&dbCounts);
+
+printf("<tr><td>All assemblies:</td><td>\n");
+myVariantsDownloadLink(database, TRUE, trackName, FALSE, "Tab-separated file");
+printf("&nbsp;&nbsp;\n");
+myVariantsDownloadLink(database, TRUE, trackName, TRUE, "Open in Excel");
+printf("</td></tr>\n");
+
+printf("<tr><td>All your tracks, all assemblies:</td><td>\n");
+myVariantsDownloadLink(database, TRUE, NULL, FALSE, "Tab-separated file");
+printf("&nbsp;&nbsp;\n");
+myVariantsDownloadLink(database, TRUE, NULL, TRUE, "Open in Excel");
+printf("</td></tr>\n");
+
+printf("</tbody></table>\n");
+myVariantsProjectFreeList(&proj);
+/* The column list belongs next to the links, not at the foot of the page under
+ * the sharing controls, where nobody choosing a file would look for it. */
+printf("<p><a href=\"../cgi-bin/hgTables?db=%s&amp;hgta_group=" MYVARIANTS_GROUP_NAME
+    "&amp;hgta_track=%s"
+    "&amp;hgta_table=%s&amp;hgta_doSchema=describe+table+schema\" target=\"ucscSchema\">"
+    "What is in these files</a>. In both files a line break in a value is "
+    "written as \\n, a tab as \\t and a backslash as \\\\. The comma-separated "
+    "file also wraps a value in quotes if it holds a comma or a quote, and "
+    "doubles any quote inside it.</p>\n",
+    database, trackName, trackName);
+printf("<p>To pick a region, a subset of fields, or another output format, open the "
+    "<a href=\"../cgi-bin/hgTables?db=%s&amp;hgta_group=" MYVARIANTS_GROUP_NAME
+    "&amp;hgta_track=%s"
+    "&amp;hgta_table=%s\" target=\"_blank\">Table Browser</a>, "
+    "which works on the assembly you are currently browsing.</p>\n",
+    database, trackName, trackName);
+}
+
+static void myVariantsShareUi(char *trackName, char *projectLabel)
+/* Render the share section on hgTrackUi for one of the user's own My
+ * Annotations tracks.  One link per track: the owner picks what the link
+ * allows, and can change that later without handing out a second link.
+ * projectLabel names what the button will share, which matters on the My Data
+ * page, where the section is not attached to a track the reader chose.  Emits
+ * HTML and calls into hui.js via jsInline to wire up the API calls. */
 {
 char *userName = getUserName();
 if (userName == NULL)
@@ -3436,35 +3524,23 @@ if (userName == NULL)
     return;
     }
 
-printf("<h3>Share this track</h3>\n");
+if (isNotEmpty(projectLabel))
+    htmlPrintf("<h3>Share the track \"%s\"</h3>\n", projectLabel);
+else
+    printf("<h3>Share this track</h3>\n");
 printf("<div id=\"shareCreateSection\">\n");
-printf("<h4 style=\"margin-top:0\">Create share link</h4>\n");
-printf("<table style=\"border-spacing:4px\"><tbody>\n");
-
-/* Project dropdown */
-printf("<tr><td>Project:</td><td><select id=\"shareProject\">\n");
-printf("<option value=\"*\">All projects</option>\n");
-struct slName *projects = myVariantsGetProjects(userName);
-struct slName *p;
-for (p = projects; p != NULL; p = p->next)
-    printf("<option value=\"%s\">%s</option>\n", htmlEncode(p->name), htmlEncode(p->name));
-slFreeList(&projects);
-printf("</select></td></tr>\n");
-
-/* Permission radios */
-printf("<tr><td>Permission:</td><td>"
-    "<label><input type=\"radio\" name=\"sharePerm\" value=\"0\" checked> Can view</label> "
-    "<label><input type=\"radio\" name=\"sharePerm\" value=\"1\"> Can edit</label>"
-    "</td></tr>\n");
-printf("<tr><td>Share with:</td>"
-    "<td><input type=\"text\" id=\"shareTargetUser\""
-    " placeholder=\"Username(s), comma-separated (blank = anyone with link)\""
-    " style=\"width:250px\"></td></tr>\n");
-printf("<tr><td>Label:</td>"
-    "<td><input type=\"text\" id=\"shareLabel\" placeholder=\"Optional label\""
-    " style=\"width:250px\"></td></tr>\n");
-printf("</tbody></table>\n");
-printf("<button type=\"button\" id=\"shareCreateBtn\">Create share link</button>\n");
+/* The track this page is for.  The API takes the track name and resolves the
+ * project from it, so the owner cannot be talked into sharing another one. */
+if (isNotEmpty(trackName))
+    printf("<input type=\"hidden\" id=\"shareTrackName\" value=\"%s\">\n", trackName);
+printf("<div>\n");
+printf("<label><input type=\"radio\" name=\"sharePerm\" value=\"0\" checked>"
+    " Anyone with the link can view</label><br>\n");
+printf("<label><input type=\"radio\" name=\"sharePerm\" value=\"1\">"
+    " Anyone with the link can view and edit</label>\n");
+printf("</div>\n");
+printf("<button type=\"button\" id=\"shareCreateBtn\" style=\"margin-top:6px\">"
+    "Create share link</button>\n");
 printf("<div id=\"shareResult\" style=\"display:none; margin-top:8px; padding:8px;"
     " background:#e8f5e9; border-radius:4px\">"
     "<span>Share URL: </span>"
@@ -3475,6 +3551,8 @@ printf("</div>\n");
 printf("<hr>\n");
 printf("<div id=\"shareListSection\">\n");
 printf("<h4>Active shares</h4>\n");
+/* Every project's share, not just this page's: a share the owner cannot see is
+ * a share the owner cannot revoke. */
 printf("<div id=\"shareListContent\">Loading...</div>\n");
 printf("</div>\n");
 
@@ -3698,7 +3776,10 @@ if (tdbSupportsColorOverride(tdb))
 if (cfgOptionBooleanDefault("doMyVariants", FALSE)
     && isMyVariantsTrack(tdb->track)
     && !isMyVariantsSharedTrack(tdb->track))
-    myVariantsShareUi(tdb);
+    {
+    myVariantsDownloadUi(tdb->track);
+    myVariantsShareUi(tdb->track, NULL);
+    }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
     {
@@ -3746,6 +3827,8 @@ if (jsonGlobalsHash != NULL)
     dyStringFree(&dy);
     }
 }
+
+
 
 void jsonObjectAddGlobal(char *name, struct jsonElement *ele)
 /* Add json object to global hash */
@@ -3853,6 +3936,8 @@ if (!tdbIsDataTrack(tdb))
 if (startsWith("hub_", tdb->track))
     return FALSE;
 if (startsWith("ct_", tdb->track))
+    return FALSE;
+if (isMyVariantsTrack(tdb->track))
     return FALSE;
 if (sameString(tdb->track, "hgPcrResult"))
     return FALSE;
@@ -4214,7 +4299,27 @@ if (!tdbIsDownloadsOnly(tdb))
     if (ct)
         {
         puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-        cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
+        if (isMyVariantsType(tdb->type))
+            {
+            /* Removing one of these drops the project's table, so say what goes
+             * and how much of it first.  The count is this assembly's; the drop
+             * takes the project on every assembly with it.  Removing a shared
+             * track only takes it out of the recipient's view, which the
+             * data-shared flag tells the confirm.  The label is a data
+             * attribute rather than part of the script text: it is the owner's
+             * words, and on a shared track the reader is not the owner. */
+            int count = ctItemCount(ct);
+            htmlPrintf("<input type='submit' name='%s|attr|' id='%s|attr|' "
+                       "value='Remove track' data-shared='%s|attr|' "
+                       "data-project-label='%s|attr|' data-project-count='%d'>",
+                CT_DO_REMOVE_VAR, CT_DO_REMOVE_VAR,
+                isMyVariantsSharedTrack(tdb->track) ? "1" : "", tdb->shortLabel,
+                count < 0 ? 0 : count);
+            jsOnEventById("click", CT_DO_REMOVE_VAR,
+                "return myVariantsConfirmProjectDelete(this);");
+            }
+        else
+            cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
         cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
         puts("&nbsp;");
         if (differentString(tdb->type, "chromGraph") &&
@@ -4233,21 +4338,16 @@ if (!tdbIsDownloadsOnly(tdb))
         if (isMyVariantsType(tdb->type) &&
             !isMyVariantsSharedTrack(tdb->track))
             {
-            /* Labels are per (track, db) so the same myVariants table can
-             * carry a different name on each assembly. */
-            char shortVar[256], longVar[256];
-            safef(shortVar, sizeof shortVar, "%s.%s.shortLabel",
-                tdb->track, database);
-            safef(longVar, sizeof longVar, "%s.%s.longLabel",
-                tdb->track, database);
-            char *curShort = cartUsualString(cart, shortVar, "");
-            char *curLong = cartUsualString(cart, longVar, "");
+            /* Renaming a My Annotations track renames its project, so the name
+             * lives in the project registry.  One name, every assembly, and it
+             * survives a cart reset.  The track name does not change with it,
+             * so visibility and the other per-track cart variables hold. */
+            char renameVar[256];
+            safef(renameVar, sizeof renameVar, "%s.projectLabel", tdb->track);
             puts("<div style='margin-top:0.5em'><b>Rename track:</b> ");
-            puts("Short Label ");
-            cgiMakeTextVar(shortVar, curShort, 18);
-            puts(" Long Label ");
-            cgiMakeTextVar(longVar, curLong, 50);
-            puts(" <span style='color:#888'>(blank = default)</span></div>");
+            cgiMakeTextVar(renameVar, tdb->shortLabel, 30);
+            puts(" <span style='color:#888'>This is the track's name on every"
+                 " assembly.</span></div>");
             }
         }
     }
@@ -4450,8 +4550,10 @@ if (operation != NULL)
    {
    if (sameString(operation, "dupe"))
        {
+       /* Only a track whose page offers Duplicate can be duplicated. */
        struct trackDb *tdb = hashFindVal(trackHash, dupTrackSkipToSourceName(track));
-       newTrack = dupTrackInCartAndTrash(track, cart, tdb);
+       if (tdb != NULL && tdbIsDupable(tdb))
+           newTrack = dupTrackInCartAndTrash(track, cart, tdb);
        }
    else if (sameString(operation, "undupe"))
        {
@@ -4635,6 +4737,129 @@ freeMem(content);
 freeMem(fileUrl);
 }
 
+static void myVariantsNoAnnotationsPage(char *track)
+/* Stand in for the track settings page when track has no annotations on this
+ * assembly, or that no longer exists. The download and share sections still
+ * apply to a track's annotations on other assemblies, so print them whenever
+ * the track is one of the user's. */
+{
+cartWebStart(cart, database, "My Annotations");
+char *userName = getUserName();
+if (userName == NULL)
+    {
+    printf("<p>Please <a href=\"./hgSession\">log in</a> to use My Annotations.</p>\n");
+    webEnd();
+    return;
+    }
+
+/* The download and share sections act on the track asked for, and only when it
+ * is one of the user's.  Any other name is a track that was deleted, reached
+ * from a stale tab or an old link, and has nothing to download or share. */
+struct myVariantsProject *thisProj = myVariantsFindProject(userName, track);
+char *mvTrack = cloneString(myVariantsProjectTrackName(thisProj));
+/* The share section has to say which project its button will act on. */
+char *mvLabel = (thisProj != NULL) ? cloneString(thisProj->label) : NULL;
+boolean haveTable = isNotEmpty(mvTrack);
+if (haveTable)
+    {
+    /* Sections below reach hgTracks and hgTables the same way the real track
+     * settings page does, so they need the same scripts and globals. */
+    jsIncludeFile("jquery.js", NULL);
+    webIncludeResourceFile("jquery-ui.css");
+    jsIncludeFile("jquery-ui.js", NULL);
+    jsIncludeFile("utils.js", NULL);
+    jsonObjectAddGlobal("track", newJsonString(mvTrack));
+    jsonObjectAddGlobal("db", newJsonString(database));
+    jsIncludeFile("hui.js", NULL);
+    }
+
+if (thisProj != NULL)
+    htmlPrintf("<p>The track \"%s\" has no annotations on this assembly (%s).</p>\n",
+        thisProj->label, database);
+else
+    printf("<p>This track no longer exists.  It may have been deleted, in this window or "
+        "another one.</p>\n");
+
+/* Name the assemblies that do hold this track's annotations.  An empty page
+ * with no other assembly on it reads as "my work is gone". */
+struct slPair *dbCounts = NULL, *dbCount;
+if (thisProj != NULL)
+    {
+    /* Keep only this track's assemblies, with this track's counts. */
+    struct slPair *all = myVariantsGetDbCounts(userName);
+    for (dbCount = all; dbCount != NULL; dbCount = dbCount->next)
+        {
+        int count = myVariantsCountForDb(thisProj->dbTable, dbCount->name);
+        if (count > 0)
+            slPairAdd(&dbCounts, dbCount->name, intToPt(count));
+        }
+    slReverse(&dbCounts);
+    slPairFreeList(&all);
+    }
+if (dbCounts != NULL)
+    {
+    char *encTrack = cgiEncode(mvTrack);
+    printf("<p>It has annotations on ");
+    for (dbCount = dbCounts; dbCount != NULL; dbCount = dbCount->next)
+        {
+        int count = ptToInt(dbCount->val);
+        if (dbCount != dbCounts)
+            printf("%s", dbCount->next == NULL ? " and " : ", ");
+        char *encDb = cgiEncode(dbCount->name);
+        printf("<a href=\"hgTrackUi?db=%s&amp;g=%s&amp;hgsid=%s\">%s</a> (%d annotation%s)",
+            encDb, encTrack, cartSessionId(cart), dbCount->name, count,
+            count == 1 ? "" : "s");
+        freeMem(encDb);
+        }
+    printf(".</p>\n");
+    freeMem(encTrack);
+    slPairFreeList(&dbCounts);
+    }
+else if (thisProj != NULL)
+    printf("<p>It has no annotations on any assembly yet.</p>\n");
+/* With nothing to draw here the track has no settings page of its own, so
+ * point at the track manager, which can rename and remove it, and which lists
+ * the tracks that do exist. */
+char *encDb = cgiEncode(database);
+printf("<p>To %s, use the <a href=\"%s?db=%s&amp;%s=1&amp;hgsid=%s\">track manager</a>.</p>\n",
+    thisProj != NULL ? "rename or remove this track" : "see the tracks you have",
+    hgTracksName(), encDb, MYVARIANTS_MANAGE_CGI_VAR, cartSessionId(cart));
+freeMem(encDb);
+myVariantsProjectFreeList(&thisProj);
+
+printf("<p>Annotations are your own marks on the genome: variants, regions, or "
+    "anything else worth keeping track of. They are saved with your Genome "
+    "Browser account, so they are private to you and are still there the next "
+    "time you log in.</p>\n");
+printf("<form action=\"%s\" method=\"get\">\n", hgTracksName());
+cartSaveSession(cart);
+cgiMakeHiddenVar("db", database);
+cgiMakeHiddenVar(MYVARIANTS_ADD_CGI_VAR, "1");
+cgiMakeButton("submit", "Add Annotation");
+printf("</form>\n");
+
+if (haveTable)
+    {
+    myVariantsDownloadUi(mvTrack);
+    myVariantsShareUi(mvTrack, mvLabel);
+    jsonPrintGlobals();
+    }
+freez(&mvTrack);
+webEnd();
+}
+
+static void myVariantsSharedGonePage()
+/* Stand in for the track settings page of a shared track that no longer
+ * resolves, because its share was revoked or its link was never valid. */
+{
+cartWebStart(cart, database, "My Annotations");
+printf("<p>This shared track is no longer available.  The person who shared it may "
+    "have stopped sharing it or deleted it.</p>\n");
+printf("<p><a href=\"%s?db=%s&amp;hgsid=%s\">Return to the Genome Browser</a></p>\n",
+    hgTracksName(), cgiEncode(database), cartSessionId(cart));
+webEnd();
+}
+
 void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
@@ -4759,10 +4984,11 @@ else if (sameWord(track, CUTTERS_TRACK_NAME))
 else if (isCustomTrack(track)
          || (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(track)))
     {
-    /* myVariants tracks (own and shared) are built dynamically and live in
-     * the CT list rather than the SQL trackDb table, but their names don't
-     * carry the ct_ prefix, so we need to look them up alongside regular
-     * custom tracks. */
+    /* My Annotations tracks (own and shared) are built from the project
+     * registry and live in the CT list rather than the SQL trackDb table, but
+     * their names don't carry the ct_ prefix, so we need to look them up
+     * alongside regular custom tracks.  They are built on every request, so a
+     * bookmarked or direct hgTrackUi URL finds them here like any other. */
     ctList = customTracksParseCart(database, cart, NULL, NULL);
     for (ct = ctList; ct != NULL; ct = ct->next)
         {
@@ -4770,31 +4996,6 @@ else if (isCustomTrack(track)
             {
             tdb = ct->tdb;
             break;
-            }
-        }
-    /* Fallback for direct hgTrackUi navigation without hgTracks: regenerate
-     * the myVariants CT file and re-parse. Normally the CT file was written
-     * during the preceding hgTracks visit, so this branch only fires for
-     * bookmarked URLs or direct links. */
-    if (tdb == NULL && isMyVariantsTrack(track))
-        {
-        char *userName = getUserName();
-        char *ctFile = myVariantsWriteCtFile(userName, database, cart);
-        if (isNotEmpty(ctFile))
-            {
-            char mvVarName[256];
-            safef(mvVarName, sizeof mvVarName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
-            cartSetString(cart, mvVarName, ctFile);
-            freeMem(ctFile);
-            ctList = customTracksParseCart(database, cart, NULL, NULL);
-            for (ct = ctList; ct != NULL; ct = ct->next)
-                {
-                if (sameString(track, ct->tdb->track))
-                    {
-                    tdb = ct->tdb;
-                    break;
-                    }
-                }
             }
         }
     }
@@ -4810,6 +5011,19 @@ else
     }
 if (tdb == NULL)
    {
+   /* A user with no annotations on this assembly has no track yet, so the My
+    * Data menu link would otherwise fail. Offer to make the first one. The
+    * ajax path serves a config fragment for the right-click popup and cannot
+    * take a whole page, so it keeps the error. */
+   if (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(track)
+       && cartOptionalString(cart, "ajax") == NULL)
+       {
+       if (isMyVariantsSharedTrack(track))
+           myVariantsSharedGonePage();
+       else
+           myVariantsNoAnnotationsPage(track);
+       return;
+       }
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
    }

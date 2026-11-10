@@ -110,7 +110,8 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
             "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",hgsMergeCart,"ctTest",
-            "myVarShare",
+            "myVarShare", MYVARIANTS_ADD_CGI_VAR, MYVARIANTS_MANAGE_CGI_VAR,
+            MYVARIANTS_SEARCH_TERM_VAR,
             NULL };
 
 boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
@@ -8152,21 +8153,11 @@ char *getPositionFromCustomTracks()
 char *pos = NULL;
 struct slName *bl = NULL;
 
-// If the user has myVariants data for this database, refresh the on-disk
-// ctfile and point the mvCtfile_<db> cart variable at it.  customTracksParseCart
-// reads that variable independently of ctfile_<db>, so regular custom tracks
-// are unaffected.
+/* Apply any pending hgc edit or delete before the custom tracks are built, so
+ * a delete of a project's last item on this assembly takes its track off the
+ * same page.  customTracksParseCart builds the My Annotations tracks itself. */
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
-    {
-    char *userName = getUserName();
-    char *ctFile = myVariantsWriteCtFile(userName, database, cart);
-    char mvVarName[256];
-    safef(mvVarName, sizeof mvVarName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
-    if (isNotEmpty(ctFile))
-        cartSetString(cart, mvVarName, ctFile);
-    else
-        cartRemove(cart, mvVarName);
-    }
+    myVariantsApplyPendingEdits();
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 
@@ -8544,6 +8535,21 @@ if (cfgOptionBooleanDefault("blatResultsGroup", FALSE))
     group->defaultIsClosed = FALSE;
     slAddHead(&list, group);
     hashAdd(hash, "blat", group);
+    }
+
+// The "My Annotations" group holds the user's annotation tracks, one per project (tdb->grp
+// on the tracks myVariantsAddTracks builds), so a project name is label enough and the
+// tracks are not mixed in with the generic Custom Tracks group.  Synthesized the same way
+// as the BLAT group above, and likewise skipped when it holds no tracks.
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    AllocVar(group);
+    group->name = cloneString(MYVARIANTS_GROUP_NAME);
+    group->label = cloneString(MYVARIANTS_GROUP_LABEL);
+    group->defaultPriority = group->priority = MYVARIANTS_GROUP_PRIORITY;
+    group->defaultIsClosed = FALSE;
+    slAddHead(&list, group);
+    hashAdd(hash, MYVARIANTS_GROUP_NAME, group);
     }
 
 // The "Visible Tracks" group is now the default top group
@@ -10584,7 +10590,8 @@ printTrashIcon("Remove this track from the QuickLift group", "quickLiftDelIcon",
 static void printTrackLink(struct track *track)
 /* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
 {
-if (sameOk(track->groupName, "user") || sameOk(track->groupName, "blat"))
+if (sameOk(track->groupName, "user") || sameOk(track->groupName, "blat")
+||  sameOk(track->groupName, MYVARIANTS_GROUP_NAME))
     printTrackDelIcon(track);
 
 char *quickLiftSourceDb = (track->tdb != NULL) ?
@@ -10651,6 +10658,63 @@ static void printPatchNote()
         }
 }
 
+static boolean termIsOnlyCoordinates(char *term)
+/* TRUE for a term that only spells out a place, such as chr1, chr1:1,000-2,000,
+ * chr1:1000 or a BED line: there is nothing in it worth saving as a search. */
+{
+if (hgIsChromRange(database, term) || hgOfficialChromName(database, term) != NULL)
+    return TRUE;
+char *rest = strchr(term, ':');
+if (rest == NULL)
+    {
+    /* A BED line is the sequence name and then numbers. */
+    rest = skipToSpaces(term);
+    if (rest == NULL)
+        return FALSE;
+    }
+else
+    rest++;
+char *c;
+for (c = rest; *c != 0; c++)
+    if (!isdigit(*c) && *c != ',' && *c != '-' && !isspace(*c))
+        return FALSE;
+return TRUE;
+}
+
+static void printMyVariantsSearchNote()
+/* Offer to save the term the user just searched as an annotation, for any
+ * search that resolved to one position.  A term with several hits stops at the
+ * results page.  The JS draws the offer, so a search answered by an in-place
+ * image update can get one too. */
+{
+if (!cfgOptionBooleanDefault("doMyVariants", FALSE))
+    return;
+/* The offer saves with no dialog, so it has nowhere to explain a log in.
+ * Anonymous visitors still get the Add Annotation button, which does. */
+if (getUserName() == NULL)
+    return;
+/* Most searches are resolved by hgSearch, which redirects here with an already
+ * resolved position and passes the term along in "search".  The Search button
+ * passes the term in MYVARIANTS_SEARCH_TERM_VAR for a position it sends here
+ * itself: what was typed, or what was picked from the autocomplete.  A term
+ * that arrives as the position from a bookmark is left on hgp, but so is the
+ * cart's own position on every page load, so coordinates there are not a
+ * search. */
+char *term = cgiOptionalString("search");
+if (isEmpty(term) && hgp != NULL && hgp->singlePos != NULL)
+    term = cgiOptionalString(MYVARIANTS_SEARCH_TERM_VAR);
+if (isEmpty(term) && hgp != NULL && hgp->singlePos != NULL &&
+    !termIsOnlyCoordinates(hgp->query))
+    term = hgp->query;
+if (isNotEmpty(term))
+    term = trimSpaces(term);
+/* The term rides in an attribute so it never lands inside a script block. */
+if (isEmpty(term))
+    hPrintf("<span id='myVarSearchNote'></span>");
+else
+    hPrintf("<span id='myVarSearchNote' data-term='%s'></span>", attributeEncode(term));
+}
+
 static void printDatabaseInfoHtml(char* database) 
 /* print database-specific piece of HTML defined in hg.conf, works also with Genark hubs */
 {
@@ -10662,6 +10726,83 @@ char *cfgName = catTwoStrings(cfgPrefix,"_html");
 char *html = cfgOption(cfgName);
 if (html)
     puts(html);
+}
+
+static void myVariantsAddClientJson()
+/* Hand the My Annotations dialog the user's projects.  A project is a track, and
+ * custom fields are columns on its own table, so each entry carries its track
+ * name and its own field lists rather than one list for the whole user.  This
+ * goes out with the image-only response too, because that response replaces
+ * the page's hgTracks object. */
+{
+char *userName = getUserName();
+if (userName == NULL)
+    return;
+char *defaultProjectId = "";
+struct myVariantsProject *projects = myVariantsListProjects(userName), *proj;
+if (projects != NULL)
+    {
+    /* Where a save with nothing chosen lands.  The list is oldest first,
+     * so this is the project myVariantsDefaultProject picks server side. */
+    char idBuf[32];
+    safef(idBuf, sizeof idBuf, "%u", projects->id);
+    defaultProjectId = cloneString(idBuf);
+    struct jsonElement *projectList = newJsonList(NULL);
+    for (proj = projects; proj != NULL; proj = proj->next)
+        {
+        struct jsonElement *entry = newJsonObject(hashNew(0));
+        jsonObjectAdd(entry, "label", newJsonString(proj->label));
+        jsonObjectAdd(entry, "id", newJsonNumber(proj->id));
+        char *projTrack = myVariantsProjectTrackName(proj);
+        jsonObjectAdd(entry, "track", newJsonString(projTrack));
+        /* The delete confirm names the project and how much goes with
+         * it.  The track already carries the count, so read it from
+         * there rather than asking the database a second time. */
+        int projCount = 0;
+        struct customTrack *projCt;
+        for (projCt = ctList; projCt != NULL; projCt = projCt->next)
+            {
+            if (sameOk(projCt->tdb->track, projTrack))
+                {
+                projCount = ctItemCount(projCt);
+                break;
+                }
+            }
+        jsonObjectAdd(entry, "itemCount",
+            newJsonNumber(projCount < 0 ? 0 : projCount));
+        /* Both lists come off one description of the table. */
+        struct slName *customFields = NULL, *hiddenFields = NULL, *cf, *hf;
+        myVariantsGetFieldLists(proj->dbTable, &customFields, &hiddenFields);
+        struct jsonElement *cfList = newJsonList(NULL);
+        for (cf = customFields; cf != NULL; cf = cf->next)
+            jsonListAdd(cfList, newJsonString(cf->name));
+        slReverse(&cfList->val.jeList);
+        jsonObjectAdd(entry, "customFields", cfList);
+        slFreeList(&customFields);
+        struct jsonElement *hfList = newJsonList(NULL);
+        for (hf = hiddenFields; hf != NULL; hf = hf->next)
+            jsonListAdd(hfList, newJsonString(hf->name));
+        slReverse(&hfList->val.jeList);
+        jsonObjectAdd(entry, "hiddenFields", hfList);
+        slFreeList(&hiddenFields);
+        jsonListAdd(projectList, entry);
+        }
+    slReverse(&projectList->val.jeList);
+    jsonObjectAdd(jsonForClient, "myVariantsProjects", projectList);
+    myVariantsProjectFreeList(&projects);
+    }
+/* Which project the dialog opens on, and where a quick add lands.  Both
+ * are ids: a label is not unique and does not survive a rename. */
+char *lastProject = cartOptionalString(cart, MYVARIANTS_LAST_PROJECT_VAR);
+if (isNotEmpty(lastProject))
+    jsonObjectAdd(jsonForClient, "myVariantsLastProject",
+        newJsonString(lastProject));
+jsonObjectAdd(jsonForClient, "myVariantsDefaultProject",
+    newJsonString(defaultProjectId));
+/* The name a first project gets, so the dialog does not spell it out
+ * a second time. */
+jsonObjectAdd(jsonForClient, "myVariantsDefaultLabel",
+    newJsonString(MYVARIANTS_DEFAULT_PROJECT));
 }
 
 void printShortcutButtons(struct cart *cart, bool hasCustomTracks, bool revCmplDisp, bool multiRegionButtonTop)
@@ -10710,49 +10851,21 @@ hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser wind
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
     hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the My Annotations track\">Add Annotation</button>");
+    // Explainer for the create dialog; the JS moves it into the dialog when built.
+    hPrintf("<div id=\"myVariantsHelpDiv\" style=\"display: none\">\n");
+    webIncludeFile("inc/myVariantsHelp.html");
+    hPrintf("</div>\n");
     jsInline("var doMyVariants = true;\n");
     jsInlineF("var userIsLoggedIn = %s;\n", getUserName() != NULL ? "true" : "false");
-    // Get existing project values for dropdown
-    char *userName = getUserName();
-    if (userName)
-        {
-        struct slName *projects = myVariantsGetProjects(userName);
-        if (projects)
-            {
-            struct jsonElement *projectList = newJsonList(NULL);
-            struct slName *proj;
-            for (proj = projects; proj != NULL; proj = proj->next)
-                jsonListAdd(projectList, newJsonString(proj->name));
-            slReverse(&projectList->val.jeList);
-            jsonObjectAdd(jsonForClient, "myVariantsProjects", projectList);
-            slFreeList(&projects);
-            }
-        /* Get existing custom field names for the create dialog */
-        struct slName *customFields = myVariantsGetCustomFields(userName);
-        if (customFields)
-            {
-            struct jsonElement *cfList = newJsonList(NULL);
-            struct slName *cf;
-            for (cf = customFields; cf != NULL; cf = cf->next)
-                jsonListAdd(cfList, newJsonString(cf->name));
-            slReverse(&cfList->val.jeList);
-            jsonObjectAdd(jsonForClient, "myVariantsCustomFields", cfList);
-            slFreeList(&customFields);
-            }
-        /* Get hidden field names for the restore UI */
-        struct slName *hiddenFields = myVariantsGetHiddenFields(userName);
-        if (hiddenFields)
-            {
-            struct jsonElement *hfList = newJsonList(NULL);
-            struct slName *hf;
-            for (hf = hiddenFields; hf != NULL; hf = hf->next)
-                jsonListAdd(hfList, newJsonString(hf->name));
-            slReverse(&hfList->val.jeList);
-            jsonObjectAdd(jsonForClient, "myVariantsHiddenFields", hfList);
-            slFreeList(&hiddenFields);
-            }
-        }
-    else if (loginSystemEnabled() || wikiLinkEnabled())
+    // hgTrackUi sends users with no annotations here to make their first one.
+    if (cgiVarExists(MYVARIANTS_ADD_CGI_VAR))
+        jsInline("var myVariantsOpenDialog = true;\n");
+    // And the settings page of a track with nothing on this assembly sends
+    // users here to rename or remove it.
+    if (cgiVarExists(MYVARIANTS_MANAGE_CGI_VAR))
+        jsInline("var myVariantsOpenManager = true;\n");
+    // The user's projects go in the hgTracks JSON, see myVariantsAddClientJson.
+    if (getUserName() == NULL && (loginSystemEnabled() || wikiLinkEnabled()))
         {
         // Hand the JS dialog a login URL that returns to this hgTracks page.
         char *retUrl = wikiLinkEncodeReturnUrl(cartSessionId(cart), "hgTracks", "");
@@ -11651,6 +11764,8 @@ if (!hideControls)
         printSearchHelpLink();
 
         printPatchNote();
+
+        printMyVariantsSearchNote();
 
 	if (!trackHubDatabase(database))
 	    {
@@ -14421,6 +14536,8 @@ else if (cartVarExists(cart, configShowEncodeGroups))
 else
     {
     tracksDisplay();
+    if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+        myVariantsAddClientJson();
     }
 
 if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))

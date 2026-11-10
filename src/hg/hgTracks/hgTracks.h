@@ -1376,6 +1376,41 @@ void myVariantsShareApiHandler(char *action);
 /* Handle share API requests. Outputs JSON to stdout and calls exit(0).
  * Called from main() before cartHtmlShell. */
 
+void myVariantsProjectApiHandler(char *action);
+/* Handle the track manager's requests: list the user's projects, create one, or
+ * rename one.  Outputs JSON to stdout and calls exit(0).  Called from main()
+ * before cartHtmlShell.  Deleting a project goes through hgCustom, which also
+ * clears the track's cart variables. */
+
+void myVariantsResolveApiHandler(char *input);
+/* Resolve an HGVS term, position, or gene symbol and return the mapped fields as
+ * JSON for the My Annotations dialog to fill in. Read-only; outputs JSON to
+ * stdout and calls exit(0). Called from main() before cartHtmlShell. */
+
+void myVariantsApplyPendingEdits();
+/* Apply an edit or delete posted from hgc to the user's own track.  Runs
+ * before the custom tracks are parsed, so a delete that empties this assembly
+ * takes the track off the same page instead of leaving an empty one behind
+ * until the next load. */
+
+void myVariantsDownloadCheckParams(char *scope);
+/* Reject a malformed download request before the cart is built, which is where
+ * an unknown db aborts with an HTML error page rather than the JSON the caller
+ * asked for. Calls exit(0) on any problem. */
+
+void myVariantsDownloadApiHandler(char *scope);
+/* Write the signed-in user's annotations as a downloadable tab or comma
+ * separated file, every assembly when scope is MYVARIANTS_DOWNLOAD_ALL and the
+ * requested db otherwise, and only the track MYVARIANTS_DOWNLOAD_TRACK_VAR
+ * names when it is given. Hidden and internal columns are left out. Read-only;
+ * outputs to stdout and calls exit(0). Called from main() before cartHtmlShell,
+ * after myVariantsDownloadCheckParams has vetted the request.
+ *
+ * Every project is a table of its own with its own custom fields, so the file
+ * leads with a project column and carries one set of columns wide enough for
+ * all of them; a project without one of the others' custom fields leaves that
+ * cell empty. */
+
 void notify(char *msg, char *msgId);
 /* print a message into a hidden DIV tag, and call Javascript to move the DIV
  * under the tableHeaderForm element and un-hide it. */

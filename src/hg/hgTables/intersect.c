@@ -19,6 +19,7 @@
 #include "jsHelper.h"
 #include "hgTables.h"
 #include "customTrack.h"
+#include "myVariants.h"
 #include "hubConnect.h"
 #include "wikiTrack.h"
 
@@ -50,7 +51,7 @@ return (tdb && isNotEmpty(trackDbSetting(tdb, "bigDataUrl")));
 boolean canIntersect(char *db, char *table)
 /* Return true if table exists and is positional. */
 {
-if (isCustomTrack(table) && ctLookupName(table) != NULL)
+if ((isCustomTrack(table) || isMyVariantsTrack(table)) && ctLookupName(table) != NULL)
     return TRUE;
 if (! hTableOrSplitExists(db, table) && ! hasBigDataUrl(db, table))
     return FALSE;
@@ -169,6 +170,8 @@ boolean wigOptions = (isWiggle(database, curTable) || isBedGraph(curTable));
 // than wig does.
 struct hTableInfo *hti1 = maybeGetHti(database, curTable, conn), *hti2 = NULL;
 htmlOpen("Intersect with %s", name);
+/* The rest of the page prints the labels as HTML. */
+name = htmlEncode(name);
 
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
@@ -178,7 +181,7 @@ hPrintf("<TABLE BORDER=0>\n");
 hPrintf("Select a group, track and table to intersect with:\n");
 iTrack = showGroupTrackRow(hgtaNextIntersectGroup, onChange,
 	hgtaNextIntersectTrack, onChange, conn);
-iName = iTrack->shortLabel;
+iName = htmlEncode(iTrack->shortLabel);
 
 hPrintf("<TR><TD>\n");
 iTable = showTableField(iTrack, hgtaNextIntersectTable, FALSE);
