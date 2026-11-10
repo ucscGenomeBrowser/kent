@@ -8908,6 +8908,52 @@ if (track->parent != NULL)
     }
 }
 
+static int notInSpaceHeight(struct track *tg, enum trackVisibility vis)
+/* One line, for the note that this track is not drawn here. */
+{
+tg->heightPer = tl.fontHeight;
+tg->lineHeight = tg->heightPer + 4;
+tg->height = tg->lineHeight;
+return tg->height;
+}
+
+static void notInSpaceDraw(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+                           int xOff, int yOff, int width, MgFont *font, Color color,
+                           enum trackVisibility vis)
+/* The note, in grey across the image.  Not the yellow box of bigDrawWarning():  nothing
+ * failed, and that one also writes a line to the error log on every draw.  The text is
+ * not kept in networkErrMsg, because any track that has one after loading is switched
+ * to bigDrawWarning(). */
+{
+char *type = cloneFirstWord(tg->tdb->type);
+char msg[512];
+safef(msg, sizeof msg, "%s tracks cannot be shown in multi-region view",
+      isNotEmpty(type) ? type : "This type of");
+hvGfxTextCentered(hvg, xOff, yOff, width, tg->height, MG_GRAY, font, msg);
+freeMem(type);
+}
+
+static void noteNotInSpace(struct track *track)
+/* A track quickLift cannot carry into the space still gets its row, with a line saying
+ * why it is empty.  Hidden without a word, a track the user has on looks like a track
+ * with no data here.  A container keeps hideFromSpace():  its rows are its children's.
+ * refs #37788 */
+{
+if (track->subtracks != NULL)
+    {
+    hideFromSpace(track);
+    return;
+    }
+track->items = NULL;
+track->loadItems = dontLoadItems;
+/* Nothing was loaded, so a wiggle's pre-draw and left axis have nothing to read. */
+track->preDrawItems = NULL;
+track->preDrawMultiRegion = NULL;
+track->drawLeftLabels = NULL;
+track->drawItems = notInSpaceDraw;
+track->totalHeight = notInSpaceHeight;
+}
+
 static boolean liftTrackIntoSpace(struct track *track, char *chainFile)
 /* Stamp this track, and the subtracks under it that draw, with the chain that maps
  * them into the synthetic space.  Answer whether anything under it can be drawn;
@@ -8998,7 +9044,7 @@ for (track = trackList; track != NULL; track = track->next)
     if (track->visibility == tvHide)
         continue;
     if (!liftTrackIntoSpace(track, chainFile))
-        hideFromSpace(track);
+        noteNotInSpace(track);
     }
 }
 
@@ -9014,7 +9060,7 @@ char *liftUrl = trackDbSetting(track->tdb, "quickLiftUrl");
 if ((liftUrl != NULL) && sameString(liftUrl, spaceChain))
     return;
 if (!liftTrackIntoSpace(track, spaceChain))
-    hideFromSpace(track);
+    noteNotInSpace(track);
 }
 
 struct track *getTrackList( struct group **pGroupList, int vis)
