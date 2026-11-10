@@ -3723,7 +3723,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
             }
 	}
-    if (!showEvery && !firstTime)
+    if (!showEvery && !firstTime && !showAll)
 	break;
     }
 if (!firstTime)
