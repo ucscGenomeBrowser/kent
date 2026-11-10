@@ -9,7 +9,7 @@ at 500 kb, under the summary window
 
 source bases asked for over chrRef:1500-2500
   quickLiftSourceRanges, padded                        31000
-  quickLiftSourceRangesExact                           29000
+  quickLiftSourceRangesExact                           1000
 
 source bases asked for over chrRef:5200-5300
   quickLiftSourceRanges, padded                        31000
