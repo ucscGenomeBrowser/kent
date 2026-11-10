@@ -463,6 +463,7 @@ driver.find_element(By.LINK_TEXT, "Show chr1_MU273333v1_fix placed on its chromo
 time.sleep(3)
 
 # Tests hgPcr for hg38
+driver.get(machine + "/cgi-bin/cartReset")
 driver.get(machine + "/cgi-bin/hgGateway?db=hg38")
 time.sleep(2)
 hover_and_click(driver, "tools3", "ispMenuLink")
