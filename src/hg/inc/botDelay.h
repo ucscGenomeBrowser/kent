@@ -27,11 +27,6 @@ int hgBotDelayTimeFrac(double fraction);
  * line to the error log and return the bottleneck.failureDelay fallback, so that the
  * request is still served.  Without that setting, abort as before. */
 
-int hgBotDelayTimeFracOrAbort(double fraction);
-/* Same as hgBotDelayTimeFrac, but errAbort when the bottleneck server cannot be
- * reached, for callers that catch the abort and answer with their own error
- * (hubApi returns a JSON 500). */
-
 int hgBotDelayTimeFracWithStatus(double fraction, boolean *retServerFailed);
 /* Same as hgBotDelayTimeFrac, and set retServerFailed to say whether the delay came
  * from the bottleneck server or from the fallback.  For a caller that would otherwise

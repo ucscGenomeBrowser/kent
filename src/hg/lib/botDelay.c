@@ -22,6 +22,7 @@
 #define defaultWarnMs 10000    /* warning at 10 to 20 second delay */
 #define defaultExitMs 20000    /* error 429 Too Many Requests after 20+ second delay */
 #define maxFailureDelayMs 2000 /* sanity limit on bottleneck.failureDelay, see connectFailDelay */
+#define maxBottleneckTimeoutSec 10 /* upper limit on bottleneck.timeoutSeconds */
 
 int botDelayWarnMs  = 0;       /* global so the previously used value can be retrieved */
 
@@ -33,6 +34,21 @@ void abortAndExplainConnectFail()
 errAbort("Failed to connect to bottleneck server");
 }
 
+static void botDelayLogWarn(char *format, va_list args)
+/* Send a warning raised during the bottleneck exchange to the error log and
+ * nowhere else.  net.c warns on a refused connect and on a short read, and
+ * customTrack.c reaches us from inside doMiddle, where cart.c has already pushed
+ * an HTML warn handler.  "Connection refused. Host ... port ..." is a message for
+ * us, not for the person who submitted a custom track.  This is not
+ * pushSilentWarnHandler(), because an outage of the bottleneck server must still
+ * be visible in the error log. */
+{
+fprintf(stderr, "botDelay: ");
+vfprintf(stderr, format, args);
+fprintf(stderr, "\n");
+fflush(stderr);
+}
+
 static int botDelayTimeMaybe(char *host, int port, char *botCheckString)
 /* Like botDelayTime, but return -1 rather than aborting when the bottleneck
  * server cannot be reached, will not take our request, or does not answer.
@@ -40,25 +56,31 @@ static int botDelayTimeMaybe(char *host, int port, char *botCheckString)
  * noWarnAbort(), which exits.  netGetString() returns NULL instead, warning first
  * on a read error and saying nothing when the server simply closes. */
 {
-int sd = netConnect(host, port);
-if (sd < 0)
-    return -1;
-/* The stock 120 second read timeout is far longer than this exchange can ever
- * usefully take, and a bottleneck server that accepts and then hangs should not
- * hold a CGI open for two minutes. */
+/* One setting covers connect, send and read.  The stock values are a 10 second
+ * connect and a 120 second read, both far longer than this exchange can ever
+ * usefully take.  The connect is the one that matters: a bottleneck host that
+ * drops packets instead of refusing costs that much on every request, which is
+ * the outage this whole fallback exists to avoid. */
 int timeout = atoi(cfgOptionDefault("bottleneck.timeoutSeconds", "10"));
-if (timeout < 1)
-    timeout = 10;
-setReadWriteTimeouts(sd, timeout);
-char buf[256];
+if (timeout < 1 || timeout > maxBottleneckTimeoutSec)
+    timeout = maxBottleneckTimeoutSec;
+
 int delay = -1;
-if (netSendString(sd, botCheckString) && netGetString(sd, buf) != NULL)
+pushWarnHandler(botDelayLogWarn);
+int sd = netConnectWithTimeout(host, port, (long)timeout * 1000);
+if (sd >= 0)
     {
-    delay = atoi(buf);
-    if (delay < 0)     /* the server never sends one, and -1 is our sentinel */
-        delay = 0;
+    setReadWriteTimeouts(sd, timeout);
+    char buf[256];
+    if (netSendString(sd, botCheckString) && netGetString(sd, buf) != NULL)
+        {
+        delay = atoi(buf);
+        if (delay < 0)     /* the server never sends one, and -1 is our sentinel */
+            delay = 0;
+        }
+    close(sd);
     }
-close(sd);
+popWarnHandler();
 return delay;
 }
 
@@ -375,7 +397,7 @@ fprintf(stderr, "botDelay: no answer from bottleneck server %s:%s, "
 return delay;
 }
 
-static int delayFromBottleneck(double fraction, boolean abortOnFail, boolean *retFailed)
+static int delayFromBottleneck(double fraction, boolean *retFailed)
 /* Get suggested delay time from the bottleneck server.  When it cannot be
  * reached, either abort, or fall back to connectFailDelay() and carry on.
  * If retFailed is not NULL, set it to say whether the server answered. */
@@ -395,9 +417,9 @@ if (host != NULL && port != NULL && ip != NULL)
     if (delay < 0)
         {
         /* bottleneck.serveOnFailure is the gate on the whole fallback.  With it
-         * off we abort as we always have.  hubApi passes abortOnFail because it
-         * catches the abort and answers with its own JSON 500 either way. */
-        if (abortOnFail || !cfgOptionBooleanDefault("bottleneck.serveOnFailure", FALSE))
+         * off we abort as we always have, and hubApi's errCatch turns that abort
+         * into its JSON 500. */
+        if (!cfgOptionBooleanDefault("bottleneck.serveOnFailure", FALSE))
             abortAndExplainConnectFail();
         if (retFailed != NULL)
             *retFailed = TRUE;
@@ -413,15 +435,7 @@ int hgBotDelayTimeFrac(double fraction)
  * error log and return the bottleneck.failureDelay fallback, so that the request is
  * still served.  Without that setting, abort as before. */
 {
-return delayFromBottleneck(fraction, FALSE, NULL);
-}
-
-int hgBotDelayTimeFracOrAbort(double fraction)
-/* Same as hgBotDelayTimeFrac, but errAbort when the bottleneck server cannot be
- * reached, for callers that catch the abort and answer with their own error
- * (hubApi returns a JSON 500). */
-{
-return delayFromBottleneck(fraction, TRUE, NULL);
+return delayFromBottleneck(fraction, NULL);
 }
 
 int hgBotDelayTimeFracWithStatus(double fraction, boolean *retServerFailed)
@@ -429,7 +443,7 @@ int hgBotDelayTimeFracWithStatus(double fraction, boolean *retServerFailed)
  * came from the bottleneck server or from the fallback.  For a caller that
  * would otherwise treat the fallback as a real bot delay and accuse the user. */
 {
-return delayFromBottleneck(fraction, FALSE, retServerFailed);
+return delayFromBottleneck(fraction, retServerFailed);
 }
 
 #define err429  429
@@ -545,7 +559,7 @@ if (exitMs < 1)	/* passed in zero, use default */
     exitMs = defaultExitMs;
 
 boolean serverFailed = FALSE;
-botDelayMillis = delayFromBottleneck(delayFrac, FALSE, &serverFailed);
+botDelayMillis = delayFromBottleneck(delayFrac, &serverFailed);
 if (serverFailed)
     {
     /* The bottleneck server is the thing that is broken, not the caller.  Sleep
