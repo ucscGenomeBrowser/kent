@@ -1224,6 +1224,40 @@ wrapup_sunset_report() {
     return 0
 }
 
+# Email each engineer the overdue and stalled release gates they own, cc the
+# build meister (refs #37925).  sunsetNotify.py takes the gate list from
+# hgConfCatalog.py itself, so it agrees with the sunset-report step above, and
+# reads the age cache that step just rebuilt.  It mails the full standing list,
+# not just what is new, every release: the point is that it keeps arriving
+# until the gate is gone.  Like the report this is hygiene, not shipping, so a
+# failure warns and returns 0.  Preview: sunsetNotify.py --cache <ages.json>
+wrapup_sunset_notify() {
+    local notify="$WEEKLYBLD/sunsetNotify.py"
+    local cache="$LOGDIR/v${BRANCHNN}.hgConfAges.json"
+    local nlog="$LOGDIR/v${BRANCHNN}.sunsetNotify.log"
+    local cc="${BUILDMEISTEREMAIL:-braney@ucsc.edu}"
+
+    if $DRY_RUN; then
+        log "(dry-run) would email each owner of an overdue/stalled hg.conf" \
+            "gate, cc $cc"
+        return 0
+    fi
+    if [[ ! -f "$cache" ]]; then
+        log "WARNING: no age cache at $cache (sunset-report skipped?);" \
+            "not sending hg.conf gate notices"
+        return 0
+    fi
+    if KENT_SRC="$BUILDHOME/kent/src" "$notify" --cache "$cache" \
+            --cc "$cc" --send >& "$nlog"; then
+        log "hg.conf gate notices:"
+    else
+        log "WARNING: some hg.conf gate notices failed; to resend:" \
+            "$notify --cache $cache --cc $cc --send"
+    fi
+    while IFS= read -r line; do log "  $line"; done < <(grep -E '^(sent|FAILED|no overdue)' "$nlog")
+    return 0
+}
+
 # Generate markdown release notes for GitHub
 wrapup_release_markdown() {
     if ! $DRY_RUN; then
@@ -1260,6 +1294,8 @@ do_wrapup() {
     step smoke-mirror     final_smoke_mirror
     # Last: a report, so nothing that matters waits on its ~4 minutes.
     step sunset-report    wrapup_sunset_report
+    # Its own step so a re-run of wrap-up does not mail the engineers twice.
+    step sunset-notify    wrapup_sunset_notify
 
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"
