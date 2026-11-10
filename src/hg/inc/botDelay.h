@@ -22,7 +22,15 @@ int hgBotDelayTime();
 /* Get suggested delay time from cgi using the standard penalty. */
 
 int hgBotDelayTimeFrac(double fraction);
-/* Get suggested delay time from cgi using the specified fraction of the standard penalty. */
+/* Get suggested delay time from cgi using the specified fraction of the standard penalty.
+ * If the bottleneck server cannot be reached and bottleneck.serveOnFailure is on, write a
+ * line to the error log and return the bottleneck.failureDelay fallback, so that the
+ * request is still served.  Without that setting, abort as before. */
+
+int hgBotDelayTimeFracWithStatus(double fraction, boolean *retServerFailed);
+/* Same as hgBotDelayTimeFrac, and set retServerFailed to say whether the delay came
+ * from the bottleneck server or from the fallback.  For a caller that would otherwise
+ * treat the fallback as a real bot delay and accuse the user. */
 
 extern int botDelayMillis;
 

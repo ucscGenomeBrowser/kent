@@ -2,10 +2,12 @@ The 'status' field in the ottoRequest table maintains state:
 
   0 == request has been received by API (set by API)
   1 == request has been acknowledged by ottoRequest.py (set by ottoRequest.py)
-  2 == galaxy jobs have been started (set by ottoRequestAlign.sh)
+  2 == alignment has been started, galaxy jobs (lastz) or a local cluster
+         run (minimap2) (set by ottoRequestAlign.sh)
   3 == galaxy jobs have completed, download started (set by workflowMonitor.sh)
-  4 == download from galaxy has taken place and track files have been created
-         (set by ottoRequestWatch.sh)
+         lastz only, minimap2 requests go from 2 to 4
+  4 == alignment done and track files have been created, for lastz after
+         the download from galaxy (set by ottoRequestWatch.sh)
   5 == symlinks for tracks are in place, ready to push files
          (set by ottoRequestWatch.sh)
   6 == push of files is complete (set by ottoRequestPush.py)
@@ -60,17 +62,35 @@ ottoRequest.py - otto user cron job running each minute to watch the
 #9,20,31,42,53 * * * * ~/kent/src/hg/utils/otto/userRequests/ottoRequestWatch.sh
 ###
 ottoRequestWatch.sh - cron script running in hiram hgwdev account to watch
-               - the ottoRequest table.  When new entries show
-               - up (status=1) it will get the galaxy workflow
-               - running by using ottoRequestAlign.sh to construct the
-               - kegAlignLastz.sh script arguments and starts that process.
-               - ottoRequestAlign.sh will set 'status=2' as the galaxy WF is on.
-               - Uses workflowMonitor.sh to check the status of jobs that
-               - are in 'status=2' state, when the galaxy run is complete,
-               - will set 'status=4'
-               - when it detects 'status=4' state, it will construct the
-               - symlinks to get all the files ready for pushing and it
-               - makes the entries in liftOverChain and quickLiftChain tables.
+               - the ottoRequest table.
+               - phase 0: when new entries show up (status=1) it first
+               - checks whether both directions have already been built
+               - (a lastz.<other> link, or a miniMap2.<other> link whose
+               - build has its fb.*Link.txt file) and are registered in
+               - liftOverChain and quickLiftChain, if so it goes
+               - straight to 'status=5' for the push.
+               - phase 1: otherwise it uses ottoRequestAlign.sh to start
+               - the alignment, lastz in galaxy or minimap2 on the local
+               - cluster, decided there by mash distance.
+               - ottoRequestAlign.sh will set 'status=2' as the alignment
+               - is started.
+               - phase 2: for lastz, uses workflowMonitor.sh to check the
+               - status of jobs that are in 'status=2' state, when the
+               - galaxy run is complete, will set 'status=4'
+               - for minimap2 (buildDir named miniMap2*) it checks the
+               - ottoMiniMap2.pid/.exit files in buildDir:
+               -   still running - nothing to do
+               -   pid gone without an .exit file, or .exit not 0 -
+               -     'status=7', any interruption to the cluster run or
+               -     the local machines is recovered manually
+               -   .exit 0 and both directions' fb.*Link.txt files -
+               -     'status=4'
+               - phase 3: when it detects 'status=4' state, for lastz it
+               - will construct the symlinks to get all the files ready
+               - for pushing and it makes the entries in liftOverChain
+               - and quickLiftChain tables.  For minimap2 those were
+               - already made by pairMiniMap2.sh -liftTableLoad, only the
+               - trackDb step is run, for both directions.
                - and then it sets 'status=5'
                - the 'status=5' states are detected by the 
                - ottoRequestPush.py cron job - which does the business of
@@ -83,12 +103,32 @@ ottoRequestWatch.sh - cron script running in hiram hgwdev account to watch
                - ottoRequestPush.py upon push completion, now it will
                - use galaxyCleanup.py to release the galaxy history and WF
                - data, it will send out confirmation finished email and sets
-               - 'status=8' to indicate completion.
+               - 'status=8' to indicate completion.  The email ends with
+               - notes on the kind of alignment: from version.txt for
+               - minimap2, the .yaml file for lastz in galaxy, or the DEF
+               - file for an existing in-house lastz alignment.
 
 ############################################################################
 ###  4.
 ottoRequestAlign.sh - given an 'id' number in the ottoRequest table, this
-                    - will generate the arguments to: 'kegAlignLastz.sh' 
+                    - will start the alignment, lastz in galaxy via
+                    - 'kegAlignLastz.sh', or minimap2 on the local cluster
+                    - via 'pairMiniMap2.sh'.
+                    - The choice is made by mashDistance.pl, with the same
+                    - thresholds doMiniMap2.pl uses (AssemblyDivergence.pm):
+                    - mash distance under 0.15 is minimap2, otherwise lastz.
+                    - A mashDistance.pl failure sets 'status=7'.
+                    - minimap2: the build directory is
+                    -   <trackData or bed>/miniMap2<Query>.<date>
+                    - (the newest existing one is reused), it writes
+                    - ottoMiniMap2.sh there and runs it in the background:
+                    -   pairMiniMap2.sh -liftTableLoad <target> <query>
+                    - leaving ottoMiniMap2.pid, ottoMiniMap2.log and,
+                    - when it ends, ottoMiniMap2.exit for ottoRequestWatch.sh
+                    - At most maxMiniMap2 (2) minimap2 requests run at once,
+                    - others stay at 'status=1' and are tried again on
+                    - the next cron tick.
+                    - lastz: generates the arguments to 'kegAlignLastz.sh'
                     - to get the alignment started in galaxy.
                     - Uses the hgcentraltest.genark table and the file
                     - dbDb.name.clade.tsv to determine full assembly ID
@@ -114,8 +154,24 @@ kegAlignLastz.sh - script to start the galaxy workflow, typical call:
     and the download of the results takes place in the other scripts.
 
 ############################################################################
+###  5b.
+pairMiniMap2.sh - in ~/kent/src/hg/utils/automation/ - runs doMiniMap2.pl
+    for the primary target -> query alignment, then doMiniMap2.pl -swap
+    for the query -> target direction, on the hgwdev parasol cluster:
+
+    pairMiniMap2.sh -liftTableLoad GCA_018852615.3 hg19
+
+    Continues in the newest existing miniMap2<Query>.<date> directory,
+    doMiniMap2.pl skips the steps that are already done there.  With
+    -liftTableLoad it also makes the liftOver/quickLift symlinks and the
+    liftOverChain/quickLiftChain table entries.  Each direction leaves a
+    dateless miniMap2.<other> symlink to its build directory.
+    Exits non-zero on any failure, an interrupted cluster run stops
+    doMiniMap2.pl with an error rather than being started over.
+
+############################################################################
 ###  6.
-workflowMonitor.sh - after the galaxy WF has started, this script can
+workflowMonitor.sh - (lastz only) after the galaxy WF has started, this script can
                    - check the status of the job and if it is done, then
                    - the processing of the results will take place to
                    - construct the chain files.
@@ -130,6 +186,11 @@ workflowMonitor.sh - after the galaxy WF has started, this script can
 ###
 ottoRequestPush.py - cron job watching for status == 5 - will run the pushing
    procedure for the relevant assemblies.  When complete will set status = 6
+   GenArk assemblies are pushed by the clade make chain, which picks up the
+   hub build liftOver/ and quickLift/ directories for lastz and minimap2
+   alike.  For a UCSC database target the .over.chain.gz is pushed from
+   /hive/data/genomes/<db>/bed/liftOver/ (falls back to the lastz.<query>
+   build directory for older lastz builds).
    TBD: Need to figure out how to push the UCSC database files out
 
 ############################################################################

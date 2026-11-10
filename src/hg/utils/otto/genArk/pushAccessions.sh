@@ -47,6 +47,8 @@
 #############################################################################
 
 set -beEu -o pipefail
+# shared lock file and remote directories, keep them group-writable
+umask 002
 
 export expectHost="hgwdev"
 export hostName=$(hostname -s)

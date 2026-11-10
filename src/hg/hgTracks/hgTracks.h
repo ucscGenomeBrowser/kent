@@ -1033,6 +1033,11 @@ void exonFramePhases(struct genePred *gp, int exonIx, boolean revStrand,
 struct linkedFeatures *linkedFeaturesFromGenePred(struct track *tg, struct genePred *gp, boolean extra);
 /* construct a linkedFeatures object from a genePred */
 
+struct linkedFeatures *lfFromGenePredInRange(struct track *tg, char *table,
+                                             char *chrom, int start, int end);
+/* Return linked features from range of a gene prediction table, quickLifting them
+ * when the track is lifted. */
+
 struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb *tdb,
 	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
 /* Convert bed to a linkedFeature, destroying bed in the process. */
