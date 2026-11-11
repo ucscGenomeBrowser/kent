@@ -10,34 +10,31 @@
 <h2>Topics</h2>
 
 <ul>
-<li><a href="#whatEvidence">How do I tell whether a region is
-                            regulatory?</a></li>
+<li><a href="#whatEvidence">How do I tell whether a region is regulatory?</a></li>
 <li><a href="#measuredPredicted">What is the difference between measured and predicted binding
                                  sites?</a></li>
 <li><a href="#whichTfbs">How do I find transcription factor binding sites?</a></li>
-<li><a href="#motifEverywhere">The JASPAR track shows my factor binding across the whole
-                               gene. Why?</a></li>
+<li><a href="#motifEverywhere">The JASPAR track shows my factor binding all over my gene.
+                               Why?</a></li>
 <li><a href="#notFound">I cannot find my transcription factor in any track. Where else can I
                         look?</a></li>
 <li><a href="#encodePortal">How do I display ENCODE data that is not already a track?</a></li>
 <li><a href="#promoters">How do I find the promoter of a gene?</a></li>
 <li><a href="#enhancers">How do I find enhancers and other regulatory elements?</a></li>
-<li><a href="#arcs">What does it mean when GeneHancer draws an arc between an element and a
-                    gene?</a></li>
+<li><a href="#arcs">What do the GeneHancer arcs between elements and genes mean?</a></li>
 <li><a href="#ccres">What are cCREs, and which cCRE track should I use?</a></li>
-<li><a href="#scores">What do the scores and the grey shading in these tracks mean?</a></li>
+<li><a href="#scores">What do the scores and colors in these tracks mean?</a></li>
 <li><a href="#signalHeight">The signal is higher in one region than another. Can I compare
                             them?</a></li>
-<li><a href="#nothingThere">Nothing is annotated over my region. Does that mean it is not
+<li><a href="#nothingThere">Nothing is annotated in my region. Does that mean it is not
                             regulatory?</a></li>
-<li><a href="#cellType">How do I restrict a search to one cell type or tissue?</a></li>
-<li><a href="#noTissue">My tissue is not in the list of cell types. What should I do?</a></li>
+<li><a href="#cellType">How do I show data for only one cell type or tissue?</a></li>
+<li><a href="#noTissue">There is no data for my tissue. What can I do?</a></li>
 <li><a href="#myGene">I have a gene. How do I find the factors that regulate it?</a></li>
-<li><a href="#variantEffect">I have a variant, not a region. What does it do to
-                             regulation?</a></li>
+<li><a href="#variantEffect">I have a variant. How can I tell if it affects regulation?</a></li>
 <li><a href="#otherGenomes">What is available for assemblies other than human and mouse?</a></li>
 <li><a href="#limits">If a region has all of this evidence, is it definitely
-                       regulatory?</a></li>
+                      regulatory?</a></li>
 <li><a href="#summary">Summary: regulatory tracks by category</a></li>
 </ul>
 <hr>
@@ -45,148 +42,133 @@
 <a href="index.html">Return to FAQ Table of Contents</a></p>
 
 <p>
-The assembly names after each track are links. They open that track's description page on
-that assembly, which gives the methods, the data version, and the citation. Coverage varies a
-lot between assemblies, so check the list before you assume a track exists on the genome you
-work with.</p>
-<p>
-<em>The tracks described here were last checked in October 2026. Projects such as JASPAR and
-ENCODE issue new versions on their own schedules, and we add tracks between checks, so use
-<a href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a> if you need to know what
-is on an assembly today.</em></p>
+Most of the tracks described here are in the <em>Regulation</em> group below the image on the
+<a href="../cgi-bin/hgTracks">main browser page</a>; the variant effect predictors are in
+<em>Phenotype and Disease Associations</em>. The assembly names after each track link to its
+description page on that assembly, which gives the methods, data version and citation. Track
+availability was last checked in October 2026, and
+<a href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a> lists what is on an
+assembly now. Regulation acting on RNA after transcription is not covered.</p>
 
 <a name="whatEvidence"></a>
 <h2>The basics</h2>
-<p>
-The Genome Browser carries a large number of tracks that annotate regulatory regions. Most of
-them are in the <em>Regulation</em> track group, which you will find below the browser image on
-the <a href="../cgi-bin/hgTracks">main browser page</a>.</p>
 
 <h6>How do I tell whether a region is regulatory?</h6>
 <p>
-This page is about regulation at the level of DNA and chromatin. Mechanisms acting on RNA after
-it has been transcribed are a separate subject and are not covered. None of the tracks below
-observes regulation directly. Each one measures a property that regulatory regions tend to have,
-and the case for any particular region is built by stacking several of them. Almost all of these
-signals differ between cell types, so pick the tissue that matters for your question instead of
-reading a genome-wide summary. How much the completed stack actually proves is covered
-<a href="#limits">at the end of this page</a>.</p>
+This requires combining data from several different assays since each only measures
+one property often associated with regulatory regions.
+But there are <a href="#limits">limits</a> what these assays can tell you about a given region.</p>
 <ul>
   <li>
-  <strong>Open chromatin.</strong> A region that is in use generally has to be reachable by the
-  proteins that bind it, and DNase-seq and ATAC-seq report where that is so. Both are in
-  <strong>ENCODE4 Regulation</strong>, organized by tissue, on
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a> and
-  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=encode4Reg">mm10</a>. The older ENCODE3
+  <strong>Open chromatin:</strong> DNase-seq and ATAC-seq measure whether a segment of DNA is accessible to
+  DNA-binding proteins. High signal means that region was more frequently measured as accessible. 
+  Tracks with data from both assays can be found in <strong>ENCODE4 Regulation</strong>, organized by
+  tissue, on <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a> and
+  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=encode4Reg">mm10</a>, and the older ENCODE3
   <strong>DNase HS</strong> clusters are on
   <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeRegDnase">hg38</a>.</li>
   <li>
-  <strong>Histone modifications.</strong> Histones carry chemical marks that differ between
-  element types: H3K4me3 at active promoters, H3K4me1 at enhancers, H3K27ac at both when they
-  are active, and H3K27me3 over Polycomb-repressed genes. The <strong>Layered H3K27Ac</strong>
-  track is the quickest look at the active ones, on
-  <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeRegMarkH3k27ac">hg19</a> and
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeRegMarkH3k27ac">hg38</a>. The
-  <a href="#ccres">cCRE tracks</a> combine accessibility, these marks and CTCF into a single
-  classification, which is usually a better first track to turn on than any one signal.</li>
+  <strong>Histone modifications:</strong> Different histone marks are associated with different gene expression states.
+  You often find H3K4me3 at active promoters and H3K4me1 at enhancers,
+  while H3K27ac will be found at both active promoters and enhancers. On the other hand, 
+  H3K27me3 is found across a gene loci that is being repressed by Polycomb.
+  The <strong>Layered H3K27Ac</strong> track overlays H3K27ac signal from several cell lines in
+  one display, on <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeRegMarkH3k27ac">hg19</a>
+  and <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeRegMarkH3k27ac">hg38</a>. The
+  <a href="#ccres">cCRE tracks</a> combine DNase, H3K4me3, H3K27ac and CTCF signal into a single
+  classification of each element.</li>
   <li>
-  <strong>DNA methylation.</strong> A methylated promoter is usually a silenced one. Many
-  promoters sit in <strong>CpG Islands</strong>, which stay unmethylated in most tissues, on
+  <strong>DNA methylation:</strong> Methylation in promoter regions is
+  generally associated with silencing of the nearby gene.
+  The <strong>CpG Islands</strong> track, which annotates regions of higher CG
+  percent than elsewehere in the genome, overlap many promoters and are unmethylated in most
+  tissues. This track is available for nearly every assembly, including
   <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=cpgIslandExt">hg19</a>,
   <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=cpgIslandExt">hg38</a>,
   <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=cpgIslandExt">mm10</a> and
   <a href="../cgi-bin/hgTrackUi?db=mm39&amp;g=cpgIslandExt">mm39</a>. The <strong>DNA
-  Methylation</strong> collection gathers measurements from several sources and calls hypo- and
-  hypermethylated regions in a range of cell types, on
+  Methylation</strong> collection holds measurements from several sources, with hypo- and
+  hypermethylated regions called in a range of cell types, on
   <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=dnaMethylation">hg19</a> and
   <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=dnaMethylation">hg38</a>.</li>
   <li>
-  <strong>Transcription factor binding.</strong> The human genome encodes well over a thousand
-  transcription factors. Many recognize nearly the same motif, so a match alone rarely tells you
-  which factor is involved. Most matches are never bound in any cell. For a
-  sense of how unspecific motifs are, paste a random sequence into the scanning tool at
-  <a href="https://jaspar.elixir.no/analysis" target="_blank">JASPAR</a> and count the hits. The
-  <a href="#measuredPredicted">next question</a> covers the distinction this creates, and
-  <a href="#whichTfbs">the section after it</a> lists the tracks.</li>
+  <strong>Transcription factor binding:</strong> There are over a thousand known human transcription
+  factors. The binding motif of one transcription factor may be nearly identical to another,
+  so a motif match on its own is often not enough to confirm binding at a site
+  (see <a href="#measuredPredicted">measured and
+  predicted binding sites</a> and the <a href="#whichTfbs">binding site tracks</a>).</li>
   <li>
-  <strong>Conservation and constraint.</strong> Non-coding sequence held steady across species
-  is often regulatory, which is what the <strong>phyloP</strong> and <strong>phastCons</strong>
-  tracks measure, on
+  <strong>Conservation and constraint:</strong> <strong>phyloP</strong> and
+  <strong>phastCons</strong> score conservation across species on
   <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=cons100way">hg19</a> and
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=cons100way">hg38</a>. <strong>Unusually
-  Conserved</strong> picks out the extreme cases, such as sequence identical between human and
-  mouse, on <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=unusualcons">hg38</a>. Sequence that
-  varies little between human genomes is described instead as constrained, and the
-  <strong>Constraint scores</strong> collection measures that, on
+  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=cons100way">hg38</a>; <strong>Unusually
+  Conserved</strong> marks regions more conserved than expected, such as
+  sequence identical between human and mouse, on
+  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=unusualcons">hg38</a>; and the <strong>Constraint
+  scores</strong> collection measures how little a region varies between human genomes, on
   <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=constraintSuper">hg19</a> and
   <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=constraintSuper">hg38</a>.</li>
   <li>
-  <strong>Physical contact.</strong> An enhancer can sit a megabase from the gene it controls,
-  so position on the chromosome says little by itself. <strong>Hi-C and Micro-C</strong> shows
-  which regions touch each other in the folded genome, on
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=hicAndMicroC">hg38</a>. CTCF sites often mark the
-  anchors of those loops and the edges of domains. For linking an element to a
-  candidate gene, see <a href="#myGene">finding the factors that regulate a gene</a>.</li>
+  <strong>Physical contact:</strong> Enhancers can sit up to a megabase from the genes they
+  regulate. <strong>Hi-C and Micro-C</strong>, on
+  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=hicAndMicroC">hg38</a>, shows which regions are in
+  contact in the folded genome, while CTCF sites often mark the anchors of the loops (see also
+  <a href="#myGene">finding the factors that regulate a gene</a>).</li>
 </ul>
 
 <a name="measuredPredicted"></a>
 <h6>What is the difference between measured and predicted binding sites?</h6>
 <p>
-A <em>measured</em> binding site comes from an experiment, usually ChIP-seq, in which one
-protein was pulled down in one cell type under one set of conditions. The site is real in the
-sense that the factor was found there in that experiment. It tells you nothing about other cell
-types, and the experiment has to have been done for your factor and your tissue for the data to
-exist at all.</p>
+A measured site comes from an experiment, where the binding activity 
+of one transcription factor was measured in a single cell type or cell line.
+For example, that means that each ChIP-seq track displays only the binding activity of
+a single factor in a single cell type.</p>
 <p>
-A <em>predicted</em> binding site comes from scanning the genome sequence for a
-<a href="/goldenPath/help/hgRegMotifHelp.html">motif</a>, the sequence theme a given factor
-prefers, usually stored as a position weight matrix and not a single spelling. Predictions exist
-everywhere in the genome for every
-factor with a known motif, regardless of cell type, and most of them are not bound <em>in
-vivo</em>. A typical transcription factor motif occurs hundreds of thousands of times in the
-human genome, while the factor binds only a few thousand of those positions in any given cell.</p>
+A predicted site comes from scanning the genome with a
+<a href="/goldenPath/help/hgRegMotifHelp.html">sequence motif</a>.
+These predicted binding sites are not cell-type specific.
+These sequence motifs are relatively short, meaning one might match hundreds of thousands of
+positions in the human genome. This means that most predicted sites are not
+bound <em>in vivo</em>.</p>
 <p>
-Neither kind is better than the other. To find out where a factor was actually found, use a
-measured track. To find out whether some sequence you care about, a variant or a promoter
-fragment, could plausibly be bound, use a predicted track. What you cannot do is cite a
-prediction as evidence that the factor binds there.</p>
+In short, a predicted track can tell you if a region could be bound, while a
+measured track can tell you where a factor was found in a specific cell
+type.</p>
 
 <a name="whichTfbs"></a>
 <h2>Transcription factor binding sites</h2>
 
 <h6>How do I find transcription factor binding sites?</h6>
 <p>
-For human, three tracks cover most needs. All three are in the <em>Regulation</em> group.</p>
+We have several tracks in the <em>Regulation</em> group that annotate transcription factor binding sites.</p>
 <ul>
   <li>
-  <strong>ReMap ChIP-seq</strong> is the broadest collection of <em>measured</em> sites. ReMap
-  2022 integrates the public ChIP-seq experiments for transcriptional regulators from GEO,
-  ArrayExpress and ENCODE into one atlas, so it covers far more factors and cell types than any
-  single project. There are three versions: all peaks per experiment, a non-redundant set that
-  merges similar targets, and cis-regulatory modules.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=ReMap">hg19</a>,
+  The <strong>ReMap</strong> track integrates ChIP-seq experiments for transcriptional
+  regulators from several sources (GEO, ArrayExpress and ENCODE).
+  It has three subtracks that offer different views of the data: all peaks per
+  experiment; a non-redundant set in which similar targets are merged;
+  and cis-regulatory modules. It's available on
+  <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=ReMap">hg19</a>,
   <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=ReMap">hg38</a>,
   <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=ReMap">mm10</a>,
   <a href="../cgi-bin/hgTrackUi?db=mm39&amp;g=ReMap">mm39</a> and
   <a href="../cgi-bin/hgTrackUi?db=dm6&amp;g=ReMap">dm6</a>.</li>
   <li>
-  <strong>TF ChIP</strong> has the ENCODE 3 transcription factor ChIP-seq peaks, all processed
-  the same way. That matters if you are comparing experiments instead of looking up one
-  factor. It covers 340 factors in 129 cell types on hg38, and 338 factors in 130 cell types on
-  hg19, where the track is named <em>ENCODE 3 TFBS</em> rather than <em>TF ChIP</em>.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=encTfChipPk">hg19</a> and
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=encTfChipPk">hg38</a>. An older clustered version of
-  the
-  same data, <em>Txn Factor ChIP</em>, is on
+  <strong>TF ChIP</strong> holds the ENCODE3 transcription factor ChIP-seq peaks, all
+  processed with one pipeline, which makes the experiments comparable with each other: 340
+  factors in 129 cell types on <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=encTfChipPk">hg38</a>,
+  and 338 factors in 130 cell types on
+  <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=encTfChipPk">hg19</a>, where the track is named
+  <em>ENCODE 3 TFBS</em>. An older clustered version of the same data, <em>Txn Factor
+  ChIP</em>, is on
   <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeRegTfbsClusteredV3">hg19</a>.</li>
   <li>
-  <strong>JASPAR Transcription Factors</strong> is the <em>predicted</em> set, made by scanning
-  the genome with the JASPAR CORE profiles. Scores are scaled from 0 to 1000 and reflect how well
-  the sequence matches the profile; the track shows only sites scoring 400 or above by default,
-  and you can raise that threshold in the track settings. Clicking a site shows the
-  <a href="/goldenPath/help/hgRegMotifHelp.html">motif display</a>, with the sequence logo and the
-  matrix behind the score. The track holds several JASPAR releases as separate subtracks, so check
-  which one you have turned on before you quote a version. JASPAR 2026 is on
+  <strong>JASPAR Transcription Factors</strong> holds sites predicted by scanning the genome
+  with the JASPAR CORE profiles, scored from 0 to 1000 by how well the sequence matches the
+  profile. Sites scoring below 400 are hidden by default, but the cutoff can be changed on the
+  track settings page; clicking a site opens the
+  <a href="/goldenPath/help/hgRegMotifHelp.html">motif display</a> with the sequence logo and
+  matrix. Several JASPAR releases are included as subtracks. JASPAR 2026 is on
   <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=jaspar">hg38</a>,
   <a href="../cgi-bin/hgTrackUi?db=mm39&amp;g=jaspar">mm39</a>,
   <a href="../cgi-bin/hgTrackUi?db=danRer11&amp;g=jaspar">danRer11</a>,
@@ -194,89 +176,68 @@ For human, three tracks cover most needs. All three are in the <em>Regulation</e
   <a href="../cgi-bin/hgTrackUi?db=dm6&amp;g=jaspar">dm6</a>,
   <a href="../cgi-bin/hgTrackUi?db=ce11&amp;g=jaspar">ce11</a>,
   <a href="../cgi-bin/hgTrackUi?db=ci3&amp;g=jaspar">ci3</a> and
-  <a href="../cgi-bin/hgTrackUi?db=sacCer3&amp;g=jaspar">sacCer3</a>. On
-  <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=jaspar">hg19</a> and
-  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=jaspar">mm10</a> the newest release is JASPAR
-  2024.</li>
+  <a href="../cgi-bin/hgTrackUi?db=sacCer3&amp;g=jaspar">sacCer3</a>, and JASPAR 2024 is the
+  latest on <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=jaspar">hg19</a> and
+  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=jaspar">mm10</a>.</li>
 </ul>
 
 <a name="motifEverywhere"></a>
-<h6>The JASPAR track shows my factor binding across the whole gene. Why?</h6>
+<h6>The JASPAR track shows my factor binding all over my gene. Why?</h6>
 <p>
-This is the expected result for a motif search, not a sign that anything has gone wrong. Motifs
-are short and they tolerate mismatches, so a typical one occurs hundreds of thousands of times
-in the human genome, while the factor binds only a few thousand of those places in any given
-cell.</p>
-<p>
-Turning a matrix into a list of hits means picking a threshold, and there is no standard one.
-Two tools working from the same matrix will hand you different sites, because they cut at
-different places and weigh conservation differently. This has been an open problem for as long
-as people have been scanning genomes, so any particular set of predicted sites is best treated as
-one possible answer.</p>
-<p>
-Raising the score cutoff in the track settings will thin the display, but it does not make the
-survivors bound. A more productive approach is to read the motif as the list of places the
-factor <em>could</em> bind, then narrow that list using evidence that it did bind: a ChIP peak
-in a cell type close to yours, open chromatin, or both.</p>
+Motifs are short and tolerate mismatches, meaning a motif can be found hundreds of thousands of times
+across the human genome, including several times in a single gene.</p>
 
 <a name="notFound"></a>
 <h6>I cannot find my transcription factor in any track. Where else can I look?</h6>
 <p>
-First check whether the experiment simply has not been done. ReMap covers the published ChIP-seq
-experiments that were available when it was built, so if your factor is absent from ReMap there
-may be no public ChIP-seq for it in that organism. The
-<a href="https://remap.univ-amu.fr/" target="_blank">ReMap website</a> lets you search by target
-and download the peaks per factor, and that is the quickest way to check.</p>
-<p>
-If the experiment exists but is newer than our tracks, or was done in a cell type we do not
-carry, you will need to load the data yourself as a custom track. The usual sources are:</p>
+ReMap includes the ChIP-seq experiments that were public when it was built, so a factor missing
+from ReMap may have no public ChIP-seq in that organism. Search the
+<a href="https://remap.univ-amu.fr/" target="_blank">ReMap website</a> to see if they have data
+not yet available in the Genome Browser.
+There are several other public data repositories that may have the data you're looking for:</p>
 <ul>
   <li>
-  The <a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a>, for anything
-  produced by ENCODE. This is the easiest case, because the portal will send the data
-  straight to our browser for you. See the <a href="#encodePortal">next question</a>.</li>
+  The <a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a>, which has buttons
+  to load the data directly to the Genome Browser (see the <a href="#encodePortal">next
+  question</a>).</li>
   <li>
-  <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank">GEO</a>, for data submitted
-  alongside a publication. Many GEO submissions include processed peak files as supplementary
-  material, usually BED or narrowPeak, which you can
-  <a href="/goldenPath/help/customTrack.html">load as a custom track</a> at
-  <a href="../cgi-bin/hgCustom">Add Custom Tracks</a>, after checking that the coordinates
-  match the assembly you are using.</li>
+  <a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank">GEO</a>, where many submissions
+  include processed peak files, usually BED or narrowPeak, that can be
+  <a href="/goldenPath/help/customTrack.html">loaded as a custom track</a> on the
+  <a href="../cgi-bin/hgCustom">Add Custom Tracks</a> page. Be sure to select the right
+  assembly when loading the data.</li>
   <li>
-  <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank">SRA</a>, for raw sequencing reads.
-  The Browser cannot display SRA data. Raw reads have to be aligned and peak-called before there
-  is anything to show, which is a job for a sequence analysis pipeline rather than for us.</li>
+  <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank">SRA</a> holds raw reads, but these cannot
+  be displayed in the Genome Browser until you've processed and analyzed them. This should be your last resort
+  as it will be the most time consuming and demanding option.</li>
 </ul>
 
 <a name="encodePortal"></a>
 <h6>How do I display ENCODE data that is not already a track?</h6>
 <p>
-You do not need to download anything or write a custom track by hand. The ENCODE portal will
-open its data in the Genome Browser for you.</p>
+ENCODE data can be loaded directly from the ENCODE portal, without needing to downloading any files:</p>
 <ol>
   <li>
   Search the <a href="https://www.encodeproject.org/search/?type=Experiment"
-  target="_blank">ENCODE portal</a> for what you want, narrowing the results with the filters
-  down the left side. <strong>Assay title</strong>, <strong>Target of assay</strong> (the
-  factor), <strong>Biosample</strong> (the cell type or tissue) and <strong>Genome
-  assembly</strong> are the useful ones.</li>
+  target="_blank">ENCODE portal</a> and narrow the results with the filters on the left, mainly
+  <strong>Assay title</strong>, <strong>Target of assay</strong> (the factor),
+  <strong>Biosample</strong> (the cell type or tissue) and <strong>Genome assembly</strong>.</li>
   <li>
-  Click the <strong>Visualize</strong> button above the result list.</li>
+  Click <strong>Visualize</strong> above the result list.</li>
   <li>
-  Pick your assembly in the panel that opens, then click <strong>UCSC</strong>.</li>
+  Choose the assembly and click <strong>UCSC</strong>.</li>
 </ol>
 <p>
-The Browser opens with every experiment in your filtered result set loaded as a track hub, so
-this works just as well for one experiment as for fifty. Restrict the search before you
-visualize, since a broad filter can attach a very large number of tracks at once.</p>
+The Browser opens with every experiment in the filtered result set loaded as a track hub, so a
+broad search can load a very large number of tracks at once.</p>
 <p>
-ENCODE also publishes a hub for each individual experiment, which is handy if you are scripting
-or want to keep a link in a session. Substitute the accession into this URL:</p>
+Each ENCODE experiment also has its own hub, at a URL of this form (with the accession of the
+experiment in place of ENCSR000AKO):</p>
 <pre>https://www.encodeproject.org/experiments/ENCSR000AKO/@@hub/hub.txt</pre>
 <p>
-and load it from the <a href="../cgi-bin/hgHubConnect#unlistedHubs">My Hubs</a> tab of the Track
-Hubs page, or by appending it to a browser URL as
-<code>hgTracks?db=hg38&amp;hubUrl=</code> followed by the hub address.</p>
+which can be loaded from the <a href="../cgi-bin/hgHubConnect#unlistedHubs">My Hubs</a> tab of
+the Track Hubs page, or appended to a browser URL as <code>hgTracks?db=hg38&amp;hubUrl=</code>
+followed by the hub address.</p>
 <!--
 <p>
 If you would rather place a single file yourself, note that ENCODE distributes peaks as bigBed
@@ -290,394 +251,305 @@ Full instructions are on the
 <a href="/goldenPath/help/customTrack.html">custom tracks help page</a> and the
 <a href="/goldenPath/help/hgTrackHubHelp.html">track hub help page</a>.</p>
 -->
+
 <a name="promoters"></a>
 <h2>Promoters, enhancers and other elements</h2>
 
 <h6>How do I find the promoter of a gene?</h6>
 <p>
-It depends on what you mean by a promoter, something which the tracks don't always agree on. In
-the loosest sense a promoter is the minimal stretch upstream of the transcription start site
-that will drive expression, but there is no agreed figure for minimal: some authors work with
-2 kb upstream, others with 500 bp or 100 bp, and the right choice depends on the gene and on
-whether you are after broad or tissue-specific expression.</p>
-<ul>
-  <li>
-  <strong>EPDnew Promoters</strong> has experimentally defined promoters, each with a single,
-  precisely mapped transcription start site. Use it when you need a defined, citable promoter
-  region and not an approximation. On hg38 there is a companion
-  set for non-coding RNA promoters.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=epdNew">hg19</a>,
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=epdNew">hg38</a> and
-  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=epdNew">mm10</a>.</li>
-  <li>
-  <strong>FANTOM5</strong> maps transcription start sites by CAGE and reports how much each one
-  is used across a large panel of tissues and cell types. Use it when you want to know which
-  start site is active in which tissue.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=fantom5">hg19</a>,
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=fantom5">hg38</a> and
-  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=fantom5">mm10</a>, and for a few other
-  genomes including chicken, dog, rat and rhesus.</li>
-  <li>
-  The promoter-like cCREs in the <a href="#ccres">ENCODE cCRE tracks</a> are a genome-wide
-  classification built from chromatin signal, so they are more inclusive and less precise than
-  EPDnew.</li>
-  <li>
-  If all you need is a fixed window upstream of a gene, do not use a promoter track at all. The
-  Table Browser can return the upstream sequence for any gene track, and our download server
-  carries prepackaged 1000, 2000 and 5000 bp upstream sequence files for RefSeq genes. See
-  <a href="FAQdownloads.html#download18">Obtaining promoter sequence</a>.</li>
-</ul>
+It depends on what you mean by a promoter. It's usually the region just upstream of the
+transcription start site, but people use anything from 100 bp to 2 kb, and the tracks below
+don't all define it the same way.</p>
+<p>
+If you need a well-defined promoter that you can cite, the <strong>EPDnew Promoters</strong>
+track (<a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=epdNew">hg19</a>,
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=epdNew">hg38</a>,
+<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=epdNew">mm10</a>) has experimentally defined
+promoters, each with a single precisely mapped transcription start site; on hg38 there's also a
+separate set for non-coding RNA promoters. The <strong>FANTOM5</strong> track has
+transcription start sites found with CAGE, with expression values for each of them in a large
+number of tissues and cell types. It's on <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=fantom5">hg19</a>,
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=fantom5">hg38</a> and
+<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=fantom5">mm10</a>, and on a few other genomes
+including chicken, dog, rat and rhesus. The <a href="#ccres">ENCODE cCRE tracks</a> also have
+promoter-like elements, called from chromatin data, which cover more of the genome than EPDnew
+although their boundaries are less precise.</p>
+<p>
+If all you need is a fixed amount of sequence upstream of a gene, the Table Browser can get
+that for any gene track, and our download server has files with the 1000, 2000 and 5000 bp
+upstream of RefSeq genes (see <a href="FAQdownloads.html#download18">Obtaining promoter
+sequence</a>).</p>
 
 <a name="enhancers"></a>
 <h6>How do I find enhancers and other regulatory elements?</h6>
-<ul>
-  <li>
-  <strong>GeneHancer</strong> is the track most users want when they ask about enhancers. It
-  marks the elements and also links them to their predicted target genes, drawn as
-  interactions.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=geneHancer">hg19</a> and
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=geneHancer">hg38</a>.</li>
-  <li>
-  <strong>VISTA Enhancers</strong> has elements that were tested one at a time in transgenic
-  mouse assays, with the resulting expression pattern recorded. It is the smallest of these
-  sets and the best validated.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=vistaEnhancersBb">hg19</a>,
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=vistaEnhancersBb">hg38</a>,
-  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=vistaEnhancersBb">mm10</a>
-  and <a href="../cgi-bin/hgTrackUi?db=mm39&amp;g=vistaEnhancersBb">mm39</a>.</li>
-  <li>
-  <strong>RefSeq Functional Elements</strong> is NCBI's curated set of experimentally
-  characterized non-coding elements.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=refSeqFuncElems">hg38</a> and
-  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=refSeqFuncElems">mm10</a>.</li>
-  <li>
-  <strong>MPRAs</strong> is a collection of massively parallel reporter assay results, which
-  measure regulatory activity for many sequences at once. The MPRA Base half holds 40,938 tested
-  elements; the MPRAVarDB half holds tested variants and is covered under
-  <a href="#variantEffect">variant effects</a> below.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=mpra">hg38</a>.</li>
-</ul>
 <p>
-For the chromatin evidence behind the called elements, see <strong>ENCODE4 Regulation</strong>,
-which carries DNase, ATAC-seq, histone modification and CTCF signal organized by tissue, on
+Most people asking about enhancers are looking for <strong>GeneHancer</strong>, on
+<a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=geneHancer">hg19</a> and
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=geneHancer">hg38</a>, which has regulatory elements
+and links each one to the genes it's predicted to regulate, drawn as arcs (see the
+<a href="#arcs">next question</a>). <strong>VISTA Enhancers</strong> is much smaller, but every
+element in it was tested individually in transgenic mice, and the track lists the tissues where
+each one drove expression
+(<a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=vistaEnhancersBb">hg19</a>,
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=vistaEnhancersBb">hg38</a>,
+<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=vistaEnhancersBb">mm10</a>,
+<a href="../cgi-bin/hgTrackUi?db=mm39&amp;g=vistaEnhancersBb">mm39</a>). NCBI's curated set of
+experimentally characterized non-coding elements is in <strong>RefSeq Functional
+Elements</strong> on <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=refSeqFuncElems">hg38</a> and
+<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=refSeqFuncElems">mm10</a>. On
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=mpra">hg38</a> there is also the
+<strong>MPRAs</strong> track, with results from massively parallel reporter assays: MPRA Base
+has 40,938 tested elements, and MPRAVarDB has tested variants (see
+<a href="#variantEffect">variant effects</a> below).</p>
+<p>
+The DNase, ATAC-seq, histone and CTCF data behind many of these elements are in
+<strong>ENCODE4 Regulation</strong>, organized by tissue, on
 <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a> and
-<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=encode4Reg">mm10</a>. This replaced <strong>ENCODE3
-Regulation</strong>
-as the default in July 2026; ENCODE3 is kept for archival use and is still on
-<a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeReg">hg19</a> and
+<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=encode4Reg">mm10</a>. That track replaced
+<strong>ENCODE3 Regulation</strong> as the default in July 2026, but ENCODE3 Regulation is still
+available on <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeReg">hg19</a> and
 <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg">hg38</a>.</p>
 
 <a name="arcs"></a>
-<h6>What does it mean when GeneHancer draws an arc between an element and a gene?</h6>
+<h6>What do the GeneHancer arcs between elements and genes mean?</h6>
 <p>
-It means that somebody has associated the two. It does not mean that the element has been
-shown to regulate the gene.</p>
-<p>
-In <strong>GeneHancer</strong> the higher end of an arc is the element and the lower end is the
-gene it has been linked to. The track pools several kinds of evidence to make those links.
-They include eQTLs, promoter capture Hi-C, correlation between enhancer RNA and gene expression,
-correlation between a transcription factor and a candidate target, and plain proximity.
-Proximity is the weakest of these. An arc drawn mostly on distance makes the same nearest-gene
-assumption you were trying to get away from. The track's
-<em>double elite</em> subset keeps only the cases where both the element and the link to the
-gene were supported by more than one source. It is a great deal smaller, which helps when the
-full set returns too much.</p>
-<p>
-The arcs also say nothing about the relationship between two genes that share an element. An
-element linked to two genes has been associated with each of them separately, which is not a
-statement that either gene affects the other.</p>
+In the GeneHancer track, the arcs connect an element (the high end of the arc) to a gene (the
+low end). The connections come from several different sources, including eQTLs, promoter
+capture Hi-C, correlation of enhancer RNA and gene expression, correlation between
+transcription factors and possible targets, and the distance to the gene. Links that are mostly
+based on distance are basically the same as picking the nearest gene, so they aren't strong
+evidence that the element regulates that gene. There is also a <em>double elite</em> subset of
+the track that only has the elements and links with support from more than one source, which is
+much smaller than the full set.</p>
 
 <a name="ccres"></a>
 <h6>What are cCREs, and which cCRE track should I use?</h6>
 <p>
-A candidate cis-regulatory element, or cCRE, is a region that looks regulatory in chromatin
-data. Nobody has shown that it regulates anything. ENCODE built the
-Registry of cCREs by combining DNase accessibility with histone modification and CTCF signal
-across many biosamples, then classifying each region as promoter-like, enhancer-like, CTCF-only
-and so on.</p>
+ENCODE's Registry of candidate cis-regulatory elements (cCREs) is a set of regions that look
+like promoters, enhancers or CTCF-bound sites, based on DNase, H3K4me3, H3K27ac and CTCF data
+from many biosamples. As &quot;candidates&quot;, most of them haven't been tested in an
+experiment. On hg38, for example, the TERT promoter is covered by the promoter-like cCRE
+EH38E3622530.</p>
 <p>
-The <strong>ENCODE cCREs</strong> container on
-<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=cCREs">hg38</a> holds several versions. The
-<strong>ENCODE4
-cCREs</strong> registry became the default in July 2026 and is the one to use: 2.3 million human
-and 927,000 mouse elements. The <strong>ENCODE4 Core Collection</strong> is a smaller,
-higher-confidence subset, covering the 170 human and 18 mouse biosamples that were profiled with
-all four core assays. <strong>ENCODE3 cCREs</strong> is the earlier release, kept for archival
-use because a great many published analyses used it and coordinates need to stay reproducible. The
-container also carries per-biosample subtracks, which is how you restrict
-the classification to one cell type. Mouse
-<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=cCREs">mm10</a> carries the same three versions.</p>
+The <strong>ENCODE cCREs</strong> track on
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=cCREs">hg38</a> and
+<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=cCREs">mm10</a> has three versions of the registry.
+The default since July 2026 is <strong>ENCODE4 cCREs</strong>, with 2.3 million elements in
+human and 927,000 in mouse, and it's the version most people will want. The <strong>ENCODE4 Core
+Collection</strong> is a smaller subset with higher confidence, from the 170 human and 18 mouse
+biosamples with data for all four core assays. We also kept the older <strong>ENCODE3
+cCREs</strong>, since many published papers used it. The track also has subtracks for each
+biosample if you want to look at one cell type.</p>
 
 <a name="scores"></a>
 <h2>Reading the data</h2>
 
-<h6>What do the scores and the grey shading in these tracks mean?</h6>
+<h6>What do the scores and colors in these tracks mean?</h6>
 <p>
-It often means signal strength, but not always, and the tracks on this page do not all use it
-the same way. A score from 0 to 1000 drawn as a shade of grey is an old BED convention, dark for
-high. Where a track uses that convention, the number reflects how strong the signal was in the
-experiment behind the item. It is not a probability, and it is not a statement that the element
-does anything.</p>
-<p>
-Beyond that convention, each track uses color for its own purpose. <strong>JASPAR</strong> does
-use it as a score: the shade is the match to the motif profile, scaled to 0 to 1000, and sites
-below 400 are hidden until the threshold is lowered in the track settings.
-<strong>ReMap</strong> does not. It gives every transcription factor a color of its own, so the
-color indicates which factor is shown and says nothing about the quality of the peak.
-<strong>GeneHancer</strong> uses color for two things at once, whether the element is a
-promoter or an enhancer and whether its confidence is high, medium or low. The
-<a href="#ccres">cCRE tracks</a> color by class, promoter-like against enhancer-like against
-CTCF-only, which is unrelated to strength.</p>
-<p>
-The track description page is authoritative in each case, and it is one click from the track
-name.</p>
+Many of these tracks follow the BED score convention, where each item has a score from 0 to
+1000 and is drawn in a shade of grey, with darker items having higher scores. In most of them
+the score reflects how strong the signal was in the experiment the data came from. A few tracks
+use color in other ways, though. The JASPAR track is shaded by how well each site matches the
+motif, while ReMap gives every transcription factor its own color and GeneHancer uses color to
+show both the element type (promoter or enhancer) and its confidence level (high, medium or
+low). The <a href="#ccres">cCRE tracks</a> are colored by element class. What the scores and
+colors mean for a particular track is described on its description page, which you can get to
+by clicking on the track name.</p>
 
 <a name="signalHeight"></a>
 <h6>The signal is higher in one region than another. Can I compare them?</h6>
 <p>
-Between cell types in one window, yes. That is what the layered tracks are built for: the
-colored traces share a vertical axis, so a taller trace really is a stronger signal.</p>
-<p>
-Between regions, check the scale first. The <strong>ENCODE4</strong> histone and accessibility
-tracks on <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a> arrive set to
-<em>Auto-scale to data view</em>, which recomputes the vertical range from whatever is on screen.
-The same peak is then drawn at different heights depending on how far out you are zoomed. Two
-screenshots of two places cannot be compared at all. Open the
-track's configuration page, change <em>Data view scaling</em> to use the vertical viewing range,
-and set a range that suits your data. The older <strong>ENCODE3</strong> layered tracks on
+That depends on the tracks and how they are scaled. In the layered tracks, such as the
+<strong>ENCODE4</strong> histone and accessibility tracks on
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a>, the cell types are drawn on
+the same vertical axis, so you can compare the different colored signals in a single view.
+These tracks are set to <em>Auto-scale to data view</em> by default, however, so the vertical
+range is recalculated each time you move or zoom and the same peak can be drawn at a different
+height somewhere else. To compare two regions, go to the track settings page, change <em>Data
+view scaling</em> to use the vertical viewing range, and set a range that works for your data.
+The older <strong>ENCODE3</strong> layered tracks on
 <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeRegMarkH3k27ac">hg19</a> and
-<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeRegMarkH3k27ac">hg38</a> come with a fixed
-range instead, so they are already comparable from one place to the next.</p>
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeRegMarkH3k27ac">hg38</a> already use a fixed
+range.</p>
 <p>
-Between one track and another, no. The experiments were done by different labs and run through
-different pipelines, so the numbers are not in the same units. A value of 12 in one track and a
-value of 12 in another are not the same quantity, and the display gives no warning of this.</p>
-<p>
-When the comparison matters, it is better to work with the values than with the picture. The
-<a href="../cgi-bin/hgTables">Table Browser</a> and the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a> will return values for your regions, and
-the track description page says what the units are.</p>
+Values from two different tracks usually can't be compared directly, since the data were
+produced by different labs with different pipelines and are often in different units. If you
+need the actual values for your regions, you can get them from the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, and the units for each track are given on
+its description page.</p>
 
 <a name="nothingThere"></a>
-<h6>Nothing is annotated over my region. Does that mean it is not regulatory?</h6>
+<h6>Nothing is annotated in my region. Does that mean it is not regulatory?</h6>
 <p>
-No. It means these particular experiments did not report anything in that region.
-</p>
-<p>
-The most common reason is that nobody has assayed your cell type. The tracks we
-carry cover only a selective number of cell types or tissues chosen by the
-experimenters, and a region may be a strong enhancer in a tissue that has never
-been profiled. The same goes for the factor. ReMap and the ENCODE ChIP tracks
-together cover a few hundred factors in a few hundred cell types, which is a
-small fraction of the possible combinations. Peak calling also requires a
-cutoff, so a site that is real but weak can fall below it and thus will not
-be annotated.</p>
-<p>
-Annotations that do not depend on a particular experiment make a better test for absence.
-Conservation requires no experiment at all, and the cCREs pool a great many biosamples into one
-classification. If those are also empty over the region, there is more reason to think it is
-may not be a regulatory region.</p>
+Not necessarily. It could mean that's not regulatory, but it could also just mean that
+these particular experiments did not report anything in that region.</p>
 
 <a name="cellType"></a>
 <h2>Working with the data</h2>
 
-<h6>How do I restrict a search to one cell type or tissue?</h6>
+<h6>How do I show data for only one cell type or tissue?</h6>
 <p>
-Most of the large regulatory tracks are collections holding many separate tracks, often with
-one per cell type or experiment. By default, these collections often only have a summary view
-turned on. Click the track name to
-open its configuration page, where you will find the list and, on the bigger collections,
-filters. ReMap, for instance, lets you filter by transcription factor directly in the track
-settings, so you can show one factor across all its experiments.</p>
-<p>
-The largest collections use a different configuration page. Where there are hundreds or
-thousands of individual experiments, as in the per-experiment tracks of
+Most large regulatory tracks are collections of subtracks, often one per cell type or
+experiment, and many show only a summary by default. Clicking the track name opens its settings
+page, where individual subtracks can be selected; some tracks also have filters, such as the
+transcription factor filter in ReMap, which shows one factor across all of its experiments.
+Collections with hundreds or thousands of experiments, such as the per-experiment tracks of
 <strong>ENCODE4 Regulation</strong> on
-<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a>, the page shows facets down the
-left side and a
-paginated table on the right: tick the tissue, assay or biosample you want and the table narrows
-to the matching experiments. This is usually a faster way to reach one cell type than reading a
-long list.</p>
-<p>
-To find a track rather than configure one, the
-<a href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a> page searches track
-names and descriptions across the whole assembly, which is usually faster than reading through
-the track groups.</p>
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a>, have a settings page with
+facets on the left (tissue, assay, biosample) and a table of matching experiments on the right.
+<a href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a> searches track names and
+descriptions across an assembly.</p>
 
 <a name="noTissue"></a>
-<h6>My tissue is not in the list of cell types. What should I do?</h6>
+<h6>There is no data for my tissue. What can I do?</h6>
 <p>
-One solution may be to choose the closest available cell type, and state that choice in any
-write-up. For example, treating a cell line as a stand-in for primary cells is a judgment made by
-the person reading the data, not something the data supports on its own.</p>
-<p>
-Before you settle for a substitute, check whether the experiment exists somewhere we do not
-carry it. The <a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a> holds
-far more biosamples than we turn into tracks. It will open any of them in the Browser for you;
-see <a href="#encodePortal">displaying ENCODE data</a> above. You can also search the
-<a href="../cgi-bin/hgHubConnect">public hubs</a> list, as some may contain more
+First, you should check if the experiment exists but is not available in the Genome Browser.
+For example, the <a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a> includes
+many biosamples that were not imported as native Genome Browser tracks, and which provides
+an easy way to visualize data in the Genome Browser (see the <a
+href="#encodePortal">displaying ENCODE data</a> section above). You can also
+search the <a href="../cgi-bin/hgHubConnect">public hubs</a> list, as some may contain more
 tissue-specific regulatory data than what's available natively in the Browser.</p>
 <p>
-If nothing close exists, consider the annotations that were never specific to one cell type.
-The cCREs pool many biosamples into a single classification, and conservation does not depend on
-any experiment. Neither one describes your tissue. Neither one silently describes a different
-tissue either, which is the risk that comes with a poorly matched proxy.</p>
+Beyond that, you might consider closely related cell types, or even annotations not specific to one cell type.
+For example, the cCREs tracks pool many biosamples into a single classification, while conservation does not
+depend on experimental data. But, these run the risk of not being specific enough to describe what's happening
+in your cell type of interest.</p>
 
 <a name="myGene"></a>
 <h6>I have a gene. How do I find the factors that regulate it?</h6>
 <p>
-No single track answers this, so you have to work outward from the gene.</p>
+You will need to go to your gene locus and turn on several tracks to find regulatory elements.
+A general workflow might look like this:</p>
 <ol>
   <li>
-  Navigate to the gene and zoom out far enough to include the surrounding non-coding sequence.
-  Regulatory elements are often tens or hundreds of kilobases away, and the nearest gene to an
-  element is frequently not its target.</li>
+  First, navigate to the gene, e.g. BRCA1 at chr17:43,044,295-43,125,483 on hg38, and zoom out to include
+  some of the non-coding sequence around it. </li>
   <li>
-  Turn on GeneHancer. Its interaction arcs will show which elements have been linked to your
-  gene, including distant ones, which narrows the search from the whole neighborhood to a
-  handful of regions.</li>
+  Next, turn on the GeneHancer track, which shows distant enhancers for a gene.</li>
   <li>
-  Turn on ReMap or TF ChIP and look at which factors have peaks in those regions. This gives you
-  factors that were measured at that position in some cell type.</li>
+  After that, turn on the ReMap or TF ChIP tracks. You can use these to identify the transcription factors 
+  with binding activity within GeneHancer elements. Note: check which cell types show peaks so that you're
+  looking at only those relevant to your question.</li>
   <li>
-  Check whether any of those cell types are relevant to your biology. A peak in K562 says little
-  about neurons.</li>
-  <li>
-  If you need candidates in a cell type nobody has assayed, fall back to JASPAR predictions
-  within the GeneHancer elements, and treat the result as hypotheses to test.</li>
+  If no relevant cell type has been assayed, turn on the JASPAR track. Look for predicted binding motifs within the
+  GeneHancer elements, which you can use as candidates for experimental testing.</li>
 </ol>
 <p>
-To do this systematically, the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a> will intersect two or more tracks and
-return a table, and the <a href="../cgi-bin/hgTables">Table Browser</a> will do the same for a
-region or for a list of genes.</p>
+For many genes or regions at once, the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>
+intersects two or more tracks and returns a table, and the
+<a href="../cgi-bin/hgTables">Table Browser</a> does the same for a region or a list of
+genes.</p>
 
 <a name="variantEffect"></a>
-<h6>I have a variant, not a region. What does it do to regulation?</h6>
+<h6>I have a variant. How can I tell if it affects regulation?</h6>
 <p>
-This is a different question from the rest of this page. Everything above annotates regions and
-tells you what is where; the tracks here take one base change and tell you what it does. The
-same measured and predicted distinction applies, so start with the one track that is
-measured.</p>
+<strong>MPRAVarDB</strong>, in the <strong>MPRAs</strong> collection on
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=mpraVarDb">hg38</a>, holds 239,028 variants tested
+for allelic effect in reporter assays, from 18 MPRA studies in more than 30 cell lines.
+These variants were identified using GWAS and eQTL fine-mapping as well as saturation mutagenesis of 20
+disease-associated elements. This means that they are concentrated at loci already associated with a
+disease or trait. For example, in the TERT promoter (chr5:1,294,989-1,295,246 in hg38) there are 3,896
+entries across 259 consecutive positions, 1,464 of them with an FDR below 0.05. But this kind of density
+is not evenly distributed across the genome.</p>
 <p>
-<strong>MPRAVarDB</strong> holds 239,028 variants that were put
-through a reporter assay and scored for allelic effect, drawn from 18 MPRA studies covering more
-than 30 cell lines and more than 30 diseases or traits. The variants come from GWAS and eQTL
-fine-mapping, from saturation mutagenesis of 20 disease-associated regulatory elements, and from
-smaller focused screens, so the coverage is concentrated on loci people have already had reason
-to care about. Items are colored by significance, dark red for FDR below 0.05. If your variant
-is in here, you have an experimental answer and not a guess. It lives in the
-<strong>MPRAs</strong> collection, alongside MPRA Base, which tests whole elements.
-Available for <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=mpraVarDb">hg38</a>.</p>
-<p>
-Most variants will not be in it, since 239,028 tested positions is a very small part of the
-genome. Three prediction tracks fill the gap by scoring every possible substitution. None of
-them is in the <em>Regulation</em> group; all three are under <em>Phenotype and Disease
-Associations</em>, the last two inside the <strong>Deleteriousness Predictions</strong>
-collection on
+For variants not in MPRAVarDB, three tracks in <em>Phenotype and Disease Associations</em>
+give a predicted score for every possible single-base substitution; AlphaGenome and PromoterAI
+are in the <strong>Deleteriousness Predictions</strong> collection on
 <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=predictionScoresSuper">hg38</a>.</p>
 <ul>
   <li>
-  <strong>CADD</strong> is the oldest and most widely used of the three, and the one a reader is
-  most likely to be asked for. It weights more than a hundred annotations, conservation and
-  regulatory signal among them, into a single score per substitution, trained by contrasting
-  variants that survived selection against simulated ones. Scores are PHRED scaled, so 10 marks
-  the top 10 percent of substitutions genome-wide, 20 the top 1 percent and 30 the top 0.1
-  percent. It was built to rank deleteriousness in general and not regulatory effect in
-  particular, so on a non-coding base treat a high score as a reason to look closer. Version 1.7
-  is available for <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=caddSuper1_7">hg19</a> and
-  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=caddSuper1_7">hg38</a>, with version 1.6 kept
-  alongside it.</li>
+  <strong>CADD</strong> combines conservation and regulatory signal to give one score per substitution.
+  Thus, you could use it, in part, to understand how a variant might affect a regulatory region.
+  Scores are PHRED scaled (meaning 10 marks the top 10%
+  of substitutions genome-wide, 20 the top 1%, and 30 the top 0.1%). Version 1.7 is on
+  <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=caddSuper1_7">hg19</a> and
+  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=caddSuper1_7">hg38</a>.</li>
   <li>
-  <strong>AlphaGenome</strong> gives the AlphaGenome Variant Impact score from Google DeepMind,
-  which folds together predicted effects on expression, splicing, chromatin accessibility and
-  transcription factor binding across hundreds of cell types, plus AlphaMissense for changes
-  that alter protein. It is precomputed for every possible single-base substitution in the
-  genome, about 8.8 billion of them, with one track per alternate allele. Scores are PHRED
-  scaled on the same convention as CADD. It is aimed squarely at regulatory consequence, which
-  is what makes it useful here, but it is new enough that there is little independent
-  benchmarking of it yet. Available for
+  <strong>AlphaGenome</strong>, from Google DeepMind, provides a "Variant Impact" score that combines
+  predicted effects on expression, splicing, chromatin accessibility and transcription factor
+  binding. There
+  is one track per alternate allele (i.e. A/T/C/G), which uses the same PHRED scale as CADD. On
   <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=alphaGenome">hg38</a>.</li>
   <li>
-  <strong>PromoterAI</strong>, from Illumina, scores every possible single-base substitution in
-  proximal promoter regions. Narrower than AlphaGenome and aimed squarely at promoter variants.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=promoterAi">hg38</a>.</li>
+  <strong>PromoterAI</strong>, from Illumina, scores substitutions in proximal promoters only,
+  on <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=promoterAi">hg38</a>.</li>
 </ul>
-<p>
-A high score from either says a model thinks the change is disruptive, not that anyone has
-measured it. Where a variant appears in both MPRAVarDB and a prediction track, the measurement
-is the better evidence.</p>
 
 <a name="otherGenomes"></a>
 <h6>What is available for assemblies other than human and mouse?</h6>
 <p>
-Much less. The limit is usually the data itself: these resources were built for human first, and
-most never went further than mouse. JASPAR is the main exception, since it needs only the genome
-sequence and a motif, so it covers zebrafish, fly, worm, chicken, sea squirt and yeast as well.
-ReMap also covers fly. Everything else described on this page is human and mouse
-only.</p>
+The regulatory data for non-human assemblies is limited.</p>
+
 <p>
-Mouse is split awkwardly between its own assemblies. mm10 carries most of these tracks and mm39
-has only JASPAR, ReMap and VISTA, because several of the source projects never released mm39
-versions. If you need something that is on mm10 but not mm39,
-<a href="../cgi-bin/hgLiftOver">LiftOver</a> will convert the coordinates, though check the
-result before trusting it. Human has a milder version of the same problem: a few tracks, such
-as the older clustered Txn Factor ChIP, are still hg19 only.</p>
+For mouse, the mm10 assembly has the most regulatory tracks, though mm39 is catching up and now includes
+JASPAR, ReMap and VISTA. You can use &quot;QuickLift&quot; (under &quot;View &gt; In Other Genomes (Convert)&quot;)
+to convert any regulatory tracks you have enabled from one assembly to another, such as from mm10 to mm39.</p>
+
 <p>
-For assemblies not hosted at UCSC, or for tracks we do not carry, check the
-<a href="../cgi-bin/hgHubConnect">public hubs</a> list, where other groups publish data through
-our browser.</p>
+JASPAR is available for most non-human and non-mouse organisms, including 
+zebrafish, fly, worm, chicken, sea squirt and yeast. This is primarily because
+JASPAR is based on searching for sequence motifs, which only requires the genome
+sequence itself. ReMap, which pulls in data from several repositories, is also
+available for fly.</p>
+
+<p>
+Check our 
+<a href="../cgi-bin/hgHubConnect">public hubs</a> list
+to see if there are data available from external groups
+for your assembly of interest.</p>
 
 <a name="limits"></a>
 <h2>Limits of the evidence</h2>
 
 <h6>If a region has all of this evidence, is it definitely regulatory?</h6>
 <p>
-No. These tracks show where biochemical activity was detected, which is not the same as showing
-that the activity matters to an organism. Early ENCODE work reported that around 80% of the
-genome registers some such activity.
-<a href="https://pubmed.ncbi.nlm.nih.gov/23431001/" target="_blank">Graur <em>et al.</em>
-(2013)</a> and
-<a href="https://pubmed.ncbi.nlm.nih.gov/24753594/" target="_blank">Kellis <em>et al.</em>
-(2014)</a> set out the competing definitions of functional and why they do not select the same
-regions.</p>
-<p>
-Attempts to validate predicted regulatory regions give a mixed picture:</p>
+Not necessarily. These tracks record biochemical activity (e.g., binding, accessibility, histone marks). 
+For example, early ENCODE results demonstrated activity over roughly 80% of the genome,
+which raised debates over what level of activity was needed to label a region as &quot;functional&quot;
+(<a href="https://pubmed.ncbi.nlm.nih.gov/23431001/" target="_blank">Graur <em>et al.</em>
+2013</a>; <a href="https://pubmed.ncbi.nlm.nih.gov/24753594/" target="_blank">Kellis
+<em>et al.</em> 2014</a>). Experimental tests of predicted regulatory regions give mixed
+results:</p>
 <ul>
   <li>
-  <a href="https://pubmed.ncbi.nlm.nih.gov/29420474/" target="_blank">Osterwalder <em>et al.</em>
-  (2018)</a>: of ten single-enhancer deletions in mouse, none changed limb morphology. Deleting
-  pairs near the same gene did.</li>
+  None of ten single limb enhancer deletions in mouse changed limb morphology, while deleting
+  pairs near the same gene did
+  (<a href="https://pubmed.ncbi.nlm.nih.gov/29420474/" target="_blank">Osterwalder <em>et
+  al.</em> 2018</a>).</li>
   <li>
-  <a href="https://pubmed.ncbi.nlm.nih.gov/24603674/" target="_blank">Cusanovich <em>et al.</em>
-  (2014)</a>: after knocking down 59 factors in one cell line, only a small subset of the genes
-  bound by a factor changed expression.</li>
+  After knockdown of 59 transcription factors in one cell line, only a small subset of the
+  genes bound by each factor changed expression
+  (<a href="https://pubmed.ncbi.nlm.nih.gov/24603674/" target="_blank">Cusanovich <em>et
+  al.</em> 2014</a>).</li>
   <li>
-  <a href="https://pubmed.ncbi.nlm.nih.gov/23236164/" target="_blank">Fisher <em>et al.</em>
-  (2012)</a>: of 104 fly regions, five of the six most heavily bound drove patterned expression,
-  against one of nine lightly bound. Occupancy mattered more than the presence of a peak.</li>
+  In fly, five of the six most heavily bound regions drove patterned expression, against one of
+  nine lightly bound regions
+  (<a href="https://pubmed.ncbi.nlm.nih.gov/23236164/" target="_blank">Fisher <em>et al.</em>
+  2012</a>).</li>
   <li>
-  <a href="https://pubmed.ncbi.nlm.nih.gov/23818646/" target="_blank">White <em>et al.</em>
-  (2013)</a>: Crx-bound sequences drove expression in mouse retina, while unbound regions
-  carrying the same number of Crx motifs did not.</li>
+  In mouse retina, Crx-bound sequences drove expression and unbound sequences with the same
+  number of Crx motifs did not
+  (<a href="https://pubmed.ncbi.nlm.nih.gov/23818646/" target="_blank">White <em>et al.</em>
+  2013</a>).</li>
   <li>
-  <a href="https://pubmed.ncbi.nlm.nih.gov/25035418/" target="_blank">Kwasnieski <em>et al.</em>
-  (2014)</a>: of 2,000 ENCODE chromatin-state segments tested in K562, those labeled
-  <em>Weak Enhancer</em> drove higher expression than those labeled <em>Enhancer</em>. These are
-  an earlier segmentation, not the <a href="#ccres">cCRE registry</a>.</li>
+  Of more than 2,000 ENCODE chromatin state segments tested in K562 cells, those labeled
+  <em>Weak Enhancer</em> drove more expression than those labeled <em>Enhancer</em>; these come
+  from an earlier segmentation, not the cCRE registry
+  (<a href="https://pubmed.ncbi.nlm.nih.gov/25035418/" target="_blank">Kwasnieski <em>et
+  al.</em> 2014</a>).</li>
 </ul>
 <p>
-The reverse errors are common too: working sites that are not conserved, or that match no JASPAR
-profile closely enough to appear in the track. Treat what you find as a ranked list of
-candidates to test, not a set of conclusions.</p>
+Beyond that, some functional binding sites are not conserved while others don't match any JASPAR profiles closely
+enough to appear in the track.</p>
 
 <a name="summary"></a>
 <h2>Summary: regulatory tracks by category</h2>
 <p>
-Each assembly name below links to that track's description page on that assembly. A few tracks
-appear on additional genomes not listed here; use
-<a href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a> to check a genome that is
-not shown.</p>
+Some of these tracks are also on genomes not listed here. Use
+<a href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a> to check other
+assemblies.</p>
 <table class="stdTbl">
   <thead style="text-align: left">
     <tr>
@@ -861,3 +733,4 @@ For the full set of tracks on any assembly, open the <em>Regulation</em> group o
 <a href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a>.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
+
