@@ -4251,9 +4251,14 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     else
         safef(setting,sizeof(setting),"%s.%s",descendentTdb->track,suffix);
     char *newVal = cartOptionalString(newCart,setting);
+    // A visibility this request created is the request asking for it, not a leftover,
+    // even when it is "hide", which cartValueHasChanged() counts as unchanged.
+    // So a URL that turns on a container and hides one of its subtracks keeps the hide.
+    boolean setByThisRequest = vis && sameOk(hashFindVal(oldVars,setting),CART_VAR_EMPTY);
     if (    newVal    != NULL
     && (   (parentVal != NULL && sameString(newVal,parentVal))
-        || (FALSE == cartValueHasChanged(newCart,oldVars,setting,TRUE,FALSE))))
+        || (!setByThisRequest
+            && FALSE == cartValueHasChanged(newCart,oldVars,setting,TRUE,FALSE))))
         removed += cartRemoveAndCount(newCart,setting);
     }
 return removed;
