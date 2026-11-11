@@ -1,0 +1,42 @@
+# #38685 -- hgEncodeVocab with an empty term.
+#
+# Fix 2b33455fa7e (hg/encode/hgEncodeVocab/hgEncodeVocab.c).  hgEncodeVocab?term="" chopped
+# the empty list with needMem(0), which aborted with "needMem: trying to allocate 0 bytes" and
+# a stack dump.  The error log cron counted each one as a memory error;  crawlers sent most of
+# them.  The fix treats an empty term=, tag=, target= or label= as no argument at all, so the
+# page says the required argument was not found, the same page as a request with no term.
+#
+# 1. term="" (the quoted form crawlers send):  the "argument not found" warning, no needMem.
+#    The warning is the positive check, because an empty page passes every noText:.
+# 2. tag="":  the same, through the same code path for a different argument.
+# 3. Control:  term="GM12878" still shows the term, so the check did not break real terms.
+#
+# The warning is written into the warn box by JavaScript, so curl does not see the text;
+# the browser does.
+proof:
+  - "assertion-only 2026-11-11 -- written after the fix"
+  - "release-ab 2026-11-11 -- fails on hgwbeta (v506, 2b33455fa7e not in v506_branch) at step 2:  no 'argument not found', the page says 'needMem: trying to allocate 0 bytes';  passes on genome-test, which has the fix"
+
+target: genome-test
+db: hg38
+position: chr1:1000000-1010000
+reset: true
+fast: true
+steps:
+  # 1. term="" (%22%22)
+  - goto: "/cgi-bin/hgEncodeVocab?term=%22%22"
+  - expect:
+      text: "argument not found"
+      noText: ["needMem", "trying to allocate 0 bytes"]
+
+  # 2. tag=""
+  - goto: "/cgi-bin/hgEncodeVocab?tag=%22%22"
+  - expect:
+      text: "argument not found"
+      noText: ["needMem", "trying to allocate 0 bytes"]
+
+  # 3. a real term still works
+  - goto: "/cgi-bin/hgEncodeVocab?term=%22GM12878%22"
+  - expect:
+      text: "GM12878"
+      noText: ["argument not found", "needMem"]
