@@ -89,6 +89,12 @@ static void loadCytoBands(struct track *tg)
 bedLoadItem(tg, "cytoBand", (ItemLoader)cytoBandLoad);
 }
 
+boolean cytoBandsIsLoader(void (*loadItems)(struct track *tg))
+/* Is loadItems the cytoBand loader?  See hgTracks.h. */
+{
+return loadItems == loadCytoBands;
+}
+
 static void loadCytoBandsIdeo(struct track *tg)
 /* Load up cytoBandIdeo from database table to track items. */
 {

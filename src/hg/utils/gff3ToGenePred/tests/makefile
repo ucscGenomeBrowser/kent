@@ -12,7 +12,8 @@ test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOu
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
 	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
 	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest makeBadTest \
-	transcriptOnlyTest hprcTest errDupIdDiffParentsTest geneCdsDiscontinuousTest
+	transcriptOnlyTest hprcTest errDupIdDiffParentsTest geneCdsDiscontinuousTest \
+	geneChildTypesTest pseudoGenesDefaultTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -141,6 +142,19 @@ errDupIdDiffParentsTest: mkout
 geneCdsDiscontinuousTest: mkout
 	${gff3ToGenePred} -useName input/geneCdsDiscontinuous.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
+
+# gene children of any type with exons, pseudogenes with direct exons or
+# no children, converted without -allowMinimalGenes (#38692)
+geneChildTypesTest: mkout
+	${gff3ToGenePred} -useName input/geneChildTypes.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+# same input as minimalGenesTest without -allowMinimalGenes: what the
+# default converts, and what is still left unprocessed (#38692)
+pseudoGenesDefaultTest: mkout
+	${gff3ToGenePred} -unprocessedRootsOut=output/$@.unprocessed input/ncbiRefSeq.pseudoGenes.gff3 output/$@.gp
+	diff expected/minimalGenesTest.gp output/$@.gp
+	diff expected/minimalGenesTest.unprocessed output/$@.unprocessed
 
 mkout:
 	@mkdir -p output

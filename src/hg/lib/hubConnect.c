@@ -569,6 +569,12 @@ for(tdb = tdbList; tdb; tdb = tdb->next)
     }
 }
 
+void quickLiftAssignChainOne(struct trackDb *tdb, char *quickLiftChain, char *db)
+/* Assign a quickLift chain to one track.  See hubConnect.h. */
+{
+addQuickToHash( tdb->settingsHash, quickLiftChain, db);
+}
+
 // a string to define trackDb for quickLift chain
 char *chainTdbString = 
     "shortLabel %s Chain\n"

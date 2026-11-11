@@ -104,8 +104,18 @@ sed -e "s/AUTO_INCREMENT=[0-9]* //" > \
 
 echo
 echo "*** Diffing old new ***"
-diff hgcentral.sql /tmp/hgcentral.sql
-if ( ! $status ) then
+# The full diff is millions of assemblyList/genark rows (about 8 GB per
+# release), so log a summary and the first lines only.
+diff hgcentral.sql /tmp/hgcentral.sql > /tmp/hgcentral.sql.diff
+set diffStatus = $status
+if ( $diffStatus ) then
+	echo "`grep -c '^<' /tmp/hgcentral.sql.diff` lines removed, `grep -c '^>' /tmp/hgcentral.sql.diff` lines added. Lines changed per table:"
+	grep -E '^[<>] INSERT INTO' /tmp/hgcentral.sql.diff | awk '{print $1, $4}' | sort | uniq -c
+	echo "First 200 lines of the diff:"
+	head -200 /tmp/hgcentral.sql.diff
+endif
+rm -f /tmp/hgcentral.sql.diff
+if ( ! $diffStatus ) then
 	echo
 	echo "No differences."
 	echo

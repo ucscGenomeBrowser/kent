@@ -30,7 +30,7 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o hgMaf.o hgRelate.o hic.o hicUi.o hubConnect.o hubPublic.o \
   hubSearchText.o hubSpace.o hubSpaceKeys.o hubSpaceQuotas.o hui.o imageClone.o indelShift.o interact.o interactUi.o itemAttr.o jksql.o joiner.o \
   jsHelper.o kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o lav.o lfs.o liftOver.o liftOverChain.o \
-  liftUp.o longRange.o lrg.o lsSnpPdb.o mafFrames.o mafGene.o mafSummary.o myVariants.o myVariantsShare.o mdb.o \
+  liftUp.o longRange.o lrg.o lsSnpPdb.o mafFrames.o mafGene.o mafSummary.o myVariants.o myVariantsProject.o myVariantsShare.o mdb.o \
   microarray.o minChromSize.o namedSessionDb.o netAlign.o netCart.o pepPred.o pgPhenoAssoc.o pgSnp.o pslReader.o qaSeq.o \
   quickLift.o quickLiftChain.o rankProp.o refLink.o refSeqStatus.o rikenCluster.o rmskAlign.o rmskJoined.o rmskOut.o rmskOut2.o rnaGene.o sage.o sageCounts.o samAlignment.o \
   sample.o sanger22extra.o scoredRef.o sessionData.o snapshotSession.o seqWindow.o snakeUi.o snp.o snpExceptions.o soTerm.o spDb.o sqlProg.o \
@@ -39,6 +39,9 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   trackVersion.o trashDir.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o txGraph.o txInfo.o txRnaAccs.o \
   userdata.o variantProjector.o vcfUi.o vegaInfo.o web.o wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o \
   wiggleUtils.o wikiLink.o wikiTrack.o bigRmskAlignBed.o bigRmskBed.o
+
+# Synthetic multi-region coordinate spaces, refs #37788
+O += multiRegionSpace.o
 
 ifeq (${USE_HIC}, 1)
   O += straw.o

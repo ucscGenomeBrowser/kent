@@ -94,6 +94,9 @@ void snpMethods(struct track *tg);
 void snp125Methods(struct track *tg);
 /* Make track for snps. */
 
+void loadSnp125(struct track *tg);
+/* load snps from table, ortho alleles from snpXXXOrthoXXX table, filter and color. */
+
 /***** haplotypes *****/
 
 char *perlegenName(struct track *tg, void *item);

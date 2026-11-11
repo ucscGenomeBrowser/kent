@@ -88,11 +88,11 @@ return isTrashPath(path) ||
 
 boolean isServerUserFilePath(char *path)
 /* Return TRUE if path is under one of the directories where the server keeps files it made
- * for a user: the trash directory, the session-data directories, or a per-feature data
- * directory such as myVariantsDataDir. */
+ * for a user: the trash directory or the session-data directories.  Kept separate from
+ * isTrashOrSessionDataPath so a per-feature data directory can be added here without
+ * touching every caller. */
 {
-return isTrashOrSessionDataPath(path) ||
-       pathIsUnderDirOrItsTarget(cfgOption("myVariantsDataDir"), path);
+return isTrashOrSessionDataPath(path);
 }
 
 boolean isRemoteUrl(char *path)

@@ -413,19 +413,21 @@ if [ "${primaryDone}" -eq 1 -a "${swapDone}" -eq 1 ]; then
   exit 0
 fi
 
-# a dated build directory that did not finish is either running right
-# now or failed part way, either way it needs attention, do not start
-# another one on top of it
+# a dated build directory that did not finish: continue in the newest
+# one, same as pairLastz.sh.  doMiniMap2.pl skips the steps that are
+# already done there, and stops with an error when a cluster run in it
+# was started but did not finish.  This is also how ottoRequestAlign.sh
+# hands over the build directory it created and recorded.
 if [ "${primaryDone}" -eq 0 ]; then
-  export working=`ls -d ${tRoot}/miniMap2${Query}.* 2> /dev/null | wc -l`
-  if [ "${working}" -gt 0 ]; then
-    printf "# ERROR: in progress or failed, ${query} -> ${target}:\n" 1>&2
-    ls -ogd ${tRoot}/miniMap2${Query}.* | sed -e 's/^/# /;' 1>&2
-    printf "# check the do.log there, and finish it with, for example:\n" 1>&2
-    printf "#   ${doMiniMap2} -buildDir=<dir> ${tId} ${qId}\n" 1>&2
-    printf "# which starts at the first step that is not done yet\n" 1>&2
-    printf "# or remove it to start over\n" 1>&2
-    exit 255
+  export existingDir=""
+  for d in ${tRoot}/miniMap2${Query}.*; do
+    if [ -d "${d}" -a ! -L "${d}" ]; then
+      existingDir="${d}"
+    fi
+  done
+  if [ -n "${existingDir}" ]; then
+    buildDir="${existingDir}"
+    printf "# continuing: %s\n" "${buildDir}" 1>&2
   fi
 fi
 
@@ -455,7 +457,7 @@ export doArgs="${liftTableLoad} -verbose=2 -workhorse=${workHorse} \\
 
 ### primary alignment, skip if it is already done
 if [ "${primaryDone}" -eq 0 ]; then
-  mkdir "${buildDir}"
+  mkdir -p "${buildDir}"
 
 ### setup the buildDir/run.sh script
 printf "#!/bin/bash

@@ -19,6 +19,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 #include "quickLift.h"
+#include "multiRegionSpace.h"
 #include "trackHub.h"
 #include "genePredReader.h"
 #include "bigChain.h"
@@ -32,6 +33,163 @@
 #include "chainToPsl.h"
 #include "pslTransMap.h"
 #include "maf.h"
+#include "errCatch.h"
+#include <pthread.h>
+
+/* ---- A chain's blocks, indexed for binary search ----
+ *
+ * Every item lifted asks its chain where the nearest aligned base is and which chain covers
+ * it best, and walking a chain's block list to answer is linear.  In a multi-region space one
+ * chain can carry tens of thousands of blocks (36,863 for exon view over hg38 chr1), and a
+ * gene track there lifts tens of thousands of items, so the walks alone took knownGene past
+ * the load timeout (#38660).  The index is built once per chain and shared by every thread
+ * that loads a track, hence the mutex. */
+
+struct blockIndex
+/* A chain's blocks as an array in target order. */
+    {
+    struct cBlock *head;        /* chain->blockList when built:  a reused address differs */
+    int count;                  /* number of blocks */
+    struct cBlock **blocks;     /* the blocks, in list order */
+    boolean sorted;             /* ascending and non-overlapping on target, so searchable */
+    };
+
+static struct hash *blockIndexHash = NULL;
+static pthread_mutex_t blockIndexMutex = PTHREAD_MUTEX_INITIALIZER;
+
+static boolean blockIndexStale(struct blockIndex *bi, struct chain *chain)
+/* TRUE if bi is missing or was not built from chain's current block list:  a different
+ * head, or a block added after the last one. */
+{
+return ((bi == NULL) || (bi->head != chain->blockList)
+        || ((bi->count > 0) && (bi->blocks[bi->count - 1]->next != NULL)));
+}
+
+static struct blockIndex *chainBlockIndex(struct chain *chain)
+/* The block index for chain, built the first time it is asked for, and rebuilt if the
+ * chain's block list is not the one it was built from.  The index is keyed by the chain's
+ * address and never dropped, so a chain that is indexed must not be freed while the
+ * process runs:  hgTracks never frees the chains in a track's chain hash.
+ * Nothing that can errAbort runs while the lock is held without an errCatch around it, so
+ * an allocation failure in one loader thread cannot leave the lock held for the rest. */
+{
+char key[64];
+safef(key, sizeof key, "%p", chain);
+pthread_mutex_lock(&blockIndexMutex);
+struct blockIndex *bi = (blockIndexHash == NULL) ? NULL : hashFindVal(blockIndexHash, key);
+pthread_mutex_unlock(&blockIndexMutex);
+if (!blockIndexStale(bi, chain))
+    return bi;
+
+/* Build outside the lock:  the chain belongs to the caller's thread. */
+struct blockIndex *fresh;
+AllocVar(fresh);
+fresh->head = chain->blockList;
+fresh->count = slCount(chain->blockList);
+AllocArray(fresh->blocks, max(fresh->count, 1));
+fresh->sorted = TRUE;
+struct cBlock *b;
+int i = 0;
+for (b = chain->blockList; b != NULL; b = b->next, ++i)
+    {
+    fresh->blocks[i] = b;
+    if ((i > 0) && (b->tStart < fresh->blocks[i-1]->tEnd))
+        fresh->sorted = FALSE;
+    }
+
+struct errCatch *errCatch = errCatchNew();
+pthread_mutex_lock(&blockIndexMutex);
+if (errCatchStart(errCatch))
+    {
+    if (blockIndexHash == NULL)
+        blockIndexHash = newHash(10);
+    if (hashLookup(blockIndexHash, key) == NULL)
+        hashAdd(blockIndexHash, key, fresh);
+    else
+        hashReplace(blockIndexHash, key, fresh);   /* the old one is left, a CGI's leak */
+    }
+errCatchEnd(errCatch);
+pthread_mutex_unlock(&blockIndexMutex);
+if (errCatch->gotError)
+    errAbort("%s", errCatch->message->string);
+errCatchFree(&errCatch);
+return fresh;
+}
+
+static int firstBlockEndingAfter(struct blockIndex *bi, int pos, boolean orAt)
+/* Index of the first block whose tEnd is past pos (orAt:  at or past it), or bi->count. */
+{
+int lo = 0, hi = bi->count;
+while (lo < hi)
+    {
+    int mid = (lo + hi) / 2;
+    int tEnd = bi->blocks[mid]->tEnd;
+    if (orAt ? (tEnd >= pos) : (tEnd > pos))
+        hi = mid;
+    else
+        lo = mid + 1;
+    }
+return lo;
+}
+
+static int chainAlignedOverlap(struct chain *chain, int start, int end)
+/* Aligned bases of chain in start-end. */
+{
+struct blockIndex *bi = chainBlockIndex(chain);
+int overlap = 0;
+if (!bi->sorted)
+    {
+    struct cBlock *b;
+    for (b = chain->blockList; b != NULL; b = b->next)
+        overlap += positiveRangeIntersection(b->tStart, b->tEnd, start, end);
+    return overlap;
+    }
+int i;
+for (i = firstBlockEndingAfter(bi, start, FALSE);
+     (i < bi->count) && (bi->blocks[i]->tStart < end); ++i)
+    overlap += positiveRangeIntersection(bi->blocks[i]->tStart, bi->blocks[i]->tEnd,
+                                         start, end);
+return overlap;
+}
+
+static struct chain *quickLiftBestChain(struct hash *chainHash, char *chrom, int start, int end)
+/* The chain in chainHash covering the most aligned bases in start-end, or NULL if none has
+ * one.  On a tie, the first one liftOverChainsInRange() returns.  Each chain is searched
+ * through its block index, not walked. */
+{
+struct binElement *el, *binList = liftOverChainsInRange(chainHash, chrom, start, end);
+struct chain *best = NULL;
+int bestOverlap = 0;
+for (el = binList; el != NULL; el = el->next)
+    {
+    struct chain *chain = el->val;
+    int overlap = chainAlignedOverlap(chain, start, end);
+    if (overlap > bestOverlap)
+        {
+        bestOverlap = overlap;
+        best = chain;
+        }
+    }
+slFreeList(&binList);
+return best;
+}
+
+static struct chain *chainForRange(struct hash *chainHash, char *chrom, int start, int end)
+/* The chain that best covers chrom:start-end.  With multiRegionSpaces on, the chain is found
+ * through its block index by quickLiftBestChain();  otherwise by liftOverChainForRange(),
+ * which walks each chain's blocks.  refs #38660 */
+{
+if (multiRegionSpacesEnabled())
+    return quickLiftBestChain(chainHash, chrom, start, end);
+return liftOverChainForRange(chainHash, chrom, start, end);
+}
+
+/* Every liftOverChainForRange() call below this point goes through chainForRange(), so
+ * master's call sites pick up the block index in a space without a second lookup.
+ * Remove this with the multiRegionSpaces gate, and rename those callers to
+ * quickLiftBestChain().  refs #37788 */
+#define liftOverChainForRange(chainHash, chrom, start, end) \
+    chainForRange(chainHash, chrom, start, end)
 
 static boolean quickLiftChainRangeIn(struct chain *chain, int tStart, int tEnd,
     int *retQStart, int *retQEnd)
@@ -133,8 +291,11 @@ if (any)
 boolean quickLiftMultiChainEnabled()
 /* Lift an item through every chain it overlaps, rather than only the best one.  hg.conf
  * quickLiftMultiChain, off by default.  refs #38510 */
+/* Where multiRegionSpaces is on, the default is on.  refs #37788 */
 {
 static int enabled = -1;
+if ((enabled < 0) && multiRegionSpacesEnabled())
+    enabled = cfgOptionBooleanDefault("quickLiftMultiChain", TRUE);
 if (enabled < 0)
     enabled = cfgOptionBooleanDefault("quickLiftMultiChain", FALSE);
 return enabled;
@@ -144,8 +305,11 @@ boolean quickLiftSplitRangesEnabled()
 /* Cut each chain's source range at large gaps, merge the ranges where they overlap, and
  * read an item only once when it crosses from one range into the next.  hg.conf
  * quickLiftSplitRanges, off by default.  refs #38510 */
+/* Where multiRegionSpaces is on, the default is on.  refs #37788 */
 {
 static int enabled = -1;
+if ((enabled < 0) && multiRegionSpacesEnabled())
+    enabled = cfgOptionBooleanDefault("quickLiftSplitRanges", TRUE);
 if (enabled < 0)
     enabled = cfgOptionBooleanDefault("quickLiftSplitRanges", FALSE);
 return enabled;
@@ -243,23 +407,35 @@ if (chain == NULL)
 return oneChainHash(qm, chain);
 }
 
-char *quickLiftRemapRange(struct hash *chainHash, void *item, char *chrom, int start, int end,
-                          char strand, char **retChrom, int *retStart, int *retEnd,
-                          char *retStrand)
-/* Lift chrom:start-end through one chain:  with quickLiftMultiChain the one item was loaded
- * for, and otherwise the chain in chainHash with the most aligned bases in the range.  Given
- * all of the chains, liftOverRemapRange() drops a range as "Duplicated in new" when two of
- * them each cover a little of it, which the short chains beside a long one in a duplicated
- * region do.  remapBlockedBed() picks the best chain instead, and so does this. */
+struct hash *quickLiftChainHashForRange(struct hash *chainHash, void *item, char *chrom,
+                                        int start, int end)
+/* The chain hash to lift an item over chrom:start-end through:  one chain, which with
+ * quickLiftMultiChain is the one item was loaded for, and otherwise the chain in chainHash
+ * with the most aligned bases in the range.  Given all of the chains, liftOverRemapRange()
+ * drops a range as "Duplicated in new" when two of them each cover a little of it, which the
+ * short chains beside a long one in a duplicated region do.  remapBlockedBed() picks the best
+ * chain instead, and so does this.  item may be NULL.  Returns NULL if no chain covers the
+ * range.  The hash is reused for the next item, as with quickLiftChainHashForItem(). */
 {
 struct hash *liftHash = quickLiftChainHashForItem(chainHash, item);
 if ((chainHash != NULL) && (liftHash == chainHash))
     {
     struct chain *best = liftOverChainForRange(chainHash, chrom, start, max(end, start + 1));
     if (best == NULL)
-        return "Deleted in new";
+        return NULL;
     liftHash = oneChainHash(quickLiftMultiFor(chainHash), best);
     }
+return liftHash;
+}
+
+char *quickLiftRemapRange(struct hash *chainHash, void *item, char *chrom, int start, int end,
+                          char strand, char **retChrom, int *retStart, int *retEnd,
+                          char *retStrand)
+/* Lift chrom:start-end through the one chain quickLiftChainHashForRange() picks. */
+{
+struct hash *liftHash = quickLiftChainHashForRange(chainHash, item, chrom, start, end);
+if (liftHash == NULL)
+    return "Deleted in new";
 return liftOverRemapRange(liftHash, 0.0, chrom, start, end, strand, 0.001,
                           retChrom, retStart, retEnd, retStrand);
 }
@@ -481,6 +657,111 @@ bed->chromStarts = needMem(sizeof(int));
 bed->chromStarts[0] = 0;
 }
 
+static int snapToBlockLinearInSpace(struct chain *chain, int pos, boolean forward)
+/* remapRangeList will only place a coordinate that falls inside an aligned block, so a
+ * clipped end has to land on real alignment, not merely inside the chain.  Return pos if
+ * it is already aligned, otherwise the nearest aligned coordinate looking forward (for a
+ * start) or backward (for an end).  Return -1 if there is no such coordinate.
+ * The asymmetry matches remapRangeList: a start needs b->tStart <= start < b->tEnd, so
+ * b->tStart is legal; an end needs b->tStart < end <= b->tEnd, so b->tEnd is legal. */
+{
+struct cBlock *b, *prev = NULL;
+
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    if (forward)
+        {
+        if ((b->tStart <= pos) && (pos < b->tEnd))
+            return pos;
+        if (b->tStart > pos)
+            return b->tStart;
+        }
+    else
+        {
+        /* An end at a block's first base has no aligned base before it in that block,
+         * so it is not aligned:  it snaps back to the end of the block before (#38660). */
+        if ((b->tStart < pos) && (pos <= b->tEnd))
+            return pos;
+        if (b->tEnd <= pos)
+            prev = b;
+        }
+    }
+
+return (!forward && (prev != NULL)) ? prev->tEnd : -1;
+}
+
+static int snapToBlockInSpace(struct chain *chain, int pos, boolean forward)
+/* snapToBlockLinearInSpace()'s answer, by binary search over the chain's block index. */
+{
+struct blockIndex *bi = chainBlockIndex(chain);
+if (!bi->sorted)
+    return snapToBlockLinearInSpace(chain, pos, forward);
+if (forward)
+    {
+    /* the first block ending past pos either holds pos or starts after it */
+    int i = firstBlockEndingAfter(bi, pos, FALSE);
+    if (i >= bi->count)
+        return -1;
+    return (bi->blocks[i]->tStart <= pos) ? pos : bi->blocks[i]->tStart;
+    }
+/* the first block ending at or past pos holds pos as an end if it starts before it;
+ * otherwise the answer is the end of the block before that one */
+int j = firstBlockEndingAfter(bi, pos, TRUE);
+if ((j < bi->count) && (bi->blocks[j]->tStart < pos))
+    return pos;
+return (j > 0) ? bi->blocks[j-1]->tEnd : -1;
+}
+
+static struct cBlock *alignedBlockAt(struct chain *chain, int pos, boolean asStart)
+/* The block of chain that holds pos, or NULL:  as a start, tStart <= pos < tEnd;  as an
+ * end, tStart < pos <= tEnd.  The same test remapRangeList() uses. */
+{
+struct blockIndex *bi = chainBlockIndex(chain);
+if (!bi->sorted)
+    {
+    struct cBlock *b;
+    for (b = chain->blockList; b != NULL; b = b->next)
+        if (asStart ? ((b->tStart <= pos) && (pos < b->tEnd))
+                    : ((b->tStart < pos) && (pos <= b->tEnd)))
+            return b;
+    return NULL;
+    }
+int i = firstBlockEndingAfter(bi, pos, !asStart);
+if (i >= bi->count)
+    return NULL;
+struct cBlock *b = bi->blocks[i];
+return (asStart ? (b->tStart <= pos) : (b->tStart < pos)) ? b : NULL;
+}
+
+static boolean chainLiftAligned(struct chain *chain, int start, int end, char strand,
+                                char **retChrom, int *retStart, int *retEnd, char *retStrand)
+/* Lift start-end through chain when start and end both sit on aligned bases:  map each
+ * end through the block that holds it.  This is the answer mapThroughChain() gives, without
+ * walking or copying the chain's blocks, which in a multi-region space can number tens of
+ * thousands.  Return FALSE if either end is not aligned.  *retChrom is a clone. */
+{
+struct cBlock *sb = alignedBlockAt(chain, start, TRUE);
+struct cBlock *eb = alignedBlockAt(chain, end, FALSE);
+if ((sb == NULL) || (eb == NULL) || (start >= end))
+    return FALSE;
+int qStart = sb->qStart + (start - sb->tStart);
+int qEnd = eb->qStart + (end - eb->tStart);
+if (chain->qStrand == '-')
+    {
+    int flip = chain->qSize - qEnd;
+    qEnd = chain->qSize - qStart;
+    qStart = flip;
+    }
+*retChrom = cloneString(chain->qName);
+*retStart = qStart;
+*retEnd = qEnd;
+/* the strand flip remapRange() makes:  + and - swap, anything else stays */
+if ((chain->qStrand == '-') && ((strand == '+') || (strand == '-')))
+    strand = (strand == '+') ? '-' : '+';
+*retStrand = strand;
+return TRUE;
+}
+
 static int snapToBlock(struct chain *chain, int pos, boolean forward)
 /* remapRangeList will only place a coordinate that falls inside an aligned block, so a
  * clipped end has to land on real alignment, not merely inside the chain.  Return pos if
@@ -489,6 +770,8 @@ static int snapToBlock(struct chain *chain, int pos, boolean forward)
  * The asymmetry matches remapRangeList: a start needs b->tStart <= start < b->tEnd, so
  * b->tStart is legal; an end needs b->tStart < end <= b->tEnd, so b->tEnd is legal. */
 {
+if (multiRegionSpacesEnabled())
+    return snapToBlockInSpace(chain, pos, forward);
 struct cBlock *b, *prev = NULL;
 
 for (b = chain->blockList; b != NULL; b = b->next)
@@ -561,7 +844,81 @@ if (bed->thickStart > bed->thickEnd)
 return TRUE;
 }
 
+static boolean clipBedToChainsInSpace(struct hash *chainHash, struct bed *bed, boolean keepIntron)
+/* An item can be far bigger than the region we loaded chains for:  ClinVar has copy
+ * number variants spanning most of a chromosome.  Its ends then sit where no chain
+ * reaches, remapRangeList can place neither of them, and the whole item is dropped even
+ * though the part on screen maps perfectly well.  Pull the ends in to the nearest aligned
+ * base so the visible part can lift.  Return TRUE if the item was clipped.
+ * If no block survives, the item is left alone unless keepIntron, which keeps the clipped
+ * span with no blocks at all:  in a multi-region space that is a transcript whose only
+ * part in view is an intron (#38660). */
+{
+struct chain *chain = quickLiftBestChain(chainHash, bed->chrom,
+                                            bed->chromStart, bed->chromEnd);
+if (chain == NULL)
+    return FALSE;               // nothing covers it, let it fail the way it used to
+
+int newStart = snapToBlock(chain, bed->chromStart, TRUE);
+int newEnd = snapToBlock(chain, bed->chromEnd, FALSE);
+
+if ((newStart < 0) || (newEnd < 0) || (newStart >= newEnd))
+    return FALSE;
+if ((newStart == bed->chromStart) && (newEnd == bed->chromEnd) && !keepIntron)
+    return FALSE;               // both ends already sit on alignment, nothing to do
+
+/* Trim the blocks to the new range.  Blocks are in ascending order, so walk them and
+ * keep the part that survives; a block entirely outside the range is dropped.
+ * In a multi-region space (keepIntron) a region can also end inside a block, leaving
+ * that block's end in the gap to the next region, where remapRangeList cannot place it.
+ * There each block's own ends are pulled in to aligned bases too, the way
+ * quickLiftClipGenePredToBlocks() does it for a genePred (#38660). */
+if (bed->blockCount > 0)
+    {
+    int i, keep = 0;
+    for (i = 0;  i < bed->blockCount;  ++i)
+        {
+        int bStart = bed->chromStart + bed->chromStarts[i];
+        int bEnd = bStart + bed->blockSizes[i];
+
+        if (bStart < newStart)
+            bStart = newStart;
+        if (bEnd > newEnd)
+            bEnd = newEnd;
+        if (keepIntron && (bStart < bEnd))
+            {
+            bStart = snapToBlock(chain, bStart, TRUE);
+            bEnd = snapToBlock(chain, bEnd, FALSE);
+            if ((bStart < 0) || (bEnd < 0))
+                continue;
+            }
+        if (bStart >= bEnd)
+            continue;
+        bed->chromStarts[keep] = bStart - newStart;
+        bed->blockSizes[keep] = bEnd - bStart;
+        keep++;
+        }
+    if ((keep == 0) && !keepIntron)
+        return FALSE;
+    bed->blockCount = keep;
+    }
+
+bed->chromStart = newStart;
+bed->chromEnd = newEnd;
+if (bed->thickStart < newStart)
+    bed->thickStart = newStart;
+if (bed->thickEnd > newEnd)
+    bed->thickEnd = newEnd;
+if (bed->thickStart > bed->thickEnd)
+    bed->thickStart = bed->thickEnd;
+
+return TRUE;
+}
+
 static struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb, boolean clip);
+static struct bed *quickLiftBedInSpace(struct bbiFile *bbi, struct hash *chainHash,
+                                       struct bigBedInterval *bb, boolean clip,
+                                       boolean keepIntron, boolean *retOutside);
 
 struct bed *quickLiftIntervalsToBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
 /* Using chains stored in chainHash, port a bigBedInterval from another assembly to a bed
@@ -569,6 +926,29 @@ struct bed *quickLiftIntervalsToBed(struct bbiFile *bbi, struct hash *chainHash,
  */
 {
 return quickLiftBed(bbi, chainHash, bb, FALSE);
+}
+
+struct bed *quickLiftIntervalsToBedKeepIntron(struct bbiFile *bbi, struct hash *chainHash,
+                                              struct bigBedInterval *bb, boolean *retOutside)
+/* Like quickLiftIntervalsToBedClip, for a multi-region space:  an item whose only part in
+ * the space is between its blocks comes back with no blocks, which draws as an intron
+ * line, where the other lifts drop it.  An item with no aligned base anywhere in its range
+ * lies outside the space:  it comes back NULL with *retOutside set, and is not a failed
+ * lift.  refs #38660 */
+{
+if (!multiRegionSpacesEnabled())
+    {
+    if (retOutside != NULL)
+        *retOutside = FALSE;
+    return quickLiftIntervalsToBedClip(bbi, chainHash, bb);
+    }
+boolean clip = cfgOptionBooleanDefault("quickLiftClipToChains", TRUE);
+/* Keeping an intron picks a chain over the whole item, introns included;  that is only
+ * sure to be the chain the blocks lift through when each item has one chain of its own.
+ * quickLiftClipToChains=off keeps no introns either:  the outside test still runs. */
+boolean keepIntron = clip && quickLiftMultiChainEnabled();
+
+return quickLiftBedInSpace(bbi, chainHash, bb, clip, keepIntron, retOutside);
 }
 
 struct bed *quickLiftIntervalsToBedClip(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb)
@@ -581,6 +961,103 @@ struct bed *quickLiftIntervalsToBedClip(struct bbiFile *bbi, struct hash *chainH
 boolean clip = cfgOptionBooleanDefault("quickLiftClipToChains", TRUE);
 
 return quickLiftBed(bbi, chainHash, bb, clip);
+}
+
+static struct bed *liftIntronOnlyBed(struct hash *chainHash, struct bigBedInterval *bb,
+                                     struct bed *bed)
+/* Lift a bed that clipBedToChains() left with no blocks by its span alone.  Return bed, or
+ * NULL if the span does not lift. */
+{
+char *newChrom = NULL;
+int newStart = 0, newEnd = 0;
+char newStrand = bed->strand[0];
+if (quickLiftRemapRange(chainHash, bb, bed->chrom, bed->chromStart, bed->chromEnd,
+                        bed->strand[0], &newChrom, &newStart, &newEnd, &newStrand) != NULL)
+    {
+    bedFree(&bed);
+    return NULL;
+    }
+freeMem(bed->chrom);
+bed->chrom = newChrom;
+bed->strand[0] = newStrand;
+bed->chromStart = newStart;
+bed->chromEnd = newEnd;
+bed->thickStart = bed->thickEnd = newEnd;       /* nothing coding is in view */
+return bed;
+}
+
+static struct bed *liftInsertionBed(struct hash *chainHash, struct bed *bed)
+/* Lift a zero-length bed as a point through chainHash, the item's own chains.  Return bed,
+ * or NULL if it does not lift.  The point sits before source base p, and is placed by the
+ * lift of that base:  at its start, or on a reversed region at its end, since the base
+ * before p then lands after it.  refs #38660 */
+{
+int p = bed->chromStart;
+struct chain *chain = quickLiftBestChain(chainHash, bed->chrom, p, p + 1);
+char *newChrom = NULL;
+int newStart = 0, newEnd = 0;
+char newStrand = bed->strand[0];
+if ((chain == NULL)
+    || !chainLiftAligned(chain, p, p + 1, bed->strand[0],
+                         &newChrom, &newStart, &newEnd, &newStrand))
+    {
+    bedFree(&bed);
+    return NULL;
+    }
+int pos = (chain->qStrand == '-') ? newEnd : newStart;
+freeMem(bed->chrom);
+bed->chrom = newChrom;
+bed->strand[0] = newStrand;
+bed->chromStart = bed->chromEnd = pos;
+bed->thickStart = bed->thickEnd = pos;
+if (bed->blockCount > 0)
+    {
+    bed->blockCount = 1;
+    bed->chromStarts[0] = 0;
+    bed->blockSizes[0] = 0;
+    }
+return bed;
+}
+
+static void widenBedToSpan(struct hash *chainHash, void *item, struct bed *bed, char *chrom,
+                           int start, int end, char strand)
+/* After the lift of a bed that came from chrom:start-end, widen it to how far that range
+ * reaches in the space, so an item that runs out of a region draws its intron line to the
+ * region's edge.  The blocks do not move.  refs #38660 */
+{
+char *spanChrom = NULL;
+int spanStart = 0, spanEnd = 0;
+char spanStrand = strand;
+if (!quickLiftSnappedSpan(chainHash, item, chrom, start, end, strand,
+                          &spanChrom, &spanStart, &spanEnd, &spanStrand))
+    return;
+if (sameString(spanChrom, bed->chrom))
+    {
+    if (spanStart < bed->chromStart)
+        {
+        int shift = bed->chromStart - spanStart;
+        int i;
+        for (i = 0;  i < bed->blockCount;  ++i)
+            bed->chromStarts[i] += shift;
+        bed->chromStart = spanStart;
+        }
+    if (spanEnd > bed->chromEnd)
+        bed->chromEnd = spanEnd;
+    }
+freeMem(spanChrom);
+}
+
+static boolean rangeOutsideChains(struct hash *chainHash, char *chrom, int start, int end)
+/* TRUE if no chain in chainHash has an aligned base in chrom:start-end. */
+{
+if (end <= start)
+    end = start + 1;    /* an insertion point:  ask about the base it sits before */
+struct chain *chain = quickLiftBestChain(chainHash, chrom, start, end);
+if (chain == NULL)
+    return TRUE;
+int alignedStart = snapToBlock(chain, start, TRUE);
+int alignedEnd = snapToBlock(chain, end, FALSE);
+return ((alignedStart < 0) || (alignedEnd < 0) || (alignedStart >= alignedEnd));
 }
 
 static struct bed *quickLiftBed(struct bbiFile *bbi, struct hash *chainHash, struct bigBedInterval *bb, boolean clip)
@@ -607,6 +1084,72 @@ if (clip)
 
 if ((error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL)) == NULL)
     return bed;
+//else
+    //printf("bed %s error:%s<BR>", bed->name, error);
+
+return NULL;
+}
+
+static struct bed *quickLiftBedInSpace(struct bbiFile *bbi, struct hash *chainHash,
+                                       struct bigBedInterval *bb, boolean clip,
+                                       boolean keepIntron, boolean *retOutside)
+/* Port a bigBedInterval to a bed on the reference.  If clip, an item too big for the
+ * chains we loaded is pulled in to what they cover rather than dropped.  If keepIntron,
+ * one whose only part in view is between its blocks is kept with no blocks.  If
+ * retOutside is non-NULL, an item with no aligned base at all returns NULL and sets it. */
+{
+if (retOutside != NULL)
+    *retOutside = FALSE;
+char startBuf[16], endBuf[16];
+char *bedRow[bbi->fieldCount];
+char chromName[256];
+static int lastChromId = -1;
+
+bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromName, sizeof(chromName));
+
+bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+
+struct bed *bed = bedLoadN(bedRow, bbi->definedFieldCount);
+char *error;
+if (bbi->definedFieldCount < 12)
+    make12(bed);
+
+struct hash *allChains = chainHash;
+char *origChrom = cloneString(bed->chrom);
+int origStart = bed->chromStart, origEnd = bed->chromEnd;
+char origStrand = bed->strand[0];
+chainHash = quickLiftChainHashForItem(chainHash, bb);
+if ((retOutside != NULL) && rangeOutsideChains(chainHash, bed->chrom, origStart, origEnd))
+    {
+    /* Loaded through a padded query range, but no part of it is in the space. */
+    *retOutside = TRUE;
+    freeMem(origChrom);
+    bedFree(&bed);
+    return NULL;
+    }
+if (keepIntron && (origStart == origEnd))
+    {
+    /* An insertion point.  remapRangeList cannot place a zero-length block at the first
+     * base of a region;  the range lift can, and the point keeps its zero length. */
+    freeMem(origChrom);
+    return liftInsertionBed(chainHash, bed);
+    }
+if (clip)
+    clipBedToChainsInSpace(chainHash, bed, keepIntron);
+if (keepIntron && (bed->blockCount == 0))
+    {
+    freeMem(origChrom);
+    return liftIntronOnlyBed(allChains, bb, bed);
+    }
+
+if ((error = remapBlockedBed(chainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL)) == NULL)
+    {
+    if (keepIntron)
+        widenBedToSpan(allChains, bb, bed, origChrom, origStart, origEnd, origStrand);
+    freeMem(origChrom);
+    return bed;
+    }
+freeMem(origChrom);
 //else
     //printf("bed %s error:%s<BR>", bed->name, error);
 
@@ -1163,6 +1706,165 @@ for (gp = gpList; gp != NULL; gp = next)
                           fudgeThick, NULL, NULL, multiple, preserveInput);
     gp->next = next;
     }
+}
+
+static int codingBases5Prime(struct genePred *gp, unsigned *starts, unsigned *ends, int count,
+                            int pos)
+/* How many coding bases of the exons starts/ends lie 5' of pos, in the direction of
+ * transcription.  On '+' pos is the first coding base of an exon, on '-' one past its last. */
+{
+int i, total = 0;
+for (i = 0; i < count; i++)
+    {
+    int s = max(starts[i], gp->cdsStart), e = min(ends[i], gp->cdsEnd);
+    if (gp->strand[0] == '-')
+        s = max(s, pos);
+    else
+        e = min(e, pos);
+    if (e > s)
+        total += e - s;
+    }
+return total;
+}
+
+int *quickLiftClipGenePredToBlocks(struct hash *chainHash, struct genePred *gp)
+/* Before quickLiftCalcGenePreds() in a multi-region space:  pull each exon's ends in to the
+ * nearest aligned base of the chain gp lifts through, and drop the exons with nothing aligned.
+ * A region can end inside an exon, and liftOver places only an exon whose two ends are both
+ * aligned.  Not for a caller that needs a gene's true extent, such as a details page.
+ * Return, for each exon kept, how many coding bases of the whole gene lie 5' of its first
+ * coding base (-1 for an exon with none), so that codons can keep their numbers;  NULL if
+ * nothing was clipped. */
+{
+if (!multiRegionSpacesEnabled())
+    return NULL;
+struct chain *chain = quickLiftBestChain(chainHash, gp->chrom, gp->txStart, gp->txEnd);
+if (chain == NULL)
+    return NULL;
+int count = gp->exonCount;
+if (count <= 0)
+    return NULL;	/* nothing to clip, and needMem(0) aborts */
+unsigned *newStarts, *newEnds;
+int *codonBase;
+AllocArray(newStarts, count);
+AllocArray(newEnds, count);
+AllocArray(codonBase, count);
+int i, keep = 0;
+boolean clipped = FALSE;
+for (i = 0; i < count; i++)
+    {
+    int newStart = snapToBlock(chain, gp->exonStarts[i], TRUE);
+    int newEnd = snapToBlock(chain, gp->exonEnds[i], FALSE);
+    if ((newStart < 0) || (newEnd < 0) || (newStart >= newEnd))
+        {
+        clipped = TRUE;
+        continue;
+        }
+    if ((newStart != gp->exonStarts[i]) || (newEnd != gp->exonEnds[i]))
+        clipped = TRUE;
+    int codingStart = max(newStart, gp->cdsStart), codingEnd = min(newEnd, gp->cdsEnd);
+    if (codingStart < codingEnd)
+        {
+        int pos = (gp->strand[0] == '-') ? codingEnd : codingStart;
+        codonBase[keep] = codingBases5Prime(gp, gp->exonStarts, gp->exonEnds, count, pos);
+        }
+    else
+        codonBase[keep] = -1;
+    newStarts[keep] = newStart;
+    newEnds[keep] = newEnd;
+    keep++;
+    }
+if (clipped && (keep > 0))
+    {
+    for (i = 0; i < keep; i++)
+        {
+        gp->exonStarts[i] = newStarts[i];
+        gp->exonEnds[i] = newEnds[i];
+        if (gp->exonFrames != NULL)
+            gp->exonFrames[i] = (codonBase[i] >= 0) ? codonBase[i] % 3 : -1;
+        }
+    }
+freeMem(newStarts);
+freeMem(newEnds);
+if (!clipped || (keep == 0))
+    {
+    /* nothing to do, or nothing aligned:  then it fails the lift the way it used to */
+    freeMem(codonBase);
+    return NULL;
+    }
+gp->exonCount = keep;
+gp->txStart = gp->exonStarts[0];
+gp->txEnd = gp->exonEnds[keep - 1];
+gp->cdsStart = max(gp->cdsStart, gp->txStart);
+gp->cdsEnd = min(gp->cdsEnd, gp->txEnd);
+if (gp->cdsStart > gp->cdsEnd)
+    gp->cdsStart = gp->cdsEnd;
+return codonBase;
+}
+
+boolean quickLiftSnappedSpan(struct hash *chainHash, void *item, char *chrom, int start,
+                             int end, char strand, char **retChrom, int *retStart, int *retEnd,
+                             char *retStrand)
+/* In a multi-region space:  pull chrom:start-end in to its first and last aligned base on
+ * the chain item lifts through, and lift that span.  For an item that runs out of a region,
+ * this is how far its line reaches in the space, which the lift of its blocks alone stops
+ * short of.  Return FALSE if no part of the range is aligned or it does not lift.
+ * refs #38660 */
+{
+/* Without quickLiftMultiChain the chain is picked over the whole span, introns included,
+ * and can be another region's than the one the item's blocks lift through. */
+if (!multiRegionSpacesEnabled() || !quickLiftMultiChainEnabled())
+    return FALSE;
+struct hash *itemHash = quickLiftChainHashForItem(chainHash, item);
+struct chain *chain = quickLiftBestChain(itemHash, chrom, start, end);
+if (chain == NULL)
+    return FALSE;
+int spanStart = snapToBlock(chain, start, TRUE);
+int spanEnd = snapToBlock(chain, end, FALSE);
+if ((spanStart < 0) || (spanEnd < 0) || (spanStart >= spanEnd))
+    return FALSE;
+return chainLiftAligned(chain, spanStart, spanEnd, strand,
+                        retChrom, retStart, retEnd, retStrand);
+}
+
+boolean quickLiftIntronOnlyGenePred(struct hash *chainHash, struct genePred *gp)
+/* Before quickLiftCalcGenePreds() in a multi-region space:  if no exon of gp has an aligned
+ * base but part of the span between its exons does, lift that part by itself and leave gp
+ * with no exons, which draws as an intron line.  The old multi-region view drew such a
+ * transcript, and liftOver cannot place a genePred with nothing aligned in its exons.
+ * Return TRUE if gp was lifted here:  it is then in the space's coordinates and must not
+ * go through quickLiftCalcGenePreds().  FALSE leaves gp untouched.  refs #38660 */
+{
+if (!multiRegionSpacesEnabled() || !quickLiftMultiChainEnabled())
+    return FALSE;       /* see quickLiftSnappedSpan() */
+struct hash *itemHash = quickLiftChainHashForItem(chainHash, gp);
+struct chain *chain = quickLiftBestChain(itemHash, gp->chrom, gp->txStart, gp->txEnd);
+if (chain == NULL)
+    return FALSE;
+int i;
+for (i = 0; i < gp->exonCount; i++)
+    {
+    int exonStart = snapToBlock(chain, gp->exonStarts[i], TRUE);
+    int exonEnd = snapToBlock(chain, gp->exonEnds[i], FALSE);
+    if ((exonStart >= 0) && (exonEnd >= 0) && (exonStart < exonEnd))
+        return FALSE;   /* an exon is in the space, so the ordinary lift handles it */
+    }
+
+char *newChrom = NULL;
+int newStart = 0, newEnd = 0;
+char newStrand = gp->strand[0];
+if (!quickLiftSnappedSpan(chainHash, gp, gp->chrom, gp->txStart, gp->txEnd, gp->strand[0],
+                          &newChrom, &newStart, &newEnd, &newStrand))
+    return FALSE;
+
+freeMem(gp->chrom);
+gp->chrom = newChrom;
+gp->strand[0] = newStrand;
+gp->txStart = newStart;
+gp->txEnd = newEnd;
+gp->cdsStart = gp->cdsEnd = newEnd;     /* nothing coding is in view */
+gp->exonCount = 0;
+return TRUE;
 }
 
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked)
@@ -1800,6 +2502,18 @@ if (fromCart >= 0)
 return cfgOptionBooleanDefault("browser.quickLiftGtex", FALSE);
 }
 
+boolean quickLiftMuteTrianglesEnabled(struct cart *cart)
+/* Return TRUE if the difference triangles on a quickLift chain track are drawn in faded
+ * colors when there are more of them than fit side by side.  Off unless hg.conf says
+ * browser.quickLiftMuteTriangles=on, and a cart variable of the same name overrides that,
+ * the same way as quickLiftBarChartEnabled. */
+{
+int fromCart = cartGate(cart, "browser.quickLiftMuteTriangles");
+if (fromCart >= 0)
+    return fromCart;
+return cfgOptionBooleanDefault("browser.quickLiftMuteTriangles", FALSE);
+}
+
 boolean quickLiftMafSummaryEnabled(struct cart *cart)
 /* Return TRUE if a quickLifted maf track reads its summary table above the summary window
  * size, lifted from the assembly it came from, and reads its blocks with no padding around
@@ -2064,6 +2778,95 @@ slReverse(&inWindow);
 return inWindow;
 }
 
+/* The one-argument loader quickLiftSqlLoadItems was handed;  quickLiftSql wants a loader
+ * that also takes a field count.  Each track is loaded by one thread. */
+static __thread struct slList *(*rowLoader)(char **row);
+
+static struct slList *rowLoaderAdapter(char **row, int numFields)
+/* Call the one-argument loader. */
+{
+return rowLoader(row);
+}
+
+struct slList *quickLiftSqlLoadItems(struct trackDb *tdb, char *trackTable,
+    char *chrom, int start, int end, char *extraWhere,
+    struct slList *(*loader)(char **row),
+    void (*adjust)(void *item, boolean flipped, int clippedStart), boolean keepSize)
+/* Load items of any type whose struct begins like a struct bed3 (next, chrom, chromStart,
+ * chromEnd) from the track's quickLiftDb, and lift those three fields in place to the
+ * reference.  The rest of each item is left as loaded, so a track with its own loader
+ * and drawing keeps both.  Items that do not lift, or lift outside chrom:start-end, are
+ * dropped.  The list is not sorted.
+ * An item is normally clipped to what lifts.  With keepSize it is instead placed whole
+ * through the first aligned block it has in the window, so that positions counted from
+ * its chromStart (blocks, an aligned part) stay right where it runs past a region's edge;
+ * only a start before 0 is clipped, by clippedStart bases.
+ * If adjust is not NULL it is called on each lifted item, with flipped TRUE when the lift
+ * turned the item around, as one placed in reverse in a multi-region space is. */
+{
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *table;
+quickLiftResolveTable(tdb, trackTable, &table, &liftDb);
+struct hash *chainHash = newHash(8);
+struct sqlConnection *conn = hAllocConn(liftDb);
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+rowLoader = loader;
+struct bed3 *item, *nextItem, *itemList = (struct bed3 *)quickLiftSql(conn, quickLiftFile,
+    table, chrom, start, end, NULL, extraWhere, rowLoaderAdapter, 0, chainHash);
+rowLoader = NULL;
+hFreeConn(&conn);
+
+struct bed3 *liftedList = NULL;
+struct hash *blockCache = keepSize ? newHash(0) : NULL;
+for (item = itemList; item != NULL; item = nextItem)
+    {
+    nextItem = item->next;
+    struct hash *itemChainHash = quickLiftChainHashForItem(chainHash, item);
+    char strand = '+';
+    char *error = NULL;
+    int clippedStart = 0;
+    if (keepSize)
+        {
+        struct quickLiftRange *pieceList = quickLiftMapToReferenceIn(itemChainHash, blockCache,
+                                 item->chrom, item->chromStart, item->chromEnd, chrom, start, end);
+        if (pieceList == NULL)
+            error = "not in window";
+        else
+            {
+            int liftStart, liftEnd;
+            quickLiftPieceToReference(pieceList, item->chromStart, item->chromEnd,
+                                      &liftStart, &liftEnd);
+            strand = pieceList->strand;
+            quickLiftRangeListFree(&pieceList);
+            if (liftStart < 0)
+                {
+                clippedStart = -liftStart;
+                liftStart = 0;
+                }
+            item->chrom = cloneString(chrom);
+            item->chromStart = liftStart;
+            item->chromEnd = liftEnd;
+            }
+        }
+    else
+        error = liftOverRemapRange(itemChainHash, 0.0, item->chrom, item->chromStart,
+                                   item->chromEnd, '+', 0.001, &item->chrom,
+                                   (int *)&item->chromStart, (int *)&item->chromEnd, &strand);
+    /* the chains are read for a padded window, so an item can lift to somewhere off screen */
+    if ((error == NULL) && ((item->chromEnd <= start) || (item->chromStart >= end)))
+        error = "outside window";
+    if (error == NULL)
+        {
+        if (adjust != NULL)
+            adjust(item, (strand == '-'), clippedStart);
+        slAddHead(&liftedList, item);
+        }
+    }
+if (blockCache != NULL)
+    quickLiftBlockCacheFree(&blockCache);
+return (struct slList *)liftedList;
+}
+
 static struct slList *rmskOutLoadItem(char **row, int numFields)
 /* quickLiftSql()'s loader signature around rmskOutLoad(). */
 {
@@ -2098,8 +2901,9 @@ boolean quickLiftRmskOut(struct hash *chainHash, struct rmskOut *ro)
 char *liftedChrom;
 int liftedStart, liftedEnd;
 char liftedStrand;
-if (liftOverRemapRange(chainHash, 0.0, ro->genoName, ro->genoStart, ro->genoEnd, ro->strand[0],
-                       0.001, &liftedChrom, &liftedStart, &liftedEnd, &liftedStrand) != NULL)
+if ((chainHash == NULL) ||
+    (liftOverRemapRange(chainHash, 0.0, ro->genoName, ro->genoStart, ro->genoEnd, ro->strand[0],
+                        0.001, &liftedChrom, &liftedStart, &liftedEnd, &liftedStrand) != NULL))
     return FALSE;
 // liftOverRemapRange hands back its own copy of the chrom name
 freeMem(ro->genoName);
@@ -2165,7 +2969,7 @@ boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *p
  * nothing of the item maps, or the aligned blocks land out of order:  drop the item then. */
 {
 int blockCount = *pBlockCount;
-if (blockCount <= 0)
+if ((chainHash == NULL) || (blockCount <= 0))
     return FALSE;
 // the unaligned flanks are drawn past the aligned part:  keep whatever they reach beyond
 // their own sizes, which is how far the item's ends sit from the aligned part

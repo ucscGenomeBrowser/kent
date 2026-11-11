@@ -1,0 +1,31 @@
+##gff-version 3
+
+# NCBI style gene structures converted by default, without -allowMinimalGenes
+# (#38692).  Expected rows with -useName:
+
+# gene -> piRNA -> exon: one row, NR_000001.1 (C. elegans 21U-RNAs)
+chrTest	RefSeq	gene	2000	2021	.	+	.	ID=gene-21ur-1;Name=21ur-1;gbkey=Gene;gene_biotype=piRNA
+chrTest	RefSeq	piRNA	2000	2021	.	+	.	ID=rna-NR_000001.1;Parent=gene-21ur-1;Name=NR_000001.1;gbkey=ncRNA
+chrTest	RefSeq	exon	2000	2021	.	+	.	ID=exon-NR_000001.1-1;Parent=rna-NR_000001.1;gbkey=ncRNA
+
+# pseudogene -> pseudogenic_tRNA -> exon: one row, tRNA1P
+chrTest	RefSeq	pseudogene	1000	1072	.	+	.	ID=gene-tRNA1P;Name=tRNA1P;gbkey=Gene;gene_biotype=tRNA_pseudogene;pseudo=true
+chrTest	RefSeq	pseudogenic_tRNA	1000	1072	.	+	.	ID=rna-tRNA1P;Parent=gene-tRNA1P;Name=tRNA1P;gbkey=tRNA;pseudo=true
+chrTest	RefSeq	exon	1000	1072	.	+	.	ID=exon-tRNA1P-1;Parent=rna-tRNA1P;gbkey=tRNA;pseudo=true
+
+# pseudogene with exons directly under it (OR4G4P on GRCh38): one two-exon
+# row, OR4G4P
+chrTest	RefSeq	pseudogene	3000	3800	.	+	.	ID=gene-OR4G4P;Name=OR4G4P;gbkey=Gene;gene_biotype=transcribed_pseudogene;pseudo=true
+chrTest	RefSeq	exon	3000	3200	.	+	.	ID=id-OR4G4P;Parent=gene-OR4G4P;gbkey=exon;pseudo=true
+chrTest	RefSeq	exon	3500	3800	.	+	.	ID=id-OR4G4P-2;Parent=gene-OR4G4P;gbkey=exon;pseudo=true
+
+# pseudogene with no children: one single-block row, FAKE1P
+chrTest	RefSeq	pseudogene	4000	4500	.	-	.	ID=gene-FAKE1P;Name=FAKE1P;gbkey=Gene;gene_biotype=pseudogene;pseudo=true
+
+# gene with a direct exon AND an mRNA: only the mRNA row, NM_000002.1;
+# the direct exon must not turn the gene into a transcript of its own
+chrTest	RefSeq	gene	5000	6000	.	+	.	ID=gene-MIX1;Name=MIX1;gbkey=Gene;gene_biotype=lncRNA
+chrTest	RefSeq	exon	5000	5100	.	+	.	ID=id-MIX1;Parent=gene-MIX1;gbkey=exon
+chrTest	RefSeq	mRNA	5000	6000	.	+	.	ID=rna-NM_000002.1;Parent=gene-MIX1;Name=NM_000002.1;gbkey=mRNA
+chrTest	RefSeq	exon	5000	5300	.	+	.	ID=exon-NM_000002.1-1;Parent=rna-NM_000002.1;gbkey=mRNA
+chrTest	RefSeq	exon	5700	6000	.	+	.	ID=exon-NM_000002.1-2;Parent=rna-NM_000002.1;gbkey=mRNA

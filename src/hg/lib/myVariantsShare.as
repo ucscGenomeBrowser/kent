@@ -1,13 +1,10 @@
 table myVariantsShares
-"A share record linking an owner's myVariants project to a recipient."
+"A share link giving anyone who holds it access to one My Annotations project."
     (
-    uint id;              "Auto-increment primary key"
-    string ownerUser;     "Owner who created the share"
-    string shareToken;    "48-char URL-safe token"
-    string project;       "Project name, or * for all"
-    string db;            "Assembly (hg38, mm39, etc.)"
-    ubyte permission;     "0=read-only, 1=read-write"
-    string targetUser;    "Comma-separated usernames, or NULL for anyone with link"
-    string label;         "Optional human-readable label"
-    string createdAt;     "Timestamp of creation"
+    uint id;           "Auto-increment primary key"
+    string ownerUser;  "Login of the project's owner"
+    string shareToken; "48-char URL-safe token; holding it is what grants access"
+    uint projectId;    "myVariantsProjects.id of the shared project"
+    ubyte permission;  "0=view, 1=edit"
+    string createdAt;  "Timestamp of creation"
     )

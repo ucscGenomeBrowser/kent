@@ -76,7 +76,8 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 
 notSupported: notSup01 notSup02 notSup03 notSup07 notSup10
 
-bugReports: redmine24089a redmine24089b redmine24666 redmine25840
+bugReports: redmine24089a redmine24089b redmine24666 redmine25840 \
+	redmine38530
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -1462,6 +1463,17 @@ redmine24666: setOutput
 redmine25840: setOutput
 	@printf "### $@ '${SERVERNAME}/getData/track?genome=hg18;track=cnpSebat2'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="hg18" -track="cnpSebat2" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# /list/chromosomes on a track name longer than 64 characters was an HTTP 500,
+# MySQL refuses such a name as a table name.  The second request is the same
+# name with _typo added, a track that does not exist, which should be a 400
+# error and not a 500, refs #38530
+redmine38530: setOutput
+	@printf "### $@ '${SERVERNAME}/list/chromosomes?track=AorticSmoothMuscleCellResponseToFGF200hr00minBiolRep1LK1_CNhs13339_ctss_fwd;genome=hg19'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/chromosomes" -genome="hg19" -track="AorticSmoothMuscleCellResponseToFGF200hr00minBiolRep1LK1_CNhs13339_ctss_fwd" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ '${SERVERNAME}/list/chromosomes?track=AorticSmoothMuscleCellResponseToFGF200hr00minBiolRep1LK1_CNhs13339_ctss_fwd_typo;genome=hg19'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/chromosomes" -genome="hg19" -track="AorticSmoothMuscleCellResponseToFGF200hr00minBiolRep1LK1_CNhs13339_ctss_fwd_typo" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c >> testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 #	curl -L "https://api-test.gi.ucsc.edu/getData/sequence?genome=ci2;chrom=scaffold_8534" 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz

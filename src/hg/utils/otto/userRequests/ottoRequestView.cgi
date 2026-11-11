@@ -41,9 +41,9 @@ FB_SNAPSHOT_PATH = '/data/apache/trash/ottoRequestFeatureBitsPct.json'
 liftStatus = {
     0: 'received by API',
     1: 'acknowledged, email sent',
-    2: 'galaxy job started',
+    2: 'alignment started',
     3: 'galaxy done, download started',
-    4: 'downloaded, track files made',
+    4: 'alignment done, track files made',
     5: 'symlinks ready, awaiting push',
     6: 'push complete',
     7: 'ERROR',
@@ -248,22 +248,27 @@ def featureBitsPct(srcAcc, qryAcc):
     bdir = hubBuildDir(srcAcc)
     pct  = ''
     if bdir:
-        # GenArk builds keep lastz under trackData/, UCSC native under bed/
+        # GenArk builds keep pairwise builds under trackData/, UCSC native
+        # under bed/
         sub = 'trackData' if '/asmHubs/' in bdir else 'bed'
         # chain<QryAcc>Link.txt: first letter of query is capitalized
         # (matches the ${dstDb^} convention in installLinks).  No-op for
         # GCA_*/GCF_* accessions; converts hg38 -> Hg38 for native dbs.
         QryAcc = qryAcc[:1].upper() + qryAcc[1:]
-        path = (f'{bdir}/{sub}/lastz.{qryAcc}/'
-                f'fb.{srcAcc}.chain{QryAcc}Link.txt')
-        try:
-            with open(path) as f:
-                txt = f.read()
+        # lastz.<qry> for lastz/KegAlign builds, miniMap2.<qry> for
+        # minimap2 builds; same fb file name in both
+        for kind in ('lastz', 'miniMap2'):
+            path = (f'{bdir}/{sub}/{kind}.{qryAcc}/'
+                    f'fb.{srcAcc}.chain{QryAcc}Link.txt')
+            try:
+                with open(path) as f:
+                    txt = f.read()
+            except OSError:
+                continue
             m = re.search(r'\(([\d.]+)%\)', txt)
             if m:
                 pct = m.group(1) + '%'
-        except OSError:
-            pass
+            break
     _fbPctCache[key] = pct
     return pct
 

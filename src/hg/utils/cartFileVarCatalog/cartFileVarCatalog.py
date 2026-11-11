@@ -100,12 +100,6 @@ CATALOG = [
            "and the name is built from the db at run time, which is why the "
            "cart.c entry is a prefix rather than a name."),
 
-    e("mvCtfile_<db>", "screened", "hg/lib/customTrack.c", "fileExists",
-      ident="{mvVar}", screen="prefix:mvCtfile_",
-      note="myVariants custom track.  Its file lives under myVariantsDataDir "
-           "when hg.conf sets one, which is why isServerUserFilePath() accepts "
-           "that directory and the bigDataUrl check does not."),
-
     e("customComposite-<db>", "screened", "hg/hgCollection/hgCollection.c",
       "open, mustOpen", ident="{buffer}", screen="prefix:customComposite-",
       note="The track collection hub.  hgCollection writes it, so a retargeted "

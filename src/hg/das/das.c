@@ -1103,8 +1103,9 @@ if (cgiVarExists("verbose"))
 if (argc == 2)
     path = argv[1];
 
-int delay = hgBotDelayTimeFrac(0.03);
-if (delay > 2000)
+boolean bottleneckFailed = FALSE;
+int delay = hgBotDelayTimeFracWithStatus(0.03, &bottleneckFailed);
+if (!bottleneckFailed && delay > 2000)
     {
     char *hogHost = getenv("REMOTE_ADDR");
     sendHogMessage(hogHost);

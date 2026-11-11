@@ -1534,7 +1534,10 @@ const T_START = Date.now();
       const n = String(o.file ?? from);
       const file = path.isAbsolute(n) ? n : path.join(SESSDIR, /\.\w+$/.test(n) ? n : n + '.txt');
       if (!fs.existsSync(file)) throw new Error(`loadSession: no such file: ${file}`);
-      await nav('/cgi-bin/hgSession');
+      // sessionNewPage=0: the upload form is on the classic page. A server can make the newer
+      // client-rendered Sessions page the default (hg.conf sessionNewPage), and that page has no
+      // hgS_loadLocalFileName input, so the click below waited 30 s and failed.
+      await nav('/cgi-bin/hgSession?sessionNewPage=0');
       await page.setInputFiles('input[name="hgS_loadLocalFileName"]', file);
       await page.click('input[name="hgS_doLoadLocal"]');
       await page.waitForLoadState('load').catch(() => {});

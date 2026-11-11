@@ -37,6 +37,7 @@
 #include "cogs.h"
 #include "cogsxra.h"
 #include "bed.h"
+#include "bedCart.h"
 #include "cgh.h"
 #include "agpFrag.h"
 #include "agpGap.h"
@@ -108,6 +109,7 @@
 #include "softPromoter.h"
 #include "customTrack.h"
 #include "myVariants.h"
+#include "wikiLink.h"
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "sage.h"
@@ -2158,8 +2160,15 @@ if (!hFindSplitTable(db, seqName, tdb->table, table, sizeof table, &hasBin))
 
 if (liftDb)
     {
+    /* lift the way hgTracks lifts this bed, or the clicked start may not match:  block by
+     * block for bed 12 (loadGappedBed()) and for bed 8 and a bed 9 without itemRgb
+     * (loadBed8(), which has no blocks).  Lift bed 10 and 11 whole: bedLoadN() fills
+     * blockCount for them but not chromStarts, so a blocked lift would read past it.
+     * A bed 9 with itemRgb is lifted whole by loadBed9(), as are the beds under 8 fields */
+    boolean blocked = (bedSize >= 12) || (bedSize == 8) ||
+                      ((bedSize == 9) && !bedItemRgb(tdb));
     struct bed *liftedBeds = quickLiftSqlLoadBeds(tdb, trackHubSkipHubName(tdb->track), liftDb,
-        seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, FALSE);
+        seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, blocked);
     /* that is every lifted item in the window, so print only the one that was clicked,
      * matched the way the unlifted query below matches it.  refs #38591 */
     for (bed = liftedBeds; bed != NULL; bed = bed->next)
@@ -2173,6 +2182,8 @@ if (liftDb)
             htmlHorizontalLine();
         bedPrintPos(bed, bedSize, tdb);
         }
+    if (firstTime)
+        printf("The lifted item was not found at this position.<BR>\n");
 
     //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     }
@@ -3713,7 +3724,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
             }
 	}
-    if (!showEvery && !firstTime)
+    if (!showEvery && !firstTime && !showAll)
 	break;
     }
 if (!firstTime)
@@ -10460,7 +10471,8 @@ for (ro = roList; ro != NULL; ro = ro->next)
     {
     char repStrand = ro->strand[0];
     if (!sameString(ro->repName, repeat) ||
-	!quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) ||
+	!quickLiftRmskOut(quickLiftChainHashForRange(chainHash, ro, ro->genoName, ro->genoStart,
+                                                  ro->genoEnd), ro) ||
 	!sameString(ro->genoName, seqName) || (ro->genoStart != start) || (ro->genoEnd != end))
 	continue;
     found = TRUE;
@@ -24264,12 +24276,33 @@ fileName = nextWord(&fileItem);
 for (ct = ctList; ct != NULL; ct = ct->next)
     if (sameString(trackId, ct->tdb->track))
 	break;
+if (ct == NULL && isMyVariantsTrack(trackId))
+    {
+    /* My Annotations tracks come from the signed-in account or an accepted
+     * share, not a file, so say which of those is missing. */
+    cartWebStart(cart, database, "My Annotations");
+    if (getUserName() == NULL)
+        {
+        char *retUrl = wikiLinkEncodeReturnUrl(cartSessionId(cart), "hgTracks", "");
+        char *loginUrl = wikiLinkUserLoginUrlReturning(cartSessionId(cart), retUrl);
+        htmlPrintf("<p>This annotation is in a My Annotations track. "
+            "<a href='%s|attr|'>Log in</a> to see your own annotations, or open the share "
+            "link again for one shared with you.</p>\n", loginUrl);
+        freez(&retUrl);
+        freez(&loginUrl);
+        }
+    else
+        printf("<p>This My Annotations track is no longer available. It may have been "
+               "deleted, or its share link revoked.</p>\n");
+    return;
+    }
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
 type = ct->tdb->type;
-cartWebStart(cart, database, "Custom Track: %s", ct->tdb->shortLabel);
+cartWebStart(cart, database, "%s: %s",
+    isMyVariantsType(ct->tdb->type) ? "My Annotations" : "Custom Track", ct->tdb->shortLabel);
 itemName = skipLeadingSpaces(fileItem);
-printf("<H2>%s</H2>\n", ct->tdb->longLabel);
+printf("<H2>%s</H2>\n", htmlEncode(ct->tdb->longLabel));
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
 else if ( startsWith( "bedMethyl", type))
@@ -28794,7 +28827,7 @@ if (isDup)
     {
     struct dupTrack *dupList = dupTrackListFromCart(cart);
     struct dupTrack *dup = dupTrackFindInList(dupList, dupWholeName);
-    if (dup != NULL)
+    if (dup != NULL && tdb != NULL)
 	{
 	tdb = dupTdbFrom(tdb, dup);
 	track = dupWholeName;

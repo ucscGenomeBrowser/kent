@@ -215,19 +215,23 @@ MAILTO=cells@ucsc.edu
 
 # cbAnnotServer: Cell Browser login/annotation API (RM #37492). Keeps gunicorn
 # (127.0.0.1:5051, Apache proxies /api to it) alive; restarts if down / on reboot.
-* * * * * umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
-@reboot umask 002; sleep 180; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
+# Runs the copy that "make install-annot" (in a cellBrowser checkout's ucsc/)
+# puts in /cluster/home/otto/cellsServer, which only otto can write. umask 027
+# keeps what it writes away from everyone outside genecats (RM #38664).
+* * * * * umask 027; CBANNOT_ENV_FILE=/cluster/home/otto/cellsServer/etc/cbAnnot.env /cluster/home/otto/cellsServer/cbAnnotServer/deploy/watchdog.sh >> /cluster/home/otto/cellsServer/logs/watchdog.log 2>&1
+@reboot umask 027; sleep 180; CBANNOT_ENV_FILE=/cluster/home/otto/cellsServer/etc/cbAnnot.env /cluster/home/otto/cellsServer/cbAnnotServer/deploy/watchdog.sh >> /cluster/home/otto/cellsServer/logs/watchdog.log 2>&1
 
 # DE worker: Cell Browser differential expression (RM #24912). Keeps deWorker.py
-# alive (reads the /hive job queue); restarts if down / on reboot.
+# alive (reads the job queue); restarts if down / on reboot.
 #
 # MOVED (2026-08-22): the DE worker now runs from the otto crontab ON
 # hgcompute-08, not here. The compute host reads exprMatrix.bin from a /hive
 # cache it fetches over HTTP (deCache.py), so it no longer needs the web host's
 # local docroot, and DE compute is off hgwdev. These two lines are left commented
-# for history; the live copy is in otto's crontab on hgcompute-08.
-#* * * * * umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
-#@reboot   umask 002; DE_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/de.env ~mspeir/cellBrowser/src/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/deWorker-watchdog.log 2>&1
+# for history; the live copy is in otto's crontab on hgcompute-08, and like the
+# cbAnnotServer lines above it runs from /cluster/home/otto/cellsServer (RM #38664).
+#* * * * * umask 027; DE_ENV_FILE=/cluster/home/otto/cellsServer/etc/de.env /cluster/home/otto/cellsServer/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /cluster/home/otto/cellsServer/logs/deWorker-watchdog.log 2>&1
+#@reboot   umask 027; DE_ENV_FILE=/cluster/home/otto/cellsServer/etc/de.env /cluster/home/otto/cellsServer/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /cluster/home/otto/cellsServer/logs/deWorker-watchdog.log 2>&1
 
 # Malacards update. Not done monthly, but running monthly anyways, as they don't have a fixed schedule
 

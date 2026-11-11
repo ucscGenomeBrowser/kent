@@ -13,6 +13,7 @@
 #include "dnaseq.h"
 #include "nib.h"
 #include "hdb.h"
+#include "multiRegionSpace.h"
 #include "hgRelate.h"
 #include "fa.h"
 #include "hgConfig.h"
@@ -51,6 +52,7 @@
 #include "chromAlias.h"
 #include "asmEquivalent.h"
 #include "genark.h"
+#include "myVariants.h"
 
 
 #ifdef LOWELAB
@@ -123,6 +125,14 @@ static struct chromInfo *lookupChromInfo(char *db, char *chrom)
 /* Query db.chromInfo for the first entry matching chrom. */
 {
 struct chromInfo *ci = NULL;
+
+/* A database being drawn in a synthetic multi-region space answers in synthetic
+ * coordinates.  The name the caller is holding is the name of what is on the
+ * screen, and the chain that defines the space carries its sequences and their
+ * sizes.  refs #37788 */
+char *spaceChain = multiRegionSpaceForDb(db);
+if (spaceChain != NULL)
+    return multiRegionSpaceChromInfo(spaceChain, chrom);
 
 /* An assembly hub keeps its sequence in a 2bit file and has no chromInfo table.  A curated
  * hub reaches us as an undecorated db name, so check the undecorated hub genomes too. */
@@ -232,6 +242,25 @@ if (code == NULL)
 return code;
 }
 
+/* hGetChromInfo()'s cache, pointed to here so hClearChromInfoCache() can reach it. */
+static struct hash **dbToInfoRef = NULL;
+
+void hClearChromInfoCache(char *db)
+/* Forget every chromosome this process has looked up for db.  Needed when the
+ * meaning of db's coordinates changes under us, which is what entering a
+ * multi-region space does:  the first answer for a name is the one that sticks,
+ * so a size read earlier in the request would otherwise stand.  refs #37788 */
+{
+if (dbToInfoRef == NULL || *dbToInfoRef == NULL || db == NULL)
+    return;
+struct hashEl *hel = hashLookup(*dbToInfoRef, db);
+if (hel == NULL)
+    return;
+struct hash *infoHash = hel->val;
+hashFree(&infoHash);
+hashRemove(*dbToInfoRef, db);
+}
+
 struct chromInfo *hGetChromInfo(char *db, char *chrom)
 /* Get chromInfo for named chromosome (case-insens.) from db.
  * Return NULL if no such chrom. */
@@ -240,6 +269,7 @@ struct chromInfo *hGetChromInfo(char *db, char *chrom)
  * is usually not necessary. */
 {
 static struct hash *dbToInfo = NULL;
+dbToInfoRef = &dbToInfo;
 struct hash *infoHash = NULL;
 struct hashEl *dHel = NULL;
 struct chromInfo *ci = NULL;
@@ -1225,6 +1255,14 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
+/* There is no file holding the sequence of a multi-region space, and the source
+ * file is not an answer:  the caller would read it at synthetic coordinates and get
+ * real bases from the wrong place, which is worse than an error.  Source sequence
+ * is reached with multiRegionSpaceSourceTwoBit(), resolved before the space went
+ * in.  refs #37788 */
+if (multiRegionSpaceForDb(db) != NULL)
+    errAbort("%s is being drawn in a multi-region coordinate space, which has no "
+             "sequence file.  This code path needs to go through hChromSeq().", db);
 if (startsWith("GC", db))
     {
     struct trackHubGenome *genome = trackHubGetGenome(db);
@@ -1345,6 +1383,13 @@ return seq;
 struct dnaSeq *hChromSeqMixed(char *db, char *chrom, int start, int end)
 /* Return mixed case (repeats in lower case) DNA from chromosome. */
 {
+/* A multi-region space has no sequence of its own.  Its bases are the source
+ * assembly's, read through the chain that defines the space, which keeps the
+ * source's own soft masking.  refs #37788 */
+char *spaceChain = multiRegionSpaceForDb(db);
+if (spaceChain != NULL)
+    return multiRegionSpaceDna(spaceChain, multiRegionSpaceSourceTwoBit(db),
+                               chrom, start, end);
 char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(db, chrom, fileName);
 return hFetchSeqMixed(fileName, chrom, start, end);
@@ -1363,6 +1408,15 @@ return hFetchSeqMixed(fileName, chrom, start, end);
 struct dnaSeq *hChromSeq(char *db, char *chrom, int start, int end)
 /* Return lower case DNA from chromosome. */
 {
+char *spaceChain = multiRegionSpaceForDb(db);
+if (spaceChain != NULL)
+    {
+    struct dnaSeq *seq = multiRegionSpaceDna(spaceChain, multiRegionSpaceSourceTwoBit(db),
+                                             chrom, start, end);
+    if (seq != NULL)
+        tolowers(seq->dna);
+    return seq;
+    }
 char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(db, chrom, fileName);
 
@@ -1579,6 +1633,10 @@ return hDnaFromSeq(db, chromName, 0, size, dnaLower);
 struct slName *hAllChromNames(char *db)
 /* Get list of all chromosome names in database. */
 {
+/* In a multi-region space these are the synthetic sequences.  refs #37788 */
+char *spaceChain = multiRegionSpaceForDb(db);
+if (spaceChain != NULL)
+    return multiRegionSpaceChromNames(spaceChain);
 if (trackHubDatabase(db) || hubConnectIsCurated(trackHubSkipHubName(db)) || isGenArk(db))
     return trackHubAllChromNames(db);
 struct slName *list = NULL;
@@ -4159,8 +4217,11 @@ if (bigDataUrl != NULL)
     }
 else
     {
-    // if it's copied from a custom track, wait to find data later
-    if (isCustomTrack(tdb->table))
+    // if it's copied from a custom track, wait to find data later.  myVariants
+    // tracks are custom tracks whose names carry no ct_ prefix, and their rows
+    // live in customTrash rather than in database.
+    if (isCustomTrack(tdb->table)
+        || (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(tdb->table)))
         return TRUE;
     return (hTableForTrack(database, tdb->table) != NULL);
     }

@@ -95,7 +95,7 @@ while ( $i <= $#files )
 	break
     endif
     # move the beta tag in cvs to track the change to this week's branch.
-    if (-e pushedToRR.flag ) then
+    if (-e $BUILDSTATE/pushedToRR.flag ) then
 	set cmd = "cvs rtag -rv${BRANCHNN}_branch -F beta kent/src/$f"
 	echo $cmd
 	$cmd

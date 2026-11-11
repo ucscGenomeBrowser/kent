@@ -67,15 +67,18 @@ options:
                         (covered by that chain and no other) into this
                         directory. Target-coordinates only -- see the
                         'targetIntervals' comment on analyzeChain() for why.
-  --failBeds DIR        write a bed6+1 file of every record that failed to
+  --failBeds DIR        write a bed9+1 file of every record that failed to
                         lift through a chain, one file per chain per test:
                         genePred.<chainLabel>.unmapped.bed (genePred records
                         reduced to chrom/txStart/txEnd/name/0/strand) and
                         <bedLabel>.<chainLabel>.unmapped.bed (BED3-BED12+
                         normalized to the same 6 columns, name/score/strand
-                        padded with '.'/'0' if the input didn't have them)
-                        for each --bed given.  The 7th column is liftOver's
-                        own reason text for why that record failed.
+                        padded with '.'/'0' if the input didn't have them).
+                        thickStart/thickEnd (columns 7-8) are set to the
+                        item's own start/end; itemRgb (column 9) is colored
+                        by failure category (see FAILURE_COLORS); column 10
+                        is liftOver's own, full reason text for why that
+                        record failed.
 
 At least one of --genePred / --bed must be given, unless --chainStats is.
 """
@@ -351,28 +354,68 @@ def writeBedIntervals(byChrom, outPath):
                 out.write(f'{chrom}\t{s}\t{e}\n')
 
 
-def genePredToBed6Plus1(fields, reason):
+# The complete observed vocabulary of liftOver -genePred failure reasons --
+# everything else collapses to 'Boundary problem' (many individual variants,
+# differing only in the need/got/diff/mapped numbers) or falls back to
+# FALLBACK_COLOR if some future liftOver version adds a reason not seen here.
+FAILURE_COLORS = {
+    'Deleted in new': '255,0,0',
+    'Partially deleted in new': '128,0,0',
+    'Boundary problem': '0,0,255',
+    "Can't find thickStart/thickEnd": '0,255,0',
+}
+FALLBACK_COLOR = '0,0,0'
+
+
+def reasonCategory(reason):
+    """Collapse a specific reason string (e.g. 'Boundary problem: need 15, '
+    'got 14, diff 1, mapped 0.9') down to its broad failure category."""
+    if reason.startswith('Boundary problem'):
+        return 'Boundary problem'
+    return reason
+
+
+def reasonColor(reason):
+    return FAILURE_COLORS.get(reasonCategory(reason), FALLBACK_COLOR)
+
+
+def consolidateReasons(reasons):
+    """Collapse a reason Counter's 'Boundary problem: ...' variants into a
+    single 'Boundary problem' entry, for a readable text report."""
+    consolidated = Counter()
+    for reason, count in reasons.items():
+        consolidated[reasonCategory(reason)] += count
+    return consolidated
+
+
+def genePredToBed9Plus1(fields, reason):
     """Reduce one genePred (standard or extended) record's fields to a
-    bed6+1 line, the 7th column being why it failed to lift over."""
+    bed9+1 line: thickStart/thickEnd set to the item's own start/end,
+    itemRgb colored by failure category, column 10 the full reason text."""
     name, chrom, strand, txStart, txEnd = fields[0], fields[1], fields[2], fields[3], fields[4]
-    return f'{chrom}\t{txStart}\t{txEnd}\t{name}\t0\t{strand}\t{reason}\n'
+    rgb = reasonColor(reason)
+    return (f'{chrom}\t{txStart}\t{txEnd}\t{name}\t0\t{strand}\t'
+            f'{txStart}\t{txEnd}\t{rgb}\t{reason}\n')
 
 
-def toBed6Plus1(fields, reason):
-    """Normalize a BED record's fields (BED3 up through BED12+) to bed6,
-    padding any missing name/score/strand, then append why it failed to
-    lift over as the 7th column."""
+def toBed9Plus1(fields, reason):
+    """Normalize a BED record's fields (BED3 up through BED12+) to bed9,
+    padding any missing name/score/strand, setting thickStart/thickEnd to
+    the item's own start/end, coloring itemRgb by failure category, and
+    appending the full reason text as column 10."""
     chrom, start, end = fields[0], fields[1], fields[2]
     name = fields[3] if len(fields) > 3 else '.'
     score = fields[4] if len(fields) > 4 else '0'
     strand = fields[5] if len(fields) > 5 else '.'
-    return f'{chrom}\t{start}\t{end}\t{name}\t{score}\t{strand}\t{reason}\n'
+    rgb = reasonColor(reason)
+    return (f'{chrom}\t{start}\t{end}\t{name}\t{score}\t{strand}\t'
+            f'{start}\t{end}\t{rgb}\t{reason}\n')
 
 
 def writeCleanUnmapped(unmappedPath, outPath, lineConverter):
     """Copy an unmapped-records file, dropping liftOver's '#reason' comment
     lines and blank lines, and converting each surviving record -- together
-    with the reason that preceded it -- to a bed6+1 line via
+    with the reason that preceded it -- to a bed9+1 line via
     lineConverter(fields, reason)."""
     currentReason = 'unknown'
     with open(unmappedPath) as fh, open(outPath, 'w') as out:
@@ -463,6 +506,11 @@ def pct(part, whole):
     return (100.0 * part / whole) if whole else float('nan')
 
 
+def cnum(n):
+    """Format an integer with thousands-comma separators for display."""
+    return f'{n:,}'
+
+
 def printTable(headers, rows):
     widths = [len(h) for h in headers]
     for row in rows:
@@ -551,17 +599,17 @@ def main():
 
         chainRows.append([
             label,
-            stats['nChains'],
-            stats['nBlocks'],
+            cnum(stats['nChains']),
+            cnum(stats['nBlocks']),
             f"{stats['blocksPerChain']:.2f}",
-            stats['alignedBases'],
-            stats['targetGapBases'],
-            stats['queryGapBases'],
-            stats['blockSizeN50'],
-            stats['chainSpanN50'],
-            stats['targetCovered'],
+            cnum(stats['alignedBases']),
+            cnum(stats['targetGapBases']),
+            cnum(stats['queryGapBases']),
+            cnum(stats['blockSizeN50']),
+            cnum(stats['chainSpanN50']),
+            cnum(stats['targetCovered']),
             f"{pct(stats['targetCovered'], tDenom):.2f}%",
-            stats['queryCovered'],
+            cnum(stats['queryCovered']),
             f"{pct(stats['queryCovered'], qDenom):.2f}%",
         ])
 
@@ -574,13 +622,13 @@ def main():
 
             if args.failBeds:
                 failPath = os.path.join(args.failBeds, f'genePred.{label}.unmapped.bed')
-                writeCleanUnmapped(unmapped, failPath, genePredToBed6Plus1)
+                writeCleanUnmapped(unmapped, failPath, genePredToBed9Plus1)
 
             translationRows.append([
                 label,
-                mappedCount,
+                cnum(mappedCount),
                 f"{pct(mappedCount, totalTranscripts):.2f}%",
-                unmappedCount,
+                cnum(unmappedCount),
                 f"{pct(unmappedCount, totalTranscripts):.2f}%",
             ])
             reasonReports.append((label, reasons))
@@ -608,14 +656,14 @@ def main():
 
             if args.failBeds:
                 failPath = os.path.join(args.failBeds, f'{bedLabel}.{chainLabel}.unmapped.bed')
-                writeCleanUnmapped(unmapped, failPath, toBed6Plus1)
+                writeCleanUnmapped(unmapped, failPath, toBed9Plus1)
 
             rows.append([
                 chainLabel,
-                mappedFeat, f"{pct(mappedFeat, totalFeat):.2f}%",
-                mappedBp, f"{pct(mappedBp, totalBp):.2f}%",
-                unmappedFeat, f"{pct(unmappedFeat, totalFeat):.2f}%",
-                unmappedBp, f"{pct(unmappedBp, totalBp):.2f}%",
+                cnum(mappedFeat), f"{pct(mappedFeat, totalFeat):.2f}%",
+                cnum(mappedBp), f"{pct(mappedBp, totalBp):.2f}%",
+                cnum(unmappedFeat), f"{pct(unmappedFeat, totalFeat):.2f}%",
+                cnum(unmappedBp), f"{pct(unmappedBp, totalBp):.2f}%",
             ])
             bedReasonReports.append((chainLabel, reasons))
         bedReports.append((bedLabel, bedPath, args.mergeBed, totalFeat, totalBp, rows, bedReasonReports))
@@ -648,18 +696,18 @@ def main():
         writeBedIntervals(commonByChrom, commonPath)
 
         print(f'## --regionBeds output (target-genome coordinates): {args.regionBeds}')
-        print(f"# common.bed: {coverageTotal(commonByChrom)} bp covered by all "
+        print(f"# common.bed: {cnum(coverageTotal(commonByChrom))} bp covered by all "
               f"{len(chainSpecs)} chains -> {commonPath}")
         for label, _path in chainSpecs:
             uniquePath = os.path.join(args.regionBeds, f'{label}.unique.bed')
             writeBedIntervals(uniqueByLabelByChrom[label], uniquePath)
-            print(f"# {label}.unique.bed: {coverageTotal(uniqueByLabelByChrom[label])} "
+            print(f"# {label}.unique.bed: {cnum(coverageTotal(uniqueByLabelByChrom[label]))} "
                   f"bp covered only by {label} -> {uniquePath}")
         print()
 
     if args.genePred:
         print(f"## genePred translation (liftOver -genePred): {args.genePred}  "
-              f"({totalTranscripts} transcripts)")
+              f"({cnum(totalTranscripts)} transcripts)")
         printTable(['label', 'mapped', 'mapped%', 'unmapped', 'unmapped%'], translationRows)
         print()
 
@@ -669,14 +717,14 @@ def main():
             if not reasons:
                 print('    (none -- everything mapped)')
                 continue
-            for reason, count in reasons.most_common():
-                print(f'    {count:8d}  {reason}')
+            for reason, count in consolidateReasons(reasons).most_common():
+                print(f'    {cnum(count):>10}  {reason}')
         print()
 
     for bedLabel, bedPath, merged, totalFeat, totalBp, rows, bedReasonReports in bedReports:
         mergedNote = ' (merged to non-overlapping BED3)' if merged else ''
         print(f"## BED translation: {bedLabel}  [{bedPath}]{mergedNote}")
-        print(f"# {totalFeat} features, {totalBp} bp tested")
+        print(f"# {cnum(totalFeat)} features, {cnum(totalBp)} bp tested")
         printTable(
             ['label', 'mapped feat', 'feat%', 'mapped bp', 'bp%',
              'unmapped feat', 'feat%', 'unmapped bp', 'bp%'],
@@ -690,8 +738,8 @@ def main():
             if not reasons:
                 print('    (none -- everything mapped)')
                 continue
-            for reason, count in reasons.most_common():
-                print(f'    {count:8d}  {reason}')
+            for reason, count in consolidateReasons(reasons).most_common():
+                print(f'    {cnum(count):>10}  {reason}')
         print()
 
     if args.keep:

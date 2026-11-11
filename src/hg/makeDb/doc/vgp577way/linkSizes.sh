@@ -45,7 +45,7 @@ do
 done
 
 ls *.len > sizes
-head sizes
+wc -l sizes
 
 # GCF_963930625.1
 # GCF_964237555.1

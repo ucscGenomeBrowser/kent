@@ -328,12 +328,23 @@ if (gencodeQuery->joinTag)
     }
 }
 
-static void addQueryCommon(struct sqlConnection *conn, struct track *tg, filterBySetGetFuncType filterBySetGetFunc, struct gencodeQuery *gencodeQuery)
-/* Add tables and joins for both gene and highlight queries */
+static void addQueryCommon(struct sqlConnection *conn, struct track *tg, filterBySetGetFuncType filterBySetGetFunc, struct slName *names, struct gencodeQuery *gencodeQuery)
+/* Add tables and joins for both gene and highlight queries.  The query reads the
+ * transcripts in the window, or, when names is not NULL, the transcripts with those
+ * names wherever they are. */
 {
-// bin range overlap part
-hAddBinToQuery(winStart, winEnd, gencodeQuery->where);
-sqlDyStringPrintf(gencodeQuery->where, "(g.chrom = \"%s\") and (g.txStart < %u) and (g.txEnd > %u)", chromName, winEnd, winStart);
+if (names != NULL)
+    {
+    sqlDyStringPrintf(gencodeQuery->where, "(g.name in (");
+    sqlDyStringPrintValuesList(gencodeQuery->where, names);
+    sqlDyStringPrintf(gencodeQuery->where, "))");
+    }
+else
+    {
+    // bin range overlap part
+    hAddBinToQuery(winStart, winEnd, gencodeQuery->where);
+    sqlDyStringPrintf(gencodeQuery->where, "(g.chrom = \"%s\") and (g.txStart < %u) and (g.txEnd > %u)", chromName, winEnd, winStart);
+    }
 
 gencodeFilterBySetQuery(tg, filterBySetGetFunc, gencodeQuery);
 addFilterMaxTranscripsByRange(conn, tg, gencodeQuery);
@@ -406,18 +417,21 @@ gencodeQuery->joinAttrs = TRUE;
 
 static struct gencodeQuery *geneQueryConstruct(struct sqlConnection *conn,
                                                struct track *tg,
-                                               boolean includeAttrs)
-/* construct the query for a GENCODE records, which includes filters. */
+                                               boolean includeAttrs,
+                                               struct slName *names)
+/* construct the query for a GENCODE records, which includes filters.  With names, only
+ * the transcripts of those names are read, rather than those in the window. */
 {
 struct gencodeQuery *gencodeQuery = gencodeQueryNew();
 geneQueryAddGenePredCols(tg, gencodeQuery);
 if (includeAttrs)
     geneQueryAddAttrsCols(tg, conn, gencodeQuery);
-addQueryCommon(conn, tg, filterBySetGet, gencodeQuery);
+addQueryCommon(conn, tg, filterBySetGet, names, gencodeQuery);
 return gencodeQuery;
 }
 
-static struct gencodeQuery *highlightQueryConstruct(struct track *tg, struct sqlConnection *conn)
+static struct gencodeQuery *highlightQueryConstruct(struct track *tg, struct sqlConnection *conn,
+                                                    struct slName *names)
 /* construct the query for GENCODE ids which should be highlighted.
  * this essentially redoes the genePred query, only using the filter functions
  * and only getting ids */
@@ -425,7 +439,7 @@ static struct gencodeQuery *highlightQueryConstruct(struct track *tg, struct sql
 struct gencodeQuery *gencodeQuery = gencodeQueryNew();
 sqlDyStringPrintf(gencodeQuery->fields, "g.name");
 
-addQueryCommon(conn, tg, highlightBySetGet, gencodeQuery);
+addQueryCommon(conn, tg, highlightBySetGet, names, gencodeQuery);
 return gencodeQuery;
 }
 
@@ -451,11 +465,12 @@ if (hashLookup(highlightIds, gp->name) != NULL)
     }
 }
 
-static struct hash* loadHighlightIds(struct sqlConnection *conn, struct track *tg)
-/* Load ids (genePred names) in window for annotations to be highlighted. */
+static struct hash* loadHighlightIds(struct sqlConnection *conn, struct track *tg,
+                                     struct slName *names)
+/* Load ids (genePred names) in window, or among names, for annotations to be highlighted. */
 {
 struct hash *highlightIds = hashNew(0);
-struct gencodeQuery *gencodeQuery = highlightQueryConstruct(tg, conn);
+struct gencodeQuery *gencodeQuery = highlightQueryConstruct(tg, conn, names);
 struct sqlResult *sr = executeQuery(conn, gencodeQuery);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -532,18 +547,18 @@ if (strlen(name) > 0)
 safecat(name, nameSize, value);
 }
 
-static char* getTranscriptLabel(unsigned enabledLabels, struct genePred *gp,
-                                struct wgEncodeGencodeAttrs *attrs)
+static char* getTranscriptLabel(unsigned enabledLabels, char *transcriptId, char *geneName,
+                                char *geneId)
 /* one type of label for a item in track */
 {
 char name[256];
 name[0] = '\0';
 if (enabledLabels & ITEM_LABEL_GENE_NAME)
-    concatItemName(name, sizeof(name), gp->name2);
+    concatItemName(name, sizeof(name), geneName);
 if (enabledLabels & ITEM_LABEL_GENE_ID)
-    concatItemName(name, sizeof(name), attrs->geneId);
+    concatItemName(name, sizeof(name), geneId);
 if (enabledLabels & ITEM_LABEL_TRANSCRIPT_ID)
-    concatItemName(name, sizeof(name), gp->name);
+    concatItemName(name, sizeof(name), transcriptId);
 return cloneString(name);
 }
 
@@ -557,7 +572,8 @@ struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, gp, TRUE);
 if (highlightIds != NULL)
     highlightByGetColor(gp, highlightIds, highlightColor, lf);
 if (gencodeQuery->isGenePredX)
-    lf->extra = getTranscriptLabel(enabledLabels, gp, attrs);
+    lf->extra = getTranscriptLabel(enabledLabels, gp->name, gp->name2,
+                                   (attrs != NULL) ? attrs->geneId : NULL);
 else
     lf->extra = cloneString(gp->name);
 wgEncodeGencodeAttrsFree(&attrs);
@@ -576,8 +592,8 @@ unsigned enabledLabels = getEnabledLabels(tg);
 boolean needAttrs = (enabledLabels & ITEM_LABEL_GENE_ID) != 0;  // only for certain labels
 struct hash *highlightIds = NULL;
 if (anyFilterBy(tg, highlightBySetGet))
-    highlightIds = loadHighlightIds(conn, tg);
-struct gencodeQuery *gencodeQuery = geneQueryConstruct(conn, tg, needAttrs);
+    highlightIds = loadHighlightIds(conn, tg, NULL);
+struct gencodeQuery *gencodeQuery = geneQueryConstruct(conn, tg, needAttrs, NULL);
 struct sqlResult *sr = executeQuery(conn, gencodeQuery);
 struct linkedFeatures *lfList = NULL;
 unsigned highlightColor = getHighlightColor(tg);
@@ -598,6 +614,90 @@ gencodeQueryFree(&gencodeQuery);
 hashFree(&highlightIds);
 }
 
+static struct slName *lfUniqNames(struct linkedFeatures *lfList)
+/* The names of the items in lfList, each once. */
+{
+struct hash *seen = hashNew(0);
+struct slName *names = NULL;
+struct linkedFeatures *lf;
+for (lf = lfList; lf != NULL; lf = lf->next)
+    {
+    if (hashLookup(seen, lf->name) == NULL)
+        {
+        hashAdd(seen, lf->name, NULL);
+        slNameAddHead(&names, lf->name);
+        }
+    }
+hashFree(&seen);
+return names;
+}
+
+static void loadGencodeTrackLifted(struct track *tg)
+/* Load a GENCODE track lifted from another assembly.  The transcripts are lifted the way
+ * any genePred track's are.  Then GENCODE's own query, with its filters, is run in the
+ * other assembly on the names that lifted.  A transcript it does not return is dropped,
+ * and the query also gives the highlights and the gene ids for the labels. */
+{
+struct linkedFeatures *lfList = lfFromGenePredInRange(tg, tg->table, chromName, winStart,
+                                                      winEnd);
+struct slName *names = lfUniqNames(lfList);
+if (names == NULL)
+    {
+    tg->items = NULL;
+    return;
+    }
+struct sqlConnection *conn = hAllocConn(trackDbSetting(tg->tdb, "quickLiftDb"));
+unsigned enabledLabels = getEnabledLabels(tg);
+boolean needAttrs = (enabledLabels & ITEM_LABEL_GENE_ID) != 0;  // only for certain labels
+struct hash *highlightIds = NULL;
+if (anyFilterBy(tg, highlightBySetGet))
+    highlightIds = loadHighlightIds(conn, tg, names);
+unsigned highlightColor = getHighlightColor(tg);
+
+/* the transcripts that pass the filters, with their gene ids */
+struct gencodeQuery *gencodeQuery = geneQueryConstruct(conn, tg, needAttrs, names);
+struct sqlResult *sr = executeQuery(conn, gencodeQuery);
+struct hash *passed = hashNew(0);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genePred *gp = gencodeQueryGenePred(gencodeQuery, row);
+    struct wgEncodeGencodeAttrs *attrs = gencodeQueryAttrs(gencodeQuery, row);  // maybe NULL
+    if (hashLookup(passed, gp->name) == NULL)
+        hashAdd(passed, gp->name, (attrs != NULL) ? cloneString(attrs->geneId) : NULL);
+    genePredFree(&gp);
+    wgEncodeGencodeAttrsFree(&attrs);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+struct linkedFeatures *lf, *lfNext, *keepList = NULL;
+for (lf = lfList; lf != NULL; lf = lfNext)
+    {
+    lfNext = lf->next;
+    struct hashEl *hel = hashLookup(passed, lf->name);
+    if (hel == NULL)
+        continue;
+    /* the lift put the gene name in extra */
+    if (gencodeQuery->isGenePredX)
+        lf->extra = getTranscriptLabel(enabledLabels, lf->name, lf->extra, hel->val);
+    if ((highlightIds != NULL) && (hashLookup(highlightIds, lf->name) != NULL))
+        {
+        lf->highlightColor = highlightColor;
+        lf->highlightMode = highlightBackground;
+        }
+    slAddHead(&keepList, lf);
+    }
+slReverse(&keepList);
+tg->items = keepList;
+if (gencodeQuery->isFiltered)
+    labelTrackAsFiltered(tg);
+gencodeQueryFree(&gencodeQuery);
+hashFree(&passed);
+hashFree(&highlightIds);
+slFreeList(&names);
+}
+
 static char *gencodeGeneName(struct track *tg, void *item)
 /* Get name to use for Gencode gene item. */
 {
@@ -612,9 +712,8 @@ static void gencodeGeneMethods(struct track *tg)
 /* Load up custom methods for ENCODE Gencode gene track */
 {
 char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
-extern void loadGenePredWithName2(struct track *tg);
 if (liftDb)
-    tg->loadItems = loadGenePredWithName2;
+    tg->loadItems = loadGencodeTrackLifted;
 else
     tg->loadItems = loadGencodeTrack;
 tg->itemName = gencodeGeneName;

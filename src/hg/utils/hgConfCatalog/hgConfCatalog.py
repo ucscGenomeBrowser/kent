@@ -740,6 +740,34 @@ RELEASE_GATES = {
                "chain's whole source range is read in one piece, as before.  "
                "Sibling of quickLiftMultiChain.  hgwdev's hg.conf turns it "
                "on."),
+        h("multiRegionSpaces", "flag", "hg/lib/multiRegionSpace.c",
+          default="FALSE", role="gate", verified=True, ticket="37788",
+          note="Draw a multi-region view (exon view, gene view, custom "
+               "regions, alt haplotype) as a synthetic assembly:  "
+               "loader/regionsToChain lays the regions end to end into a "
+               "bigChain in trash/mrSpace, tracks are lifted into it with "
+               "quickLift, and the ruler is numbered in source coordinates.  "
+               "Read once, in multiRegionSpacesEnabled(), which "
+               "enterMultiRegionSpace() and the other space entry points in "
+               "hgTracks.c ask first;  every other test of the space "
+               "(multiRegionSpaceForDb(), liftedInSpace()) is FALSE until "
+               "one of them installs a space.  Off, the old virtual-"
+               "chromosome path draws the view, as before.  Needs the "
+               "hgcentral table from hg/lib/multiRegionSpaceKey.sql.  "
+               "hgwdev's hg.conf turns it on."),
+        h("multiRegionSpaceMaxRegions", "limit", "hg/lib/multiRegionSpace.c",
+          default="500000", verified=True, ticket="37788",
+          note="The most regions a multi-region space is built for.  A view "
+               "with more warns and is drawn by the old virtual-chromosome "
+               "path.  Read in multiRegionSpaceMaxRegions();  only asked "
+               "when multiRegionSpaces is on."),
+        h("multiRegionSpaceKeyName", "table", "hg/lib/multiRegionSpace.c",
+          default='"multiRegionSpaceKey"', verified=True, ticket="37788",
+          note="The hgcentral table that maps a multi-region view's "
+               "conditions to the SHA1 of its region list, so a view built "
+               "once is found again without rebuilding the list.  Read in "
+               "multiRegionSpaceKeyTable();  only asked when "
+               "multiRegionSpaces is on."),
         h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
           default="FALSE", role="gate", verified=True, ticket="38490",
           note="Let quickLift lift bigBarChart tracks.  Read in "
@@ -1264,8 +1292,6 @@ PATHS = {
         h("hubSpaceTusdEndpoint", "url",
           "hg/hgHubConnect/trackHubWizard.c", default="NULL",
           verified=True, family="hubSpace"),
-        h("myVariantsDataDir", "path", "hg/lib/myVariants.c",
-          verified=True, note="Goes with the doMyVariants gate."),
         h("hgPhyloPlaceServerDir", "path", "hg/hgPhyloPlace/runUsher.c",
           verified=True),
         h("browser.documentRoot", "path", "hg/lib/hui.c",
@@ -1423,6 +1449,31 @@ ABUSE = {
         h("bottleneck.except", "internal", "hg/lib/botDelay.c",
           verified=True, family="bottleneck",
           note="IPs exempt from delay."),
+        h("bottleneck.serveOnFailure", "flag", "hg/lib/botDelay.c",
+          default="FALSE", role="gate", verified=True, ticket="37738",
+          family="bottleneck",
+          note="Serve the request when the bottleneck server cannot be reached, "
+               "instead of failing the CGI.  Without it an unreachable bottleneck "
+               "server takes down every CGI that consults it, which is about fifteen "
+               "of them plus das, so one process is a single point of failure for the "
+               "whole site.  hubApi follows the same gate: with it off hubApi answers "
+               "with a JSON 500, with it on hubApi serves the request like every other "
+               "CGI.  Flip it once QA has seen a browser run with the bottleneck server "
+               "stopped."),
+        h("bottleneck.failureDelay", "limit", "hg/lib/botDelay.c",
+          default='"0"', verified=True, ticket="37738", family="bottleneck",
+          note="Milliseconds to delay each request while the bottleneck server is "
+               "unreachable and bottleneck.serveOnFailure is on.  The default of 0 "
+               "serves at full speed, on the reasoning that an outage of ours should "
+               "not slow users down.  Capped at 2000."),
+        h("bottleneck.timeoutSeconds", "limit", "hg/lib/botDelay.c",
+          default='"10"', verified=True, ticket="37738", family="bottleneck",
+          note="Connect, read and write timeout on the bottleneck socket.  The stock socket "
+               "default is 120 seconds for a read and 10 for the connect, both far "
+               "longer than a rate-limit lookup can usefully take.  The connect is the "
+               "one that matters: a bottleneck host that drops packets instead of "
+               "refusing costs that much on every request.  Values above 10 are "
+               "treated as 10."),
         h("hguidIpTracking.maxIps", "limit", "hg/lib/botDelay.c",
           default='"10"', verified=True, family="hguidIpTracking"),
         h("hguidIpTracking.windowSeconds", "limit", "hg/lib/botDelay.c",
