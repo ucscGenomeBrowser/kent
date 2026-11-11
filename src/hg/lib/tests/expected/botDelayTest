@@ -1,0 +1,33 @@
+answer, serveOnFailure=on, timeoutSeconds=2, failureDelay=0:
+server got: 192.0.2.7 1.000000
+  delay 42, server failed no
+  net.c warnings sent to the log: 0
+refused, serveOnFailure=on, timeoutSeconds=2, failureDelay=0:
+  delay 0, server failed yes
+  log: botDelay: no answer from bottleneck server 127.0.0.1:PORT, serving this request with a delay of 0 milliseconds
+  net.c warnings sent to the log: 1
+refused, serveOnFailure=on, timeoutSeconds=2, failureDelay=250:
+  delay 250, server failed yes
+  log: botDelay: no answer from bottleneck server 127.0.0.1:PORT, serving this request with a delay of 250 milliseconds
+  net.c warnings sent to the log: 1
+refused, serveOnFailure=on, timeoutSeconds=2, failureDelay=99999:
+  delay 2000, server failed yes
+  log: botDelay: no answer from bottleneck server 127.0.0.1:PORT, serving this request with a delay of 2000 milliseconds
+  net.c warnings sent to the log: 1
+refused, serveOnFailure=off, timeoutSeconds=2, failureDelay=0:
+  aborted: Failed to connect to bottleneck server
+  net.c warnings sent to the log: 1
+silent, serveOnFailure=on, timeoutSeconds=1, failureDelay=0:
+  returned after the timeout and before the server let go: yes
+  delay 0, server failed yes
+  log: botDelay: no answer from bottleneck server 127.0.0.1:PORT, serving this request with a delay of 0 milliseconds
+  net.c warnings sent to the log: 1
+silent, serveOnFailure=on, timeoutSeconds=99999, failureDelay=0:
+  returned after the timeout and before the server let go: yes
+  delay 0, server failed yes
+  log: botDelay: no answer from bottleneck server 127.0.0.1:PORT, serving this request with a delay of 0 milliseconds
+  net.c warnings sent to the log: 1
+silent, serveOnFailure=off, timeoutSeconds=1, failureDelay=0:
+  returned after the timeout and before the server let go: yes
+  aborted: Failed to connect to bottleneck server
+  net.c warnings sent to the log: 1

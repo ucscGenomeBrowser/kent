@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest quickLiftMergeTest quickLiftMafSummaryTest refLinkNoRowTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest quickLiftMergeTest quickLiftMafSummaryTest refLinkNoRowTest ctLongFieldTest cartContentsValTest cartPcrVarTest botDelayTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -128,6 +128,21 @@ mallocTopPadTest: ${BIN_DIR}/mallocTopPadTester mkdirs
 	HGDB_CONF=output/topPadOff.conf ${BIN_DIR}/mallocTopPadTester > output/mallocTopPadTest
 	HGDB_CONF=output/topPadOn.conf ${BIN_DIR}/mallocTopPadTester >> output/mallocTopPadTest
 	diff expected/mallocTopPadTest output/mallocTopPadTest
+
+# The bottleneck server answering, refusing, and holding the connection without an answer,
+# with bottleneck.serveOnFailure on and off.  The tester writes its own conf for each run
+# and includes nothing, so no gate comes from the developer's conf.  The two silent runs
+# wait 1 and 10 seconds, so this target takes about 12 seconds.  refs #37738
+botDelayTest: ${BIN_DIR}/botDelayTester mkdirs
+	${BIN_DIR}/botDelayTester answer on 2 0 output > output/botDelayTest
+	${BIN_DIR}/botDelayTester refused on 2 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester refused on 2 250 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester refused on 2 99999 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester refused off 2 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester silent on 1 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester silent on 99999 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester silent off 1 0 output >> output/botDelayTest
+	diff expected/botDelayTest output/botDelayTest
 
 hVarSubstHtmlTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hVarSubstHtmlTester hVarSubstHtmlTester.c ${MYLIBS} $L
