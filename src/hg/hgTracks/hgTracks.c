@@ -7184,7 +7184,9 @@ if (withCenterLabels)
         setGlobalsFromWindow(windows); // first window
         y = savey + flatTrack->maxHeight;
 
-        if (theImgBox && tdbIsCompositeChild(track->tdb) &&
+        // An empty subtrack can be 0 pixels high, and then it got no data slice above,
+        // so it has nothing for the toggle to cover.
+        if (theImgBox && sliceHeight > 0 && tdbIsCompositeChild(track->tdb) &&
                 (track->limitedVis == tvDense ||
                  (track->limitedVis == tvPack && centerLabelHeight == 0)))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track);
