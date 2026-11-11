@@ -1341,6 +1341,9 @@ void bigRmskMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Set up bigRmsk methods. */
 
+void loadBigBedSummary(struct track *track);
+/* Check if summary loading needed for bigBed */
+
 void commonBigBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Set up common bigBed methods used by several track types that depend on the bigBed format. */
