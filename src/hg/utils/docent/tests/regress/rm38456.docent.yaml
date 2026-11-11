@@ -64,8 +64,10 @@ steps:
   # 4. Saved from an empty cart (ignoreCookie=1), so its contents have no db=.  The classic
   #    session list read past the end of the string looking for one and the CGI segfaulted,
   #    both on the Save confirmation page and on My Sessions, cutting the page off inside the
-  #    table.  "Sharing Sessions" is the section printed after the list.
-  - goto: "/cgi-bin/hgSession?ignoreCookie=1&hgS_doNewSession=1&hgS_newSessionName=rm38456"
+  #    table.  "Sharing Sessions" is the section printed after the list.  sessionNewPage=0,
+  #    because an empty cart otherwise gets the server's default page, and where hg.conf sets
+  #    sessionNewPage that is the newer Sessions page, which has no classic list.
+  - goto: "/cgi-bin/hgSession?ignoreCookie=1&sessionNewPage=0&hgS_doNewSession=1&hgS_newSessionName=rm38456"
   - expect:
       text: ["Overwrote the contents of session", "rm38456", "Sharing Sessions"]
   - goto: "/cgi-bin/hgSession?sessionNewPage=0"
