@@ -1,13 +1,21 @@
 #!/bin/bash
 
-# ottoRequestAlign.sh - look up an ottoRequest row by id and construct
-#   the kegAlignLastz.sh command line from genark metadata
+# ottoRequestAlign.sh - look up an ottoRequest row by id and start the
+#   alignment, either lastz in Galaxy (kegAlignLastz.sh) or minimap2 on
+#   the local cluster (pairMiniMap2.sh)
 #
 # usage: ottoRequestAlign.sh <id>
 #
 # Queries ${centDb}.ottoRequest for fromDb/toDb, then looks up
 # each accession in ${centDb}.genark for asmName and clade.
-# Prints and executes the resulting kegAlignLastz.sh command.
+# mashDistance.pl decides the pipeline, with the same thresholds
+# doMiniMap2.pl applies (AssemblyDivergence.pm).
+#   lastz:    runs kegAlignLastz.sh in the background
+#   minimap2: writes ottoMiniMap2.sh in the build directory and runs it
+#             in the background, leaving ottoMiniMap2.pid, .log and .exit
+#             there for ottoRequestWatch.sh phase 2.  At most
+#             ${maxMiniMap2} minimap2 requests run at once, the others
+#             stay at status=1 and are tried again on the next cron tick.
 
 set -eEu -o pipefail
 export centDb="hgcentral"
@@ -24,6 +32,12 @@ fi
 
 export requestId="$1"
 export scriptDir=$(cd "$(dirname "$0")" && pwd)
+# the same kent tree copies pairMiniMap2.sh/doMiniMap2.pl use, so the
+# mash thresholds in AssemblyDivergence.pm are the same for both
+export mashDistance="${HOME}/kent/src/hg/utils/automation/mashDistance.pl"
+export pairMiniMap2="${HOME}/kent/src/hg/utils/automation/pairMiniMap2.sh"
+# minimap2 runs on the hgwdev parasol cluster, limit how many at once
+export maxMiniMap2=2
 
 # validate id is a positive integer
 case "${requestId}" in
@@ -228,6 +242,48 @@ else
 fi
 
 ############################################################################
+# step 3b: mash distance decides the pipeline -- minimap2 for closely
+#   related pairs, lastz otherwise (thresholds in AssemblyDivergence.pm,
+#   the same ones doMiniMap2.pl applies).  A mashDistance.pl failure is
+#   an error for this request.
+############################################################################
+if ! mashOut=$("${mashDistance}" "${fromDb}" "${toDb}"); then
+  printf "ERROR: mashDistance.pl failed for %s %s\n" "${fromDb}" "${toDb}" 1>&2
+  setErrorStatus ${requestId}
+  exit 255
+fi
+case "${mashOut}" in
+  *pipeline=minimap2*) export pipeline="miniMap2" ;;
+  *pipeline=lastz*)    export pipeline="lastz" ;;
+  *)
+    printf "ERROR: no pipeline= in mashDistance.pl output for %s %s\n" \
+      "${fromDb}" "${toDb}" 1>&2
+    setErrorStatus ${requestId}
+    exit 255
+    ;;
+esac
+
+############################################################################
+# step 3c: concurrency limit for minimap2 -- count the minimap2 requests
+#   still running (status=2, no ottoMiniMap2.exit yet).  At the limit,
+#   exit 0 leaving this request at status=1 with buildDir='' so the next
+#   cron tick tries again (a non-zero exit would set status=7).
+############################################################################
+if [ "${pipeline}" = "miniMap2" ]; then
+  running=0
+  while read -r runDir; do
+    if [ -d "${runDir}" ] && [ ! -s "${runDir}/ottoMiniMap2.exit" ]; then
+      running=$((running+1))
+    fi
+  done < <(/cluster/bin/x86_64/${hgSql} -N -B -e \
+    "SELECT buildDir FROM ottoRequest WHERE status = 2 \
+     AND requestType = 'liftOver' AND buildDir LIKE '%/miniMap2%';" ${centDb})
+  if [ "${running}" -ge "${maxMiniMap2}" ]; then
+    exit 0
+  fi
+fi
+
+############################################################################
 # step 4: compute buildDir and update ottoRequest table
 ############################################################################
 
@@ -236,6 +292,8 @@ export tAccId=$(printf "%s" "${fromId}" | cut -d'_' -f1-2)
 export qAccId=$(printf "%s" "${toId}" | cut -d'_' -f1-2)
 export Query="${qAccId^}"
 export DS=$(date "+%F")
+
+if [ "${pipeline}" = "lastz" ]; then
 
 # compute buildDir -- UCSC db default, then GenArk override
 export buildDir="/hive/data/genomes/${fromId}/bed/lastz${Query}.${DS}"
@@ -260,6 +318,37 @@ if [ "${working}" -gt 0 ]; then
 # printf "# existing buildDir: %s\n" "${buildDir}" 1>&2
 fi
 
+else    # minimap2
+
+# the same build directory pairMiniMap2.sh/doMiniMap2.pl use:
+#   UCSC db: /hive/data/genomes/<db>/bed/miniMap2<Query>.<date>
+#   GenArk:  .../{genbankBuild,refseqBuild}/GCx/ddd/ddd/ddd/<asmId>/trackData/miniMap2<Query>.<date>
+export tRoot="/hive/data/genomes/${tAccId}/bed"
+case ${tAccId} in
+  GC[AF]_*)
+    tSub="genbankBuild"
+    if [ "${tAccId:0:3}" = "GCF" ]; then
+      tSub="refseqBuild"
+    fi
+    tAsmDir=$(ls -d /hive/data/genomes/asmHubs/${tSub}/${tAccId:0:3}/${tAccId:4:3}/${tAccId:7:3}/${tAccId:10:3}/${tAccId}_* 2> /dev/null | head -1 || true)
+    if [ -z "${tAsmDir}" ]; then
+      printf "ERROR: can not find the GenArk build directory for %s\n" "${tAccId}" 1>&2
+      setErrorStatus ${requestId}
+      exit 255
+    fi
+    tRoot="${tAsmDir}/trackData"
+    ;;
+esac
+export buildDir="${tRoot}/miniMap2${Query}.${DS}"
+# continue in the newest existing one, the same rule pairMiniMap2.sh uses
+for d in ${tRoot}/miniMap2${Query}.*; do
+  if [ -d "${d}" ] && [ ! -L "${d}" ]; then
+    buildDir="${d}"
+  fi
+done
+
+fi      # if [ "${pipeline}" = "lastz" ]
+
 mkdir -p  "${buildDir}"
 
 # printf "# buildDir: %s\n" "${buildDir}" 1>&2
@@ -270,7 +359,39 @@ mkdir -p  "${buildDir}"
   "${centDb}"
 
 ############################################################################
-# step 5: map clades and build the kegAlignLastz.sh command
+# step 5 minimap2: write ottoMiniMap2.sh in the build directory and run it
+#   in the background.  It records the exit code of pairMiniMap2.sh in
+#   ottoMiniMap2.exit whether it succeeds or not (no set -e there), and
+#   its own pid is in ottoMiniMap2.pid while it runs.  -liftTableLoad:
+#   the liftOver/quickLift links and the hgcentral entries are made in
+#   this same run.
+############################################################################
+if [ "${pipeline}" = "miniMap2" ]; then
+  printf "#!/bin/bash
+
+# ottoMiniMap2.sh - written by ottoRequestAlign.sh for ottoRequest id=%s
+#   %s -> %s, mash: %s
+
+export targetDb=\"%s\"
+export queryDb=\"%s\"
+
+cd \"%s\"
+rc=0
+%s -liftTableLoad %s %s || rc=\$?
+printf \"%%d\\\\n\" \"\${rc}\" > \"%s/ottoMiniMap2.exit\"
+" "${requestId}" "${tAccId}" "${qAccId}" "$(printf "%s" "${mashOut}" | tr '\n' ' ')" \
+    "${tAccId}" "${qAccId}" "${buildDir}" \
+    "${pairMiniMap2}" "${tAccId}" "${qAccId}" "${buildDir}" \
+    > "${buildDir}/ottoMiniMap2.sh"
+  chmod +x "${buildDir}/ottoMiniMap2.sh"
+  rm -f "${buildDir}/ottoMiniMap2.exit"
+  nohup "${buildDir}/ottoMiniMap2.sh" >> "${buildDir}/ottoMiniMap2.log" 2>&1 < /dev/null &
+  printf "%d\n" "$!" > "${buildDir}/ottoMiniMap2.pid"
+  exit 0
+fi
+
+############################################################################
+# step 5 lastz: map clades and build the kegAlignLastz.sh command
 ############################################################################
 export fromCladeArg=$(cladeMap "${fromClade}")
 export toCladeArg=$(cladeMap "${toClade}")

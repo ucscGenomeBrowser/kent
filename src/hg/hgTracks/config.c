@@ -966,36 +966,72 @@ if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE))
     hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
     }
 
-// My Variants navigation preference reset - stored in localStorage
+hTableEnd();
+
+// My Annotations preferences.  They are stored in localStorage, so the controls
+// have no name, stay out of the cart, and are read and written in the browser.
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
-    hPrintf("<TR><TD>");
-    hPrintf("<input type='checkbox' id='resetMyVariantsNav' name='resetMyVariantsNav'>");
-    hPrintf("</TD><TD>");
-    hPrintf("Reset 'My Annotations' navigation preference (currently: <span id='myVariantsNavPrefDisplay'>not set</span>)");
+    hPrintf("<P><B>My Annotations</B></P>\n");
+
+    hPrintf("<TABLE style=\"border:0px; \">\n");
+    hPrintf("<TR><TD COLSPAN=2>");
+    hPrintf("<input type='checkbox' id='myVariantsDeleteAsk'> ");
+    hPrintf("Ask before deleting an annotation");
     hPrintf("</TD></TR>\n");
-    // Display current preference and clear localStorage on form submit if checkbox is checked
+
+    hPrintf("<TR><TD>After adding an annotation outside the current view:</TD>");
+    hPrintf("<TD><select id='myVariantsNavPref'>"
+            "<option value=''>Ask</option>"
+            "<option value='jump'>Go to the annotation</option>"
+            "<option value='stay'>Stay here</option>"
+            "</select></TD></TR>\n");
+
+    hPrintf("<TR><TD>After a search:</TD>");
+    hPrintf("<TD><select id='myVariantsSearchSavePref'>"
+            "<option value=''>Ask whether to save</option>"
+            "<option value='save'>Save without asking</option>"
+            "<option value='skip'>Do not save</option>"
+            "</select></TD></TR>\n");
+    hPrintf("</TABLE>\n");
+
+    // Show what each preference is set to now, and store what the controls say
+    // when the page is submitted.  An empty value means ask, the default.
     jsInlineF(
         "document.addEventListener('DOMContentLoaded', function() {"
-        "    var prefSpan = document.getElementById('myVariantsNavPrefDisplay');"
-        "    if (prefSpan) {"
-        "        var pref = localStorage.getItem('myVariants_navPref');"
-        "        prefSpan.textContent = pref ? pref : 'not set';"
-        "    }"
-        "    var form = document.forms['TrackForm'] || document.forms['TrackHeaderForm'];"
+        "    var prefs = [['myVariantsNavPref', 'myVariants_navPref'],"
+        "                 ['myVariantsSearchSavePref', 'myVariants_searchSavePref']];"
+        "    var delCb = document.getElementById('myVariantsDeleteAsk');"
+        "    if (delCb)"
+        "        delCb.checked = localStorage.getItem('myVariants_deleteNoConfirm') !== 'yes';"
+        "    prefs.forEach(function(p) {"
+        "        var sel = document.getElementById(p[0]);"
+        "        if (sel)"
+        "            sel.value = localStorage.getItem(p[1]) || '';"
+        "    });"
+        "    var form = document.forms['mainForm'];"
         "    if (form) {"
         "        form.addEventListener('submit', function() {"
-        "            var cb = document.getElementById('resetMyVariantsNav');"
-        "            if (cb && cb.checked) {"
-        "                localStorage.removeItem('myVariants_navPref');"
+        "            if (delCb) {"
+        "                if (delCb.checked)"
+        "                    localStorage.removeItem('myVariants_deleteNoConfirm');"
+        "                else"
+        "                    localStorage.setItem('myVariants_deleteNoConfirm', 'yes');"
         "            }"
+        "            prefs.forEach(function(p) {"
+        "                var sel = document.getElementById(p[0]);"
+        "                if (!sel)"
+        "                    return;"
+        "                if (sel.value)"
+        "                    localStorage.setItem(p[1], sel.value);"
+        "                else"
+        "                    localStorage.removeItem(p[1]);"
+        "            });"
         "        });"
         "    }"
         "});"
     );
     }
-
-hTableEnd();
 
 
 cgiDown(0.9);

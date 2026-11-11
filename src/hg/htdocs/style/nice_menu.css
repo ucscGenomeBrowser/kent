@@ -569,9 +569,22 @@ ul.nice-menu-down li li.menuparent.active {
 	background:#ffffff;
 	color:#fff;
 }
+/* A third level menu hangs off the right edge of its parent item, whatever that
+ * item is wide. The 141px this used to say predates the 200px min-width the
+ * items now carry, so the submenu landed on top of them. */
 ul.nice-menu-down li ul li ul {
-	left:141px;
+	left:100%;
 	top:0px;
+}
+
+/* An item that opens a submenu gets a right pointing triangle. It is content,
+ * not an element, so reading the link's text still gives just its name, and
+ * inherit keeps it legible on the hover background. */
+ul.nice-menu li.submenuParent > a::after {
+	content:"\25B8";
+	margin-left:6px;
+	padding:0;
+	color:inherit;
 }
 
 ul.nice-menu li.horizSep {

@@ -555,7 +555,9 @@ struct customTrack *track;
 struct dyString *ds = dyStringNew(0);
 for (track = trackList; track != NULL; track = track->next)
     {
-    /* myVariants tracks live in mvCtfile_<db>; skip so they aren't duplicated here. */
+    /* My Annotations tracks are built from their project registry, not parsed from
+     * this file, and type=myVariants is not a format the factory accepts.  Writing
+     * one here would make the whole file fail to parse on the next load. */
     if (track->tdb && isMyVariantsType(track->tdb->type))
         continue;
     /* may be coming in here from the table browser.  It has wiggle
@@ -1000,33 +1002,11 @@ if (customTracksExist(cart, &ctFileName))
         return NULL;
     }
 
-/* Layer in the user's myVariants tracks from mvCtfile_<db>. */
-char mvVar[256];
-safef(mvVar, sizeof mvVar, MYVARIANTS_FILE_VAR_PREFIX "%s", genomeDb);
-char *mvFile = cartOptionalString(cart, mvVar);
-if (isNotEmpty(mvFile) && !isServerUserFilePath(mvFile))
-    {
-    /* not a file we made;  drop the pointer rather than parse it */
-    cartRemove(cart, mvVar);
-    mvFile = NULL;
-    }
-if (isNotEmpty(mvFile) && fileExists(mvFile))
-    {
-    struct customTrack *mvList = NULL;
-    struct errCatch *mvCatch = errCatchNew();
-    if (errCatchStart(mvCatch))
-        mvList = customFactoryParse(genomeDb, mvFile, TRUE, fileName, NULL);
-    errCatchEnd(mvCatch);
-    if (mvCatch->gotError)
-        {
-        if (isNotEmpty(mvCatch->message->string))
-            warn("myVariants load error: %s", mvCatch->message->string);
-        cartRemove(cart, mvVar);
-        mvList = NULL;
-        }
-    errCatchFree(&mvCatch);
-    ctList = slCat(ctList, mvList);
-    }
+/* Layer in the user's My Annotations tracks.  They are built from the project
+ * registry rather than parsed from a file, so there is no custom-track text
+ * here for a user to supply. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    myVariantsAddTracks(&ctList, cart, genomeDb);
 
 /* Handle a selected track from hgTrackUi (remove or doc update). */
 char *selectedTable = NULL;

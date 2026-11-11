@@ -28,9 +28,13 @@
 #
 # On hgwdev-demo6 (multiRegionSpaces=on) both rmsk viz rows are drawn in the space and
 # the script passes.
+#
+# Since 2026-11-10 this passes on genome-test, which draws multi-region views as a
+# synthetic assembly (multiRegionSpaces=on, #37788).  With that gate off it fails again.
 proof:
   - "assertion-only 2026-10-06 -- written from the ticket"
   - "xfail 2026-10-06 -- genome-test (v504) drops both rmsk viz rows in exonMostly with imgTrack has bad slice; hgwdev-demo6 passes"
+  - "server-flip 2026-11-10 -- passes on genome-test since #37788 (2f2540a3596) was pushed and installed there (cgi-alpha 2026-11-09 13:02) with multiRegionSpaces=on in its hg.conf, having failed there as an xfail on 2026-11-09"
 
 target: genome-test
 db: hg38

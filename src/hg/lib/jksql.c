@@ -2667,6 +2667,19 @@ monitorLeave();
 return id;
 }
 
+long long sqlAffectedRows(struct sqlConnection *conn)
+/* Return how many rows the last query inserted, updated or deleted.  Call it
+ * straight after the sqlUpdate() of that query.  Unlike sqlUpdateRows() this
+ * works for INSERT and DELETE, not only UPDATE. */
+{
+assert(!conn->isFree);
+long long rows;
+monitorEnter();
+rows = (long long)mysql_affected_rows(conn->conn);
+monitorLeave();
+return rows;
+}
+
 /* Stuff to manage and caches of open connections on a database.  Typically
  * you only need 3.  MySQL takes about 2 milliseconds on a local host to open
  * a connection.  On a remote host it can be more and this caching is probably
@@ -4131,6 +4144,68 @@ if (!sqlCheckAllowedChars(identifier, allowed))
     sqlCheckError("Illegal character found in identifier %s", identifier);
     }
 return identifier;
+}
+
+boolean sqlIsReservedWord(char *word)
+/* Return TRUE if word, in any case, is one MariaDB 10.6 or MySQL 8 will not
+ * take as an unquoted identifier, such as select or order. */
+{
+static char *reservedWords[] = {
+    "accessible", "add", "all", "alter", "analyze", "and", "as", "asc", "asensitive",
+    "before", "between", "bigint", "binary", "blob", "both", "by", "call", "cascade",
+    "case", "change", "char", "character", "check", "collate", "column", "condition",
+    "constraint", "continue", "convert", "create", "cross", "cube", "cume_dist",
+    "current_date", "current_role", "current_time", "current_timestamp", "current_user",
+    "cursor", "database", "databases", "day_hour", "day_microsecond", "day_minute",
+    "day_second", "dec", "decimal", "declare", "default", "delayed", "delete",
+    "delete_domain_id", "dense_rank", "desc", "describe", "deterministic", "distinct",
+    "distinctrow", "div", "do_domain_ids", "double", "drop", "dual", "each", "else",
+    "elseif", "empty", "enclosed", "escaped", "except", "exists", "exit", "explain",
+    "false", "fetch", "first_value", "float", "float4", "float8", "for", "force",
+    "foreign", "from", "fulltext", "function", "generated", "get", "grant", "group",
+    "grouping", "groups", "having", "high_priority", "hour_microsecond", "hour_minute",
+    "hour_second", "if", "ignore", "ignore_domain_ids", "in", "index", "infile", "inner",
+    "inout", "insensitive", "insert", "int", "int1", "int2", "int3", "int4", "int8",
+    "integer", "intersect", "interval", "into", "io_after_gtids", "io_before_gtids", "is",
+    "iterate", "join", "json_table", "key", "keys", "kill", "lag", "last_value",
+    "lateral", "lead", "leading", "leave", "left", "like", "limit", "linear", "lines",
+    "load", "localtime", "localtimestamp", "lock", "long", "longblob", "longtext", "loop",
+    "low_priority", "master_bind", "master_ssl_verify_server_cert", "match", "maxvalue",
+    "mediumblob", "mediumint", "mediumtext", "middleint", "minute_microsecond",
+    "minute_second", "mod", "modifies", "natural", "no_write_to_binlog", "not",
+    "nth_value", "ntile", "null", "numeric", "of", "offset", "on", "optimize",
+    "optimizer_costs", "optionally", "or", "order", "out", "outer", "outfile", "over",
+    "page_checksum", "parse_vcol_expr", "partition", "percent_rank", "portion",
+    "precision", "primary", "procedure", "purge", "range", "rank", "read", "read_write",
+    "reads", "real", "recursive", "ref_system_id", "references", "regexp", "release",
+    "rename", "repeat", "replace", "require", "resignal", "restrict", "return",
+    "returning", "revoke", "right", "rlike", "row", "row_number", "rows", "schema",
+    "schemas", "second_microsecond", "select", "sensitive", "separator", "set", "show",
+    "signal", "smallint", "spatial", "specific", "sql", "sql_big_result",
+    "sql_calc_found_rows", "sql_small_result", "sqlexception", "sqlstate", "sqlwarning",
+    "ssl", "starting", "stats_auto_recalc", "stats_persistent", "stats_sample_pages",
+    "stored", "straight_join", "system", "table", "terminated", "then", "tinyblob",
+    "tinyint", "tinytext", "to", "trailing", "trigger", "true", "undo", "union", "unique",
+    "unlock", "unsigned", "update", "usage", "use", "using", "utc_date", "utc_time",
+    "utc_timestamp", "values", "varbinary", "varchar", "varcharacter", "varying",
+    "virtual", "when", "where", "while", "window", "with", "write", "xor", "year_month",
+    "zerofill", NULL
+};
+static struct hash *reservedHash = NULL;
+if (reservedHash == NULL)
+    {
+    reservedHash = hashNew(9);
+    int i;
+    for (i = 0; reservedWords[i] != NULL; i++)
+        hashAdd(reservedHash, reservedWords[i], NULL);
+    }
+/* The words are stored in lower case, and none is near this long. */
+char lower[64];
+if (word == NULL || strlen(word) >= sizeof lower)
+    return FALSE;
+safecpy(lower, sizeof lower, word);
+tolowers(lower);
+return hashLookup(reservedHash, lower) != NULL;
 }
 
 

@@ -587,7 +587,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     if ((ctDataUrl(ct) && ctHtmlUrl(ct)) ||
             sameString(ct->tdb->type, "chromGraph") ||
             isMyVariantsType(ct->tdb->type))
-        printf("<TR><TD>%s</A></TD>", shortLabel);
+        printf("<TR><TD>%s</TD>", shortLabel);
     else
 	{
 	char *cgiName = cgiEncode(ct->tdb->track);
@@ -602,7 +602,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     printf("<TD>%s</TD>", longLabel);
     freeMem(longLabel);
     /* Type field */
-    printf("<TD>%s</TD>", ctInputType(ct));
+    printf("<TD>%s</TD>", isMyVariantsType(ct->tdb->type) ? "My Annotations" : ctInputType(ct));
     /* Doc field */
     printf("<TD ALIGN='CENTER'>%s</TD>",
                 isNotEmpty(ct->tdb->html) ? "Y" : "&nbsp;");
@@ -1104,6 +1104,16 @@ for (ct = ctList; ct != NULL; ct = ct->next)
      * file, so dropping them from ctList alone isn't enough -- the next
      * page load regenerates the CT entry from the database.  Delegate
      * the type-specific cleanup. */
+    if (isMyVariantsType(ct->tdb->type)
+        && !sameOk(cgiOptionalString("hgsid"), cartSessionId(cart)))
+        {
+        /* Dropping a project's table cannot be undone, so this one needs the
+         * session id in the request and not just the cookie. */
+        warn("Ignoring a request to remove %s that did not come from this "
+             "session.  Use the Remove button on the track's page.",
+             ct->tdb->shortLabel);
+        continue;
+        }
     myVariantsHandleCtRemoval(ct, cart, database);
     slRemoveEl(&ctList, ct);
     }
@@ -1254,81 +1264,6 @@ measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 initialDb = cloneString(cartUsualString(cart, "db", ""));
 getDbAndGenome(cart, &database, &organism, oldVars);
 chromAliasSetup(database);
-
-/* Ensure myVariants CT is registered in this cart if user has items for current db.
- * Uses a dedicated cart variable (mvCtfile_<db>) so regular custom tracks at
- * ctfile_<db> are untouched. */
-if (cfgOptionBooleanDefault("doMyVariants", FALSE))
-    {
-    char *user = wikiLinkUserName();
-    if (isNotEmpty(user))
-        {
-        char *dbTable = myVariantsTableExists(user);
-        if (isNotEmpty(dbTable))
-            {
-            struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-            char query[512];
-            sqlSafef(query, sizeof query, "select count(*) from %s where db='%s'", dbTable, database);
-            int ctCount = sqlQuickNum(conn, query);
-            if (ctCount > 0)
-                {
-                char *ctFile = myVariantsWriteCtFile(user, database, cart);
-                if (isNotEmpty(ctFile))
-                    {
-                    char varName[256];
-                    safef(varName, sizeof varName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
-                    cartSetString(cart, varName, ctFile);
-                    freeMem(ctFile);
-                    }
-                }
-            hFreeConn(&conn);
-            }
-        }
-    }
-
-/* Special endpoint: stream a custom track generated from the user's myVariants table */
-char *op = cgiOptionalString("op");
-if (cfgOptionBooleanDefault("doMyVariants", FALSE) && op && sameString(op, "myVariantsCt"))
-    {
-    char *user = wikiLinkUserName();
-    if (isEmpty(user))
-        errAbort("myVariantsCt: must be logged in");
-
-    // Build fully-qualified table name and verify existence
-    char *dbTable = myVariantsGetDbTable(user);
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    if (!sqlTableExists(conn, dbTable))
-        {
-        hFreeConn(&conn);
-        errAbort("myVariantsCt: table does not exist for current user");
-        }
-
-    // Emit CT text: a track line and BED9 rows filtered by current database
-    // Plain text response, no HTML
-    cgiPrintContentType("text/plain");
-    /* Keep track name stable so re-import replaces */
-    char *userEnc = htmlEncode(user);
-    printf("track name=\"myVariants\" type=\"bed 9\" itemRgb=\"on\" visibility=\"pack\" shortLabel=\"My Annotations\" longLabel=\"My Annotations (%s)\"\n", userEnc);
-    freeMem(userEnc);
-
-    struct dyString *query = dyStringNew(0);
-    sqlDyStringPrintf(query,
-            "select chrom, chromStart, chromEnd, name, score, strand, thickStart, thickEnd, itemRgb "
-            "from %s where db='%s'",
-            dbTable, database);
-    struct sqlResult *sr = sqlGetResult(conn, query->string);
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        /* BED9: chrom start end name score strand thickStart thickEnd itemRgb */
-        printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
-        row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]);
-        }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    /* Done with special op */
-    return;
-    }
 
 customFactoryEnableExtraChecking(TRUE);
 

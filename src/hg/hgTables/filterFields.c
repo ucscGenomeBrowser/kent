@@ -414,8 +414,6 @@ struct customTrack *ct = ctLookupName(table);
 char *type = ct->dbTrackType;
 if (type == NULL)
     type = ct->tdb->type;
-if (isMyVariantsType(type) && ct->dbTableName == NULL)
-    ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 struct asObject *asObj = asForTdb(conn, ct->tdb);
 if (asObj)
@@ -430,7 +428,7 @@ if (asObj)
 	}
     if (fieldList == NULL)
         fieldList = asColNames(asObj);
-    if (isMyVariantsSharedTrack(table))
+    if (isMyVariantsTrack(table))
         myVariantsStripHiddenFields(&fieldList);
     showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
     asObjectFree(&asObj);
@@ -600,8 +598,8 @@ if (fieldList == NULL)
     errAbort("Please go back and select at least one field");
 slReverse(&fieldList);
 
-/* Drop owner-hidden columns so a recipient can't request them by name. */
-if (isMyVariantsSharedTrack(table))
+/* Drop hidden columns so they can't be requested by name. */
+if (isMyVariantsTrack(table))
     myVariantsStripHiddenFields(&fieldList);
 if (fieldList == NULL)
     errAbort("Please go back and select at least one field");
@@ -1140,6 +1138,19 @@ else if (type != NULL &&
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     struct sqlFieldType *ftList = sqlListFieldsAndTypes(conn, ct->dbTableName);
+    if (isMyVariantsTrack(table))
+        {
+        /* Hidden My Annotations fields are not offered for filtering. */
+        struct sqlFieldType *ft, *next, *kept = NULL;
+        for (ft = ftList; ft != NULL; ft = next)
+            {
+            next = ft->next;
+            if (!startsWithNoCase("_hidden_", ft->name))
+                slAddHead(&kept, ft);
+            }
+        slReverse(&kept);
+        ftList = kept;
+        }
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     hFreeConn(&conn);
     }
@@ -1254,7 +1265,7 @@ cgiMakeButton(hgtaDoMainPage, "cancel");
 static void filterControlsForTable(char *db, char *rootTable)
 /* Put up filter controls for a single table. */
 {
-if (isCustomTrack(rootTable))
+if (isCustomTrack(rootTable) || isMyVariantsTrack(rootTable))
     filterControlsForTableCt(db, rootTable);
 else
     filterControlsForTableDb(db, rootTable);
@@ -1479,7 +1490,7 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[512];
 char *type = NULL;
-sqlSafef(query, sizeof(query), "describe %s %s", table, field);
+sqlSafef(query, sizeof(query), "describe %s `%s`", table, field);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     type = cloneString(row[1]);
@@ -1545,7 +1556,7 @@ else
      explicitDb[0] = 0;
 
 /* Cope with split table and/or custom tracks. */
-if (isCustomTrack(table))
+if (isCustomTrack(table) || isMyVariantsTrack(table))
     {
     conn = hAllocConn(CUSTOM_TRASH);
     struct customTrack *ct = ctLookupName(table);
@@ -1576,7 +1587,7 @@ dy = dyStringNew(0);
 for (var = varList; var != NULL; var = var->next)
     {
     /* Parse variable name into field and type. */
-    char field[64], *s, *type;
+    char field[65], *s, *type;	/* MySQL column names run to 64 characters. */
     s = var->name + varPrefixSize;
     type = strchr(s, '.');
     if (type == NULL)
@@ -1602,6 +1613,9 @@ for (var = varList; var != NULL; var = var->next)
 	warn("Missing name in cart variable: %s\n", var->name);
 	continue;
 	}
+    /* Hidden My Annotations fields are not offered for filtering, so skip them. */
+    if (isMyVariantsTrack(table) && startsWithNoCase("_hidden_", field))
+        continue;
     if (sameString(type, filterDdVar))
         {
 	char *patVar = filterPatternVarName(db, table, field);
@@ -1724,9 +1738,10 @@ char *filterClause(char *db, char *table, char *chrom, char *extraClause)
 /* Get filter clause (something to put after 'where')
  * for table */
 {
-/* For shared myVariants tracks, fold the share's project/db scope into
- * extraClause so the recipient can only query rows the owner authorized. */
-char *myVarScope = myVariantsSharedScopeWhere(table, cart);
+/* For My Annotations tracks, fold the assembly scope into extraClause: a
+ * project's table holds its annotations on every assembly, and a page only
+ * shows the one being browsed. */
+char *myVarScope = myVariantsScopeWhere(db, table);
 char *combined = NULL;
 if (isNotEmpty(myVarScope))
     {

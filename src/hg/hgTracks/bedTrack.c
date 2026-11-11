@@ -129,7 +129,12 @@ else if (tg->isBigBed)
             }
         if (quickLiftFile)
             {
-            struct bed *lifted = quickLiftIntervalsToBed(bbi, chainHash, bb);
+            /* In a multi-region space an item that runs past its region is pulled in to
+             * it, rather than dropped, as bigBedTrack.c does (#38660).  A barChart spanning
+             * a whole gene is the common case.  refs #37788 */
+            struct bed *lifted = liftedInSpace(tg) ?
+                quickLiftIntervalsToBedKeepIntron(bbi, chainHash, bb, NULL) :
+                quickLiftIntervalsToBed(bbi, chainHash, bb);
             if (lifted == NULL)
                 continue;
             if (!quickLiftNeedsLoader(loader))

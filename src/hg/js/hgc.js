@@ -497,23 +497,72 @@ function initPage() {
         convertTitleTagsToMouseovers();
     }
 
-    // Set up myVariants project dropdown handler
+    // Set up the My Annotations "move to another project" dropdown. Moving an
+    // annotation moves it to another table, so any custom field the destination
+    // has no column for is dropped; say which ones before the user submits.
     var projectSelects = document.querySelectorAll('[id$="_projectSelect"]');
     projectSelects.forEach(function(sel) {
-        sel.addEventListener('change', function() {
-            var inputId = this.id.replace('Select', '');
-            var input = document.getElementById(inputId);
-            if (!input) {
-                console.error('myVariants project: Could not find input with id:', inputId);
-                return;
+        var trackName = sel.id.replace('_projectSelect', '');
+        var newInput = document.getElementById(trackName + '_moveToNew');
+        var warnSpan = document.getElementById(trackName + '_moveWarn');
+        var saveButton = document.getElementById(trackName + '_moveSave');
+        var saveMsg = document.getElementById(trackName + '_moveSaveMsg');
+        var newOption = sel.querySelector('option[value="__new__"]');
+        var newOptionLabel = newOption ? newOption.textContent : '';
+
+        // Save puts the typed name in the dropdown so the user can see what
+        // they asked for. The project itself is created by the submit below,
+        // so the option keeps the __new__ value the server looks for.
+        var clearSaved = function() {
+            if (newOption) {
+                newOption.textContent = newOptionLabel;
             }
-            if (this.value === '__new__') {
-                input.style.display = '';
-                input.value = '';
-                input.focus();
-            } else {
-                input.style.display = 'none';
-                input.value = this.value;
+            if (saveMsg) {
+                saveMsg.textContent = '';
+            }
+        };
+        if (saveButton) {
+            saveButton.addEventListener('click', function() {
+                var name = newInput.value.trim();
+                if (name === '') {
+                    saveMsg.textContent = ' Type a name for the new track.';
+                    newInput.focus();
+                    return;
+                }
+                newInput.value = name;
+                newOption.textContent = name + ' (new)';
+                saveMsg.textContent = " New track '" + name +
+                    "' is created when you save this annotation.";
+            });
+        }
+        if (newInput) {
+            // The name changed, so what Save showed no longer holds.
+            newInput.addEventListener('input', clearSaved);
+        }
+
+        sel.addEventListener('change', function() {
+            clearSaved();
+            if (newInput) {
+                if (this.value === '__new__') {
+                    newInput.style.display = '';
+                    newInput.value = '';
+                    newInput.focus();
+                } else {
+                    newInput.style.display = 'none';
+                    newInput.value = '';
+                }
+            }
+            if (saveButton) {
+                saveButton.style.display = (this.value === '__new__') ? '' : 'none';
+            }
+            if (warnSpan) {
+                var missing = this.options[this.selectedIndex].dataset.missing;
+                if (missing) {
+                    warnSpan.textContent = ' Moving this annotation will drop ' +
+                        missing + ', which that track does not have.';
+                } else {
+                    warnSpan.textContent = '';
+                }
             }
         });
     });

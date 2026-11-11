@@ -110,7 +110,8 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
             "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",hgsMergeCart,"ctTest",
-            "myVarShare",
+            "myVarShare", MYVARIANTS_ADD_CGI_VAR, MYVARIANTS_MANAGE_CGI_VAR,
+            MYVARIANTS_SEARCH_TERM_VAR,
             NULL };
 
 boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
@@ -2493,7 +2494,8 @@ int synStart = 0, synEnd = 0;
 if (!sourceToSyntheticRange(chainFile, h->chrom, h->chromStart, h->chromEnd,
                             &synChrom, &synStart, &synEnd))
     return FALSE;
-h->chrom = synChrom;
+/* Named as the page names the space, which is what both drawers compare against. */
+h->chrom = MULTI_REGION_CHROM;
 h->chromStart = synStart;
 h->chromEnd = synEnd;
 return TRUE;
@@ -3926,6 +3928,24 @@ if (sqlQuickQuery(conn, query, strand, sizeof strand) == NULL)
 return (strand[0] == '-');
 }
 
+static char *singleAltHaploPlacedOn(char *haplotypeId)
+/* The chromosome this alt or fix sequence is placed on, or NULL if the placement table
+ * does not list it.  refs #37788 */
+{
+if (isEmpty(haplotypeId))
+    return NULL;
+char *table = endsWith(haplotypeId, "_fix") ? "fixLocations" : "altLocations";
+if (!hTableExists(database, table))
+    return NULL;
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+sqlSafef(query, sizeof(query), "select chrom from %s where name rlike '^%s(:[0-9-]+)?'",
+         table, haplotypeId);
+char *chrom = sqlQuickString(conn, query);
+hFreeConn(&conn);
+return chrom;
+}
+
 static boolean initSingleAltHaplotypeInPlace(char *haplotypeId)
 /* Show one alt haplotype in place:  the chromosome it is placed on, with the alt spliced
  * in where the placement says it belongs, and nothing else.
@@ -5286,6 +5306,10 @@ if (sameString(mode, "customUrl"))
 return TRUE;
 }
 
+static char *requestedVirtPosition = NULL;
+/* The multi: position this request arrived with, before exon and gene view replace it
+ * with nonVirtPosition.  In a space it is a position on the space.  refs #37788 */
+
 static void installMultiRegionSpace(char *chainFile, char *conditions)
 /* Draw in the synthetic coordinate space this chain describes.
  *
@@ -5365,8 +5389,11 @@ int synStart = 0, synEnd = 0;
 boolean inView = FALSE;
 char *virtChrom = NULL;
 int virtStart = 0, virtEnd = 0;
-if (startsWith(MULTI_REGION_CHROM, position) &&
-    hgParseChromRange(NULL, position, &virtChrom, &virtStart, &virtEnd) &&
+/* Exon and gene view swap a multi: position for nonVirtPosition before this runs, so
+ * read the one the request asked for. */
+char *virtPosition = (requestedVirtPosition != NULL) ? requestedVirtPosition : position;
+if (startsWith(MULTI_REGION_CHROM, virtPosition) &&
+    hgParseChromRange(NULL, virtPosition, &virtChrom, &virtStart, &virtEnd) &&
     sameString(virtChrom, MULTI_REGION_CHROM) &&
     virtEnd <= hChromSize(database, multiRegionSpaceSoleChrom(chainFile)))
     {
@@ -5427,17 +5454,41 @@ else
     else
         {
         /* Nothing of the window is in the view, which is ordinary:  the user was
-         * somewhere else when they turned multi-region on.  Land at the start of the
-         * synthetic sequence.
+         * somewhere else when they turned multi-region on, or typed a position between
+         * the regions.  Do what the virtual chromosome did:  the nearest region on the
+         * same chromosome, and failing that 10 kb from the middle of the view, with the
+         * same message.
          *
          * chromName is still the SOURCE name here, and a space holds only the sequences
          * its own regions came from, so asking hChromSize() about it would reach
-         * mustGetChromInfo() and abort:  the user would get this warning followed by a
-         * dead end.  The space has exactly one sequence;  go there. */
-        warn("%s:%d-%d is not in this multi-region view.", srcChrom, srcStart+1, srcEnd);
+         * mustGetChromInfo() and abort.  The space has exactly one sequence;  go there. */
         chromName = multiRegionSpaceSoleChrom(chainFile);
-        winStart = 0;
-        winEnd = min(10000, hChromSize(database, chromName));
+        int nearStart = 0, nearEnd = 0;
+        if (sourceToNearestSyntheticRange(chainFile, srcChrom, srcStart, srcEnd,
+                                          &nearStart, &nearEnd))
+            {
+            winStart = nearStart;
+            winEnd = nearEnd;
+            }
+        else
+            {
+            /* A view that fits in the window is shown whole, with nothing to explain
+             * (#24033:  three 1 kb regions, all on screen).  A bigger one gets the
+             * middle, and the message the virtual chromosome gave (#18006). */
+            int synSize = hChromSize(database, chromName);
+            if (synSize <= 10000)
+                {
+                winStart = 0;
+                winEnd = synSize;
+                }
+            else
+                {
+                warn("Your new regions are not near previous location. "
+                     "Using middle of new coordinates.");
+                winStart = synSize / 2 - 5000;
+                winEnd = winStart + 10000;
+                }
+            }
         }
     }
 
@@ -8102,21 +8153,11 @@ char *getPositionFromCustomTracks()
 char *pos = NULL;
 struct slName *bl = NULL;
 
-// If the user has myVariants data for this database, refresh the on-disk
-// ctfile and point the mvCtfile_<db> cart variable at it.  customTracksParseCart
-// reads that variable independently of ctfile_<db>, so regular custom tracks
-// are unaffected.
+/* Apply any pending hgc edit or delete before the custom tracks are built, so
+ * a delete of a project's last item on this assembly takes its track off the
+ * same page.  customTracksParseCart builds the My Annotations tracks itself. */
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
-    {
-    char *userName = getUserName();
-    char *ctFile = myVariantsWriteCtFile(userName, database, cart);
-    char mvVarName[256];
-    safef(mvVarName, sizeof mvVarName, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
-    if (isNotEmpty(ctFile))
-        cartSetString(cart, mvVarName, ctFile);
-    else
-        cartRemove(cart, mvVarName);
-    }
+    myVariantsApplyPendingEdits();
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 
@@ -8496,6 +8537,21 @@ if (cfgOptionBooleanDefault("blatResultsGroup", FALSE))
     hashAdd(hash, "blat", group);
     }
 
+// The "My Annotations" group holds the user's annotation tracks, one per project (tdb->grp
+// on the tracks myVariantsAddTracks builds), so a project name is label enough and the
+// tracks are not mixed in with the generic Custom Tracks group.  Synthesized the same way
+// as the BLAT group above, and likewise skipped when it holds no tracks.
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    AllocVar(group);
+    group->name = cloneString(MYVARIANTS_GROUP_NAME);
+    group->label = cloneString(MYVARIANTS_GROUP_LABEL);
+    group->defaultPriority = group->priority = MYVARIANTS_GROUP_PRIORITY;
+    group->defaultIsClosed = FALSE;
+    slAddHead(&list, group);
+    hashAdd(hash, MYVARIANTS_GROUP_NAME, group);
+    }
+
 // The "Visible Tracks" group is now the default top group
 struct group *visible = NULL;
 AllocVar(visible);
@@ -8858,6 +8914,52 @@ if (track->parent != NULL)
     }
 }
 
+static int notInSpaceHeight(struct track *tg, enum trackVisibility vis)
+/* One line, for the note that this track is not drawn here. */
+{
+tg->heightPer = tl.fontHeight;
+tg->lineHeight = tg->heightPer + 4;
+tg->height = tg->lineHeight;
+return tg->height;
+}
+
+static void notInSpaceDraw(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
+                           int xOff, int yOff, int width, MgFont *font, Color color,
+                           enum trackVisibility vis)
+/* The note, in grey across the image.  Not the yellow box of bigDrawWarning():  nothing
+ * failed, and that one also writes a line to the error log on every draw.  The text is
+ * not kept in networkErrMsg, because any track that has one after loading is switched
+ * to bigDrawWarning(). */
+{
+char *type = cloneFirstWord(tg->tdb->type);
+char msg[512];
+safef(msg, sizeof msg, "%s tracks cannot be shown in multi-region view",
+      isNotEmpty(type) ? type : "This type of");
+hvGfxTextCentered(hvg, xOff, yOff, width, tg->height, MG_GRAY, font, msg);
+freeMem(type);
+}
+
+static void noteNotInSpace(struct track *track)
+/* A track quickLift cannot carry into the space still gets its row, with a line saying
+ * why it is empty.  Hidden without a word, a track the user has on looks like a track
+ * with no data here.  A container keeps hideFromSpace():  its rows are its children's.
+ * refs #37788 */
+{
+if (track->subtracks != NULL)
+    {
+    hideFromSpace(track);
+    return;
+    }
+track->items = NULL;
+track->loadItems = dontLoadItems;
+/* Nothing was loaded, so a wiggle's pre-draw and left axis have nothing to read. */
+track->preDrawItems = NULL;
+track->preDrawMultiRegion = NULL;
+track->drawLeftLabels = NULL;
+track->drawItems = notInSpaceDraw;
+track->totalHeight = notInSpaceHeight;
+}
+
 static boolean liftTrackIntoSpace(struct track *track, char *chainFile)
 /* Stamp this track, and the subtracks under it that draw, with the chain that maps
  * them into the synthetic space.  Answer whether anything under it can be drawn;
@@ -8948,7 +9050,7 @@ for (track = trackList; track != NULL; track = track->next)
     if (track->visibility == tvHide)
         continue;
     if (!liftTrackIntoSpace(track, chainFile))
-        hideFromSpace(track);
+        noteNotInSpace(track);
     }
 }
 
@@ -8964,7 +9066,7 @@ char *liftUrl = trackDbSetting(track->tdb, "quickLiftUrl");
 if ((liftUrl != NULL) && sameString(liftUrl, spaceChain))
     return;
 if (!liftTrackIntoSpace(track, spaceChain))
-    hideFromSpace(track);
+    noteNotInSpace(track);
 }
 
 struct track *getTrackList( struct group **pGroupList, int vis)
@@ -10488,7 +10590,8 @@ printTrashIcon("Remove this track from the QuickLift group", "quickLiftDelIcon",
 static void printTrackLink(struct track *track)
 /* print a link hgTrackUi with shortLabel and various icons and mouseOvers */
 {
-if (sameOk(track->groupName, "user") || sameOk(track->groupName, "blat"))
+if (sameOk(track->groupName, "user") || sameOk(track->groupName, "blat")
+||  sameOk(track->groupName, MYVARIANTS_GROUP_NAME))
     printTrackDelIcon(track);
 
 char *quickLiftSourceDb = (track->tdb != NULL) ?
@@ -10555,6 +10658,63 @@ static void printPatchNote()
         }
 }
 
+static boolean termIsOnlyCoordinates(char *term)
+/* TRUE for a term that only spells out a place, such as chr1, chr1:1,000-2,000,
+ * chr1:1000 or a BED line: there is nothing in it worth saving as a search. */
+{
+if (hgIsChromRange(database, term) || hgOfficialChromName(database, term) != NULL)
+    return TRUE;
+char *rest = strchr(term, ':');
+if (rest == NULL)
+    {
+    /* A BED line is the sequence name and then numbers. */
+    rest = skipToSpaces(term);
+    if (rest == NULL)
+        return FALSE;
+    }
+else
+    rest++;
+char *c;
+for (c = rest; *c != 0; c++)
+    if (!isdigit(*c) && *c != ',' && *c != '-' && !isspace(*c))
+        return FALSE;
+return TRUE;
+}
+
+static void printMyVariantsSearchNote()
+/* Offer to save the term the user just searched as an annotation, for any
+ * search that resolved to one position.  A term with several hits stops at the
+ * results page.  The JS draws the offer, so a search answered by an in-place
+ * image update can get one too. */
+{
+if (!cfgOptionBooleanDefault("doMyVariants", FALSE))
+    return;
+/* The offer saves with no dialog, so it has nowhere to explain a log in.
+ * Anonymous visitors still get the Add Annotation button, which does. */
+if (getUserName() == NULL)
+    return;
+/* Most searches are resolved by hgSearch, which redirects here with an already
+ * resolved position and passes the term along in "search".  The Search button
+ * passes the term in MYVARIANTS_SEARCH_TERM_VAR for a position it sends here
+ * itself: what was typed, or what was picked from the autocomplete.  A term
+ * that arrives as the position from a bookmark is left on hgp, but so is the
+ * cart's own position on every page load, so coordinates there are not a
+ * search. */
+char *term = cgiOptionalString("search");
+if (isEmpty(term) && hgp != NULL && hgp->singlePos != NULL)
+    term = cgiOptionalString(MYVARIANTS_SEARCH_TERM_VAR);
+if (isEmpty(term) && hgp != NULL && hgp->singlePos != NULL &&
+    !termIsOnlyCoordinates(hgp->query))
+    term = hgp->query;
+if (isNotEmpty(term))
+    term = trimSpaces(term);
+/* The term rides in an attribute so it never lands inside a script block. */
+if (isEmpty(term))
+    hPrintf("<span id='myVarSearchNote'></span>");
+else
+    hPrintf("<span id='myVarSearchNote' data-term='%s'></span>", attributeEncode(term));
+}
+
 static void printDatabaseInfoHtml(char* database) 
 /* print database-specific piece of HTML defined in hg.conf, works also with Genark hubs */
 {
@@ -10566,6 +10726,83 @@ char *cfgName = catTwoStrings(cfgPrefix,"_html");
 char *html = cfgOption(cfgName);
 if (html)
     puts(html);
+}
+
+static void myVariantsAddClientJson()
+/* Hand the My Annotations dialog the user's projects.  A project is a track, and
+ * custom fields are columns on its own table, so each entry carries its track
+ * name and its own field lists rather than one list for the whole user.  This
+ * goes out with the image-only response too, because that response replaces
+ * the page's hgTracks object. */
+{
+char *userName = getUserName();
+if (userName == NULL)
+    return;
+char *defaultProjectId = "";
+struct myVariantsProject *projects = myVariantsListProjects(userName), *proj;
+if (projects != NULL)
+    {
+    /* Where a save with nothing chosen lands.  The list is oldest first,
+     * so this is the project myVariantsDefaultProject picks server side. */
+    char idBuf[32];
+    safef(idBuf, sizeof idBuf, "%u", projects->id);
+    defaultProjectId = cloneString(idBuf);
+    struct jsonElement *projectList = newJsonList(NULL);
+    for (proj = projects; proj != NULL; proj = proj->next)
+        {
+        struct jsonElement *entry = newJsonObject(hashNew(0));
+        jsonObjectAdd(entry, "label", newJsonString(proj->label));
+        jsonObjectAdd(entry, "id", newJsonNumber(proj->id));
+        char *projTrack = myVariantsProjectTrackName(proj);
+        jsonObjectAdd(entry, "track", newJsonString(projTrack));
+        /* The delete confirm names the project and how much goes with
+         * it.  The track already carries the count, so read it from
+         * there rather than asking the database a second time. */
+        int projCount = 0;
+        struct customTrack *projCt;
+        for (projCt = ctList; projCt != NULL; projCt = projCt->next)
+            {
+            if (sameOk(projCt->tdb->track, projTrack))
+                {
+                projCount = ctItemCount(projCt);
+                break;
+                }
+            }
+        jsonObjectAdd(entry, "itemCount",
+            newJsonNumber(projCount < 0 ? 0 : projCount));
+        /* Both lists come off one description of the table. */
+        struct slName *customFields = NULL, *hiddenFields = NULL, *cf, *hf;
+        myVariantsGetFieldLists(proj->dbTable, &customFields, &hiddenFields);
+        struct jsonElement *cfList = newJsonList(NULL);
+        for (cf = customFields; cf != NULL; cf = cf->next)
+            jsonListAdd(cfList, newJsonString(cf->name));
+        slReverse(&cfList->val.jeList);
+        jsonObjectAdd(entry, "customFields", cfList);
+        slFreeList(&customFields);
+        struct jsonElement *hfList = newJsonList(NULL);
+        for (hf = hiddenFields; hf != NULL; hf = hf->next)
+            jsonListAdd(hfList, newJsonString(hf->name));
+        slReverse(&hfList->val.jeList);
+        jsonObjectAdd(entry, "hiddenFields", hfList);
+        slFreeList(&hiddenFields);
+        jsonListAdd(projectList, entry);
+        }
+    slReverse(&projectList->val.jeList);
+    jsonObjectAdd(jsonForClient, "myVariantsProjects", projectList);
+    myVariantsProjectFreeList(&projects);
+    }
+/* Which project the dialog opens on, and where a quick add lands.  Both
+ * are ids: a label is not unique and does not survive a rename. */
+char *lastProject = cartOptionalString(cart, MYVARIANTS_LAST_PROJECT_VAR);
+if (isNotEmpty(lastProject))
+    jsonObjectAdd(jsonForClient, "myVariantsLastProject",
+        newJsonString(lastProject));
+jsonObjectAdd(jsonForClient, "myVariantsDefaultProject",
+    newJsonString(defaultProjectId));
+/* The name a first project gets, so the dialog does not spell it out
+ * a second time. */
+jsonObjectAdd(jsonForClient, "myVariantsDefaultLabel",
+    newJsonString(MYVARIANTS_DEFAULT_PROJECT));
 }
 
 void printShortcutButtons(struct cart *cart, bool hasCustomTracks, bool revCmplDisp, bool multiRegionButtonTop)
@@ -10614,49 +10851,21 @@ hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser wind
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
     hPrintf("<button id=\"myVariantsButton\" title=\"Add an item to the My Annotations track\">Add Annotation</button>");
+    // Explainer for the create dialog; the JS moves it into the dialog when built.
+    hPrintf("<div id=\"myVariantsHelpDiv\" style=\"display: none\">\n");
+    webIncludeFile("inc/myVariantsHelp.html");
+    hPrintf("</div>\n");
     jsInline("var doMyVariants = true;\n");
     jsInlineF("var userIsLoggedIn = %s;\n", getUserName() != NULL ? "true" : "false");
-    // Get existing project values for dropdown
-    char *userName = getUserName();
-    if (userName)
-        {
-        struct slName *projects = myVariantsGetProjects(userName);
-        if (projects)
-            {
-            struct jsonElement *projectList = newJsonList(NULL);
-            struct slName *proj;
-            for (proj = projects; proj != NULL; proj = proj->next)
-                jsonListAdd(projectList, newJsonString(proj->name));
-            slReverse(&projectList->val.jeList);
-            jsonObjectAdd(jsonForClient, "myVariantsProjects", projectList);
-            slFreeList(&projects);
-            }
-        /* Get existing custom field names for the create dialog */
-        struct slName *customFields = myVariantsGetCustomFields(userName);
-        if (customFields)
-            {
-            struct jsonElement *cfList = newJsonList(NULL);
-            struct slName *cf;
-            for (cf = customFields; cf != NULL; cf = cf->next)
-                jsonListAdd(cfList, newJsonString(cf->name));
-            slReverse(&cfList->val.jeList);
-            jsonObjectAdd(jsonForClient, "myVariantsCustomFields", cfList);
-            slFreeList(&customFields);
-            }
-        /* Get hidden field names for the restore UI */
-        struct slName *hiddenFields = myVariantsGetHiddenFields(userName);
-        if (hiddenFields)
-            {
-            struct jsonElement *hfList = newJsonList(NULL);
-            struct slName *hf;
-            for (hf = hiddenFields; hf != NULL; hf = hf->next)
-                jsonListAdd(hfList, newJsonString(hf->name));
-            slReverse(&hfList->val.jeList);
-            jsonObjectAdd(jsonForClient, "myVariantsHiddenFields", hfList);
-            slFreeList(&hiddenFields);
-            }
-        }
-    else if (loginSystemEnabled() || wikiLinkEnabled())
+    // hgTrackUi sends users with no annotations here to make their first one.
+    if (cgiVarExists(MYVARIANTS_ADD_CGI_VAR))
+        jsInline("var myVariantsOpenDialog = true;\n");
+    // And the settings page of a track with nothing on this assembly sends
+    // users here to rename or remove it.
+    if (cgiVarExists(MYVARIANTS_MANAGE_CGI_VAR))
+        jsInline("var myVariantsOpenManager = true;\n");
+    // The user's projects go in the hgTracks JSON, see myVariantsAddClientJson.
+    if (getUserName() == NULL && (loginSystemEnabled() || wikiLinkEnabled()))
         {
         // Hand the JS dialog a login URL that returns to this hgTracks page.
         char *retUrl = wikiLinkEncodeReturnUrl(cartSessionId(cart), "hgTracks", "");
@@ -11202,6 +11411,15 @@ outCollectionsToJson();
 jsonObjectAdd(jsonForClient, "winStart", newJsonNumber(virtWinStart));
 jsonObjectAdd(jsonForClient, "winEnd", newJsonNumber(virtWinEnd));
 jsonObjectAdd(jsonForClient, "chromName", newJsonString(virtChromName));
+/* In a space the page names the window "multi:", which means nothing to the reader.
+ * The position line shows the source span instead, and an in-place update has to keep
+ * doing so.  refs #37788 */
+if (coordRulerUrl != NULL)
+    {
+    char *srcSpan = sourceSpanPosition(coordRulerUrl, chromName, winStart, winEnd);
+    if (srcSpan != NULL)
+        jsonObjectAdd(jsonForClient, "spaceSourcePosition", newJsonString(srcSpan));
+    }
 
 // Tell javascript about multiple windows info
 if (virtMode)
@@ -11546,6 +11764,8 @@ if (!hideControls)
         printSearchHelpLink();
 
         printPatchNote();
+
+        printMyVariantsSearchNote();
 
 	if (!trackHubDatabase(database))
 	    {
@@ -12605,6 +12825,7 @@ if (NULL == position)
 	{
 	position = stripCommas(position); // sometimes the position string arrives with commas in it.
 	positionIsVirt = TRUE;
+	requestedVirtPosition = cloneString(position);
 	}
     }
 
@@ -12650,6 +12871,28 @@ if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMost
     }
 
 lastVirtModeType = cartUsualString(cart, "lastVirtModeType", lastVirtModeType);
+
+/* A space for one alt holds only the chromosome the alt is placed on, and the alt.  A
+ * position typed on any other sequence has no place in it, so leave the alt view and go
+ * there.  On the virtual chromosome the whole genome was laid out, so the user stayed in
+ * the mode;  a space cannot hold that, it is wider than an int.  refs #37788 #17412 */
+if (multiRegionSpacesEnabled() && !positionIsVirt &&
+    sameString(virtModeType, "singleAltHaplo") && sameOk(lastVirtModeType, "singleAltHaplo"))
+    {
+    /* Only a move inside the alt already on screen.  Asking for another alt is entering
+     * a new view, and the position it arrives with is the old one. */
+    char *altId = cartUsualString(cart, "singleAltHaploId", singleAltHaploId);
+    char sameAltState[1024];
+    safef(sameAltState, sizeof sameAltState, "singleAltHaploId=%s", altId);
+    char *altChrom = NULL;
+    if (sameOk(cartOptionalString(cart, "lastVirtModeExtraState"), sameAltState))
+        altChrom = singleAltHaploPlacedOn(altId);
+    if ((altChrom != NULL) && !sameString(chromName, altChrom) && !sameString(chromName, altId))
+        {
+        virtModeType = "default";
+        cartSetString(cart, "virtModeType", virtModeType);
+        }
+    }
 
 /* A view that has been drawn before is found from the cart or from the conditions
  * table, and then the region list is never built.  That is the whole saving:  in exon
@@ -12897,7 +13140,11 @@ else
 
     }
 
-if (virtMode)
+/* A space is named "multi" on the page too.  Its one sequence is named after the source
+ * chromosome whenever every region came from it, so a link written as "chr7:7595150-..."
+ * would come back as a SOURCE position and land on another gene.  "multi:" is read as a
+ * position on the space, the way it was on the virtual chromosome.  refs #37788 */
+if (virtMode || (multiRegionSpaceForDb(database) != NULL))
     virtChromName = MULTI_REGION_CHROM;
 else
     virtChromName = displayChromName;
@@ -14289,6 +14536,8 @@ else if (cartVarExists(cart, configShowEncodeGroups))
 else
     {
     tracksDisplay();
+    if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+        myVariantsAddClientJson();
     }
 
 if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))

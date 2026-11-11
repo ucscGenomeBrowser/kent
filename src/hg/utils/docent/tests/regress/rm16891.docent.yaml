@@ -10,20 +10,21 @@
 # mafSpeciesSubset, loaded as a type=maf custom track named rm16891maf.  The custom track
 # is loaded in a second request, because hideTracks=1 in the same request hides it too.
 #
-# What this asserts is Christopher's symptom: the MAF row must still be drawn, at its full
-# five-species height (75px on genome-test), in exon-only view, after a zoom out, in
-# gene-only view, and after a zoom out there.  A custom track's row id carries a per-run
-# number, so it is matched as td_data_ct_rm16891maf*.
+# With multiRegionSpaces on (#37788), multi-region view is a synthetic assembly and every
+# track is lifted into it with quickLift.  quickLift cannot carry a maf custom track, so
+# in exon-only and gene-only view the MAF row holds one grey line instead, "maf tracks
+# cannot be shown in multi-region view".  The custom track no longer disappears, which
+# was Christopher's symptom, and it no longer draws half its data, which was Matt's.
 #
-# It does NOT assert Matt's "half the data disappears" or the misaligned labels.  Those
-# are pixel-level, and the row keeps its height either way.  On genome-test 2026-10-06
-# every check here passes, so this script cannot see whatever part of the ticket is still
-# open there.
-#
-# On hgwdev-demo6 (multiRegionSpaces=on) the MAF custom track is not drawn at all once the
-# view is a space, so this script fails there at step 5.
+# What this asserts: the MAF row is drawn at its full five-species height (75px) in the
+# single-region view, and in exon-only view, after a zoom out, in gene-only view, and
+# after a zoom out there, the row is still on the page as the one-line note (34px).  A
+# custom track's row id carries a per-run number, so it is matched as
+# td_data_ct_rm16891maf*.  The note itself is drawn into the image, where no check can
+# read it.
 proof:
   - "assertion-only 2026-10-06 -- written from the ticket"
+  - "assertion-only 2026-11-10 -- multi-region steps now expect the one-line note row of a space"
 
 target: genome-test
 db: hg19
@@ -41,17 +42,17 @@ steps:
   - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly"
   - expect:
       has: ['#hgTracksConfigMultiRegionPage.pressed', 'img[id^="img_data_ct_rm16891maf"]']
-      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '>=70'}
+      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '<=40'}
   - zoom: out
   - expect:
       has: ['#hgTracksConfigMultiRegionPage.pressed', 'img[id^="img_data_ct_rm16891maf"]']
-      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '>=70'}
+      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '<=40'}
 
   - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=geneMostly"
   - expect:
       has: ['#hgTracksConfigMultiRegionPage.pressed', 'img[id^="img_data_ct_rm16891maf"]']
-      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '>=70'}
+      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '<=40'}
   - zoom: out
   - expect:
       has: ['#hgTracksConfigMultiRegionPage.pressed', 'img[id^="img_data_ct_rm16891maf"]']
-      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '>=70'}
+      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '<=40'}
