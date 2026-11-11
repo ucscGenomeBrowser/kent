@@ -41,8 +41,8 @@ if ( "$LASTREVIEW2DAY" == "" ) then
  exit 1
 endif
 
-if ( -e GitReports.ok ) then
-    rm GitReports.ok
+if ( -e $BUILDSTATE/GitReports.ok ) then
+    rm $BUILDSTATE/GitReports.ok
 endif    
 
 echo
@@ -174,7 +174,7 @@ endif
 echo "</body></html>" >> index.html
 cd $WEEKLYBLD
 
-echo "success Git Reports v${BRANCHNN} $mode [${0}: START=${ScriptStart} END=`date`]" > GitReports.ok
+echo "success Git Reports v${BRANCHNN} $mode [${0}: START=${ScriptStart} END=`date`]" > $BUILDSTATE/GitReports.ok
 
 exit 0
 

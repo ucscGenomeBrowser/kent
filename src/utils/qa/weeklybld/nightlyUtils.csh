@@ -6,7 +6,7 @@
 #   30 7 * * * flock -n $HOME/nightlyUtils.lock /hive/groups/browser/newBuild/kent/src/utils/qa/weeklybld/nightlyUtils.csh
 #
 # It builds the commit that last passed the nightly build and make test.
-# runBuildWithUseCases.sh writes that commit to $HOME/kent/lastCleanNightly,
+# runBuildWithUseCases.sh writes that commit to $BUILDSTATE/lastCleanNightly,
 # so a night that fails installs nothing new.  It builds in its own checkout
 # and passes BINDIR to make, so it leaves alone the nightly CGI tree and
 # ~build/bin.
@@ -17,7 +17,7 @@
 
 if ( -e $HOME/kent/noNightlyUtils ) exit 0
 
-set lastClean = $HOME/kent/lastCleanNightly
+set lastClean = /hive/groups/browser/newBuild/state/lastCleanNightly
 if ( ! -s $lastClean ) exit 0
 set commit = `cat $lastClean`
 

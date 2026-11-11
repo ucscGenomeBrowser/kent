@@ -17,6 +17,9 @@ setenv baseSubversion                  # empty string unless mistake, otherwise 
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
+# build logs and build state live outside the kent tree, so git status stays clean
+setenv BUILDLOGS ${BUILDHOME}/logs
+setenv BUILDSTATE ${BUILDHOME}/state
 setenv REPLYTO clmfisch@ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.gi.ucsc.edu:/data/git/kent.git
