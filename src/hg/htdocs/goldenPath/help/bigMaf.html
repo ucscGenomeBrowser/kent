@@ -46,11 +46,23 @@ hg38.chrom.sizes bigMaf.bb</code></p>
 
 <h3 id="frames_summary">Supporting <code>frame</code> and <code>summary</code> definitions</h3>
 <p>
-Alongside the bigMaf file, two other summary and frame bigBeds are created. The
-following autoSql definition is used to create the first file, pointed to online
-with <code>summary &lt;url&gt;</code>, rather than the standard
-<code>bigDataUrl &lt;url&gt;</code> used with bigMaf. The file
-<a href="examples/mafSummary.as"><em>mafSummary.as</em></a>, is pulled in when
+You can make two optional bigBed files to go with a bigMaf file. Both are added
+to the track with their own settings, next to <code>bigDataUrl</code>. They do
+not replace it:</p>
+<ul>
+  <li>The <b>summary</b> file is set with <code>summary &lt;url&gt;</code>. It holds
+  the alignment blocks of each species in a compact form. When the window is
+  larger than 1,000,000 bases, the Genome Browser draws the species rows from this
+  file instead of reading the alignments. Without it, a bigMaf track draws nothing
+  in a window that large.</li>
+  <li>The <b>frames</b> file is set with <code>frames &lt;url&gt;</code>. It holds
+  the codon frame of each coding exon. With it, the track settings page offers
+  <b>Codon Translation</b>, which shows the alignment translated into amino acids.
+  Without it, that option is not offered.</li>
+</ul>
+<p>
+The following autoSql definition is used to create the summary file. The file
+<a href="examples/mafSummary.as"><em>mafSummary.as</em></a> is pulled in when
 the <code>bedToBigBed</code> utility is run with the <code>-as=mafSummary.as</code>
 option.</p>
 <h6>mafSummary.as</h6>
@@ -71,9 +83,8 @@ An example, <code>bedToBigBed -type=bed3+4 -as=mafSummary.as
 Another tool, <code>mafToBigMafSummary</code> generates the input
 <code>bigMafSummary.bed</code> file.</p>
 <p>
-The following autoSql definition is used to create the second file,
-pointed to online with <code>frames &lt;url&gt;</code>. The file
-<a href="examples/mafFrames.as"><em>mafFrames.as</em></a>, is pulled in when
+The following autoSql definition is used to create the frames file. The file
+<a href="examples/mafFrames.as"><em>mafFrames.as</em></a> is pulled in when
 the <code>bedToBigBed</code> utility is run with the <code>-as=mafFrames.as</code>
 option.</p>
 <h6>mafFrames.as</h6>
@@ -100,6 +111,32 @@ An example, <code>bedToBigBed -type=bed3+8 -as=mafFrames.as
 <p>
 Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
 25% more RAM than the uncompressed BED input file.</p>
+
+<h3 id="names">Sequence names in a MAF file</h3>
+<p>
+Each sequence name in a MAF file is an assembly name, a dot, and a sequence name, for
+example <code>hg38.chr1</code>. The tools and the Genome Browser split the name into
+these two parts with the following rules:</p>
+<ul>
+  <li>The assembly name ends at the first dot. Everything after that dot is the
+  sequence name, so a sequence name can contain dots: <code>mm10.NC_000067.7</code>
+  is assembly <code>mm10</code>, sequence <code>NC_000067.7</code>.</li>
+  <li>A GenArk assembly name such as <code>GCA_000772875.3</code> keeps its version:
+  <code>GCA_000772875.3.chr1</code> is assembly <code>GCA_000772875.3</code>, sequence
+  <code>chr1</code>. This works for names that start with <code>GCA_</code> or
+  <code>GCF_</code>.</li>
+  <li>Do not use a dot anywhere else in an assembly name. For
+  <code>canFam.v3.chr17</code>, the summary file records the assembly as
+  <code>canFam</code>. Use another character, for example <code>canFam_v3</code>.</li>
+  <li>Do not use a pipe (<code>|</code>) between the assembly and the sequence name.
+  <code>mafToBigMafSummary</code> accepts it, but the Genome Browser draws no
+  alignment for that species in a window of 1,000,000 bases or less.</li>
+</ul>
+<p>
+If you write a program that reads these names, this regular expression follows the
+same rules. The first group is the assembly name and the second group is the
+sequence name:</p>
+<pre><code>^(GC[AF]_\d+\.\d+|[^.]+)\.(.+)$</code></pre>
 
 <h2 id="steps">Creating a bigMaf track</h2>
 <p>
