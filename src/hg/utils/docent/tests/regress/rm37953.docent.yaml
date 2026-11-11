@@ -26,6 +26,7 @@
 proof:
   - "assertion-only 2026-11-11 -- written from #37953 and 91545e44710"
   - "sandbox-ab 2026-11-11 -- fails on genome-test (v506, no fix) at step 3 with clinvarCnv drawn, passes on hgwdev-braney built from master with 91545e44710"
+  - "server-flip 2026-11-11 -- passes on genome-test after 91545e44710 was pushed and installed with cgi-alpha; it failed there earlier the same day"
 
 target: genome-test
 db: hg38
