@@ -1,0 +1,45 @@
+# #37953 -- one URL that turns on a container and hides one of its subtracks lost the hide.
+#
+# Fix: 91545e44710, hg/lib/cart.c cartRemoveOldFromTdbTree().  When a container's
+# visibility changes, hgTracks removes subtrack visibilities it thinks are left over from
+# earlier requests.  cartValueHasChanged() counts a newly created "hide" as unchanged, so the
+# request's own <subtrack>=hide was removed as a leftover.  A visibility this request created
+# is now kept.
+#
+# Checks, after one plain page from a cart reset:
+#   * clinvar=pack&clinvarCnv=hide: the main ClinVar subtrack is drawn (proves the
+#     container came on) and the CNV subtrack is not.
+#   * dbSnp155Composite=pack&dbSnp155Common=hide: the Common dbSNP subtrack is not drawn, and
+#     the ClinVar row from the step before still is.
+#
+# The first step loads a plain page so the cart holds the image width.  After a cart reset
+# the first hgTracks request has no width, and hgTracks answers with a small page that
+# measures the window and reloads without the URL's settings, so the cleanup never runs and
+# the page is right on both builds.  A user whose cart already has a width sees the bug.
+#
+# Do NOT add hideTracks=1 to these URLs.  That path turns a subtrack hide into _sel 0, which
+# the cleanup never touches, so the page is right on both builds.
+#
+# NOT asserted: that a hide left over from an EARLIER request is still removed when the
+# container changes.  That is the cleanup working as designed, and it is the same on both
+# builds (checked by hand with curl on 2026-11-11).
+proof:
+  - "assertion-only 2026-11-11 -- written from #37953 and 91545e44710"
+  - "sandbox-ab 2026-11-11 -- fails on genome-test (v506, no fix) at step 3 with clinvarCnv drawn, passes on hgwdev-braney built from master with 91545e44710"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125364"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125364&clinvar=pack&clinvarCnv=hide"
+  - expect:
+      has: '#tr_clinvarMain'
+      noHas: '#tr_clinvarCnv'
+
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125364&dbSnp155Composite=pack&dbSnp155Common=hide"
+  - expect:
+      has: '#tr_clinvarMain'
+      noHas: '#tr_dbSnp155Common'
