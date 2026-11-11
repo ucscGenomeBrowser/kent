@@ -48,6 +48,7 @@
 #include "bigPsl.h"
 #include "blatShare.h"
 #include "perfTimer.h"
+#include "hubConnect.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -699,9 +700,13 @@ if (pslName != NULL && faName != NULL)
     char *faId  = cloneString(strrchr(faName,  '/') ? strrchr(faName,  '/') + 1 : faName);
     chopSuffix(pslId);   /* drop ".pslx" -> bare token */
     chopSuffix(faId);    /* drop ".fa"   -> bare token */
-    /* blatMin: the search's minimum score, since the reader's cart does not have it. */
-    jsonWriteStringf(jw, "shareUrl", "hgBlat?blatNewPage=1&db=%s&blatPslId=%s&blatFaId=%s&blatMin=%d",
-        database, pslId, faId, minMatchShown);
+    /* blatMin: the search's minimum score, since the reader's cart does not have it.  The assembly
+     * goes in as hubConnectDbUrlArgs() spells it, so a hub assembly reconnects in a cart without the
+     * hub instead of opening as the default assembly. */
+    char *dbArgs = hubConnectDbUrlArgs(database);
+    jsonWriteStringf(jw, "shareUrl", "hgBlat?blatNewPage=1&%s&blatPslId=%s&blatFaId=%s&blatMin=%d",
+        dbArgs, pslId, faId, minMatchShown);
+    freeMem(dbArgs);
     freeMem(pslId);
     freeMem(faId);
     }

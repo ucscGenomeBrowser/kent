@@ -184,11 +184,12 @@ https://genome.ucsc.edu/goldenpath/help/trackDb/trackDbHub.html
     pBuild = subparsers.add_parser("build", parents=[common, outDirOpt],
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=trackMetaHelp,
-        help="create a track hub for all bigBed/bigWig files under a directory",
-        description="Create a track hub for all bigBed/bigWig files under a directory.\n\n"
+        help="create a track hub for all bigBed/bigWig/BAM/CRAM/VCF files under a directory",
+        description="Create a track hub for all bigBed/bigWig/BAM/CRAM/VCF files under a directory.\n\n"
             "Creates a single-file hub.txt and guesses reasonable settings from the file names:\n"
-            " - bigBed/bigWig files in the current directory become top-level tracks\n"
-            " - big* files in subdirectories become composites\n"
+            " - data files in the current directory become top-level tracks\n"
+            " - data files in subdirectories become composites\n"
+            " - .bam, .cram and .vcf.gz need their .bai, .crai or .tbi index next to them\n"
             " - for every filename, the part before the first dot becomes the track base name\n"
             " - if a directory has more than 80% of track base names with both a bigBed and\n"
             "   bigWig file, views are activated for this composite\n"
@@ -711,12 +712,23 @@ def readFnames(inDir):
         # this means that a.scaled.bigBed and a.raw.bigWig get paired correctly
         fileBase = basename(fname).split(".")[0]
 
+        lowName = fname.lower()
         if ext==".bw" or ext==".bigwig":
             fileType = "bigWig"
         elif ext==".bb" or ext==".bigbed":
             fileType = "bigBed"
+        elif ext==".bam":
+            fileType = "bam"
+        elif ext==".cram":
+            fileType = "cram"
+        elif lowName.endswith(".vcf.gz") or lowName.endswith(".vcf.bgz"):
+            fileType = "vcfTabix"
+        elif ext==".vcf":
+            logging.warning("%s: a VCF file has to be compressed with bgzip and indexed with tabix "
+                    "to be used in a hub, skipping it" % filePath)
+            continue
         else:
-            logging.debug("file %s is not bigBed nor bigWig, skipping" % fname)
+            logging.debug("file %s is not a bigBed, bigWig, BAM, CRAM or VCF file, skipping" % fname)
             continue
 
         absFname = abspath(filePath)
@@ -725,6 +737,33 @@ def readFnames(inDir):
         #fnameDict[baseName][fileType].setdefault([])
         fnameDict[fileBase][fileType].append(absFname)
     return subDirs, fnameDict
+
+# index file extensions for the indexed types. The first one is the name the browser looks for
+# when there is no bigDataIndex setting, the others have to be named with bigDataIndex
+indexExts = {
+    "bam"      : [".bai"],
+    "cram"     : [".crai"],
+    "vcfTabix" : [".tbi"],
+}
+
+def findIndexSetting(absFname, fileType, tdbDir):
+    """ return the bigDataIndex value for an indexed data file, or None if the index has the
+    default name or the type needs no index. Warns if no index can be found. """
+    if fileType not in indexExts:
+        return None
+    exts = indexExts[fileType]
+    if isfile(absFname + exts[0]):
+        return None
+    # also accept x.bai next to x.bam, the browser needs a bigDataIndex line for that name
+    noExt = splitext(absFname)[0]
+    for ext in exts:
+        for cand in [absFname + ext, noExt + ext]:
+            if isfile(cand):
+                return relpath(cand, tdbDir)
+    logging.warning("%s has no index file next to it (expected %s). The Genome Browser cannot "
+            "show it without one, create it with 'samtools index' (BAM/CRAM) or 'tabix -p vcf' (VCF)." %
+            (absFname, basename(absFname) + exts[0]))
+    return None
 
 def mostFilesArePaired(fnameDict):
     " check if 80% of the tracks have a pair bigBed+bigWig"
@@ -942,7 +981,11 @@ def makeTrackDbEntries(inDir, dirDict, dirType, tdbDir, ofh, existingTracks=None
                     elif fileType=="bigBed":
                         labelSuff = " Peaks"
                     else:
-                        assert(False) # views and non-bigWig/Bed are not supported yet?
+                        # a composite with views can only have tracks that belong to a view
+                        logging.warning("%s: the composite %s has Peaks/Signal views, %s files "
+                                "cannot go into it. Move the file into its own directory." %
+                                (absFname, parentName, fileType))
+                        continue
 
                 if parentName is not None:
                     parentPrefix = parentName+"__"
@@ -958,6 +1001,10 @@ def makeTrackDbEntries(inDir, dirDict, dirType, tdbDir, ofh, existingTracks=None
                         "type"       :  fileType,
                         "bigDataUrl" :  relFname,
                       }
+
+                indexUrl = findIndexSetting(absFname, fileType, tdbDir)
+                if indexUrl:
+                    tdb["bigDataIndex"] = indexUrl
 
                 if parentName:
                     tdb["parent"] = parentName

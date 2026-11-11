@@ -69,6 +69,15 @@ if (hubStatusTableName == NULL)
 return hubStatusTableName;
 }
 
+static char *hubUrlForId(struct sqlConnection *conn, unsigned hubId)
+/* Return the URL of the hub with this hubStatus id, or NULL.  Only reads hubStatus: unlike
+ * hubFromId() it never fetches the hub.  Free with freeMem(). */
+{
+char query[1024];
+sqlSafef(query, sizeof query, "select hubUrl from %s where id=%u", getHubStatusTableName(), hubId);
+return sqlQuickString(conn, query);
+}
+
 char *hubPublicTableName()
 /* Get the name of the table that lists public hubs.  Don't free the result. */
 {
@@ -150,13 +159,11 @@ if (cartVarExists(cart, hgHubConnectRemakeTrackHub))
     // (with trailing dot) so unrelated vars like "quickLifted*" or
     // "quickLiftSourceDb" don't get matched and parsed as <hubId>.<db>.
     struct sqlConnection *conn = hConnectCentral();
-    char query[2048];
     hubVarList = cartVarsWithPrefix(cart, "quickLift.");
     for (hubVar = hubVarList; hubVar != NULL; hubVar = hubVar->next)
         {
         unsigned hubNumber = atoi(hubVar->name + strlen("quickLift."));
-        sqlSafef(query, sizeof(query), "select hubUrl from hubStatus where id='%d'", hubNumber);
-        char *hubUrl = sqlQuickString(conn, query);
+        char *hubUrl = hubUrlForId(conn, hubNumber);
         if (hubUrl == NULL)
             continue;
         char *errorMessage;
@@ -440,6 +447,22 @@ char save = *ptr2;
 unsigned val = sqlUnsigned(ptr1);
 *ptr2 = save;
 return  val;
+}
+
+boolean hubIdFromTrackNameNoAbort(char *trackName, unsigned *retId)
+/* Like hubIdFromTrackName(), but return FALSE instead of aborting when trackName is not
+ * hub_<digits>_<rest>. */
+{
+if (trackName == NULL || !startsWith("hub_", trackName))
+    return FALSE;
+char *idStart = trackName + strlen("hub_");
+size_t idLen = strspn(idStart, "0123456789");
+if (idLen == 0 || idLen > 9 || idStart[idLen] != '_')   // 9 digits always fit in an unsigned
+    return FALSE;
+char idBuf[16];
+safencpy(idBuf, sizeof idBuf, idStart, idLen);
+*retId = sqlUnsigned(idBuf);
+return TRUE;
 }
 
 char *hubConnectSkipHubPrefix(char *trackName)
@@ -1427,10 +1450,7 @@ boolean hubConnectIdIsCuratedHub(char *db, unsigned hubId)
  * cannot make us open or re-check an arbitrary hub. */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[1024];
-sqlSafef(query, sizeof query, "select hubUrl from %s where id=%u",
-         getHubStatusTableName(), hubId);
-char *hubUrl = sqlQuickString(conn, query);
+char *hubUrl = hubUrlForId(conn, hubId);
 hDisconnectCentral(&conn);
 boolean ret = hubConnectIsCuratedHubUrl(db, hubUrl);
 freeMem(hubUrl);
@@ -1632,6 +1652,99 @@ struct sqlConnection *conn = hConnectCentral();
 char *name = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 return name;
+}
+
+static boolean isGenarkHubUrl(char *name, char *hubUrl)
+/* Return TRUE if hubUrl is the GenArk hub of the assembly with this accession. */
+{
+char *genark = genarkUrl(name);
+boolean ret = (genark != NULL && sameString(genark, hubUrl));
+freeMem(genark);
+return ret;
+}
+
+char *hubConnectPortableDb(char *db, char **retHubUrl)
+/* Return the name that selects assembly db in any cart, also one that has never connected
+ * db's hub, and set *retHubUrl to the URL of a hub that has to be connected with it, or NULL.
+ * A native assembly, an unparseable name or a hub that is no longer in hubStatus come back
+ * unchanged with no URL; the curated or GenArk copy of an assembly (hub_<id>_hs1,
+ * hub_<id>_GCF_...) comes back as the bare name, which the cart reconnects by itself; any other
+ * assembly hub comes back as its bare name with the hub's URL, to use as genome= with hubUrl=.
+ * Do not free either result.  The last answer is kept, since menuBar() and the page can both
+ * ask for the same db. */
+{
+static char *lastDb = NULL, *lastName = NULL, *lastHubUrl = NULL;
+*retHubUrl = NULL;
+unsigned hubId;
+if (!hubIdFromTrackNameNoAbort(db, &hubId))
+    return db;
+if (lastDb != NULL && sameString(lastDb, db))
+    {
+    *retHubUrl = lastHubUrl;
+    return lastName;
+    }
+char *name = trackHubSkipHubName(db);
+/* The hub of the cart's own assembly is already loaded, so take its URL from memory; any other
+ * hub costs a hubStatus query, which never fetches the hub. */
+char *hubUrl;
+if (trackHubDatabase(db))
+    hubUrl = cloneString(trackHubGetGenome(db)->trackHub->url);
+else
+    {
+    struct sqlConnection *conn = hConnectCentral();
+    hubUrl = hubUrlForId(conn, hubId);
+    hDisconnectCentral(&conn);
+    }
+char *portableName = db;
+char *portableHubUrl = NULL;
+if (isNotEmpty(hubUrl))
+    {
+    /* The bare name is enough only when this hub is the curated or GenArk copy of that name.
+     * A user hub may call its own assembly "hg38" or "GCF_000001405.40", and the bare name
+     * would then open ours instead of theirs.  Most hub traffic is GenArk, so for an accession
+     * ask about GenArk first. */
+    boolean isAccession = (startsWith("GCF_", name) || startsWith("GCA_", name));
+    boolean bareIsEnough = isAccession ?
+        (isGenarkHubUrl(name, hubUrl) || hubConnectIsCuratedHubUrl(name, hubUrl)) :
+        (hubConnectIsCuratedHubUrl(name, hubUrl) || isGenarkHubUrl(name, hubUrl));
+    portableName = name;
+    if (!bareIsEnough)
+        portableHubUrl = hubUrl;
+    }
+freeMem(lastDb);
+freeMem(lastHubUrl);
+lastDb = cloneString(db);
+lastName = lastDb + (portableName - db);    // portableName points into db
+lastHubUrl = cloneString(portableHubUrl);
+freeMem(hubUrl);
+*retHubUrl = lastHubUrl;
+return lastName;
+}
+
+char *hubConnectDbUrlArgs(char *db)
+/* Return the CGI arguments, URL-encoded and without a leading '&', that select the assembly db in
+ * any cart, also one that has never connected db's hub: "db=<name>" for a native assembly, a
+ * curated hub such as hs1 or a GenArk assembly (the cart connects those from the name), else
+ * "hubUrl=<url>&genome=<name>".  A bare "db=hub_<id>_<name>" only works in a cart that is
+ * already connected to that hub, and hub ids differ between servers; a cart without the hub
+ * silently falls back to the default assembly.  Use this for every link that can be opened
+ * outside the current cart: share links, URLs put into the address bar, links in email.
+ * A hub that is no longer in hubStatus has nothing better to offer: its db comes back as
+ * db=hub_<id>_<name>, which still only works in a cart connected to it.  Costs up to four
+ * hgcentral queries for a hub assembly (see hubConnectPortableDb()), none for a native one.
+ * Free the result with freeMem(). */
+{
+struct dyString *dy = dyStringNew(0);
+char *hubUrl;
+char *name = hubConnectPortableDb(db, &hubUrl);
+if (hubUrl == NULL)
+    cgiEncodeIntoDy("db", name, dy);
+else
+    {
+    cgiEncodeIntoDy("hubUrl", hubUrl, dy);
+    cgiEncodeIntoDy("genome", name, dy);
+    }
+return dyStringCannibalize(&dy);
 }
 
 void addPublicHubsToHubStatus(struct cart *cart, struct sqlConnection *conn, char *publicTable, char  *statusTable)

@@ -566,10 +566,11 @@ return distance;
 
 static struct tdbRecord *findParent(struct tdbRecord *rec,
                                     char *parentFieldName, struct hash *hash,
-                                    unsigned currentReleaseBit)
+                                    unsigned currentReleaseBit, boolean warnMissing)
 /* Find parent record if possible.  This is a bit complicated by wanting to
  * match parents and children from the same release if possible.  Our
- * strategy is to just ignore records from the wrong release. */
+ * strategy is to just ignore records from the wrong release.
+ * If warnMissing, warn when the parent cannot be found. */
 {
 if (rec->override)  // don't do these
     return NULL;
@@ -602,12 +603,14 @@ for (hel = hashLookup(hash, parentName); hel != NULL; hel = hashLookupNext(hel))
 if (closestParent != NULL)
     return closestParent;
 
-recordWarn(rec, "parent %s of %s release %s doesn't exist", parentName, rec->key,
-           naForNull(tdbRecordFieldVal(rec, "release")));
+if (warnMissing)
+    recordWarn(rec, "parent %s of %s release %s doesn't exist", parentName, rec->key,
+               naForNull(tdbRecordFieldVal(rec, "release")));
 return NULL;
 }
 
-static void linkUpParents(struct tdbRecord *list, char *parentField, unsigned currentReleaseBit)
+static void linkUpParents(struct tdbRecord *list, char *parentField, unsigned currentReleaseBit,
+                          boolean warnMissing)
 /* Link up records according to parent/child relationships. */
 {
 /* Zero out children, parent, and older sibling fields, since going to recalculate
@@ -627,7 +630,8 @@ for (rec = list; rec != NULL; rec = rec->next)
 /* Scan through linking up parents. */
 for (rec = list; rec != NULL; rec = rec->next)
     {
-    struct tdbRecord *parent = findParent(rec, parentField, hash, currentReleaseBit);
+    struct tdbRecord *parent = findParent(rec, parentField, hash, currentReleaseBit,
+                                          warnMissing);
     if (parent != NULL)
 	{
 	rec->parent = parent;
@@ -655,7 +659,9 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
     verbose(2, "Read %d records starting from %s\n", slCount(fileRecords), fileName);
     fileRecords = filterOnRelease(fileRecords, currentReleaseBit);
     verbose(2, "After filterOnRelease %d records\n", slCount(fileRecords));
-    linkUpParents(fileRecords, parentField, currentReleaseBit);
+    /* No linkUpParents here: a parent may be defined at a higher level (e.g. an
+     * organism-level superTrack with assembly-level children), as hgTrackDb allows.
+     * Parents are linked once all levels are merged, in inheritFromParents. */
     checkDupeKeys(fileRecords, TRUE, currentReleaseBit);
     struct tdbRecord *record, *nextRecord;
     for (record = fileRecords; record != NULL; record = nextRecord)
@@ -710,7 +716,7 @@ static void inheritFromParents(struct tdbRecord *list, char *parentField, char *
 /* Go through list.  If an element has a parent field, then fill in non-existent fields from
  * parent. */
 {
-linkUpParents(list, parentField, currentReleaseBit);
+linkUpParents(list, parentField, currentReleaseBit, TRUE);
 
 /* Scan through doing inheritance. */
 struct tdbRecord *rec;
@@ -1115,7 +1121,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
     inheritFromParents(recordList, "parent", "noInherit", releaseBit, lm);
-    linkUpParents(recordList, "parent", releaseBit);
+    linkUpParents(recordList, "parent", releaseBit, FALSE); // already warned above
     checkDupeKeys(recordList, FALSE, releaseBit);
 
     if (clCheck)

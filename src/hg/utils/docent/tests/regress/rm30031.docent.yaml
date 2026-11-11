@@ -1,0 +1,80 @@
+# #30031 -- loading a session throws away everything the user had in the browser.  The
+# ticket asked for a way back.  6e201f9c97f (Christopher Lee, 2026-10-09, refs #35736 and
+# #30031) added a list of recent views; #35736 note-81 (2026-11) made it what it is now:
+# My Data > Restore Previous Session lists the copies of the cart made just before a session
+# or settings load replaced it, and nothing else.  Visiting pages, opening the list or signing
+# in adds nothing.
+#
+# hg/lib/cart.c: cartKeepCopyBeforeLoad() stores the copy in a sessionDb row with the
+# hgS_prevViewOf marker and puts it on the "recentSessions" list (userDb only, at most 20, at
+# most 7 days old).  A load without a known hgsid -- a session link, My Sessions, a URL load in
+# a new tab -- copies the cart this web browser saved last, the userDb row.
+# hg/hgTracks/hgTracks.c: outputRecentSessionsData() writes `var recentSessions = [...]` with
+# the marked rows only; showSessionLoadNotice() puts the note with the "Open previous session in
+# new tab" button (#openPrevSessionBtn) and the My Data link (#recentViewsLink).
+# hg/js/hgTracks.js: sessionLoadDialog, a jQuery UI dialog with the id #sessionLoadDialog.
+#
+# How the script runs: a docent `goto:` carries no hgsid, so each request below starts a new
+# hgsid under the same hguid cookie.  The first visit makes the userDb row, the second leaves
+# chr7 in it.  Opening the list then shows no copies, as visits add none.  Then a settings file
+# is loaded by URL, which copies the chr7 view.
+#
+# Checks:
+#   * Before the load the list is empty: page visits are not on it.
+#   * After the load the note has the button and the link, the link opens the dialog, and the
+#     dialog lists the copy, labeled as made before a file or URL load, with the chr7 position,
+#     which the loaded settings (an alt contig) do not have.
+#   * #imgTbl, so the page really drew and the settings really loaded.
+#   * The next hgTracks page has no note: the marker is used once.
+#
+# NOT asserted: the time on the row (it depends on the clock), and the tab the button opens.
+#
+# hg.conf: `recentSessions.enable` and `sessionLoadNotice` both default to OFF.  genome-test
+# (hgwdev) sets both on; hgwbeta and the RR (copies in ~/kent/confs) do not.  A server without
+# them fails at the first wait for #sessionLoadDialog, and that is the configuration, not a
+# regression:
+#     grep -n 'recentSessions\|sessionLoadNotice' /usr/local/apache/cgi-bin/hg.conf
+proof:
+  - "assertion-only 2026-10-10 -- written from #30031 and 6e201f9c97f after it reached genome-test"
+  - "release-ab 2026-10-10 -- passes on genome-test (master with 6e201f9c97f, recentSessions.enable=on); fails on hgw0 (v504, which has neither the code nor the setting) at step 5, the wait for #sessionLoadDialog: the session loaded and v504 drew the tracks with no dialog"
+  - "sandbox-ab 2026-11-06 -- rewritten for #35736 note-81, copies only before a load. Passes on hgwdev-max (this change); fails on genome-test (master before it) at step 5: the list there still says 'Recent Browser Views' and lists the page visits"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  # Two requests, each a new hgsid under one hguid.  The first makes the userDb row.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871"
+
+  # Page visits are not on the list.
+  - goto: "/cgi-bin/hgTracks?hgS_showRecentViews=1"
+  - wait: '#sessionLoadDialog'
+  - expect:
+      text:
+        - "Restore Previous Session"
+        - "There are no copies yet in this web browser."
+
+  # Load settings from a URL.  The note offers the copy of the chr7 view.
+  - loadSession: "https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/utils/docent/tests/regress/sessionFiles/RM_35326_bug.txt"
+  - wait: '.notifBoxOnce'
+  - expect:
+      text:
+        - "You have loaded browser settings from a file or URL."
+        - "Your previous tracks and settings were replaced."
+      has: ['#imgTbl', '#openPrevSessionBtn', '#recentViewsLink']
+  - click: '#recentViewsLink'
+  - wait: '#sessionLoadDialog'
+  - expect:
+      text:
+        - "Before you opened settings from a file or URL"
+        - "chr7:155799529-155812871"
+      has: '#sessionLoadDialog a[href*="hgsid="]'
+
+  # The next page has no note.
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      has: '#imgTbl'
+      noHas: '.notifBoxOnce'

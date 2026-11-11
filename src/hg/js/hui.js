@@ -1839,7 +1839,7 @@ function myVariantsShareUrl(token) {
     // carries no user name and no assembly scope; a share covers its project
     // wherever that project has annotations.
     return window.location.protocol + "//" + window.location.host +
-        "/cgi-bin/hgTracks?myVarShare=" + token + "&db=" + getDb();
+        "/cgi-bin/hgTracks?myVarShare=" + token + "&" + dbUrlArgs(getDb());
 }
 
 function myVariantsShareCreate() {

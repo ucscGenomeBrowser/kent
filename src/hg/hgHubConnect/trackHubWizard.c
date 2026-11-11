@@ -12,6 +12,7 @@
 #include "trashDir.h"
 #include "hgHubConnect.h"
 #include "jsHelper.h"
+#include "jsonParse.h"
 #include "web.h"
 #include "wikiLink.h"
 #include "customTrack.h"
@@ -406,7 +407,17 @@ webIncludeFile("inc/hgMyData.html");
 webIncludeResourceFile("hgMyData.css");
 
 jsInlineF("\nvar isLoggedIn = %s;\n", getUserName() ? "true" : "false");
-jsInlineF("\nvar cartDb=\"%s %s\";\n", trackHubSkipHubName(hGenome(database)), database);
+// The default genome of an upload, written into the hub.txt it creates and into its share link.
+// Both are read in other carts, where a hub assembly's hub_<id>_ prefix means nothing, so a GenArk
+// or curated assembly gets its bare name, which is what a track hub on it has to say.  Any other
+// assembly hub keeps its cart name: its bare name opens nothing, and the cart name at least works
+// in the user's own cart.
+char *uploadHubUrl = NULL;
+char *uploadDb = hubConnectPortableDb(database, &uploadHubUrl);
+if (uploadHubUrl != NULL)
+    uploadDb = database;
+jsInlineF("\nvar cartDb=\"%s %s\";\n", jsonStringEscape(trackHubSkipHubName(hGenome(database))),
+          jsonStringEscape(uploadDb));
 jsInlineF("\nvar tusdEndpoint=\"%s\";\n", cfgOptionDefault("hubSpaceTusdEndpoint", NULL));
 jsInlineF("\nvar fileListEndpoint=\"%shgHubConnect\";\n", hLoginHostCgiBinUrl());
 jsInlineF("\nvar loginHost=\"http%s://%s\";\n", loginUseHttps() ? "s" : "", wikiLinkHost());
