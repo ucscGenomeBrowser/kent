@@ -1,12 +1,16 @@
 #!/bin/csh
 
 # Run from cron as:
-#   $HOME/bin/scripts/buildWithUseCases $HOME/kent/src alpha >& $HOME/kent/buildWithUse.log
+#   $HOME/bin/scripts/buildWithUseCases $HOME/kent/src alpha  (runBuildWithUseCases.sh; logs go to $NIGHTLY_LOGDIR)
 # or from bash command line:
-#   $HOME/bin/scripts/buildWithUseCases $HOME/kent/src > $HOME/kent/buildWithUse.log 2>&1
+#   $HOME/bin/scripts/buildWithUseCases $HOME/kent/src > some.log 2>&1
 
 echo
 echo '***' Starting ${0} script on `date`
+echo
+echo '***' make
+which make
+make --version
 echo
 echo '***' uptime
 uptime
@@ -37,6 +41,14 @@ if ("$1" != "") then
 endif
 cd ${targetDir}
 
+# Logs go to targetDir unless NIGHTLY_LOGDIR names another place; the nightly
+# cron (runBuildWithUseCases.sh) sets it so no logs land in the kent tree.
+set logDir = $targetDir
+if ($?NIGHTLY_LOGDIR) then
+  set logDir = $NIGHTLY_LOGDIR
+  mkdir -p $logDir
+endif
+
 echo '***' Current directory is `pwd`
 echo '***' Argv = $argv
 
@@ -57,30 +69,31 @@ echo
 # Each case will be tried and may fail.
 # An early failure must not interfere with the rest of the trial
 # argument order:                            USE_BAM
-#                                              USE_TABIX
-#                                                USE_SAMTABIX
-#                                                  USE_HTS
-#                                                    KNETFILE_HOOKS
-#                                                      USE_HAL
-rm -f $targetDir/buildWithUse.log >& /dev/null
+#                                              USE_SSL
+#                                                USE_TABIX
+#                                                  USE_SAMTABIX
+#                                                    USE_HTS
+#                                                      KNETFILE_HOOKS
+#                                                        USE_HAL
+rm -f $logDir/buildWithUse.log >& /dev/null
 
-$HOME/bin/scripts/buildOneUseCase $targetDir 0 0 0 0 0 0 0 $argv >>& $targetDir/buildWithUse.log
-# $HOME/bin/scripts/buildOneUseCase $targetDir 1 0 0 0 0 0 0 $argv >>& $targetDir/buildWithUse.log
-$HOME/bin/scripts/buildOneUseCase $targetDir 0 1 0 0 0 0 0 $argv >>& $targetDir/buildWithUse.log
-$HOME/bin/scripts/buildOneUseCase $targetDir 0 0 1 1 1 1 0 $argv >>& $targetDir/buildWithUse.log
-# $HOME/bin/scripts/buildOneUseCase $targetDir 1 1 0 0 0 0 0 $argv >>& $targetDir/buildWithUse.log
-$HOME/bin/scripts/buildOneUseCase $targetDir 1 0 1 1 1 1 0 $argv >>& $targetDir/buildWithUse.log
-$HOME/bin/scripts/buildOneUseCase $targetDir 0 1 1 1 1 1 0 $argv >>& $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 0 0 0 0 0 0 0 $argv >>& $logDir/buildWithUse.log
+# $HOME/bin/scripts/buildOneUseCase $targetDir 1 0 0 0 0 0 0 $argv >>& $logDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 0 1 0 0 0 0 0 $argv >>& $logDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 0 0 1 1 1 1 0 $argv >>& $logDir/buildWithUse.log
+# $HOME/bin/scripts/buildOneUseCase $targetDir 1 1 0 0 0 0 0 $argv >>& $logDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 1 0 1 1 1 1 0 $argv >>& $logDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 0 1 1 1 1 1 0 $argv >>& $logDir/buildWithUse.log
 
-$HOME/bin/scripts/buildOneUseCase $targetDir 1 1 1 1 1 1 0 $argv >>& $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 1 1 1 1 1 1 0 $argv >>& $logDir/buildWithUse.log
 
 # The last case is the desired outcome.  Errors stop the build and are emailed by cron.
-$HOME/bin/scripts/buildOneUseCase $targetDir 1 1 1 1 1 1 1 $argv >> $targetDir/buildWithUse.log
+$HOME/bin/scripts/buildOneUseCase $targetDir 1 1 1 1 1 1 1 $argv >> $logDir/buildWithUse.log
 set ret = $status
 echo "========================== cat buildWithUse.log ======================="
 echo "targetDir: $targetDir"
 # Make sure the build with use case logs are seen.
-cat $targetDir/buildWithUse.log
+cat $logDir/buildWithUse.log
 echo "============= end of buildWithUse.log ret code: $ret =================="
 # If the target build failed then be vocal (!0 return triggers mail from cron)
 if ($ret) exit $ret
@@ -91,17 +104,24 @@ make tags
 echo '***' Done with make tags
 
 echo
-echo '***' Entering make test on `date`
-make -k test
-echo '***' Done with make test
-if ($status) exit $status
+rm -f $logDir/makeTest.log
+echo '***' Entering make test on `date` >>& $logDir/makeTest.log
+make -k test >>& $logDir/makeTest.log
+echo '***' Done with make test >>& $logDir/makeTest.log
+set testError = `grep -E "Error [1-9]+" $logDir/makeTest.log | grep -v "ignored" | wc -l`
+if ( "$testError" != 0 ) then
+    echo "*** Nightly build completed with Error during make test."
+    echo "See $logDir/makeTest.log for failing tests"
+    exit -1
+endif
+#if ($status) exit $status
 
 # It would be good to look for errors in the use cases.
 echo
-set wc = `grep "*\*\* ERROR stopped" $targetDir/buildWithUse.log | wc -w`
+set wc = `grep "*\*\* ERROR stopped" $logDir/buildWithUse.log | wc -w`
 if ( "$wc" != "0" ) then
     echo "*** Nightly build completed with ERRORs in at least one USE case." | bash -c "cat - 1>&2"
-    echo "Details found in: $targetDir/buildWithUse.log" | bash -c "cat - 1>&2"
+    echo "Details found in: $logDir/buildWithUse.log" | bash -c "cat - 1>&2"
     exit -1
 endif
 echo "*** Nightly build completed successfully."

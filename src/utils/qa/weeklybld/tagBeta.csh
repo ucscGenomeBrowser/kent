@@ -73,7 +73,7 @@ if ( $status ) then
 endif
 git branch -D beta   # delete any old local beta branch
 
-echo "1" > pushedToRR.flag
+echo "1" > $BUILDSTATE/pushedToRR.flag
 
 echo "beta branch reset to the new branch v$BRANCHNN. [${0}: `date`]"
 

@@ -30,7 +30,7 @@
 #   if it looks stale (lists commits already on the branch). Each id is checked to
 #   exist and to not be a merge commit (NO merge commits in a cherry-pick).
 #   It is a forced-only phase (never auto-detected from the calendar) and is
-#   repeatable: each run is one patch round (logs/v${NN}.patch<N>.log), and the
+#   repeatable: each run is one patch round ($BUILDHOME/logs/weekly/v${NN}.patch<N>.log), and the
 #   checkpoint state file is cleared on success so the next round starts fresh.
 #
 #   The phase branches on pushedToRR.flag (written by tagBeta at wrap-up, removed
@@ -77,7 +77,11 @@ set -eEu -o pipefail
 SCRIPT_NAME="$(basename "$0")"
 WEEKLYBLD="/hive/groups/browser/newBuild/kent/src/utils/qa/weeklybld"
 BUILDENV="$WEEKLYBLD/buildEnv.csh"
-LOGDIR="$WEEKLYBLD/logs"
+# Logs and build state live outside the kent tree (buildEnv.csh BUILDLOGS /
+# BUILDSTATE), so they never show up in the build checkout's git status.
+BUILDHOME_DIR="/hive/groups/browser/newBuild"
+LOGDIR="$BUILDHOME_DIR/logs/weekly"
+STATEDIR="$BUILDHOME_DIR/state"
 LOCKFILE="/tmp/autoBuild.lock"
 GCAL_ICAL_URL="https://calendar.google.com/calendar/ical/ucsc.edu_vaaiq62mh73n78jonljfrnoof4%40group.calendar.google.com/public/basic.ics"
 DRY_RUN=false
@@ -332,7 +336,7 @@ smoke_failed_list() {
 
 state_init() {
     # $1 = phase name, $2 = version (NN) this phase produces
-    mkdir -p "$LOGDIR"
+    mkdir -p "$LOGDIR" "$STATEDIR"
     STATE_FILE="$LOGDIR/.autobuild.state.v${2}.${1}"
     if [[ -f "$STATE_FILE" ]]; then
         local done_steps
@@ -631,12 +635,12 @@ final_tag_branch() {
 }
 
 final_git_reports() {
-    if ! $DRY_RUN && [[ -e "$WEEKLYBLD/GitReports.ok" ]]; then
-        rm -f "$WEEKLYBLD/GitReports.ok"
+    if ! $DRY_RUN && [[ -e "$STATEDIR/GitReports.ok" ]]; then
+        rm -f "$STATEDIR/GitReports.ok"
     fi
-    run_tcsh "./buildGitReports.csh branch real >& doNewGit.log" || return 1
-    if ! $DRY_RUN && [[ ! -e "$WEEKLYBLD/GitReports.ok" ]]; then
-        die "git-reports completed but GitReports.ok not found. See doNewGit.log"
+    run_tcsh "./buildGitReports.csh branch real >& $LOGDIR/doNewGit.log" || return 1
+    if ! $DRY_RUN && [[ ! -e "$STATEDIR/GitReports.ok" ]]; then
+        die "git-reports completed but GitReports.ok not found. See $LOGDIR/doNewGit.log"
     fi
     return 0
 }
@@ -913,7 +917,7 @@ do_final() {
 
 generate_release_markdown() {
     local ver="$1"
-    local outdir="$WEEKLYBLD/markdownReleaseNotes"
+    local outdir="$STATEDIR/markdownReleaseNotes"
     local outfile="$outdir/v${ver}_markdown.txt"
     local url="https://genecats.gi.ucsc.edu/builds/versions-all/v${ver}.html"
 
@@ -1167,7 +1171,7 @@ wrapup_refresh_containers() {
 # The age cache is rebuilt into $LOGDIR, not in place: the committed
 # hgConfAges.json lives inside the source tree and refreshing it there would
 # leave the build tree's checkout dirty. The rebuild walks git history and takes
-# ~4 minutes. logs/ is untracked, so the cache adds no git noise.
+# ~4 minutes. $LOGDIR is outside the tree, so the cache adds no git noise.
 wrapup_sunset_report() {
     local catalog="$BUILDHOME/kent/src/hg/utils/hgConfCatalog/hgConfCatalog.py"
     local slog="$LOGDIR/v${BRANCHNN}.hgConfSunset.log"
@@ -1302,7 +1306,7 @@ do_wrapup() {
     log "  - Push to genome browser store: sudo /cluster/bin/scripts/gbib_gbic_push"
     log "  - Verify the GitHub release doZip.csh created (with submodule-complete"
     log "    source archives attached): https://github.com/ucscGenomeBrowser/kent/releases"
-    log "    Edit its notes if needed; source: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "    Edit its notes if needed; source: $STATEDIR/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
     log "    Note: GitHub's own auto-generated 'Source code' zip/tar.gz omit submodules;"
     log "    users should download the attached kent.src.zip / kent.src.tar.gz instead."
     log "  - Wait 1 day for nightly rsync, then verify hgdownload: https://hgdownload.soe.ucsc.edu/admin/exe/"
@@ -1379,7 +1383,7 @@ cherrypick_refresh_rel() {
 #
 # Every id is also checked to exist and to not be a merge commit either way.
 cherrypick_prepare_commits() {
-    local conf="$WEEKLYBLD/CherryPickCommits.conf"
+    local conf="$STATEDIR/CherryPickCommits.conf"
     local -a shas=()
     local from_cmdline=false
 
@@ -1477,7 +1481,7 @@ do_cherrypick() {
     # artifacts (re-run the relevant wrap-up steps). Absent => still in the QA
     # window; just land the patch + rebuild beta, wrap-up tags/artifacts later.
     local post_rr=false
-    if [[ -e "$WEEKLYBLD/pushedToRR.flag" ]]; then
+    if [[ -e "$STATEDIR/pushedToRR.flag" ]]; then
         post_rr=true
         log "pushedToRR.flag present -> POST-RR patch: will regenerate release artifacts."
         # This path re-runs doZip (GitHub upload), so require gh auth up front too.
@@ -1613,7 +1617,7 @@ patchtickets_query() {
 
     if $DRY_RUN; then
         # Later dry-run steps still need the list, so keep it in a temp file
-        # rather than writing the real worklist under logs/.
+        # rather than writing the real worklist under $LOGDIR.
         log "(dry-run) would write ${eligible} ticket(s) to $PATCHTICKETS_WORKLIST"
         PATCHTICKETS_WORKLIST=$(mktemp)
         printf '%s\n' "${lines[@]}" > "$PATCHTICKETS_WORKLIST"
