@@ -5,37 +5,32 @@
 # when he copied that virt: text into the position box and pressed go, nothing happened.
 # Jairo closed it in 2023 as no longer an issue.
 #
-# The virtual chromosome is now called "multi", not "virt".  The position display beside
-# the box still names a multi: range after the move to chr17 (on 2026-10-06 it reads
-# multi:2,689,877,736-2,689,958,924), because singleAltHaplo is the whole genome with one
-# alt swapped in.  So the first half of the ticket is by design today, and a noText of
-# "virt:" would pass on any build because the word itself is gone.  It is not asserted.
-#
-# What this script asserts is the half Bob settled on: the multi: text the display shows
-# works as a position.  It leaves chr17 first, so that a go that does "nothing" stays on
-# chr1 and fails, instead of staying on chr17 and passing.
+# The virtual chromosome is now called "multi", not "virt".  With multiRegionSpaces on
+# (#37788) the alt view holds only the chromosome the alt is placed on, with the alt
+# spliced in.  The old view was the whole genome with one alt swapped in, and that is
+# wider than a space can be.  So a position typed on another chromosome now leaves the alt
+# view and goes there, which settles the first half of the ticket:  the display reads
+# chr17, not a multi: range.
 #
 # Checks:
 #   step 1  the alt view really loaded: the Multi-region button is pressed and the alt
 #           sequence has its own region box.  Without this step the rest of the script
 #           could pass on a server that ignored singleAltHaplo.
 #   step 2  the move to chr17:43044295-43125483 really happens: the ideogram is chr17's
-#           (a cytoBand map box names chr17), knownGene is drawn, and the view is still
-#           multi-region.  noText is the warning the space path prints when a position
-#           cannot be placed in the view.
-#   step 3  back to chr1 (a chr1 ideogram, no chr17 one), so the next check starts
-#           somewhere else.
-#   step 4  the multi: range the display showed on chr17, typed into the position box
-#           and submitted, lands on chr17 again.
+#           (a cytoBand map box names chr17), knownGene is drawn, and the view has left
+#           multi-region, so the button is not pressed.  noText is the warning an earlier
+#           space build printed when it refused the move.
+#   step 3  back into the alt view.
+#   step 4  the half Bob settled on: a multi: position typed into the box and submitted
+#           works.  multi:1-100000 is the start of the alt view, which the display names
+#           as chr1:1-100,000, and the view stays multi-region.  The alt view holds two
+#           sequences, so it draws no ideogram to check instead.
 #
-# On hgwdev-demo6 (multiRegionSpaces) step 2 fails: the move to chr17 is refused with
-# "chr17:43044295-43125483 is not in this multi-region view."  That is a different failure
-# from this ticket, but it is the same user complaint: you cannot leave the alt.
-#
-# The multi: offsets come from hg38's chromosome sizes and the one alt, so a data update
-# cannot move them.
+# Before the #37788 fix of 2026-11-10 step 2 failed on genome-test with
+# "chr17:43044295-43125483 is not in this multi-region view."
 proof:
   - "assertion-only 2026-10-06 -- written from the ticket"
+  - "assertion-only 2026-11-10 -- rewritten for the space path:  a position on another chromosome leaves the alt view"
 
 target: genome-test
 db: hg38
@@ -53,19 +48,15 @@ steps:
   - expect:
       rows: [ruler, knownGene]
       noText: "is not in this multi-region view"
-      has:
-        - '#hgTracksConfigMultiRegionPage.pressed'
-        - 'area.cytoBand[data-tooltip*="chr17:"]'
+      has: 'area.cytoBand[data-tooltip*="chr17:"]'
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'
 
-  - goto: "/cgi-bin/hgTracks?position=chr1%3A2094367-3145714"
+  - goto: "/cgi-bin/hgTracks?position=chr1%3A2094367-3145714&virtModeType=singleAltHaplo&singleAltHaploId=chr1_KI270762v1_alt"
   - expect:
-      has: 'area.cytoBand[data-tooltip*="chr1:"]'
-      noHas: 'area.cytoBand[data-tooltip*="chr17:"]'
+      has: '#hgTracksConfigMultiRegionPage.pressed'
 
-  - goShow: "multi:2689877736-2689958924"
+  - goShow: "multi:1-100000"
   - expect:
       rows: [ruler, knownGene]
-      has:
-        - '#hgTracksConfigMultiRegionPage.pressed'
-        - 'area.cytoBand[data-tooltip*="chr17:"]'
-      noHas: 'area.cytoBand[data-tooltip*="chr1:"]'
+      text: "chr1:1-100,000"
+      has: '#hgTracksConfigMultiRegionPage.pressed'

@@ -23,6 +23,8 @@
 # same class as the known snp125-handler difference in a space.
 proof:
   - "assertion-only 2026-10-06 -- written from the ticket"
+  - "sandbox-ab 2026-11-10 -- failed at step 4 on genome-test (ENST00000357654 not drawn in the lifted GENCODE row, #38735), passed on ts park 38735 with the fix"
+  - "server-flip 2026-11-10 -- failed in the 2026-11-10 nightly on genome-test at step 4 (ENST00000357654 not drawn in the lifted GENCODE row); passed on genome-test by hand once 8925a142c70 was installed there the same day"
 
 target: genome-test
 db: hg38

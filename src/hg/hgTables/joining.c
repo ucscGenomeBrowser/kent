@@ -249,10 +249,12 @@ slReverse(&dtfList);
 return dtfList;
 }
 
-static void makeOrderedCommaFieldList(struct slName *orderList, 
-	struct joinerDtf *dtfList, struct dyString *dy)
+static void makeOrderedCommaFieldList(struct slName *orderList,
+	struct joinerDtf *dtfList, char *qualifier, struct dyString *dy)
 /* Given list in order, and a subset of fields to use, make
- * a comma separated list of that subset in order. */
+ * a comma separated list of that subset in order.  If qualifier is non-NULL,
+ * a field that is an SQL reserved word is written as qualifier.field, which
+ * MySQL accepts without quotes. */
 {
 struct joinerDtf *dtf;
 struct slName *order;
@@ -270,6 +272,8 @@ for (order = orderList; order != NULL; order = order->next)
 	    first = FALSE;
 	else
 	    dyStringAppendC(dy, ',');
+	if (qualifier != NULL && sqlIsReservedWord(order->name))
+	    dyStringPrintf(dy, "%s.", qualifier);
 	dyStringAppend(dy, order->name);
 	}
     }
@@ -284,7 +288,7 @@ void makeDbOrderedCommaFieldList(struct sqlConnection *conn,
 {
 char *split = chromTable(conn, table);
 struct slName *fieldList = sqlListFields(conn, split);
-makeOrderedCommaFieldList(fieldList, dtfList, dy);
+makeOrderedCommaFieldList(fieldList, dtfList, NULL, dy);
 slFreeList(&fieldList);
 freez(&split);
 }
@@ -298,6 +302,7 @@ char *track = dtfList->table;
 struct customTrack *ct = ctLookupName(track);
 char *type = ct->dbTrackType;
 struct slName *fieldList = NULL;
+char *qualifier = NULL;
 if (isMyVariantsType(type) ||
         sameWord("bedDetail", type) ||
         sameWord("barChart", type) ||
@@ -306,20 +311,18 @@ if (isMyVariantsType(type) ||
         sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    if (isMyVariantsType(type))
-        {
-        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
-        }
     fieldList = sqlListFields(conn, ct->dbTableName);
-    if (isMyVariantsSharedTrack(track))
+    if (isMyVariantsTrack(track))
         myVariantsStripHiddenFields(&fieldList);
     hFreeConn(&conn);
+    /* A My Annotations custom field can be named order or group. */
+    qualifier = ct->dbTableName;
     }
 else
     {
     fieldList = getBedFields(15);
     }
-makeOrderedCommaFieldList(fieldList, dtfList, dy);
+makeOrderedCommaFieldList(fieldList, dtfList, qualifier, dy);
 slFreeList(&fieldList);
 }
 
@@ -332,7 +335,7 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = hAllocConn(dtfList->database);
 struct slName *fieldList = bigBedGetFields(dtfList->table, conn);
-makeOrderedCommaFieldList(fieldList, dtfList, dy);
+makeOrderedCommaFieldList(fieldList, dtfList, NULL, dy);
 slFreeList(&fieldList);
 hFreeConn(&conn);
 }
@@ -343,7 +346,7 @@ static void makeLongTabixOrderedCommaFieldList(struct joinerDtf *dtfList,
  * long tabix file. */
 {
 struct slName *fieldList = getLongTabixFields();
-makeOrderedCommaFieldList(fieldList, dtfList, dy);
+makeOrderedCommaFieldList(fieldList, dtfList, NULL, dy);
 slFreeList(&fieldList);
 }
 
@@ -353,7 +356,7 @@ static void makeBamOrderedCommaFieldList(struct joinerDtf *dtfList,
  * big bed. */
 {
 struct slName *fieldList = bamGetFields();
-makeOrderedCommaFieldList(fieldList, dtfList, dy);
+makeOrderedCommaFieldList(fieldList, dtfList, NULL, dy);
 slFreeList(&fieldList);
 }
 
@@ -363,7 +366,7 @@ static void makeVcfOrderedCommaFieldList(struct joinerDtf *dtfList,
  * big bed. */
 {
 struct slName *fieldList = vcfGetFields();
-makeOrderedCommaFieldList(fieldList, dtfList, dy);
+makeOrderedCommaFieldList(fieldList, dtfList, NULL, dy);
 slFreeList(&fieldList);
 }
 
@@ -373,7 +376,7 @@ static void makeHicOrderedCommaFieldList(struct joinerDtf *dtfList,
  * big bed. */
 {
 struct slName *fieldList = hicGetFields();
-makeOrderedCommaFieldList(fieldList, dtfList, dy);
+makeOrderedCommaFieldList(fieldList, dtfList, NULL, dy);
 slFreeList(&fieldList);
 }
 
@@ -1259,7 +1262,9 @@ boolean doJoin = joinRequired(db, table,
 struct region *region;
 struct bed *bedList = NULL;
 char *idField = getIdField(db, curTrack, table, hti);
-struct hash *idHash = identifierHash(db, table);
+/* Pasted identifiers are kept under the name the user picked, which for a custom
+ * track is not its SQL table. */
+struct hash *idHash = identifierHash(dbVarName, tableVarName);
 
 if (! doJoin)
     {

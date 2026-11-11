@@ -1292,8 +1292,6 @@ PATHS = {
         h("hubSpaceTusdEndpoint", "url",
           "hg/hgHubConnect/trackHubWizard.c", default="NULL",
           verified=True, family="hubSpace"),
-        h("myVariantsDataDir", "path", "hg/lib/myVariants.c",
-          verified=True, note="Goes with the doMyVariants gate."),
         h("hgPhyloPlaceServerDir", "path", "hg/hgPhyloPlace/runUsher.c",
           verified=True),
         h("browser.documentRoot", "path", "hg/lib/hui.c",
@@ -1451,6 +1449,31 @@ ABUSE = {
         h("bottleneck.except", "internal", "hg/lib/botDelay.c",
           verified=True, family="bottleneck",
           note="IPs exempt from delay."),
+        h("bottleneck.serveOnFailure", "flag", "hg/lib/botDelay.c",
+          default="FALSE", role="gate", verified=True, ticket="37738",
+          family="bottleneck",
+          note="Serve the request when the bottleneck server cannot be reached, "
+               "instead of failing the CGI.  Without it an unreachable bottleneck "
+               "server takes down every CGI that consults it, which is about fifteen "
+               "of them plus das, so one process is a single point of failure for the "
+               "whole site.  hubApi follows the same gate: with it off hubApi answers "
+               "with a JSON 500, with it on hubApi serves the request like every other "
+               "CGI.  Flip it once QA has seen a browser run with the bottleneck server "
+               "stopped."),
+        h("bottleneck.failureDelay", "limit", "hg/lib/botDelay.c",
+          default='"0"', verified=True, ticket="37738", family="bottleneck",
+          note="Milliseconds to delay each request while the bottleneck server is "
+               "unreachable and bottleneck.serveOnFailure is on.  The default of 0 "
+               "serves at full speed, on the reasoning that an outage of ours should "
+               "not slow users down.  Capped at 2000."),
+        h("bottleneck.timeoutSeconds", "limit", "hg/lib/botDelay.c",
+          default='"10"', verified=True, ticket="37738", family="bottleneck",
+          note="Connect, read and write timeout on the bottleneck socket.  The stock socket "
+               "default is 120 seconds for a read and 10 for the connect, both far "
+               "longer than a rate-limit lookup can usefully take.  The connect is the "
+               "one that matters: a bottleneck host that drops packets instead of "
+               "refusing costs that much on every request.  Values above 10 are "
+               "treated as 10."),
         h("hguidIpTracking.maxIps", "limit", "hg/lib/botDelay.c",
           default='"10"', verified=True, family="hguidIpTracking"),
         h("hguidIpTracking.windowSeconds", "limit", "hg/lib/botDelay.c",

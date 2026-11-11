@@ -173,9 +173,13 @@ quickLiftMergeTest: mkdirs
 	diff expected/quickLiftMergeTest output/quickLiftMergeTest
 
 # Includes hgTracks/mafTrack.h for inSummaryMode, an inline there.  Reads hg19.
+# quickLiftSplitRanges is set on by name.  It changes the exact source ranges, and an
+# hg.conf that includes the shared one turns it on, so the answer would depend on who runs it.
 quickLiftMafSummaryTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -I../../hgTracks -o ${BIN_DIR}/quickLiftMafSummaryTester quickLiftMafSummaryTester.c ${MYLIBS} $L
-	${BIN_DIR}/quickLiftMafSummaryTester input/quickLift/lift.bb > output/quickLiftMafSummaryTest
+	echo "include ${HOME}/.hg.conf" > output/quickLiftMafSummary.conf
+	echo "quickLiftSplitRanges=on" >> output/quickLiftMafSummary.conf
+	HGDB_CONF=output/quickLiftMafSummary.conf ${BIN_DIR}/quickLiftMafSummaryTester input/quickLift/lift.bb > output/quickLiftMafSummaryTest
 	diff expected/quickLiftMafSummaryTest output/quickLiftMafSummaryTest
 
 refLinkNoRowTest: mkdirs

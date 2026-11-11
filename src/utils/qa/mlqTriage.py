@@ -97,6 +97,9 @@ STATUS_REJECTED = 6
 ACCOUNTS_MAX_AGE_HOURS = 48
 ACCOUNTS_REFRESH_HOURS = 20
 ACCOUNTS_MIN_ROWS = 25
+# Staff who answer the lists from an address that is not on their Redmine account.
+# Each counts only while that account is active. Lou, 2026-11-10.
+EXTRA_STAFF_ADDRESSES = {'clayfischer@ucsc.edu': 'clay', 'hclawson@ucsc.edu': 'hiram'}
 # How long after a message arrives the old script's action on it is looked for,
 # and when to stop looking. A held message can sit days before someone approves
 # it (2026-10 certificate-outage reports), so the window is a week; matching
@@ -757,6 +760,9 @@ def refreshAccounts(conn, force=False):
     rows = dbQuery("select lower(e.address) address, u.login from users u "
                    "join email_addresses e on e.user_id=u.id "
                    "where u.status=1 and u.type='User'")
+    active = {r['login'] for r in rows}
+    rows += [{'address': a, 'login': login} for a, login in EXTRA_STAFF_ADDRESSES.items()
+             if login in active]
     now = utcNow()
     conn.execute("delete from accounts")
     conn.executemany("insert or replace into accounts(address, login, refreshedAt) "
@@ -879,10 +885,9 @@ def observeOldScript(conn):
 
 
 def observeSubject(subject):
-    """Subject reduced for comparing a message with a ticket, for the observer only.
-
-    This is measurement code, not a decision the bot acts on, so a plain strip of
-    list tags and reply tokens is enough here."""
+    """Subject reduced for comparing a message with a ticket: list tags and reply
+    tokens stripped. The observer uses it, and Stage 2 uses it to find candidates for
+    a short subject; either way it only proposes, and nothing is filed on it alone."""
     s = (subject or '').lower()
     s = re.sub(r'\[[^\]]{1,15}\]', ' ', s)          # [genome-www], [EXT], [EXTERNAL]
     s = re.sub(r'\bext msg\b', ' ', s)
@@ -1632,15 +1637,28 @@ def matchCandidates(rec, verdict):
         ids += [r['id'] for r in dbQuery(
             "select id from issues where tracker_id=7 and subject like %s order by id desc "
             "limit %s", ('%' + subject.replace('%', '') + '%', CANDIDATES_PER_SOURCE))]
+    elif subject:
+        # A short subject ("File", "bugs") is part of too many other subjects, so here
+        # only a ticket whose whole subject is the same, list tags and Re: aside, counts.
+        ids += [r['id'] for r in dbQuery(
+            "select id, subject from issues where tracker_id=7 and subject like %s "
+            "order by id desc limit 200", ('%' + subject.replace('%', ''),))
+            if observeSubject(r['subject']) == observeSubject(subject)][:CANDIDATES_PER_SOURCE]
     # The sender's other tickets are evidence only for something Stage 1 judged a reply:
     # for a new question, the same person writing again is usually a new topic (a
     # Retrogenes question was matched to the sender's lincRNA ticket before this rule).
+    # A reply often comes from someone other than the opener (staff answering, a cc'd
+    # colleague), so the outside people it is addressed to count too.
     if verdict['disposition'] != 'question':
-        ids += [r['id'] for r in dbQuery(
-            "select i.id from issues i join custom_values cv on cv.customized_id=i.id "
-            "and cv.customized_type='Issue' and cv.custom_field_id=40 "
-            "where i.tracker_id=7 and cv.value like %s order by i.id desc limit %s",
-            ('%' + rec['fromAddr'] + '%', CANDIDATES_PER_SOURCE))]
+        people = [rec['fromAddr']] + [
+            a.lower() for _, a in email.utils.getaddresses([rec.get('to', ''), rec.get('cc', '')])
+            if '@' in a and not re.search(r'ucsc\.edu$|@lists\.', a, re.I)]
+        for addr in list(dict.fromkeys(people))[:4]:
+            ids += [r['id'] for r in dbQuery(
+                "select i.id from issues i join custom_values cv on cv.customized_id=i.id "
+                "and cv.customized_type='Issue' and cv.custom_field_id=40 "
+                "where i.tracker_id=7 and cv.value like %s order by i.id desc limit %s",
+                ('%' + addr + '%', CANDIDATES_PER_SOURCE))]
     # Only tickets that existed when the email arrived: otherwise a shadow or backfill run
     # finds the ticket mlqAutomate.py created from this very email and "matches" it.
     arrived = toDbTime(rec['receivedAt'])

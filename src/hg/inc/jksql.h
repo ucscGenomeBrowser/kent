@@ -464,6 +464,11 @@ unsigned long sqlLastAutoId64(struct sqlConnection *conn);
 unsigned int sqlLastAutoId(struct sqlConnection *conn);
 /* Return last automatically incremented id inserted into database (not 64-bit). */
 
+long long sqlAffectedRows(struct sqlConnection *conn);
+/* Return how many rows the last query inserted, updated or deleted.  Call it
+ * straight after the sqlUpdate() of that query.  Unlike sqlUpdateRows() this
+ * works for INSERT and DELETE, not only UPDATE. */
+
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args);
 /* Error message handler. */
 
@@ -673,6 +678,10 @@ void sqlCheckIdentifiersList(char* buffer, int bufSize, char *identifiers);
 #define sqlCkId sqlCheckIdentifier
 char *sqlCheckIdentifier(char *identifier);
 /* Check that only valid identifier characters are used */
+
+boolean sqlIsReservedWord(char *word);
+/* Return TRUE if word, in any case, is one MariaDB 10.6 or MySQL 8 will not
+ * take as an unquoted identifier, such as select or order. */
 
 
 // =============================

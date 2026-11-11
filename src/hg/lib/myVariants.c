@@ -11,8 +11,11 @@
 #include "trashDir.h"
 #include "obscure.h"
 #include "wikiLink.h"
+#include "htmshell.h"
+#include "hui.h"
+#include "hVarSubst.h"
 
-char *myVariantsItemTypes[] = { "transcript", "snv", "cnv" };
+char *myVariantsItemTypes[] = { "transcript", "snv", "cnv", "other" };
 int myVariantsNumItemTypes = ArraySize(myVariantsItemTypes);
 
 char *myVariantsCnvTypes[] = {
@@ -82,11 +85,10 @@ ret->description = row[13];
 ret->db = row[14];
 ret->ref = row[15];
 ret->alt = row[16];
-ret->project = row[17];
-ret->mouseover = row[18];
-ret->itemType = row[19];
-ret->cnvType = row[20];
-ret->id = sqlUnsigned(row[21]);
+ret->mouseover = row[17];
+ret->itemType = row[18];
+ret->cnvType = row[19];
+ret->id = sqlUnsigned(row[20]);
 }
 
 struct myVariants *myVariantsLoadByQuery(struct sqlConnection *conn, char *query)
@@ -119,26 +121,26 @@ return dyStringCannibalize(&dy);
 void myVariantsSaveToDb(struct sqlConnection *conn, struct myVariants *el, char *tableName, int updateSize)
 /* Save myVariants as a row to the table specified by tableName.
  * Uses explicit column names so custom fields in el->customFields are included.
- * If el->name is NULL or empty, fills it in post-INSERT as "Variant N" using
+ * If el->name is NULL or empty, fills it in post-INSERT as "Annotation N" using
  * the row's auto-increment id; sqlLastAutoId wraps MariaDB's mysql_insert_id,
  * which is per-connection and unaffected by concurrent INSERTs on other
  * connections. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,blockCount,blockSizes,chromStarts,description,db,ref,alt,project,mouseover,itemType,cnvType", tableName);
+sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,blockCount,blockSizes,chromStarts,description,db,ref,alt,mouseover,itemType,cnvType", tableName);
 
-/* Append custom field column names */
+/* Append custom field column names, quoted because one can be named order. */
 struct slPair *cf;
 for (cf = el->customFields; cf != NULL; cf = cf->next)
-    sqlDyStringPrintf(update, ",%s", cf->name);
+    sqlDyStringPrintf(update, ",`%s`", cf->name);
 
 char *insertName = isEmpty(el->name) ? "" : el->name;
 char *blockSizesStr = commaIntList(el->blockSizes, el->blockCount);
 char *chromStartsStr = commaIntList(el->chromStarts, el->blockCount);
-sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'",
+sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s'",
     el->bin, el->chrom, el->chromStart, el->chromEnd, insertName, el->score, el->strand,
     el->thickStart, el->thickEnd, el->itemRgb, el->blockCount, blockSizesStr, chromStartsStr,
-    el->description, el->db, el->ref, el->alt, el->project, el->mouseover,
+    el->description, el->db, el->ref, el->alt, el->mouseover,
     isEmpty(el->itemType) ? "snv" : el->itemType,
     isEmpty(el->cnvType) ? "" : el->cnvType);
 freeMem(blockSizesStr);
@@ -156,13 +158,13 @@ if (isEmpty(el->name))
     {
     unsigned int newId = sqlLastAutoId(conn);
     struct dyString *nameUpdate = sqlDyStringCreate(
-        "update %s set name = 'Variant %u' where id = %u",
+        "update %s set name = 'Annotation %u' where id = %u",
         tableName, newId, newId);
     sqlUpdate(conn, dyStringCannibalize(&nameUpdate));
     el->id = newId;
     freez(&el->name);
     struct dyString *dy = dyStringNew(0);
-    dyStringPrintf(dy, "Variant %u", newId);
+    dyStringPrintf(dy, "Annotation %u", newId);
     el->name = dyStringCannibalize(&dy);
     }
 }
@@ -192,11 +194,10 @@ ret->description = cloneString(row[13]);
 ret->db = cloneString(row[14]);
 ret->ref = cloneString(row[15]);
 ret->alt = cloneString(row[16]);
-ret->project = cloneString(row[17]);
-ret->mouseover = cloneString(row[18]);
-ret->itemType = cloneString(row[19]);
-ret->cnvType = cloneString(row[20]);
-ret->id = sqlUnsigned(row[21]);
+ret->mouseover = cloneString(row[17]);
+ret->itemType = cloneString(row[18]);
+ret->cnvType = cloneString(row[19]);
+ret->id = sqlUnsigned(row[20]);
 return ret;
 }
 
@@ -273,7 +274,6 @@ ret->description = sqlStringComma(&s);
 ret->db = sqlStringComma(&s);
 ret->ref = sqlStringComma(&s);
 ret->alt = sqlStringComma(&s);
-ret->project = sqlStringComma(&s);
 ret->mouseover = sqlStringComma(&s);
 ret->itemType = sqlStringComma(&s);
 ret->cnvType = sqlStringComma(&s);
@@ -295,7 +295,6 @@ freeMem(el->description);
 freeMem(el->db);
 freeMem(el->ref);
 freeMem(el->alt);
-freeMem(el->project);
 freeMem(el->mouseover);
 freeMem(el->itemType);
 freeMem(el->cnvType);
@@ -385,10 +384,6 @@ fprintf(f, "%s", el->alt);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->project);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mouseover);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -404,30 +399,32 @@ fprintf(f, "%u", el->id);
 fputc(lastSep,f);
 }
 
+/* Keep in step with myVariants.as - this is the copy the schema page shows. */
 static char *myVariantsAutoSqlString =
 "table myVariants\n"
-"\"An item in a myVariants type track.\"\n"
+"\"One annotation in a My Annotations track.\"\n"
 "    (\n"
-"    uint bin;         \"Bin for range index\"\n"
+"    uint bin;         \"Range index used internally; not part of the annotation\"\n"
 "    string chrom;     \"Reference sequence chromosome or scaffold\"\n"
 "    uint   chromStart;\"Start position in chromosome\"\n"
 "    uint   chromEnd;  \"End position in chromosome\"\n"
-"    string name;      \"Name of item - up to 16 chars\"\n"
-"    uint  score;      \"0-1000.  Higher numbers are darker.\"\n"
-"    char[1] strand;   \"+ or - for strand\"\n"
-"    uint   thickStart;\"Start of thick part\"\n"
-"    uint   thickEnd;  \"End position of thick part\"\n"
-"    uint itemRgb;     \"RGB 8 bits each as in bed\"\n"
+"    string name;      \"Label shown on the annotation\"\n"
+"    uint  score;      \"Unused. Annotations are colored by itemRgb\"\n"
+"    char[1] strand;   \"+ or - for strand, . when not known\"\n"
+"    uint   thickStart;\"Start of the thick part; the coding start for a transcript\"\n"
+"    uint   thickEnd;  \"End of the thick part; the coding end for a transcript\"\n"
+"    uint itemRgb;     \"Display color, RGB 8 bits each as in bed\"\n"
 "    uint blockCount;  \"Number of blocks\"\n"
 "    int[blockCount] blockSizes; \"Comma separated list of block sizes\"\n"
 "    int[blockCount] chromStarts; \"Start positions relative to chromStart\"\n"
-"    lstring description; \"Longer item description\"\n"
-"    string db;        \"database name of this annotation\"\n"
-"    string ref;       \"reference allele\"\n"
-"    string alt;       \"alternate allele\"\n"
-"    string project;    \"project name for grouping variants\"\n"
-"    string mouseover;  \"short mouseover text for hover display\"\n"
-"    uint id;          \"Unique ID for item\"\n"
+"    lstring description; \"Longer notes about the annotation\"\n"
+"    string db;        \"Assembly this annotation is on (hg38, mm39, etc.)\"\n"
+"    string ref;       \"Reference allele on the forward genomic strand\"\n"
+"    string alt;       \"Alternate allele on the forward genomic strand\"\n"
+"    string mouseover;  \"Short text shown when hovering over the annotation\"\n"
+"    string itemType;   \"Annotation type: transcript, snv, cnv or other\"\n"
+"    string cnvType;    \"gnomAD CNV term; empty unless itemType is cnv\"\n"
+"    uint id;          \"Row identifier used internally; not part of the annotation\"\n"
 "    )\n"
 ;
 
@@ -472,153 +469,394 @@ for (p = userName; *p; p++)
 return dyStringCannibalize(&dy);
 }
 
-char *myVariantsGetTableName(char *userName)
-/* Build the SQL table name for this user's myVariants.  Encodes the user
- * name so non-identifier characters (e.g. '@' in email-style logins) don't
- * fail sqlCheckIdentifier. */
+/* Longest encoded login allowed in a table name.  MySQL identifiers stop at 64
+ * characters, and the prefix, separator and random suffix take 20. */
+#define MYVARIANTS_ENCODED_USER_MAXLEN 30
+
+static char *myVariantsNewTableName(char *userName)
+/* Build an unused SQL table name for a new project of this user's:
+ * myVariants_<encoded login>_<8 random characters>.  The suffix is random rather
+ * than the registry id because the table is created before the registry row, so
+ * the id is not known yet, and because a name that never changes lets a project
+ * be renamed without renaming its track.  Caller frees. */
 {
-if (!userName)
-    return NULL;
 char *encoded = encodeUserNameForIdentifier(userName);
-struct dyString *tableName = dyStringCreate(MYVARIANTS_TRACK_PREFIX "%s", encoded);
+/* The login is in the name to make a stray table recognizable, not to make it
+ * unique; the random suffix does that.  So truncating it is safe. */
+if (strlen(encoded) > MYVARIANTS_ENCODED_USER_MAXLEN)
+    encoded[MYVARIANTS_ENCODED_USER_MAXLEN] = 0;
+char *key = makeRandomKey(32);
+/* makeRandomKey returns base64url text, which can hold '-'; keep the
+ * identifier to alphanumerics and underscore. */
+subChar(key, '-', '_');
+struct dyString *dy = dyStringCreate(MYVARIANTS_TRACK_PREFIX "%s_%s", encoded, key);
 freeMem(encoded);
-return dyStringCannibalize(&tableName);
+freeMem(key);
+return dyStringCannibalize(&dy);
 }
 
-char *myVariantsGetDbTable(char *userName)
-/* Return the string db.tableName based on the userName for use in sql statements
- * without specifying the database */
+static void myVariantsCreateItemTable(struct sqlConnection *conn, char *dbTable)
+/* Create one project's annotation table.  Keep in step with myVariants.sql and
+ * with myVariantsAutoSqlString above. */
 {
-char *db = myVariantsGetDatabaseForUser(userName);
-char *tbl = myVariantsGetTableName(userName);
-if (isNotEmpty(db) && isNotEmpty(tbl))
+struct dyString *createTable = sqlDyStringCreate(
+        "CREATE TABLE %s (\n"
+        "    bin int unsigned not null,\n"
+        "    chrom varchar(255) not null,\n"
+        "    chromStart int unsigned not null,\n"
+        "    chromEnd int unsigned not null,\n"
+        "    name varchar(255) not null,\n"
+        "    score int unsigned not null,\n"
+        "    strand char(1) not null,\n"
+        "    thickStart int unsigned not null,\n"
+        "    thickEnd int unsigned not null,\n"
+        "    itemRgb int unsigned not null,\n"
+        "    blockCount int unsigned not null,\n"
+        "    blockSizes longblob not null,\n"
+        "    chromStarts longblob not null,\n"
+        "    description longblob not null,\n"
+        "    db varchar(255) not null,\n"
+        "    ref varchar(255) not null,\n"
+        "    alt varchar(255) not null,\n"
+        "    mouseover varchar(255) not null,\n"
+        "    itemType varchar(16) not null default 'snv',\n"
+        "    cnvType varchar(32) not null default '',\n"
+        "    id int auto_increment,\n"
+        "    PRIMARY KEY(id),\n"
+        "    INDEX(chrom(16),bin),\n"
+        "    INDEX(db)\n"
+        ") ENGINE=InnoDB;", dbTable);
+sqlUpdate(conn, dyStringCannibalize(&createTable));
+}
+
+struct myVariantsProject *myVariantsNewProject(char *userName, char *label,
+    boolean *retCreated)
+/* Create a project for userName: a new annotation table plus the registry row
+ * that names it.  The table is created first, so a request that dies part way
+ * leaves a table no row points at, never a row pointing at a table that is not
+ * there.  Returns the existing project when the label is already taken, so a
+ * user cannot end up with two tracks they cannot tell apart.  Returns NULL if
+ * userName is empty, label is empty or only whitespace, or the label is too
+ * long.  retCreated, when not NULL, is set TRUE only for a project this call
+ * made, so a caller that means to alter the new project's table does not alter
+ * one the user already had.  Caller frees with myVariantsProjectFreeList. */
+{
+if (retCreated != NULL)
+    *retCreated = FALSE;
+if (isEmpty(userName) || isEmpty(skipLeadingSpaces(label))
+    || strlen(label) > MYVARIANTS_LABEL_MAXLEN)
+    return NULL;
+
+struct sqlConnection *central = hConnectCentral();
+if (!sqlTableExists(central, MYVARIANTS_PROJECT_TABLE))
     {
-    struct dyString *ret = dyStringCreate("%s.%s", db, tbl);
-    return dyStringCannibalize(&ret);
+    hDisconnectCentral(&central);
+    return NULL;
     }
-return NULL;
+/* Two projects with the same label would draw two tracks a user cannot tell
+ * apart, so reuse the existing one instead of making a second. */
+struct myVariantsProject *found = myVariantsProjectByLabelOnConn(central, userName, label);
+if (found != NULL)
+    {
+    hDisconnectCentral(&central);
+    return found;
+    }
+
+char *shardDb = myVariantsGetDatabaseForUser(userName);
+char *tableName = myVariantsNewTableName(userName);
+struct dyString *dy = dyStringCreate("%s.%s", shardDb, tableName);
+char *dbTable = dyStringCannibalize(&dy);
+
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+myVariantsCreateItemTable(conn, dbTable);
+hFreeConn(&conn);
+
+struct myVariantsProject *created = myVariantsProjectInsert(central, userName, dbTable, label);
+myVariantsForgetProjects();
+if (created == NULL)
+    {
+    /* Another request claimed this label between the lookup and the insert.
+     * Take theirs and drop the table just made, so the loser of the race does
+     * not leave one behind on every attempt. */
+    created = myVariantsProjectByLabelOnConn(central, userName, label);
+    conn = hAllocConn(CUSTOM_TRASH);
+    struct dyString *drop = sqlDyStringCreate("DROP TABLE IF EXISTS %s", dbTable);
+    sqlUpdate(conn, dyStringCannibalize(&drop));
+    hFreeConn(&conn);
+    }
+else if (retCreated != NULL)
+    *retCreated = TRUE;
+hDisconnectCentral(&central);
+freeMem(shardDb);
+freeMem(tableName);
+freeMem(dbTable);
+return created;
 }
 
-void myVariantsDeleteForDb(char *userName, char *targetDb)
-/* Delete the user's myVariants items for the given assembly.  No-op if the
- * table doesn't exist. */
+/* One request asks for the project list several times: the pending-edit sweep,
+ * the track build, and the block that hands the list to the page's JavaScript.
+ * The answer cannot change between them, so it is read once.  A CGI serves one
+ * request and exits, so there is nothing to invalidate. */
+static struct myVariantsProject *cachedProjects = NULL;
+static char *cachedProjectsUser = NULL;
+
+static struct myVariantsProject *cloneProjectList(struct myVariantsProject *list)
+/* Copy a project list so the caller can free what it is given without
+ * disturbing the cache.  Order is kept. */
 {
-if (isEmpty(userName) || isEmpty(targetDb))
-    return;
-char *dbTable = myVariantsTableExists(userName);
-if (isEmpty(dbTable))
-    return;
+struct myVariantsProject *copy = NULL, *proj;
+for (proj = list; proj != NULL; proj = proj->next)
+    {
+    struct myVariantsProject *one;
+    AllocVar(one);
+    one->id = proj->id;
+    one->userName = cloneString(proj->userName);
+    one->dbTable = cloneString(proj->dbTable);
+    one->label = cloneString(proj->label);
+    one->createdAt = cloneString(proj->createdAt);
+    slAddHead(&copy, one);
+    }
+slReverse(&copy);
+return copy;
+}
+
+void myVariantsForgetProjects()
+/* Drop the cached project list, so the next call reads it again.  Anything that
+ * creates, renames or removes a project calls this. */
+{
+myVariantsProjectFreeList(&cachedProjects);
+freez(&cachedProjectsUser);
+}
+
+struct myVariantsProject *myVariantsListProjects(char *userName)
+/* Return every project this user owns, oldest first.  NULL if none, or if the
+ * registry table is not installed.  Caller frees with
+ * myVariantsProjectFreeList. */
+{
+if (isEmpty(userName))
+    return NULL;
+if (cachedProjectsUser == NULL || !sameString(cachedProjectsUser, userName))
+    {
+    myVariantsForgetProjects();
+    struct sqlConnection *central = hConnectCentral();
+    if (sqlTableExists(central, MYVARIANTS_PROJECT_TABLE))
+        cachedProjects = myVariantsProjectList(central, userName);
+    hDisconnectCentral(&central);
+    cachedProjectsUser = cloneString(userName);
+    }
+return cloneProjectList(cachedProjects);
+}
+
+struct myVariantsProject *myVariantsDefaultProject(char *userName)
+/* Return the project a save with no project chosen goes into: the user's oldest
+ * one, or a new project named MYVARIANTS_DEFAULT_PROJECT when they have none.
+ * Every annotation belongs to a project, so this is what the quick-add paths
+ * and a first-time user get.  Caller frees. */
+{
+if (isEmpty(userName))
+    return NULL;
+struct myVariantsProject *list = myVariantsListProjects(userName);
+if (list != NULL)
+    {
+    struct myVariantsProject *oldest = list;
+    list = list->next;
+    oldest->next = NULL;
+    myVariantsProjectFreeList(&list);
+    return oldest;
+    }
+return myVariantsNewProject(userName, MYVARIANTS_DEFAULT_PROJECT, NULL);
+}
+
+struct myVariantsProject *myVariantsProjectForUser(char *userName, unsigned id)
+/* Return the project with this id if userName owns it, otherwise NULL.  This is
+ * the ownership check for a project id that came in from a form or a URL.
+ * Caller frees with myVariantsProjectFreeList. */
+{
+if (isEmpty(userName) || id == 0)
+    return NULL;
+struct sqlConnection *central = hConnectCentral();
+struct myVariantsProject *proj = NULL;
+if (sqlTableExists(central, MYVARIANTS_PROJECT_TABLE))
+    proj = myVariantsProjectById(central, id);
+hDisconnectCentral(&central);
+if (proj != NULL && !sameOk(proj->userName, userName))
+    myVariantsProjectFreeList(&proj);
+return proj;
+}
+
+struct myVariantsProject *myVariantsFindProject(char *userName, char *trackName)
+/* Return the project userName owns that draws as trackName, or NULL when
+ * trackName is not one of theirs.  This is the ownership check for an own
+ * track: a track name that does not come back is one the caller may not read.
+ * Caller frees. */
+{
+if (isEmpty(userName) || isEmpty(trackName))
+    return NULL;
+struct myVariantsProject *list = myVariantsListProjects(userName), *proj;
+struct myVariantsProject *found = NULL;
+for (proj = list; proj != NULL; proj = proj->next)
+    {
+    if (sameOk(myVariantsProjectTrackName(proj), trackName))
+        {
+        found = proj;
+        break;
+        }
+    }
+if (found != NULL)
+    {
+    slRemoveEl(&list, found);
+    found->next = NULL;
+    }
+myVariantsProjectFreeList(&list);
+return found;
+}
+
+boolean myVariantsRenameProject(unsigned id, char *userName, char *label)
+/* Set a project's label.  userName must own it, and the label must not be empty
+ * or only whitespace.  Returns TRUE if a row was updated.  The table and the
+ * track name are untouched, so visibility and the other per-track cart
+ * variables survive a rename. */
+{
+if (isEmpty(userName) || isEmpty(skipLeadingSpaces(label)))
+    return FALSE;
+struct sqlConnection *central = hConnectCentral();
+boolean ok = FALSE;
+if (sqlTableExists(central, MYVARIANTS_PROJECT_TABLE))
+    ok = myVariantsProjectRename(central, id, userName, label);
+myVariantsForgetProjects();
+hDisconnectCentral(&central);
+return ok;
+}
+
+boolean myVariantsDropProject(unsigned id, char *userName)
+/* Delete a project: its share, its registry row, then its table, in that
+ * order, so a request that dies part way leaves a table no row points at.
+ * userName must own the project.  Returns TRUE if it was deleted. */
+{
+if (isEmpty(userName))
+    return FALSE;
+struct sqlConnection *central = hConnectCentral();
+if (!sqlTableExists(central, MYVARIANTS_PROJECT_TABLE))
+    {
+    hDisconnectCentral(&central);
+    return FALSE;
+    }
+struct myVariantsProject *proj = myVariantsProjectById(central, id);
+if (proj == NULL || !sameString(proj->userName, userName))
+    {
+    myVariantsProjectFreeList(&proj);
+    hDisconnectCentral(&central);
+    return FALSE;
+    }
+char *dbTable = cloneString(proj->dbTable);
+myVariantsProjectFreeList(&proj);
+if (sqlTableExists(central, MYVARIANTS_SHARE_TABLE))
+    myVariantsRevokeSharesForProject(central, id, userName);
+boolean ok = myVariantsProjectDeleteRow(central, id, userName);
+myVariantsForgetProjects();
+hDisconnectCentral(&central);
+
+if (ok)
+    {
+    /* The table can go away between asking and dropping, and a concurrent
+     * delete should not abort. */
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    struct dyString *drop = sqlDyStringCreate("DROP TABLE IF EXISTS %s", dbTable);
+    sqlUpdate(conn, dyStringCannibalize(&drop));
+    hFreeConn(&conn);
+    }
+freeMem(dbTable);
+return ok;
+}
+
+int myVariantsCountForDb(char *dbTable, char *targetDb)
+/* Return how many annotations dbTable holds on targetDb.  0 if the table is
+ * gone, which is how a project whose table was swept shows up. */
+{
+if (isEmpty(dbTable) || isEmpty(targetDb))
+    return 0;
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-struct dyString *del = sqlDyStringCreate("DELETE FROM %s WHERE db='%s'",
-    dbTable, targetDb);
-sqlUpdate(conn, del->string);
-dyStringFree(&del);
+int count = 0;
+if (sqlTableExists(conn, dbTable))
+    {
+    char query[512];
+    sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE db='%s'", dbTable, targetDb);
+    count = sqlQuickNum(conn, query);
+    }
 hFreeConn(&conn);
+return count;
 }
 
 struct myVariantsShare *myVariantsResolveSharedTrack(char *trackName, struct cart *cart)
 /* For a "myVariants_shared_*" custom-track name, look up and revalidate the
- * share record from hgcentral. Returns NULL if the track is not a shared
- * track, the cart cookie is missing, the share has been revoked, or the
- * current user is not authorized (target user mismatch). The returned share
- * carries the validated owner/db/project/permission; callers should use these
- * (not the cart-supplied values) for authorization or scoping decisions.
- * Caller frees with myVariantsShareFree. */
+ * share record from hgcentral.  Returns NULL if the track is not a shared
+ * track, the cart does not hold the token, or the share has been revoked.  The
+ * returned share carries the validated projectId and permission; callers
+ * should use these, not any cart-supplied value, for authorization and
+ * scoping.  Caller frees with myVariantsShareFree.
+ *
+ * The token is the credential: anyone holding it may view the project, and may
+ * edit it when the share says so.  The cart variable is the record that this
+ * session was given the token, which is why cartLoadUserSession drops these
+ * variables when a user loads somebody else's saved session - a session must
+ * not pass the credential on. */
 {
 if (isEmpty(trackName) || !isMyVariantsSharedTrack(trackName))
     return NULL;
 char *token = trackName + strlen(MYVARIANTS_SHARED_TRACK_PREFIX);
+if (!myVariantsIsShareToken(token))
+    return NULL;
 char cartVar[256];
 safef(cartVar, sizeof(cartVar), MYVAR_SHARED_CART_PREFIX "%s", token);
-/* The cart-cookie presence gate is belt-and-suspenders: it ensures the share
- * was once accepted into this session before we hit hgcentral. The real
- * authorization is the targetUser check below against the live share row. */
 if (cart == NULL || !cartVarExists(cart, cartVar))
     return NULL;
 struct sqlConnection *conn = hConnectCentral();
-if (!sqlTableExists(conn, "myVariantsShares"))
+if (!sqlTableExists(conn, MYVARIANTS_SHARE_TABLE))
     {
     hDisconnectCentral(&conn);
     return NULL;
     }
 struct myVariantsShare *share = myVariantsGetShareByToken(conn, token);
 hDisconnectCentral(&conn);
-if (share == NULL)
-    return NULL;
-if (!myVariantsShareAllowsUser(share, getUserName()))
-    {
-    myVariantsShareFree(&share);
-    return NULL;
-    }
 return share;
 }
 
-char *myVariantsResolveDbTableForCustomTrack(char *trackName, struct cart *cart)
-/* For a custom-track name of the form "myVariants_*", return the fully
- * qualified SQL table (db.tableName) holding the items.  Handles both own
- * tracks and shared tracks. For shared tracks, revalidates the share against
- * hgcentral; returns NULL if the share has been revoked, downgraded out of
- * scope, or is not for the current user. */
+char *myVariantsShareDbTable(struct myVariantsShare *share)
+/* Return the fully qualified table the share's project is stored in, or NULL
+ * if the project is gone.  Caller frees. */
 {
-if (isEmpty(trackName))
+if (share == NULL)
     return NULL;
-if (isMyVariantsSharedTrack(trackName))
+struct sqlConnection *central = hConnectCentral();
+struct myVariantsProject *proj = NULL;
+if (sqlTableExists(central, MYVARIANTS_PROJECT_TABLE))
+    proj = myVariantsProjectById(central, share->projectId);
+hDisconnectCentral(&central);
+if (proj == NULL)
+    return NULL;
+/* A project id is only meaningful together with the owner the share names, so
+ * confirm the two still agree before handing back a table. */
+if (!sameOk(proj->userName, share->ownerUser))
     {
-    struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
-    if (share == NULL)
-        return NULL;
-    char *dbTable = myVariantsGetDbTable(share->ownerUser);
-    myVariantsShareFree(&share);
-    return dbTable;
+    myVariantsProjectFreeList(&proj);
+    return NULL;
     }
-if (isMyVariantsTrack(trackName))
-    {
-    /* trackName is the SQL-identifier-encoded form "myVariants_<encoded>".
-     * Resolve via the current logged-in user (an own track is only viewable
-     * by its owner) and verify the trackName matches the encoded form for
-     * that user before returning their db.tableName. */
-    char *userName = getUserName();
-    if (isEmpty(userName))
-        return NULL;
-    char *expected = myVariantsGetTableName(userName);
-    boolean match = sameOk(expected, trackName);
-    freeMem(expected);
-    if (!match)
-        return NULL;
-    return myVariantsGetDbTable(userName);
-    }
-return NULL;
+char *dbTable = cloneString(proj->dbTable);
+myVariantsProjectFreeList(&proj);
+return dbTable;
 }
 
-char *myVariantsSharedScopeWhere(char *trackName, struct cart *cart)
-/* For a "myVariants_shared_*" custom-track, return a SQL WHERE-clause
- * fragment that limits a query to the share's authorized project and db
- * (e.g. "db='hg38' and project='Variants'", or "db='hg38'" alone when the
- * share's project is "*"). Returns NULL for non-shared tracks or revoked
- * shares. Memoized per-process: callers receive a fresh cloneString that
- * they own. */
+char *myVariantsScopeWhere(char *database, char *trackName)
+/* Return a SQL WHERE-clause fragment limiting a myVariants query to the rows a
+ * page on database should see.  A project's table holds its annotations on
+ * every assembly, so this is the assembly clause; the project itself is the
+ * table, and needs no clause.  Returns NULL when there is nothing to add.
+ * Caller frees. */
 {
-static struct hash *cache = NULL;
-if (cache == NULL)
-    cache = hashNew(0);
-if (isEmpty(trackName) || !isMyVariantsSharedTrack(trackName))
+if (isEmpty(trackName) || !isMyVariantsTrack(trackName) || isEmpty(database))
     return NULL;
-char *cached = hashFindVal(cache, trackName);
-if (cached != NULL)
-    return cached[0] ? cloneString(cached) : NULL;
-
-char *result = NULL;
-struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
-if (share != NULL && isNotEmpty(share->db))
-    {
-    struct dyString *dy = sqlDyStringCreate("db='%s'", share->db);
-    if (isNotEmpty(share->project) && !sameString(share->project, "*"))
-        sqlDyStringPrintf(dy, " and project='%s'", share->project);
-    result = dyStringCannibalize(&dy);
-    }
-myVariantsShareFree(&share);
-hashAdd(cache, trackName, cloneString(result ? result : ""));
-return result;
+struct dyString *dy = sqlDyStringCreate("db='%s'", database);
+return dyStringCannibalize(&dy);
 }
 
 void myVariantsStripHiddenFields(struct slName **pFieldList)
@@ -635,7 +873,7 @@ for (fld = *pFieldList; fld != NULL; fld = next)
     next = fld->next;
     char *bare = strrchr(fld->name, '.');
     bare = bare ? bare + 1 : fld->name;
-    if (startsWith("_hidden_", bare))
+    if (startsWithNoCase("_hidden_", bare))
         freeMem(fld);
     else
         slAddHead(&kept, fld);
@@ -644,424 +882,242 @@ slReverse(&kept);
 *pFieldList = kept;
 }
 
-char *myVariantsTableExists(char *userName)
-/* See if we already have a table for this user. If so, return the name
- * of the table (in db.tableName format), else NULL */
+static char *myVariantsDescriptionHtml(char *trackName, char *ctDb)
+/* Return the shared description page for a My Annotations track, with $db and
+ * $track filled in so its Data Access links point at this track.  NULL if the
+ * file is not installed.  Caller frees. */
 {
-if (!userName)
+char descPath[PATH_LEN];
+safef(descPath, sizeof descPath, "%s/inc/myVariantsDesc.html", hDocumentRoot());
+if (!fileExists(descPath))
     return NULL;
-char *dbTable = myVariantsGetDbTable(userName);
-if (!dbTable)
+char *html = NULL;
+readInGulp(descPath, &html, NULL);
+if (isEmpty(html))
+    {
+    freeMem(html);
     return NULL;
-struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-boolean exists = sqlTableExists(conn, dbTable);
-hFreeConn(&conn);
-if (exists)
-    return dbTable;
-return NULL;
+    }
+struct trackDb *tdb;
+AllocVar(tdb);
+tdb->track = trackName;
+tdb->table = trackName;
+hVarSubstInVar(trackName, tdb, ctDb, &html);
+freeMem(tdb);
+return html;
 }
 
-char *myVariantsCreateTable(char *userName)
-/* Return name of myVariants table (in db.tableName format) for user if it exists or
- * we can create, NULL otherwise */
+static struct customTrack *myVariantsTrackForProject(char *trackName, char *dbTable,
+    char *shortLabel, char *longLabel, char *ctDb, int itemCount)
+/* Build one My Annotations custom track.  There is no ct file: the annotations
+ * are in SQL and every field here comes out of the registry, so the track is
+ * assembled in memory rather than written to a file and parsed back.  That
+ * also means no custom-track text a user can write ever names one of these
+ * tables. */
 {
-if (!userName)
-    return NULL;
-char *db = myVariantsGetDatabaseForUser(userName);
-char *tableName = myVariantsGetTableName(userName);
-if (!tableName)
-    return NULL;
-char *dbTable = myVariantsGetDbTable(userName);
-struct sqlConnection *existConn = hAllocConn(CUSTOM_TRASH);
-boolean exists = sqlTableExists(existConn, dbTable);
-hFreeConn(&existConn);
-if (exists)
-    return dbTable;
-else
-    {
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    struct dyString *createTable = sqlDyStringCreate(
-            "CREATE TABLE %s.%s (\n"
-            "    bin int unsigned not null,\n"
-            "    chrom varchar(255) not null,\n"
-            "    chromStart int unsigned not null,\n"
-            "    chromEnd int unsigned not null,\n"
-            "    name varchar(255) not null,\n"
-            "    score int unsigned not null,\n"
-            "    strand char(1) not null,\n"
-            "    thickStart int unsigned not null,\n"
-            "    thickEnd int unsigned not null,\n"
-            "    itemRgb int unsigned not null,\n"
-            "    blockCount int unsigned not null,\n"
-            "    blockSizes longblob not null,\n"
-            "    chromStarts longblob not null,\n"
-            "    description longblob not null,\n"
-            "    db varchar(255) not null,\n"
-            "    ref varchar(255) not null,\n"
-            "    alt varchar(255) not null,\n"
-            "    project varchar(255) not null,\n"
-            "    mouseover varchar(255) not null,\n"
-            "    itemType varchar(16) not null default 'snv',\n"
-            "    cnvType varchar(32) not null default '',\n"
-            "    id int auto_increment,\n"
-            "    PRIMARY KEY(id),\n"
-            "    INDEX(chrom(16),bin),\n"
-            "    INDEX(db),\n"
-            "    INDEX(project)\n"
-            ") ENGINE=InnoDB;", db, tableName);
-    sqlUpdate(conn, dyStringCannibalize(&createTable));
-    return myVariantsGetDbTable(userName);
-    }
-} 
+struct customTrack *ct;
+AllocVar(ct);
+struct trackDb *tdb = customTrackTdbDefault();
+tdb->track = cloneString(trackName);
+tdb->table = cloneString(trackName);
+tdb->shortLabel = cloneString(shortLabel);
+tdb->longLabel = cloneString(longLabel);
+tdb->type = cloneString(MYVARIANTS_TYPE);
+tdb->grp = cloneString(MYVARIANTS_GROUP_NAME);
+tdb->visibility = tvPack;
+tdb->html = myVariantsDescriptionHtml(tdb->track, ctDb);
+ct->tdb = tdb;
+ct->genomeDb = cloneString(ctDb);
+ct->dbTableName = cloneString(dbTable);
+ct->fieldCount = MYVARIANTS_NUM_COLS;
+/* dbTrackType is the loader type, and the annotations really are in SQL, so the
+ * type checks in hgTables read it here as they always have.  dbTrack and
+ * dbDataLoad stay FALSE on purpose: setting dbDataLoad sends every parse
+ * through ctDbTableExists, which touches customTrash.metaInfo, and dbTrash
+ * drops what it finds there after a few days.  These tables hold the user's
+ * own data and must not be swept. */
+ct->dbTrackType = cloneString(MYVARIANTS_TYPE);
+ctAddToSettings(ct, "tdbType", MYVARIANTS_TYPE);
+ctAddToSettings(ct, "itemRgb", "on");
+ctAddToSettings(ct, "group", MYVARIANTS_GROUP_NAME);
+/* ctAddToSettings hashes the pointer it is given rather than a copy, so the
+ * value has to outlive this function. */
+char countBuf[32];
+safef(countBuf, sizeof countBuf, "%d", itemCount);
+ctAddToSettings(ct, "itemCount", cloneString(countBuf));
+return ct;
+}
 
-
-static void readLabelsFromCtFile(char *path, char *trackName,
-                                 char **retShort, char **retLong)
-/* Parse the matching track line in an existing ctfile and pull shortLabel
- * and longLabel via hashVarLine.  Leaves *ret as NULL when not found or
- * path is missing. */
+void myVariantsAddTracks(struct customTrack **pCtList, struct cart *cart, char *genomeDb)
+/* Append the signed-in user's My Annotations tracks for genomeDb, one per
+ * project that has annotations there, plus one per share accepted into this
+ * cart.  Replaces the ct file the feature used to write and parse back on
+ * every request: the registry is the only copy of a project's name and table,
+ * so there is nothing a file would add. */
 {
-*retShort = NULL;
-*retLong = NULL;
-if (isEmpty(path) || isEmpty(trackName) || !fileExists(path))
+if (isEmpty(genomeDb))
     return;
-struct lineFile *lf = lineFileOpen(path, TRUE);
-char *line = NULL;
-while (lineFileNext(lf, &line, NULL))
+struct customTrack *added = NULL;
+char *userName = getUserName();
+
+/* The user's own projects. */
+struct myVariantsProject *projects = myVariantsListProjects(userName), *proj;
+for (proj = projects; proj != NULL; proj = proj->next)
     {
-    if (!startsWith("track ", line))
+    int count = myVariantsCountForDb(proj->dbTable, genomeDb);
+    if (count == 0)
         continue;
-    struct hash *settings = hashVarLine(line + strlen("track "), lf->lineIx);
-    char *name = hashFindVal(settings, "name");
-    if (name != NULL && sameString(name, trackName))
-        {
-        char *s = hashFindVal(settings, "shortLabel");
-        char *l = hashFindVal(settings, "longLabel");
-        if (s != NULL)
-            *retShort = cloneString(s);
-        if (l != NULL)
-            *retLong = cloneString(l);
-        hashFree(&settings);
-        break;
-        }
-    hashFree(&settings);
+    struct dyString *longLabel = dyStringCreate("My Annotations: %s", proj->label);
+    struct customTrack *ct = myVariantsTrackForProject(myVariantsProjectTrackName(proj),
+        proj->dbTable, proj->label, dyStringContents(longLabel), genomeDb, count);
+    dyStringFree(&longLabel);
+    slAddHead(&added, ct);
     }
-lineFileClose(&lf);
-}
+myVariantsProjectFreeList(&projects);
 
-static char *sanitizeLabel(char *raw, int maxLen)
-/* Strip both quote characters, newlines and carriage returns, then cap to
- * maxLen characters.  Returns NULL for NULL/empty input or when sanitizing
- * leaves nothing behind.  Matches the precedent in hgCustom.c for
- * user-supplied CT labels written into the trackline. */
-{
-if (isEmpty(raw))
-    return NULL;
-char *s = cloneString(raw);
-stripChar(s, '"');
-stripChar(s, '\'');
-stripChar(s, '\\');
-stripChar(s, '\n');
-stripChar(s, '\r');
-if ((int)strlen(s) > maxLen)
-    s[maxLen] = '\0';
-if (isEmpty(s))
-    {
-    freeMem(s);
-    return NULL;
-    }
-return s;
-}
-
-static void myVariantsCtFilePath(struct tempName *tn,
-                                 char *encodedTableName, char *targetDb)
-/* Build the per-user-per-db ctfile path.  Prefers
- * cfgOption("myVariantsDataDir") so the file lives outside trash and the
- * trashCleaner doesn't expire it; falls back to trashDirReusableFile when
- * the dir isn't configured. */
-{
-char *persistentDir = cfgOption("myVariantsDataDir");
-if (isNotEmpty(persistentDir))
-    {
-    /* Group files per user so one user's tracks live together:
-     * ${persistentDir}/<encodedTableName>/<db>.bed. */
-    char *subdir = isNotEmpty(encodedTableName) ? encodedTableName : "shared";
-    char *sep = endsWith(persistentDir, "/") ? "" : "/";
-    char path[PATH_LEN];
-    safef(path, sizeof path, "%s%s%s/%s.bed", persistentDir, sep, subdir, targetDb);
-    char dirPart[PATH_LEN];
-    splitPath(path, dirPart, NULL, NULL);
-    makeDirsOnPath(dirPart);
-    safef(tn->forCgi, sizeof tn->forCgi, "%s", path);
-    safef(tn->forHtml, sizeof tn->forHtml, "%s", path);
-    }
-else
-    {
-    char base[PATH_LEN];
-    char *hostPort = cgiServerNamePort();
-    safef(base, sizeof base, MYVARIANTS_TRACK_PREFIX "%s_%s_%s",
-        hostPort ? hostPort : "localhost", targetDb,
-        isNotEmpty(encodedTableName) ? encodedTableName : "shared");
-    for (char *p = base; *p; p++) if (*p == '/') *p = '_';
-    trashDirReusableFile(tn, "ct", base, ".bed");
-    }
-}
-
-void myVariantsUnlinkCtFile(char *userName, char *targetDb)
-/* Delete the on-disk ctfile for this user+assembly if it exists.  Uses the
- * same path resolution as myVariantsWriteCtFile so it targets either the
- * persistent dir (myVariantsDataDir) or the trash fallback. */
-{
-if (isEmpty(userName) || isEmpty(targetDb))
-    return;
-char *encodedTableName = myVariantsGetTableName(userName);
-if (isEmpty(encodedTableName))
-    return;
-struct tempName tn;
-myVariantsCtFilePath(&tn, encodedTableName, targetDb);
-if (fileExists(tn.forCgi))
-    unlink(tn.forCgi);
-freeMem(encodedTableName);
-}
-
-char *myVariantsWriteCtFile(char *userName, char *targetDb, struct cart *cart)
-/* Write a Custom Track file for user's myVariants in targetDb and any shared
- * tracks found in cart. Return filename or NULL if nothing to write.
- * If cfgOption("myVariantsDataDir") is set the file is placed there so the
- * trashCleaner doesn't expire it; otherwise it goes in trash/ct as before. */
-{
-if (isEmpty(targetDb))
-    return NULL;
-
-/* Identifier-safe form of userName for the CT track name and trash filename.
- * The raw userName may contain non-ASCII or characters unsafe in trackDb
- * syntax, filesystem paths, or SQL (e.g. '@', ';', spaces, quotes). */
-char *encodedTableName = NULL;
-if (isNotEmpty(userName))
-    encodedTableName = myVariantsGetTableName(userName);
-
-/* Check if user has their own items */
-boolean hasOwnItems = FALSE;
-if (isNotEmpty(userName))
-    {
-    char *dbTable = myVariantsGetDbTable(userName);
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    if (isNotEmpty(dbTable) && sqlTableExists(conn, dbTable))
-        {
-        char countQuery[512];
-        sqlSafef(countQuery, sizeof countQuery,
-            "select count(*) from %s where db='%s'", dbTable, targetDb);
-        hasOwnItems = (sqlQuickNum(conn, countQuery) > 0);
-        }
-    hFreeConn(&conn);
-    }
-
-/* Collect shared track lines from cart. All authoritative metadata
- * (owner/db/project/label) comes from the live share row, never from
- * cart-parsed values. */
-struct dyString *sharedLines = dyStringNew(0);
+/* Shares accepted into this cart.  All of the metadata comes from the live
+ * share and its project, never from the cart value. */
 if (cart != NULL)
     {
-    struct hashEl *shareVars = cartFindPrefix(cart, MYVAR_SHARED_CART_PREFIX);
-    struct hashEl *el;
+    struct hashEl *shareVars = cartFindPrefix(cart, MYVAR_SHARED_CART_PREFIX), *el;
     for (el = shareVars; el != NULL; el = el->next)
         {
+        /* The suffix of a cart variable name is whatever the request said it
+         * was, so check it before it goes into a buffer. */
         char *token = el->name + strlen(MYVAR_SHARED_CART_PREFIX);
+        if (!myVariantsIsShareToken(token))
+            continue;
         char trackName[512];
         safef(trackName, sizeof(trackName), MYVARIANTS_SHARED_TRACK_PREFIX "%s", token);
         struct myVariantsShare *share = myVariantsResolveSharedTrack(trackName, cart);
         if (share == NULL)
             continue;
-        if (!sameString(share->db, targetDb))
-            {
-            myVariantsShareFree(&share);
-            continue;
-            }
-        /* Skip if the sharer is the current user - they already see their own track */
+        /* The owner already sees the project as their own track. */
         if (isNotEmpty(userName) && sameString(share->ownerUser, userName))
             {
             myVariantsShareFree(&share);
             continue;
             }
-        /* Verify the owner's table exists */
-        char *ownerDbTable = myVariantsGetDbTable(share->ownerUser);
-        struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-        boolean tableOk = (isNotEmpty(ownerDbTable) && sqlTableExists(conn, ownerDbTable));
-        hFreeConn(&conn);
-        if (!tableOk)
+        struct sqlConnection *central = hConnectCentral();
+        struct myVariantsProject *shared = NULL;
+        if (sqlTableExists(central, MYVARIANTS_PROJECT_TABLE))
+            shared = myVariantsProjectById(central, share->projectId);
+        hDisconnectCentral(&central);
+        if (shared == NULL)
             {
             myVariantsShareFree(&share);
             continue;
             }
-        /* Strip double quotes from owner-controlled values to prevent injection
-         * of additional trackDb settings via the CT file track line. */
-        char *owner = cloneString(share->ownerUser);
-        char *project = cloneString(share->project);
-        char *label = isNotEmpty(share->label) ? cloneString(share->label) : NULL;
-        stripChar(owner, '"');
-        stripChar(project, '"');
-        if (label != NULL)
-            stripChar(label, '"');
-        char *projectLabel = sameString(project, "*") ? "All" : project;
-        char shortLabel[64];
-        if (isNotEmpty(label))
-            safef(shortLabel, sizeof(shortLabel), "%s", label);
-        else
-            safef(shortLabel, sizeof(shortLabel), "%s's %s", owner, projectLabel);
-        dyStringPrintf(sharedLines,
-            "track name=\"" MYVARIANTS_SHARED_TRACK_PREFIX "%s\""
-            " type=\"" MYVARIANTS_TYPE "\" itemRgb=\"on\""
-            " visibility=\"pack\""
-            " shortLabel=\"%s\""
-            " longLabel=\"Shared annotations: %s (from %s)\"\n",
-            token, shortLabel, projectLabel, owner);
-        freeMem(owner);
-        freeMem(project);
-        freeMem(label);
+        int count = myVariantsCountForDb(shared->dbTable, genomeDb);
+        if (count > 0)
+            {
+            struct dyString *shortLabel = dyStringCreate("%s's %s",
+                share->ownerUser, shared->label);
+            struct dyString *longLabel = dyStringCreate("Shared annotations: %s (from %s)",
+                shared->label, share->ownerUser);
+            struct customTrack *ct = myVariantsTrackForProject(trackName, shared->dbTable,
+                dyStringContents(shortLabel), dyStringContents(longLabel), genomeDb, count);
+            dyStringFree(&shortLabel);
+            dyStringFree(&longLabel);
+            slAddHead(&added, ct);
+            }
+        myVariantsProjectFreeList(&shared);
         myVariantsShareFree(&share);
         }
     hashElFreeList(&shareVars);
     }
 
-if (!hasOwnItems && dyStringLen(sharedLines) == 0)
-    {
-    /* Nothing to write: remove any stale on-disk file so it doesn't leak
-     * when the user empties their table.  Under the old trash-only path
-     * the trashCleaner would have done this for us. */
-    if (isNotEmpty(encodedTableName))
-        {
-        struct tempName stale;
-        myVariantsCtFilePath(&stale, encodedTableName, targetDb);
-        if (fileExists(stale.forCgi))
-            unlink(stale.forCgi);
-        }
-    dyStringFree(&sharedLines);
-    freeMem(encodedTableName);
-    return NULL;
-    }
-
-/* Reusable, stable filename per user+db - always rewrite since shares are dynamic */
-struct tempName tn;
-myVariantsCtFilePath(&tn, encodedTableName, targetDb);
-
-/* Resolve display labels for the user's own track: cart vars set by the
- * rename UI win, then the existing on-disk file (so a rename survives a
- * cart reset), then the default. */
-char *shortLabel = NULL, *longLabel = NULL;
-if (hasOwnItems)
-    {
-    if (cart != NULL)
-        {
-        char cartVar[256];
-        safef(cartVar, sizeof cartVar, "%s.%s.shortLabel",
-            encodedTableName, targetDb);
-        shortLabel = sanitizeLabel(cartOptionalString(cart, cartVar), 80);
-        safef(cartVar, sizeof cartVar, "%s.%s.longLabel",
-            encodedTableName, targetDb);
-        longLabel = sanitizeLabel(cartOptionalString(cart, cartVar), 200);
-        }
-    if (shortLabel == NULL || longLabel == NULL)
-        {
-        char *diskShort = NULL, *diskLong = NULL;
-        readLabelsFromCtFile(tn.forCgi, encodedTableName, &diskShort, &diskLong);
-        if (shortLabel == NULL)
-            shortLabel = sanitizeLabel(diskShort, 80);
-        if (longLabel == NULL)
-            longLabel = sanitizeLabel(diskLong, 200);
-        freeMem(diskShort);
-        freeMem(diskLong);
-        }
-    if (shortLabel == NULL)
-        shortLabel = cloneString("My Annotations");
-    if (longLabel == NULL)
-        longLabel = cloneString("My Annotations");
-    }
-
-FILE *f = mustOpen(tn.forCgi, "w");
-if (hasOwnItems)
-    fprintf(f, "track name=\"%s\" type=\"" MYVARIANTS_TYPE "\" itemRgb=\"on\""
-        " visibility=\"pack\" shortLabel=\"%s\""
-        " longLabel=\"%s\"\n", encodedTableName, shortLabel, longLabel);
-if (dyStringLen(sharedLines) > 0)
-    fprintf(f, "%s", dyStringContents(sharedLines));
-carefulClose(&f);
-dyStringFree(&sharedLines);
-freeMem(encodedTableName);
-freeMem(shortLabel);
-freeMem(longLabel);
-return cloneString(tn.forCgi);
+slReverse(&added);
+*pCtList = slCat(*pCtList, added);
 }
 
 boolean myVariantsHandleCtRemoval(struct customTrack *ct, struct cart *cart,
                                   char *database)
-/* If ct is a myVariants own track: delete the user's rows for the current
- * assembly, unlink the persistent ctfile, drop the per-db renamed labels
- * and the visibility var.  If ct is a myVariants shared track: drop the
- * share-acceptance cart var and the visibility var.  Returns TRUE when ct
- * was a myVariants track and this function fully handled the cart cleanup
- * (caller must skip its own per-track cart cleanup so other-assembly
- * labels are preserved); FALSE otherwise. */
+/* Handle "Remove custom track" on a My Annotations track.  For an own track
+ * this deletes the project: its share, its registry row and its table.  For a
+ * shared track it drops the acceptance so the recipient stops seeing it, and
+ * leaves the owner's data alone.  Returns TRUE when ct was a My Annotations
+ * track and this function handled the cart cleanup, so the caller must skip
+ * its own.  The confirmation is the caller's job; by the time we are here the
+ * user has agreed. */
 {
-if (ct == NULL || ct->tdb == NULL || isEmpty(ct->tdb->track))
+if (ct == NULL || ct->tdb == NULL || !isMyVariantsType(ct->tdb->type))
     return FALSE;
 char *trackName = ct->tdb->track;
-if (!isMyVariantsTrack(trackName))
+if (isEmpty(trackName))
     return FALSE;
-
-/* Cleanup common to any myVariants removal: drop the track's visibility var
- * and invalidate the on-disk ctfile pointer so the next entry-point visit
- * regenerates from current SQL/share state. */
-cartRemove(cart, trackName);
-char mvVar[256];
-safef(mvVar, sizeof mvVar, MYVARIANTS_FILE_VAR_PREFIX "%s", database);
-cartRemove(cart, mvVar);
 
 if (isMyVariantsSharedTrack(trackName))
     {
-    /* Drop the share-acceptance var so the share isn't re-imported. */
     char *token = trackName + strlen(MYVARIANTS_SHARED_TRACK_PREFIX);
-    char shareCartVar[256];
-    safef(shareCartVar, sizeof shareCartVar,
-        MYVAR_SHARED_CART_PREFIX "%s", token);
-    cartRemove(cart, shareCartVar);
+    char cartVar[256];
+    safef(cartVar, sizeof(cartVar), MYVAR_SHARED_CART_PREFIX "%s", token);
+    cartRemove(cart, cartVar);
+    cartRemove(cart, trackName);
     return TRUE;
     }
 
-/* Own track: delete the user's SQL rows for this assembly, unlink the
- * persisted ctfile, and drop any renamed-label cart vars so a freshly
- * created track on this assembly starts at "My Annotations" again. */
-char *userName = wikiLinkUserName();
-if (isNotEmpty(userName))
-    {
-    myVariantsDeleteForDb(userName, database);
-    myVariantsUnlinkCtFile(userName, database);
-    }
-char labelPrefix[256];
-safef(labelPrefix, sizeof labelPrefix, "%s.%s.", trackName, database);
-cartRemovePrefix(cart, labelPrefix);
+char *userName = getUserName();
+struct myVariantsProject *proj = myVariantsFindProject(userName, trackName);
+if (proj == NULL)
+    return FALSE;
+myVariantsDropProject(proj->id, userName);
+myVariantsProjectFreeList(&proj);
+cartRemove(cart, trackName);
+/* The track name is gone for good, so its own settings go with it.  Other
+ * projects keep theirs because nothing here touches them. */
+char prefix[256];
+safef(prefix, sizeof prefix, "%s.", trackName);
+cartRemovePrefix(cart, prefix);
 return TRUE;
 }
 
-struct slName *myVariantsGetProjects(char *userName)
-/* Return list of distinct non-empty project values for this user's myVariants table.
- * Caller must slFreeList the result. Returns NULL if no projects or table doesn't exist. */
+struct slPair *myVariantsGetDbCounts(char *userName)
+/* Return a list of assemblies this user has annotations on, each val an item
+ * count made with intToPt, summed over all of their projects.  Caller must
+ * slPairFreeList the result.  Returns NULL if the user has no annotations. */
 {
 if (isEmpty(userName))
     return NULL;
-
-char *dbTable = myVariantsTableExists(userName);
-if (isEmpty(dbTable))
+struct myVariantsProject *projects = myVariantsListProjects(userName), *proj;
+if (projects == NULL)
     return NULL;
 
+struct hash *totals = hashNew(0);
+struct slPair *counts = NULL;
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-struct slName *projects = NULL;
-char query[512];
-sqlSafef(query, sizeof(query),
-    "SELECT DISTINCT project FROM %s WHERE project IS NOT NULL AND project != '' ORDER BY project",
-    dbTable);
-projects = sqlQuickList(conn, query);
+for (proj = projects; proj != NULL; proj = proj->next)
+    {
+    if (!sqlTableExists(conn, proj->dbTable))
+        continue;
+    char query[512];
+    sqlSafef(query, sizeof(query),
+        "SELECT db, count(*) FROM %s WHERE db IS NOT NULL AND db != ''"
+        " GROUP BY db", proj->dbTable);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct hashEl *hel = hashLookup(totals, row[0]);
+        if (hel == NULL)
+            {
+            struct slPair *pair = slPairNew(row[0], intToPt(sqlSigned(row[1])));
+            slAddHead(&counts, pair);
+            hashAdd(totals, row[0], pair);
+            }
+        else
+            {
+            struct slPair *pair = hel->val;
+            pair->val = intToPt(ptToInt(pair->val) + sqlSigned(row[1]));
+            }
+        }
+    sqlFreeResult(&sr);
+    }
 hFreeConn(&conn);
-return projects;
+hashFree(&totals);
+myVariantsProjectFreeList(&projects);
+slSort(&counts, slPairCmp);
+return counts;
 }
 
 /* Built-in column names from myVariants.as - any column NOT in this list is a
@@ -1070,7 +1126,7 @@ return projects;
 static const char *builtInColumns[] = {
     "bin", "chrom", "chromStart", "chromEnd", "name", "score", "strand",
     "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
-    "chromStarts", "description", "db", "ref", "alt", "project",
+    "chromStarts", "description", "db", "ref", "alt",
     "mouseover", "itemType", "cnvType", "id",
 };
 
@@ -1083,66 +1139,59 @@ for (i = 0;  i < ArraySize(builtInColumns);  i++)
 return FALSE;
 }
 
-struct slName *myVariantsGetCustomFields(char *userName)
-/* Return list of user-added custom column names for this user's myVariants table.
- * Excludes built-in columns and _hidden_ prefixed columns.
- * Caller must slFreeList the result. Returns NULL if no custom fields or table doesn't exist. */
+void myVariantsGetFieldLists(char *dbTable, struct slName **retCustom,
+    struct slName **retHidden)
+/* Split one project's user-added columns into the visible ones and the hidden
+ * ones, with the _hidden_ prefix stripped from the latter.  Both lists come off
+ * a single description of the table.  Either return may be NULL if the caller
+ * does not want that list.  Caller slFreeLists what it asked for. */
 {
-if (isEmpty(userName))
-    return NULL;
-
-char *dbTable = myVariantsTableExists(userName);
+if (retCustom != NULL)
+    *retCustom = NULL;
+if (retHidden != NULL)
+    *retHidden = NULL;
 if (isEmpty(dbTable))
-    return NULL;
+    return;
 
+/* The table can be gone when the project was deleted in another window. */
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-struct slName *allFields = sqlListFields(conn, dbTable);
+struct slName *allFields = NULL;
+if (sqlTableExists(conn, dbTable))
+    allFields = sqlListFields(conn, dbTable);
 hFreeConn(&conn);
 if (allFields == NULL)
-    return NULL;
+    return;
 
-struct slName *customFields = NULL;
-struct slName *field;
+struct slName *customFields = NULL, *hiddenFields = NULL, *field;
 for (field = allFields; field != NULL; field = field->next)
     {
     if (isBuiltInColumn(field->name))
         continue;
-    if (startsWith("_hidden_", field->name))
-        continue;
-    slNameAddHead(&customFields, field->name);
+    if (startsWithNoCase("_hidden_", field->name))
+        slNameAddHead(&hiddenFields, field->name + strlen("_hidden_"));
+    else
+        slNameAddHead(&customFields, field->name);
     }
 slFreeList(&allFields);
 slReverse(&customFields);
-return customFields;
+slReverse(&hiddenFields);
+if (retCustom != NULL)
+    *retCustom = customFields;
+else
+    slFreeList(&customFields);
+if (retHidden != NULL)
+    *retHidden = hiddenFields;
+else
+    slFreeList(&hiddenFields);
 }
 
-struct slName *myVariantsGetHiddenFields(char *userName)
-/* Return list of hidden custom column names (with _hidden_ prefix stripped) for this user's
- * myVariants table. Caller must slFreeList the result. Returns NULL if none. */
+struct slName *myVariantsGetCustomFields(char *dbTable)
+/* Return list of user-added custom column names on one project's table.
+ * Excludes built-in columns and _hidden_ prefixed columns.  Custom fields are
+ * per project, so each project has its own list.
+ * Caller must slFreeList the result. Returns NULL if no custom fields or table doesn't exist. */
 {
-if (isEmpty(userName))
-    return NULL;
-
-char *dbTable = myVariantsTableExists(userName);
-if (isEmpty(dbTable))
-    return NULL;
-
-struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-struct slName *allFields = sqlListFields(conn, dbTable);
-hFreeConn(&conn);
-if (allFields == NULL)
-    return NULL;
-
-struct slName *hiddenFields = NULL;
-struct slName *field;
-for (field = allFields; field != NULL; field = field->next)
-    {
-    if (isBuiltInColumn(field->name))
-        continue;
-    if (startsWith("_hidden_", field->name))
-        slNameAddHead(&hiddenFields, field->name + strlen("_hidden_"));
-    }
-slFreeList(&allFields);
-slReverse(&hiddenFields);
-return hiddenFields;
+struct slName *customFields = NULL;
+myVariantsGetFieldLists(dbTable, &customFields, NULL);
+return customFields;
 }

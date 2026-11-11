@@ -962,8 +962,7 @@ include hprcPclai.ra alpha
 
 include episignatures.ra
 
-# tmp removed due to problem with track
-#include transcriptionStart.ra alpha
+include transcriptionStart.ra alpha
 include transcriptionStartPublic.ra beta,public
 # include hg38.GCA_040939475.2.chainNet.ra alpha
 # include hg38.GCF_002880755.1.chainNet.ra alpha

@@ -215,14 +215,14 @@ foreach my $asmId (@orderList) {
       printf STDERR "# error missing ${asmId}.masked.2bit.bpt\n";
    }
   `ln -s "${buildDir}/${asmId}.chrNames.2bit" "${destDir}/${accessionId}.chrNames.2bit"` if (-s "${buildDir}/${asmId}.chrNames.2bit");
-#   if (-s "${buildDir}/${accessionId}.untrans.gfidx") {
-#      if (-s "${buildDir}/${accessionId}.trans.gfidx") {
+   if (-s "${buildDir}/${accessionId}.untrans.gfidx") {
+      if (-s "${buildDir}/${accessionId}.trans.gfidx") {
 #        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${destDir}/${accessionId}.untrans.gfidx"`;
 #        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${destDir}/${accessionId}.trans.gfidx"`;
-#        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${dynaDir}/${accessionId}.untrans.gfidx"`;
-#        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${dynaDir}/${accessionId}.trans.gfidx"`;
-#      }
-#   }
+        `ln -s "${buildDir}/${accessionId}.untrans.gfidx" "${dynaDir}/${accessionId}.untrans.gfidx"`;
+        `ln -s "${buildDir}/${accessionId}.trans.gfidx" "${dynaDir}/${accessionId}.trans.gfidx"`;
+      }
+   }
   `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/${accessionId}.agp.gz"` if (-s "${buildDir}/${asmId}.agp.gz");
    if (-s "${buildDir}/${asmId}.chrom.sizes") {
     `ln -s "${buildDir}/${asmId}.chrom.sizes" "${destDir}/${accessionId}.chrom.sizes.txt"`;

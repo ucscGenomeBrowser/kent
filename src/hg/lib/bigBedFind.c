@@ -111,10 +111,14 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
             // highlight the item bases only, to distinguish from padding
             hgPos->highlight = addHighlight(cartString(cart, "db"),
                                             hgPos->chrom, hgPos->chromStart, hgPos->chromEnd);
+            int matchStart = hgPos->chromStart, matchEnd = hgPos->chromEnd;
             hgPos->chromStart -= padding;
             hgPos->chromEnd   += padding;
             if (hgPos->chromStart < 0)
                 hgPos->chromStart = 0;
+            // record what was actually added, after any clamping
+            hgPos->padStart = matchStart - hgPos->chromStart;
+            hgPos->padEnd = hgPos->chromEnd - matchEnd;
             }
         // MANE/HGNC description logic
         if (sameString(hfs->searchName, "mane"))

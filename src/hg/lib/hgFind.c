@@ -2654,12 +2654,20 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next )
             // highlight the item bases to distinguish from padding
             pos->highlight = addHighlight(db, pos->chrom, pos->chromStart, pos->chromEnd);
             int chromSize = hChromSize(db, pos->chrom);
+            int matchStart = pos->chromStart, matchEnd = pos->chromEnd;
             pos->chromStart -= padding;
             pos->chromEnd   += padding;
             if (pos->chromStart < 0)
                 pos->chromStart = 0;
             if (pos->chromEnd > chromSize)
                 pos->chromEnd = chromSize;
+            // record what was actually added, after any clamping to the chrom.
+            // A row reaching past chromSize clamps to less than it matched, so
+            // floor at zero rather than report negative padding.
+            pos->padStart = matchStart - pos->chromStart;
+            pos->padEnd = pos->chromEnd - matchEnd;
+            if (pos->padEnd < 0)
+                pos->padEnd = 0;
             }
         slAddHead(&table->posList, pos);
         }
@@ -4037,6 +4045,7 @@ if (hgvsList)
                 pos->chrom = helper->chrom;
                 pos->chromStart = helper->chromStart - padding;
                 pos->chromEnd = helper->chromEnd + padding;
+                pos->padStart = pos->padEnd = padding;
                 pos->name = slNameListToString(helper->validTranscripts, '/');
                 pos->description = cloneString(helper->label);
                 pos->browserName = "";
@@ -4080,6 +4089,7 @@ if (hgvsList)
             pos->chrom = cloneString(chrom);
             pos->chromStart = spanStart-padding;
             pos->chromEnd = spanEnd + padding;
+            pos->padStart = pos->padEnd = padding;
             pos->name = "Approximate area";
             pos->description = term;
             pos->browserName = term;
