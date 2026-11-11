@@ -16314,6 +16314,11 @@ static void bigMethylMethods(struct track *track)
 track->isBigBed = TRUE;
 bedMethylMethods(track);
 track->loadItems = bigMethylLoadItems;
+
+/* Without this a window holding more items than bigBedMaxItems draws nothing at
+ * all: bigBedSelectRangeExt throws the over-limit list away, and with no summary
+ * method there is no coverage graph to fall back on and no message. */
+track->loadSummary = loadBigBedSummary;
 }
 
 void fillInFromType(struct track *track, struct trackDb *tdb)

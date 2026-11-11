@@ -7184,7 +7184,9 @@ if (withCenterLabels)
         setGlobalsFromWindow(windows); // first window
         y = savey + flatTrack->maxHeight;
 
-        if (theImgBox && tdbIsCompositeChild(track->tdb) &&
+        // An empty subtrack can be 0 pixels high, and then it got no data slice above,
+        // so it has nothing for the toggle to cover.
+        if (theImgBox && sliceHeight > 0 && tdbIsCompositeChild(track->tdb) &&
                 (track->limitedVis == tvDense ||
                  (track->limitedVis == tvPack && centerLabelHeight == 0)))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track);
@@ -14093,20 +14095,16 @@ hDisconnectCentral(&conn);
 freeMem(encOwner);
 freeMem(encName);
 
-char *loggedIn = wikiLinkUserName();
-boolean isOwn = (loggedIn != NULL && sameString(loggedIn, sessionOwner));
+// the owner also for your own sessions, so it reads the same as in a shared link
 dyStringPrintf(dy, "You have opened the saved session <b>%s</b>, ", jsSafe(sessionName));
-if (isOwn)
-    dyStringPrintf(dy, "saved by yourself");
-else
-    dyStringPrintf(dy, "saved by user <b>%s</b>", jsSafe(sessionOwner));
+dyStringPrintf(dy, "saved by user <b>%s</b>", jsSafe(sessionOwner));
 if (isNotEmpty(created))
     {
     // firstUse is a mysql datetime, "2026-09-18 11:22:33", the day is enough here
     char *day = firstWordInLine(created);
     dyStringPrintf(dy, " on %s", jsSafe(day));
     }
-dyStringPrintf(dy, ". ");
+dyStringPrintf(dy, ".<br>");
 
 if (isNotEmpty(description))
     {
@@ -14120,7 +14118,7 @@ if (isNotEmpty(description))
         description[300] = 0;
         truncated = TRUE;
         }
-    dyStringPrintf(dy, "Session description: <i>%s%s</i> ",
+    dyStringPrintf(dy, "Session description: <i>%s%s</i><br>",
             jsSafe(description), (truncated ? "..." : ""));
     }
 }
@@ -14149,25 +14147,28 @@ if (fromFile && !cartRecentSessionsEnabled())
 
 struct dyString *dy = dyStringNew(1024);
 if (fromFile)
-    dyStringPrintf(dy, "You have loaded browser settings from a file or a URL. ");
+    dyStringPrintf(dy, "You have loaded browser settings from a file or URL.<br>");
 else
     sessionNoticeText(dy, sessionName, sessionOwner);
 
-char *what = fromFile ? "these settings" : "this session";
+char *what = fromFile ? "" : " by opening this session";
 // hgTracks.js opens the same dialog as the My Data menu item when this link is clicked
-char *recentViewsLink = "<a href='#' id='recentViewsLink'>My Data &gt; Recent Browser Views</a>";
+char *recentViewsLink = "<a href='#' id='recentViewsLink'>My Data &gt; Restore Previous Session</a>";
+// hgTracks.js opens the newest copy, the one made just before this load, when the button is clicked
 if (recentViewCount > 0)
-    dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have "
-            "been replaced by %s. To go back to them, open %s. ", what, recentViewsLink);
+    dyStringPrintf(dy, "Your previous tracks and settings were replaced%s.<br>"
+            "<button type='button' id='openPrevSessionBtn'>Open previous session in new tab</button> "
+            "Or go to %s to restore other sessions.", what, recentViewsLink);
 else if (cartRecentSessionsEnabled())
-    dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have "
-            "been replaced by %s. The views you had in this web browser in the last 7 days are "
-            "under %s. ", what, recentViewsLink);
+    dyStringPrintf(dy, "Your previous tracks and settings were replaced%s. "
+            "Settings from the last 7 days are listed under %s.", what, recentViewsLink);
 else
+    {
     dyStringPrintf(dy, "%s replaced the tracks, position, and settings you had in the browser "
             "before. To keep a browser view for later, save it under My Data &gt; My Sessions "
             "before you open a session. ", fromFile ? "These settings" : "This session");
-dyStringPrintf(dy, "This note goes away when you close it or leave this page.");
+    dyStringPrintf(dy, "This note goes away when you close it or leave this page.");
+    }
 // separate ids, so "Don't show again" on one note does not hide the other
 notifyOnce(dy->string, fromFile ? "settingsLoad" : "sessionLoad");
 dyStringFree(&dy);
@@ -14211,10 +14212,17 @@ for (struct slPair *el = recent; el != NULL; el = el->next)
     struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
     if (cdb == NULL)
         continue;
+    // only set in a copy made just before a session load, "" if it was a file or URL.  Lists
+    // from before 2026-11 also have the hgsids of other tabs, and a copy loses the marker once
+    // it is opened: those are not shown, the list is only the views a load replaced.
+    char *prevViewOf = cartContentsVal(cdb->contents, hgsPrevViewOf);
+    if (prevViewOf == NULL)
+        {
+        cartDbFree(&cdb);
+        continue;
+        }
     char *db = cartContentsVal(cdb->contents, "db");
     char *position = cartContentsVal(cdb->contents, "position");
-    // only set in a copy made just before a session load, "" if it was a file or URL
-    char *prevViewOf = cartContentsVal(cdb->contents, hgsPrevViewOf);
     jsonWriteObjectStart(jw, NULL);
     jsonWriteString(jw, "hgsid", el->name);
     jsonWriteString(jw, "db", db);

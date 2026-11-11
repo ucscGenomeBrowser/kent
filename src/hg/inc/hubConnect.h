@@ -120,6 +120,10 @@ struct slName  *hubConnectHubsInCart(struct cart *cart);
 int hubIdFromCartName(char *trackName);
 /* Given something like "hgHubConnect.hub.123" return 123 */
 
+boolean hubIdFromTrackNameNoAbort(char *trackName, unsigned *retId);
+/* Like hubIdFromTrackName(), but return FALSE instead of aborting when trackName is not
+ * hub_<digits>_<rest>. */
+
 unsigned hubIdFromTrackName(char *trackName);
 /* Given something like "hub_123_myWig" return 123 */
 
@@ -211,6 +215,21 @@ boolean hubPublicHasEmail(struct sqlConnection *conn);
 
 char *hubNameFromUrl(char *hubUrl);
 /* Given the URL for a hub, return its hub_# name. */
+
+char *hubConnectPortableDb(char *db, char **retHubUrl);
+/* Return the name that selects assembly db in any cart, also one that has never connected db's
+ * hub, and set *retHubUrl to the URL of a hub that has to be connected with it, or NULL: the bare
+ * name for the curated or GenArk copy of an assembly, the bare name plus the hub URL for any
+ * other assembly hub, db unchanged for anything else.  Do not free either result. */
+
+char *hubConnectDbUrlArgs(char *db);
+/* Return the CGI arguments, URL-encoded and without a leading '&', that select the assembly db in
+ * any cart, also one that has never connected db's hub: "db=<name>" for a native assembly, a
+ * curated hub or a GenArk assembly, else "hubUrl=<url>&genome=<name>".  Use this for every link
+ * that can be opened outside the current cart (share links, address-bar URLs, links in email);
+ * a bare "db=hub_<id>_<name>" silently opens the default assembly there.  A hub no longer in
+ * hubStatus still comes back as db=hub_<id>_<name>.  Up to four hgcentral queries for a hub
+ * assembly, none for a native one.  Free with freeMem(). */
 
 void addPublicHubsToHubStatus(struct cart *cart, struct sqlConnection *conn, char *publicTable, char  *statusTable);
 /* Add urls in the hubPublic table to the hubStatus table if they aren't there already */

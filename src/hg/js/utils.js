@@ -1583,6 +1583,38 @@ if (db.startsWith("hub_")) {
 return retDb;
 }
 
+function dbUrlArgs(db)
+{
+// Return the URL arguments, already encoded, that open assembly db in any cart.  Use them in a link
+// that leaves the cart (no hgsid): a hub assembly's db=hub_<id>_<name> only works in a cart
+// connected to that hub, elsewhere the CGI opens the default assembly.  For the page's own hub
+// assembly, web.c's menuBar() puts the right arguments into hubDbUrlArgs, from
+// hubConnectDbUrlArgs(): db=<bare name> for a curated or GenArk assembly, else hubUrl=&genome=.
+    if (window.hubDbUrlArgs && window.hubDbUrlArgs.db === db)
+        return window.hubDbUrlArgs.args;
+    return "db=" + encodeURIComponent(db);
+}
+
+function urlWithPortableDb(url)
+{
+// Return url with its db= argument replaced by dbUrlArgs(), so the link opens the same assembly
+// in any cart.  Only that argument is touched: the others keep their order and encoding, and a
+// hubUrl= already in the url stays, since the cart connects every hubUrl it is given.
+    var m = url.match(/([?&])db=([^&#]*)/);
+    if (!m)
+        return url;
+    var db;
+    try {
+        db = decodeURIComponent(m[2].replace(/\+/g, " "));
+    } catch (e) {
+        return url;
+    }
+    var args = dbUrlArgs(db);
+    if (args === "db=" + encodeURIComponent(db))
+        return url;
+    return url.replace(m[0], m[1] + args);
+}
+
 function getDb()
 {
     var db = normed($("input[name='db']").first());

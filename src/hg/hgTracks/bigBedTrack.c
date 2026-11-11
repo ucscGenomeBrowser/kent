@@ -484,7 +484,7 @@ return (resultCount > bigBedMaxItems());
 }
 
 
-static void loadBigBedSummary(struct track *track)
+void loadBigBedSummary(struct track *track)
 /* Check if summary loading needed for bigBed */
 {
 if (track->subtracks)  // do tracks or subtracks but not parents.
