@@ -1,0 +1,18 @@
+# 2026-11-11 Claude/max: Cancer Mutations collection, Cancer Mutation Atlas (mutAtlas, mutAtlasLolly)
+
+# Cancer Mutation Atlas (CMA), Karchin Lab, JHU, https://cancermutationatlas.org/
+# version 2026.09.15 (beta1). Ensembl 115 GFF3 for bcftools csq, OncoTree 2025_10_03 for type names.
+mkdir -p /hive/data/genomes/hg38/bed/cancerVariants/mutAtlas
+cd /hive/data/genomes/hg38/bed/cancerVariants/mutAtlas
+~/kent/src/hg/makeDb/scripts/cancerMutations/mutAtlasDownload.sh 2026.09.15
+
+# atlas.tsv -> VCF -> bcftools csq -> bed9+25 -> mutAtlas.bb, ~4 minutes.
+# Also writes mutAtlasFilters.ra, the filterValues lines for cancerMutations.ra
+~/kent/src/hg/makeDb/scripts/cancerMutations/mutAtlasBuild.sh
+# 3918034 variants written: all rows of atlas.tsv, none skipped
+# SNV 3610054, deletion 190553, insertion 74173, MNV 31477, delins 11777
+# 85555 variants are outside all Ensembl transcripts ("intergenic")
+
+# mutAtlas (bigBed) and mutAtlasLolly (bigLolly) use the same file
+mkdir -p /gbdb/hg38/cancerMutations
+ln -s /hive/data/genomes/hg38/bed/cancerVariants/mutAtlas/mutAtlas.bb /gbdb/hg38/cancerMutations/

@@ -1,0 +1,69 @@
+track cancerMutations
+shortLabel Cancer Mutations
+longLabel Somatic mutations in cancer
+superTrack on
+group phenDis
+
+track mutAtlas
+parent cancerMutations pack
+shortLabel Cancer Mutation Atlas
+longLabel Cancer Mutation Atlas (CMA): somatic variants and their prevalence in 800 cancer types
+type bigBed 9 +
+bigDataUrl /gbdb/hg38/cancerMutations/mutAtlas.bb
+itemRgb on
+visibility squish
+priority 1
+maxWindowCoverage 200000
+mouseOver <b>${name}</b> ${effect}<br>Carriers: ${carriers} of ${tested} tested patients (${prevalence}%)<br>${topTypes}
+detailsDynamicTable _jsonTypes|Cancer types with this variant,_jsonStudies|Studies with this variant
+skipFields score,strand,thickStart,thickEnd,reserved,topTypes,log10Carriers,typeCodes,typeCarriers,typeTested,studyCarriers,studyTested
+skipEmptyFields on
+urls transcript="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$"
+filterByRange.carriers on
+filter.carriers 1:6956
+filterByRange.maxPrev on
+filter.maxPrev 0:100
+filterLimits.maxPrev 0:100
+filterValues.varType SNV,deletion,insertion,MNV,delins
+filterLabel.varType Variant type
+filterValues.effect missense,synonymous,frameshift,stop gained,intron,non-coding transcript,intergenic,splice region,splice acceptor,splice donor,3 prime UTR,inframe deletion,5 prime UTR,inframe insertion,start lost,stop lost,feature truncation,stop retained,coding sequence,feature elongation,start retained
+filterLabel.effect Effect
+filterValues.tissues Lung,Uterus,Bowel,Skin,Esophagus/Stomach,Thyroid,Breast,CNS/Brain,Bladder/Urinary Tract,Head and Neck,Ovary/Fallopian Tube,Prostate,Other,Lymphoid,Kidney,Pancreas,Cervix,Liver,Soft Tissue,Biliary Tract,Myeloid,Adrenal Gland,Pleura,Peripheral Nervous System,Bone,Testis,Eye,Thymus,Ampulla of Vater,Vulva/Vagina,Peritoneum,Penis
+filterType.tissues multipleListOr
+filterLabel.tissues Cancer tissue (OncoTree)
+filterValues.studies TCGA,AACR_genie,CPTAC_open,REBC,ALCHEMIST,FM,pan_origimed_2020,prad_p1000,cll_broad_2022,mds_iwg_2022,brca_metabric,dlbcl_duke_2017
+filterType.studies multipleListOr
+filterLabel.studies Study
+
+track mutAtlasLolly
+parent cancerMutations hide
+shortLabel CMA Lollipops
+longLabel Cancer Mutation Atlas (CMA): lollipop height is log10 of the number of carriers
+type bigLolly 9 +
+bigDataUrl /gbdb/hg38/cancerMutations/mutAtlas.bb
+html mutAtlas
+lollyField log10Carriers
+viewLimits 0:4
+maxHeightPixels 200:120:20
+priority 2
+maxWindowToDraw 2000000
+mouseOver <b>${name}</b> ${effect}<br>Carriers: ${carriers} of ${tested} tested patients (${prevalence}%)<br>${topTypes}
+detailsDynamicTable _jsonTypes|Cancer types with this variant,_jsonStudies|Studies with this variant
+skipFields score,strand,thickStart,thickEnd,reserved,topTypes,log10Carriers,typeCodes,typeCarriers,typeTested,studyCarriers,studyTested
+skipEmptyFields on
+urls transcript="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$"
+filterByRange.carriers on
+filter.carriers 1:6956
+filterByRange.maxPrev on
+filter.maxPrev 0:100
+filterLimits.maxPrev 0:100
+filterValues.varType SNV,deletion,insertion,MNV,delins
+filterLabel.varType Variant type
+filterValues.effect missense,synonymous,frameshift,stop gained,intron,non-coding transcript,intergenic,splice region,splice acceptor,splice donor,3 prime UTR,inframe deletion,5 prime UTR,inframe insertion,start lost,stop lost,feature truncation,stop retained,coding sequence,feature elongation,start retained
+filterLabel.effect Effect
+filterValues.tissues Lung,Uterus,Bowel,Skin,Esophagus/Stomach,Thyroid,Breast,CNS/Brain,Bladder/Urinary Tract,Head and Neck,Ovary/Fallopian Tube,Prostate,Other,Lymphoid,Kidney,Pancreas,Cervix,Liver,Soft Tissue,Biliary Tract,Myeloid,Adrenal Gland,Pleura,Peripheral Nervous System,Bone,Testis,Eye,Thymus,Ampulla of Vater,Vulva/Vagina,Peritoneum,Penis
+filterType.tissues multipleListOr
+filterLabel.tissues Cancer tissue (OncoTree)
+filterValues.studies TCGA,AACR_genie,CPTAC_open,REBC,ALCHEMIST,FM,pan_origimed_2020,prad_p1000,cll_broad_2022,mds_iwg_2022,brca_metabric,dlbcl_duke_2017
+filterType.studies multipleListOr
+filterLabel.studies Study

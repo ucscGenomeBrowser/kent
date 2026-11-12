@@ -159,8 +159,8 @@ extTable *
 externalDb bigGenePred
 extraDetailsTable bigBed
 detailsStaticTable bigBed
-extraTableFields bigBed
-detailsDynamicTable bigBed
+extraTableFields bigBed bigLolly
+detailsDynamicTable bigBed bigLolly
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -555,7 +555,7 @@ qValueFilter bed narrowPeak broadPeak bigNarrowPeak
 qValueFilterLimits bed narrowPeak broadPeak bigNarrowPeak
 singleCellColumnNames *
 skipFields bigBed bigPsl bigGenePred bigLolly
-skipEmptyFields bigBed bigPsl bigGenePred
+skipEmptyFields bigBed bigPsl bigGenePred bigLolly
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
 snpExceptionDesc bed

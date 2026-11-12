@@ -12,6 +12,8 @@ include clinvarMapped.ra alpha
 
 include gdcCancer.ra
 
+include cancerMutations.ra alpha
+
 include cortexVelmeshev.ra
 include heartCellAtlas.ra
 include kidneyStewart.ra
