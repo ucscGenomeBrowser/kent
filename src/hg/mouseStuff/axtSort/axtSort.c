@@ -44,6 +44,7 @@ else
 lineFileClose(&lf);
 for (axt = axtList; axt != NULL; axt = axt->next)
     axtWrite(axt, f);
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
