@@ -818,11 +818,11 @@ function sessionBuild() {
     // The sign-in line uses the yellow banner style of the "experimental page" note, so a
     // signed-out user does not miss why there is no save form and no session list.
     var intro = '<div class="sessIntro">' +
-        (acctHtml ? '<p class="gbBanner">' + acctHtml + '</p>' : '') +
-        '<p>A session is a stable link to a Genome Browser view that you can save, load later, ' +
-        'share or copy into a manuscript. See the ' +
+        '<p>A saved session is a stable link to a Genome Browser view that you can save, load ' +
+        'later, share or copy into a manuscript. See the ' +
         '<a href="' + sessEnc(C.helpUrl) + '" target="_blank">Sessions User’s Guide</a> and the ' +
-        '<a href="' + sessEnc(C.galleryUrl) + '" target="_blank">Session Gallery</a>.</p></div>';
+        '<a href="' + sessEnc(C.galleryUrl) + '" target="_blank">Session Gallery</a>.</p>' +
+        (acctHtml ? '<p class="gbBanner sessSignIn">' + acctHtml + '</p>' : '') + '</div>';
 
     // Every row carries the server it lives on; at this point they are all this server's own.
     // The sessions merged in later from the other nodes get theirs in sessMergeMirrors().
