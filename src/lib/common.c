@@ -2838,7 +2838,7 @@ void mustWrite(FILE *file, void *buf, size_t size)
 {
 if (size != 0 && fwrite(buf, size, 1, file) != 1)
     {
-    errAbort("Error writing %lld bytes: %s\n", (long long)size, strerror(ferror(file)));
+    errAbort("Error writing %lld bytes: %s\n", (long long)size, strerror(errno));
     }
 }
 
@@ -2849,7 +2849,7 @@ void mustRead(FILE *file, void *buf, size_t size)
 if (size != 0 && fread(buf, size, 1, file) != 1)
     {
     if (ferror(file))
-	errAbort("Error reading %lld bytes: %s", (long long)size, strerror(ferror(file)));
+	errAbort("Error reading %lld bytes: %s", (long long)size, strerror(errno));
     else
 	errAbort("End of file reading %lld bytes", (long long)size);
     }
@@ -2962,7 +2962,7 @@ char *success = fgets(buf, charCount, file);
 if (success == NULL && charCount > 0)
     buf[0] = '\0';
 if (ferror(file))
-    errAbort("mustGetLine: fgets failed: %s", strerror(ferror(file)));
+    errAbort("mustGetLine: fgets failed: %s", strerror(errno));
 }
 
 
@@ -3148,7 +3148,11 @@ if ((pFile != NULL) && ((f = *pFile) != NULL))
         // I/O cleanup causes the invalid memory to be written to the file,
         // possible outputting corruption data.  If would be consistent with
         // stdio behavior to have "stdout" magic name open "/dev/stdout".
-        fflush(f);
+        if (fflush(f) != 0 || ferror(f))
+            {
+            errnoWarn("error writing to stdout");
+            ok = FALSE;
+            }
         }
     *pFile = NULL;
     }
