@@ -1057,7 +1057,7 @@ else  // hyperlink
         dyStringPrintf(url, "&r=%d", psl->tEnd);
         dyStringPrintf(url, "&%s=%s",  cartSessionVarName(), cartSessionId(cart));
         /* the assembly of this search: the cart's db may change in another tab (hgc doMiddle) */
-        dyStringPrintf(url, "&blatDb=%s", cgiEncode(database));
+        dyStringPrintf(url, "&blatBuildDb=%s", cgiEncode(database));
         /* the track filters on the search's minimum score */
         dyStringPrintf(url, "&blatTrackMin=%d", minMatchShown);
         dyStringPrintf(url, "&Submit=%s", cgiEncode("Create a stable custom track with these results"));

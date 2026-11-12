@@ -28677,12 +28677,13 @@ if (issueBotWarning)
     botDelayMessage(ip, botDelayMillis);
     }
 
-/* hgBlat builds its results track for the assembly of the search, which it sends as blatDb: the
- * cart's db may have been changed in another tab since.  The cart's db is put back at the end of
- * buildBigPsl, so building the track does not switch that tab's assembly either. */
-if (sameOk(track, "buildBigPsl") && cgiOptionalString("blatDb") != NULL)
+/* hgBlat builds its results track for the assembly of the search, which it sends as blatBuildDb:
+ * the cart's db may have been changed in another tab since.  The cart's db is put back at the end
+ * of buildBigPsl, so building the track does not switch that tab's assembly either.  This is not
+ * called blatDb, as that is hgBlat's own cart variable and hgc excludes this one from the cart. */
+if (sameOk(track, "buildBigPsl") && cgiOptionalString("blatBuildDb") != NULL)
     {
-    char *blatDb = cgiString("blatDb");
+    char *blatDb = cgiString("blatBuildDb");
     if (hDbIsActive(blatDb) || trackHubDatabase(blatDb))
         {
         blatCartDbBefore = cloneString(cartUsualString(cart, "db", ""));
@@ -30161,7 +30162,7 @@ doMiddle();
 // "u"/"s" are the shared BLAT link's session selectors (loadBlatShareSessionIfAny); exclude them so
 // they are not left in the reader's cart and written into any session they later save.
 char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "aliTrack", "addp", "pred",
-                       "quickLiftCcds", "u", "s", "blatDb", "blatTrackMin", NULL};
+                       "quickLiftCcds", "u", "s", "blatBuildDb", "blatTrackMin", NULL};
 
 int main(int argc, char *argv[])
 {

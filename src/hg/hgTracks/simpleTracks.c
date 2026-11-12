@@ -4842,8 +4842,10 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		innerLine(hvg, x1, midY2, w, color);
 		// An intron of a spliced alignment, with a few unaligned query bases at the
 		// splice site, is no "region with many differences": leave it to the item's
-		// own mouseover.
-		if (!(intronGap > 0 && tGap >= intronGap && tGap > 5 * qGap))
+		// own mouseover.  Most mRNA tracks and BLAT results have no intronGap setting,
+		// so 30 bases, the most common value of it, is the minimum intron then.
+		int minIntron = (intronGap > 0) ? intronGap : 30;
+		if (!(tGap >= minIntron && tGap > 5 * qGap))
 		    {
 		    char *other = aliMarkOtherSeqName(tg);
 		    char text[512];
