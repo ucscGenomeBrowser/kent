@@ -3148,7 +3148,11 @@ if ((pFile != NULL) && ((f = *pFile) != NULL))
         // I/O cleanup causes the invalid memory to be written to the file,
         // possible outputting corruption data.  If would be consistent with
         // stdio behavior to have "stdout" magic name open "/dev/stdout".
-        fflush(f);
+        if (fflush(f) != 0 || ferror(f))
+            {
+            errnoWarn("error writing to stdout");
+            ok = FALSE;
+            }
         }
     *pFile = NULL;
     }
