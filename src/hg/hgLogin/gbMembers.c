@@ -246,14 +246,18 @@ fputc(lastSep,f);
 
 boolean gbMembersActivationTokenOk(struct sqlConnection *conn, char *userName, char *token)
 /* Return TRUE if token is userName's current activation token.  Let the database decide
- * whether the token is still current: setupNewAccount sets emailTokenExpires seven days out and
- * the activation mail says the code expires then, so a link older than that must no longer
- * work.  An unknown user name gives NULL here, and an account that has already been activated
+ * whether the token is still current.  The token only expires for an account with no password:
+ * activateAccount signs such an account in, so its link is a login credential, and
+ * setupNewAccount sets emailTokenExpires seven days out for it.  For an account with a password
+ * the link only proves that its owner reads that mailbox, which is as true after a month as
+ * after a day, and an expired link left the account with no way to be activated at all.
+ * An unknown user name gives NULL here, and an account that has already been activated
  * has an empty emailToken, so both fall through to the same answer as a wrong token. */
 {
 char query[256];
 sqlSafef(query,sizeof(query),
-    "SELECT emailToken FROM gbMembers WHERE userName='%s' AND emailTokenExpires > NOW()",
+    "SELECT emailToken FROM gbMembers WHERE userName='%s' "
+    "AND (emailTokenExpires > NOW() OR password<>'')",
     userName);
 char *emailToken = sqlQuickString(conn, query);
 boolean ok = (isNotEmpty(emailToken) && sameString(emailToken, token));

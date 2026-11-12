@@ -66,6 +66,8 @@ boolean pwdEyeIconEnabled = TRUE; /* show/hide eye icon on password fields;
 boolean recovEmailVerifyOk = FALSE; /* TRUE when gbMembers has the recovEmailVerified column, so
     a confirmed recovery address can be told apart from one that was merely typed into the signup
     form.  Set in doMiddle() after the auto-upgrade; FALSE on a mirror where the ALTER failed. */
+boolean offerActivationResend = FALSE; /* TRUE when errMsg says the account is not activated yet,
+    so the login page offers to send the activation mail again. */
 
 /* for earlyBotCheck() function at the beginning of main() */
 #define delayFraction   1.0    /* standard penalty is 1.0 for most CGIs */
@@ -744,6 +746,13 @@ hPrintf("<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"
 if (emailLinkEnabled())
     hPrintf("<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"loginLink\" id=\"loginLink\">"
         "<label for=\"loginLink\" class=\"radioLabel\">Email me a <b>sign-in link</b>.</label></div>");
+// An install that sends no mail activates every account at signup, so there is nothing to resend.
+boolean canResend = !sameWord(returnAddr, "NOEMAIL");
+if (canResend)
+    hPrintf("<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"activation\" id=\"activation\"%s>"
+        "<label for=\"activation\" class=\"radioLabel\">I did not get my <b>activation email</b>, or its link "
+        "expired. Send it again.</label></div>",
+        sameString(pre, "activation") ? " checked" : "");
 hPrintf("</div>\n");
 hPrintf("<div class=\"inputGroup\" id=\"usernameBox\" style=\"display: none;\">"
     "<label for=\"emailUsername\">Username</label>"
@@ -765,8 +774,10 @@ jsOnEventById("click", "password", "toggle('showU');");
 jsOnEventById("click", "username", "toggle('showE');");
 if (emailLinkEnabled())
     jsOnEventById("click", "loginLink", "toggle('showE');");
+if (canResend)
+    jsOnEventById("click", "activation", "toggle('showU');");
 // If a radio was preselected via the URL, open its matching input box on load.
-if (sameString(pre, "password"))
+if (sameString(pre, "password") || (canResend && sameString(pre, "activation")))
     jsInline("toggle('showU');");
 else if (sameString(pre, "username") || sameString(pre, "loginLink"))
     jsInline("toggle('showE');");
@@ -800,6 +811,15 @@ else
     sqlSafef(query,sizeof(query),"SELECT recovEmail FROM gbMembers WHERE userName='%s'", username);
 char *recovEmail = sqlQuickString(conn, query);
 
+/* Signing in with this temporary password activates an account that is still waiting for its
+ * activation link (see displayLogin), which is only right when the password went to the main
+ * address alone.  So an unactivated account gets no copy at its recovery address. */
+sqlSafef(query,sizeof(query),
+    "SELECT accountActivated FROM gbMembers WHERE userName='%s'", username);
+char *activated = sqlQuickString(conn, query);
+if (!sameOk(activated, "Y"))
+    recovEmail = NULL;
+
 sendNewPwdMail(username, email, recovEmail, password);
 }
 
@@ -828,13 +848,35 @@ cartRemove(cart, "hgLogin_changeRequired");
 return;
 }
 
-void sendActivateMail(char *email, char *username, char *encToken)
+static boolean activationLinkExpires(struct sqlConnection *conn, char *username)
+/* Only the activation link of an account with no password expires, see
+ * gbMembersActivationTokenOk. */
+{
+char query[256];
+sqlSafef(query, sizeof(query),
+    "SELECT count(*) FROM gbMembers WHERE userName='%s' AND password=''", username);
+return (sqlQuickNum(conn, query) > 0);
+}
+
+static void markAccountActivated(struct sqlConnection *conn, char *username)
+/* Activate the account and drop its activation token. */
+{
+char query[256];
+sqlSafef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' WHERE userName='%s'",
+    username);
+sqlUpdate(conn, query);
+}
+
+void sendActivateMail(struct sqlConnection *conn, char *email, char *username, char *encToken)
 /* Send activation mail with token to user*/
 {
 char subject[256];
 char msg[4096];
 char activateURL[256];
 char *remoteAddr=getenv("REMOTE_ADDR");
+char *expiry = "";
+if (activationLinkExpires(conn, username))
+    expiry = " This confirmation code will expire in 7 days.";
 
 safef(activateURL, sizeof(activateURL),
     "%s?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
@@ -843,8 +885,8 @@ safef(activateURL, sizeof(activateURL),
     cgiEncode(encToken));
 safef(subject, sizeof(subject),"%s account email address confirmation", brwName);
 safef(msg, sizeof(msg),
-    "Someone (probably you, from IP address %s) has requested an account %s with this email address on the %s.\nTo confirm that this account really does belong to you on the %s, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n\nIf this *is* you, after clicking the activation link, your new account gives you access to sessions you can create and name. Sessions allow you to save your Genome Browser screen configuration and share it with others with a link like https://genome.ucsc.edu/s/%s/YourSessionName\n\nFor more information on sessions, see our help page on the topic: https://genome.ucsc.edu/goldenPath/help/hgSessionHelp.html#Introduction\n\nAdditional resources:\nSubscribe to the Genome Browser Mailing List: https://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en\nGenome Browser User Guide: https://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html\nTraining and Tutorials: https://genome.ucsc.edu/training/index.html\n\n%s\n%s",
-     remoteAddr, username, brwName, brwName, activateURL, username, signature, returnAddr);
+    "Someone (probably you, from IP address %s) has requested an account %s with this email address on the %s.\nTo confirm that this account really does belong to you on the %s, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link.%s\n\nIf this *is* you, after clicking the activation link, your new account gives you access to sessions you can create and name. Sessions allow you to save your Genome Browser screen configuration and share it with others with a link like https://genome.ucsc.edu/s/%s/YourSessionName\n\nFor more information on sessions, see our help page on the topic: https://genome.ucsc.edu/goldenPath/help/hgSessionHelp.html#Introduction\n\nAdditional resources:\nSubscribe to the Genome Browser Mailing List: https://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en\nGenome Browser User Guide: https://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html\nTraining and Tutorials: https://genome.ucsc.edu/training/index.html\n\n%s\n%s",
+     remoteAddr, username, brwName, brwName, activateURL, expiry, username, signature, returnAddr);
 sendActMailOut(email, subject, msg);
 }
 
@@ -864,7 +906,7 @@ sqlSafef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(),emailToken='%s
     username
     );
 sqlUpdate(conn, query);
-sendActivateMail(email, username, tokenMD5);
+sendActivateMail(conn, email, username, tokenMD5);
 return;
 }
 
@@ -872,20 +914,51 @@ void resendActivateMail(struct sqlConnection *conn, char *email, char *username)
 /* Mail the activation link for an account that already has one outstanding, reusing the token
  * rather than minting a new one.  Every fresh token silently kills the link in the mail before
  * it, so a user who clicks the provider button twice and then opens the first message is told
- * their link is invalid.  Falls back to a new token once the old one has expired. */
+ * their link is invalid.  Falls back to a new token once the old one has expired, which only
+ * happens for an account with no password (see gbMembersActivationTokenOk). */
 {
 char query[256];
 sqlSafef(query, sizeof(query),
     "SELECT emailToken FROM gbMembers WHERE userName='%s' AND emailToken<>'' "
-    "AND emailTokenExpires > NOW()", username);
+    "AND (emailTokenExpires > NOW() OR password<>'')", username);
 char *token = sqlQuickString(conn, query);
 if (isEmpty(token))
     {
     setupNewAccount(conn, email, username);
     return;
     }
-sendActivateMail(email, username, token);
+sendActivateMail(conn, email, username, token);
 freeMem(token);
+}
+
+void resendActivation(struct sqlConnection *conn, char *username)
+/* Mail the activation link again, for a user whose mail never arrived or whose link expired.
+ * The page says the same thing whether or not the account exists or is waiting, and the mail
+ * only ever goes to the address stored on the account. */
+{
+char query[256];
+sqlSafef(query, sizeof(query),
+    "SELECT email FROM gbMembers WHERE userName='%s' AND accountActivated<>'Y'", username);
+char *email = sqlQuickString(conn, query);
+if (isNotEmpty(email))
+    resendActivateMail(conn, email, username);
+freeMem(email);
+
+char *encUser = htmlEncode(username);
+hPrintf(
+    "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
+    "<h2>%s</h2>", brwName);
+hPrintf(
+    "<p id=\"confirmationMsg\" class=\"confirmationTxt\">If the account <b>%s</b> is waiting "
+    "to be activated, the activation email has been sent again to the email address of that "
+    "account. Please click the link in the email to activate your account.</p>"
+    "<p>You may have to look in your spam folder for the email, especially if you use "
+    "Microsoft Outlook or Hotmail. If the account is already activated, you can sign in "
+    "now.</p>", encUser);
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>\n",
+        hgLoginUrl);
+freeMem(encUser);
+cartRemove(cart, "hgLogin_helpWith");
 }
 
 void printPwdEyeIcon(char *iconId, char *slashId)
@@ -943,6 +1016,9 @@ if (errMsg && sameString(errMsg, "Your account has been activated."))
     hPrintf("<span style='color:green;'>%s</span>\n", errMsg ? errMsg : "");
 else
     hPrintf("<span style='color:red;'>%s</span>\n", errMsg ? errMsg : "");
+if (offerActivationResend && !sameWord(returnAddr, "NOEMAIL"))
+    hPrintf("<p><a href=\"%s?hgLogin.do.displayAccHelpPage=1&hgLogin_helpWith=activation\">"
+        "Send the activation email again</a></p>\n", hgLoginUrl);
 hPrintf("<form method=post action=\"%s\" name=\"accountLoginForm\" id=\"accountLoginForm\">"
     "\n"
     "<div class=\"inputGroup\">"
@@ -992,9 +1068,7 @@ char *token = cgiUsualString("token", "");
 char *username = cgiUsualString("user","");
 if (gbMembersActivationTokenOk(conn, username, token))
     {
-    sqlSafef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' WHERE userName='%s'",
-    username);
-    sqlUpdate(conn, query);
+    markAccountActivated(conn, username);
     /* An account with no password was created by a social login, and the provider button is its
      * only other way in.  Opening this link proves the mailbox is theirs, which is the same
      * proof the passwordless email link accepts (see emailLogin), so finish the job and sign
@@ -1018,6 +1092,7 @@ else
     freez(&errMsg);
     errMsg = cloneString("This activation link is not valid, has expired, or has already "
         "been used.");
+    offerActivationResend = TRUE;
     }
 cartSetString(cart, "hgLogin_userName", username);
 
@@ -2009,6 +2084,20 @@ if (sameString(helpWith,"loginLink"))
     return;
     }
 
+/* Activation mail never arrived, or its link expired */
+if (sameString(helpWith,"activation") && !sameWord(returnAddr, "NOEMAIL"))
+    {
+    if (sameString(username,""))
+        {
+        freez(&errMsg);
+        errMsg = cloneString("Username cannot be blank.");
+        displayAccHelpPage(conn);
+        return;
+        }
+    resendActivation(conn, username);
+    return;
+    }
+
 /* Forgot username */
 if (sameString(helpWith,"username"))
     {
@@ -2155,13 +2244,22 @@ if ((row = sqlNextRow(sr)) == NULL)
 struct gbMembers *m = gbMembersLoad(row);
 sqlFreeResult(&sr);
 
-/* Check user name exist and account activated */
+/* Check user name exist and account activated.  A temporary password from "forgot password"
+ * is mailed only to the account's main address while it is not activated (sendNewPassword), so
+ * signing in with one proves the same thing as the activation link does. */
 if (!sameString(m->accountActivated,"Y"))
-    {              
-    freez(&errMsg);
-    errMsg = cloneString("Account is not activated.");
-    displayLoginPage(conn);
-    return;
+    {
+    if (usingNewPassword(conn, m->userName, password))
+        markAccountActivated(conn, m->userName);
+    else
+        {
+        freez(&errMsg);
+        errMsg = cloneString("Account is not activated. Please click the link in the activation "
+            "email we sent you.");
+        offerActivationResend = TRUE;
+        displayLoginPage(conn);
+        return;
+        }
     }
 if (checkPwd(password,m->password))
     {
