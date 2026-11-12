@@ -69,6 +69,7 @@ fileTypeExtensions = {
     "bigChain": [ ".bigchain" ],
     "bamIndex": [ ".bam.bai", ".bai" ],
     "tabixIndex": [ ".vcf.gz.tbi", "vcf.bgz.tbi" ],
+    "cramIndex": [ ".cram.crai", ".crai" ],
     "2bit": [ ".2bit" ],
     "text": [ ".txt", ".text" ],
 }

@@ -1392,6 +1392,7 @@ var hubCreate = (function() {
         "bigChain": [".bigchain"],
         "bamIndex": [".bam.bai", ".bai"],
         "tabixIndex": [".vcf.gz.tbi", "vcf.bgz.tbi"],
+        "cramIndex": [".cram.crai", ".crai"],
         "hub.txt": ["hub.txt"],
         "2bit": [".2bit"],
         "text": [".txt", ".text"],
@@ -2445,7 +2446,7 @@ var hubCreate = (function() {
             return folderIcon;
         } else {
             // only offer the button if this is a track file
-            if (rowData.fileType !== "hub.txt" && rowData.fileType !== "text" && rowData.fileType !== "tabixIndex" && rowData.fileType !== "bamIndex" && rowData.fileType !== "2bit" && rowData.fileType in extensionMap) {
+            if (rowData.fileType !== "hub.txt" && rowData.fileType !== "text" && rowData.fileType !== "tabixIndex" && rowData.fileType !== "bamIndex" && rowData.fileType !== "cramIndex" && rowData.fileType !== "2bit" && rowData.fileType in extensionMap) {
                 let container = document.createElement("div");
                 let viewBtn = document.createElement("button");
                 viewBtn.textContent = "View in Genome Browser";

@@ -811,7 +811,8 @@ return found;
 
 static void writeTrackStanza(char *hubFileName, char *track, char *bigDataUrl, char *type, char *label, char *bigFileLocation)
 {
-if ( (sameString(type, "bamIndex") || sameString(type, "tabixIndex") || sameString(type, "text")) )
+if ( (sameString(type, "bamIndex") || sameString(type, "tabixIndex") || sameString(type, "cramIndex")
+        || sameString(type, "text")) )
     // don't need to make track stanzas for these supporting files
     return;
 
