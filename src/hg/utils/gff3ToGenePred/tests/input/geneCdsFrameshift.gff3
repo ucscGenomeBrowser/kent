@@ -1,0 +1,13 @@
+##gff-version 3
+NC_000913.3	RefSeq	gene	492092	494023	.	+	.	ID=gene-b0470;Name=dnaX;gbkey=Gene;gene=dnaX;gene_biotype=protein_coding;locus_tag=b0470
+NC_000913.3	RefSeq	CDS	492092	494023	.	+	0	ID=cds-NP_415003.1;Parent=gene-b0470;Name=NP_415003.1;gbkey=CDS;gene=dnaX;product=DNA polymerase III subunit tau
+NC_000913.3	RefSeq	CDS	492092	493375	.	+	0	ID=cds-YP_009518751.1;Parent=gene-b0470;Name=YP_009518751.1;exception=ribosomal slippage;gbkey=CDS;gene=dnaX;product=DNA polymerase III subunit gamma
+NC_000913.3	RefSeq	CDS	493375	493386	.	+	0	ID=cds-YP_009518751.1;Parent=gene-b0470;Name=YP_009518751.1;exception=ribosomal slippage;gbkey=CDS;gene=dnaX;product=DNA polymerase III subunit gamma
+NC_000913.3	RefSeq	gene	508875	511379	.	-	.	ID=gene-b0484;Name=copA;gbkey=Gene;gene=copA;gene_biotype=protein_coding;locus_tag=b0484
+NC_000913.3	RefSeq	CDS	508875	511379	.	-	0	ID=cds-NP_415017.1;Parent=gene-b0484;Name=NP_415017.1;gbkey=CDS;gene=copA;product=Cu(+) exporting P-type ATPase
+NC_000913.3	RefSeq	CDS	511176	511379	.	-	0	ID=cds-YP_009518752.1;Parent=gene-b0484;Name=YP_009518752.1;exception=ribosomal slippage;gbkey=CDS;gene=copA;product=copper chaperone CopA(Z)
+NC_000913.3	RefSeq	CDS	511168	511176	.	-	0	ID=cds-YP_009518752.1;Parent=gene-b0484;Name=YP_009518752.1;exception=ribosomal slippage;gbkey=CDS;gene=copA;product=copper chaperone CopA(Z)
+NC_000913.3	RefSeq	pseudogene	4507197	4509793	.	+	.	ID=gene-b4623;Name=insO;gbkey=Gene;gene=insO;gene_biotype=pseudogene;locus_tag=b4623;pseudo=true
+NC_000913.3	RefSeq	CDS	4507197	4507451	.	+	0	ID=cds-gnl|b4623|CDS4514;Parent=gene-b4623;gbkey=CDS;gene=insO;locus_tag=b4623;pseudo=true
+NC_000913.3	RefSeq	CDS	4509009	4509479	.	+	0	ID=cds-gnl|b4623|CDS4514;Parent=gene-b4623;gbkey=CDS;gene=insO;locus_tag=b4623;pseudo=true
+NC_000913.3	RefSeq	CDS	4509479	4509793	.	+	0	ID=cds-gnl|b4623|CDS4514;Parent=gene-b4623;gbkey=CDS;gene=insO;locus_tag=b4623;pseudo=true

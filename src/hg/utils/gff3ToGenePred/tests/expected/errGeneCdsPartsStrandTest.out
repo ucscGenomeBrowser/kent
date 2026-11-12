@@ -1,0 +1,2 @@
+Error: parts of CDS cds-p1 are on different sequences or strands: chr1:99-300 + and chr1:699-900 -
+1 errors converting GFF3 file: input/geneCdsPartsStrand.gff3

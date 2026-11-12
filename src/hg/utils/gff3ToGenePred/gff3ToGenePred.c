@@ -463,13 +463,18 @@ static bool adjacentBlocks(struct gff3Ann *prevAnn, struct gff3Ann *ann)
 return (prevAnn != NULL) && (prevAnn->end == ann->start);
 }
 
-static void addExon(struct genePred *gp, struct gff3Ann *prevAnn, struct gff3Ann *ann)
-/* add one block as an exon, merging adjacent blocks */
+static void addExon(struct genePred *gp, struct gff3Ann *prevAnn, struct gff3Ann *ann,
+                    boolean mergeOverlaps)
+/* add one block as an exon, merging adjacent blocks, and overlapping ones if mergeOverlaps */
 {
 int i = gp->exonCount;
 if (adjacentBlocks(prevAnn, ann))
     {
     gp->exonEnds[i-1] = ann->end; // extend
+    }
+else if (mergeOverlaps && (i > 0) && (ann->start < gp->exonEnds[i-1]))
+    {
+    gp->exonEnds[i-1] = max(gp->exonEnds[i-1], ann->end);
     }
 else
     {
@@ -480,17 +485,18 @@ else
     }
 }
     
-static void addExons(struct genePred *gp, struct gff3AnnRef *blks)
+static void addExons(struct genePred *gp, struct gff3AnnRef *blks, boolean mergeOverlaps)
 /* Add exons.  Blks can either be exon records or utr and cds records.  This
  * is necessary to define genePred exons as GFF3 doesn't insist on an exact
- * annotation hierarchy. If blks are adjacent, they will be joined.  exons
- * records maybe split later when assigning CDS frame
+ * annotation hierarchy. If blks are adjacent, they will be joined, and if they
+ * overlap and mergeOverlaps is set, too.  exons records maybe split later when
+ * assigning CDS frame
  */
 {
 struct gff3AnnRef *blk, *prevBlk = NULL;
 for (blk = blks; blk != NULL; prevBlk = blk, blk = blk->next)
     {
-    addExon(gp, ((prevBlk == NULL) ? NULL : prevBlk->ann), blk->ann);
+    addExon(gp, ((prevBlk == NULL) ? NULL : prevBlk->ann), blk->ann, mergeOverlaps);
     }
 }
 
@@ -653,16 +659,32 @@ if (exons == NULL)
     cdsUtrBlks = getCdsUtrBlks(mrna);
 struct gff3AnnRef *useExons = (exons != NULL) ? exons : cdsUtrBlks;
 
+boolean joinedParts = FALSE;
 if (useExons == NULL) // if we don't have any exons, just use the feature
     {
     if (isCdsPart(mrna))
         {
         // multi-exon CDS that is a direct child of a gene: one record per
         // exon, all with the same ID, linked by nextPart starting at the head.
+        // NCBI writes a programmed frameshift as two parts that overlap by a
+        // base; these are merged into one exon below, and addExonFrames then
+        // splits it at the frameshift, as it does for an mRNA with an exon.
         struct gff3Ann *part;
         for (part = mrna; part != NULL; part = part->nextPart)
+            {
+            if (differentString(part->seqid, mrna->seqid)
+                || differentStringNullOk(part->strand, mrna->strand))
+                {
+                cnvError("parts of CDS %s are on different sequences or strands: %s:%d-%d %s and %s:%d-%d %s",
+                         mrna->id, mrna->seqid, mrna->start, mrna->end, naForNull(mrna->strand),
+                         part->seqid, part->start, part->end, naForNull(part->strand));
+                slFreeList(&useExons);
+                return NULL;
+                }
             slAddHead(&useExons, gff3AnnRefNew(part));
+            }
         slSort(&useExons, gff3AnnRefLocCmp);
+        joinedParts = TRUE;
         }
     else
         useExons = gff3AnnRefNew(mrna);
@@ -673,7 +695,7 @@ if (useExons == NULL) // if we don't have any exons, just use the feature
 struct genePred *gp = makeGenePred((gene != NULL) ? gene : mrna, mrna, useExons, cdsBlks);
 if (gp != NULL)
     {
-    addExons(gp, useExons);
+    addExons(gp, useExons, joinedParts);
     if (!validateCds(gp, cdsBlks))
         genePredFree(&gp);
     else
@@ -692,7 +714,7 @@ static struct genePred *standaloneGeneToGenePred(struct gff3Ann *gene)
 struct gff3AnnRef fakeExons = {NULL, gene};
 struct genePred *gp = makeGenePred(gene, gene, &fakeExons, NULL);
 if (gp != NULL)
-    addExons(gp, &fakeExons);
+    addExons(gp, &fakeExons, FALSE);
 return gp;  // NULL if error above
 }
 

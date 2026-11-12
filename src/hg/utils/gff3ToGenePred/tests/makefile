@@ -13,7 +13,7 @@ test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOu
 	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
 	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest makeBadTest \
 	transcriptOnlyTest hprcTest errDupIdDiffParentsTest geneCdsDiscontinuousTest \
-	geneChildTypesTest pseudoGenesDefaultTest
+	geneChildTypesTest pseudoGenesDefaultTest geneCdsFrameshiftTest errGeneCdsPartsStrandTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -142,6 +142,16 @@ errDupIdDiffParentsTest: mkout
 geneCdsDiscontinuousTest: mkout
 	${gff3ToGenePred} -useName input/geneCdsDiscontinuous.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
+
+# NCBI bacterial programmed frameshifts: CDS parts with one ID that overlap by a base
+geneCdsFrameshiftTest: mkout
+	${gff3ToGenePred} -useName input/geneCdsFrameshift.gff3 output/$@.gp
+	genePredCheck output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+errGeneCdsPartsStrandTest: mkout
+	if ! ${gff3ToGenePred} input/geneCdsPartsStrand.gff3 /dev/null >output/$@.out 2>&1 ; then true ; else ${cmdShouldFail} ; fi
+	diff expected/$@.out output/$@.out
 
 # gene children of any type with exons, pseudogenes with direct exons or
 # no children, converted without -allowMinimalGenes (#38692)
