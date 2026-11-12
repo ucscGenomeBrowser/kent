@@ -486,9 +486,6 @@ char *encoded = encodeUserNameForIdentifier(userName);
 if (strlen(encoded) > MYVARIANTS_ENCODED_USER_MAXLEN)
     encoded[MYVARIANTS_ENCODED_USER_MAXLEN] = 0;
 char *key = makeRandomKey(32);
-/* makeRandomKey returns base64url text, which can hold '-'; keep the
- * identifier to alphanumerics and underscore. */
-subChar(key, '-', '_');
 struct dyString *dy = dyStringCreate(MYVARIANTS_TRACK_PREFIX "%s_%s", encoded, key);
 freeMem(encoded);
 freeMem(key);
@@ -880,6 +877,17 @@ for (fld = *pFieldList; fld != NULL; fld = next)
     }
 slReverse(&kept);
 *pFieldList = kept;
+}
+
+boolean myVariantsIsHiddenField(char *table, char *field)
+/* TRUE if table is a myVariants table, bare or as db.table, and field is one
+ * of its "_hidden_" columns.  NULL-safe. */
+{
+if (table == NULL || field == NULL)
+    return FALSE;
+char *bare = strrchr(table, '.');
+bare = bare ? bare + 1 : table;
+return isMyVariantsTrack(bare) && startsWithNoCase("_hidden_", field);
 }
 
 static char *myVariantsDescriptionHtml(char *trackName, char *ctDb)

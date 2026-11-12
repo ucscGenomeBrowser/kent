@@ -85,6 +85,8 @@ void doValueHistogram(char *field)
 {
 char *db = cartString(cart, hgtaDatabase);
 char *table = cartString(cart, hgtaHistoTable);
+if (myVariantsIsHiddenField(table, field))
+    errAbort("No histogram available for field %s", field);
 htmlOpen("Value histogram for %s.%s.%s", db, table, field);
 printValueHistogram(db, table, field);
 htmlClose();
@@ -121,6 +123,8 @@ char *db = cartString(cart, hgtaDatabase);
 char *table = cartString(cart, hgtaHistoTable);
 boolean showItemRgb = FALSE;
 
+if (myVariantsIsHiddenField(table, field))
+    errAbort("No range available for field %s", field);
 showItemRgb=bedItemRgb(findTdbForTable(db, curTrack, table, ctLookupName));
 // should we expect itemRgb instead of "reserved"
 

@@ -119,6 +119,12 @@ puts("</TR>\n");
 example = exampleList;
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    if (myVariantsIsHiddenField(table, row[0]))
+        {
+        if (example != NULL)
+            example = example->next;
+        continue;
+        }
     if (showItemRgb && (sameWord(row[0],"reserved")))
 	hPrintf("<TR><TD><TT>itemRgb</TT></TD> ");
     else
@@ -220,7 +226,6 @@ static void printSampleRows(int sampleCount, struct sqlConnection *conn, char *t
 /* Put up sample values.  whereClause, if given, is a NOSQLINJ-safe fragment
  * limiting the rows sampled; pass NULL to sample the whole table. */
 {
-char query[256];
 struct sqlResult *sr;
 char **row;
 int i, columnCount = 0;
@@ -231,23 +236,27 @@ showItemRgb=bedItemRgb(findTdbForTable(database, curTrack, table, ctLookupName))
 // should we expect itemRgb     instead of "reserved"
 
 /* Make table with header row containing name of fields. */
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
+struct slName *fieldList = sqlListFields(conn, table);
+columnCount = slCount(fieldList);
+boolean *hiddenCol;
+AllocArray(hiddenCol, columnCount);
 hTableStart();
 hPrintf("<TR>");
-while ((row = sqlNextRow(sr)) != NULL)
+struct slName *field;
+for (field = fieldList, i = 0; field != NULL; field = field->next, ++i)
     {
-    if (showItemRgb && sameWord(row[0],"reserved"))
+    if (myVariantsIsHiddenField(table, field->name))
+        hiddenCol[i] = TRUE;
+    else if (showItemRgb && sameWord(field->name,"reserved"))
 	{
 	hPrintf("<TH>itemRgb</TH>");
-	itemRgbCol = columnCount;
+	itemRgbCol = i;
 	}
     else
-	hPrintf("<TH>%s</TH>", row[0]);
-    ++columnCount;
+	hPrintf("<TH>%s</TH>", field->name);
     }
 hPrintf("</TR>");
-sqlFreeResult(&sr);
+slFreeList(&fieldList);
 
 /* Get some sample fields. */
 struct dyString *sampleQuery = sqlDyStringCreate("select * from %s", table);
@@ -261,6 +270,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     hPrintf("<TR>");
     for (i=0; i<columnCount; ++i)
 	{
+	if (hiddenCol[i])
+	    continue;
 	if (showItemRgb && (i == itemRgbCol))
 	    {
 	    int rgb = atoi(row[i]);
@@ -282,6 +293,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     hPrintf("</TR>\n");
     }
 sqlFreeResult(&sr);
+freeMem(hiddenCol);
 hTableEnd();
 explainCoordSystem();
 }

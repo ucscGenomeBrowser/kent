@@ -1145,7 +1145,7 @@ else if (type != NULL &&
         for (ft = ftList; ft != NULL; ft = next)
             {
             next = ft->next;
-            if (!startsWithNoCase("_hidden_", ft->name))
+            if (!myVariantsIsHiddenField(table, ft->name))
                 slAddHead(&kept, ft);
             }
         slReverse(&kept);
@@ -1614,7 +1614,7 @@ for (var = varList; var != NULL; var = var->next)
 	continue;
 	}
     /* Hidden My Annotations fields are not offered for filtering, so skip them. */
-    if (isMyVariantsTrack(table) && startsWithNoCase("_hidden_", field))
+    if (myVariantsIsHiddenField(table, field))
         continue;
     if (sameString(type, filterDdVar))
         {
