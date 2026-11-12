@@ -60,8 +60,8 @@ struct hgPos
      bool canonical;		/* The gene is the canonical version. */
      struct tsrPos *tp;		/* The trix search associated with the gene. */
      char *highlight;		/* If non-empty, new value for highlight cart variable */
-     int padStart;		/* Context bases added before the match, 0 if none. */
-     int padEnd;			/* Context bases added after the match, 0 if none. */
+     int padStart;              /* Context bases added before the match, 0 if none. */
+     int padEnd;                /* Context bases added after the match, 0 if none. */
      };
 
 struct searchCategory

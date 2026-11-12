@@ -250,36 +250,77 @@ async function upload(p, opts) {
     }
 }
 
-async function deleteHub(p, hubName) {
-    // Select the hub's own row in the file table and delete it with everything in
-    // it, as a user does from the top level of the table.
+async function clickInRow(p, fullPath, what) {
+    // Click an element inside the row the table shows for fullPath. The row has to
+    // be in the current view, so open its directory first.
     await wait.until(p, (n) => window.hubCreate && n in hubCreate.uiState.filesHash,
-        `there is no hub ${hubName} in the file table`, { arg: hubName });
-    const clicked = await p.evaluate(([sel, n]) => {
+        `there is no ${fullPath} in the file table`, { arg: fullPath });
+    const clicked = await p.evaluate(([sel, n, inner]) => {
         const table = jQuery(sel).DataTable();
-        const idx = table.rows().indexes().toArray()
+        const idx = table.rows({ search: 'applied' }).indexes().toArray()
             .find(i => table.row(i).data().fullPath === n);
         if (idx === undefined) {
             return false;
         }
-        const box = table.row(idx).node().querySelector('input.dt-select-checkbox');
-        if (!box) {
+        const el = table.row(idx).node().querySelector(inner);
+        if (!el) {
             return false;
         }
-        box.click();
+        el.click();
         return true;
-    }, [FILES_TABLE, hubName]);
+    }, [FILES_TABLE, fullPath, what]);
     if (!clicked) {
-        throw new Error(`hub ${hubName} has no row to select at the top of the table`);
+        throw new Error(`${fullPath} has no ${what} in the table's current view`);
     }
-    const accept = d => d.accept();
-    p.on('dialog', accept);
+}
+
+async function openDir(p, fullPath) {
+    // Open a directory through its folder icon, as a user does. The directory
+    // must be in the current view.
+    await clickInRow(p, fullPath, '.folderIcon');
+    await wait.until(p, (n) => hubCreate.uiState.currentHubPath === n,
+        `the table never opened ${fullPath}`, { arg: fullPath });
+}
+
+async function selectRow(p, fullPath) {
+    // Tick a row's checkbox. The row must be in the current view.
+    await clickInRow(p, fullPath, 'input.dt-select-checkbox');
+}
+
+async function deleteSelected(p, gone) {
+    // Press "Delete selected", say yes to any question, and wait until every path
+    // in gone has left the file table. Returns the text of every alert the page
+    // showed. An alert means the page refused, so then it returns without waiting.
+    const alerts = [];
+    const answer = (d) => {
+        if (d.type() === 'alert') {
+            alerts.push(d.message());
+        }
+        return d.accept();
+    };
+    p.on('dialog', answer);
     try {
+        // the refusal is an alert from the click handler, so it is answered by
+        // the time the click returns
         await p.locator('button:visible:text-is("Delete selected")').first().click();
-        await wait.until(p, (n) => !(n in hubCreate.uiState.filesHash),
-            `hub ${hubName} was still listed after the delete`, { arg: hubName });
+        if (alerts.length) {
+            return alerts;
+        }
+        await wait.until(p, (paths) => paths.every(n => !(n in hubCreate.uiState.filesHash)),
+            `still listed after the delete: ${gone.join(', ')}`, { arg: gone });
     } finally {
-        p.off('dialog', accept);
+        p.off('dialog', answer);
+    }
+    return alerts;
+}
+
+async function deleteHub(p, hubName) {
+    // Select the hub's own row in the file table and delete it with everything in
+    // it, as a user does from the top level of the table.
+    await selectRow(p, hubName);
+    const alerts = await deleteSelected(p, [hubName]);
+    if (alerts.length) {
+        throw new Error(`the page refused to delete hub ${hubName}: ${alerts.join(' | ')}`);
     }
 }
 
@@ -368,7 +409,8 @@ async function listedRow(p, fullPath) {
 
 module.exports = {
     openUploadTab, openDashboard, addFile, addDiskFiles, addFolder, editFile,
-    openFileCard, upload, deleteHub, waitForFileCard, saveFileCard,
+    openFileCard, upload, openDir, selectRow, deleteSelected, deleteHub,
+    waitForFileCard, saveFileCard,
     hasUploadTab, files, fileNamed, metaOf, cardGenome, cardHubName, cardFileName,
     listedRow,
 };

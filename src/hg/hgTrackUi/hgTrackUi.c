@@ -3435,7 +3435,7 @@ static void myVariantsDownloadLink(char *db, boolean allDbs, char *trackName,
  * being browsed. Excel downloads are comma separated with a .csv name, which
  * Excel opens without complaint. */
 {
-printf("<a href=\"../cgi-bin/hgTracks?db=%s&amp;" MYVARIANTS_DOWNLOAD_CGI_VAR "=%s"
+htmlPrintf("<a href=\"../cgi-bin/hgTracks?db=%s|url|&amp;" MYVARIANTS_DOWNLOAD_CGI_VAR "=%s"
        "&amp;" MYVARIANTS_DOWNLOAD_SEP_VAR "=%s",
     db, allDbs ? MYVARIANTS_DOWNLOAD_ALL : "assembly", forExcel ? "csv" : "tab");
 if (trackName != NULL)
@@ -3467,7 +3467,7 @@ for (dbCount = dbCounts; dbCount != NULL; dbCount = dbCount->next)
     int count = myVariantsCountForDb(proj->dbTable, dbCount->name);
     if (count <= 0)
         continue;
-    printf("<tr><td>%s (%d annotation%s)%s:</td><td>\n",
+    htmlPrintf("<tr><td>%s (%d annotation%s)%s:</td><td>\n",
         dbCount->name, count, count == 1 ? "" : "s",
         sameString(dbCount->name, database) ? ", this assembly" : "");
     myVariantsDownloadLink(dbCount->name, FALSE, trackName, FALSE, "Tab-separated file");
@@ -3493,18 +3493,18 @@ printf("</tbody></table>\n");
 myVariantsProjectFreeList(&proj);
 /* The column list belongs next to the links, not at the foot of the page under
  * the sharing controls, where nobody choosing a file would look for it. */
-printf("<p><a href=\"../cgi-bin/hgTables?db=%s&amp;hgta_group=" MYVARIANTS_GROUP_NAME
-    "&amp;hgta_track=%s"
-    "&amp;hgta_table=%s&amp;hgta_doSchema=describe+table+schema\" target=\"ucscSchema\">"
+htmlPrintf("<p><a href=\"../cgi-bin/hgTables?db=%s|url|&amp;hgta_group=" MYVARIANTS_GROUP_NAME
+    "&amp;hgta_track=%s|url|"
+    "&amp;hgta_table=%s|url|&amp;hgta_doSchema=describe+table+schema\" target=\"ucscSchema\">"
     "What is in these files</a>. In both files a line break in a value is "
     "written as \\n, a tab as \\t and a backslash as \\\\. The comma-separated "
     "file also wraps a value in quotes if it holds a comma or a quote, and "
     "doubles any quote inside it.</p>\n",
     database, trackName, trackName);
-printf("<p>To pick a region, a subset of fields, or another output format, open the "
-    "<a href=\"../cgi-bin/hgTables?db=%s&amp;hgta_group=" MYVARIANTS_GROUP_NAME
-    "&amp;hgta_track=%s"
-    "&amp;hgta_table=%s\" target=\"_blank\">Table Browser</a>, "
+htmlPrintf("<p>To pick a region, a subset of fields, or another output format, open the "
+    "<a href=\"../cgi-bin/hgTables?db=%s|url|&amp;hgta_group=" MYVARIANTS_GROUP_NAME
+    "&amp;hgta_track=%s|url|"
+    "&amp;hgta_table=%s|url|\" target=\"_blank\">Table Browser</a>, "
     "which works on the assembly you are currently browsing.</p>\n",
     database, trackName, trackName);
 }
@@ -3532,7 +3532,7 @@ printf("<div id=\"shareCreateSection\">\n");
 /* The track this page is for.  The API takes the track name and resolves the
  * project from it, so the owner cannot be talked into sharing another one. */
 if (isNotEmpty(trackName))
-    printf("<input type=\"hidden\" id=\"shareTrackName\" value=\"%s\">\n", trackName);
+    htmlPrintf("<input type=\"hidden\" id=\"shareTrackName\" value=\"%s|attr|\">\n", trackName);
 printf("<div>\n");
 printf("<label><input type=\"radio\" name=\"sharePerm\" value=\"0\" checked>"
     " Anyone with the link can view</label><br>\n");

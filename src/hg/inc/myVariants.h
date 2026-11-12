@@ -260,6 +260,10 @@ void myVariantsStripHiddenFields(struct slName **pFieldList);
  * see columns the owner has hidden. (Custom non-hidden columns are kept,
  * since they are part of the data the owner intentionally shared.) */
 
+boolean myVariantsIsHiddenField(char *table, char *field);
+/* TRUE if table is a myVariants table, bare or as db.table, and field is one
+ * of its "_hidden_" columns.  NULL-safe. */
+
 void myVariantsAddTracks(struct customTrack **pCtList, struct cart *cart, char *genomeDb);
 /* Append the signed-in user's My Annotations tracks for genomeDb, one per
  * project that has annotations there, plus one per share accepted into this

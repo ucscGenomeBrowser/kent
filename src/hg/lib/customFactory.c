@@ -39,7 +39,6 @@
 #include "hgBam.h"
 #include "vcf.h"
 #include "vcfUi.h"
-#include "myVariants.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "regexHelper.h"
@@ -55,7 +54,6 @@
 #include "cgiApoptosis.h"
 #include "chromAlias.h"
 #include "bedMethyl.h"
-#include "hVarSubst.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"

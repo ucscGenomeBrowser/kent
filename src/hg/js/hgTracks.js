@@ -2673,7 +2673,10 @@ var myVariants = {
             try { sessionStorage.setItem(myVariants.lastAutoSavedKey, saveId); } catch (e) { /* private mode */ }
             myVariants.saveSearchedTerm(term);
         })
-        .catch(function() {});
+        .catch(function(err) {
+            // The offer is optional, so log the failure rather than warn().
+            console.warn("myVariants search note lookup failed: " + err);
+        });
     },
 
     matchInView: function(matches) {
@@ -6965,7 +6968,20 @@ function deleteCustomTrack (trackName) {
     // since we store custom tracks as a text file, not mysql tables
     xhttp.open("GET", url, false);
     xhttp.send();
+    removeCustomTrackCells(trackName);
     return true;
+}
+
+function removeCustomTrackCells (trackName) {
+    /* Remove this custom track from the track list under the image. A visible track is
+     * listed twice, once in its own group and once in the Visible Tracks group, so drop
+     * every cell that carries its delete icon, not just the one that was clicked. */
+    var selector = 'div.trackDeleteIcon[data-track="' + trackName + '"]';
+    document.querySelectorAll(selector).forEach(function(d) {
+        var td = d.closest("td");
+        if (td)
+            td.remove();
+    });
 }
 
 function deleteAllBlatTracks () {

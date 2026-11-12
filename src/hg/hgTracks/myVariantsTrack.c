@@ -830,15 +830,16 @@ safef(varName, sizeof varName, "%s_%s", trackName, fieldName);
 return cartOptionalString(cart, varName);
 }
 
-static char *refuseItemEdit(char *trackName, char *message)
-/* Give up on a submission the annotation cannot take, before anything has been
- * written, and hand back what to tell the user.  The submission's cart
- * variables go first, or a variable left behind would be retried against
- * whichever row is edited next.  Not errAbort: the edits are applied before any
- * of the page exists, so an abort here leaves the reader on a bare error page
- * with no browser to go back to. */
+static char *refuseItemEdit(char *trackName, char *message, struct myVariants **pItem,
+    struct slPair **pCustomVals)
+/* Refuse an item edit before anything is written. Clears the edit's cart
+ * variables, frees *pItem and *pCustomVals, and returns a copy of message for
+ * the user. It returns instead of calling errAbort because the page is not
+ * drawn yet. */
 {
 clearItemFieldVars(trackName);
+myVariantsFree(pItem);
+slPairFreeValsAndList(pCustomVals);
 return cloneString(message);
 }
 
@@ -1030,6 +1031,7 @@ struct myVariants *item = myVariantsLoadByQuery(conn, dyStringCannibalize(&rowQu
 if (item == NULL)
     return NULL;
 char problem[512];
+struct slPair *customVals = NULL;
 
 /* The type decides which of the other fields the row keeps, so read it first. */
 char *newType = itemEditValue(trackName, "itemType");
@@ -1037,7 +1039,8 @@ if (newType != NULL)
     {
     char *canonical = myVariantsCanonicalItemType(newType);
     if (canonical == NULL)
-        return refuseItemEdit(trackName, "That is not one of the annotation types.");
+        return refuseItemEdit(trackName, "That is not one of the annotation types.",
+            &item, &customVals);
     item->itemType = cloneString(canonical);
     }
 boolean isTranscript = sameOk(item->itemType, "transcript");
@@ -1069,7 +1072,7 @@ if (newVal != NULL)
     {
     unsigned color;
     if (!htmlColorForCode(newVal, &color))
-        return refuseItemEdit(trackName, "That is not a color.");
+        return refuseItemEdit(trackName, "That is not a color.", &item, &customVals);
     item->itemRgb = color;
     }
 
@@ -1082,7 +1085,8 @@ if (newVal != NULL)
         {
         char *canonical = myVariantsCanonicalCnvType(newVal);
         if (canonical == NULL)
-            return refuseItemEdit(trackName, "That is not one of the CNV types.");
+            return refuseItemEdit(trackName, "That is not one of the CNV types.",
+                &item, &customVals);
         item->cnvType = cloneString(canonical);
         }
     }
@@ -1111,7 +1115,7 @@ if (isNotEmpty(posString))
         safef(problem, sizeof problem,
             "Position out of range on %s.  The annotation is unchanged.",
             shownChrom);
-        return refuseItemEdit(trackName, problem);
+        return refuseItemEdit(trackName, problem, &item, &customVals);
         }
     /* A single base, chr1:1000, is the range chr1:1000-1000. */
     char rangeBuf[256];
@@ -1129,7 +1133,7 @@ if (isNotEmpty(posString))
         safef(problem, sizeof problem,
             "%s is not a position in %s.  Write it as chr1:1000-2000.  "
             "The annotation is unchanged.", shownPos, item->db);
-        return refuseItemEdit(trackName, problem);
+        return refuseItemEdit(trackName, problem, &item, &customVals);
         }
     /* hgParseChromRange turns the 1-based start into a 0-based one by
      * subtracting, so a start of 0 arrives here as -1. */
@@ -1138,14 +1142,14 @@ if (isNotEmpty(posString))
         safef(problem, sizeof problem,
             "Positions count from base 1, so %s does not name one.  "
             "The annotation is unchanged.", shownPos);
-        return refuseItemEdit(trackName, problem);
+        return refuseItemEdit(trackName, problem, &item, &customVals);
         }
     if (chromStart >= chromEnd)
         {
         safef(problem, sizeof problem,
             "%s:%d-%d does not run forward.  The annotation is unchanged.",
             chrom, chromStart + 1, chromEnd);
-        return refuseItemEdit(trackName, problem);
+        return refuseItemEdit(trackName, problem, &item, &customVals);
         }
     int chromSize = hChromSize(item->db, chrom);
     if (chromEnd > chromSize)
@@ -1154,9 +1158,10 @@ if (isNotEmpty(posString))
             "%s:%d-%d runs past the end of %s, which is %d bases long.  "
             "The annotation is unchanged.",
             chrom, chromStart + 1, chromEnd, chrom, chromSize);
-        return refuseItemEdit(trackName, problem);
+        return refuseItemEdit(trackName, problem, &item, &customVals);
         }
-    item->chrom = chrom;
+    /* chrom can point into the chromAlias cache, and myVariantsFree frees this. */
+    item->chrom = cloneString(chrom);
     item->chromStart = chromStart;
     item->chromEnd = chromEnd;
     }
@@ -1169,7 +1174,7 @@ if (thickStartStr != NULL && thickEndStr != NULL)
     if (!isAllDigits(thickStartStr) || !isAllDigits(thickEndStr))
         return refuseItemEdit(trackName,
             "CDS Start and CDS End have to be whole numbers.  "
-            "The annotation is unchanged.");
+            "The annotation is unchanged.", &item, &customVals);
     item->thickStart = sqlUnsigned(thickStartStr);
     item->thickEnd = sqlUnsigned(thickEndStr);
     }
@@ -1183,7 +1188,8 @@ if (isTranscript && countStr != NULL && sizesStr != NULL && startsStr != NULL)
     {
     if (!isAllDigits(countStr) || !isNumberList(sizesStr) || !isNumberList(startsStr))
         return refuseItemEdit(trackName,
-            "The blocks have to be whole numbers.  The annotation is unchanged.");
+            "The blocks have to be whole numbers.  The annotation is unchanged.",
+            &item, &customVals);
     unsigned blockCount = sqlUnsigned(countStr);
     char *sizesDup = cloneString(sizesStr);
     char *startsDup = cloneString(startsStr);
@@ -1199,7 +1205,7 @@ if (isTranscript && countStr != NULL && sizesStr != NULL && startsStr != NULL)
         freeMem(starts);
         return refuseItemEdit(trackName,
             "There are more or fewer blocks than the block count says.  "
-            "The annotation is unchanged.");
+            "The annotation is unchanged.", &item, &customVals);
         }
     item->blockCount = blockCount;
     item->blockSizes = sizes;
@@ -1208,7 +1214,6 @@ if (isTranscript && countStr != NULL && sizesStr != NULL && startsStr != NULL)
 
 /* Custom fields are columns on this project's table.  Cloned like the rest,
  * because the cart's own strings are freed by the cleanup below. */
-struct slPair *customVals = NULL;
 struct slName *customCols = myVariantsGetCustomFields(tableName), *col;
 for (col = customCols; col != NULL; col = col->next)
     {
@@ -1244,7 +1249,7 @@ ensureItemBlocks(item);
 
 char *textProblem = itemTextProblem(item, customVals);
 if (textProblem != NULL)
-    return refuseItemEdit(trackName, textProblem);
+    return refuseItemEdit(trackName, textProblem, &item, &customVals);
 
 /* The whole submission is in hand now, so drop it: nothing below reads the cart,
  * and a variable left behind would be retried against another row. */
@@ -1305,7 +1310,7 @@ if (errCatch->gotError)
     safef(problem, sizeof problem, "%s  The annotation is unchanged.",
         errCatch->message->string);
     errCatchFree(&errCatch);
-    return refuseItemEdit(trackName, problem);
+    return refuseItemEdit(trackName, problem, &item, &customVals);
     }
 errCatchFree(&errCatch);
 
