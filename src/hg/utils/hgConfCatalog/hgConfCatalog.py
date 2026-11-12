@@ -1969,6 +1969,21 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("browser.quickLiftMuteTriangles", "flag", "hg/lib/quickLift.c",
+          default="FALSE", ticket="38693",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/quickLift.c.  Came in at a789fe5ac91, quickLift: fade "
+               "the difference triangles on a chain track when they overlap. "
+               "When there are more triangles than fit side by side, they "
+               "merge into one solid band of color.  The color now moves "
+               "toward white as the overlap grows: no fade while they fit, "
+               "then 90% x (1 - 1/fill), where fill is the total triangle "
+               "width over the window width.  The faded color is opaque, so "
+               "overlapping triangles do not stack back up to full color. "
+               "Gated by browser.quickLiftMuteTriangles, cart first and then "
+               "hg.conf, off by default.  refs #38693.  Needs a description "
+               "and a gate or knob call."),
     ],
 }
 

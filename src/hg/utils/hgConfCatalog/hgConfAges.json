@@ -1,5 +1,5 @@
 {
- "current": 505,
+ "current": 506,
  "first": {
   "(not set, defaults on)": {
    "commit": "a0a3411bca2",
@@ -744,6 +744,17 @@
    "version": 270,
    "via": "call"
   },
+  "bottleneck.failureDelay": {
+   "commit": "a38cfad5d3d",
+   "released": false,
+   "subject": "botDelay: serve the request when the bottleneck server cannot be reached, refs #37738",
+   "tickets": [
+    37738
+   ],
+   "ts": 1789230066,
+   "version": 507,
+   "via": "literal"
+  },
   "bottleneck.host": {
    "commit": "e0d3d4459af",
    "subject": "Making it so that hgBotDelay skips bottleneck if no",
@@ -759,6 +770,28 @@
    "ts": 1075568737,
    "version": 50,
    "via": "call"
+  },
+  "bottleneck.serveOnFailure": {
+   "commit": "a38cfad5d3d",
+   "released": false,
+   "subject": "botDelay: serve the request when the bottleneck server cannot be reached, refs #37738",
+   "tickets": [
+    37738
+   ],
+   "ts": 1789230066,
+   "version": 507,
+   "via": "call"
+  },
+  "bottleneck.timeoutSeconds": {
+   "commit": "a38cfad5d3d",
+   "released": false,
+   "subject": "botDelay: serve the request when the bottleneck server cannot be reached, refs #37738",
+   "tickets": [
+    37738
+   ],
+   "ts": 1789230066,
+   "version": 507,
+   "via": "literal"
   },
   "browser.background": {
    "commit": "bf73a8d0f37",
@@ -916,6 +949,27 @@
    ],
    "ts": 1791498176,
    "version": 505,
+   "via": "call"
+  },
+  "browser.quickLiftMuteTriangles": {
+   "commit": "a789fe5ac91",
+   "released": false,
+   "subject": "quickLift: fade the difference triangles on a chain track when they overlap. When there are more triangles than fit side",
+   "tickets": [
+    38693
+   ],
+   "ts": 1793924793,
+   "version": 507,
+   "via": "call"
+  },
+  "browser.quickLiftRmsk": {
+   "commit": "1875ec156e5",
+   "subject": "quickLift: lift RepeatMasker tracks (rmsk, RepeatMasker Viz. and bigRmsk), behind browser.quickLiftRmsk, refs #37437",
+   "tickets": [
+    37437
+   ],
+   "ts": 1792449523,
+   "version": 506,
    "via": "call"
   },
   "browser.quickLiftWig": {
@@ -1601,6 +1655,16 @@
    "ts": 1601502828,
    "version": 405,
    "via": "literal"
+  },
+  "freeTypeTuneUI": {
+   "commit": "05d90ce7ada",
+   "subject": "hgTracks: a block of controls on the configure page for the FreeType rendering itself, behind hg.conf freeTypeTuneUI, so",
+   "tickets": [
+    38562
+   ],
+   "ts": 1792613412,
+   "version": 506,
+   "via": "call"
   },
   "ftpProxy": {
    "commit": "36071edc040",
@@ -2732,6 +2796,42 @@
    "ts": 1615695868,
    "version": 412,
    "via": "call"
+  },
+  "multiRegionSpaceKeyName": {
+   "commit": "2f2540a3596",
+   "released": false,
+   "subject": "Multi-region views as a synthetic assembly, behind hg.conf multiRegionSpaces, refs #37788 #38660",
+   "tickets": [
+    37788,
+    38660
+   ],
+   "ts": 1793922888,
+   "version": 507,
+   "via": "literal"
+  },
+  "multiRegionSpaceMaxRegions": {
+   "commit": "2f2540a3596",
+   "released": false,
+   "subject": "Multi-region views as a synthetic assembly, behind hg.conf multiRegionSpaces, refs #37788 #38660",
+   "tickets": [
+    37788,
+    38660
+   ],
+   "ts": 1793922888,
+   "version": 507,
+   "via": "literal"
+  },
+  "multiRegionSpaces": {
+   "commit": "2f2540a3596",
+   "released": false,
+   "subject": "Multi-region views as a synthetic assembly, behind hg.conf multiRegionSpaces, refs #37788 #38660",
+   "tickets": [
+    37788,
+    38660
+   ],
+   "ts": 1793922888,
+   "version": 507,
+   "via": "literal"
   },
   "multiWigMouseOver": {
    "commit": "ee90fbd7616",
@@ -4128,6 +4228,16 @@
    "version": 497,
    "via": "call"
   },
+  "genarkLiftOver": {
+   "commit": "d13b2ec9f9c",
+   "subject": "Turn genarkLiftOver on by default, so hgLiftOver and hgConvert offer liftOver to and from GenArk assemblies without an h",
+   "tickets": [
+    38572
+   ],
+   "ts": 1792693641,
+   "version": 506,
+   "via": "call"
+  },
   "greyBarIcons": {
    "commit": "4f8248a37b7",
    "subject": "Make grey bar icons default to always on, refs #36956",
@@ -4186,6 +4296,30 @@
    ],
    "ts": 1786129679,
    "version": 503,
+   "via": "call"
+  },
+  "quickLiftMultiChain": {
+   "commit": "2f2540a3596",
+   "released": false,
+   "subject": "Multi-region views as a synthetic assembly, behind hg.conf multiRegionSpaces, refs #37788 #38660",
+   "tickets": [
+    37788,
+    38660
+   ],
+   "ts": 1793922888,
+   "version": 507,
+   "via": "call"
+  },
+  "quickLiftSplitRanges": {
+   "commit": "2f2540a3596",
+   "released": false,
+   "subject": "Multi-region views as a synthetic assembly, behind hg.conf multiRegionSpaces, refs #37788 #38660",
+   "tickets": [
+    37788,
+    38660
+   ],
+   "ts": 1793922888,
+   "version": 507,
    "via": "call"
   },
   "sessionLoadNotice": {
@@ -6289,6 +6423,10 @@
   [
    505,
    "77c1a2959c646d1c57c01001aeaa3a82be31e1fb"
+  ],
+  [
+   506,
+   "7d874dc87acddfe2d8e7bd5dba46d6bda5f270ce"
   ]
  ],
  "schema": 3
