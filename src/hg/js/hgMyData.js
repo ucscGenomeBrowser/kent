@@ -2035,14 +2035,15 @@ var hubCreate = (function() {
     function deleteFileList(ev) {
         // same as deleteFile() but acts on the selectedData variable
         let data = selectedData;
-        // Block deletion of an assembly hub's defining 2bit unless the whole hub
+        // Block deletion of an assembly hub's 2bit unless a directory holding it
         // is also in this batch. Removing the 2bit alone leaves hub.txt with a
         // twoBitPath pointing at a missing file and the surviving rows still
-        // flagged hubType=assemblyHub. The user must delete the entire hub
-        // instead, or replace the 2bit by uploading a new one with the same name.
+        // flagged hubType=assemblyHub. The user must delete the 2bit's folder
+        // or the entire hub instead, or replace the 2bit by uploading a new one
+        // with the same name.
         let selectedValues = Object.values(data);
-        let selectedHubDirs = new Set(
-            selectedValues.filter(x => x.fileType === "dir").map(x => x.fullPath));
+        let selectedDirs = selectedValues.filter(x => x.fileType === "dir").map(x => x.fullPath);
+        let inSelectedDir = (path) => selectedDirs.some(dir => path.startsWith(dir + "/"));
         let blockedTwoBits = [];
         for (let d of selectedValues) {
             if (d.fileType !== "2bit") continue;
@@ -2051,12 +2052,13 @@ var hubCreate = (function() {
             let hubRoot = hubRootFromPath(d.fullPath);
             let hub = uiState.filesHash[hubRoot];
             if (!hub || hub.hubType !== "assemblyHub") continue;
-            if (!selectedHubDirs.has(hubRoot)) blockedTwoBits.push(d);
+            if (!inSelectedDir(d.fullPath)) blockedTwoBits.push(d);
         }
         if (blockedTwoBits.length > 0) {
             let names = blockedTwoBits.map(d => d.fullPath).join("\n  ");
             alert(`Cannot delete the following 2bit file(s) because they are part of ` +
-                  `an assembly hub:\n  ${names}\n\nDelete the whole hub instead, ` +
+                  `an assembly hub:\n  ${names}\n\nDelete the folder holding the 2bit ` +
+                  `or the whole hub instead, ` +
                   `or replace the 2bit by uploading a new one with the same name.`);
             return;
         }
