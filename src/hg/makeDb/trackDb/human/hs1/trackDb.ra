@@ -36,3 +36,6 @@ include transcriptionStart.ra alpha
 include transcriptionStartPublic.ra beta,public
 
 include miniMapChains.ra alpha
+
+# a 'contrib' set of tracks from Nancy Hansen
+include T2TPrimates.trackDb.ra alpha
