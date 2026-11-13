@@ -38,7 +38,7 @@ dataVersion /gbdb/$D/mavemd/version.txt
     filterLabel.acmgOutcome ACMG functional evidence
     filterValues.funcClass abnormal,indeterminate,normal,not classified
     filterLabel.funcClass Measured functional class
-    filterValues.gene ASPA,BAP1,BARD1,BRCA1,BRCA2,CALM1,CARD11,CBS,CHEK2,CRX,CTCF,DDX3X,F9,FKRP,G6PD,GCK,HMBS,JAG1,KCNE1,KCNH2,KCNQ4,LARGE1,MSH2,NDUFAF6,OTC,PALB2,PAX6,PTEN,RAD51C,RAD51D,RHO,SCN5A,SGCB,TARDBP,TP53,TPK1,TSC2,VHL,XRCC2
+    filterValues.gene ASPA,BAP1,BARD1,BRCA1,BRCA2,CALM1,CARD11,CBS,CHEK2,CRX,CTCF,DDX3X,F9,FKRP,G6PD,GCK,HMBS,JAG1,KCNE1,KCNH2,KCNQ4,LARGE1,LDLR,MSH2,NDUFAF6,OTC,PALB2,PAX6,PTEN,RAD51C,RAD51D,RHO,SCN5A,SGCB,TARDBP,TP53,TPK1,TSC2,VHL,XRCC2
     filterLabel.gene Gene
     filterValues.clinvarSig Benign,Benign/Likely benign,Benign; association,Conflicting classifications of pathogenicity,Conflicting classifications of pathogenicity; other; risk factor,Conflicting classifications of pathogenicity; risk factor,Likely benign,Likely pathogenic,Likely pathogenic/Likely risk allele,Likely risk allele,Pathogenic,Pathogenic/Likely pathogenic,Pathogenic/Likely pathogenic/Likely risk allele,Pathogenic/Likely pathogenic/Pathogenic,, low penetrance,Uncertain risk allele,Uncertain significance,Uncertain significance/Uncertain risk allele,drug response,no classification for the single variant,not provided,other
     filterLabel.clinvarSig ClinVar significance
