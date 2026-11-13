@@ -762,6 +762,14 @@ char *cartContentsVal(char *contents, char *var);
 /* Return the CGI-decoded value of var from a CGI-encoded cart contents string,
  * or NULL if not present.  Free the result when done. */
 
+char *cartRecentViewsJson(struct cart *cart, int *retCount);
+/* Return the list of recent views, the copies of the cart made just before a session load
+ * replaced it, as a JSON list of {hgsid, db, position, timestamp, prevViewOf}, newest first.
+ * Set *retCount to the number of copies.  Free the result when done. */
+
+/* Asks hgSession for the list of recent views as JSON, for the My Data menu on hgTracks */
+#define hgsRecentViewsJson hgSessionPrefix "recentViewsJson"
+
 struct cartDb *cartDbLoadFromId(struct sqlConnection *conn, char *table, char *secureId);
 /* Load up cartDb entry for particular ID.  Returns NULL if no such id. */
 

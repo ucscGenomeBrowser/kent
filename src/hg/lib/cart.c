@@ -2320,6 +2320,58 @@ cgiDecode(val, val, strlen(val));
 return val;
 }
 
+char *cartRecentViewsJson(struct cart *cart, int *retCount)
+/* Return the list of recent views, the copies of the cart made just before a session load
+ * replaced it, as a JSON list of {hgsid, db, position, timestamp, prevViewOf}, newest first.
+ * Set *retCount to the number of copies.  Free the result when done. */
+{
+struct slPair *recent = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+char *currentId = cartSessionId(cart);
+struct sqlConnection *conn = cartDefaultConnector();
+struct jsonWrite *jw = jsonWriteNew();
+int count = 0;
+jsonWriteListStart(jw, NULL);
+for (struct slPair *el = recent; el != NULL; el = el->next)
+    {
+    if (sameString(el->name, currentId))
+        continue;
+    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
+    if (cdb == NULL)
+        continue;
+    // only set in a copy made just before a session load, "" if it was a file or URL.  Lists
+    // from before 2026-11 also have the hgsids of other tabs, and a copy opened by its own
+    // hgsid lost the marker: those are not shown, the list is only the views a load replaced.
+    char *prevViewOf = cartContentsVal(cdb->contents, hgsPrevViewOf);
+    if (prevViewOf == NULL)
+        {
+        cartDbFree(&cdb);
+        continue;
+        }
+    char *db = cartContentsVal(cdb->contents, "db");
+    char *position = cartContentsVal(cdb->contents, "position");
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "hgsid", el->name);
+    jsonWriteString(jw, "db", db);
+    jsonWriteString(jw, "position", position);
+    jsonWriteNumber(jw, "timestamp", sqlLongLong(el->val));
+    jsonWriteString(jw, "prevViewOf", prevViewOf);
+    jsonWriteObjectEnd(jw);
+    freeMem(db);
+    freeMem(position);
+    freeMem(prevViewOf);
+    cartDbFree(&cdb);
+    count++;
+    }
+jsonWriteListEnd(jw);
+char *json = cloneString(jw->dy->string);
+jsonWriteFree(&jw);
+cartDefaultDisconnector(&conn);
+slPairFreeValsAndList(&recent);
+if (retCount != NULL)
+    *retCount = count;
+return json;
+}
+
 static void cartUpdateRecentSession(struct cart *cart, char *currentId)
 /* Move the hgsid currentId to the front of the recent sessions list, dropping
  * entries that are too old or past MAX_RECENT_SESSIONS. */

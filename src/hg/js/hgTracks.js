@@ -10382,7 +10382,7 @@ var sessionLoadDialog = {
     },
 
     buildSessionList: function(sessions) {
-        // Build HTML for the list of saved copies, newest first
+        // Build HTML for the list of saved copies, newest first.  Styles are in HGStyle.css.
         if (sessions.length === 0) {
             return '<p>There are no copies yet in this web browser. The Genome Browser keeps a ' +
                     'copy of your tracks and settings before you open a session or load settings ' +
@@ -10390,41 +10390,35 @@ var sessionLoadDialog = {
                     'other web browsers or <a href="../contacts.html" target="_blank">contact ' +
                     'us</a>.</p>';
         }
-        var html = '<p>Before you open a session or load settings from a file or URL, the ' +
-                'Genome Browser keeps a copy of your tracks and settings. These are your most ' +
-                'recent copies in this web browser from the last 7 days. Click Open to restore ' +
-                'one in a new tab, or Save to keep it as a named session.</p>';
+        var html = '<p>When you open a saved session, all current tracks and settings are ' +
+                'replaced, but the Genome Browser keeps copies that you can restore here. ' +
+                'These are your most recent copies in this web browser from the last 7 days. Click Open to ' +
+                'restore one in a new tab.</p>';
         var sorted = sessions.slice().sort(function(a, b) {
             return b.timestamp - a.timestamp;
         });
-        var th = '<th style="padding: 8px; text-align: left;">';
-        html += '<div style="max-height: 300px; overflow-y: auto;">';
-        html += '<table style="width: 100%; border-collapse: collapse;">';
-        html += '<thead><tr style="background: #f0f0f0;">' +
-                th + 'Replaced by</th>' + th + 'Date</th>' + th + 'Assembly</th>' +
-                th + 'Position</th><th style="padding: 8px;"></th>' +
-                '</tr></thead><tbody>';
+        html += '<table class="recentViewsTable"><thead><tr>' +
+                '<th title="The session or settings file that replaced these tracks and settings">' +
+                'Replaced by</th>' +
+                '<th title="When the copy was made">Date</th>' +
+                '<th title="Genome assembly of the copy">Assembly</th>' +
+                '<th title="Position shown in the copy">Position</th>' +
+                '<th></th></tr></thead><tbody>';
 
         for (var i = 0; i < sorted.length; i++) {
             var s = sorted[i];
-            var saveUrl = '../cgi-bin/hgSession?hgS_doMainPage=1&hgS_openCopy=' +
-                    encodeURIComponent(s.hgsid);
-            html += '<tr style="border-bottom: 1px solid #ddd;">';
-            html += '<td style="padding: 8px;">' + this.replacedBy(s) + '</td>';
-            html += '<td style="padding: 8px; white-space: nowrap;">' +
-                    this.formatTimestamp(s.timestamp) + '</td>';
-            html += '<td style="padding: 8px;">' + htmlEncode(s.db || '(unknown)') + '</td>';
-            html += '<td style="padding: 8px; white-space: nowrap;">' +
-                    htmlEncode(s.position || '(unknown)') + '</td>';
-            html += '<td style="padding: 8px; white-space: nowrap;">' +
-                    '<a href="' + this.openUrl(s) + '" target="_blank">Open</a> ' +
-                    '<a href="' + saveUrl + '" target="_blank" ' +
-                    'title="Open the Sessions page with these settings, to save them under a name">' +
-                    'Save</a></td>';
+            html += '<tr>';
+            html += '<td>' + this.replacedBy(s) + '</td>';
+            html += '<td class="nowrap">' + this.formatTimestamp(s.timestamp) + '</td>';
+            html += '<td>' + htmlEncode(s.db || '(unknown)') + '</td>';
+            html += '<td class="nowrap">' + htmlEncode(s.position || '(unknown)') + '</td>';
+            html += '<td><button type="button" class="recentViewOpen" data-url="' +
+                    this.openUrl(s) + '" title="Open these tracks and settings in a new tab">' +
+                    'Open</button></td>';
             html += '</tr>';
         }
 
-        html += '</tbody></table></div>';
+        html += '</tbody></table>';
         return html;
     },
 
@@ -10434,18 +10428,27 @@ var sessionLoadDialog = {
         }
         var $dialog = $('<div id="sessionLoadDialog"></div>');
         $dialog.html(this.buildSessionList(recentSessions));
-        // not wider than the window, or its right side is cut off in a narrow window
+        // not larger than the window, or it is cut off in a small window
         var dialogWidth = function() {
-            return Math.min(650, $(window).width() - 20);
+            return Math.min(900, $(window).width() - 20);
+        };
+        var dialogHeight = function() {
+            // the message that there are no copies needs no room for a list
+            if (recentSessions.length === 0) {
+                return 'auto';
+            }
+            return Math.min(550, $(window).height() - 20);
         };
         var onResize = function() {
             $dialog.dialog('option', 'width', dialogWidth());
+            $dialog.dialog('option', 'height', dialogHeight());
             $dialog.dialog('option', 'position', {my: 'center', at: 'center', of: window});
         };
         $(window).on('resize', onResize);
         $dialog.dialog({
             title: 'Restore Previous Session',
             width: dialogWidth(),
+            height: dialogHeight(),
             modal: false,
             resizable: false,
             buttons: {
@@ -10458,6 +10461,17 @@ var sessionLoadDialog = {
                 $(this).dialog('destroy').remove();
             }
         });
+    },
+
+    showFromMenu: function() {
+        // My Data > Restore Previous Session on this page: get the list from hgSession and open
+        // the dialog, instead of reloading the whole page
+        $.getJSON('../cgi-bin/hgSession', {hgS_recentViewsJson: 1, hgsid: getHgsid()},
+            function(list) {
+                window.recentSessions = list;
+                $('#sessionLoadDialog').dialog('close');
+                sessionLoadDialog.show();
+            });
     },
 
     openNewest: function() {
@@ -10473,6 +10487,18 @@ var sessionLoadDialog = {
 $(document).on('click', '#recentViewsLink', function(ev) {
     ev.preventDefault();
     sessionLoadDialog.show();
+});
+
+// My Data > Restore Previous Session.  On other pages it is a plain link to hgTracks.
+$(document).on('click', '#recentViewsMenuLink', function(ev) {
+    ev.preventDefault();
+    sessionLoadDialog.showFromMenu();
+});
+
+// The Open buttons in the dialog
+$(document).on('click', '#sessionLoadDialog .recentViewOpen', function(ev) {
+    ev.preventDefault();
+    window.open($(this).attr('data-url'), '_blank');
 });
 
 // The "Open previous session" button in the same note

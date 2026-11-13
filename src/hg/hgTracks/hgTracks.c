@@ -14220,50 +14220,12 @@ cartRemove(cart, hgsShowRecentViews);
 if (!openDialog && !cartVarExists(cart, hgsSessionJustLoaded))
     return 0;
 
-struct slPair *recent = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
-char *currentId = cartSessionId(cart);
-struct sqlConnection *conn = hConnectCart();
-struct jsonWrite *jw = jsonWriteNew();
 int count = 0;
-jsonWriteListStart(jw, NULL);
-for (struct slPair *el = recent; el != NULL; el = el->next)
-    {
-    if (sameString(el->name, currentId))
-        continue;
-    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
-    if (cdb == NULL)
-        continue;
-    // only set in a copy made just before a session load, "" if it was a file or URL.  Lists
-    // from before 2026-11 also have the hgsids of other tabs, and a copy opened by its own
-    // hgsid lost the marker: those are not shown, the list is only the views a load replaced.
-    char *prevViewOf = cartContentsVal(cdb->contents, hgsPrevViewOf);
-    if (prevViewOf == NULL)
-        {
-        cartDbFree(&cdb);
-        continue;
-        }
-    char *db = cartContentsVal(cdb->contents, "db");
-    char *position = cartContentsVal(cdb->contents, "position");
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteString(jw, "hgsid", el->name);
-    jsonWriteString(jw, "db", db);
-    jsonWriteString(jw, "position", position);
-    jsonWriteNumber(jw, "timestamp", sqlLongLong(el->val));
-    jsonWriteString(jw, "prevViewOf", prevViewOf);
-    jsonWriteObjectEnd(jw);
-    freeMem(db);
-    freeMem(position);
-    freeMem(prevViewOf);
-    cartDbFree(&cdb);
-    count++;
-    }
-jsonWriteListEnd(jw);
-jsInlineF("var recentSessions = %s;\n", jw->dy->string);
+char *json = cartRecentViewsJson(cart, &count);
+jsInlineF("var recentSessions = %s;\n", json);
 if (openDialog)
     jsInline("$(function() { sessionLoadDialog.show(); });\n");
-jsonWriteFree(&jw);
-hDisconnectCart(&conn);
-slPairFreeValsAndList(&recent);
+freeMem(json);
 return count;
 }
 

@@ -3086,6 +3086,15 @@ else if (cartVarExists(cart, hgsDoAnonName))
     {
     doAnonNameJson();
     }
+else if (cartVarExists(cart, hgsRecentViewsJson))
+    {
+    // the list for My Data > Restore Previous Session on hgTracks, so it opens without a reload
+    cartRemove(cart, hgsRecentViewsJson);
+    char *json = cartRecentSessionsEnabled() ? cartRecentViewsJson(cart, NULL) : cloneString("[]");
+    cgiPrintContentType("application/json");
+    puts(json);
+    freeMem(json);
+    }
 else if (cartVarExists(cart, hgsDoSaveSessionJson))
     {
     doSaveSessionJson(userName);

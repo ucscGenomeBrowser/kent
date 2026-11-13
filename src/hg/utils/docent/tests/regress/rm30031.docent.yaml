@@ -13,8 +13,9 @@
 # the marked rows only; showSessionLoadNotice() puts the note with the "Open previous session"
 # button (#openPrevSessionBtn) and the My Data link (#recentViewsLink).
 # hg/js/hgTracks.js: sessionLoadDialog, a jQuery UI dialog with the id #sessionLoadDialog.  Its
-# Open and Save links pass hgS_openCopy, which opens the copy in a new hgsid (cartOpenCopy()), so
-# the copy stays on the list as it is.
+# Open buttons pass hgS_openCopy, which opens the copy in a new hgsid (cartOpenCopy()), so the
+# copy stays on the list as it is.  On hgTracks the My Data menu item gets the list from
+# hgSession?hgS_recentViewsJson=1 and opens the dialog without a reload.
 #
 # How the script runs: a docent `goto:` carries no hgsid, so each request below starts a new
 # hgsid under the same hguid cookie.  The first visit makes the userDb row, the second leaves
@@ -25,7 +26,7 @@
 #   * Before the load the list is empty: page visits are not on it.
 #   * After the load the note has the button and the link, the link opens the dialog, and the
 #     dialog lists the copy, replaced by settings from a file or URL, with the chr7 position,
-#     which the loaded settings (an alt contig) do not have, and its Open link uses hgS_openCopy.
+#     which the loaded settings (an alt contig) do not have, and its Open button uses hgS_openCopy.
 #   * #imgTbl, so the page really drew and the settings really loaded.
 #   * The next hgTracks page has no note: the marker is used once.
 #
@@ -74,7 +75,7 @@ steps:
         - "Replaced by"
         - "Settings from a file or URL"
         - "chr7:155799529-155812871"
-      has: '#sessionLoadDialog a[href*="hgS_openCopy="]'
+      has: '#sessionLoadDialog button.recentViewOpen[data-url*="hgS_openCopy="]'
 
   # The next page has no note.
   - goto: "/cgi-bin/hgTracks"
