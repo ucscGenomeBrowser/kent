@@ -413,6 +413,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *sessionUrl = dyStringContents(dy);
     printf("<a id='linkEl-%d' data-copy='%s' href=\"%s\">%s</a>", rowIdx, sessionUrl, sessionUrl, htmlEncode(sessionName));
     dyStringFree(&dy);
+    /* The link has no hgsid, so it can be copied and shared.  A plain click loads the session
+     * into this tab, so it gets this tab's hgsid: the copy of the view that the load replaces
+     * is then this tab's, not the cart another tab saved last. */
+    jsOnEventByIdF("click", linkId,
+        "if (event.ctrlKey || event.metaKey || event.shiftKey) return true; "
+        "location.href = '../cgi-bin/hgTracks?hgsid=%s&" hgsDoOtherUser "=submit&"
+        hgsOtherUserName "=%s&" hgsOtherUserSessionName "=%s'; return false;",
+        cartSessionId(cart), encUserName, encSessionName);
     rowIdx++;
 
     struct tm firstUseTm;

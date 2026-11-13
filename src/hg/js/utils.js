@@ -1069,10 +1069,11 @@ function notifBoxSetup(cgiName, keyName, msg, skipCloseButton) {
     });
 }
 
-function notifBoxOnce(msg, id) {
+function notifBoxOnce(msg, id, firstButton) {
 /* Show a notification that is meant for this page only, e.g. to say what just happened.
  * The message is gone on the next page anyway, but it can come back on a later page
- * (the next session load), so "Don't show again" keeps it away for good in this web browser. */
+ * (the next session load), so "Don't show again" keeps it away for good in this web browser.
+ * firstButton, if given, is the HTML of a button that goes in front of Close. */
     let boxId = id + "notifBoxOnce";
     let lsKey = "notifBoxOnce_" + id;
     if (document.getElementById(boxId))
@@ -1087,7 +1088,8 @@ function notifBoxOnce(msg, id) {
     box.className = "notifBox notifBoxOnce";
     box.id = boxId;
     box.innerHTML = msg +
-        "<div style='text-align: center'><button id='" + id + "notifyOnceHide'>Close</button>&nbsp;" +
+        "<div style='text-align: center'>" + (firstButton ? firstButton + "&nbsp;" : "") +
+        "<button id='" + id + "notifyOnceHide'>Close</button>&nbsp;" +
         "<button id='" + id + "notifyOnceHideForever'>Don't show again</button></div>";
     let parentEl = document.getElementById('TrackHeaderForm');
     if (!parentEl)

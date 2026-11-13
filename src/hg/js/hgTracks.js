@@ -10370,47 +10370,54 @@ var sessionLoadDialog = {
         }
     },
 
-    describe: function(s) {
-        // What a row is: the copy made just before a session load, or before a file or URL load
-        var what = s.prevViewOf ? 'session <b>' + htmlEncode(s.prevViewOf) + '</b>'
-                                : 'settings from a file or URL';
-        return 'Before you opened ' + what + ', ' + this.formatTimestamp(s.timestamp).toLowerCase();
+    replacedBy: function(s) {
+        // What replaced the copy: a session, or settings from a file or URL
+        return s.prevViewOf ? 'Session <b>' + htmlEncode(s.prevViewOf) + '</b>'
+                            : 'Settings from a file or URL';
+    },
+
+    openUrl: function(s) {
+        // The copy opens in a new hgsid, so it stays on the list as it is
+        return '../cgi-bin/hgTracks?hgS_openCopy=' + encodeURIComponent(s.hgsid);
     },
 
     buildSessionList: function(sessions) {
         // Build HTML for the list of saved copies, newest first
+        if (sessions.length === 0) {
+            return '<p>There are no copies yet in this web browser. The Genome Browser keeps a ' +
+                    'copy of your tracks and settings before you open a session or load settings ' +
+                    'from a file or URL. If you think there should be copies here, check your ' +
+                    'other web browsers or <a href="../contacts.html" target="_blank">contact ' +
+                    'us</a>.</p>';
+        }
         var html = '<p>Before you open a session or load settings from a file or URL, the ' +
                 'Genome Browser keeps a copy of your tracks and settings. These are your most ' +
                 'recent copies in this web browser from the last 7 days. Click Open to restore ' +
                 'one in a new tab, or Save to keep it as a named session.</p>';
-        if (sessions.length === 0) {
-            return html + '<p>There are no copies yet in this web browser. If you think there ' +
-                    'should be some, check your other web browsers, or ' +
-                    '<a href="../contacts.html" target="_blank">contact us</a>.</p>';
-        }
         var sorted = sessions.slice().sort(function(a, b) {
             return b.timestamp - a.timestamp;
         });
+        var th = '<th style="padding: 8px; text-align: left;">';
         html += '<div style="max-height: 300px; overflow-y: auto;">';
         html += '<table style="width: 100%; border-collapse: collapse;">';
         html += '<thead><tr style="background: #f0f0f0;">' +
-                '<th style="padding: 8px; text-align: left;">Copy</th>' +
-                '<th style="padding: 8px; text-align: left;">Assembly</th>' +
-                '<th style="padding: 8px; text-align: left;">Position</th>' +
-                '<th style="padding: 8px;"></th>' +
+                th + 'Replaced by</th>' + th + 'Date</th>' + th + 'Assembly</th>' +
+                th + 'Position</th><th style="padding: 8px;"></th>' +
                 '</tr></thead><tbody>';
 
         for (var i = 0; i < sorted.length; i++) {
             var s = sorted[i];
-            var sid = encodeURIComponent(s.hgsid);
-            var openUrl = '../cgi-bin/hgTracks?hgsid=' + sid;
-            var saveUrl = '../cgi-bin/hgSession?hgS_doMainPage=1&hgsid=' + sid;
+            var saveUrl = '../cgi-bin/hgSession?hgS_doMainPage=1&hgS_openCopy=' +
+                    encodeURIComponent(s.hgsid);
             html += '<tr style="border-bottom: 1px solid #ddd;">';
-            html += '<td style="padding: 8px;">' + this.describe(s) + '</td>';
-            html += '<td style="padding: 8px;">' + htmlEncode(s.db || '(unknown)') + '</td>';
-            html += '<td style="padding: 8px;">' + htmlEncode(s.position || '(unknown)') + '</td>';
+            html += '<td style="padding: 8px;">' + this.replacedBy(s) + '</td>';
             html += '<td style="padding: 8px; white-space: nowrap;">' +
-                    '<a href="' + openUrl + '" target="_blank">Open</a> ' +
+                    this.formatTimestamp(s.timestamp) + '</td>';
+            html += '<td style="padding: 8px;">' + htmlEncode(s.db || '(unknown)') + '</td>';
+            html += '<td style="padding: 8px; white-space: nowrap;">' +
+                    htmlEncode(s.position || '(unknown)') + '</td>';
+            html += '<td style="padding: 8px; white-space: nowrap;">' +
+                    '<a href="' + this.openUrl(s) + '" target="_blank">Open</a> ' +
                     '<a href="' + saveUrl + '" target="_blank" ' +
                     'title="Open the Sessions page with these settings, to save them under a name">' +
                     'Save</a></td>';
@@ -10458,8 +10465,7 @@ var sessionLoadDialog = {
         if (typeof recentSessions === 'undefined' || recentSessions.length === 0) {
             return;
         }
-        window.open('../cgi-bin/hgTracks?hgsid=' + encodeURIComponent(recentSessions[0].hgsid),
-                '_blank');
+        window.open(this.openUrl(recentSessions[0]), '_blank');
     }
 };
 
@@ -10469,7 +10475,7 @@ $(document).on('click', '#recentViewsLink', function(ev) {
     sessionLoadDialog.show();
 });
 
-// The "Open previous session in new tab" button in the same note
+// The "Open previous session" button in the same note
 $(document).on('click', '#openPrevSessionBtn', function(ev) {
     ev.preventDefault();
     sessionLoadDialog.openNewest();

@@ -980,26 +980,124 @@ static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean e
  * sets it only for a request with hgSession variables, as only those can load a session. */
 static char *cartStateBeforeRequest = NULL;
 
-static void cartKeepCopyBeforeLoad(struct cart *cart, char *loadedName)
+/* Variables the browser keeps for itself, which change when a page is drawn: two carts that
+ * differ only in these show the same thing. */
+static char *cartBookkeepingVars[] = {"pix", "oldPosition", "lastPosition", "cartVersion",
+    "lastVirtModeType", "lastVirtModeExtraState", "nonVirtPosition", NULL};
+static char *cartBookkeepingPrefixes[] = {hgSessionPrefix, "position.", "expOrder_", "simOrder_",
+    NULL};
+/* Variables that a page sets to its default when they are missing: they only count as different
+ * when both carts have them. */
+static char *cartDefaultedVars[] = {"clade", "org", "virtMode", "virtModeType", "trackHubs",
+    "textFont", "textSize", "textStyle", NULL};
+
+static boolean inStringArray(char *s, char **array, boolean isPrefix)
+/* Return TRUE if s is in the NULL-terminated array, or starts with one of its strings. */
+{
+for (char **el = array; *el != NULL; el++)
+    if (isPrefix ? startsWith(*el, s) : sameString(*el, s))
+        return TRUE;
+return FALSE;
+}
+
+static struct hash *cartContentsToHash(char *contents)
+/* Return a hash of the variables in a CGI-encoded cart contents string, without the ones that
+ * say nothing about the tracks and settings: hgsid, the recent views list and bookkeeping. */
+{
+struct hash *hash = hashNew(10);
+char *dupe = cloneString(contents);
+char *namePt = dupe;
+while (namePt != NULL && *namePt != 0)
+    {
+    char *next = strchr(namePt, '&');
+    if (next != NULL)
+        *next++ = 0;
+    char *val = strchr(namePt, '=');
+    if (val != NULL)
+        {
+        *val++ = 0;
+        cgiDecode(val, val, strlen(val));
+        }
+    else
+        val = "";
+    cgiDecode(namePt, namePt, strlen(namePt));
+    if (!sameString(namePt, cartSessionVarName()) && !sameString(namePt, RECENT_SESSIONS_VAR)
+            && !inStringArray(namePt, cartBookkeepingVars, FALSE)
+            && !inStringArray(namePt, cartBookkeepingPrefixes, TRUE)
+            && hashLookup(hash, namePt) == NULL)
+        hashAdd(hash, namePt, cloneString(val));
+    namePt = next;
+    }
+freeMem(dupe);
+return hash;
+}
+
+static boolean hashValsInOther(struct hash *hash, struct hash *other)
+/* Return TRUE if every variable of hash has the same value in other, or is missing in other and
+ * is one that pages set to a default. */
+{
+struct hashCookie cookie = hashFirst(hash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    char *otherVal = hashFindVal(other, hel->name);
+    if (otherVal == NULL ? !inStringArray(hel->name, cartDefaultedVars, FALSE)
+                         : !sameString(otherVal, hel->val))
+        return FALSE;
+    }
+return TRUE;
+}
+
+static boolean sameCartContents(char *a, char *b)
+/* Return TRUE if two CGI-encoded cart contents strings have the same tracks and settings. */
+{
+if (a == NULL || b == NULL)
+    return FALSE;
+struct hash *aHash = cartContentsToHash(a), *bHash = cartContentsToHash(b);
+boolean same = hashValsInOther(aHash, bHash) && hashValsInOther(bHash, aHash);
+hashFreeWithVals(&aHash, freez);
+hashFreeWithVals(&bHash, freez);
+return same;
+}
+
+static struct cartDb *cartNewestCopyIfSame(struct sqlConnection *conn, struct cart *cart,
+                                           char *contents)
+/* Return the sessionDb row of the newest copy on the list of recent views if it has the same
+ * tracks and settings as contents, else NULL. */
+{
+struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+struct cartDb *newest = NULL;
+if (list != NULL && !sameString(list->name, cartSessionId(cart)))
+    {
+    newest = cartDbLoadFromId(conn, sessionDbTable(), list->name);
+    if (newest != NULL)
+        {
+        char *mark = cartContentsVal(newest->contents, hgsPrevViewOf);
+        if (mark == NULL || !sameCartContents(newest->contents, contents))
+            cartDbFree(&newest);
+        freeMem(mark);
+        }
+    }
+slPairFreeValsAndList(&list);
+return newest;
+}
+
+static boolean cartKeepCopyBeforeLoad(struct cart *cart, char *loadedName, char *loadedContents)
 /* A full session load is about to replace the cart.  Store a copy of the view the user had in a
  * sessionDb row and put that on the list of recent views, the only way a row gets on that list.
  * The view is the cart of the hgsid as it was before this request, or, for a request without a
- * known hgsid (a session link, My Sessions, Public Sessions), the cart this web browser saved
- * last.  The row is a new one, or the row of the oldest copy when that is about to drop off the
- * list, so a user has at most MAX_RECENT_SESSIONS copies. */
+ * known hgsid (a session link, Public Sessions), the cart this web browser saved last.  The row
+ * is a new one, or the row of the oldest copy when that is about to drop off the list, so a user
+ * has at most MAX_RECENT_SESSIONS copies.  If the view is the same as the newest copy, that copy
+ * is relabeled and moved to the top instead, so opening one session twice does not list the
+ * same view twice.  If loadedContents, the session being loaded, is the same as the view,
+ * nothing would be lost: no copy is made and FALSE is returned. */
 {
 if (!cartRecentSessionsEnabled() || cart->sessionInfo == NULL)
-    return;
+    return TRUE;
 // a new hgsid without a cart from userDb: nothing was there before
 if (cart->sessionInfo->useCount == 0 && cartStateBeforeRequest == NULL)
-    return;
-struct sqlConnection *conn = cartDefaultConnector();
-struct cartDb *copy = cartReusableCopy(conn, cart);
-if (copy == NULL)
-    {
-    boolean found;
-    copy = loadDb(conn, sessionDbTable(), NULL, &found);
-    }
+    return TRUE;
 struct dyString *dy = dyStringNew(4096);
 // Keep the view from before this request: the variables of a session link (position,
 // hideTracks, ...) belong to the session being loaded.  The hgS_ ones that ask for the load are
@@ -1008,6 +1106,20 @@ if (cartStateBeforeRequest != NULL)
     dyStringAppend(dy, cartStateBeforeRequest);
 else
     cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
+if (sameCartContents(dy->string, loadedContents))
+    {
+    dyStringFree(&dy);
+    return FALSE;
+    }
+struct sqlConnection *conn = cartDefaultConnector();
+struct cartDb *copy = cartNewestCopyIfSame(conn, cart, dy->string);
+if (copy == NULL)
+    copy = cartReusableCopy(conn, cart);
+if (copy == NULL)
+    {
+    boolean found;
+    copy = loadDb(conn, sessionDbTable(), NULL, &found);
+    }
 char *encName = cgiEncode(loadedName);
 dyStringPrintf(dy, "%s%s=%s", (dy->stringSize > 0) ? "&" : "", hgsPrevViewOf, encName);
 // updateOne writes useCount+1.  At 2 hgcentralTidy keeps the row for 14 days if it is not
@@ -1021,6 +1133,7 @@ freeMem(encName);
 dyStringFree(&dy);
 cartDbFree(&copy);
 cartDefaultDisconnector(&conn);
+return TRUE;
 }
 
 #ifndef GBROWSE
@@ -1084,8 +1197,9 @@ if (row != NULL)
         sessionTableString = cloneString(sessionTableString);
         char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
         pubSessionsTableString = cloneString(pubSessionsTableString);
+        boolean copyKept = TRUE;
         if (!merge)
-            cartKeepCopyBeforeLoad(cart, sessionName);
+            copyKept = cartKeepCopyBeforeLoad(cart, sessionName, row[1]);
         char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
         struct sqlConnection *conn2 = hConnectCentral();
         sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
@@ -1121,7 +1235,7 @@ if (row != NULL)
          * the current view, so it needs no note. */
         if (!merge)
             {
-            cartSetString(cart, hgsSessionJustLoaded, "on");
+            cartSetString(cart, hgsSessionJustLoaded, copyKept ? "on" : hgsNoCopyNeeded);
             cartSetString(cart, hgsOtherUserSessionName, sessionName);
             cartSetString(cart, hgsOtherUserName, sessionOwner);
             }
@@ -1702,7 +1816,7 @@ char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
 sessionTableString = cloneString(sessionTableString);
 char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
 pubSessionsTableString = cloneString(pubSessionsTableString);
-cartKeepCopyBeforeLoad(cart, "");
+cartKeepCopyBeforeLoad(cart, "", NULL);
 char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
 cartRemoveLike(cart, "*");
 cartSetString(cart, sessionVar, hgsid);
@@ -2251,7 +2365,8 @@ for (struct slPair *el = list; el != NULL && reuse == NULL; el = el->next)
     struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
     if (cdb == NULL)
         continue;
-    // Opening a copy removes the marker, so a copy someone went back to is left alone.
+    // A copy opened by its own hgsid, as before 2026-11, has lost the marker and is a cart in
+    // use: leave it alone.
     char *mark = cartContentsVal(cdb->contents, hgsPrevViewOf);
     if (mark != NULL)
         reuse = cdb;
@@ -2261,6 +2376,49 @@ for (struct slPair *el = list; el != NULL && reuse == NULL; el = el->next)
     }
 slPairFreeValsAndList(&list);
 return reuse;
+}
+
+static boolean cartOpenCopy(struct cart *cart, struct hash *oldVars)
+/* Replace the cart with the tracks and settings of the copy that hgsOpenCopy names, so the
+ * copy is opened in this request's hgsid and stays on the list of recent views as it is.  Only
+ * a copy on this web browser's own list can be opened.  Return TRUE if the cart was replaced. */
+{
+char *copyId = cloneString(cartString(cart, hgsOpenCopy));
+cartRemove(cart, hgsOpenCopy);
+boolean opened = FALSE;
+struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+if (cartRecentSessionsEnabled() && slPairFind(list, copyId) != NULL
+        && differentString(copyId, cartSessionId(cart)))
+    {
+    struct sqlConnection *conn = cartDefaultConnector();
+    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), copyId);
+    cartDefaultDisconnector(&conn);
+    if (cdb != NULL)
+        {
+        char *hgsid = cloneString(cartSessionId(cart));
+        char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
+        cartRemoveLike(cart, "*");
+        cartParseOverHash(cart, cdb->contents);
+        cartRemove(cart, hgsPrevViewOf);
+        cartSetString(cart, cartSessionVarName(), hgsid);
+        if (oldVars)
+            hashEmpty(oldVars);
+        // the CGI variables of this request, e.g. what hgSession should show, still apply
+        loadCgiOverHash(cart, oldVars);
+        cartRemove(cart, hgsOpenCopy);
+        cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
+        freeMem(recentSessions);
+        freeMem(hgsid);
+        cartDbFree(&cdb);
+        opened = TRUE;
+        }
+    }
+if (!opened)
+    warn("This copy of your tracks and settings is not available anymore. Copies are kept "
+         "for 7 days, in the web browser where they were made.");
+slPairFreeValsAndList(&list);
+freeMem(copyId);
+return opened;
 }
 
 void cartSetHubDatabase(struct cart *cart, struct hash *oldVars, char *newDatabase)
@@ -2393,7 +2551,10 @@ cartJustify(cart, oldVars);
  * apply those to cart before we do anything else.  (If this is hgSession,
  * let it handle the settings so it can display feedback to the user.) */
 boolean didSessionLoad = FALSE;
-if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
+// Open and Save in the list of recent views open a copy in a new tab, in hgTracks or hgSession
+if (cartVarExists(cart, hgsOpenCopy))
+    didSessionLoad = cartOpenCopy(cart, oldVars);
+else if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
     {
     if (cartVarExists(cart, hgsDoOtherUser))
 	{
