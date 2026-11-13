@@ -3457,6 +3457,15 @@ else
     exonText   = trackDbSettingClosestToHomeOrDefault(tg->tdb, "exonText"  , "Exon"  );
     intronText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "intronText", "Intron");
     }
+// some genePreds are not transcripts so they can label themselves as such via itemTypeLabel
+// in trackDb, keep "Transcript" as the default for backwards compatibility of not needing
+// this on every gene track. NOTE: if you change this text, it specifically affects
+// non-hgc right-click titles, which primarily is knownGene/hgGene.
+// hgTracks.js:mouseOverToLabel() has a regex that tries to extract the item name from a label,
+// which will not work correctly if the track is trying to link to hgGene and itemTypeLabel is
+// not "Transcript"
+char *itemTypeLabel = htmlEncode(trackDbSettingClosestToHomeOrDefault(tg->tdb, "itemTypeLabel", "Transcript"));
+
 while (exon != NULL)
 /* Make a stupid list of exons separate from what's given. */
 /* It seems like lf->components isn't necessarily sorted. */
@@ -3597,9 +3606,8 @@ for (ref = exonList; TRUE; )
                                     char *oldMouseOver = lf->mouseOver;
                                     lf->mouseOver = NULL;
                                     dyStringClear(codonDy);
-                                    // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                                     if (!isEmpty(existingText))
-                                        dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
+                                        dyStringPrintf(codonDy, "<b>%s: </b> %s<br>", itemTypeLabel, existingText);
                                     if (codon->codonIndex > 0)
                                         {
                                         /* The c. range is measured off the codon's own bases
@@ -3642,13 +3650,13 @@ for (ref = exonList; TRUE; )
                                             {
                                             int txCStart = (codon->txCodonIndex - 1) * 3 + 1;
                                             dyStringPrintf(codonDy,
-                                                "<b>Transcript codon number: </b> "
+                                                "<b>%s codon number: </b> "
                                                 "c.%d-%d (p.%d)<br>",
-                                                txCStart, txCStart+2, codon->txCodonIndex);
+                                                itemTypeLabel, txCStart, txCStart+2, codon->txCodonIndex);
                                             dyStringPrintf(codonDy,
-                                                "<b>Note: </b>This transcript's sequence has "
+                                                "<b>Note: </b>This item's sequence has "
                                                 "extra or missing bases compared to the genome "
-                                                "before this codon, so the genomic and transcript "
+                                                "before this codon, so the genomic and item "
                                                 "codon numbers differ. "
                                                 "<a target=_blank "
                                                 "href=\"../FAQ/FAQgenes.html#txIndel\">"
@@ -3729,9 +3737,9 @@ for (ref = exonList; TRUE; )
                         }
 
 
-                    safef(mouseOverText, sizeof(mouseOverText), "<b>Transcript:</b> %s<br>%s"
+                    safef(mouseOverText, sizeof(mouseOverText), "<b>%s:</b> %s<br>%s"
                             "<b>Strand:</b> %s<br><b>%s:</b> %s %d of %d&nbsp;&nbsp;<b>%s</b> %d bp<br>%s",
-                        existingText, posNote, strandStr, exonOrIntron, exonIntronText,
+                        itemTypeLabel, existingText, posNote, strandStr, exonOrIntron, exonIntronText,
                         exonIntronNumber, numExonIntrons, lengthLabel, e - s, phaseText);
 
                     // temporarily remove the mouseOver from the lf, since linkedFeatureMapItem will always 

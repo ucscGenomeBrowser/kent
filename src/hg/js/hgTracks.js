@@ -5821,6 +5821,8 @@ var rightClick = {
 
                         // remove special genePred exon mouseover html text
                         // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
+                        // and hgGene needs the right item name instead of the full Transcript: XYZ,
+                        // so extract it here. Note that hgc links just use the URL below
                         title = rightClick.mouseOverToLabel(decodeURIComponent(title));
 
                         if (title.length > maxLength) {
