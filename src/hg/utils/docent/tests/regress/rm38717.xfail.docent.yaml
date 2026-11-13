@@ -1,0 +1,43 @@
+# #38717 -- hgTracks crashed (SIGSEGV) on a paired-end BAM track in squish or full.
+#
+# de6ef063cec (v506 Preview I CR fixes, refs #38640) turned on the mismatch, insertion and
+# unaligned-end mouseovers for BAM reads.  addAliMarkMouseOverPx() in cds.c named each
+# mouseover's map box with tg->mapItemName(tg, lf).  A paired-end BAM track
+# (pairEndsByName on) uses the linkedFeaturesSeries methods, so that was
+# linkedFeaturesSeriesName(), which read the single read it was given as a
+# linkedFeaturesSeries and got a garbage name pointer; cgiEncode() crashed on it.  Fixed in
+# 5ae0bd3c0d8, which uses the read's own name there (the pair has the same name).
+# Unpaired BAM tracks were never affected.
+#
+# Found by the checkSessionsFromRR cron in five RR sessions.  This is the state of session
+# 5699 (hg19, Caltech HepG2 paired-end RNA-seq alignments in squish), rebuilt from cart
+# variables rather than committed as a session file, because that session belongs to an
+# outside user.  pairEndsByName comes from the trackDb of wgEncodeCaltechRnaSeqViewAligns,
+# not from the cart.
+#
+# What is asserted:
+#   * The page finishes: the track has its per-read map boxes.  A crash stops the page in
+#     the middle of the image map, so these are missing.
+#   * At least one mismatch mouseover on that track, which is the code that crashed, and
+#     its hgc link names the read, 311B7AAXX_HWUSI-EAS627_1:4:52:823:404, the read whose
+#     C>T mismatch at chr3:128,198,444 was in the crash stack.  A fix that dropped the
+#     mouseovers for paired tracks, or named them wrongly, fails here.
+# NOT asserted: the number of mismatch boxes (262 on the fixed build), which the per-track
+# and per-item caps decide.
+proof:
+  - "assertion-only 2026-11-12 -- written from #38717 and 5ae0bd3c0d8"
+  - "sandbox-ab 2026-11-12 -- fails on genome-test (v506 master, before 5ae0bd3c0d8): page stops in the image map, track not drawn; passes on hgwdev-max with 5ae0bd3c0d8 built in"
+
+target: genome-test
+db: hg19
+position: chr3:128198265-128212030
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr3%3A128198265-128212030&pix=1405&hideTracks=1&wgEncodeRnaSeqSuper=show&wgEncodeCaltechRnaSeq=squish&wgEncodeCaltechRnaSeqViewAligns=squish&wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2_sel=1&wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2=squish"
+  - expect:
+      rows: [wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2]
+      has:
+        - 'map area[href*="g=wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2"]'
+        - 'map area[href*="g=wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2"][data-tooltip^="Mismatch (red)"]'
+        - 'map area[href*="i=311B7AAXX_HWUSI%2DEAS627_1%3A4%3A52%3A823%3A404"][data-tooltip*="chr3:128,198,444 C>T"]'
