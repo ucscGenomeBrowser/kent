@@ -88,6 +88,7 @@
 #include "exportedDataHubs.h"
 #include "myVariants.h"
 #include "quickLift.h"
+#include "snapshotSession.h"
 
 //#include "bed3Sources.h"
 
@@ -9169,8 +9170,9 @@ if (rtsLoad)  // load a recommended track set using the merge method
     hashStore(excludeHash, "user");
     changeTrackVisExclude(groupList, NULL, tvHide, excludeHash, FALSE);
 
-    // The set files have no visibility lines for hub tracks, so return the tracks of the
-    // set's own hubs to their defaults.  Otherwise they stay hidden.
+    // The set files have visibility lines only for hub tracks that are not at their
+    // default, so return the other tracks of the set's hubs to their defaults.  Otherwise
+    // they stay hidden.
     struct group *group;
     for (group = groupList; group != NULL; group = group->next)
         {
@@ -14049,12 +14051,13 @@ jsInlineF("notifBoxSetup(\"hgTracks\", \"%s\", \"%s\");\n", msgId, msg);
 jsInlineF("notifBoxShow(\"hgTracks\", \"%s\");\n", msgId);
 }
 
-void notifyOnce (char *msg, char *msgId)
+void notifyOnce (char *msg, char *msgId, char *firstButton)
 /* Like notify(), but for a message that only makes sense on this page, e.g. after a session was
  * loaded.  It is not shown again on the next page; its "Don't show again" button keeps it away
- * the next time the same thing happens, in this web browser. */
+ * the next time the same thing happens, in this web browser.  firstButton, if not NULL, is the
+ * HTML of a button in front of Close, with single quotes only. */
 {
-jsInlineF("notifBoxOnce(\"%s\", \"%s\");\n", msg, msgId);
+jsInlineF("notifBoxOnce(\"%s\", \"%s\", \"%s\");\n", msg, msgId, firstButton ? firstButton : "");
 }
 
 static char *jsSafe(char *text)
@@ -14071,6 +14074,7 @@ static void sessionNoticeText(struct dyString *dy, char *sessionName, char *sess
  * anymore (it can be deleted after it was loaded) just say what the cart remembers. */
 {
 char *created = NULL, *description = NULL;
+boolean isShareLink = sameOk(sessionOwner, snapshotAnonUser);
 struct sqlConnection *conn = hConnectCentral();
 char *encOwner = cgiEncodeFull(sessionOwner);
 char *encName = cgiEncodeFull(sessionName);
@@ -14083,6 +14087,8 @@ char **row = sqlNextRow(sr);
 if (row != NULL)
     {
     created = cloneString(row[0]);
+    if (snapshotIsSnapshotSettings(row[1]))
+        isShareLink = TRUE;
     if (isNotEmpty(row[1]))
         {
         struct hash *settings = raFromString(row[1]);
@@ -14095,14 +14101,21 @@ hDisconnectCentral(&conn);
 freeMem(encOwner);
 freeMem(encName);
 
-// the owner also for your own sessions, so it reads the same as in a shared link
-dyStringPrintf(dy, "You have opened the saved session <b>%s</b>, ", jsSafe(sessionName));
-dyStringPrintf(dy, "saved by user <b>%s</b>", jsSafe(sessionOwner));
+// A link from "Share a link" has a random name and the anonymous owner "l", which mean nothing
+// to the person who opens it.  Otherwise name the owner also for your own sessions, so it reads
+// the same as in a shared link.
+if (isShareLink)
+    dyStringPrintf(dy, "You have opened a shared link");
+else
+    {
+    dyStringPrintf(dy, "You have opened the saved session <b>%s</b>, ", jsSafe(sessionName));
+    dyStringPrintf(dy, "saved by user <b>%s</b>", jsSafe(sessionOwner));
+    }
 if (isNotEmpty(created))
     {
     // firstUse is a mysql datetime, "2026-09-18 11:22:33", the day is enough here
     char *day = firstWordInLine(created);
-    dyStringPrintf(dy, " on %s", jsSafe(day));
+    dyStringPrintf(dy, isShareLink ? ", created on %s" : " on %s", jsSafe(day));
     }
 dyStringPrintf(dy, ".<br>");
 
@@ -14132,6 +14145,8 @@ static void showSessionLoadNotice(int recentViewCount)
 {
 if (trackImgOnly || !cartVarExists(cart, hgsSessionJustLoaded))
     return;
+// cart.c makes no copy when the tracks and settings were already those of the session
+boolean copyKept = !sameString(cartString(cart, hgsSessionJustLoaded), hgsNoCopyNeeded);
 cartRemove(cart, hgsSessionJustLoaded);
 if (!cfgOptionBooleanDefault("sessionLoadNotice", FALSE))
     return;
@@ -14155,10 +14170,17 @@ char *what = fromFile ? "" : " by opening this session";
 // hgTracks.js opens the same dialog as the My Data menu item when this link is clicked
 char *recentViewsLink = "<a href='#' id='recentViewsLink'>My Data &gt; Restore Previous Session</a>";
 // hgTracks.js opens the newest copy, the one made just before this load, when the button is clicked
-if (recentViewCount > 0)
-    dyStringPrintf(dy, "Your previous tracks and settings were replaced%s.<br>"
-            "<button type='button' id='openPrevSessionBtn'>Open previous session in new tab</button> "
-            "Or go to %s to restore other sessions.", what, recentViewsLink);
+char *button = NULL;
+if (!copyKept)
+    dyStringPrintf(dy, "Your tracks and settings were already those of this session, so nothing "
+            "was replaced. Earlier sessions are under %s.", recentViewsLink);
+else if (recentViewCount > 0)
+    {
+    dyStringPrintf(dy, "Your previous tracks and settings were replaced%s. "
+            "To restore other sessions, go to %s.", what, recentViewsLink);
+    button = "<button type='button' id='openPrevSessionBtn' "
+            "title='Open previous session in new tab'>Open previous session</button>";
+    }
 else if (cartRecentSessionsEnabled())
     dyStringPrintf(dy, "Your previous tracks and settings were replaced%s. "
             "Settings from the last 7 days are listed under %s.", what, recentViewsLink);
@@ -14170,7 +14192,7 @@ else
     dyStringPrintf(dy, "This note goes away when you close it or leave this page.");
     }
 // separate ids, so "Don't show again" on one note does not hide the other
-notifyOnce(dy->string, fromFile ? "settingsLoad" : "sessionLoad");
+notifyOnce(dy->string, fromFile ? "settingsLoad" : "sessionLoad", button);
 dyStringFree(&dy);
 }
 
@@ -14199,50 +14221,12 @@ cartRemove(cart, hgsShowRecentViews);
 if (!openDialog && !cartVarExists(cart, hgsSessionJustLoaded))
     return 0;
 
-struct slPair *recent = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
-char *currentId = cartSessionId(cart);
-struct sqlConnection *conn = hConnectCart();
-struct jsonWrite *jw = jsonWriteNew();
 int count = 0;
-jsonWriteListStart(jw, NULL);
-for (struct slPair *el = recent; el != NULL; el = el->next)
-    {
-    if (sameString(el->name, currentId))
-        continue;
-    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
-    if (cdb == NULL)
-        continue;
-    // only set in a copy made just before a session load, "" if it was a file or URL.  Lists
-    // from before 2026-11 also have the hgsids of other tabs, and a copy loses the marker once
-    // it is opened: those are not shown, the list is only the views a load replaced.
-    char *prevViewOf = cartContentsVal(cdb->contents, hgsPrevViewOf);
-    if (prevViewOf == NULL)
-        {
-        cartDbFree(&cdb);
-        continue;
-        }
-    char *db = cartContentsVal(cdb->contents, "db");
-    char *position = cartContentsVal(cdb->contents, "position");
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteString(jw, "hgsid", el->name);
-    jsonWriteString(jw, "db", db);
-    jsonWriteString(jw, "position", position);
-    jsonWriteNumber(jw, "timestamp", sqlLongLong(el->val));
-    jsonWriteString(jw, "prevViewOf", prevViewOf);
-    jsonWriteObjectEnd(jw);
-    freeMem(db);
-    freeMem(position);
-    freeMem(prevViewOf);
-    cartDbFree(&cdb);
-    count++;
-    }
-jsonWriteListEnd(jw);
-jsInlineF("var recentSessions = %s;\n", jw->dy->string);
+char *json = cartRecentViewsJson(cart, &count);
+jsInlineF("var recentSessions = %s;\n", json);
 if (openDialog)
     jsInline("$(function() { sessionLoadDialog.show(); });\n");
-jsonWriteFree(&jw);
-hDisconnectCart(&conn);
-slPairFreeValsAndList(&recent);
+freeMem(json);
 return count;
 }
 

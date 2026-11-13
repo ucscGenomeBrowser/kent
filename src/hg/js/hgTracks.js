@@ -10372,54 +10372,55 @@ var sessionLoadDialog = {
         }
     },
 
-    describe: function(s) {
-        // What a row is: the copy made just before a session load, or before a file or URL load
-        var what = s.prevViewOf ? 'session <b>' + htmlEncode(s.prevViewOf) + '</b>'
-                                : 'settings from a file or URL';
-        return 'Before you opened ' + what + ', ' + this.formatTimestamp(s.timestamp).toLowerCase();
+    replacedBy: function(s) {
+        // What replaced the copy: a session, or settings from a file or URL
+        return s.prevViewOf ? 'Session <b>' + htmlEncode(s.prevViewOf) + '</b>'
+                            : 'Settings from a file or URL';
+    },
+
+    openUrl: function(s) {
+        // The copy opens in a new hgsid, so it stays on the list as it is
+        return '../cgi-bin/hgTracks?hgS_openCopy=' + encodeURIComponent(s.hgsid);
     },
 
     buildSessionList: function(sessions) {
-        // Build HTML for the list of saved copies, newest first
-        var html = '<p>Before you open a session or load settings from a file or URL, the ' +
-                'Genome Browser keeps a copy of your tracks and settings. These are your most ' +
-                'recent copies in this web browser from the last 7 days. Click Open to restore ' +
-                'one in a new tab, or Save to keep it as a named session.</p>';
+        // Build HTML for the list of saved copies, newest first.  Styles are in HGStyle.css.
         if (sessions.length === 0) {
-            return html + '<p>There are no copies yet in this web browser. If you think there ' +
-                    'should be some, check your other web browsers, or ' +
-                    '<a href="../contacts.html" target="_blank">contact us</a>.</p>';
+            return '<p>There are no copies yet in this web browser. The Genome Browser keeps a ' +
+                    'copy of your tracks and settings before you open a session or load settings ' +
+                    'from a file or URL. If you think there should be copies here, check your ' +
+                    'other web browsers or <a href="../contacts.html" target="_blank">contact ' +
+                    'us</a>.</p>';
         }
+        var html = '<p>When you open a saved session, all current tracks and settings are ' +
+                'replaced, but the Genome Browser keeps copies that you can restore here. ' +
+                'These are your most recent copies in this web browser from the last 7 days. Click Open to ' +
+                'restore one in a new tab.</p>';
         var sorted = sessions.slice().sort(function(a, b) {
             return b.timestamp - a.timestamp;
         });
-        html += '<div style="max-height: 300px; overflow-y: auto;">';
-        html += '<table style="width: 100%; border-collapse: collapse;">';
-        html += '<thead><tr style="background: #f0f0f0;">' +
-                '<th style="padding: 8px; text-align: left;">Copy</th>' +
-                '<th style="padding: 8px; text-align: left;">Assembly</th>' +
-                '<th style="padding: 8px; text-align: left;">Position</th>' +
-                '<th style="padding: 8px;"></th>' +
-                '</tr></thead><tbody>';
+        html += '<table class="recentViewsTable"><thead><tr>' +
+                '<th title="The session or settings file that replaced these tracks and settings">' +
+                'Replaced by</th>' +
+                '<th title="When the copy was made">Date</th>' +
+                '<th title="Genome assembly of the copy">Assembly</th>' +
+                '<th title="Position shown in the copy">Position</th>' +
+                '<th></th></tr></thead><tbody>';
 
         for (var i = 0; i < sorted.length; i++) {
             var s = sorted[i];
-            var sid = encodeURIComponent(s.hgsid);
-            var openUrl = '../cgi-bin/hgTracks?hgsid=' + sid;
-            var saveUrl = '../cgi-bin/hgSession?hgS_doMainPage=1&hgsid=' + sid;
-            html += '<tr style="border-bottom: 1px solid #ddd;">';
-            html += '<td style="padding: 8px;">' + this.describe(s) + '</td>';
-            html += '<td style="padding: 8px;">' + htmlEncode(s.db || '(unknown)') + '</td>';
-            html += '<td style="padding: 8px;">' + htmlEncode(s.position || '(unknown)') + '</td>';
-            html += '<td style="padding: 8px; white-space: nowrap;">' +
-                    '<a href="' + openUrl + '" target="_blank">Open</a> ' +
-                    '<a href="' + saveUrl + '" target="_blank" ' +
-                    'title="Open the Sessions page with these settings, to save them under a name">' +
-                    'Save</a></td>';
+            html += '<tr>';
+            html += '<td>' + this.replacedBy(s) + '</td>';
+            html += '<td class="nowrap">' + this.formatTimestamp(s.timestamp) + '</td>';
+            html += '<td>' + htmlEncode(s.db || '(unknown)') + '</td>';
+            html += '<td class="nowrap">' + htmlEncode(s.position || '(unknown)') + '</td>';
+            html += '<td><button type="button" class="recentViewOpen" data-url="' +
+                    this.openUrl(s) + '" title="Open these tracks and settings in a new tab">' +
+                    'Open</button></td>';
             html += '</tr>';
         }
 
-        html += '</tbody></table></div>';
+        html += '</tbody></table>';
         return html;
     },
 
@@ -10429,18 +10430,27 @@ var sessionLoadDialog = {
         }
         var $dialog = $('<div id="sessionLoadDialog"></div>');
         $dialog.html(this.buildSessionList(recentSessions));
-        // not wider than the window, or its right side is cut off in a narrow window
+        // not larger than the window, or it is cut off in a small window
         var dialogWidth = function() {
-            return Math.min(650, $(window).width() - 20);
+            return Math.min(900, $(window).width() - 20);
+        };
+        var dialogHeight = function() {
+            // the message that there are no copies needs no room for a list
+            if (recentSessions.length === 0) {
+                return 'auto';
+            }
+            return Math.min(550, $(window).height() - 20);
         };
         var onResize = function() {
             $dialog.dialog('option', 'width', dialogWidth());
+            $dialog.dialog('option', 'height', dialogHeight());
             $dialog.dialog('option', 'position', {my: 'center', at: 'center', of: window});
         };
         $(window).on('resize', onResize);
         $dialog.dialog({
             title: 'Restore Previous Session',
             width: dialogWidth(),
+            height: dialogHeight(),
             modal: false,
             resizable: false,
             buttons: {
@@ -10455,13 +10465,23 @@ var sessionLoadDialog = {
         });
     },
 
+    showFromMenu: function() {
+        // My Data > Restore Previous Session on this page: get the list from hgSession and open
+        // the dialog, instead of reloading the whole page
+        $.getJSON('../cgi-bin/hgSession', {hgS_recentViewsJson: 1, hgsid: getHgsid()},
+            function(list) {
+                window.recentSessions = list;
+                $('#sessionLoadDialog').dialog('close');
+                sessionLoadDialog.show();
+            });
+    },
+
     openNewest: function() {
         // Open the copy made just before this load: the server lists the newest first
         if (typeof recentSessions === 'undefined' || recentSessions.length === 0) {
             return;
         }
-        window.open('../cgi-bin/hgTracks?hgsid=' + encodeURIComponent(recentSessions[0].hgsid),
-                '_blank');
+        window.open(this.openUrl(recentSessions[0]), '_blank');
     }
 };
 
@@ -10471,7 +10491,19 @@ $(document).on('click', '#recentViewsLink', function(ev) {
     sessionLoadDialog.show();
 });
 
-// The "Open previous session in new tab" button in the same note
+// My Data > Restore Previous Session.  On other pages it is a plain link to hgTracks.
+$(document).on('click', '#recentViewsMenuLink', function(ev) {
+    ev.preventDefault();
+    sessionLoadDialog.showFromMenu();
+});
+
+// The Open buttons in the dialog
+$(document).on('click', '#sessionLoadDialog .recentViewOpen', function(ev) {
+    ev.preventDefault();
+    window.open($(this).attr('data-url'), '_blank');
+});
+
+// The "Open previous session" button in the same note
 $(document).on('click', '#openPrevSessionBtn', function(ev) {
     ev.preventDefault();
     sessionLoadDialog.openNewest();

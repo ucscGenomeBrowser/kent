@@ -516,6 +516,10 @@ button.ui-button::-moz-focus-inner {
 	left: .5em;
 	top: .3em;
 }
+/* Dialogs use the normal font size of the page, not the smaller one of .ui-widget's parent */
+.ui-dialog.ui-widget {
+	font-size: 1rem;
+}
 .ui-dialog {
 	position: relative;
 	padding: .2em;
@@ -547,7 +551,7 @@ button.ui-button::-moz-focus-inner {
 	padding: .5em 1em;
 	background: none;
 	overflow: auto;
-    font-size: small;
+    font-size: 1rem;
 }
 .ui-dialog .ui-dialog-buttonpane {
 	text-align: left;
@@ -555,7 +559,8 @@ button.ui-button::-moz-focus-inner {
 	background-image: none;
 	margin: .2em;
 	padding: .1em;
-    height: 1em;
+    height: auto;
+    display: flow-root;
     background: #FFFEE8;
 }
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
@@ -566,7 +571,7 @@ button.ui-button::-moz-focus-inner {
 	cursor: pointer;
     min-width: 80px;
     border-color: #003399;
-    font-size: small;
+    font-size: 1rem;
     padding: 0 1em;
 }
 

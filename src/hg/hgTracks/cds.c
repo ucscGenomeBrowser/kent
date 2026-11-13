@@ -548,8 +548,11 @@ itemCount++;
 char *directUrl = trackDbSetting(tg->tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
 char *trackName = (tg->originalTrack != NULL) ? tg->originalTrack : tg->track;
+// lf is always a single linkedFeatures here. Paired-end BAM tracks use the series methods,
+// whose mapItemName would read lf as a linkedFeaturesSeries; the pair has the read's name.
+char *mapName = (tg->mapItemName == linkedFeaturesSeriesName) ? lf->name : tg->mapItemName(tg, lf);
 mapBoxHgcOrHgGene(hvg, lf->start, lf->end, x, y, width, height,
-                  trackName, tg->mapItemName(tg, lf), text, directUrl, withHgsid, NULL);
+                  trackName, mapName, text, directUrl, withHgsid, NULL);
 }
 
 static void addAliMarkMouseOver(struct track *tg, struct linkedFeatures *lf,

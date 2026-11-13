@@ -549,9 +549,11 @@ static void hgcAnchorSomewhereExt(char *group, char *item, char *other, char *ch
  * and other parameters. */
 {
 char *itemSafe = cgiEncode(item);
+char *tblSafe = cgiEncode(tbl);
 printf("<A HREF=\"%s&db=%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), database, group, itemSafe, chrom, start, end, other, tbl);
+       hgcPathAndSettings(), database, group, itemSafe, chrom, start, end, other, tblSafe);
 freeMem(itemSafe);
+freeMem(tblSafe);
 }
 
 void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
@@ -566,7 +568,7 @@ void hgcAnchorPosition(char *group, char *item)
 /* Generate an anchor that calls click processing program with item
  * and group parameters. */
 {
-char *tbl = cgiUsualString("table", cgiString("g"));
+char *tbl = cgiEncode(cgiUsualString("table", cgiString("g")));
 printf("<A HREF=\"%s&db=%s&g=%s&i=%s&table=%s\">",
        hgcPathAndSettings(), database, group, item, tbl);
 }
@@ -596,7 +598,7 @@ void hgcAnchorTranslatedChain(int item, char *other, char *chrom, int cdsStart, 
 /* Generate an anchor that calls click processing program with item
  * and other parameters. */
 {
-char *tbl = cgiUsualString("table", cgiString("g"));
+char *tbl = cgiEncode(cgiUsualString("table", cgiString("g")));
 printf("<A HREF=\"%s&db=%s&g=%s&i=%d&c=%s&l=%d&r=%d&o=%s&table=%s&qs=%d&qe=%d\">",
        hgcPathAndSettings(), database, "htcChainTransAli", item, chrom, winStart, winEnd, other,
        tbl, cdsStart, cdsEnd);
@@ -762,7 +764,7 @@ else
     strand = "?";
 if (featDna && end > start)
     {
-    char *tbl = cgiUsualString("table", cgiString("g"));
+    char *tbl = cgiEncode(cgiUsualString("table", cgiString("g")));
     strand = cgiEncode(strand);
     printf("<A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A>  (%s/%s)<BR>\n",  hgcPathAndSettings(),
@@ -7434,8 +7436,10 @@ static char *aliTrackParam()
  * to a real table on the assembly being viewed. */
 {
 static char buf[1024];
+char *track = cgiEncode(cgiUsualString("table", cgiUsualString("g", "")));
 
-safef(buf, sizeof buf, "&aliTrack=%s", cgiUsualString("table", cgiUsualString("g", "")));
+safef(buf, sizeof buf, "&aliTrack=%s", track);
+freeMem(track);
 return buf;
 }
 
@@ -18751,7 +18755,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char *org = hOrganism(database);
-char *tbl = cgiUsualString("table", cgiString("g"));
+char *tbl = cgiEncode(cgiUsualString("table", cgiString("g")));
 char *elname, *ptr, *xenoDb, *xenoOrg, *xenoChrom;
 char query[256];
 int rowOffset;

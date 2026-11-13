@@ -1167,6 +1167,9 @@ char *lfMapNameFromExtra(struct track *tg, void *item);
 char *linkedFeaturesName(struct track *tg, void *item);
 /* Return name of item. */
 
+char *linkedFeaturesSeriesName(struct track *tg, void *item);
+/* Return name of a linkedFeaturesSeries item. */
+
 int getFilterColor(char *type, int colorIx);
 /* Get color corresponding to type - MG_RED for "red" etc. */
 

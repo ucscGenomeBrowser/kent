@@ -6196,6 +6196,33 @@ retroFinder/branches/version2/src/pipeline/analyseExpress.sh
 # Scripts copied ucscRetroAli9.psl, ucscRetroInfo9.bed and ucscRetroCds9.tab
 # to /hive/data/genomes/hg38/bed/retro/
 
+# clip ucscRetroInfo9 thickStart/thickEnd to the alignment (DONE 2026-11-12 markd)
+# refs #38753
+# analyseExpress.sh overwrote thickStart/thickEnd with the CDS of the expressed
+# transcript model in ucscRetroExpressed9.  That model is wider than the retro
+# alignment, so 973 of the 15491 rows had thick coordinates outside their own
+# chromStart..chromEnd and the first 12 columns would not load as BED.  The
+# unclipped ORF is still in ucscRetroExpressed9.
+cd /hive/data/genomes/hg38/bed/retro
+hgsql hg38 -N -e "select * from ucscRetroInfo9" > ucscRetroInfo9.preThickFix.bed
+awk -F'\t' 'BEGIN{OFS="\t"}
+{
+  if ($7 > $3 || $8 < $2) { $7 = $2; $8 = $2 }
+  else {
+    if ($7 < $2) $7 = $2
+    if ($8 > $3) $8 = $3
+  }
+  print
+}' ucscRetroInfo9.preThickFix.bed > ucscRetroInfo9.thickClipped.bed
+hgsql hg38 -e "create table ucscRetroInfo9New like ucscRetroInfo9"
+hgLoadSqlTab -oldTable -notOnServer hg38 ucscRetroInfo9New /dev/null ucscRetroInfo9.thickClipped.bed
+hgsql hg38 -e "rename table ucscRetroInfo9 to ucscRetroInfo9PreThickFix, ucscRetroInfo9New to ucscRetroInfo9"
+# 840 rows clipped at one end, 133 with no overlap at all set to no CDS.
+# Nothing but thickStart and thickEnd changed.  ucscRetroInfo9PreThickFix was
+# dropped once the new table was checked; ucscRetroInfo9.preThickFix.bed is the
+# copy of what was replaced.
+
+
 ##########
 # Make dbVar chrom to UCSC chrom lift file
 #  DONE braney 2/12/15
