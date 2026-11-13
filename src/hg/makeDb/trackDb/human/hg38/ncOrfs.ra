@@ -3,6 +3,7 @@ superTrack on
 shortLabel Non-canonical ORFs
 longLabel Non-canonical Open Reading Frames
 group genes
+itemTypeLabel ORF
 
     track utrAnnotUorfs
     parent ncOrfs
