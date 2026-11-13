@@ -114,15 +114,23 @@ return cloneString(buf);
 
 static unsigned loadedHubId(char *idStr, struct slPair *assumes)
 /* Return the local id of a hub that the set file names by idStr, or 0 if that hub is not
- * loaded.  The file uses the ids of the machine it was saved on, so look the hub up by the
- * url from the file's assumesHub setting as well. */
+ * loaded.  The file uses the ids of the machine it was saved on, and on another machine a
+ * different hub can have that id.  So when the file's assumesHub setting gives a url for
+ * the id, look the hub up by that url only, and use the id only when there is no url. */
 {
 unsigned id = atoi(idStr);
 char *url = slPairFindVal(assumes, idStr);
 struct hubConnectStatus *hub;
 for (hub = hubConnectGetHubs(); hub != NULL; hub = hub->next)
-    if (hub->id == id || (url != NULL && sameString(hub->hubUrl, url)))
+    {
+    if (url != NULL)
+        {
+        if (sameString(hub->hubUrl, url))
+            return hub->id;
+        }
+    else if (hub->id == id)
         return hub->id;
+    }
 return 0;
 }
 
