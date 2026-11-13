@@ -27,6 +27,7 @@
 proof:
   - "assertion-only 2026-11-12 -- written from #38717 and 5ae0bd3c0d8"
   - "sandbox-ab 2026-11-12 -- fails on genome-test (v506 master, before 5ae0bd3c0d8): page stops in the image map, track not drawn; passes on hgwdev-max with 5ae0bd3c0d8 built in"
+  - "server-flip 2026-11-13 -- passes on genome-test after 5ae0bd3c0d8 was pushed and installed there; it failed there as an xfail on 2026-11-12 (nightly 2026-11-13_0410, commit 013c1de2758)"
 
 target: genome-test
 db: hg19
