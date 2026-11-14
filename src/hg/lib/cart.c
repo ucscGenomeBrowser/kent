@@ -2057,10 +2057,18 @@ static void hubGenomeNotFoundAbort(char *genome, struct hubConnectStatus *hub)
  * browser would quietly open the default assembly instead.  refs #30832 */
 {
 char *hubUrl = (hub != NULL) ? hub->hubUrl : "";
+// a constant, passed with |none| so the HTML is not encoded
+char *hubIdNote = startsWith("hub_", genome) ?
+    "<p>A name that starts with <b>hub_</b> and a number refers to an assembly hub that is "
+    "connected on one particular Genome Browser server, and the number is different on every "
+    "server. Connect that assembly hub first. In genomes.txt, name the assembly the way the "
+    "assembly hub's own genomes.txt does, without the hub_ and the number, because that name "
+    "is the same on every server.</p>" : "";
 errAbort(EARLY_ERROR_PAGE_START
         "<h2>Genome assembly not found</h2>"
         "<p>The track hub <b>%s</b> lists the assembly <b>%s</b> in its genomes.txt file, "
         "but this assembly is not available on this Genome Browser.</p>"
+        "%s|none|"
         "<p>If you made this hub, check the genomes.txt file:</p>"
         "<ul><li>If <b>%s</b> is your own assembly, its stanza needs a <b>twoBitPath</b> line "
         "that points to the sequence file.</li>"
@@ -2072,7 +2080,7 @@ errAbort(EARLY_ERROR_PAGE_START
         "<p>To look for another assembly, <a href='../cgi-bin/hgGateway'>go back to the "
         "Genome Browser start page</a>. If you need help, "
         "<a href='../contacts.html'>contact us</a>.</p></div>",
-        hubUrl, genome, genome);
+        hubUrl, genome, hubIdNote, genome);
 }
 
 static void fixUpDb(struct cart *cart)
@@ -2696,10 +2704,12 @@ if (cartCollectionHubCopyOnWrite() && gLocalHubCopyRequested)
 char *newDatabase = hubConnectLoadHubs(cart);
 
 // newDatabase is only set when this request connects a hub and asks for one of its genomes.
-// Assembly hub genomes (and GenArk ones, after hubConnectLoadHubs) are "hub_<id>_<name>"; any
-// other name has to be an assembly of ours, or getDbAndGenome() would silently fall back to
-// the default one.  refs #30832
-if ((newDatabase != NULL) && !startsWith("hub_", newDatabase) && !hDbIsActive(newDatabase))
+// It has to be an assembly of ours or one of a connected assembly hub (hDbIsActive knows both,
+// and by now hubConnectLoadHubs has loaded the hubs), or getDbAndGenome() would silently fall
+// back to the default one.  A track hub on an assembly hub names it "hub_<id>_<name>", and that
+// fails too when hub <id> is not connected here, e.g. because the id is from another server.
+// refs #30832
+if ((newDatabase != NULL) && !hDbIsActive(newDatabase))
     hubGenomeNotFoundAbort(newDatabase, hubConnectNewHub());
 
 if (newDatabase != NULL)
