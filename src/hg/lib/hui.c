@@ -4438,7 +4438,7 @@ jsInlineF("$(function () { "
     "$('#filterClearButton').click( "
        "     function(ev) { ev.preventDefault(); "
        "     $('.filterBy option[value=\"All\"]').removeAttr(\"selected\");"
-       "     $('.filterBy option[Value=\"All\"]').attr('selected', 'selected');"
+       "     $('.filterBy option[Value=\"All\"]').prop('selected', true);"
        "     $('.filterBy').dropdownchecklist('refresh'); "
        " }); "
 "});");

@@ -124,7 +124,7 @@ var ddcl = {
         if (allCheckboxes[0].checked === true) {
             allCheckboxes.each(function(index) {
                 if (index > 0) {
-                    $(this).attr('checked',false);
+                    $(this).prop('checked',false);
                 }
             });
         }
@@ -149,7 +149,7 @@ var ddcl = {
                 $(facetSpan).html(' ('+facetCount+')');
             }
             // facetSpan and item and this did not work to get it to hide:
-            if (index === 0 || (facetCount !== 0) || $(this).attr('checked')) {
+            if (index === 0 || (facetCount !== 0) || $(this).prop('checked')) {
                     $(item).show();
             } else {
                 $(item).hide();
@@ -197,13 +197,13 @@ var ddcl = {
                 multiSelect.options[0].selected = true;
                 // How to check the first item?
                 var dropWrapper = $('#ddcl-' + id + '-ddw');
-                $(dropWrapper).find("input").first().attr("checked",true);
+                $(dropWrapper).find("input").first().prop("checked",true);
             }
         } else if (chosen.length === $(multiSelect).find('option').length) {
             // If all are chosen then select only the first!
             $(chosen).each(function(index) {
                 if (index > 0)
-                    $(this).attr('selected',false);
+                    $(this).prop('selected',false);
             });
         }
 

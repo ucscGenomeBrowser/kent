@@ -680,18 +680,18 @@ if (showAllButtons)
     cgiSimpleTableRowStart();
     printf("<TD COLSPAN=%d ALIGN='RIGHT'>check all / clear all&nbsp;</TD>", colSpan);
     cgiSimpleTableFieldStart();
-    cgiMakeButtonWithOnClick(hgCtDoDeleteSet, "+", "Select all for deletion", "$('.deleteCheckbox').attr('checked', true); return false;");
+    cgiMakeButtonWithOnClick(hgCtDoDeleteSet, "+", "Select all for deletion", "$('.deleteCheckbox').prop('checked', true); return false;");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    cgiMakeButtonWithOnClick(hgCtDoDeleteClr, "-", "Clear all for deletion", "$('.deleteCheckbox').attr('checked', false); return false;");
+    cgiMakeButtonWithOnClick(hgCtDoDeleteClr, "-", "Clear all for deletion", "$('.deleteCheckbox').prop('checked', false); return false;");
     cgiTableFieldEnd();
     if (updateCt)
         {
         cgiSimpleTableFieldStart();
-        cgiMakeButtonWithOnClick(hgCtDoRefreshSet, "+", "Select all for update", "$('.updateCheckbox').attr('checked', true); return false;");
+        cgiMakeButtonWithOnClick(hgCtDoRefreshSet, "+", "Select all for update", "$('.updateCheckbox').prop('checked', true); return false;");
         cgiTableFieldEnd();
         cgiSimpleTableFieldStart();
-        cgiMakeButtonWithOnClick(hgCtDoRefreshClr, "-", "Clear all for update", "$('.updateCheckbox').attr('checked', false); return false;");
+        cgiMakeButtonWithOnClick(hgCtDoRefreshClr, "-", "Clear all for update", "$('.updateCheckbox').prop('checked', false); return false;");
         cgiTableFieldEnd();
         }
     cgiTableRowEnd();

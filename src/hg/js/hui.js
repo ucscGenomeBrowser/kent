@@ -395,13 +395,13 @@ function matChkBoxNormalize(matCB)
         if (!isABC) {
             if (CBsChecked.length === subCBs.length) {
                 matCbComplete(matCB,true);
-                $(matCB).attr('checked',true);
+                $(matCB).prop('checked',true);
             } else if (CBsChecked.length === 0) {
                 matCbComplete(matCB,true);
-                $(matCB).attr('checked',false);
+                $(matCB).prop('checked',false);
             } else {
                 matCbComplete(matCB,false);
-                $(matCB).attr('checked',true);
+                $(matCB).prop('checked',true);
             }
         }
     }
@@ -572,7 +572,7 @@ function compositeCfgUpdateSubtrackCfgs(inp)
         }
         if ($(list).length > 0) {
             if (inp.multiple !== true)
-                $(list).attr('selectedIndex',inp.selectedIndex);
+                $(list).prop('selectedIndex',inp.selectedIndex);
             else {
                 $(list).each(function(view) {  // for all dependent (subtrack) multi-selects
                     sel = this;
@@ -584,8 +584,8 @@ function compositeCfgUpdateSubtrackCfgs(inp)
                     // for all options of dependent mult-selects set selected state
                     // to independent (parent) selected state
                     $(this).children('option').each(function() {  
-                        $(this).attr('selected',$(inp).children(
-                                                    'option:eq('+this.index+')').attr('selected')); 
+                        $(this).prop('selected',$(inp).children(
+                                                    'option:eq('+this.index+')').prop('selected')); 
                     });
                     $(this).attr('size',$(inp).attr('size'));
                 });
@@ -600,7 +600,7 @@ function compositeCfgUpdateSubtrackCfgs(inp)
                     });
         }
         if ($(list).length > 0)
-            $(list).attr("checked",$(inp).attr("checked"));
+            $(list).prop("checked",$(inp).prop("checked"));
     }
     else if (inp.type.indexOf("radio") === 0) {
         list = $("input:radio[name$='"+suffix+"']").not("[name='"+inp.name+"']");
@@ -611,7 +611,7 @@ function compositeCfgUpdateSubtrackCfgs(inp)
                     });
         }
         if ($(list).length > 0)
-            $(list).attr("checked",true);
+            $(list).prop("checked",true);
     }
     else {  // Various types of inputs
         list = $("input[name$='"+suffix+"']").not("[name='"+inp.name+"']");// Exclude self from list
@@ -807,9 +807,9 @@ function multiSelectBlur(obj)
     var val = $(obj).val();
     if (!val || val === "") {
         $(obj).val("All");
-        $(obj).attr('selectedIndex',0);
+        $(obj).prop('selectedIndex',0);
     }
-    if ($(obj).attr('selectedIndex') === 0) // Close if selected index is 1
+    if ($(obj).prop('selectedIndex') === 0) // Close if selected index is 1
         $(obj).attr('size',1);
     else
         multiSelectCollapseToSelectedOnly(obj);
@@ -1152,7 +1152,7 @@ function multiSelectClick(obj,sizeWhenOpen)
     if ($(obj).attr('size') !== sizeWhenOpen) {
         multiSelectFocus(obj,sizeWhenOpen);
         return false;
-    } else if ($(obj).attr('selectedIndex') === 0)
+    } else if ($(obj).prop('selectedIndex') === 0)
         $(obj).attr('size',1);
 return true;
 }

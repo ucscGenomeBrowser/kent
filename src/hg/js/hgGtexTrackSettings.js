@@ -124,7 +124,7 @@ var gtexTrackSettings = (function() {
                 // TODO: less obfuscated approach to colored border
 
         // Set hidden input checkbox, for cart
-        $('#' + tis + ' > input').attr('checked', true);
+        $('#' + tis + ' > input').prop('checked', true);
 
         // Change appearance of label in body map
         var el = _svgDoc.getElementById(tis + TEXT_HI);
@@ -144,7 +144,7 @@ var gtexTrackSettings = (function() {
         colorPatch.addClass(CLASS_TISSUE_UNSELECTED_COLOR);
 
         // Clear hidden input checkbox
-        $('#' + tis + ' > input').attr('checked', false);
+        $('#' + tis + ' > input').prop('checked', false);
 
         // Change appearance of label in body map
         var el = _svgDoc.getElementById(tis + TEXT_HI);

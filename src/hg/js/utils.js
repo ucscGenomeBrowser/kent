@@ -1972,7 +1972,7 @@ function gtexTransformChanged(name)
 
     // check log transform
     var logCheckbox = $("input[name='" + name + ".logTransform']");
-    var isLogChecked = logCheckbox.attr('checked');
+    var isLogChecked = logCheckbox.prop('checked');
 
     // enable/disable view limits
     var maxTextbox = $("input[name='" + name + ".maxViewLimit']");
@@ -2392,7 +2392,7 @@ function setCheckboxList(list, value)
 { // set value of all checkboxes in semicolon delimited list
     var names = list.split(";");
     for (var i=0; i < names.length; i++) {
-        $("input[name='" + names[i] + "']").attr('checked', value);
+        $("input[name='" + names[i] + "']").prop('checked', value);
     }
 }
 
@@ -3650,7 +3650,7 @@ var findTracks = {
                         $(tr).after( newTr );
                         element = $(newTr).find("select.mdbVar")[0];
                         if (element)
-                            $(element).attr('selectedIndex',-1); // chrome needs this after 'after'
+                            $(element).prop('selectedIndex',-1); // chrome needs this after 'after'
                     }
                 });
                 if (table)
