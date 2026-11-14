@@ -706,13 +706,16 @@ function sessSaveCardHtml(C) {
         '<span class="sessInfo" title="' + nameTip + '">&#9432;</span></div>' +
         '<label class="sessSaveCheck"><input type="checkbox" id="sessSavePrivate"> ' +
         'Private: Session can only be loaded by myself</label>' +
-        '<button type="button" class="gbPill primary" id="sessSaveBtn" ' +
-        'title="Save your current browser view as a named session">Save session</button>' +
         '</div>' +
+        // Save sits after the description, the last field, so the form reads top to bottom.
+        '<div class="sessSaveRow">' +
         '<div class="sessSaveField">' +
         '<input id="sessSaveDesc" class="sessSaveInput" type="text" maxlength="512" ' +
         'placeholder="Description (optional)">' +
         '<span class="sessInfo" title="' + descTip + '">&#9432;</span></div>' +
+        '<button type="button" class="gbPill primary" id="sessSaveBtn" ' +
+        'title="Save your current browser view as a named session">Save session</button>' +
+        '</div>' +
         '</div>';
 }
 
