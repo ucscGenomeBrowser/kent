@@ -2877,8 +2877,8 @@ struct rmskOut *quickLiftSqlLoadRmsk(struct trackDb *tdb, char *trackTable, char
     int start, int end, struct hash *chainHash)
 /* Read the rows of a quickLifted rmsk track from the assembly it came from, over the source
  * ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:  lift each
- * one with quickLiftRmskOut() through quickLiftChainHashForItem(chainHash, row).  chainHash,
- * from newHash(), is filled with the chains that do the lifting. */
+ * one with quickLiftRmskOut() through quickLiftChainHashForRange(chainHash, row, ...).
+ * chainHash, from newHash(), is filled with the chains that do the lifting. */
 {
 char *liftDb = trackDbSetting(tdb, "quickLiftDb");
 char *table;
@@ -2924,8 +2924,9 @@ struct rmskJoined *quickLiftSqlLoadRmskJoined(struct trackDb *tdb, char *trackTa
     char *chrom, int start, int end, struct hash *chainHash)
 /* Read the rows of a quickLifted rmskJoined track from the assembly it came from, over the
  * source ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:
- * lift each one with quickLiftJoinedRepeat() through quickLiftChainHashForItem(chainHash, row).
- * chainHash, from newHash(), is filled with the chains that do the lifting. */
+ * lift each one with quickLiftJoinedRepeat() through
+ * quickLiftChainHashForRange(chainHash, row, ...).  chainHash, from newHash(), is filled
+ * with the chains that do the lifting. */
 {
 char *liftDb = trackDbSetting(tdb, "quickLiftDb");
 char *table;

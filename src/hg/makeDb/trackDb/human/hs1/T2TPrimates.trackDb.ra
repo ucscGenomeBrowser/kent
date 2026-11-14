@@ -1,0 +1,2719 @@
+# BEGIN genark contrib: T2TPrimates
+
+track wfmash
+mouseOverField name
+type bigChain
+longLabel wfmash v0.13.0 16-way chain
+superTrack on
+priority 100
+group compGeno
+visibility hide
+shortLabel WFMASH
+
+track wfmashGRCh38
+mouseOverField name
+type bigChain hg38
+longLabel GRCh38 to CHM13v2.0
+otherDb hg38
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.GRCh38.bigChain.bb
+priority 101
+otherTwoBitUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.GRCh38.bigChain.link.bb
+group compGeno
+shortLabel GRCh38
+visibility dense
+
+track wfmashmGorGor1mat
+mouseOverField name
+type bigChain GCA_028885495.2
+longLabel mGorGor1_v2.0 mat to T2T-CHM13v2.0
+otherDb GCA_028885495.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mGorGor1mat.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Gorilla_gorilla/mGorGor1/assembly_curated/mGorGor1_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mGorGor1mat.bigChain.link.bb
+group compGeno
+shortLabel mGorGor1#mat
+visibility hide
+
+track wfmashmGorGor1pat
+mouseOverField name
+type bigChain GCA_028885475.2
+longLabel mGorGor1_v2.0 pat to T2T-CHM13v2.0
+otherDb GCA_028885475.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mGorGor1pat.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Gorilla_gorilla/mGorGor1/assembly_curated/mGorGor1_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mGorGor1pat.bigChain.link.bb
+group compGeno
+shortLabel mGorGor1#pat
+visibility hide
+
+track wfmashmPanPan1mat
+mouseOverField name
+type bigChain GCA_028858845.2
+longLabel mPanPan1_v2.0 mat to T2T-CHM13v2.0
+otherDb GCA_028858845.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPanPan1mat.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Pan_paniscus/mPanPan1/assembly_curated/mPanPan1_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPanPan1mat.bigChain.link.bb
+group compGeno
+shortLabel mPanPan1#mat
+visibility hide
+
+track wfmashmPanPan1pat
+mouseOverField name
+type bigChain GCA_028858825.2
+longLabel mPanPan1_v2.0 pat to T2T-CHM13v2.0
+otherDb GCA_028858825.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPanPan1pat.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Pan_paniscus/mPanPan1/assembly_curated/mPanPan1_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPanPan1pat.bigChain.link.bb
+group compGeno
+shortLabel mPanPan1#pat
+visibility hide
+
+track wfmashmPanTro3hap1
+mouseOverField name
+type bigChain GCF_028858775.2
+longLabel mPanTro3_v2.0 hap1 to T2T-CHM13v2.0
+otherDb GCF_028858775.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPanTro3hap1.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Pan_troglodytes/mPanTro3/assembly_curated/mPanTro3_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPanTro3hap1.bigChain.link.bb
+group compGeno
+shortLabel mPanTro3#hap1
+visibility hide
+
+track wfmashmPanTro3hap2
+mouseOverField name
+type bigChain GCA_028858805.2
+longLabel mPanTro3_v2.0 hap2 to T2T-CHM13v2.0
+otherDb GCA_028858805.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPanTro3hap2.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Pan_troglodytes/mPanTro3/assembly_curated/mPanTro3_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPanTro3hap2.bigChain.link.bb
+group compGeno
+shortLabel mPanTro3#hap2
+visibility hide
+
+track wfmashmPonAbe1hap1
+mouseOverField name
+type bigChain GCF_028885655.2
+longLabel mPonAbe1_v2.0 hap1 to T2T-CHM13v2.0
+otherDb GCF_028885655.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPonAbe1hap1.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Pongo_abelii/mPonAbe1/assembly_curated/mPonAbe1_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPonAbe1hap1.bigChain.link.bb
+group compGeno
+shortLabel mPonAbe1#hap1
+visibility hide
+
+track wfmashmPonAbe1hap2
+mouseOverField name
+type bigChain GCA_028885685.2
+longLabel mPonAbe1_v2.0 hap2 to T2T-CHM13v2.0
+otherDb GCA_028885685.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPonAbe1hap2.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Pongo_abelii/mPonAbe1/assembly_curated/mPonAbe1_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPonAbe1hap2.bigChain.link.bb
+group compGeno
+shortLabel mPonAbe1#hap2
+visibility hide
+
+track wfmashmPonPyg2hap1
+mouseOverField name
+type bigChain GCF_028885625.2
+longLabel mPonPyg2_v2.0 hap1 to T2T-CHM13v2.0
+otherDb GCF_028885625.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPonPyg2hap1.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Pongo_pygmaeus/mPonPyg2/assembly_curated/mPonPyg2_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPonPyg2hap1.bigChain.link.bb
+group compGeno
+shortLabel mPonPyg2#hap1
+visibility hide
+
+track wfmashmPonPyg2hap2
+mouseOverField name
+type bigChain GCA_028885525.2
+longLabel mPonPyg2_v2.0 hap2 to T2T-CHM13v2.0
+otherDb GCA_028885525.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPonPyg2hap2.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Pongo_pygmaeus/mPonPyg2/assembly_curated/mPonPyg2_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mPonPyg2hap2.bigChain.link.bb
+group compGeno
+shortLabel mPonPyg2#hap2
+visibility hide
+
+track wfmashmSymSyn1hap1
+mouseOverField name
+type bigChain GCA_028878055.2
+longLabel mSymSyn1_v2.0 hap1 to T2T-CHM13v2.0
+otherDb GCA_028878055.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mSymSyn1hap1.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Symphalangus_syndactylus/mSymSyn1/assembly_curated/mSymSyn1_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mSymSyn1hap1.bigChain.link.bb
+group compGeno
+shortLabel mSymSyn1#hap1
+visibility hide
+
+track wfmashmSymSyn1hap2
+mouseOverField name
+type bigChain GCA_028878085.2
+longLabel mSymSyn1_v2.0 hap2 to T2T-CHM13v2.0
+otherDb GCA_028878085.2
+parent wfmash
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mSymSyn1hap2.bigChain.bb
+priority 120
+otherTwoBitUrl https://genomeark.s3.amazonaws.com/species/Symphalangus_syndactylus/mSymSyn1/assembly_curated/mSymSyn1_v2.0.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/wfmash_v0.13.0.mSymSyn1hap2.bigChain.link.bb
+group compGeno
+shortLabel mSymSyn1#hap2
+visibility hide
+
+track wfmashHPRCy1
+mouseOverField name
+type bigChain
+longLabel wfmash v0.13.0 HPRCy1 chain
+superTrack on
+priority 130
+html /gbdb/hs1/contrib/T2TPrimates/wfmash.html
+group compGeno
+visibility hide
+shortLabel WFMASH-HPRCy1
+
+track wfmashHPRCy1HG002hap1
+mouseOverField name
+type bigChain HG002#hap1
+longLabel HPRCy1 HG002 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG002hap1_to_CHM13v2.0.bigChain.bb
+priority 131
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG002hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG002#hap1
+visibility hide
+
+track wfmashHPRCy1HG002hap2
+mouseOverField name
+type bigChain HG002#hap2
+longLabel HPRCy1 HG002 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG002hap2_to_CHM13v2.0.bigChain.bb
+priority 132
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG002hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG002#hap2
+visibility hide
+
+track wfmashHPRCy1HG00438hap1
+mouseOverField name
+type bigChain HG00438#hap1
+longLabel HPRCy1 HG00438 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00438hap1_to_CHM13v2.0.bigChain.bb
+priority 133
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00438hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00438#hap1
+visibility hide
+
+track wfmashHPRCy1HG00438hap2
+mouseOverField name
+type bigChain HG00438#hap2
+longLabel HPRCy1 HG00438 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00438hap2_to_CHM13v2.0.bigChain.bb
+priority 134
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00438hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00438#hap2
+visibility hide
+
+track wfmashHPRCy1HG005hap1
+mouseOverField name
+type bigChain HG005#hap1
+longLabel HPRCy1 HG005 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG005hap1_to_CHM13v2.0.bigChain.bb
+priority 135
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG005hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG005#hap1
+visibility hide
+
+track wfmashHPRCy1HG005hap2
+mouseOverField name
+type bigChain HG005#hap2
+longLabel HPRCy1 HG005 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG005hap2_to_CHM13v2.0.bigChain.bb
+priority 136
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG005hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG005#hap2
+visibility hide
+
+track wfmashHPRCy1HG00621hap1
+mouseOverField name
+type bigChain HG00621#hap1
+longLabel HPRCy1 HG00621 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00621hap1_to_CHM13v2.0.bigChain.bb
+priority 137
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00621hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00621#hap1
+visibility hide
+
+track wfmashHPRCy1HG00621hap2
+mouseOverField name
+type bigChain HG00621#hap2
+longLabel HPRCy1 HG00621 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00621hap2_to_CHM13v2.0.bigChain.bb
+priority 138
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00621hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00621#hap2
+visibility hide
+
+track wfmashHPRCy1HG00673hap1
+mouseOverField name
+type bigChain HG00673#hap1
+longLabel HPRCy1 HG00673 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00673hap1_to_CHM13v2.0.bigChain.bb
+priority 139
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00673hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00673#hap1
+visibility hide
+
+track wfmashHPRCy1HG00673hap2
+mouseOverField name
+type bigChain HG00673#hap2
+longLabel HPRCy1 HG00673 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00673hap2_to_CHM13v2.0.bigChain.bb
+priority 140
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00673hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00673#hap2
+visibility hide
+
+track wfmashHPRCy1HG00733hap1
+mouseOverField name
+type bigChain HG00733#hap1
+longLabel HPRCy1 HG00733 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00733hap1_to_CHM13v2.0.bigChain.bb
+priority 141
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00733hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00733#hap1
+visibility hide
+
+track wfmashHPRCy1HG00733hap2
+mouseOverField name
+type bigChain HG00733#hap2
+longLabel HPRCy1 HG00733 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00733hap2_to_CHM13v2.0.bigChain.bb
+priority 142
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00733hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00733#hap2
+visibility hide
+
+track wfmashHPRCy1HG00735hap1
+mouseOverField name
+type bigChain HG00735#hap1
+longLabel HPRCy1 HG00735 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00735hap1_to_CHM13v2.0.bigChain.bb
+priority 143
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00735hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00735#hap1
+visibility hide
+
+track wfmashHPRCy1HG00735hap2
+mouseOverField name
+type bigChain HG00735#hap2
+longLabel HPRCy1 HG00735 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00735hap2_to_CHM13v2.0.bigChain.bb
+priority 144
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00735hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00735#hap2
+visibility hide
+
+track wfmashHPRCy1HG00741hap1
+mouseOverField name
+type bigChain HG00741#hap1
+longLabel HPRCy1 HG00741 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00741hap1_to_CHM13v2.0.bigChain.bb
+priority 145
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00741hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00741#hap1
+visibility hide
+
+track wfmashHPRCy1HG00741hap2
+mouseOverField name
+type bigChain HG00741#hap2
+longLabel HPRCy1 HG00741 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00741hap2_to_CHM13v2.0.bigChain.bb
+priority 146
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG00741hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG00741#hap2
+visibility hide
+
+track wfmashHPRCy1HG01071hap1
+mouseOverField name
+type bigChain HG01071#hap1
+longLabel HPRCy1 HG01071 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01071hap1_to_CHM13v2.0.bigChain.bb
+priority 147
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01071hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01071#hap1
+visibility hide
+
+track wfmashHPRCy1HG01071hap2
+mouseOverField name
+type bigChain HG01071#hap2
+longLabel HPRCy1 HG01071 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01071hap2_to_CHM13v2.0.bigChain.bb
+priority 148
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01071hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01071#hap2
+visibility hide
+
+track wfmashHPRCy1HG01106hap1
+mouseOverField name
+type bigChain HG01106#hap1
+longLabel HPRCy1 HG01106 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01106hap1_to_CHM13v2.0.bigChain.bb
+priority 149
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01106hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01106#hap1
+visibility hide
+
+track wfmashHPRCy1HG01106hap2
+mouseOverField name
+type bigChain HG01106#hap2
+longLabel HPRCy1 HG01106 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01106hap2_to_CHM13v2.0.bigChain.bb
+priority 150
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01106hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01106#hap2
+visibility hide
+
+track wfmashHPRCy1HG01109hap1
+mouseOverField name
+type bigChain HG01109#hap1
+longLabel HPRCy1 HG01109 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01109hap1_to_CHM13v2.0.bigChain.bb
+priority 151
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01109hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01109#hap1
+visibility hide
+
+track wfmashHPRCy1HG01109hap2
+mouseOverField name
+type bigChain HG01109#hap2
+longLabel HPRCy1 HG01109 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01109hap2_to_CHM13v2.0.bigChain.bb
+priority 152
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01109hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01109#hap2
+visibility hide
+
+track wfmashHPRCy1HG01123hap1
+mouseOverField name
+type bigChain HG01123#hap1
+longLabel HPRCy1 HG01123 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01123hap1_to_CHM13v2.0.bigChain.bb
+priority 153
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01123hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01123#hap1
+visibility hide
+
+track wfmashHPRCy1HG01123hap2
+mouseOverField name
+type bigChain HG01123#hap2
+longLabel HPRCy1 HG01123 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01123hap2_to_CHM13v2.0.bigChain.bb
+priority 154
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01123hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01123#hap2
+visibility hide
+
+track wfmashHPRCy1HG01175hap1
+mouseOverField name
+type bigChain HG01175#hap1
+longLabel HPRCy1 HG01175 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01175hap1_to_CHM13v2.0.bigChain.bb
+priority 155
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01175hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01175#hap1
+visibility hide
+
+track wfmashHPRCy1HG01175hap2
+mouseOverField name
+type bigChain HG01175#hap2
+longLabel HPRCy1 HG01175 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01175hap2_to_CHM13v2.0.bigChain.bb
+priority 156
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01175hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01175#hap2
+visibility hide
+
+track wfmashHPRCy1HG01243hap1
+mouseOverField name
+type bigChain HG01243#hap1
+longLabel HPRCy1 HG01243 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01243hap1_to_CHM13v2.0.bigChain.bb
+priority 157
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01243hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01243#hap1
+visibility hide
+
+track wfmashHPRCy1HG01243hap2
+mouseOverField name
+type bigChain HG01243#hap2
+longLabel HPRCy1 HG01243 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01243hap2_to_CHM13v2.0.bigChain.bb
+priority 158
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01243hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01243#hap2
+visibility hide
+
+track wfmashHPRCy1HG01258hap1
+mouseOverField name
+type bigChain HG01258#hap1
+longLabel HPRCy1 HG01258 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01258hap1_to_CHM13v2.0.bigChain.bb
+priority 159
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01258hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01258#hap1
+visibility hide
+
+track wfmashHPRCy1HG01258hap2
+mouseOverField name
+type bigChain HG01258#hap2
+longLabel HPRCy1 HG01258 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01258hap2_to_CHM13v2.0.bigChain.bb
+priority 160
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01258hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01258#hap2
+visibility hide
+
+track wfmashHPRCy1HG01358hap1
+mouseOverField name
+type bigChain HG01358#hap1
+longLabel HPRCy1 HG01358 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01358hap1_to_CHM13v2.0.bigChain.bb
+priority 161
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01358hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01358#hap1
+visibility hide
+
+track wfmashHPRCy1HG01358hap2
+mouseOverField name
+type bigChain HG01358#hap2
+longLabel HPRCy1 HG01358 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01358hap2_to_CHM13v2.0.bigChain.bb
+priority 162
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01358hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01358#hap2
+visibility hide
+
+track wfmashHPRCy1HG01361hap1
+mouseOverField name
+type bigChain HG01361#hap1
+longLabel HPRCy1 HG01361 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01361hap1_to_CHM13v2.0.bigChain.bb
+priority 163
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01361hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01361#hap1
+visibility hide
+
+track wfmashHPRCy1HG01361hap2
+mouseOverField name
+type bigChain HG01361#hap2
+longLabel HPRCy1 HG01361 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01361hap2_to_CHM13v2.0.bigChain.bb
+priority 164
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01361hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01361#hap2
+visibility hide
+
+track wfmashHPRCy1HG01891hap1
+mouseOverField name
+type bigChain HG01891#hap1
+longLabel HPRCy1 HG01891 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01891hap1_to_CHM13v2.0.bigChain.bb
+priority 165
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01891hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01891#hap1
+visibility hide
+
+track wfmashHPRCy1HG01891hap2
+mouseOverField name
+type bigChain HG01891#hap2
+longLabel HPRCy1 HG01891 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01891hap2_to_CHM13v2.0.bigChain.bb
+priority 166
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01891hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01891#hap2
+visibility hide
+
+track wfmashHPRCy1HG01928hap1
+mouseOverField name
+type bigChain HG01928#hap1
+longLabel HPRCy1 HG01928 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01928hap1_to_CHM13v2.0.bigChain.bb
+priority 167
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01928hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01928#hap1
+visibility hide
+
+track wfmashHPRCy1HG01928hap2
+mouseOverField name
+type bigChain HG01928#hap2
+longLabel HPRCy1 HG01928 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01928hap2_to_CHM13v2.0.bigChain.bb
+priority 168
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01928hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01928#hap2
+visibility hide
+
+track wfmashHPRCy1HG01952hap1
+mouseOverField name
+type bigChain HG01952#hap1
+longLabel HPRCy1 HG01952 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01952hap1_to_CHM13v2.0.bigChain.bb
+priority 169
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01952hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01952#hap1
+visibility hide
+
+track wfmashHPRCy1HG01952hap2
+mouseOverField name
+type bigChain HG01952#hap2
+longLabel HPRCy1 HG01952 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01952hap2_to_CHM13v2.0.bigChain.bb
+priority 170
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01952hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01952#hap2
+visibility hide
+
+track wfmashHPRCy1HG01978hap1
+mouseOverField name
+type bigChain HG01978#hap1
+longLabel HPRCy1 HG01978 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01978hap1_to_CHM13v2.0.bigChain.bb
+priority 171
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01978hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01978#hap1
+visibility hide
+
+track wfmashHPRCy1HG01978hap2
+mouseOverField name
+type bigChain HG01978#hap2
+longLabel HPRCy1 HG01978 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01978hap2_to_CHM13v2.0.bigChain.bb
+priority 172
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG01978hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG01978#hap2
+visibility hide
+
+track wfmashHPRCy1HG02055hap1
+mouseOverField name
+type bigChain HG02055#hap1
+longLabel HPRCy1 HG02055 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02055hap1_to_CHM13v2.0.bigChain.bb
+priority 173
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02055hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02055#hap1
+visibility hide
+
+track wfmashHPRCy1HG02055hap2
+mouseOverField name
+type bigChain HG02055#hap2
+longLabel HPRCy1 HG02055 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02055hap2_to_CHM13v2.0.bigChain.bb
+priority 174
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02055hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02055#hap2
+visibility hide
+
+track wfmashHPRCy1HG02080hap1
+mouseOverField name
+type bigChain HG02080#hap1
+longLabel HPRCy1 HG02080 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02080hap1_to_CHM13v2.0.bigChain.bb
+priority 175
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02080hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02080#hap1
+visibility hide
+
+track wfmashHPRCy1HG02080hap2
+mouseOverField name
+type bigChain HG02080#hap2
+longLabel HPRCy1 HG02080 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02080hap2_to_CHM13v2.0.bigChain.bb
+priority 176
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02080hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02080#hap2
+visibility hide
+
+track wfmashHPRCy1HG02109hap1
+mouseOverField name
+type bigChain HG02109#hap1
+longLabel HPRCy1 HG02109 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02109hap1_to_CHM13v2.0.bigChain.bb
+priority 177
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02109hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02109#hap1
+visibility hide
+
+track wfmashHPRCy1HG02109hap2
+mouseOverField name
+type bigChain HG02109#hap2
+longLabel HPRCy1 HG02109 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02109hap2_to_CHM13v2.0.bigChain.bb
+priority 178
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02109hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02109#hap2
+visibility hide
+
+track wfmashHPRCy1HG02145hap1
+mouseOverField name
+type bigChain HG02145#hap1
+longLabel HPRCy1 HG02145 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02145hap1_to_CHM13v2.0.bigChain.bb
+priority 179
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02145hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02145#hap1
+visibility hide
+
+track wfmashHPRCy1HG02145hap2
+mouseOverField name
+type bigChain HG02145#hap2
+longLabel HPRCy1 HG02145 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02145hap2_to_CHM13v2.0.bigChain.bb
+priority 180
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02145hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02145#hap2
+visibility hide
+
+track wfmashHPRCy1HG02148hap1
+mouseOverField name
+type bigChain HG02148#hap1
+longLabel HPRCy1 HG02148 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02148hap1_to_CHM13v2.0.bigChain.bb
+priority 181
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02148hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02148#hap1
+visibility hide
+
+track wfmashHPRCy1HG02148hap2
+mouseOverField name
+type bigChain HG02148#hap2
+longLabel HPRCy1 HG02148 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02148hap2_to_CHM13v2.0.bigChain.bb
+priority 182
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02148hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02148#hap2
+visibility hide
+
+track wfmashHPRCy1HG02257hap1
+mouseOverField name
+type bigChain HG02257#hap1
+longLabel HPRCy1 HG02257 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02257hap1_to_CHM13v2.0.bigChain.bb
+priority 183
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02257hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02257#hap1
+visibility hide
+
+track wfmashHPRCy1HG02257hap2
+mouseOverField name
+type bigChain HG02257#hap2
+longLabel HPRCy1 HG02257 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02257hap2_to_CHM13v2.0.bigChain.bb
+priority 184
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02257hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02257#hap2
+visibility hide
+
+track wfmashHPRCy1HG02486hap1
+mouseOverField name
+type bigChain HG02486#hap1
+longLabel HPRCy1 HG02486 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02486hap1_to_CHM13v2.0.bigChain.bb
+priority 185
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02486hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02486#hap1
+visibility hide
+
+track wfmashHPRCy1HG02486hap2
+mouseOverField name
+type bigChain HG02486#hap2
+longLabel HPRCy1 HG02486 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02486hap2_to_CHM13v2.0.bigChain.bb
+priority 186
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02486hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02486#hap2
+visibility hide
+
+track wfmashHPRCy1HG02559hap1
+mouseOverField name
+type bigChain HG02559#hap1
+longLabel HPRCy1 HG02559 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02559hap1_to_CHM13v2.0.bigChain.bb
+priority 187
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02559hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02559#hap1
+visibility hide
+
+track wfmashHPRCy1HG02559hap2
+mouseOverField name
+type bigChain HG02559#hap2
+longLabel HPRCy1 HG02559 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02559hap2_to_CHM13v2.0.bigChain.bb
+priority 188
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02559hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02559#hap2
+visibility hide
+
+track wfmashHPRCy1HG02572hap1
+mouseOverField name
+type bigChain HG02572#hap1
+longLabel HPRCy1 HG02572 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02572hap1_to_CHM13v2.0.bigChain.bb
+priority 189
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02572hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02572#hap1
+visibility hide
+
+track wfmashHPRCy1HG02572hap2
+mouseOverField name
+type bigChain HG02572#hap2
+longLabel HPRCy1 HG02572 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02572hap2_to_CHM13v2.0.bigChain.bb
+priority 190
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02572hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02572#hap2
+visibility hide
+
+track wfmashHPRCy1HG02622hap1
+mouseOverField name
+type bigChain HG02622#hap1
+longLabel HPRCy1 HG02622 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02622hap1_to_CHM13v2.0.bigChain.bb
+priority 191
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02622hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02622#hap1
+visibility hide
+
+track wfmashHPRCy1HG02622hap2
+mouseOverField name
+type bigChain HG02622#hap2
+longLabel HPRCy1 HG02622 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02622hap2_to_CHM13v2.0.bigChain.bb
+priority 192
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02622hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02622#hap2
+visibility hide
+
+track wfmashHPRCy1HG02630hap1
+mouseOverField name
+type bigChain HG02630#hap1
+longLabel HPRCy1 HG02630 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02630hap1_to_CHM13v2.0.bigChain.bb
+priority 193
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02630hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02630#hap1
+visibility hide
+
+track wfmashHPRCy1HG02630hap2
+mouseOverField name
+type bigChain HG02630#hap2
+longLabel HPRCy1 HG02630 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02630hap2_to_CHM13v2.0.bigChain.bb
+priority 194
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02630hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02630#hap2
+visibility hide
+
+track wfmashHPRCy1HG02717hap1
+mouseOverField name
+type bigChain HG02717#hap1
+longLabel HPRCy1 HG02717 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02717hap1_to_CHM13v2.0.bigChain.bb
+priority 195
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02717hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02717#hap1
+visibility hide
+
+track wfmashHPRCy1HG02717hap2
+mouseOverField name
+type bigChain HG02717#hap2
+longLabel HPRCy1 HG02717 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02717hap2_to_CHM13v2.0.bigChain.bb
+priority 196
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02717hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02717#hap2
+visibility hide
+
+track wfmashHPRCy1HG02723hap1
+mouseOverField name
+type bigChain HG02723#hap1
+longLabel HPRCy1 HG02723 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02723hap1_to_CHM13v2.0.bigChain.bb
+priority 197
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02723hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02723#hap1
+visibility hide
+
+track wfmashHPRCy1HG02723hap2
+mouseOverField name
+type bigChain HG02723#hap2
+longLabel HPRCy1 HG02723 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02723hap2_to_CHM13v2.0.bigChain.bb
+priority 198
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02723hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02723#hap2
+visibility hide
+
+track wfmashHPRCy1HG02818hap1
+mouseOverField name
+type bigChain HG02818#hap1
+longLabel HPRCy1 HG02818 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02818hap1_to_CHM13v2.0.bigChain.bb
+priority 199
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02818hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02818#hap1
+visibility hide
+
+track wfmashHPRCy1HG02818hap2
+mouseOverField name
+type bigChain HG02818#hap2
+longLabel HPRCy1 HG02818 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02818hap2_to_CHM13v2.0.bigChain.bb
+priority 200
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02818hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02818#hap2
+visibility hide
+
+track wfmashHPRCy1HG02886hap1
+mouseOverField name
+type bigChain HG02886#hap1
+longLabel HPRCy1 HG02886 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02886hap1_to_CHM13v2.0.bigChain.bb
+priority 201
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02886hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02886#hap1
+visibility hide
+
+track wfmashHPRCy1HG02886hap2
+mouseOverField name
+type bigChain HG02886#hap2
+longLabel HPRCy1 HG02886 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02886hap2_to_CHM13v2.0.bigChain.bb
+priority 202
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG02886hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG02886#hap2
+visibility hide
+
+track wfmashHPRCy1HG03098hap1
+mouseOverField name
+type bigChain HG03098#hap1
+longLabel HPRCy1 HG03098 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03098hap1_to_CHM13v2.0.bigChain.bb
+priority 203
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03098hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03098#hap1
+visibility hide
+
+track wfmashHPRCy1HG03098hap2
+mouseOverField name
+type bigChain HG03098#hap2
+longLabel HPRCy1 HG03098 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03098hap2_to_CHM13v2.0.bigChain.bb
+priority 204
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03098hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03098#hap2
+visibility hide
+
+track wfmashHPRCy1HG03453hap1
+mouseOverField name
+type bigChain HG03453#hap1
+longLabel HPRCy1 HG03453 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03453hap1_to_CHM13v2.0.bigChain.bb
+priority 205
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03453hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03453#hap1
+visibility hide
+
+track wfmashHPRCy1HG03453hap2
+mouseOverField name
+type bigChain HG03453#hap2
+longLabel HPRCy1 HG03453 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03453hap2_to_CHM13v2.0.bigChain.bb
+priority 206
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03453hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03453#hap2
+visibility hide
+
+track wfmashHPRCy1HG03486hap1
+mouseOverField name
+type bigChain HG03486#hap1
+longLabel HPRCy1 HG03486 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03486hap1_to_CHM13v2.0.bigChain.bb
+priority 207
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03486hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03486#hap1
+visibility hide
+
+track wfmashHPRCy1HG03486hap2
+mouseOverField name
+type bigChain HG03486#hap2
+longLabel HPRCy1 HG03486 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03486hap2_to_CHM13v2.0.bigChain.bb
+priority 208
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03486hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03486#hap2
+visibility hide
+
+track wfmashHPRCy1HG03492hap1
+mouseOverField name
+type bigChain HG03492#hap1
+longLabel HPRCy1 HG03492 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03492hap1_to_CHM13v2.0.bigChain.bb
+priority 209
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03492hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03492#hap1
+visibility hide
+
+track wfmashHPRCy1HG03492hap2
+mouseOverField name
+type bigChain HG03492#hap2
+longLabel HPRCy1 HG03492 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03492hap2_to_CHM13v2.0.bigChain.bb
+priority 210
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03492hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03492#hap2
+visibility hide
+
+track wfmashHPRCy1HG03516hap1
+mouseOverField name
+type bigChain HG03516#hap1
+longLabel HPRCy1 HG03516 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03516hap1_to_CHM13v2.0.bigChain.bb
+priority 211
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03516hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03516#hap1
+visibility hide
+
+track wfmashHPRCy1HG03516hap2
+mouseOverField name
+type bigChain HG03516#hap2
+longLabel HPRCy1 HG03516 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03516hap2_to_CHM13v2.0.bigChain.bb
+priority 212
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03516hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03516#hap2
+visibility hide
+
+track wfmashHPRCy1HG03540hap1
+mouseOverField name
+type bigChain HG03540#hap1
+longLabel HPRCy1 HG03540 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03540hap1_to_CHM13v2.0.bigChain.bb
+priority 213
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03540hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03540#hap1
+visibility hide
+
+track wfmashHPRCy1HG03540hap2
+mouseOverField name
+type bigChain HG03540#hap2
+longLabel HPRCy1 HG03540 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03540hap2_to_CHM13v2.0.bigChain.bb
+priority 214
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03540hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03540#hap2
+visibility hide
+
+track wfmashHPRCy1HG03579hap1
+mouseOverField name
+type bigChain HG03579#hap1
+longLabel HPRCy1 HG03579 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03579hap1_to_CHM13v2.0.bigChain.bb
+priority 215
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03579hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03579#hap1
+visibility hide
+
+track wfmashHPRCy1HG03579hap2
+mouseOverField name
+type bigChain HG03579#hap2
+longLabel HPRCy1 HG03579 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03579hap2_to_CHM13v2.0.bigChain.bb
+priority 216
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/HG03579hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel HG03579#hap2
+visibility hide
+
+track wfmashHPRCy1NA18906hap1
+mouseOverField name
+type bigChain NA18906#hap1
+longLabel HPRCy1 NA18906 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/NA18906hap1_to_CHM13v2.0.bigChain.bb
+priority 217
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/NA18906hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel NA18906#hap1
+visibility hide
+
+track wfmashHPRCy1NA18906hap2
+mouseOverField name
+type bigChain NA18906#hap2
+longLabel HPRCy1 NA18906 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/NA18906hap2_to_CHM13v2.0.bigChain.bb
+priority 218
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/NA18906hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel NA18906#hap2
+visibility hide
+
+track wfmashHPRCy1NA19240hap1
+mouseOverField name
+type bigChain NA19240#hap1
+longLabel HPRCy1 NA19240 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/NA19240hap1_to_CHM13v2.0.bigChain.bb
+priority 219
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/NA19240hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel NA19240#hap1
+visibility hide
+
+track wfmashHPRCy1NA19240hap2
+mouseOverField name
+type bigChain NA19240#hap2
+longLabel HPRCy1 NA19240 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/NA19240hap2_to_CHM13v2.0.bigChain.bb
+priority 220
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/NA19240hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel NA19240#hap2
+visibility hide
+
+track wfmashHPRCy1NA20129hap1
+mouseOverField name
+type bigChain NA20129#hap1
+longLabel HPRCy1 NA20129 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/NA20129hap1_to_CHM13v2.0.bigChain.bb
+priority 221
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/NA20129hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel NA20129#hap1
+visibility hide
+
+track wfmashHPRCy1NA20129hap2
+mouseOverField name
+type bigChain NA20129#hap2
+longLabel HPRCy1 NA20129 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/NA20129hap2_to_CHM13v2.0.bigChain.bb
+priority 222
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/NA20129hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel NA20129#hap2
+visibility hide
+
+track wfmashHPRCy1NA21309hap1
+mouseOverField name
+type bigChain NA21309#hap1
+longLabel HPRCy1 NA21309 hap1 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/NA21309hap1_to_CHM13v2.0.bigChain.bb
+priority 223
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/NA21309hap1_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel NA21309#hap1
+visibility hide
+
+track wfmashHPRCy1NA21309hap2
+mouseOverField name
+type bigChain NA21309#hap2
+longLabel HPRCy1 NA21309 hap2 to CHM13v2.0
+parent wfmashHPRCy1
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/NA21309hap2_to_CHM13v2.0.bigChain.bb
+priority 224
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/NA21309hap2_to_CHM13v2.0.bigChain.link.bb
+group compGeno
+shortLabel NA21309#hap2
+visibility hide
+
+track haqer
+mouseOverField name
+type bigBed 4
+longLabel Human Ancestor Quickly Evolved Regions
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/haqer_v1.0.bb
+itemRgb on
+priority 500
+html /gbdb/hs1/contrib/T2TPrimates/haqer.html
+group compGeno
+shortLabel HAQERs
+visibility hide
+
+track phast
+longLabel Most conserved region from 2 approaches
+superTrack on
+priority 600
+html /gbdb/hs1/contrib/T2TPrimates/trackDescription_conservation.html
+group compGeno
+shortLabel PHAST
+
+track cons1score
+type bigWig 0 1
+longLabel Approach 1 Conservation Score
+viewLimits 0:1
+autoScale Off
+parent phast
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/approach1.scores_v0.1.bw
+priority 601
+graphTypeDefault Bar
+gridDefault OFF
+group compGeno
+maxHeightPixels 128:36:16
+windowingFunction Mean
+shortLabel Score (Approach1)
+visibility hide
+
+track cons1elmnt
+type bigWig -428 100000
+longLabel Approach 1 Most Conserved Elements
+viewLimits -428:100000
+autoScale Off
+parent phast
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/approach1.most_conserved_v0.1.bw
+priority 602
+graphTypeDefault Bar
+gridDefault OFF
+group compGeno
+maxHeightPixels 128:36:16
+windowingFunction Mean
+shortLabel Conserved (Approach1)
+visibility hide
+
+track cons2score
+type bigWig 0 1
+longLabel Approach 2 Conservation Score v0.1
+viewLimits 0:1
+autoScale Off
+parent phast
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/approach2.scores_v0.1.bw
+priority 603
+graphTypeDefault Bar
+gridDefault OFF
+group compGeno
+maxHeightPixels 128:36:16
+windowingFunction Mean
+shortLabel Score (Approach2 v0.1)
+visibility hide
+
+track cons2elmnt
+type bigBed 3
+longLabel Approach 2 Most Conserved Elements v0.1
+parent phast
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/approach2.most_conserved_v0.1.bb
+priority 604
+group compGeno
+shortLabel Conserved (Approach2 v0.1)
+visibility hide
+
+track cons2score2
+type bigWig 0 1
+longLabel Approach 2 Conservation Score v0.2
+viewLimits 0:1
+autoScale Off
+parent phast
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/approach2.scores_v0.2.bw
+priority 605
+graphTypeDefault Bar
+gridDefault OFF
+group compGeno
+maxHeightPixels 128:36:16
+windowingFunction Mean
+shortLabel Score (Approach2 v0.2)
+visibility hide
+
+track cons2elmnt2
+type bigBed 3
+longLabel Approach 2 Most Conserved Elements v0.2
+parent phast
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/approach2.most_conserved_v0.2.bb
+priority 606
+group compGeno
+shortLabel Conserved (Approach2 v0.2)
+visibility hide
+
+track cons2score3
+type bigWig 0 1
+longLabel Approach 2 Conservation Score v0.3
+viewLimits 0:1
+autoScale Off
+parent phast
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/approach2.scores_v0.3.bw
+priority 607
+graphTypeDefault Bar
+gridDefault OFF
+group compGeno
+maxHeightPixels 128:36:16
+windowingFunction Mean
+shortLabel Score (Approach2 v0.3)
+visibility hide
+
+track cons2elmnt3
+type bigBed 3
+longLabel Approach 2 Most Conserved Elements v0.3
+parent phast
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/approach2.most_conserved_v0.3.bb
+priority 608
+group compGeno
+shortLabel Conserved (Approach2 v0.3)
+visibility hide
+
+track shortAccessiblty
+type bigBed
+longLabel Short-Read Accessibility Mask
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/hs1.combined_mask.bb
+priority 70
+html /gbdb/hs1/contrib/T2TPrimates/accessibilityMask.html
+group var
+shortLabel SR Accessiblility Mask
+
+track sgdpCopyNumber_subset
+type bigBed 9 +
+longLabel SGDP copy number estimates (subset)
+itemRgb on
+priority 74
+compositeTrack off
+html /gbdb/hs1/contrib/T2TPrimates/GCA_009914755.4_T2T-CHM13v2.0.sgdpCopyNumber.html
+group var
+shortLabel SGDP Copy Number (Subset)
+maxItems 100000
+
+track subset_CHM13_kmer_wssd
+type bigBed 9 +
+longLabel CHM13 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/CHM13_kmer_wssd.bb
+priority 74.1
+itemRgb on
+group var
+shortLabel CHM13 CN
+visibility hide
+
+track subset_HG002_kmer_wssd
+type bigBed 9 +
+longLabel HG002 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/HG002_wssd.bb
+priority 74.2
+itemRgb on
+group var
+shortLabel HG002 CN
+visibility hide
+
+track subset_GRCh38_kmer_wssd
+type bigBed 9 +
+longLabel GRCh38 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/GRCh38_kmer_wssd.bb
+priority 82
+itemRgb on
+group var
+shortLabel GRCh38 CN
+visibility hide
+
+track subset_AFR_BantuTswana_LP6005443-DNA_G02_wssd
+type bigBed 9 +
+longLabel AFR_BantuTswana_LP6005443-DNA_G02 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_G02_wssd.bb
+priority 75
+itemRgb on
+group var
+shortLabel AFR_BantuTswana_LP6005443-DNA_G02 CN
+visibility hide
+
+track subset_AFR_Biaka_LP6005441-DNA_G02_wssd
+type bigBed 9 +
+longLabel AFR_Biaka_LP6005441-DNA_G02 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_G02_wssd.bb
+priority 75
+itemRgb on
+group var
+shortLabel AFR_Biaka_LP6005441-DNA_G02 CN
+visibility hide
+
+track subset_AFR_Biaka_LP6005441-DNA_H02_wssd
+type bigBed 9 +
+longLabel AFR_Biaka_LP6005441-DNA_H02 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_H02_wssd.bb
+priority 75
+itemRgb on
+group var
+shortLabel AFR_Biaka_LP6005441-DNA_H02 CN
+visibility hide
+
+track subset_AFR_Dinka_LP6005443-DNA_H08_wssd
+type bigBed 9 +
+longLabel AFR_Dinka_LP6005443-DNA_H08 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_H08_wssd.bb
+priority 75
+itemRgb on
+group var
+shortLabel AFR_Dinka_LP6005443-DNA_H08 CN
+visibility hide
+
+track subset_AFR_Ju_hoan_North_LP6005443-DNA_G08_wssd
+type bigBed 9 +
+longLabel AFR_Ju_hoan_North_LP6005443-DNA_G08 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_G08_wssd.bb
+priority 75
+itemRgb on
+group var
+shortLabel AFR_Ju_hoan_North_LP6005443-DNA_G08 CN
+visibility hide
+
+track subset_AFR_Mbuti_LP6005441-DNA_B08_wssd
+type bigBed 9 +
+longLabel AFR_Mbuti_LP6005441-DNA_B08 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_B08_wssd.bb
+priority 75
+itemRgb on
+group var
+shortLabel AFR_Mbuti_LP6005441-DNA_B08 CN
+visibility hide
+
+track subset_AFR_Mbuti_LP6005592-DNA_C03_wssd
+type bigBed 9 +
+longLabel AFR_Mbuti_LP6005592-DNA_C03 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005592-DNA_C03_wssd.bb
+priority 75
+itemRgb on
+group var
+shortLabel AFR_Mbuti_LP6005592-DNA_C03 CN
+visibility hide
+
+track subset_AFR_Yoruba_LP6005442-DNA_B02_wssd
+type bigBed 9 +
+longLabel AFR_Yoruba_LP6005442-DNA_B02 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005442-DNA_B02_wssd.bb
+priority 75
+itemRgb on
+group var
+shortLabel AFR_Yoruba_LP6005442-DNA_B02 CN
+visibility hide
+
+track subset_AMR_Karitiana_LP6005441-DNA_G06_wssd
+type bigBed 9 +
+longLabel AMR_Karitiana_LP6005441-DNA_G06 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_G06_wssd.bb
+priority 76
+itemRgb on
+group var
+shortLabel AMR_Karitiana_LP6005441-DNA_G06 CN
+visibility hide
+
+track subset_AMR_Mayan_LP6005441-DNA_H07_wssd
+type bigBed 9 +
+longLabel AMR_Mayan_LP6005441-DNA_H07 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_H07_wssd.bb
+priority 76
+itemRgb on
+group var
+shortLabel AMR_Mayan_LP6005441-DNA_H07 CN
+visibility hide
+
+track subset_AMR_Mixtec_LP6005443-DNA_H11_wssd
+type bigBed 9 +
+longLabel AMR_Mixtec_LP6005443-DNA_H11 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_H11_wssd.bb
+priority 76
+itemRgb on
+group var
+shortLabel AMR_Mixtec_LP6005443-DNA_H11 CN
+visibility hide
+
+track subset_AMR_Zapotec_LP6005443-DNA_A12_wssd
+type bigBed 9 +
+longLabel AMR_Zapotec_LP6005443-DNA_A12 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_A12_wssd.bb
+priority 76
+itemRgb on
+group var
+shortLabel AMR_Zapotec_LP6005443-DNA_A12 CN
+visibility hide
+
+track subset_EAS_She_LP6005443-DNA_G01_wssd
+type bigBed 9 +
+longLabel EAS_She_LP6005443-DNA_G01 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_G01_wssd.bb
+priority 77
+itemRgb on
+group var
+shortLabel EAS_She_LP6005443-DNA_G01 CN
+visibility hide
+
+track subset_OCN_Papuan_LP6005441-DNA_B10_wssd
+type bigBed 9 +
+longLabel OCN_Papuan_LP6005441-DNA_B10 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_B10_wssd.bb
+priority 78
+itemRgb on
+group var
+shortLabel OCN_Papuan_LP6005441-DNA_B10 CN
+visibility hide
+
+track subset_OCN_Papuan_LP6005443-DNA_B08_wssd
+type bigBed 9 +
+longLabel OCN_Papuan_LP6005443-DNA_B08 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_B08_wssd.bb
+priority 78
+itemRgb on
+group var
+shortLabel OCN_Papuan_LP6005443-DNA_B08 CN
+visibility hide
+
+track subset_OCN_Bougainville_LP6005441-DNA_A03_wssd
+type bigBed 9 +
+longLabel OCN_Bougainville_LP6005441-DNA_A03 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_A03_wssd.bb
+priority 78
+itemRgb on
+group var
+shortLabel OCN_Bougainville_LP6005441-DNA_A03 CN
+visibility hide
+
+track subset_OCN_Bougainville_LP6005441-DNA_B03_wssd
+type bigBed 9 +
+longLabel OCN_Bougainville_LP6005441-DNA_B03 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_B03_wssd.bb
+priority 78
+itemRgb on
+group var
+shortLabel OCN_Bougainville_LP6005441-DNA_B03 CN
+visibility hide
+
+track subset_SAS_Brahui_LP6005441-DNA_D03_wssd
+type bigBed 9 +
+longLabel SAS_Brahui_LP6005441-DNA_D03 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_D03_wssd.bb
+priority 79
+itemRgb on
+group var
+shortLabel SAS_Brahui_LP6005441-DNA_D03 CN
+visibility hide
+
+track subset_SAS_Hazara_LP6005441-DNA_F05_wssd
+type bigBed 9 +
+longLabel SAS_Hazara_LP6005441-DNA_F05 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_F05_wssd.bb
+priority 79
+itemRgb on
+group var
+shortLabel SAS_Hazara_LP6005441-DNA_F05 CN
+visibility hide
+
+track subset_SAS_Madiga_LP6005519-DNA_H04_wssd
+type bigBed 9 +
+longLabel SAS_Madiga_LP6005519-DNA_H04 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005519-DNA_H04_wssd.bb
+priority 79
+itemRgb on
+group var
+shortLabel SAS_Madiga_LP6005519-DNA_H04 CN
+visibility hide
+
+track subset_SAS_Mala_LP6005519-DNA_E04_wssd
+type bigBed 9 +
+longLabel SAS_Mala_LP6005519-DNA_E04 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005519-DNA_E04_wssd.bb
+priority 79
+itemRgb on
+group var
+shortLabel SAS_Mala_LP6005519-DNA_E04 CN
+visibility hide
+
+track subset_SIB_Aleut_LP6005443-DNA_A03_wssd
+type bigBed 9 +
+longLabel SIB_Aleut_LP6005443-DNA_A03 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_A03_wssd.bb
+priority 80
+itemRgb on
+group var
+shortLabel SIB_Aleut_LP6005443-DNA_A03 CN
+visibility hide
+
+track subset_SIB_Even_LP6005443-DNA_C04_wssd
+type bigBed 9 +
+longLabel SIB_Even_LP6005443-DNA_C04 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_C04_wssd.bb
+priority 80
+itemRgb on
+group var
+shortLabel SIB_Even_LP6005443-DNA_C04 CN
+visibility hide
+
+track subset_SIB_Tubalar_LP6005442-DNA_E12_wssd
+type bigBed 9 +
+longLabel SIB_Tubalar_LP6005442-DNA_E12 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005442-DNA_E12_wssd.bb
+priority 80
+itemRgb on
+group var
+shortLabel SIB_Tubalar_LP6005442-DNA_E12 CN
+visibility hide
+
+track subset_SIB_Ulchi_LP6005442-DNA_G12_wssd
+type bigBed 9 +
+longLabel SIB_Ulchi_LP6005442-DNA_G12 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005442-DNA_G12_wssd.bb
+priority 80
+itemRgb on
+group var
+shortLabel SIB_Ulchi_LP6005442-DNA_G12 CN
+visibility hide
+
+track subset_EUR_Adygei_LP6005441-DNA_B01_wssd
+type bigBed 9 +
+longLabel EUR_Adygei_LP6005441-DNA_B01 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_B01_wssd.bb
+priority 81
+itemRgb on
+group var
+shortLabel EUR_Adygei_LP6005441-DNA_B01 CN
+visibility hide
+
+track subset_EUR_BedouinB_LP6005441-DNA_E02_wssd
+type bigBed 9 +
+longLabel EUR_BedouinB_LP6005441-DNA_E02 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005441-DNA_E02_wssd.bb
+priority 81
+itemRgb on
+group var
+shortLabel EUR_BedouinB_LP6005441-DNA_E02 CN
+visibility hide
+
+track subset_EUR_Estonian_LP6005442-DNA_G03_wssd
+type bigBed 9 +
+longLabel EUR_Estonian_LP6005442-DNA_G03 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005442-DNA_G03_wssd.bb
+priority 81
+itemRgb on
+group var
+shortLabel EUR_Estonian_LP6005442-DNA_G03 CN
+visibility hide
+
+track subset_EUR_North_Ossetian_LP6005443-DNA_E10_wssd
+type bigBed 9 +
+longLabel EUR_North_Ossetian_LP6005443-DNA_E10 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005443-DNA_E10_wssd.bb
+priority 81
+itemRgb on
+group var
+shortLabel EUR_North_Ossetian_LP6005443-DNA_E10 CN
+visibility hide
+
+track subset_EUR_Tajik_LP6005519-DNA_C03_wssd
+type bigBed 9 +
+longLabel EUR_Tajik_LP6005519-DNA_C03 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005519-DNA_C03_wssd.bb
+priority 81
+itemRgb on
+group var
+shortLabel EUR_Tajik_LP6005519-DNA_C03 CN
+visibility hide
+
+track subset_EUR_Turkish_LP6005677-DNA_C03_wssd
+type bigBed 9 +
+longLabel EUR_Turkish_LP6005677-DNA_C03 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005677-DNA_C03_wssd.bb
+priority 81
+itemRgb on
+group var
+shortLabel EUR_Turkish_LP6005677-DNA_C03 CN
+visibility hide
+
+track subset_EUR_Yemenite_Jew_LP6005592-DNA_H01_wssd
+type bigBed 9 +
+longLabel EUR_Yemenite_Jew_LP6005592-DNA_H01 Copy Number
+parent sgdpCopyNumber_subset
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/LP6005592-DNA_H01_wssd.bb
+priority 81
+itemRgb on
+group var
+shortLabel EUR_Yemenite_Jew_LP6005592-DNA_H01 CN
+visibility hide
+
+track unique
+type bigBed 3
+longLabel Non-syntenic region to GRCh
+superTrack on
+priority 67
+html /gbdb/hs1/contrib/T2TPrimates/v1_nflo_description.html
+group grc
+visibility hide
+shortLabel Unique to GRCh
+
+track uniqHg38
+type bigBed 3
+longLabel Non-syntenic to GRCh38
+parent unique
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2-unique_to_hg38.bb
+priority 67.1
+group grc
+shortLabel Unique to hg38
+
+track uniqHg19
+type bigBed 3
+longLabel Non-syntenic to GRCh37/hg19
+parent unique
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2-unique_to_hg19.bb
+priority 67.2
+group grc
+shortLabel Unique to hg19
+
+track synteny
+mouseOverField name
+type bigChain
+longLabel Synteny to GRCh
+superTrack on
+priority 68
+html /gbdb/hs1/contrib/T2TPrimates/v1_nflo_description.html
+group grc
+visibility hide
+shortLabel Synteny
+
+track synHg38
+mouseOverField name
+type bigChain
+longLabel Synteny to GRCh38
+otherDb hg38
+parent synteny
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/grch38_to_chm13v2.bigChain.bb
+priority 68.1
+otherTwoBitUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/grch38_to_chm13v2.bigChain.link.bb
+group grc
+shortLabel hg38
+visibility hide
+
+track synHg19
+mouseOverField name
+type bigChain
+longLabel Synteny to GRCh37/hg19
+otherDb hg19
+parent synteny
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/hg19_to_chm13v2.bigChain.bb
+priority 68.2
+otherTwoBitUrl https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
+linkDataUrl /gbdb/hs1/contrib/T2TPrimates/hg19_to_chm13v2.bigChain.link.bb
+group grc
+shortLabel hg19
+visibility hide
+
+track methylation
+type bigWig
+longLabel Methylation Frequency
+autoScale off
+superTrack on
+priority 51
+graphTypeDefault bar
+html /gbdb/hs1/contrib/T2TPrimates/epigenetics.html
+gridDefault on
+group regulation
+maxHeightPixels 100:32:16
+visibility hide
+shortLabel Methylation
+
+track chm13cpg
+type bigWig
+longLabel CHM13 CpG Methylation (ONT Guppy v3.6.0, Nanopolish v0.13.2)
+viewLimits 0:1
+parent methylation
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2.0_CHM13_CpG_ont_guppy3.6.0_nanopolish0.13.2.bw
+priority 51
+group regulation
+shortLabel CHM13 CpG Guppy3
+visibility full
+
+track hg002_5mC_hifi
+type bigWig 0 100
+longLabel HG002 5mC Methylation (PacBio Revio, Modkit v0.1.11)
+viewLimits 0:100
+parent methylation
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2.0_hg002_5mC_hifi_revio_modkit0.1.11.bw
+priority 52
+group regulation
+shortLabel HG002 5mC Revio
+visibility hide
+
+track hg002cpg
+type bigWig
+longLabel HG002 CpG Methylation (ONT Guppy v6.1.2, Remora)
+viewLimits 0:1
+parent methylation
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2.0_hg002_CpG_ont_guppy6.1.2.bw
+priority 53
+group regulation
+shortLabel HG002 CpG Guppy6
+visibility hide
+
+track hg002cpgOld
+type bigWig
+longLabel HG002 CpG Methylation (ONT Guppy v5.0.7, Nanopolish v0.13.2)
+viewLimits 0:1
+parent methylation
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2.0_hg002_CpG_ont_guppy5.0.7_nanopolish0.13.2.bw
+priority 54
+group regulation
+shortLabel HG002 CpG Guppy5
+visibility hide
+
+track hg002gpc
+type bigWig
+longLabel HG002 GpC Methylation (ONT Guppy v5.0.7, Nanopolish v0.13.2)
+viewLimits 0:1
+parent methylation
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2.0_hg002_GpC_ont_guppy5.0.7_nanopolish0.13.2.bw
+priority 55
+group regulation
+shortLabel HG002 GpC Guppy5
+visibility hide
+
+track hg002gpcZ
+type bigWig
+longLabel HG002 GpC Methylation (ONT Guppy v5.0.7, Nanopolish v0.13.2) Z-Score
+viewLimits -1:1
+parent methylation
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2.0_hg002_GpC_ont_guppy5.0.7_nanopolish0.13.2.bw
+priority 56
+group regulation
+shortLabel HG002 GpC Z-score
+visibility hide
+
+track fire
+longLabel FIRE peaks
+superTrack on
+priority 60
+html /gbdb/hs1/contrib/T2TPrimates/fire.html
+group regulation
+maxHeightPixels 100:32:16
+visibility hide
+shortLabel FIRE
+
+track log-fdr
+type bigWig 0 1000
+longLabel FIRE peak FDR, in -10log10 scale
+autoScale on
+parent fire
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/log_FDR.bw
+priority 61
+gridDefault on
+group regulation
+maxHeightPixels 100:32:1
+yLineOnOff on
+shortLabel CHM13 -10log10 FDR
+visibility hide
+alwaysZero on
+maxItems 100000
+yLineMark 13.010299956639813
+
+track FDR-wide-peaks
+type bigBed
+longLabel Aggregated peaks closer than the size of a nucleosome based on FDR < 5%
+parent fire
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/FDR-wide-peaks.bb
+priority 62
+group regulation
+shortLabel CHM13 FDR wide peaks
+visibility hide
+maxItems 100000
+
+track peaks
+type bigNarrowPeak
+longLabel FIRE (Fiber-seq Inferred Regulatory Elements) peaks
+parent fire
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/FDR-FIRE-peaks.bb
+priority 63
+group regulation
+maxHeightPixels 50:50:1
+shortLabel CHM13 FIRE peaks
+visibility hide
+
+track all-accessible
+type bigWig 0 100
+longLabel % accessible by regulatory elements by all fiber reads
+viewLimits 0:100
+autoScale off
+color 0,0,0
+parent fire
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/all.percent.accessible.bw
+priority 64
+group regulation
+shortLabel CHM13 % accessible
+visibility hide
+alwaysZero on
+maxItems 100000
+
+track repliSeq
+type bigWig
+longLabel Replication Sequencing
+autoScale on
+superTrack on
+priority 66
+graphTypeDefault bar
+html /gbdb/hs1/contrib/T2TPrimates/repliseq.html
+gridDefault on
+group regulation
+maxHeightPixels 100:32:16
+visibility hide
+shortLabel Repli-Seq
+
+track repliSeq_GM12878
+longLabel Replication Sequencing from GM12878, 4DN
+parent repliSeq
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/repliSeq_GM12878_v1.bw
+group regulation
+shortLabel Repli-Seq GM12878
+
+track repliSeq_HFFc6
+longLabel Replication Sequencing from HFFc6, 4DN
+parent repliSeq
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/repliSeq_HFFc6_v1.bw
+group regulation
+shortLabel Repli-Seq HFFc6
+
+track isoSeq
+type bam
+longLabel CHM13 IsoSeq
+priority 41
+indelQueryInsert on
+dragAndDrop subTracks
+showNames off
+compositeTrack on
+bamGrayMode aliQual
+html /gbdb/hs1/contrib/T2TPrimates/isoseq.html
+group rna
+shortLabel CHM13 IsoSeq
+visibility hide
+indelDoubleInsert on
+bamColorMode gray
+
+track chm13_isoseq_1
+type bam
+longLabel CHM13 IsoSeq 1
+parent isoSeq
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2.0.Iso-Seq_CHM13_pbmm2_1.bam
+priority 42.1
+group rna
+shortLabel CHM13 IsoSeq 1
+
+track chm13_isoseq_2
+type bam
+longLabel CHM13 IsoSeq 2
+parent isoSeq
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2.0.Iso-Seq_CHM13_pbmm2_2.bam
+priority 42.2
+group rna
+shortLabel CHM13 IsoSeq 2
+
+track curGene5.2
+type bigGenePred
+longLabel Curated RefSeq + LiftOff gene annotation v5.2
+baseColorDefault genomicCodons
+defaultLabelFields name2,geneName2
+labelSeparator ","
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chm13v2.0_RefSeq_Liftoff_v5.2.bb
+searchTrix /gbdb/hs1/contrib/T2TPrimates/chm13v2.0_RefSeq_Liftoff_v5.2.ix
+itemRgb on
+priority 31
+compositeTrack on
+labelFields name2,geneName2
+searchIndex name,geneName,geneName2
+html /gbdb/hs1/contrib/T2TPrimates/curGene.html
+group genes
+visibility hide
+shortLabel Curated RefSeq 5.2
+
+track curGene5.1
+type bigGenePred
+longLabel Curated RefSeq + LiftOff gene annotation v5.1
+baseColorDefault genomicCodons
+defaultLabelFields name2,geneName2
+labelSeparator ","
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/curGene_v5.1.bb
+searchTrix /gbdb/hs1/contrib/T2TPrimates/curGene_v5.1.ix
+itemRgb on
+priority 32
+compositeTrack on
+labelFields name2,geneName2
+searchIndex name,geneName,geneName2
+html /gbdb/hs1/contrib/T2TPrimates/curGene.html
+group genes
+visibility hide
+shortLabel Curated RefSeq 5.1
+
+track refGene
+type bigGenePred
+longLabel RefSeq gene annotation GCF_009914755.1-RS_2023_10
+baseColorDefault genomicCodons
+defaultLabelFields geneName,geneName2
+labelSeparator ","
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/refGene.bb
+searchTrix /gbdb/hs1/contrib/T2TPrimates/refGene.ix
+itemRgb on
+priority 35
+labelFields geneName,geneName2
+searchIndex name,geneName,geneName2
+html /gbdb/hs1/contrib/T2TPrimates/refGene.html
+group genes
+visibility hide
+shortLabel RefSeq 10/2023
+
+track censatAnn
+type bigBed 9
+longLabel Centromeric Satellite Annotation
+parent censat
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/censat_v2.1.bb
+itemRgb on
+priority 20.1
+html /gbdb/hs1/contrib/T2TPrimates/censat.html
+group varRep
+shortLabel CenSat
+visibility dense
+
+track censatStrand
+type bigBed 9
+longLabel Centromeric Satellite Strand Annotation
+parent censat
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/censatStrand_v2.1.bb
+itemRgb on
+priority 20.2
+html /gbdb/hs1/contrib/T2TPrimates/censat.html
+group varRep
+shortLabel CenSat Strand
+visibility hide
+
+track segDups2024
+type bigBed 9 35
+longLabel SEDEF Segmental Duplications (Yoo, 2024)
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/segDups_2024.bb
+itemRgb on
+priority 23.2
+html /gbdb/hs1/contrib/T2TPrimates/segDups.html
+group varRep
+shortLabel Segmental Dups (2024)
+visibility dense
+maxItems 100000
+
+track seqidyAcro
+mouseOverField name
+type bigBed 9
+longLabel Sequence Identity in 10kb, Acrocentric Chromosomes
+superTrack on
+itemRgb on
+priority 24.1
+html /gbdb/hs1/contrib/T2TPrimates/seqIdy.html
+group varRep
+visibility hide
+shortLabel SeqIdy (Acro)
+
+track seqIdychr13
+longLabel chr13
+parent seqidyAcro
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr13.bb
+priority 24.10
+group varRep
+shortLabel chr13
+
+track seqIdychr14
+longLabel chr14
+parent seqidyAcro
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr14.bb
+priority 24.11
+group varRep
+shortLabel chr14
+
+track seqIdychr15
+longLabel chr15
+parent seqidyAcro
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr15.bb
+priority 24.12
+group varRep
+shortLabel chr15
+
+track seqIdychr21
+longLabel chr21
+parent seqidyAcro
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr21.bb
+priority 24.13
+group varRep
+shortLabel chr21
+
+track seqIdychr22
+longLabel chr22
+parent seqidyAcro
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr22.bb
+priority 24.14
+group varRep
+shortLabel chr22
+
+track seqIdychrY
+longLabel chrY
+parent seqidyAcro
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chrY.bb
+priority 24.15
+group varRep
+shortLabel chrY
+
+track seqidy
+mouseOverField name
+type bigBed 9
+longLabel Sequence Identity in 10kb, Acrocentric Chromosomes
+superTrack on hide
+itemRgb on
+priority 24.3
+html /gbdb/hs1/contrib/T2TPrimates/seqIdy.html
+group varRep
+visibility hide
+shortLabel SeqIdy (Non-Acro)
+
+track seqIdychr1
+longLabel chr1
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr1.bb
+priority 24.30
+group varRep
+shortLabel chr1
+
+track seqIdychr2
+longLabel chr2
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr2.bb
+priority 24.31
+group varRep
+shortLabel chr2
+
+track seqIdychr3
+longLabel chr3
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr3.bb
+priority 24.32
+group varRep
+shortLabel chr3
+
+track seqIdychr4
+longLabel chr4
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr4.bb
+priority 24.33
+group varRep
+shortLabel chr4
+
+track seqIdychr5
+longLabel chr5
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr5.bb
+priority 24.34
+group varRep
+shortLabel chr5
+
+track seqIdychr6
+longLabel chr6
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr6.bb
+priority 24.35
+group varRep
+shortLabel chr6
+
+track seqIdychr7
+longLabel chr7
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr7.bb
+priority 24.36
+group varRep
+shortLabel chr7
+
+track seqIdychr8
+longLabel chr8
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr8.bb
+priority 24.37
+group varRep
+shortLabel chr8
+
+track seqIdychr9
+longLabel chr9
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr9.bb
+priority 24.38
+group varRep
+shortLabel chr9
+
+track seqIdychr10
+longLabel chr10
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr10.bb
+priority 24.39
+group varRep
+shortLabel chr10
+
+track seqIdychr11
+longLabel chr11
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr11.bb
+priority 24.40
+group varRep
+shortLabel chr11
+
+track seqIdychr12
+longLabel chr12
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr12.bb
+priority 24.41
+group varRep
+shortLabel chr12
+
+track seqIdychr16
+longLabel chr16
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr16.bb
+priority 24.42
+group varRep
+shortLabel chr16
+
+track seqIdychr17
+longLabel chr17
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr17.bb
+priority 24.43
+group varRep
+shortLabel chr17
+
+track seqIdychr18
+longLabel chr18
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr18.bb
+priority 24.44
+group varRep
+shortLabel chr18
+
+track seqIdychr19
+longLabel chr19
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr19.bb
+priority 24.45
+group varRep
+shortLabel chr19
+
+track seqIdychr20
+longLabel chr20
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chr20.bb
+priority 24.46
+group varRep
+shortLabel chr20
+
+track seqIdychrX
+longLabel chrX
+parent seqidy
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/chrX.bb
+priority 24.47
+group varRep
+shortLabel chrX
+
+track seqidyPrimates
+mouseOverField name
+type bigBed 9
+longLabel Sequence Identity in 10kb, T2T-Primate Genomes with Human Orthologs
+superTrack on
+itemRgb on
+priority 24.50
+html /gbdb/hs1/contrib/T2TPrimates/seqIdy.html
+group varRep
+visibility hide
+shortLabel SeqIdy (Primates)
+
+track seqIdyGorGor1
+longLabel mGorGor1 GGO (Gorilla)
+parent seqidyPrimates
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/mGorGor1v2.0_to_CHM13.bb
+priority 24.51
+group varRep
+shortLabel Gorilla
+
+track seqIdyPanPan1
+longLabel mPanPan1v2.0 PPA (Bonobo)
+parent seqidyPrimates
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/mPanPan1v2.0_to_CHM13.bb
+priority 24.52
+group varRep
+shortLabel Bonobo
+
+track seqIdyPanTro3
+longLabel mPanTro3v2.0 PTR (Chimpanzee)
+parent seqidyPrimates
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/mPanTro3v2.0_to_CHM13.bb
+priority 24.53
+group varRep
+shortLabel Chimpanzee
+
+track seqIdyPonAbe1
+longLabel mPonAbe1v2.0 PAB (Sumatran orangutan)
+parent seqidyPrimates
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/mPonAbe1v2.0_to_CHM13.bb
+priority 24.54
+group varRep
+shortLabel S_Orang
+
+track seqIdyPonPyg2
+longLabel mPonPyg2v2.0 PPY (Bornean orangutan)
+parent seqidyPrimates
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/mPonPyg2v2.0_to_CHM13.bb
+priority 24.55
+group varRep
+shortLabel B_Orang
+
+track phr
+type bigWig
+longLabel Pseudo-Homologous Regions
+viewLimits 0:1
+autoScale on
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/phrs.bw
+priority 25
+html /gbdb/hs1/contrib/T2TPrimates/phr.html
+group varRep
+maxHeightPixels 100:32:16
+shortLabel PHR
+visibility hide
+alwaysZero on
+
+track prdm9sites
+type bigBed 4
+longLabel PRDM9 Binding Sites (beta)
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/prdm9_bMotif.bb
+priority 26
+html /gbdb/hs1/contrib/T2TPrimates/chm13v2.0-prdm9-track.html
+group varRep
+visibility hide
+shortLabel PRDM9 Sites
+
+track nonB
+longLabel Non-B DNA
+superTrack on hide
+priority 27
+html /gbdb/hs1/contrib/T2TPrimates/nonB.html
+group varRep
+visibility hide
+shortLabel Non-B DNA
+
+track nonBapr
+type bigBed 3
+longLabel A-phased repeats
+parent nonB
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/nonB_APR.bb
+priority 27.1
+group varRep
+shortLabel A-phased repeats
+
+track nonBdr
+type bigBed 3
+longLabel Direct repeats
+parent nonB
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/nonB_DR.bb
+priority 27.2
+group varRep
+shortLabel Direct repeats
+
+track nonBgq
+type bigBed 4
+longLabel G-quadruplexes
+parent nonB
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/nonB_GQ.bb
+priority 27.3
+group varRep
+shortLabel G-quadruplexes
+
+track nonBir
+type bigBed 3
+longLabel Inverted repeats
+parent nonB
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/nonB_IR.bb
+priority 27.4
+group varRep
+shortLabel Inverted repeats
+
+track nonBmr
+type bigBed 3
+longLabel Mirror repeats
+parent nonB
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/nonB_MR.bb
+priority 27.5
+group varRep
+shortLabel Mirror repeats
+
+track nonBtr
+type bigBed 3
+longLabel Triplex repeats
+parent nonB
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/nonB_TRI.bb
+priority 27.6
+group varRep
+shortLabel Triplex repeats
+
+track nonBstr
+type bigBed 3
+longLabel Short tandem repeats
+parent nonB
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/nonB_STR.bb
+priority 27.7
+group varRep
+shortLabel Short tandem repeats
+
+track nonBz
+type bigBed 3
+longLabel Z-DNA
+parent nonB
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/nonB_Z.bb
+priority 27.8
+group varRep
+shortLabel Z-DNA
+
+track numt
+type bigBed 3
+longLabel Nuclear-Mitochondrial DNA Segment
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/numt_v0.1.bb
+priority 28
+html /gbdb/hs1/contrib/T2TPrimates/numt.html
+group varRep
+shortLabel NUMT
+visibility hide
+
+track feature
+mouseOverField name
+type bigBed 9 +
+longLabel Genome Feature
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/genomeFeature_v1.1.bb
+itemRgb on
+priority 11
+html /gbdb/hs1/contrib/T2TPrimates/genomeFeature.html
+group map
+shortLabel Genome Feature
+visibility dense
+
+track validation
+longLabel Validation of T2T-CHM13 assembly
+superTrack on
+priority 18
+group map
+shortLabel Validation
+visibility hide
+
+track issues
+type bigBed 9
+longLabel Assembly Issues
+parent validation
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/v2.0_issues.bb
+itemRgb on
+priority 18.1
+html /gbdb/hs1/contrib/T2TPrimates/description.html
+group map
+shortLabel Issues
+visibility dense
+maxItems 100000
+
+track readCoverageHiFi
+noInherit on
+type bigWig
+longLabel CHM13 HiFi marker assisted alignment overlayed on primary alignment (no Y)
+viewLimits 0:130
+parent validation
+priority 18.2
+html /gbdb/hs1/contrib/T2TPrimates/readCoverage.html
+group map
+maxHeightPixels 100:32:8
+shortLabel CHM13 HiFi coverage
+visibility full
+container multiWig
+showSubtrackColorOnUi on
+aggregate transparentOverlay
+
+track readCoverageHiFiPri
+type bigWig 0 130
+longLabel HiFi Primary read coverage
+color 255,182,193
+parent readCoverageHiFi
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/hifi.pri.cov.bigWig
+html /gbdb/hs1/contrib/T2TPrimates/readCoverage.html
+group map
+shortLabel HiFi Pri coverage
+
+track readCoverageHiFiMarker
+type bigWig 0 130
+longLabel HiFi marker assisted read coverage
+color 240,128,128
+parent readCoverageHiFi
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/hifi.markersandlength.cov.bigWig
+html /gbdb/hs1/contrib/T2TPrimates/readCoverage.html
+group map
+shortLabel HiFi marker assisted coverage
+
+track readCoverageONT
+noInherit on
+type bigWig
+longLabel CHM13 ONT marker assisted alignment overlayed on primary alignment (no Y)
+viewLimits 0:300
+parent validation
+priority 18.4
+html /gbdb/hs1/contrib/T2TPrimates/readCoverage.html
+group map
+maxHeightPixels 100:32:8
+shortLabel CHM13 ONT coverage
+visibility hide
+container multiWig
+showSubtrackColorOnUi on
+aggregate transparentOverlay
+
+track readCoverageONTPri
+type bigWig 0 300
+longLabel ONT Primary read coverage
+color 173,216,230
+parent readCoverageONT
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/ont.pri.len1k_idy85.cov.bigWig
+html /gbdb/hs1/contrib/T2TPrimates/readCoverage.html
+group map
+shortLabel ONT Pri coverage
+
+track readCoverageONTMarker
+type bigWig 0 300
+longLabel ONT marker assisted read coverage
+color 100,149,237
+parent readCoverageONT
+bigDataUrl /gbdb/hs1/contrib/T2TPrimates/ont.markersandlength.cov.bigWig
+html /gbdb/hs1/contrib/T2TPrimates/readCoverage.html
+group map
+shortLabel ONT marker assisted coverage
+
+# END genark contrib: T2TPrimates

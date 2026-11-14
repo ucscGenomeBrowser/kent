@@ -9170,8 +9170,9 @@ if (rtsLoad)  // load a recommended track set using the merge method
     hashStore(excludeHash, "user");
     changeTrackVisExclude(groupList, NULL, tvHide, excludeHash, FALSE);
 
-    // The set files have no visibility lines for hub tracks, so return the tracks of the
-    // set's own hubs to their defaults.  Otherwise they stay hidden.
+    // The set files have visibility lines only for hub tracks that are not at their
+    // default, so return the other tracks of the set's hubs to their defaults.  Otherwise
+    // they stay hidden.
     struct group *group;
     for (group = groupList; group != NULL; group = group->next)
         {
