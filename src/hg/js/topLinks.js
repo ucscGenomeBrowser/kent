@@ -249,6 +249,7 @@ var topLinks = (function() {
                         {background: "#f0f0f0", padding: "6px 8px", borderRadius: "4px",
                          wordBreak: "break-all", userSelect: "all", fontFamily: "monospace"});
         urlBox.setAttribute("data-copy", url);   // copyToClipboard() reads data-copy or innerText
+        urlBox.tabIndex = 0;                     // focusable, so the link can be put under the cursor
         body.appendChild(urlBox);
 
         var btnRow = el("div", {}, {marginTop: "8px"});
@@ -299,6 +300,15 @@ var topLinks = (function() {
         else if (opts.pageNote)
             body.appendChild(el("p", {textContent: "This link shows the page only. It does not " +
                 "restore the tracks you currently have displayed."}, {marginTop: "14px"}));
+
+        // Put the cursor on the link and select it, so Ctrl-C/Cmd-C copies it right away.  Done
+        // last, after the auto-copy above, which may move the focus and selection itself.
+        urlBox.focus();
+        var range = document.createRange();
+        range.selectNodeContents(urlBox);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
     }
 
     // The "Specify name" editor: rename the session, then show the updated link.
