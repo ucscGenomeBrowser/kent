@@ -14,15 +14,15 @@
  * not missed. */
 #sessionApp .sessIntro .sessSignIn { color:#000; border:2px solid #000; }
 
-/* Save-current-view card and the "most recently used session" bar - the two actions on the page -
- * are dark panels with white text so they stand out from the table below. */
-#sessionApp .sessSaveCard, #sessionApp .sessRecent { background:#1E2833; color:#fff; }
-#sessionApp .sessSaveCard .sessInfo, #sessionApp .sessRecent .sessInfo { color:#fff; }
-#sessionApp .sessSaveCard { border:0; padding:14px 16px;
+/* The "most recently used session" bar is a dark panel with white text so it stands out; the
+ * save-current-view card has the light grey of the session table's header row. */
+#sessionApp .sessRecent { background:#1E2833; color:#fff; }
+#sessionApp .sessRecent .sessInfo { color:#fff; }
+#sessionApp .sessSaveCard { border:0; padding:14px 16px; background:var(--headrow);
     display:flex; flex-direction:column; gap:12px; margin:0 0 12px; }
 #sessionApp .sessSaveHead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
 /* Title and the current-view summary share one font size (title is just bold). */
-#sessionApp .sessSaveTitle { font-size:14px; font-weight:700; color:#fff; }
+#sessionApp .sessSaveTitle { font-size:14px; font-weight:700; color:var(--accent); }
 #sessionApp .sessSaveWhat { font-size:14px; }
 #sessionApp .sessSaveRow { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
 /* Name/description: no label - the placeholder and the info bubble after the box say what it is -
@@ -35,10 +35,6 @@
 
 #sessionApp .sessSaveCheck { display:flex; align-items:center; gap:7px; font-size:13px;
     color:var(--ink); white-space:nowrap; }
-#sessionApp .sessSaveCard .sessSaveCheck { color:#fff; }
-/* The navy primary button would vanish on the dark card; white with dark text instead. */
-#sessionApp .sessSaveCard .gbPill.primary { background:#fff; color:#1E2833; border-color:#fff; }
-#sessionApp .sessSaveCard .gbPill.primary:hover { background:#dde3ea; }
 
 /* One-click "update the most recently used session" - a compact thin bar above the save card. */
 #sessionApp .sessRecent { display:flex; align-items:center; gap:8px; flex-wrap:wrap;
