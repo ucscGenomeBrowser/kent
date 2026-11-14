@@ -28462,15 +28462,35 @@ dnaSeqFreeList(&qSeqList);
 return dyStringCannibalize(&setting);
 }
 
-static void buildBigPsl(char *fileNames)
-/* Build a custom track with a bigPsl file out of blat results.
- * Bring up the bigPsl detail page with all the alignments. */
+static char *blatPslSetting(char *pslName)
+/* Return the value of the blatPsl track line setting for the search whose .pslx is pslName: the
+ * file's base name, cgiEncoded.  The base name, since a search and a reopen of it (blatPslId=)
+ * spell the trash path differently. */
 {
-char *trackName = cartString(cart, "trackName");
-char *trackDescription = cartString(cart, "trackDescription");
-char *pslName, *faName, *qName;
-parseSs(fileNames, &pslName, &faName, &qName);
+char dir[PATH_LEN], root[FILENAME_LEN], ext[FILEEXT_LEN], base[FILENAME_LEN + FILEEXT_LEN];
+splitPath(pslName, dir, root, ext);
+safef(base, sizeof base, "%s%s", root, ext);
+return cgiEncode(base);
+}
 
+static struct customTrack *blatFindResultCt(struct customTrack *ctList, char *pslSetting)
+/* Return the BLAT results track in ctList that was built from the search with this blatPsl
+ * setting, or NULL. */
+{
+struct customTrack *ct;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (blatIsResultTrack(ct->tdb) && sameOk(trackDbSetting(ct->tdb, "blatPsl"), pslSetting)
+    &&  trackDbSetting(ct->tdb, "bigDataUrl") != NULL)
+        return ct;
+return NULL;
+}
+
+static struct customTrack *blatNewResultCt(char *pslName, char *faName, char *pslSetting,
+                                           char *trackName, char *trackDescription,
+                                           char **retBigBedFile)
+/* Make the bigPsl file of a BLAT search and return a custom track for it.  The track line carries
+ * blatPsl=pslSetting, so a reopen of the same search finds this track (blatFindResultCt). */
+{
 struct tempName bigBedTn;
 trashDirDateFile(&bigBedTn, "hgBlat", "bp", ".bb");
 char *bigBedFile = bigBedTn.forCgi;
@@ -28500,18 +28520,46 @@ if (blatTrackMin > 0)
     extraForMismatch = catTwoStrings(extraForMismatch, filterTag);
     }
 extraForMismatch = catTwoStrings(extraForMismatch, blatQueryOrderSetting(faName));
+char pslTag[PATH_LEN];
+safef(pslTag, sizeof pslTag, " blatPsl=\"%s\"", pslSetting);
+extraForMismatch = catTwoStrings(extraForMismatch, pslTag);
 struct dyString *trackLine = dyStringNew(4096);
 dyStringPrintf(trackLine, customTextTemplate, groupTag, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
+*retBigBedFile = bigBedFile;
+return customFactoryParse(database, trackLine->string, FALSE, NULL, NULL);
+}
+
+static void buildBigPsl(char *fileNames)
+/* Build a custom track with a bigPsl file out of blat results, or reuse the one this cart already
+ * has for the same search, then bring up the bigPsl detail page with all the alignments.  hgBlat
+ * asks for the track every time it shows a search's results, also on a reload, on Back and when a
+ * results link is opened again, and each of these used to add another copy of the track. */
+{
+char *trackName = cartString(cart, "trackName");
+char *trackDescription = cartString(cart, "trackDescription");
+char *pslName, *faName, *qName;
+parseSs(fileNames, &pslName, &faName, &qName);
+
+/* getCtList has already dropped a track the request removes (CT_DO_REMOVE_VAR): a rename sends
+ * the old name, so a rename always builds a new track. */
 struct customTrack *ctList = getCtList();
-struct customTrack *newCts = customFactoryParse(database, trackLine->string, FALSE, NULL, NULL);
+char *pslSetting = blatPslSetting(pslName);
+struct customTrack *sameSearchCt = blatFindResultCt(ctList, pslSetting);
+struct customTrack *newCts = NULL;
+char *bigBedFile = NULL;
+if (sameSearchCt != NULL)
+    bigBedFile = trackDbSetting(sameSearchCt->tdb, "bigDataUrl");
+else
+    newCts = blatNewResultCt(pslName, faName, pslSetting, trackName, trackDescription,
+                             &bigBedFile);
 
 /* Optionally clear PREVIOUS BLAT result tracks (those tagged blatResult=on) so the user is not
  * confused about which results are current.  hg.conf "blatOldTracks":
  *   keep   (default) - do nothing, every search's track stays as-is
  *   hide             - leave earlier BLAT tracks in the session but set them to hide
  *   delete           - remove earlier BLAT tracks from the session (their trash files age out)
- * Only BLAT-tagged tracks are touched; the track just made is left alone. */
+ * Only BLAT-tagged tracks are touched; the track just made or reused is left alone. */
 char *oldTracks = cfgOptionDefault("blatOldTracks", "keep");
 /* Fail safe on an unrecognized value (e.g. a typo in hg.conf): fall back to "keep" rather than to
  * the destructive "delete" branch below, so a misconfiguration never silently discards a user's
@@ -28533,7 +28581,7 @@ if (differentString(oldTracks, "keep"))
     for (ct = ctList; ct != NULL; ct = next)
         {
         next = ct->next;
-        if (blatIsResultTrack(ct->tdb))
+        if (ct != sameSearchCt && blatIsResultTrack(ct->tdb))
             {
             if (sameString(oldTracks, "hide"))
                 {
@@ -28561,7 +28609,7 @@ if (sameString(cfgOptionDefault("blatOnlyLatestCheckbox", "off"), "on")
     for (ct = ctList; ct != NULL; ct = next)
         {
         next = ct->next;
-        if (blatIsResultTrack(ct->tdb))
+        if (ct != sameSearchCt && blatIsResultTrack(ct->tdb))
             {
             cartRemove(cart, ct->tdb->track);   /* no orphaned visibility for a reused ct_ id */
             continue;   /* drop it; customTracksSaveCart below writes out only the kept list */
@@ -28577,10 +28625,18 @@ if (sameString(cfgOptionDefault("blatOnlyLatestCheckbox", "off"), "on")
  * deleted.  The old visibility cart variable outlives the deleted track and would silently start
  * the new track hidden (seen with "I'm feeling lucky": the user lands on hgTracks and the result
  * is invisible, RM #38086).  Runs after every block above that can set "hide" (blatOldTracks=hide
- * included), so ordering cannot hide the new track again. */
-customTracksClearCartVis(cart, newCts);
-
-theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
+ * included), so ordering cannot hide the new track again.  A reused track is shown again too, as
+ * a new one would be: the user is looking at its results. */
+if (sameSearchCt != NULL)
+    {
+    cartRemove(cart, sameSearchCt->tdb->track);
+    theCtList = ctList;
+    }
+else
+    {
+    customTracksClearCartVis(cart, newCts);
+    theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
+    }
 
 customTracksSaveCart(database, cart, theCtList);
 
@@ -28589,13 +28645,14 @@ customTracksSaveCart(database, cart, theCtList);
  * BLAT custom tracks from earlier searches. */
 cartSetString(cart, "blatLastBigBed", bigBedFile);
 
+char *ctTrack = (sameSearchCt != NULL) ? sameSearchCt->tdb->track : newCts->tdb->track;
 cartSetString(cart, "i", "PrintAllSequences");
-hgCustom(newCts->tdb->track, NULL);
+hgCustom(ctTrack, NULL);
 
 if (sameOk(cartOptionalString(cart, "autoRearr"), "1"))  
     {
     char snakeVar[256];
-    safef(snakeVar, sizeof snakeVar, "%s.doSnake", newCts->tdb->track);
+    safef(snakeVar, sizeof snakeVar, "%s.doSnake", ctTrack);
     cartSetString(cart, snakeVar, "1");
     }
 
