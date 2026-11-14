@@ -220,21 +220,13 @@ var SESS_TRASH_SVG = '<svg class="sessIcon sessTrash" xmlns="http://www.w3.org/2
     ' 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8' +
     'c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7' +
     ' 47.9-45L416 128z"/></svg>';
-// Font Awesome "floppy-disk" (save) regular/outline path - reads more clearly as a save icon.
-var SESS_SAVE_SVG = '<svg class="sessIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"' +
-    ' aria-hidden="true"><path fill="currentColor" d="M160 144C151.2 144 144 151.2 144 160L144 480C144' +
-    ' 488.8 151.2 496 160 496L480 496C488.8 496 496 488.8 496 480L496 237.3C496 233.1 494.3 229 491.3' +
-    ' 226L416 150.6L416 240C416 257.7 401.7 272 384 272L224 272C206.3 272 192 257.7 192 240L192 144L160' +
-    ' 144zM240 144L240 224L368 224L368 144L240 144zM96 160C96 124.7 124.7 96 160 96L402.7 96C419.7 96' +
-    ' 436 102.7 448 114.7L525.3 192C537.3 204 544 220.3 544 237.3L544 480C544 515.3 515.3 544 480' +
-    ' 544L160 544C124.7 544 96 515.3 96 480L96 160zM256 384C256 348.7 284.7 320 320 320C355.3 320 384' +
-    ' 348.7 384 384C384 419.3 355.3 448 320 448C284.7 448 256 419.3 256 384z"/></svg>';
 // Font Awesome "lock" solid path - marks a private (not-shared) session, since sharing is the default.
 var SESS_LOCK_SVG = '<svg class="sessLock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"' +
     ' aria-hidden="true"><path fill="currentColor" d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80' +
     ' 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0' +
     ' 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/></svg>';
-// Lucide "share" and "pen-line" (stroke icons, ISC license); stroke:currentColor like the others.
+// Lucide "share", "pen-line" and "arrow-down-to-line" (stroke icons, ISC license);
+// stroke:currentColor like the others.
 var SESS_LUCIDE_OPEN = '<svg class="sessIcon sessLucide" xmlns="http://www.w3.org/2000/svg"' +
     ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"' +
     ' stroke-linejoin="round" aria-hidden="true">';
@@ -243,6 +235,8 @@ var SESS_SHARE_SVG = SESS_LUCIDE_OPEN + '<path d="M12 2v13"/><path d="m16 6-4-4-
 var SESS_EDIT_SVG = SESS_LUCIDE_OPEN + '<path d="M13 21h8"/><path d="M21.174 6.812a1 1 0 0 0' +
     '-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0' +
     ' .83-.497z"/></svg>';
+var SESS_UPDATE_SVG = SESS_LUCIDE_OPEN + '<path d="M12 17V3"/><path d="m6 11 6 6 6-6"/>' +
+    '<path d="M19 21H5"/></svg>';
 
 function sessActionsHtml(row) {
     // Order: Share, Edit, Update (overwrite with the current view), each an icon plus a word, then
@@ -263,7 +257,7 @@ function sessActionsHtml(row) {
         '<button type="button" class="gbPill sessIconBtn" data-act="edit" data-key="' + e + '" ' +
         'title="Rename this session or edit its description">' + SESS_EDIT_SVG + 'Edit</button>' +
         '<button type="button" class="gbPill sessIconBtn" data-act="overwrite" data-key="' + e + '" ' +
-        'title="Update this session: overwrite it with your current browser view">' + SESS_SAVE_SVG +
+        'title="Update this session: overwrite it with your current browser view">' + SESS_UPDATE_SVG +
         'Update</button>' +
         '<button type="button" class="gbPill danger" data-act="delete" data-key="' + e + '" ' +
         'aria-label="Delete this session" title="Delete this session">' + SESS_TRASH_SVG + '</button>';
