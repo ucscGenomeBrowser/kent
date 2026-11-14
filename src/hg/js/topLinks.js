@@ -587,6 +587,8 @@ var topLinks = (function() {
         body.appendChild(row);
         body.appendChild(status);
         appendManageNote(body, opts.loggedIn);
+        if (nameInput)
+            nameInput.focus();
     }
 
     // ---- Wire up the menu items --------------------------------------------------------------
