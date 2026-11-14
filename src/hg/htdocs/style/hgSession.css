@@ -14,10 +14,9 @@
  * not missed. */
 #sessionApp .sessIntro .sessSignIn { color:#000; border:2px solid #000; }
 
-/* The "most recently used session" bar is a dark panel with white text so it stands out; the
- * save-current-view card has the light grey of the session table's header row. */
-#sessionApp .sessRecent { background:#1E2833; color:#fff; }
-#sessionApp .sessRecent .sessInfo { color:#fff; }
+/* The "most recently used session" bar and the save-current-view card have the light grey of the
+ * session table's header row. */
+#sessionApp .sessRecent { background:var(--headrow); }
 #sessionApp .sessSaveCard { border:0; padding:14px 16px; background:var(--headrow);
     display:flex; flex-direction:column; gap:12px; margin:0 0 12px; }
 #sessionApp .sessSaveHead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
@@ -42,7 +41,7 @@
 #sessionApp .sessRecent .gbPill { padding:2px 10px; }
 #sessionApp .sessRecent .gbPill.sessIconBtn { display:inline-flex; align-items:center; gap:4px;
     padding-left:7px; }
-#sessionApp .sessRecentTime { color:#c8d0da; }
+#sessionApp .sessRecentTime { color:var(--muted); }
 /* Info bubble (navy circled i) used for the recent-update hint and session descriptions. */
 #sessionApp .sessInfo { color:var(--accent); cursor:help; font-size:15px; line-height:1; }
 
