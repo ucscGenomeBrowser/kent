@@ -2,73 +2,142 @@
 
 <p>
 Part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack">Imprinting</a> track collection, this track
-shows 50 imprinted differentially methylated regions (DMRs) that Monk et al. proposed as the
-standard set for diagnostic testing of imprinting disorders. Each region has a systematic name
-built from the gene, the position relative to it (promoter, exon, intron or intergenic) and the
-type of region, for example <i>H19/IGF2:IG-DMR</i>. The older names under which a region is
-commonly known, such as ICR1 or KvDMR1, are listed as aliases.
+shows 50 imprinted differentially methylated regions (DMRs) that Monk et al. (2018) proposed as the
+standard set for diagnostic testing of imprinting disorders, annotated with the clinical
+classification from the more recent joint statement on multi-locus imprinting disturbance (MLID) by
+Mackay et al. (2024). The two papers list the same regions with identical hg38 coordinates, except
+two intronic DMRs at SNRPN that only Monk et al. list.
 </p>
 
 <p>
-For each region the track gives the parent whose allele carries the methylation, the number of CpG
-sites, whether the methylation is established in the oocyte or in the sperm (germline DMR) or is
-acquired later and depends on a neighboring germline DMR (secondary DMR), and the matching
-Locus Reference Genomic (LRG) record where one exists. The coordinates in the paper are in hg19.
-Everything here was lifted to hg38, and all 50 regions lifted without loss.
+Each region has a systematic name built from the gene, the position relative to it (promoter, exon,
+intron or intergenic) and the type of region, for example <i>H19/IGF2:IG-DMR</i>. The older names
+under which a region is commonly known, such as ICR1 or KvDMR1, are listed as other names. For each
+region the track gives the parent whose allele carries the methylation, the number of CpG sites,
+whether the methylation is established in the oocyte or in the sperm (germline DMR) or only after
+fertilization (secondary DMR), and the matching Locus Reference Genomic (LRG) record where one
+exists.
+</p>
+
+<p>
+Mackay et al. classify each region by whether methylation there is used in diagnosis. A clinically
+associated DMR is one where a change in methylation is directly associated with an imprinting
+disorder, or is used as a proxy to detect imprinting disturbance. A non-clinical DMR is not
+currently associated with a clinical phenotype or used in diagnosis. For the clinically associated
+regions the track gives the imprinting disorders in which they are involved.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Regions are colored by the parent whose allele is methylated:
+The color shows the parent whose allele is methylated, and the shade shows the classification:
 </p>
 
 <table class="stdTbl">
   <tr><th style="background-color:#DC1414;width:2em">&nbsp;</th>
-      <td>Red: the maternal allele is methylated</td></tr>
+      <td>Red: clinically associated DMR, maternal allele methylated</td></tr>
   <tr><th style="background-color:#003CC8;width:2em">&nbsp;</th>
-      <td>Blue: the paternal allele is methylated</td></tr>
+      <td>Blue: clinically associated DMR, paternal allele methylated</td></tr>
+  <tr><th style="background-color:#F09696;width:2em">&nbsp;</th>
+      <td>Light red: non-clinical DMR or not classified by Mackay et al., maternal allele methylated</td></tr>
+  <tr><th style="background-color:#96AFF0;width:2em">&nbsp;</th>
+      <td>Light blue: non-clinical DMR, paternal allele methylated</td></tr>
 </table>
 
 <p>
-The track can be filtered by methylated allele and by germline origin. The details page shows all columns of the original table and the
-position as published in hg19.
+The track can be filtered by clinical classification, methylated allele and imprint origin. The
+details page also shows the type given in Table 1 of Mackay et al. (clinically associated,
+non-clinical, or variable methylation that cannot be interpreted clinically), whether the region is
+marked as the key diagnostic DMR of its locus, which of the two papers list it, and the position as
+published by Monk et al. in hg19.
 </p>
+
+<p>
+The imprinting disorders named in the track are described in Table 2 of Mackay et al.:
+</p>
+
+<table class="stdTbl">
+  <tr><th>Disorder</th><th>Chromosome</th><th>Prevalence</th><th>OMIM</th></tr>
+  <tr><td>Beckwith-Wiedemann syndrome (BWS)</td><td>11p15.5</td><td>1:10,000 to 1:80,000</td><td>130650</td></tr>
+  <tr><td>Silver-Russell syndrome (SRS)</td><td>11p15.5, chr7</td><td>1:16,000</td><td>180860</td></tr>
+  <tr><td>Transient neonatal diabetes mellitus type 1 (TNDM)</td><td>6q24</td><td>1:15,000 to 1:400,000</td><td>601410</td></tr>
+  <tr><td>Pseudohypoparathyroidism type 1b (PHP)</td><td>20q13.3</td><td>not known</td><td>603233</td></tr>
+  <tr><td>Temple syndrome (TS14)</td><td>14q32</td><td>not known</td><td>616222</td></tr>
+  <tr><td>Kagami-Ogata syndrome (KOS14)</td><td>14q32</td><td>not known</td><td>608140</td></tr>
+  <tr><td>Angelman syndrome (AS)</td><td>15q11.2</td><td>1:25,000 to 1:40,000</td><td>105830</td></tr>
+  <tr><td>Prader-Willi syndrome (PWS)</td><td>15q11.2</td><td>1:8,000 to 1:30,000</td><td>176270</td></tr>
+  <tr><td>Mulchandani-Bhoj-Conlin syndrome</td><td>chr20</td><td>not known</td><td>617352</td></tr>
+</table>
 
 <h2>Methods</h2>
 
 <p>
 Monk et al. defined the extent of each DMR from methyl-seq data sets and named the regions with the
 nomenclature proposed by EUCID, using HGNC-approved gene names, so that the same region is reported
-under one name in the clinic. See the paper for details.</p>
+under one name in the clinic. Mackay et al. list the regions with their hg38 location, number of CpG
+sites, imprint origin, associated disorders and type. Their expert working groups based the
+classification on current knowledge and on DNA from blood, the most frequently used diagnostic
+tissue. Tissue-specific, transient and polymorphically imprinted loci are not part of the
+classification. See the papers for details.</p>
 
 <p>
-The table was copied from Table 1 of the paper on the
-<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5873357/table/t0001/" target="_blank">PubMed Central
-web page</a>. Starts in the table are 1-based, so one was subtracted to get the BED start. The BED
-file was lifted from hg19 to hg38 with <tt>liftOver</tt> and the hg19-to-hg38 chain file. All 50
-regions were converted and none was lost. The thousands separators the web page inserted into
-the LRG identifiers were removed, the dash and prime characters in two names were converted to ASCII,
-and M and P were spelled out as Maternal and Paternal. The coordinates of the region
-SNRPN:Int1-DMR1 are shown as published, 100 kb long for 44 CpGs, which is probably a typing error in
-the paper. See the
+The Monk et al. table was copied from
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5873357/table/t0001/" target="_blank">Table 1 of
+the paper</a> on PubMed Central. Starts in the table are 1-based, so one was subtracted to get the
+BED start, and the regions were lifted from hg19 to hg38 with <tt>liftOver</tt>. All 50 regions were
+converted. The thousands separators the web page inserted into the LRG identifiers were removed, the
+dash and prime characters in two names were converted to ASCII, and M and P were spelled out as
+Maternal and Paternal. The coordinates of SNRPN:Int1-DMR1 are shown as published, 100 kb long for
+44 CpGs, which is probably a typing error in the paper.
+</p>
+
+<p>
+The Mackay et al. tables were copied from PubMed Central
+(<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11295890/table/Tab1/" target="_blank">Table 1</a>,
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11295890/table/Tab2/" target="_blank">Table 2</a>,
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11295890/table/Tab3/" target="_blank">Table 3</a>).
+Its 48 regions have exactly the same hg38 coordinates as 48 of the lifted Monk et al. regions, and
+were joined on them. The H19/IGF2 region is listed in Table 1 as one row for the IG-DMR and the
+TSS-DMR and was matched to the IG-DMR. Table 1 does not state which parent's allele is methylated:
+for regions with an oocyte germline origin the maternal allele was taken, for a sperm germline origin
+the paternal allele, and for the nine regions with only a secondary origin, the parent given by Monk
+et al.; it agrees with Monk et al. for all 48 regions. The clinical classification comes from Table
+3. Six regions are not in Table 3: five that Table 1 marks as variable methylation (GPR1-AS:TSS-DMR,
+VTRNA2-1:DMR, WDR27:Int13-DMR, INPP5F:Int2-DMR, MKRN3:TSS-DMR) are shown as non-clinical, and
+IGF2:Ex9-DMR, which Table 1 marks as clinically associated, is shown as clinically associated. Two
+regions that Table 1 marks as clinically associated (IGF2:alt-TSS-DMR and MEG3:TSS-DMR) are listed
+as non-clinical in Table 3, and the track follows Table 3. The disorder acronyms of Table 1 were
+expanded using Table 2; upd(7)mat was expanded as maternal uniparental disomy of chromosome 7,
+which causes Silver-Russell syndrome, and upd(20)mat as maternal uniparental disomy of chromosome
+20, connected here with Mulchandani-Bhoj-Conlin syndrome, the only chromosome 20 syndrome in Table 2.
+</p>
+
+<p>
+Where the two papers differ, the track shows the names of Monk et al. and the other values of
+Mackay et al. Two names differ in spelling (Monk ZNF597:3' DMR and GNAS A/B:TSS-DMR, Mackay
+ZNF597:3-DMR and GNAS-A/B:TSS-DMR); the Mackay spelling is listed as another name. The CpG counts
+differ for three regions, DIRAS3:Ex2-DMR, DIRAS3:TSS-DMR (whose counts are swapped between the
+papers) and SVOPL:alt-TSS-DMR, and both numbers are shown. Monk et al. call the secondary DMRs
+"No-secondary DMR", which is shown as "Secondary DMR" as in Mackay et al. The two SNRPN regions
+that Mackay et al. do not list are classified as "Not in Mackay 2024". See the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt"
-target="_blank">makeDoc file</a> and the
+target="_blank">makeDoc file</a> and the scripts in
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/monk2018Imprint"
-target="_blank">scripts</a>.</p>
+target="_blank">monk2018Imprint</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mackay2024Imprint"
+target="_blank">mackay2024Imprint</a>.</p>
 
 <h2>Data Access</h2>
 
 <p>The data can be explored interactively in table format with the <a href="../cgi-bin/hgTables">Table Browser</a> or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or tab-sep tables. From scripts, the data can be accessed through our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>monk2018Imprint</i>.</p>
 
-<p>For automated download and analysis, the genome annotation is stored in a bigBed file that can be downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/monk2018/" target="_blank">our download server</a>. The file for this track is called <tt>monk2018Imprint.bb</tt>. Individual regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled binary for your system. Instructions for downloading source code and binaries can be found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>. The tool can also be used to obtain features within a given range, e.g. <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/monk2018/monk2018Imprint.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+<p>For automated download and analysis, the genome annotation is stored in a bigBed file that can be downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/monk2018/" target="_blank">our download server</a>. The file for this track is called <tt>monk2018Imprint.bb</tt>. Individual regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled binary for your system. Instructions for downloading source code and binaries can be found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>. The tool can also be used to obtain features within a given range, e.g. <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/monk2018/monk2018Imprint.bb -chrom=chr11 -start=0 -end=3000000 stdout</tt></p>
 
-<p>The original annotation source data can be downloaded from
-<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5873357/table/t0001/" target="_blank">Table 1 of the paper</a>.</p>
+<p>The original data can be viewed in
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5873357/table/t0001/" target="_blank">Table 1 of Monk et al.</a> and
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11295890/table/Tab1/" target="_blank">Table 1 of Mackay et al.</a></p>
 
 <h2>References</h2>
-Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link.
-
 
 <p>
 Monk D, Morales J, den Dunnen JT, Russo S, Court F, Prawitt D, Eggermann T, Beygo J, Buiting K,
@@ -81,3 +150,13 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27911167" target="_blank">279
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5873357/" target="_blank">PMC5873357</a>
 </p>
 
+<p>
+Mackay DJG, Gazdagh G, Monk D, Brioude F, Giabicani E, Krzyzewska IM, Kalish JM, Maas SM, Kagami M,
+Beygo J <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/39090763" target="_blank">
+Multi-locus imprinting disturbance (MLID): interim joint statement for clinical and molecular
+diagnosis</a>.
+<em>Clin Epigenetics</em>. 2024 Aug 1;16(1):99.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39090763" target="_blank">39090763</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11295890/" target="_blank">PMC11295890</a>
+</p>

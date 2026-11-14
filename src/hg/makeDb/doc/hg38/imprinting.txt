@@ -392,3 +392,36 @@ done
 ~/kent/src/hg/makeDb/scripts/hprcImprint/hprcImprintDmrToBigBed.sh
 # 870 bed lines in, 870 bigBed records out, nothing dropped (880 CHM13 regions, 10 not
 # liftable by the authors). 426 maternal (126 strong), 444 paternal (24 strong).
+
+
+# 2026-11-13 Claude (for max): OMIM and Geneimprint genes merged into one track, imprintedGenes.
+# Colors by source: OMIM green (0,140,0), Geneimprint blue (0,60,200), Geneimprint status
+# Predicted gray (128,128,128). The parental-allele colors of Geneimprint are gone, the
+# expressed allele is still a field and a filter. Every row of both beds is kept, a gene in
+# both catalogs is drawn twice. The mouseover is built per row by the script (_mouseOver).
+mkdir -p /hive/data/genomes/hg38/bed/imprinting/imprintedGenes
+cd /hive/data/genomes/hg38/bed/imprinting/imprintedGenes
+~/kent/src/hg/makeDb/scripts/imprinting/imprintedGenesMerge.py \
+    ../geneimprint/geneimprint.bed ../omimImprint/omimImprint.bed imprintedGenes.bed
+# 274 Geneimprint + 459 OMIM = 733 rows written
+bedToBigBed -type=bed9+16 -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/imprinting/imprintedGenes.as \
+    -extraIndex=name \
+    imprintedGenes.bed /hive/data/genomes/hg38/chrom.sizes imprintedGenes.bb
+
+
+# 2026-11-13 Claude (for max): Monk 2018 and Mackay 2024 merged into one track, monk2018Imprint
+# ("Clinical iDMRs"); the mackay2024Imprint track was removed. The 48 Mackay regions have
+# exactly the same hg38 coordinates as 48 lifted Monk regions; the other two Monk regions
+# (SNRPN:Int1-DMR1, SNRPN:Int1-DMR2) are not in Mackay and are classified "Not in Mackay 2024".
+# Names from Monk, the rest from Mackay. Differences between the papers, all kept visible:
+#   names: Monk ZNF597:3' DMR / GNAS A/B:TSS-DMR, Mackay ZNF597:3-DMR / GNAS-A/B:TSS-DMR
+#          (Mackay spelling added to the other names)
+#   CpGs:  DIRAS3:Ex2-DMR Mackay 88 Monk 39, DIRAS3:TSS-DMR Mackay 39 Monk 88 (swapped),
+#          SVOPL:alt-TSS-DMR Mackay 74 Monk 31 (both numbers shown)
+#   Monk's "No-secondary DMR" is shown as Mackay's "Secondary DMR".
+# Colors as the Mackay track had them: strong red/blue clinically associated, light otherwise.
+# The Mackay bed is built first with mackay2024ImprintBuild.sh (above); the Monk build script
+# now runs monk2018ImprintMerge.py on both beds before bedToBigBed.
+~/kent/src/hg/makeDb/scripts/monk2018Imprint/monk2018ImprintBuild.sh
+# 50 regions written: 13 clinically associated, 35 non-clinical, 2 not in Mackay 2024

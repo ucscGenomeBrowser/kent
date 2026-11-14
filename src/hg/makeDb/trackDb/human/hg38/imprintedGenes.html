@@ -1,0 +1,177 @@
+<h2>Description</h2>
+
+<p>
+Part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack">Imprinting</a> track collection, this
+track shows the genes that two hand-curated catalogs list as imprinted or candidate imprinted:
+OMIM, the catalog of human genes and genetic disorders curated at Johns Hopkins, and Geneimprint,
+a catalog of imprinted genes maintained by Randy L. Jirtle. A gene that is in both catalogs is
+shown twice, once for each source.
+</p>
+
+<p>
+The OMIM part has 459 loci. OMIM marks a gene as imprinted or a candidate by reading the primary
+literature, and publishes this mark only through
+<a href="https://genescout.omim.org/" target="_blank">GeneScout</a>, OMIM's tool for listing the
+genes and phenotypes inside a set of genomic intervals, which appends <tt>(I)</tt> to the location
+of a flagged gene. The mark is not in the OMIM gene map or in any OMIM download file. The OMIM
+curators point out that it covers both genes where imprinting is established and genes where it
+is only a candidate, and that the export does not say which is which, so an OMIM gene in this
+track is a pointer into its OMIM entry rather than a settled call. 225 of the loci have an OMIM
+gene entry of their own; the other 234 are in the gene map without one and are mostly antisense
+transcripts, long non-coding RNAs and microRNAs inside imprinted clusters, such as KCNQ1-AS1 and
+INS-IGF2.
+</p>
+
+<p>
+The Geneimprint part has 274 genes, the whole human catalog. The catalog gives only a cytogenetic
+band, so the coordinates come from resolving the gene symbols against the
+<a href="hgTrackUi?g=hgnc">HGNC</a> gene annotation. It includes 99 genes that are only
+predicted to be imprinted, 18 that Geneimprint records as <em>not</em> imprinted and 10 whose
+status is unknown. Use the filters on the track configuration page to narrow the display to
+the sources and evidence levels you want.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each item is one gene, drawn over the gene span given by OMIM or over the resolved HGNC locus for
+Geneimprint. OMIM does not report a strand, so OMIM items are drawn without one. Geneimprint
+items are labeled with the name Geneimprint uses, which for older entries can differ from
+today's approved symbol. The color shows the source:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#008C00;width:2em">&nbsp;</th>
+      <td>Green: OMIM</td></tr>
+  <tr><th style="background-color:#003CC8;width:2em">&nbsp;</th>
+      <td>Blue: Geneimprint, all statuses except Predicted</td></tr>
+  <tr><th style="background-color:#808080;width:2em">&nbsp;</th>
+      <td>Gray: Geneimprint, status Predicted</td></tr>
+</table>
+
+<p>
+Clicking an item opens a page with the details of its source. For Geneimprint these are the
+imprint status, the expressed parental allele, the band given by the catalog and links to the
+Geneimprint and HGNC entries. For OMIM they are the MIM number with a link to the OMIM entry,
+the full gene name and every OMIM phenotype associated with the gene, with its mode of
+inheritance.
+</p>
+
+<p>
+Filters are available for the source, the Geneimprint imprint status and expressed allele, and
+whether an OMIM locus has a gene entry of its own. None of them filter anything out by default.
+The Geneimprint filters remove the OMIM genes when they are used, and the OMIM filter removes
+the Geneimprint genes.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+OMIM curators read the primary literature and record, for each gene, the phenotypes it causes,
+the mode of inheritance and a set of annotations, one of which is that the gene is imprinted or
+a candidate for it. GeneScout is described in Applegate et al. (2022). Geneimprint is curated by
+hand from the imprinting literature. A large share of its entries marked as predicted rather than
+confirmed comes from the genome-wide machine learning screen of Luedi et al. (2007), which scored
+every human gene on the sequence features that distinguish known imprinted genes, mainly the
+arrangement of repeats and transcription factor binding sites around the locus. The catalog
+records for each gene the expressed parental allele and an evidence level: imprinted, not
+imprinted, predicted, conflicting data, provisional data, tissue dependent or unknown. The site
+does not publish a definition of these levels.
+</p>
+
+<p>
+The OMIM gene list was exported from <a href="https://genescout.omim.org/" target="_blank">GeneScout</a>
+as a tab-delimited file, using a search that covers every chromosome on assembly GRCh38, and the
+flagged entries were converted to browser coordinates. GeneScout also lists OMIM phenotype entries
+alongside genes; those are mapped disease regions rather than gene positions, some of them tens of
+megabases long, so 108 of them were not included. The Genome Browser already has them in the
+<a href="hgTrackUi?g=omimLocation">OMIM Cyto Loci</a> track.
+The Geneimprint catalog table was downloaded from
+<a href="https://geneimprint.com/site/genes-by-species.Homo+sapiens" target="_blank">https://geneimprint.com/site/genes-by-species.Homo+sapiens</a>
+and parsed out of the HTML page. Each gene symbol was resolved against the HGNC track, trying in
+turn the approved symbol, the previous approved symbols and the alias symbols, first for the
+catalog name and then for each of the aliases the catalog lists. Only the main chromosomes were
+considered. Where a symbol matched more than one locus, the one whose cytogenetic band agreed with
+the catalog was taken. Two cluster names, SNORD115@ and SNORD116, do not exist as single loci and
+were spanned from the first to the last numbered member of their family. One symbol that HGNC has
+retired, PRR25, was resolved through RefSeq instead. The catalog lists 281 entries: four could not
+be placed because their gene identifiers have been retired (one of those, PWCR1, is an older name
+for the SNORD116 cluster, which is in the track under that name), and three genes appear twice
+under an old and a current symbol and are drawn once, carrying both names. The two gene lists were
+then merged into one file. The processing steps are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt" target="_blank">imprinting makeDoc</a>
+and the scripts are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/imprinting" target="_blank">makeDb/scripts/imprinting</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. From scripts, the data can be accessed through
+our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>imprintedGenes</i>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a
+bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/imprintedGenes/" target="_blank">our download server</a>.
+The file for this track is called <tt>imprintedGenes.bb</tt>. Individual regions or
+the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded
+as a precompiled binary for your system. Instructions for downloading source
+code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/imprintedGenes/imprintedGenes.bb -chrom=chr15 -start=23000000 -end=26000000 stdout</tt>
+</p>
+
+<p>
+The original OMIM gene list can be exported from
+<a href="https://genescout.omim.org/" target="_blank">GeneScout</a>. Use of OMIM
+resources requires agreement to the
+<a href="https://omim.org/help/agreement" target="_blank">OMIM terms of use</a>.
+The original Geneimprint catalog can be browsed at
+<a href="https://geneimprint.com/site/genes-by-species.Homo+sapiens" target="_blank">https://geneimprint.com/site/genes-by-species.Homo+sapiens</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to the OMIM curators at the McKusick-Nathans Institute of Genetic
+Medicine, Johns Hopkins University School of Medicine, for maintaining the
+catalog, and in particular to Joanna Amberger for explaining how to export the
+gene list from GeneScout. Thanks to Randy L. Jirtle for curating and publishing
+the Geneimprint catalog.
+</p>
+
+<h2>References</h2>
+
+<p>
+Applegate CD, Schiettecatte F, Hamosh A, Amberger JS.
+<a href="https://doi.org/10.1002/cpz1.530" target="_blank">
+Exploring Genes and Phenotypes Within Chromosomal Regions Using OMIM&#x27;s GeneScout</a>.
+<em>Curr Protoc</em>. 2022 Sep;2(9):e530.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36130039" target="_blank">36130039</a>
+</p>
+
+<p>
+Amberger JS, Bocchini CA, Schiettecatte F, Scott AF, Hamosh A.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/25428349" target="_blank">
+OMIM.org: Online Mendelian Inheritance in Man (OMIM®), an online catalog of human genes and genetic
+disorders</a>.
+<em>Nucleic Acids Res</em>. 2015 Jan;43(Database issue):D789-98.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25428349" target="_blank">25428349</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4383985/" target="_blank">PMC4383985</a>
+</p>
+
+<p>
+Luedi PP, Dietrich FS, Weidman JR, Bosko JM, Jirtle RL, Hartemink AJ.
+<a href="https://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=18055845" target="_blank">
+Computational and experimental identification of novel human imprinted genes</a>.
+<em>Genome Res</em>. 2007 Dec;17(12):1723-30.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/18055845" target="_blank">18055845</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2099581/" target="_blank">PMC2099581</a>
+</p>

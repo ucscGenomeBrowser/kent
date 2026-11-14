@@ -22,44 +22,21 @@ allele-specific methylation that defines them.
 
 <ul>
 <li>
-<a href="hgTrackUi?g=monk2018Imprint">Monk iDMRs</a> &mdash; 50 imprinted
+<a href="hgTrackUi?g=monk2018Imprint">Clinical iDMRs</a> &mdash; 50 imprinted
 differentially methylated regions recommended by Monk et al. for reporting
-methylation changes in clinical diagnostics, with their nomenclature, aliases
-and germline origin.
+methylation changes in clinical diagnostics, with the classification as clinically
+associated or non-clinical and the linked imprinting disorders from the more recent
+joint statement of Mackay et al.
 </li>
 <li>
-<a href="hgTrackUi?g=mackay2024Imprint">Mackay iDMRs</a> &mdash; 48 imprinted
-differentially methylated regions from the joint statement on multi-locus
-imprinting disturbance, classified as clinically associated or non-clinical and
-linked to the imprinting disorders they are involved in. A more recent
-counterpart of the Monk list.
-</li>
-<li>
-<a href="hgTrackUi?g=omimImprint">OMIM Genes</a> &mdash; the genes that the
-OMIM staff curate as imprinted or candidate imprinted, published through OMIM's
-GeneScout tool. The two are not distinguished in what OMIM publishes.
-</li>
-<li>
-<a href="hgTrackUi?g=geneimprint">Geneimprint Genes</a> &mdash; the genes that
-Geneimprint curates as imprinted or candidate imprinted, colored by which
-parental copy is expressed.
-</li>
-<li>
-<a href="hgTrackUi?g=methBaseAsm">MethBase2 ASM</a> &mdash; for every CpG site,
-the fraction of MethBase2 human methylomes in which the site was part of an
-allelically methylated region. Peaks mark candidate imprinting control regions.
+<a href="hgTrackUi?g=imprintedGenes">Imprinted Genes</a> &mdash; the genes that
+OMIM (green) and Geneimprint (blue, gray if only predicted) curate as imprinted or
+candidate imprinted.
 </li>
 <li>
 <a href="hgTrackUi?g=akbariIdmr">Akbari iDMRs</a> &mdash; 192 imprinted
 differentially methylated regions that Akbari et al. compiled from five
 genome-wide studies, colored by which parental copy is methylated.
-</li>
-<li>
-<a href="hgTrackUi?g=kaplanImprint">Rosenski ASM</a> &mdash; three annotation
-sets from a survey of allele-specific methylation in about 40 purified cell
-types: regions whose methylation follows the parent of origin, known control
-regions with their boundaries redrawn, and the much larger pool of regions
-carrying two methylation states that these were drawn from.
 </li>
 <li>
 <a href="hgTrackUi?g=hprcDmr">Kim DMRs</a> &mdash; regions where methylation
@@ -71,10 +48,22 @@ whose copy is more methylated.
 <a href="hgTrackUi?g=hprcMethDiff">Kim Meth Diff</a> &mdash; the maternal minus
 paternal methylation difference at each CpG site, averaged over the same genomes.
 </li>
+<li>
+<a href="hgTrackUi?g=kaplanImprint">Rosenski ASM</a> &mdash; three annotation
+sets from a survey of allele-specific methylation in about 40 purified cell
+types: regions whose methylation follows the parent of origin, known control
+regions with their boundaries redrawn, and the much larger pool of regions
+carrying two methylation states that these were drawn from.
+</li>
+<li>
+<a href="hgTrackUi?g=methBaseAsm">MethBase2 ASM</a> &mdash; for every CpG site,
+the fraction of MethBase2 human methylomes in which the site was part of an
+allelically methylated region. Peaks mark candidate imprinting control regions.
+</li>
 </ul>
 
 <p>
-The first five sets above are gene or region catalogs assembled from the
+The first three sets above are gene or region catalogs assembled from the
 literature, so they overlap by design: a gene called imprinted by OMIM is
 usually also in Geneimprint, and its control region is usually among the Akbari
 iDMRs.
@@ -106,15 +95,13 @@ The tracks that name a parental copy use the same two colors:
 </table>
 
 <p>
-What is being marked differs by track, because the sources annotate
-different things: Geneimprint names the copy that is <em>expressed</em>, while
-the Akbari and Monk iDMR tracks name the copy that is <em>methylated</em>, and
-the Kim DMRs name the copy with the higher methylation. So H19 is red in
-Geneimprint and blue in the iDMR tracks, and both are correct. Each track page
-states which copy its colors refer to, and adds any categories that only it
-uses. In Geneimprint, genes with the status Predicted are gray and genes with no
-parent of origin are black. The OMIM track does not state a parental copy and is
-drawn in black. The Rosenski ASM tracks use the same red and blue for the oocyte
+What is being marked differs by track: the Clinical iDMRs and Akbari iDMRs tracks
+name the copy that is <em>methylated</em>, and the Kim DMRs name the copy with
+the higher methylation. Each track page states which copy its colors refer to,
+and adds any categories that only it uses. The Imprinted Genes track is the
+exception: its colors show the source, green for OMIM, blue for Geneimprint and
+gray for genes that Geneimprint lists only as predicted. The expressed copy that
+Geneimprint gives is on the details page. The Rosenski ASM tracks use the same red and blue for the oocyte
 and the sperm gamete, in which the methylation is established.
 </p>
 
