@@ -3091,6 +3091,33 @@ printf("</PRE>\n");
  * old session-based links still open.  A separate longer-lived (~6-12 month) auto-expiring anonymous
  * trash tier, for links that should outlive normal trash, is still wanted later (see the
  * edit-kent-code skill note "Trash lifetime & durable anonymous storage"). */
+static void orderQuerySeqs(struct dnaSeq **pSeqList, char *order)
+/* Put the query sequences in the order of the uploaded FASTA, as hgc's buildBigPsl stored it on the
+ * results track's line (blatQueryOrder: space-separated, cgiEncoded names).  Sequences not named
+ * there keep their order, after the others.  A track made before that setting has none (NULL). */
+{
+if (isEmpty(order))
+    return;
+struct dnaSeq *ordered = NULL;
+char *dupe = cloneString(order), *word, *s = dupe;
+while ((word = nextWord(&s)) != NULL)
+    {
+    cgiDecode(word, word, strlen(word));
+    struct dnaSeq *seq;
+    for (seq = *pSeqList; seq != NULL; seq = seq->next)
+        if (sameString(seq->name, word))
+            break;
+    if (seq != NULL)
+        {
+        slRemoveEl(pSeqList, seq);
+        slAddHead(&ordered, seq);
+        }
+    }
+freeMem(dupe);
+slReverse(&ordered);
+*pSeqList = slCat(ordered, *pSeqList);
+}
+
 static void showBigPslResults(char *database, char *organism, char *bbFile, struct trackDb *ctTdb)
 /* Rebuild the Table view from the bigPsl file of a BLAT results custom track, without re-running
  * BLAT.  The query sequences come from the bigPsl file too.  bbFile must already be checked to be
@@ -3109,6 +3136,8 @@ if (bbFile == NULL || !fileExists(bbFile))
     }
 struct dnaSeq *querySeqs = NULL;
 struct psl *pslList = pslListFromBigPslFile(bbFile, &querySeqs);
+if (ctTdb != NULL)
+    orderQuerySeqs(&querySeqs, trackDbSetting(ctTdb, "blatQueryOrder"));
 if (pslList == NULL)
     {
     printf("<p>These BLAT results contained no alignments.</p>\n");

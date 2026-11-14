@@ -28478,11 +28478,27 @@ if (blatTrackMin > 0)
     safef(filterTag, sizeof filterTag, " filter.match=%d", blatTrackMin);
     extraForMismatch = catTwoStrings(extraForMismatch, filterTag);
     }
-char buffer[4096];
-safef(buffer, sizeof buffer, customTextTemplate, groupTag, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
+/* The query names in the order of the uploaded FASTA, for hgBlat's "Show Query Sequence" on a page
+ * reopened from this track: the bigPsl file has each query's sequence, but not their order.  Names
+ * are cgiEncoded, so they hold no space or quote, and space-separated. */
+struct dyString *orderTag = dyStringCreate(" blatQueryOrder=\"");
+struct dnaSeq *qSeq, *qSeqList = faReadAllMixed(faName);
+for (qSeq = qSeqList; qSeq != NULL; qSeq = qSeq->next)
+    {
+    char *encName = cgiEncode(qSeq->name);
+    dyStringPrintf(orderTag, "%s%s", qSeq == qSeqList ? "" : " ", encName);
+    freeMem(encName);
+    }
+dyStringAppendC(orderTag, '"');
+if (qSeqList != NULL)
+    extraForMismatch = catTwoStrings(extraForMismatch, orderTag->string);
+dnaSeqFreeList(&qSeqList);
+dyStringFree(&orderTag);
+struct dyString *trackLine = dyStringNew(4096);
+dyStringPrintf(trackLine, customTextTemplate, groupTag, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
 struct customTrack *ctList = getCtList();
-struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL, NULL);
+struct customTrack *newCts = customFactoryParse(database, trackLine->string, FALSE, NULL, NULL);
 
 /* Optionally clear PREVIOUS BLAT result tracks (those tagged blatResult=on) so the user is not
  * confused about which results are current.  hg.conf "blatOldTracks":
