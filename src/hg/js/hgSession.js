@@ -696,7 +696,8 @@ function sessSaveCardHtml(C) {
         sessEnc(C.userName) + '/[sessionName].';
     var descTip = 'Shown when the session is loaded, in the table below on mouseover, and in ' +
         'the Public Sessions gallery if this session is made public.';
-    var privTip = 'To load saved session links marked as private, you need to be logged in';
+    var privTip = 'To load saved session links later that were marked as private, you will need ' +
+        'to be logged in.';
     return '<div class="sessSaveCard">' +
         '<div class="sessSaveHead"><span class="sessSaveTitle">' +
         'Save the current view as a stable session link</span>' + what + '</div>' +
