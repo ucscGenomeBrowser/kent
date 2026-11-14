@@ -548,9 +548,14 @@ itemCount++;
 char *directUrl = trackDbSetting(tg->tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
 char *trackName = (tg->originalTrack != NULL) ? tg->originalTrack : tg->track;
-// lf is always a single linkedFeatures here. Paired-end BAM tracks use the series methods,
-// whose mapItemName would read lf as a linkedFeaturesSeries; the pair has the read's name.
-char *mapName = (tg->mapItemName == linkedFeaturesSeriesName) ? lf->name : tg->mapItemName(tg, lf);
+// lf is always a single linkedFeatures here, but the items of a paired-end BAM track are
+// linkedFeaturesSeries, and its name methods (also ctMapItemName, which calls tg->itemName)
+// read their item as one. So give them a series around lf, with the pair's name, which is
+// the read's name (lfsFromLf).
+struct linkedFeaturesSeries lfs = {.name = lf->name, .start = lf->start, .end = lf->end,
+                                   .features = lf};
+void *item = (tg->itemName == linkedFeaturesSeriesName) ? (void *)&lfs : (void *)lf;
+char *mapName = tg->mapItemName(tg, item);
 mapBoxHgcOrHgGene(hvg, lf->start, lf->end, x, y, width, height,
                   trackName, mapName, text, directUrl, withHgsid, NULL);
 }
