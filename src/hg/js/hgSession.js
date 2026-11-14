@@ -236,7 +236,8 @@ var SESS_LOCK_SVG = '<svg class="sessLock" xmlns="http://www.w3.org/2000/svg" vi
     ' 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/></svg>';
 
 function sessActionsHtml(row) {
-    // Order: Share, Edit, then the icon-only Overwrite (floppy) and Delete (trash).
+    // Order: Share, Edit, Update (floppy icon + word: overwrite with the current view), then the
+    // icon-only Delete (trash).
     if (row.remote) {
         // A session on another server can only be shown here: sharing, renaming, overwriting and
         // deleting all go through the cart and the session table of the server that holds it. So
@@ -251,9 +252,9 @@ function sessActionsHtml(row) {
         'title="Copy a shareable link or change who can see this session">Share</button>' +
         '<button type="button" class="gbPill" data-act="edit" data-key="' + e + '" ' +
         'title="Rename this session or edit its description">Edit</button>' +
-        '<button type="button" class="gbPill" data-act="overwrite" data-key="' + e + '" ' +
-        'aria-label="Overwrite with current view" ' +
-        'title="Overwrite this session with your current browser view">' + SESS_SAVE_SVG + '</button>' +
+        '<button type="button" class="gbPill sessUpdateBtn" data-act="overwrite" data-key="' + e + '" ' +
+        'title="Update this session: overwrite it with your current browser view">' + SESS_SAVE_SVG +
+        'Update</button>' +
         '<button type="button" class="gbPill danger" data-act="delete" data-key="' + e + '" ' +
         'aria-label="Delete this session" title="Delete this session">' + SESS_TRASH_SVG + '</button>';
 }
