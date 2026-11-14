@@ -1166,9 +1166,12 @@ function blatFormBuild() {
     // Checkbox plus the browser's standard info icon.  Same SVG and same title +
     // convertTitleTagsToMouseovers mechanism as printInfoIcon()/printInfoIconSvg() in hg/lib/hui.c,
     // so these read identically to the info icons on every other Genome Browser page.
+    // The hidden boolshad.<name> field is what cgiMakeCheckBox() adds on the other CGIs: an
+    // unticked box sends nothing, so without it the cart would keep the box's last "on" forever.
     var check = (name, on, label, tip) =>
         `<span class="blatCheck"><label><input type="checkbox" name="${name}" ` +
         `id="blat_${name}"${on ? ' checked' : ''}>${label}</label>` +
+        `<input type="hidden" name="boolshad.${name}" value="0">` +
         `<span class="blatInfo" title="${htmlEncode(tip)}">${BLAT_INFO_SVG}</span></span>`;
 
     // "Keep results" starting state.  The cart (cfg.keepResults) only remembers the choice within a
