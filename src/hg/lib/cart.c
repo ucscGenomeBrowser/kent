@@ -2708,8 +2708,10 @@ char *newDatabase = hubConnectLoadHubs(cart);
 // and by now hubConnectLoadHubs has loaded the hubs), or getDbAndGenome() would silently fall
 // back to the default one.  A track hub on an assembly hub names it "hub_<id>_<name>", and that
 // fails too when hub <id> is not connected here, e.g. because the id is from another server.
-// refs #30832
-if ((newDatabase != NULL) && !hDbIsActive(newDatabase))
+// Off by default: earlier fixes for this broke other hub cases, so it stays switchable
+// with hubGenomeNotFoundError=on in hg.conf.  refs #30832
+if ((newDatabase != NULL) && cfgOptionBooleanDefault("hubGenomeNotFoundError", FALSE)
+        && !hDbIsActive(newDatabase))
     hubGenomeNotFoundAbort(newDatabase, hubConnectNewHub());
 
 if (newDatabase != NULL)
