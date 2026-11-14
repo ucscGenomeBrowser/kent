@@ -1,0 +1,70 @@
+# #38764 -- ticking a track on the Track Search page did not turn it on. Every ticked track
+# was sent back as <track>=hide, and a container child also as <track>_sel=0, so "View in
+# Browser" drew nothing new. Reported by Todd Lowe for "trna".
+#
+# findTracks.clickedOne() in hg/js/utils.js read the checkbox and the visibility dropdown
+# with jQuery's attr('checked') and attr('selectedIndex'). After the jQuery updates of
+# August 2024 (982640144e4 to 1.12.4, 572d31a9744 to 3.7.1) attr() reads the HTML
+# attribute, the state the page was drawn with, so a box the user ticked still read as
+# unticked and the dropdown never left Hide. Fixed in a5f4fa7b857, which reads them with
+# prop().
+#
+# Two tracks, one per branch of clickedOne():
+#   tRNAs  a top-level track, hidden on a fresh cart. Only <track>=<vis> is sent.
+#   hmc    a plain track in the constraintSuper supertrack, which is hidden on a fresh cart.
+#          <track>_sel=1 is sent too, and that is what opens the supertrack (cart.c,
+#          cartTdbOverrideSuperTracks).
+# For each: the row starts unticked at Hide; ticking it moves the dropdown off Hide and
+# puts that visibility in the hidden input the form sends -- checked BEFORE the page is
+# left, which is where the bug was; then "View in Browser" draws the track.
+#
+# No hg.conf gate. The urlTrackOpensContainer setting from #38762 is not involved: hmc
+# arrives with _sel=1, which opens its supertrack on every server.
+#
+# Not asserted: the Clear button's dropdown resets and "check all", which had the same
+# attr()/prop() mistake and were fixed in the same commit.
+proof:
+  - "assertion-only 2026-11-13 -- written with a5f4fa7b857, before it reached genome-test"
+  - "xfail 2026-11-13 -- fails on genome-test at step 5, its own check: #tRNAs_id holds hide, wanted pack; input[name='tRNAs'] holds hide, wanted pack"
+  - "sandbox-ab 2026-11-13 -- all steps pass on hgwdev-max with a5f4fa7b857 in its htdocs js; genome-test without it fails at step 5 as above"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - go: "chr6:26,500,000-26,600,000"
+
+  # tRNAs: a top-level track, pack after the tick.
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hgt_tSearch=Search&tsSimple=trna"
+  - expect:
+      has: "#tRNAs_sel_id:not(:checked)"
+      value: {sel: "#tRNAs_id", is: "hide"}
+  - click: "#tRNAs_sel_id"
+  - expect:
+      has: "#tRNAs_sel_id:checked"
+      value:
+        - {sel: "#tRNAs_id", is: "pack"}
+        - {sel: "input[name='tRNAs']", is: "pack"}
+  - click: "input.viewBtn"
+  - wait: "#imgTbl"
+  - expect:
+      rows: [tRNAs]
+
+  # hmc: a child of a hidden supertrack, full (its last choice) after the tick, with _sel=1.
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hgt_tSearch=Search&tsSimple=hmc"
+  - expect:
+      has: "#hmc_sel_id:not(:checked)"
+      value: {sel: "#hmc_id", is: "hide"}
+  - click: "#hmc_sel_id"
+  - expect:
+      has: "#hmc_sel_id:checked"
+      value:
+        - {sel: "#hmc_id", is: "full"}
+        - {sel: "input[name='hmc']", is: "full"}
+        - {sel: "input[name='hmc_sel']", is: "1"}
+  - click: "input.viewBtn"
+  - wait: "#imgTbl"
+  - expect:
+      rows: [tRNAs, hmc]
+      noRows: [jarvis, ukbDepletion]
