@@ -28441,6 +28441,27 @@ unlink(bigPslFile);
 
 static char *blatCartDbBefore = NULL;   /* the cart's db, if doMiddle changed it to blatDb */
 
+static char *blatQueryOrderSetting(char *faName)
+/* Return the track line setting " blatQueryOrder=\"<names>\"" with the query names in the order
+ * of the uploaded FASTA, or "" if it has none.  hgBlat uses it for "Show Query Sequence" on a page
+ * reopened from the track: the bigPsl file has each query's sequence, but not their order.  Names
+ * are cgiEncoded, so they hold no space or quote, and space-separated. */
+{
+struct dnaSeq *qSeq, *qSeqList = faReadAllMixed(faName);
+if (qSeqList == NULL)
+    return "";
+struct dyString *setting = dyStringCreate(" blatQueryOrder=\"");
+for (qSeq = qSeqList; qSeq != NULL; qSeq = qSeq->next)
+    {
+    char *encName = cgiEncode(qSeq->name);
+    dyStringPrintf(setting, "%s%s", qSeq == qSeqList ? "" : " ", encName);
+    freeMem(encName);
+    }
+dyStringAppendC(setting, '"');
+dnaSeqFreeList(&qSeqList);
+return dyStringCannibalize(&setting);
+}
+
 static void buildBigPsl(char *fileNames)
 /* Build a custom track with a bigPsl file out of blat results.
  * Bring up the bigPsl detail page with all the alignments. */
@@ -28478,22 +28499,7 @@ if (blatTrackMin > 0)
     safef(filterTag, sizeof filterTag, " filter.match=%d", blatTrackMin);
     extraForMismatch = catTwoStrings(extraForMismatch, filterTag);
     }
-/* The query names in the order of the uploaded FASTA, for hgBlat's "Show Query Sequence" on a page
- * reopened from this track: the bigPsl file has each query's sequence, but not their order.  Names
- * are cgiEncoded, so they hold no space or quote, and space-separated. */
-struct dyString *orderTag = dyStringCreate(" blatQueryOrder=\"");
-struct dnaSeq *qSeq, *qSeqList = faReadAllMixed(faName);
-for (qSeq = qSeqList; qSeq != NULL; qSeq = qSeq->next)
-    {
-    char *encName = cgiEncode(qSeq->name);
-    dyStringPrintf(orderTag, "%s%s", qSeq == qSeqList ? "" : " ", encName);
-    freeMem(encName);
-    }
-dyStringAppendC(orderTag, '"');
-if (qSeqList != NULL)
-    extraForMismatch = catTwoStrings(extraForMismatch, orderTag->string);
-dnaSeqFreeList(&qSeqList);
-dyStringFree(&orderTag);
+extraForMismatch = catTwoStrings(extraForMismatch, blatQueryOrderSetting(faName));
 struct dyString *trackLine = dyStringNew(4096);
 dyStringPrintf(trackLine, customTextTemplate, groupTag, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
