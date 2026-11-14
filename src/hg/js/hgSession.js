@@ -721,12 +721,12 @@ function sessRecentHtml(recent) {
     // description.  Hidden when there are no saved sessions.  The button's own mouseover is easy to
     // miss, so a visible (i) bubble carries the same text.
     if (!recent) { return ''; }
-    var tip = 'Overwrite this session with the currently active view; keeps the session name and ' +
-        'description identical';
+    var tip = 'Update this session: overwrite it with the currently active view; keeps the ' +
+        'session name and description identical';
     return '<div class="sessRecent">Most recently used session: <b>' + sessEnc(recent.name) +
         '</b> <span class="sessRecentTime">(' + sessEnc(recent.lastUse) + ')</span> ' +
-        '<button type="button" class="gbPill" id="sessUpdateNow" title="' + tip + '">' +
-        'Overwrite now</button> <span class="sessInfo" title="' + tip + '">&#9432;</span></div>';
+        '<button type="button" class="gbPill sessIconBtn" id="sessUpdateNow" title="' + tip + '">' +
+        SESS_UPDATE_SVG + 'Update now</button> <span class="sessInfo" title="' + tip + '">&#9432;</span></div>';
 }
 
 function sessScrollToTable() {
@@ -839,8 +839,8 @@ function sessionBuild() {
     });
 
     // The session most recently used (max lastUse: saved, overwritten or opened), for the one-click
-    // "Overwrite now".
-    // Only this server's own sessions: "Overwrite now" saves through this server's cart.
+    // "Update now".
+    // Only this server's own sessions: "Update now" saves through this server's cart.
     var recent = null;
     (sessData.sessions || []).forEach(function(s) {
         if (s.remote) { return; }
@@ -866,10 +866,10 @@ function sessionBuild() {
     if (recent) {
         $('#sessUpdateNow').on('click', function() {
             sessConfirm({
-                title: 'Overwrite session',
+                title: 'Update session',
                 bodyHtml: 'Overwrite <b>' + sessEnc(recent.name) + '</b> with the view you are ' +
                     'looking at now? The session name and description stay the same.',
-                okLabel: 'Overwrite now',
+                okLabel: 'Update now',
                 onOk: function() { sessDoOverwrite(recent); }
             });
         });
@@ -978,7 +978,7 @@ function sessBuildTable() {
             { title: 'Session', className: 'sessNameCol', data: 'name',
               render: function(d, type, row) {
                   return (type === 'display') ? sessNameCellHtml(row) : row.name; } },
-            { title: 'Assembly', data: 'db',
+            { title: 'Assembly and Locus', data: 'db',
               render: function(d, type, row) {
                   if (type !== 'display') { return row.db || ''; }
                   var html = sessEnc(row.db || 'n/a');
@@ -1071,11 +1071,11 @@ function sessBuildTable() {
     // Column-header tooltips (set title, then let utils.js convert to styled mouseovers).
     var tips = {
         'Session': 'Click a name to load that session in the Genome Browser',
-        'Assembly': 'The genome assembly this session was saved on',
+        'Assembly and Locus': 'The genome assembly and the position this session was saved on',
         'Created': 'When the session was first saved',
         'Last used': 'When the session was last saved or loaded',
         'Views': 'How many times this session has been loaded',
-        'Actions': 'Overwrite with your current view, share, edit, or delete'
+        'Actions': 'Share, edit, update with your current view, or delete'
     };
     $('#sessionAppTable thead th').each(function() {
         var t = tips[$(this).text().trim()];

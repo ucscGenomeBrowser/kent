@@ -14,12 +14,15 @@
  * not missed. */
 #sessionApp .sessIntro .sessSignIn { color:#000; border:2px solid #000; }
 
-/* Save-current-view card - the primary action.  Neutral light-grey panel. */
-#sessionApp .sessSaveCard { border:0; background:#f6f8fa; padding:14px 16px;
+/* Save-current-view card and the "most recently used session" bar - the two actions on the page -
+ * are dark panels with white text so they stand out from the table below. */
+#sessionApp .sessSaveCard, #sessionApp .sessRecent { background:#1E2833; color:#fff; }
+#sessionApp .sessSaveCard .sessInfo, #sessionApp .sessRecent .sessInfo { color:#fff; }
+#sessionApp .sessSaveCard { border:0; padding:14px 16px;
     display:flex; flex-direction:column; gap:12px; margin:0 0 12px; }
 #sessionApp .sessSaveHead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
 /* Title and the current-view summary share one font size (title is just bold). */
-#sessionApp .sessSaveTitle { font-size:14px; font-weight:700; color:var(--accent); }
+#sessionApp .sessSaveTitle { font-size:14px; font-weight:700; color:#fff; }
 #sessionApp .sessSaveWhat { font-size:14px; }
 #sessionApp .sessSaveRow { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
 /* Name/description: no label - the placeholder and the info bubble after the box say what it is -
@@ -32,12 +35,18 @@
 
 #sessionApp .sessSaveCheck { display:flex; align-items:center; gap:7px; font-size:13px;
     color:var(--ink); white-space:nowrap; }
+#sessionApp .sessSaveCard .sessSaveCheck { color:#fff; }
+/* The navy primary button would vanish on the dark card; white with dark text instead. */
+#sessionApp .sessSaveCard .gbPill.primary { background:#fff; color:#1E2833; border-color:#fff; }
+#sessionApp .sessSaveCard .gbPill.primary:hover { background:#dde3ea; }
 
-/* One-click "overwrite the most recently saved session" - a compact thin bar above the save card. */
+/* One-click "update the most recently used session" - a compact thin bar above the save card. */
 #sessionApp .sessRecent { display:flex; align-items:center; gap:8px; flex-wrap:wrap;
-    border:0; background:#f6f8fa; padding:6px 12px; font-size:14px; margin:0 0 12px; }
+    border:0; padding:6px 12px; font-size:14px; margin:0 0 12px; }
 #sessionApp .sessRecent .gbPill { padding:2px 10px; }
-#sessionApp .sessRecentTime { color:var(--muted); }
+#sessionApp .sessRecent .gbPill.sessIconBtn { display:inline-flex; align-items:center; gap:4px;
+    padding-left:7px; }
+#sessionApp .sessRecentTime { color:#c8d0da; }
 /* Info bubble (navy circled i) used for the recent-update hint and session descriptions. */
 #sessionApp .sessInfo { color:var(--accent); cursor:help; font-size:15px; line-height:1; }
 
@@ -74,11 +83,11 @@
     justify-content:center; height:24px; padding:0 9px; font-size:12px; margin-left:5px;
     box-sizing:border-box; vertical-align:middle; }
 #sessionAppTable td.sessActionsCol .gbPill.danger { padding:0 8px; }
-#sessionAppTable .sessIcon { width:17px; height:17px; display:block; }
+#sessionApp .sessIcon { width:17px; height:17px; display:block; }
 /* Share, Edit, Update: icon plus word (a floppy icon alone read as "save to file"). */
 #sessionAppTable td.sessActionsCol .gbPill.sessIconBtn { gap:4px; padding-left:7px; }
 /* Lucide stroke glyphs and the trash glyph fill almost their whole box; 13px keeps them small. */
-#sessionAppTable .sessIcon.sessLucide { width:13px; height:13px; }
+#sessionApp .sessIcon.sessLucide { width:13px; height:13px; }
 #sessionAppTable .sessIcon.sessTrash { width:13px; height:13px; }
 #sessionAppTable .sessPublic { display:inline-block; margin-left:6px; font-size:11px; font-weight:700;
     color:#1f7a34; }
