@@ -8887,6 +8887,69 @@ if (s != NULL)
 return hideKids;
 }
 
+static boolean requestTurnsTrackOn()
+/* Return TRUE if a CGI variable on this request has a visibility other than hide as its
+ * value.  Only such a request can open a hidden supertrack, and almost no request has one,
+ * so getTrackList() asks this once instead of looking up every track on the request. */
+{
+static char *onVis[] = {"dense", "squish", "pack", "full", "show"};
+struct cgiVar *var;
+for (var = cgiVarList(); var != NULL; var = var->next)
+    {
+    if (stringArrayIx(var->val, onVis, ArraySize(onVis)) >= 0)
+        return TRUE;
+    }
+return FALSE;
+}
+
+static boolean superTrackOnRequest(struct trackDb *tdb)
+/* Return TRUE if this request sets the visibility of any supertrack above tdb. */
+{
+struct trackDb *ancestor;
+for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+    {
+    if (!tdbIsSuperTrack(ancestor))
+        continue;
+    if (cgiVarExists(ancestor->track))
+        return TRUE;
+    if (startsWith("hub_", ancestor->track) && cgiVarExists(trackHubSkipHubName(ancestor->track)))
+        return TRUE;
+    }
+return FALSE;
+}
+
+static void requestOpensSuperTrack(struct track *track)
+/* A link, a search result or the track search page turns on a member of a supertrack by
+ * naming it on the request.  If its supertrack is hidden, the member would stay hidden, so
+ * mark it as just selected: parentChildCartCleanup() then shows the supertrack and hides its
+ * other members, as whoever made the link wanted to see this track, not the rest.  Only a
+ * variable on the request does this, never one in the cart, or a supertrack could never be
+ * hidden again.  A supertrack that is on the request itself decides on its own, because its
+ * configuration page submits its own setting together with that of every member.
+ * refs #38762 */
+{
+char *vis = cgiOptionalString(track->track);
+if (vis == NULL && startsWith("hub_", track->track))
+    {
+    // the bare name is the native track's if the assembly has one by that name
+    vis = cgiOptionalString(trackHubSkipHubName(track->track));
+    if (vis != NULL && !hubTrackOwnsBareName(database, track->track))
+        vis = NULL;
+    }
+if (vis == NULL || sameString(vis, "hide"))
+    return;
+// what the request asked for may have been overruled, e.g. by a _hideKids
+char *cartVis = cartOptionalString(cart, track->track);
+if (cartVis == NULL || sameString(cartVis, "hide"))
+    return;
+if (superTrackOnRequest(track->tdb))
+    return;
+// the same mark tdbSetCartVisibility() leaves for a position search result
+char sel[1024];
+safef(sel, sizeof sel, "%s_sel", track->track);
+cartSetString(cart, sel, "1");
+}
+
 static void setSearchedTrackToPackOrFull(struct track *trackList)
 // Open track associated with search position if any. Also open its parents if any.
 {
@@ -9243,6 +9306,10 @@ if (defaultGeneTrack)
         cartSetString(cart, defaultGeneTrack, s);
     }
 
+// a track turned on by the request opens its hidden supertrack, refs #38762
+boolean requestCanOpenSuperTracks = cfgOptionBooleanDefault("urlTrackOpensContainer", FALSE)
+                                    && requestTurnsTrackOn();
+
 for (track = trackList; track != NULL; track = track->next)
     {
     // deal with any supertracks we're seeing for the first time
@@ -9305,6 +9372,9 @@ for (track = trackList; track != NULL; track = track->next)
             cartRemove(cart, trackHubSkipHubName(track->track)); // remove the undecorated version
             }
         }
+
+    if (requestCanOpenSuperTracks && tdbIsSuperTrackChild(track->tdb))
+        requestOpensSuperTrack(track);
 
     // now deal with composite track children
     if (tdbIsComposite(track->tdb) || tdbIsMultiTrack(track->tdb))
