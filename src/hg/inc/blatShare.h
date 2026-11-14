@@ -13,14 +13,16 @@
 
 struct cart;
 struct trackDb;
+struct dnaSeq;
 
 boolean blatIsResultTrack(struct trackDb *tdb);
 /* Return TRUE if tdb is a BLAT results custom track, tagged blatResult=on by hgc's buildBigPsl. */
 
-struct psl *pslListFromBigPslFile(char *bbFileName);
+struct psl *pslListFromBigPslFile(char *bbFileName, struct dnaSeq **retQuerySeqs);
 /* Read every alignment out of a bigPsl bigBed file into a psl list, in query-display order.  The
  * two-char (query,target) strand pslFromBigPsl yields is collapsed to a single char for non-protein
- * queries, to match the classic/fresh result page. */
+ * queries, to match the classic/fresh result page.  If retQuerySeqs is non-NULL, also return the
+ * query sequences stored in the file, one per query name, in the order they were first seen. */
 
 struct psl *pslFromBigPslFileMatch(char *bbFileName, char *chrom, int tStart, char *qName,
                                    char **retSeq, char **retCds);

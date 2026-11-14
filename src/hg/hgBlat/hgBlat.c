@@ -625,18 +625,38 @@ if (sqlDatabaseExists(database))
 return locusConn;
 }
 
+static void jsonWriteQuerySeqs(struct jsonWrite *jw, struct dnaSeq *seqList)
+/* Write the query sequences for the "Show Query Sequence" button, if there are any. */
+{
+if (seqList == NULL)
+    return;
+struct dnaSeq *seq;
+jsonWriteListStart(jw, "querySeqs");
+for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "name", seq->name);
+    jsonWriteString(jw, "seq", seq->dna);
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+}
+
 static void printBlatResultsApp(struct psl *pslList, char *database, char *organism, char *browserUrl,
     char *hgcUrl, char *pslName, char *faName, char *customText, char *uiState, char *unhideTrack,
-    struct sqlConnection *locusConn, struct subText *subList, char *ctName)
+    struct sqlConnection *locusConn, struct subText *subList, struct trackDb *ctTdb,
+    struct dnaSeq *ctQuerySeqs)
 /* "Table" output mode: emit the hit data as an inline JSON object plus an empty container, and let
  * hgBlat.js build the UI (summary strip, DataTable with identity/coverage bars, detail panel).
  * All presentation lives in hgBlat.js; this function only assembles data.
  * On a fresh search the per-hit "Alignment details" links go to hgc's htcUserAli (which reads the
  * ephemeral trash .pslx/.fa); on a shared-link reopen (pslName NULL) there is no trash, so they go
  * to htcBlatAlign instead, which rebuilds each alignment from the durable bigPsl custom track.
- * ctName is the results custom track when the page was reopened from it (blatCt=), else NULL. */
+ * ctTdb is the results custom track when the page was reopened from it (blatCt= or a shared
+ * link), else NULL, and ctQuerySeqs the query sequences stored in that track. */
 {
 struct psl *psl;
+char *ctName = ctTdb != NULL ? ctTdb->track : NULL;
 jsIncludeDataTablesLibs();
 webIncludeResourceFile("gbModern.css");   // shared house-style components (.gbPill, .gbCard, ...)
 webIncludeResourceFile("hgBlat.css");
@@ -664,24 +684,29 @@ jsonWriteBoolean(jw, "altFixFilter", sameWord(trackHubSkipHubName(organism), "Hu
 /* Sharing a link only makes sense when a durable bigPsl custom track was made from the results
  * (autoBigPsl); otherwise there is nothing for the shared session to reopen from. */
 jsonWriteBoolean(jw, "canShare", autoBigPsl);
-/* Renaming the results custom track needs the bigPsl track + the C blatRenameCt() helper, both only
- * present with autoBigPsl, and the helper only on a page built from the trash files (pslName set),
- * not on a reopen from the track or a shared link.  hgBlat.js shows its own "Rename BLAT Track"
- * button + modal in that case, pre-filled with the track's current name/description (below) so it
- * needs no page-global. */
-jsonWriteBoolean(jw, "canRename", autoBigPsl && pslName != NULL);
+/* Renaming the results custom track needs the bigPsl track (autoBigPsl).  On a page built from the
+ * trash files (pslName set) the track is rebuilt under the new name by the C blatRenameCt() helper;
+ * on a page reopened from the track (ctName set) hgBlat renames it in place (doRenameCt).  hgBlat.js
+ * shows its own "Rename BLAT Track" button + modal, pre-filled with the track's current
+ * name/description (below) so it needs no page-global. */
+jsonWriteBoolean(jw, "canRename", autoBigPsl && (pslName != NULL || ctName != NULL));
 /* Deleting needs the name of the results track: on a page rendered from the trash files hgBlat.js
- * gets it from the track this page builds (window.blatCtName in showAliPlaces), on a blatCt= reopen
- * it is ctName.  A reopen from an old shared session has neither. */
+ * gets it from the track this page builds (window.blatCtName in showAliPlaces), on a reopen from
+ * the track it is ctName.  A reopen from a shared session whose track is gone has neither. */
 jsonWriteBoolean(jw, "canDelete", autoBigPsl && (pslName != NULL || ctName != NULL));
 if (ctName != NULL)
     jsonWriteString(jw, "ctName", ctName);
-if (autoBigPsl)
+if (ctTdb != NULL)
     {
-    char *ctName = NULL, *ctDescription = NULL;
-    getCustomName(database, cart, pslList, &ctName, &ctDescription);
-    jsonWriteString(jw, "trackName", ctName);
-    jsonWriteString(jw, "trackDescription", ctDescription);
+    jsonWriteString(jw, "trackName", ctTdb->shortLabel);
+    jsonWriteString(jw, "trackDescription", ctTdb->longLabel);
+    }
+else if (autoBigPsl)
+    {
+    char *trackName = NULL, *trackDescription = NULL;
+    getCustomName(database, cart, pslList, &trackName, &trackDescription);
+    jsonWriteString(jw, "trackName", trackName);
+    jsonWriteString(jw, "trackDescription", trackDescription);
     }
 /* The classic "Old BLAT result page" view re-reads the trash .pslx from the current search, so it
  * is only offered on a fresh search (pslName set), not on a shared-link reopen rebuilt from the
@@ -725,26 +750,17 @@ else if (!autoBigPsl && pslName != NULL)
 dyStringPrintf(va, "&%s%s", uiState, unhideTrack);
 jsonWriteString(jw, "viewAllUrl", va->string);
 dyStringFree(&va);
-/* The query sequence(s) for the "Show Query Sequence" button.  Only available on a fresh search,
- * where the uploaded FASTA is still in trash (faName); on a shared-link reopen faName is NULL and
- * the button is omitted client-side. */
+/* The query sequence(s) for the "Show Query Sequence" button: the uploaded FASTA while it is in
+ * trash (faName), else the sequences stored in the results track.  With neither, the button is
+ * omitted client-side. */
 if (faName != NULL && fileExists(faName))
     {
-    struct dnaSeq *qSeqList = faReadAllMixed(faName), *qSeq;
-    if (qSeqList != NULL)
-        {
-        jsonWriteListStart(jw, "querySeqs");
-        for (qSeq = qSeqList; qSeq != NULL; qSeq = qSeq->next)
-            {
-            jsonWriteObjectStart(jw, NULL);
-            jsonWriteString(jw, "name", qSeq->name);
-            jsonWriteString(jw, "seq", qSeq->dna);
-            jsonWriteObjectEnd(jw);
-            }
-        jsonWriteListEnd(jw);
-        }
+    struct dnaSeq *qSeqList = faReadAllMixed(faName);
+    jsonWriteQuerySeqs(jw, qSeqList);
     dnaSeqFreeList(&qSeqList);
     }
+else
+    jsonWriteQuerySeqs(jw, ctQuerySeqs);
 jsonWriteObjectEnd(jw);   // config
 
 jsonWriteListStart(jw, "hits");
@@ -1273,7 +1289,7 @@ else  // hyperlink
             locusConn = blatLocusConn(database, &subList);
 
     if (tableOut)
-        printBlatResultsApp(pslList, database, organism, browserUrl, hgcUrl, pslName, faName, customText, uiState, unhideTrack, locusConn, subList, NULL);
+        printBlatResultsApp(pslList, database, organism, browserUrl, hgcUrl, pslName, faName, customText, uiState, unhideTrack, locusConn, subList, NULL, NULL);
     else
         {
         printf("<DIV STYLE=\"display:block;\"><PRE>");
@@ -3075,11 +3091,11 @@ printf("</PRE>\n");
  * old session-based links still open.  A separate longer-lived (~6-12 month) auto-expiring anonymous
  * trash tier, for links that should outlive normal trash, is still wanted later (see the
  * edit-kent-code skill note "Trash lifetime & durable anonymous storage"). */
-static void showBigPslResults(char *database, char *organism, char *bbFile, char *ctName)
+static void showBigPslResults(char *database, char *organism, char *bbFile, struct trackDb *ctTdb)
 /* Rebuild the Table view from the bigPsl file of a BLAT results custom track, without re-running
- * BLAT and without any stored query sequence.  bbFile must already be checked to be a server
- * file (trash or session data); NULL or a missing file says the results are gone.  ctName is the
- * custom track's name if known, for the "Delete track" button. */
+ * BLAT.  The query sequences come from the bigPsl file too.  bbFile must already be checked to be
+ * a server file (trash or session data); NULL or a missing file says the results are gone.  ctTdb
+ * is the custom track if known, for the "Rename" and "Delete track" buttons. */
 {
 cartWebStart(cart, database, "%s (%s) BLAT Results",
     trackHubSkipHubName(organism), trackHubSkipHubName(database));
@@ -3091,7 +3107,8 @@ if (bbFile == NULL || !fileExists(bbFile))
     cartWebEnd();
     return;
     }
-struct psl *pslList = pslListFromBigPslFile(bbFile);
+struct dnaSeq *querySeqs = NULL;
+struct psl *pslList = pslListFromBigPslFile(bbFile, &querySeqs);
 if (pslList == NULL)
     {
     printf("<p>These BLAT results contained no alignments.</p>\n");
@@ -3124,7 +3141,8 @@ struct sqlConnection *locusConn = blatLocusConn(database, &subList);
 char uiState[64];
 safef(uiState, sizeof uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 printBlatResultsApp(pslList, database, organism, hgTracksName(), hgcName(),
-    NULL, NULL, NULL, uiState, "", locusConn, subList, ctName);
+    NULL, NULL, NULL, uiState, "", locusConn, subList, ctTdb, querySeqs);
+dnaSeqFreeList(&querySeqs);
 cartWebEnd();
 }
 
@@ -3133,7 +3151,21 @@ static void doShareReopen(char *database, char *organism)
  * was saved with the session.  The custom track (and its bigBed file) is kept alive by
  * refreshNamedSessionCustomTracks for as long as the shared session exists, so this is durable. */
 {
-showBigPslResults(database, organism, blatFindPinnedBigPsl(cart), NULL);
+char *bbFile = blatFindPinnedBigPsl(cart);
+/* The BLAT results track of the session that holds this file, for Rename and Delete. */
+struct trackDb *ctTdb = NULL;
+if (bbFile != NULL)
+    {
+    struct customTrack *ct, *ctList = customTracksParseCart(database, cart, NULL, NULL);
+    for (ct = ctList; ct != NULL; ct = ct->next)
+        if (ct->tdb != NULL && blatIsResultTrack(ct->tdb)
+        &&  sameOk(trackDbSetting(ct->tdb, "bigDataUrl"), bbFile))
+            {
+            ctTdb = ct->tdb;
+            break;
+            }
+    }
+showBigPslResults(database, organism, bbFile, ctTdb);
 }
 
 static void doCtReopen(char *database, char *organism, char *ctName)
@@ -3143,6 +3175,7 @@ static void doCtReopen(char *database, char *organism, char *ctName)
  * name comes from the URL. */
 {
 char *bbFile = NULL;
+struct trackDb *ctTdb = NULL;
 struct customTrack *ct, *ctList = customTracksParseCart(database, cart, NULL, NULL);
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
@@ -3153,6 +3186,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     &&  isTrashOrSessionDataPath(bigDataUrl))
         {
         bbFile = bigDataUrl;
+        ctTdb = ct->tdb;
         /* cartOrTdbString: a filter.match the user set in the track's settings wins over the one
          * the search put in the track line. */
         blatBigPslMin = atoi(cartOrTdbString(cart, ct->tdb, "filter.match", "0"));
@@ -3163,47 +3197,116 @@ for (ct = ctList; ct != NULL; ct = ct->next)
  * those of the newest search. */
 if (bbFile != NULL)
     cartSetString(cart, "blatLastBigBed", bbFile);
-showBigPslResults(database, organism, bbFile, bbFile != NULL ? ctName : NULL);
+showBigPslResults(database, organism, bbFile, ctTdb);
 }
 
-static void doDeleteCt(char *database, char *ctName)
-/* hgBlat.js's "Delete track" button: remove one BLAT results custom track of this cart and answer
- * with JSON, {"deleted":true} or {"error":"..."}.  The assembly comes with the request and the
- * cart's db is not changed, since the user may have switched assemblies in another tab.  Only a
- * custom track tagged blatResult=on is removed, since the name comes from the request. */
+static char *cleanCtLabel(char *s, int maxLen)
+/* Return a clone of a track name or description from the request, cut to maxLen characters, with
+ * tabs and line breaks turned into spaces so it cannot break the custom track file's track line.
+ * Quotes are dropped here, as saveTdbLine() would drop them when it writes the file, so the track
+ * id made from the name now is the one the track gets when the file is read back. */
 {
-char *err = NULL;
+char *label = cloneString(s);
+subChar(label, '\t', ' ');
+subChar(label, '\n', ' ');
+subChar(label, '\r', ' ');
+stripChar(label, '"');
+stripChar(label, '\'');
+char *trimmed = cloneString(trimSpaces(label));
+freeMem(label);
+if (strlen(trimmed) > maxLen)
+    trimmed[maxLen] = '\0';
+return trimmed;
+}
+
+static void doEditCt(char *database, char *ctName, char *newName, char *newDescription)
+/* hgBlat.js's "Delete track" and "Rename BLAT Track" buttons on a page reopened from the track:
+ * remove one BLAT results custom track of this cart, or, if newName is non-NULL, give it a new
+ * name and description in place, and answer with JSON, {"deleted":true}, {"renamed":true,
+ * "ctName":"<new track id>"} or {"error":"..."}.  A custom track's id is made from its name
+ * (customTrackTableFromLabel), so a rename changes it, and the cart settings of the old id move to
+ * the new one.  The assembly comes with the request and the cart's db is not changed, since the
+ * user may have switched assemblies in another tab.  Only a custom track tagged blatResult=on is
+ * changed, since the name comes from the request. */
+{
+boolean rename = (newName != NULL);
+char *err = NULL, *newCtName = NULL;
+if (rename)
+    {
+    newName = cleanCtLabel(newName, 80);
+    newDescription = cleanCtLabel(newDescription, 120);
+    if (isEmpty(newName))
+        err = "the track name is empty.";
+    }
 /* Parts of the custom track code read the cart's db rather than the database passed to them
  * (customTracksSaveCart, for one), so the cart has the results' db while they run. */
 char *cartDb = cloneString(cartOptionalString(cart, "db"));
 struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
+if (err == NULL)
     {
-    if (!hDbIsActive(database) && !trackHubDatabase(database))
-        err = "The assembly of these BLAT results is not available.";
-    else
+    if (errCatchStart(errCatch))
         {
-        cartSetString(cart, "db", database);
-        struct customTrack *ct, *ctList = customTracksParseCart(database, cart, NULL, NULL);
-        for (ct = ctList; ct != NULL; ct = ct->next)
-            if (ct->tdb != NULL && sameString(ct->tdb->track, ctName)
-            &&  blatIsResultTrack(ct->tdb))
-                break;
-        if (ct == NULL)
-            err = "The custom track with these BLAT results was not found. It may have been "
-                  "deleted already.";
+        if (!hDbIsActive(database) && !trackHubDatabase(database))
+            err = "The assembly of these BLAT results is not available.";
         else
             {
-            slRemoveEl(&ctList, ct);
-            customTracksSaveCart(database, cart, ctList);
-            cartRemove(cart, ctName);
-            char prefix[256];
-            safef(prefix, sizeof prefix, "%s.", ctName);
-            cartRemovePrefix(cart, prefix);
+            cartSetString(cart, "db", database);
+            struct customTrack *ct, *ctList = customTracksParseCart(database, cart, NULL, NULL);
+            for (ct = ctList; ct != NULL; ct = ct->next)
+                if (ct->tdb != NULL && sameString(ct->tdb->track, ctName)
+                &&  blatIsResultTrack(ct->tdb))
+                    break;
+            if (ct == NULL)
+                err = "The custom track with these BLAT results was not found. It may have been "
+                      "deleted already.";
+            else if (rename)
+                {
+                newCtName = customTrackTableFromLabel(newName);
+                struct customTrack *other;
+                for (other = ctList; other != NULL; other = other->next)
+                    if (other != ct && other->tdb != NULL
+                    &&  sameString(other->tdb->track, newCtName))
+                        err = "another custom track already has this name.";
+                if (err == NULL)
+                    {
+                    /* saveTdbLine() writes the track line's name and description from these. */
+                    ct->tdb->shortLabel = newName;
+                    ct->tdb->longLabel = newDescription;
+                    customTracksSaveCart(database, cart, ctList);
+                    if (differentString(newCtName, ctName))
+                        {
+                        /* the track's visibility (ct_x) and its settings (ct_x.*) */
+                        char *vis = cartOptionalString(cart, ctName);
+                        if (vis != NULL)
+                            cartSetString(cart, newCtName, vis);
+                        char prefix[256];
+                        safef(prefix, sizeof prefix, "%s.", ctName);
+                        struct slPair *var, *varList = cartVarsWithPrefix(cart, prefix);
+                        for (var = varList; var != NULL; var = var->next)
+                            {
+                            char newVar[512];
+                            safef(newVar, sizeof newVar, "%s%s", newCtName,
+                                  var->name + strlen(ctName));
+                            cartSetString(cart, newVar, (char *)var->val);
+                            }
+                        cartRemove(cart, ctName);
+                        cartRemovePrefix(cart, prefix);
+                        }
+                    }
+                }
+            else
+                {
+                slRemoveEl(&ctList, ct);
+                customTracksSaveCart(database, cart, ctList);
+                cartRemove(cart, ctName);
+                char prefix[256];
+                safef(prefix, sizeof prefix, "%s.", ctName);
+                cartRemovePrefix(cart, prefix);
+                }
             }
         }
+    errCatchEnd(errCatch);
     }
-errCatchEnd(errCatch);
 if (cartDb != NULL)
     cartSetString(cart, "db", cartDb);
 else
@@ -3214,9 +3317,14 @@ if (errCatch->gotError)
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 if (err == NULL)
-    jsonWriteBoolean(jw, "deleted", TRUE);
+    {
+    jsonWriteBoolean(jw, rename ? "renamed" : "deleted", TRUE);
+    if (rename)
+        jsonWriteString(jw, "ctName", newCtName);
+    }
 else
-    jsonWriteStringf(jw, "error", "The track could not be deleted: %s", err);
+    jsonWriteStringf(jw, "error", "The track could not be %s: %s",
+                     rename ? "renamed" : "deleted", err);
 jsonWriteObjectEnd(jw);
 cgiPrintContentType("application/json");
 puts(jw->dy->string);
@@ -3336,11 +3444,17 @@ if (cgiOptionalString("s") != NULL)
     freeMem(myNewPage);
     }
 
-/* hgBlat.js's "Delete track" button.  Before getDbAndGenome, which would store the request's db
- * in the cart. */
+/* hgBlat.js's "Delete track" and, on a page reopened from the track, "Rename BLAT Track" buttons.
+ * Before getDbAndGenome, which would store the request's db in the cart. */
 if (cgiOptionalString("blatDeleteCt") != NULL && cgiOptionalString("blatCtDb") != NULL)
     {
-    doDeleteCt(cgiString("blatCtDb"), cgiString("blatDeleteCt"));
+    doEditCt(cgiString("blatCtDb"), cgiString("blatDeleteCt"), NULL, NULL);
+    return;
+    }
+if (cgiOptionalString("blatRenameCt") != NULL && cgiOptionalString("blatCtDb") != NULL)
+    {
+    doEditCt(cgiString("blatCtDb"), cgiString("blatRenameCt"),
+             cgiUsualString("blatCtLabel", ""), cgiUsualString("blatCtDescription", ""));
     return;
     }
 
@@ -3650,7 +3764,7 @@ else
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", "blatReopen", "blatCt", "blatDeleteCt", "blatCtDb", "blatMin", "u", "s", NULL};
+char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", "blatReopen", "blatCt", "blatDeleteCt", "blatRenameCt", "blatCtLabel", "blatCtDescription", "blatCtDb", "blatMin", "u", "s", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

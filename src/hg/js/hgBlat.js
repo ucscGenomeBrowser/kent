@@ -150,8 +150,8 @@ function blatSummaryStrip(cfg, queryCount) {
     if (cfg.viewAllUrl) {
         actions += `<a class="gbPill" id="blatViewAllBtn" title="Open the Genome Browser with all these BLAT hits shown together as one custom track" href="${htmlEncode(cfg.viewAllUrl)}">View all in browser</a>`;
     }
-    // "Show Query Sequence" opens the query FASTA in a panel (with Download / Copy). Only on a fresh
-    // search, where the uploaded sequence is available (cfg.querySeqs emitted by hgBlat.c).
+    // "Show Query Sequence" opens the query FASTA in a panel (with Download / Copy). Only when
+    // hgBlat.c found the query sequence, in the search's files or in the results track (cfg.querySeqs).
     if (cfg.querySeqs && cfg.querySeqs.length) {
         // Font Awesome Free 7 "file-lines" (fontawesome.com, free icons), inlined like the icons below.
         var seqIcon = '<svg class="blatShareIcon" viewBox="0 0 640 640" width="16" height="16" ' +
@@ -449,9 +449,10 @@ function blatShareLink() {
 // ---- Rename BLAT track (modal) -------------------------------------------
 // The results custom track is built (and renamed) by hgBlat.c's inline code, which exposes a small
 // window.blatRenameCt(name, description) helper (it POSTs to hgc's buildBigPsl and rebuilds the
-// track).  We reuse that helper (no new endpoint), just swapping its old inline toggle-form UI for a
-// proper modal dialog.  The current name/description come from cfg (hgBlat.c), not a global, so this
-// does not depend on any generic page-global.
+// track).  We reuse that helper, just swapping its old inline toggle-form UI for a proper modal
+// dialog.  A page reopened from the track has no such helper; there hgBlat renames the track in
+// place (blatRenameCtInPlace).  The current name/description come from cfg (hgBlat.c), not a global,
+// so this does not depend on any generic page-global.
 
 function blatRenameModalHtml(cfg) {
     // hgSession link is relative (same /cgi-bin/), carrying db + hgsid so the session page opens in
@@ -505,20 +506,63 @@ function blatWireRename() {
         var name = document.getElementById('blatRenameName').value.trim();
         var desc = document.getElementById('blatRenameDesc').value.trim();
         if (!name) { document.getElementById('blatRenameName').focus(); return; }
-        // Reuse hgBlat.c's window.blatRenameCt(name, description): rebuilds the custom track under the
-        // new name via the existing hgc buildBigPsl call.  Keep cfg in sync so a re-open of the modal
-        // shows the new values.
+        // On a page built from the search's files, reuse hgBlat.c's window.blatRenameCt(name,
+        // description): rebuilds the custom track under the new name via the existing hgc
+        // buildBigPsl call.  On a page reopened from the track (cfg.ctName) there are no such
+        // files, so hgBlat renames the track in place (doEditCt).  Keep cfg in sync so a re-open
+        // of the modal shows the new values.
+        var cfg = hgBlatData.config;
         if (typeof window.blatRenameCt === 'function') {
-            hgBlatData.config.trackName = name;
-            hgBlatData.config.trackDescription = desc;
+            cfg.trackName = name;
+            cfg.trackDescription = desc;
             window.blatRenameCt(name, desc);
+        } else if (cfg.ctName) {
+            blatRenameCtInPlace(cfg, name, desc);
         }
         blatCloseRename();
     });
 }
 
+function blatRenameCtInPlace(cfg, name, desc) {
+    // Rename the results track of a page reopened from it.  An error goes into the share box under
+    // the summary, like the errors of Delete track.
+    var box = document.getElementById('gbShareBox');
+    $.ajax({
+        type: 'POST',
+        url: 'hgBlat',
+        // blatCtDb: as for Delete track, the cart's assembly may have changed in another tab.
+        data: { hgsid: cfg.hgsid, blatCtDb: cfg.fullDb, blatRenameCt: cfg.ctName,
+                blatCtLabel: name, blatCtDescription: desc },
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            if (!data || !data.renamed) {
+                blatShowShareBox(box, null, (data && data.error) || 'The track could not be renamed.');
+                return;
+            }
+            cfg.trackName = name;
+            cfg.trackDescription = desc;
+            // A custom track's id is made from its name, so the rename changed it.  Delete track
+            // and a reload of this page (blatCt= in the address bar) need the new one.
+            if (data.ctName && data.ctName !== cfg.ctName) {
+                cfg.ctName = data.ctName;
+                try {
+                    var url = new URL(window.location.href);
+                    if (url.searchParams.has('blatCt')) {
+                        url.searchParams.set('blatCt', data.ctName);
+                        history.replaceState(null, '', url.toString());
+                    }
+                } catch (e) { /* older browsers: ignore */ }
+            }
+        },
+        error: function() {
+            blatShowShareBox(box, null, topLinks.serverUnreachableMsg);
+        }
+    });
+}
+
 // ---- Delete BLAT track ----------------------------------------------------
-// The track is removed by an hgBlat request (doDeleteCt in hgBlat.c), which answers with JSON.  An
+// The track is removed by an hgBlat request (doEditCt in hgBlat.c), which answers with JSON.  An
 // error goes into the share box under the summary, where the Share a link messages also go.
 // The track name is cfg.ctName on a page reopened from the track (blatCt=), else the track this page
 // built (hgBlat.c's window.blatCtName).  On a page built from the trash files the table keeps
