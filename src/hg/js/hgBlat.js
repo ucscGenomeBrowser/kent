@@ -179,7 +179,8 @@ function blatSummaryStrip(cfg, queryCount) {
         '24-24s24 10.7 24 24z"/></svg>';
     actions += '<button type="button" class="gbPill" id="blatTsvBtn" ' +
         'title="Download the hits in the table below, in their current order and filter, as a ' +
-        'tab-separated file that opens in Excel">' + downloadIcon + 'Download Table</button>';
+        'tab-separated file that opens in Excel. The file name and first column give the ' +
+        'assembly searched.">' + downloadIcon + 'Download Table</button>';
     // "Share a link" creates a durable, minimal snapshot session (db + results bigPsl only) and shows
     // its ?u=&s= reopen link (see blatShareLink).  Only offered when a durable bigPsl backs the
     // results (cfg.canShare = autoBigPsl); without it there is nothing for the shared link to reopen.
@@ -674,18 +675,19 @@ function blatDownloadText(text, fileName, mimeType) {
     setTimeout(function() { URL.revokeObjectURL(a.href); }, 0);
 }
 
-function blatHitsToTsv(hits, hasLocus) {
-    // One line per hit, with the columns of the classic results page (positions 1-based) plus the
+function blatHitsToTsv(hits, hasLocus, db) {
+    // One line per hit, with the assembly searched (so files from several assemblies can be told
+    // apart or concatenated), the columns of the classic results page (positions 1-based) plus the
     // locus and the match counts, then the PSL block lists, which are 0-based like in a .psl file and
     // are enough to rebuild the alignment.  Tabs and newlines in a query name would break the columns.
     var clean = s => String(s === undefined || s === null ? '' : s).replace(/[\t\r\n]/g, ' ');
-    var head = ['query', 'score', 'qStart', 'qEnd', 'qSize', 'identity', 'chrom', 'strand',
+    var head = ['assembly', 'query', 'score', 'qStart', 'qEnd', 'qSize', 'identity', 'chrom', 'strand',
                 'tStart', 'tEnd', 'span', 'matches', 'misMatches', 'gaps', 'blocks'];
     if (hasLocus) { head.push('locus'); }
     head.push('tSize', 'blockSizes', 'qStarts', 'tStarts');
     var lines = [head.join('\t')];
     hits.forEach(function(h) {
-        var row = [h.qName, h.score, h.qStart, h.qEnd, h.qSize, h.identity.toFixed(1), h.chrom,
+        var row = [db, h.qName, h.score, h.qStart, h.qEnd, h.qSize, h.identity.toFixed(1), h.chrom,
                    h.strand, h.tStart, h.tEnd, h.span, h.matches, h.misMatch, h.gaps, h.blocks];
         if (hasLocus) { row.push(h.locusText); }
         row.push(h.tSize, h.blockSizes, h.qStarts, h.tStarts);
@@ -862,9 +864,11 @@ function blatBuild() {
 
     $('#blatTsvBtn').on('click', function() {
         var shown = dt.rows({ search: 'applied', order: 'applied' }).data().toArray();
-        var base = cfg.multiQuery ? 'blatResults' :
-            'blat_' + String(cfg.queryName).replace(/[^A-Za-z0-9._-]+/g, '_');
-        blatDownloadText(blatHitsToTsv(shown, cfg.hasLocus), base + '.tsv',
+        // The assembly is in the file name, so the same query BLATed against several assemblies
+        // does not give several files with the same name.
+        var safe = s => String(s).replace(/[^A-Za-z0-9._-]+/g, '_');
+        var base = 'blat_' + safe(cfg.db) + (cfg.multiQuery ? '' : '_' + safe(cfg.queryName));
+        blatDownloadText(blatHitsToTsv(shown, cfg.hasLocus, cfg.db), base + '.tsv',
             'text/tab-separated-values');
     });
 
