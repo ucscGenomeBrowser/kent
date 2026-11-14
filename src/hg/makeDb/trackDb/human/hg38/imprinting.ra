@@ -30,7 +30,7 @@ priority 3.5
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/imprinting/akbari2023/akbariIdmr.bb
     visibility pack
-    priority 5
+    priority 2
     itemRgb on
     labelFields gene,name
     defaultLabelFields gene
