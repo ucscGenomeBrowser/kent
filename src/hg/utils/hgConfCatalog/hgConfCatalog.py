@@ -293,6 +293,15 @@ RELEASE_GATES = {
                "hgTrackUi.c, which does the clearing; with it off the menu item "
                "is not offered and hgTrackUi ignores the request.  Off during "
                "QA; flip to TRUE once released."),
+        h("urlTrackOpensContainer", "flag", "hg/hgTracks/hgTracks.c",
+          default="FALSE", role="gate", verified=True, ticket="38762",
+          note="A track turned on by a link or a form, e.g. hmc=pack on the "
+               "URL, opens its hidden supertrack and hides the supertrack's "
+               "other members, by setting the same <track>_sel mark the Track "
+               "Search checkbox sends.  Read once in getTrackList(); off, such "
+               "a link sets the track's visibility but the track stays hidden "
+               "inside its supertrack.  On for genome-test and hgwdev since "
+               "2026-11-13; flip to TRUE once released."),
         h("showMouseovers", "flag", "hg/hgTracks/config.c", default="FALSE",
           role="gate", verified=True,
           note="Mouseover text on track items instead of the browser's own "
