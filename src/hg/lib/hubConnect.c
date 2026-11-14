@@ -418,17 +418,16 @@ return sqlUnsigned(ptr2+1);
 }
 
 char *hubNameFromGroupName(char *groupName)
-/* Given something like "hub_123_myWig" return hub_123 */
+/* Given something like "hub_123_myWig" return hub_123.  A name that is not a hub's, like
+ * "map", comes back unchanged. */
 {
 char *hubName = cloneString(groupName);
-
-char *ptr1 = hubName;
-ptr1 += 4;
-char *ptr2 = strchr(ptr1, '_');
-
-if (ptr2 != NULL)
-    *ptr2 = 0;
-
+if (isHubTrack(hubName))
+    {
+    char *ptr2 = strchr(hubName + strlen(hubTrackPrefix), '_');
+    if (ptr2 != NULL)
+        *ptr2 = 0;
+    }
 return hubName;
 }
 

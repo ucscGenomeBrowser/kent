@@ -128,7 +128,8 @@ unsigned hubIdFromTrackName(char *trackName);
 /* Given something like "hub_123_myWig" return 123 */
 
 char *hubNameFromGroupName(char *groupName);
-/* Given something like "hub_123_myWig" return hub_123 */
+/* Given something like "hub_123_myWig" return hub_123.  A name that is not a hub's, like
+ * "map", comes back unchanged. */
 
 void hubConnectAddDescription(char *database, struct trackDb *tdb);
 /* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
