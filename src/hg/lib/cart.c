@@ -2041,6 +2041,40 @@ cartRemove(cart, "db");
 return TRUE;
 }
 
+// The pages below are shown by the bare early error handler, before the page header exists,
+// so they bring their own title bar and margins.
+// The handler wraps the message in <P>, which the browser closes empty at the first <div>.
+#define EARLY_ERROR_PAGE_START \
+        "<div style='background:#003a72; padding:8px 24px'>" \
+        "<style>body {margin:0; font-family:Arial,Helvetica,sans-serif} p:empty {display:none}</style>" \
+        "<a href='../index.html' style='color:white; text-decoration:none; font-size:20px'>" \
+        "UCSC Genome Browser</a></div>" \
+        "<div style='margin:16px 24px; max-width:50em; font-size:15px; line-height:1.5'>"
+
+static void hubGenomeNotFoundAbort(char *genome, struct hubConnectStatus *hub)
+/* A hubUrl= request asked to open genome, which the hub's genomes.txt lists without a
+ * twoBitPath, so it has to be an assembly we have, and we don't have it.  Without this the
+ * browser would quietly open the default assembly instead.  refs #30832 */
+{
+char *hubUrl = (hub != NULL) ? hub->hubUrl : "";
+errAbort(EARLY_ERROR_PAGE_START
+        "<h2>Genome assembly not found</h2>"
+        "<p>The track hub <b>%s</b> lists the assembly <b>%s</b> in its genomes.txt file, "
+        "but this assembly is not available on this Genome Browser.</p>"
+        "<p>If you made this hub, check the genomes.txt file:</p>"
+        "<ul><li>If <b>%s</b> is your own assembly, its stanza needs a <b>twoBitPath</b> line "
+        "that points to the sequence file.</li>"
+        "<li>If it should be an assembly that we host, check the name for typing errors. UCSC "
+        "assembly names look like <b>hg38</b> or <b>mm39</b>. NCBI assembly accessions look "
+        "like <b>GCF_000001405.40</b>, including the version number after the dot.</li></ul>"
+        "<p>The <a href='../cgi-bin/hgHubConnect#hubDeveloper'>Hub Development</a> tab of the "
+        "Track Hubs page can check the whole hub for errors.</p>"
+        "<p>To look for another assembly, <a href='../cgi-bin/hgGateway'>go back to the "
+        "Genome Browser start page</a>. If you need help, "
+        "<a href='../contacts.html'>contact us</a>.</p></div>",
+        hubUrl, genome, genome);
+}
+
 static void fixUpDb(struct cart *cart)
 // we want to load Genark hubs or error out if db is not available
 {
@@ -2064,14 +2098,7 @@ if (differentString(aliasDb, db))
         return;
     }
 
-// This is shown by the bare early error handler, before the page header exists, so it
-// brings its own title bar and margins.
-// The handler wraps the message in <P>, which the browser closes empty at the first <div>.
-errAbort("<div style='background:#003a72; padding:8px 24px'>"
-        "<style>body {margin:0; font-family:Arial,Helvetica,sans-serif} p:empty {display:none}</style>"
-        "<a href='../index.html' style='color:white; text-decoration:none; font-size:20px'>"
-        "UCSC Genome Browser</a></div>"
-        "<div style='margin:16px 24px; max-width:50em; font-size:15px; line-height:1.5'>"
+errAbort(EARLY_ERROR_PAGE_START
         "<h2>Genome assembly not found</h2>"
         "<p>The genome assembly <b>%s</b> is not available on this Genome Browser.</p>"
         "<p>First, check the name for typing errors. UCSC assembly names look like "
@@ -2667,6 +2694,13 @@ if (cartCollectionHubCopyOnWrite() && gLocalHubCopyRequested)
     cartCopyLocalHubs(cart);
 
 char *newDatabase = hubConnectLoadHubs(cart);
+
+// newDatabase is only set when this request connects a hub and asks for one of its genomes.
+// Assembly hub genomes (and GenArk ones, after hubConnectLoadHubs) are "hub_<id>_<name>"; any
+// other name has to be an assembly of ours, or getDbAndGenome() would silently fall back to
+// the default one.  refs #30832
+if ((newDatabase != NULL) && !startsWith("hub_", newDatabase) && !hDbIsActive(newDatabase))
+    hubGenomeNotFoundAbort(newDatabase, hubConnectNewHub());
 
 if (newDatabase != NULL)
     cartSetHubDatabase(cart, oldVars, newDatabase);
