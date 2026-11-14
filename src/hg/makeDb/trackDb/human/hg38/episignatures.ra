@@ -63,7 +63,7 @@ pennantIcon New red ../goldenPath/newsarch.html#110326 "Released Nov. 3, 2026"
     filterLimits.maxAbsDelta 0:1
     filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at this probe
     labelFields name,displaySignature
-    defaultLabelFields name,displaySignature
+    defaultLabelFields name
     skipFields signatureList,mouseOver
     detailsDynamicTable comparisonTable|Episignatures at this CpG site
     # the provider's bigBed as is: displayOmim is a full URL, mouseOver is
