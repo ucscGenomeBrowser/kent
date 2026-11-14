@@ -696,6 +696,7 @@ function sessSaveCardHtml(C) {
         sessEnc(C.userName) + '/[sessionName].';
     var descTip = 'Shown when the session is loaded, in the table below on mouseover, and in ' +
         'the Public Sessions gallery if this session is made public.';
+    var privTip = 'To load saved session links marked as private, you need to be logged in';
     return '<div class="sessSaveCard">' +
         '<div class="sessSaveHead"><span class="sessSaveTitle">' +
         'Save the current view as a stable session link</span>' + what + '</div>' +
@@ -704,8 +705,11 @@ function sessSaveCardHtml(C) {
         '<input id="sessSaveName" class="sessSaveInput" type="text" maxlength="255" ' +
         'placeholder="Session name, default ' + randName + '">' +
         '<span class="sessInfo" title="' + nameTip + '">&#9432;</span></div>' +
+        // The (i) sits outside the label, so clicking it does not toggle the checkbox.
+        '<div class="sessSaveField">' +
         '<label class="sessSaveCheck"><input type="checkbox" id="sessSavePrivate"> ' +
-        'Private: Session can only be loaded by myself</label>' +
+        'Private: only I can load this session</label>' +
+        '<span class="sessInfo" title="' + privTip + '">&#9432;</span></div>' +
         '</div>' +
         // Save sits after the description, the last field, so the form reads top to bottom.
         '<div class="sessSaveRow">' +
