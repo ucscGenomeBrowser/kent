@@ -234,10 +234,19 @@ var SESS_LOCK_SVG = '<svg class="sessLock" xmlns="http://www.w3.org/2000/svg" vi
     ' aria-hidden="true"><path fill="currentColor" d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80' +
     ' 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0' +
     ' 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/></svg>';
+// Lucide "share" and "pen-line" (stroke icons, ISC license); stroke:currentColor like the others.
+var SESS_LUCIDE_OPEN = '<svg class="sessIcon sessLucide" xmlns="http://www.w3.org/2000/svg"' +
+    ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"' +
+    ' stroke-linejoin="round" aria-hidden="true">';
+var SESS_SHARE_SVG = SESS_LUCIDE_OPEN + '<path d="M12 2v13"/><path d="m16 6-4-4-4 4"/>' +
+    '<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>';
+var SESS_EDIT_SVG = SESS_LUCIDE_OPEN + '<path d="M13 21h8"/><path d="M21.174 6.812a1 1 0 0 0' +
+    '-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0' +
+    ' .83-.497z"/></svg>';
 
 function sessActionsHtml(row) {
-    // Order: Share, Edit, Update (floppy icon + word: overwrite with the current view), then the
-    // icon-only Delete (trash).
+    // Order: Share, Edit, Update (overwrite with the current view), each an icon plus a word, then
+    // the icon-only Delete (trash).
     if (row.remote) {
         // A session on another server can only be shown here: sharing, renaming, overwriting and
         // deleting all go through the cart and the session table of the server that holds it. So
@@ -248,11 +257,12 @@ function sessActionsHtml(row) {
             sessEnc(row.server || 'server') + '</button>';
     }
     var e = sessEnc(row.uid);
-    return '<button type="button" class="gbPill" data-act="share" data-key="' + e + '" ' +
-        'title="Copy a shareable link or change who can see this session">Share</button>' +
-        '<button type="button" class="gbPill" data-act="edit" data-key="' + e + '" ' +
-        'title="Rename this session or edit its description">Edit</button>' +
-        '<button type="button" class="gbPill sessUpdateBtn" data-act="overwrite" data-key="' + e + '" ' +
+    return '<button type="button" class="gbPill sessIconBtn" data-act="share" data-key="' + e + '" ' +
+        'title="Copy a shareable link or change who can see this session">' + SESS_SHARE_SVG +
+        'Share</button>' +
+        '<button type="button" class="gbPill sessIconBtn" data-act="edit" data-key="' + e + '" ' +
+        'title="Rename this session or edit its description">' + SESS_EDIT_SVG + 'Edit</button>' +
+        '<button type="button" class="gbPill sessIconBtn" data-act="overwrite" data-key="' + e + '" ' +
         'title="Update this session: overwrite it with your current browser view">' + SESS_SAVE_SVG +
         'Update</button>' +
         '<button type="button" class="gbPill danger" data-act="delete" data-key="' + e + '" ' +

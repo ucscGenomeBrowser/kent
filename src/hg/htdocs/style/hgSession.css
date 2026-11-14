@@ -75,8 +75,10 @@
     box-sizing:border-box; vertical-align:middle; }
 #sessionAppTable td.sessActionsCol .gbPill.danger { padding:0 8px; }
 #sessionAppTable .sessIcon { width:17px; height:17px; display:block; }
-/* Update = floppy icon plus the word, so it does not read as "save to file". */
-#sessionAppTable td.sessActionsCol .gbPill.sessUpdateBtn { gap:3px; padding-left:6px; }
+/* Share, Edit, Update: icon plus word (the floppy alone read as "save to file"). */
+#sessionAppTable td.sessActionsCol .gbPill.sessIconBtn { gap:4px; padding-left:7px; }
+/* Lucide stroke glyphs fill ~85% of their box, the floppy ~70%; size them to look equal. */
+#sessionAppTable .sessIcon.sessLucide { width:13px; height:13px; }
 /* The trash glyph fills its whole viewBox, the floppy only ~70% of its; shrink trash to match. */
 #sessionAppTable .sessIcon.sessTrash { width:13px; height:13px; }
 #sessionAppTable .sessPublic { display:inline-block; margin-left:6px; font-size:11px; font-weight:700;
