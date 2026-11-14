@@ -6,18 +6,18 @@ type bigBed 12 +
 bigDataUrl /gbdb/$D/lrTransTabSap/lrTransTabSap.bb
 visibility pack
 itemRgb on
-labelFields geneSymbol,name
+labelFields geneSymbol,name,ensTranscript
 defaultLabelFields geneSymbol
 searchIndex name,geneSymbol
 maxWindowCoverage 200000
 skipEmptyFields on
-skipFields score
+skipFields score,ensTranscript
 detailsDynamicTable _jsonExpr|UMIs per tissue
-mouseOver <b>${geneSymbol}</b> ${name}<br>${category}, ${subcategory}<br>${coding} ${cdsType}<br>${reads} UMIs in ${cells} cells, ${tissues} tissues<br>SQANTI3 filter: ${filterResult}
+mouseOver <b>${geneSymbol}</b> ${name} ${ensTranscript}<br>${category}, ${subcategory}<br>${coding} ${cdsType}<br>${reads} UMIs in ${cells} cells, ${tissues} tissues<br>Pigeon filter: ${pigeonFilter}, SQANTI3 filter: ${filterResult}
 filterValues.category Full splice match (FSM),Incomplete splice match (ISM),Novel in catalog (NIC),Novel not in catalog (NNC),Fusion,Genic genomic,Genic intron,Antisense,Intergenic
 filterLabel.category Structural category (SQANTI3)
 filterValues.filterResult Isoform,Artifact
-filterLabel.filterResult SQANTI3 filter result
+filterLabel.filterResult Standalone SQANTI3 filter result (all isoforms passed the Pigeon filter)
 filterValues.coding coding,non-coding
 filterLabel.coding Coding potential
 filterValues.nmd yes,no

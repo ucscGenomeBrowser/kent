@@ -38,3 +38,12 @@ cat tissueExpr.tsv.tissues.tsv
 # column changes, so rerun the build to regenerate the bigBed:
 cd /hive/data/genomes/hg38/bed/lrTrans/tabulasapiens
 time ~/kent/src/hg/makeDb/scripts/lrTrans/lrTransTabSap.sh
+
+# 2026-11-14 Claude (max): two new columns (bed12+26), from the data submitter's
+# requests in note 7 of #38565. ensTranscript: the SQANTI3 associated transcript as
+# plain versioned IDs, shown in the mouseover and available as a label. pigeonFilter:
+# "Isoform" for every model, because all submitted models passed the Pigeon-SQANTI3
+# filter; the filterResult column is the stricter standalone SQANTI3 filter. Rebuild:
+cd /hive/data/genomes/hg38/bed/lrTrans/tabulasapiens
+time ~/kent/src/hg/makeDb/scripts/lrTrans/lrTransTabSap.sh
+# 1m23s, 854,410 isoforms in and out, as before.
