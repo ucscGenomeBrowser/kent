@@ -869,6 +869,10 @@ function sessionBuild() {
     $('#sessSaveName, #sessSaveDesc').on('keydown', function(ev) {
         if (ev.key === 'Enter') { ev.preventDefault(); sessDoSave(); }
     });
+    // Saving is what most people come here for, so the cursor starts in the name box (only there
+    // when signed in).  preventScroll: the box is near the top, do not jump if the page is scrolled.
+    var nameBox = document.getElementById('sessSaveName');
+    if (nameBox) { nameBox.focus({preventScroll: true}); }
 
     // One-click overwrite of the most recently used session.
     if (recent) {
