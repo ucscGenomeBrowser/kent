@@ -123,17 +123,20 @@ priority 3.5
     filterValues.parent Maternal,Paternal
     filterType.parent multipleListOr
     filterLabel.parent Filter by haplotype with higher methylation
+    filterValues.strength Strong,Moderate
+    filterType.strength multipleListOr
+    filterLabel.strength Filter by size of the difference (strong: 0.15 or more)
     filterByRange.methDiff on
     filter.methDiff -1:1
     filterLimits.methDiff -1:1
     filterLabel.methDiff Methylation difference (maternal - paternal)
 
-    track hprcDmc
+    track hprcMethDiff
     parent imprinting on
-    shortLabel Kim DMCs
-    longLabel Imprinting - Kim et al 2026 - HPRC2 maternal minus paternal methylation difference at differentially methylated CpGs
-    type bigWig -0.9 0.9
-    bigDataUrl /gbdb/hg38/imprinting/hprcImprint/hprcDmc.bw
+    shortLabel Kim Meth Diff
+    longLabel Imprinting - Kim et al 2026 - HPRC2 mean maternal minus paternal methylation difference per CpG
+    type bigWig -0.96 0.96
+    bigDataUrl /gbdb/hg38/imprinting/hprcImprint/hprcMethDiff.bw
     visibility full
     priority 9
     color 220,20,20

@@ -362,3 +362,33 @@ bedToBigBed -type=bed9+9 -tab \
 # Result: 13 clinically associated, 35 non-clinical. Dark red/blue = clinical, light red/blue = non-clinical.
 ~/kent/src/hg/makeDb/scripts/mackay2024Imprint/mackay2024ImprintBuild.sh
 # 48 DMRs in, 48 bigBed records, nothing dropped.
+
+
+# 2026-11-13 Claude (for max): Kim DMRs and the bigWig replaced with the corrected analysis
+# of the authors (paired DSS design, ~ haplotype + sample; chrX from 50 females balanced by
+# the parent of the inactive X). The old DMR set had 4827 regions, the new one has 870.
+# The old bigWig had only the differentially methylated CpGs (DMCs), the new one has the mean
+# maternal minus paternal difference at every CpG with <5% missing data, so the bigWig
+# track was renamed from hprcDmc to hprcMethDiff.
+# The old files were moved to /hive/data/genomes/hg38/bed/imprinting/phillipy/v1.
+cd /hive/data/genomes/hg38/bed/imprinting/phillipy
+B=https://s3-us-west-2.amazonaws.com/human-pangenomics/publications/Pooch_2026/tracks
+for f in README.md \
+    all_chr.missingrate_5.createDiffDatasetFromMethylDataset.flipped.mean.bw \
+    all_chr.missingrate_5.createDiffDatasetFromMethylDataset.flipped.mean.grch38.bw \
+    dmrs.N05_filt.all_chr.1e3.mrg.forPlotting.bed.gz \
+    dmrs.N05_filt.all_chr.1e3.mrg.forPlotting.grch38.mrg.coordinate_fix.bed.gz \
+    readme_iDMRs_GRCh38.html readme_iDMRs_T2T-CHM13v2.html \
+    readme_mean_methylation_track.GRCh38.html readme_mean_methylation_track.T2T-CHM13v2.html; do
+  curl -sS -o $f $B/$f
+done
+
+# Column 5 of the DMR bed is documented as the signed maternal minus paternal difference,
+# but it is always positive: the direction is only in column 4 (Maternal/Paternal), which
+# agrees with the sign of the bigWig averaged over the region for 869 of 870 regions.
+# The script takes the sign from column 4, colors strong (>=0.15) and moderate regions in
+# dark and light red/blue, and rewrites the 1 GB CrossMap bigWig with
+# bigWigToBedGraph | bedGraphToBigWig (324 MB, identical values).
+~/kent/src/hg/makeDb/scripts/hprcImprint/hprcImprintDmrToBigBed.sh
+# 870 bed lines in, 870 bigBed records out, nothing dropped (880 CHM13 regions, 10 not
+# liftable by the authors). 426 maternal (126 strong), 444 paternal (24 strong).

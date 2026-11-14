@@ -3,8 +3,8 @@
 <p>
 Part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack">Imprinting</a> track collection,
 this track shows differentially methylated regions (DMRs) between the maternal and the paternal
-haplotype. They were identified from 123 trio-phased assemblies of the HPRC release 2. The track
-has more than 4800 regions with an absolute methylation difference above 0.05. A region where the
+haplotype. They were identified from 123 phased assemblies of the HPRC release 2 (50 female
+genomes for chromosome X). The track has 870 regions. A region where the
 maternal copy is more methylated than the paternal copy is a candidate for a locus that is imprinted
 by methylation of the maternal allele, and the reverse holds for the paternal copy.
 </p>
@@ -17,43 +17,61 @@ track, see Methods for details.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Each region is colored by the parent whose haplotype has the higher methylation level:
+Each region is colored by the parent whose haplotype has the higher methylation level, and by
+the size of the difference, as classified by the authors:
 </p>
 
 <table class="stdTbl">
   <tr><th style="background-color:#DC1414;width:2em">&nbsp;</th>
-      <td>Red: higher methylation on the maternal haplotype</td></tr>
+      <td>Red: higher methylation on the maternal haplotype, difference 0.15 or more</td></tr>
+  <tr><th style="background-color:#F08C8C;width:2em">&nbsp;</th>
+      <td>Light red: higher methylation on the maternal haplotype, difference below 0.15</td></tr>
   <tr><th style="background-color:#003CC8;width:2em">&nbsp;</th>
-      <td>Blue: higher methylation on the paternal haplotype</td></tr>
+      <td>Blue: higher methylation on the paternal haplotype, difference 0.15 or more</td></tr>
+  <tr><th style="background-color:#82A0EB;width:2em">&nbsp;</th>
+      <td>Light blue: higher methylation on the paternal haplotype, difference below 0.15</td></tr>
 </table>
 
 <p>
 The methylation difference,
 maternal minus paternal, is shown on the details page and when the mouse is moved over a region.
-It is positive for red and negative for blue regions. The track can be filtered by haplotype and by
-the size of the methylation difference.
+It is positive for red and negative for blue regions. The track can be filtered by haplotype, by
+strong or moderate difference and by the methylation difference itself.
 </p>
 
 <h2>Methods</h2>
 
 <p>
-Methylation was called from Oxford Nanopore reads with modkit v0.4.1 and the reads were aligned to
-the personalized assemblies with Winnowmap v2.03 (<tt>-x map-ont -I 8G --MD --cs -y -a -Y -L
---eqx</tt>), keeping primary alignments. Each diploid assembly was split by haplotype and chain
-files from haplotype to CHM13v2.0 were built with a Nextflow pipeline running nf-LO and minimap2.
-Methylation calls were lifted to CHM13v2.0 with CrossMap v0.7.0, using a shift of 1 bp on the
-negative strand so that the methylation tag stays on the C of the CpG. Maternal and paternal groups
-were compared per chromosome with DSS v2.58.0 in R v4.5.3: DSS::DMLtest with smoothing (span 500 bp)
-and unequal dispersion identified differentially methylated CpGs (delta 0, p-value below 0.001), and
-callDMR (p-value below 0.001, delta 0, minimum length 50 bp, at least 3 CpGs, merge distance 100 bp,
-at least half of the sites significant) grouped them into regions. Only regions with an absolute
-methylation difference above 0.05 were kept. See Lucas et al. for details on the HPRC data.</p>
+Oxford Nanopore reads with methylation tags from 123 HPRC release 2 samples were aligned to
+the personalized diploid assemblies with Winnowmap v2.03 (<tt>-x map-ont -I 8G --MD --cs -y -a -Y -L
+--eqx</tt>), keeping primary alignments, and methylated and total read counts per CpG were
+obtained with modkit v0.4.1. Each diploid assembly was split by haplotype and chain files from
+haplotype to CHM13v2.0 were built with nf-LO and minimap2. Methylation calls were lifted to
+CHM13v2.0 with CrossMap v0.7.0, shifting negative-strand calls by 1 bp onto the C of the CpG.
+For chromosome X, the samples were classified by the methylation of the XIST promoter on each
+haplotype, which shows which parental X is preferentially inactivated. Of 59 female samples, 25
+had preferential maternal and 34 preferential paternal X inactivation; all 25 of the first group
+and 25 randomly selected samples of the second were used. Differential methylation was tested
+per chromosome with DSS v2.58.0 in R v4.5.3. CpG sites with missing data in more than 5% of
+samples were removed. A paired design was used, with the model <tt>~ haplotype + sample</tt>
+fitted with DMLfit.multiFactor and a Wald test of the haplotype term with DMLtest.multiFactor.
+DMRs were called with callDMR (p-value below 0.001, otherwise default parameters). Neighboring
+DMRs within 1,000 bp with the same direction were merged, which reduced 1,509 regions to 880.
+Regions with an absolute difference of at least 0.15 were classified as strong, the others as
+moderate. See Lucas et al. for details on the HPRC data.</p>
 
 <p>
-The data files were provided by the authors, who also lifted the regions from CHM13v2.0 to hg38
-with the chain files of the <a href="https://github.com/marbl/CHM13" target="_blank">CHM13 project</a>.
-The lifted BED file contains 4827 regions. We converted it to a bigBed file and added the haplotype
-and the methylation difference as separate fields, see the
+The data files were downloaded from the
+<a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=publications/Pooch_2026/tracks/"
+target="_blank">HPRC S3 bucket</a>, file
+<tt>dmrs.N05_filt.all_chr.1e3.mrg.forPlotting.grch38.mrg.coordinate_fix.bed.gz</tt>.
+The authors lifted the 880 regions from CHM13v2.0 to hg38 with CrossMap and the
+chm13v2-grch38 chain file of the <a href="https://github.com/marbl/CHM13" target="_blank">CHM13
+project</a>. 10 regions could not be lifted. Fragments of the same region that were on the same
+chromosome and at most 10,000 bp apart were merged again, which gave 870 regions. We converted
+the file to a bigBed file and added the haplotype, the strong/moderate class and the signed
+methylation difference as separate fields (the source file has the absolute difference and the
+direction in a separate column), see the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt"
 target="_blank">makeDoc file</a> and the
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/hprcImprint"
@@ -65,7 +83,7 @@ target="_blank">scripts</a>. No region was dropped.</p>
 
 <p>For automated download and analysis, the genome annotation is stored in a bigBed file that can be downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/hprcImprint/" target="_blank">our download server</a>. The file for this track is called <tt>hprcDmr.bb</tt>. Individual regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled binary for your system. Instructions for downloading source code and binaries can be found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>. The tool can also be used to obtain features within a given range, e.g. <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/hprcImprint/hprcDmr.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
 
-<p>The original annotation source data was provided by the authors and is available on request.</p>
+<p>The original data files, in hg38 and CHM13v2.0 coordinates, can be downloaded from the <a href="https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=publications/Pooch_2026/tracks/" target="_blank">HPRC S3 bucket</a>.</p>
 
 <h2>Credits</h2>
 
