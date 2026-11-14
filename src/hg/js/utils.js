@@ -3372,7 +3372,7 @@ var findTracks = {
             $(hiddenVis).val($(seenVis).val());
         else {
             var selCb = $("input#"+trackName+"_sel_id");
-            $(selCb).attr('checked',false);    // Can't set these to [] because that means default
+            $(selCb).prop('checked',false);    // Can't set these to [] because that means default
             $(seenVis).attr('disabled',true);  // setting is used. However, we're explicitly hiding!
             var needSel = (tdb.parentTrack !== undefined && tdb.parentTrack !== null);
             if (needSel) {
@@ -3406,19 +3406,21 @@ var findTracks = {
         if (shouldPack
         &&  tdb.shouldPack !== undefined && tdb.shouldPack !== null && !tdb.shouldPack)
             shouldPack = false;
-        var checked = $(selCb).attr('checked');
+        // prop, not attr: in jQuery 3 attr() reads the HTML attribute, which is the state the
+        // page was drawn with, not what the user clicked.  refs #38764
+        var checked = $(selCb).prop('checked');
 
         // First deal with seenVis control
         if (checked) {
             $(seenVis).attr('disabled', false);
-            if ($(seenVis).attr('selectedIndex') === 0) {
+            if ($(seenVis).prop('selectedIndex') === 0) {
                 if (shouldPack)
-                    $(seenVis).attr('selectedIndex',3);  // packed
+                    $(seenVis).prop('selectedIndex',3);  // packed
                 else
-                    $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
+                    $(seenVis).prop('selectedIndex',$(seenVis).prop('length') - 1);
             }
         } else {
-            $(seenVis).attr('selectedIndex',0);  // hide
+            $(seenVis).prop('selectedIndex',0);  // hide
             $(seenVis).attr('disabled', true );
         }
 
@@ -3502,7 +3504,7 @@ var findTracks = {
     _checkAll: function (check)
     {   // Checks/unchecks all found tracks.
         var selCbs = $('input.selCb');
-        $(selCbs).attr('checked',check);
+        $(selCbs).prop('checked',check);
 
         // All should have their vis enabled/disabled appropriately (false means don't update cart)
         $(selCbs).each( function(i) { findTracks.clickedOne(this,false); });
@@ -3557,7 +3559,7 @@ var findTracks = {
     {   // Clear found tracks and all input controls
         findTracks.clearFound();
         $('input[type="text"]').val(''); // This will always be found
-        $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
+        $('select.mdbVal').prop('selectedIndex',0); // Should be 'Any'
         $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
             //$(this).dropdownchecklist("refresh");  // requires v1.1
             $(this).dropdownchecklist("destroy");
@@ -3565,8 +3567,8 @@ var findTracks = {
             ddcl.setup(this,'noneIsAll');
         });
 
-        $('select.groupSearch').attr('selectedIndex',0);
-        $('select.typeSearch').attr('selectedIndex',0);
+        $('select.groupSearch').prop('selectedIndex',0);
+        $('select.typeSearch').prop('selectedIndex',0);
         //findTracks.searchButtonsEnable(false);
         return false;
     },
