@@ -237,6 +237,8 @@ var SESS_EDIT_SVG = SESS_LUCIDE_OPEN + '<path d="M13 21h8"/><path d="M21.174 6.8
     ' .83-.497z"/></svg>';
 var SESS_UPDATE_SVG = SESS_LUCIDE_OPEN + '<path d="M12 17V3"/><path d="m6 11 6 6 6-6"/>' +
     '<path d="M19 21H5"/></svg>';
+// Label of an Update button once that session has been updated on this page view.
+var SESS_UPDATED_LABEL = '&#10003; Updated';
 
 function sessActionsHtml(row) {
     // Order: Share, Edit, Update (overwrite with the current view), each an icon plus a word, then
@@ -257,8 +259,8 @@ function sessActionsHtml(row) {
         '<button type="button" class="gbPill sessIconBtn" data-act="edit" data-key="' + e + '" ' +
         'title="Rename this session or edit its description">' + SESS_EDIT_SVG + 'Edit</button>' +
         '<button type="button" class="gbPill sessIconBtn" data-act="overwrite" data-key="' + e + '" ' +
-        'title="Update this session: overwrite it with your current browser view">' + SESS_UPDATE_SVG +
-        'Update</button>' +
+        'title="Update this session: overwrite it with your current browser view">' +
+        (row.justUpdated ? SESS_UPDATED_LABEL : SESS_UPDATE_SVG + 'Update') + '</button>' +
         '<button type="button" class="gbPill danger" data-act="delete" data-key="' + e + '" ' +
         'aria-label="Delete this session" title="Delete this session">' + SESS_TRASH_SVG + '</button>';
 }
@@ -290,31 +292,16 @@ function sessDoOverwrite(row) {
         row.useCount = resp.useCount;
         if (resp.created) { row.created = resp.created; }
         if (resp.db) { row.db = resp.db; }
+        // No status line at the top of the page (#38157: it read oddly, far from where the user
+        // clicked); this session's Update button(s) say "Updated" until the page is reloaded.  It
+        // stays clickable to update again.  The flag on the row survives redraws (sort, paging).
+        row.justUpdated = true;
         var r = sessRowByKey(row.uid);
         if (r) { r.data(row).draw(false); }
         sessModalClose();
-        // No status line at the top of the page (#38157: it read oddly, far from where the user
-        // clicked); the Update button(s) of this session say "Updated" for a moment instead.
-        sessFlashUpdated($('#sessionAppTable button[data-act="overwrite"]').filter(function() {
-            return this.getAttribute('data-key') === row.uid;
-        }));
-        if ($('#sessUpdateNow').attr('data-key') === row.uid) { sessFlashUpdated($('#sessUpdateNow')); }
-    });
-}
-
-function sessFlashUpdated(btns) {
-    // Show a check mark and "Updated" on the button for a moment, then put it back.
-    btns.each(function() {
-        var b = this;
-        if (b.getAttribute('data-orig')) { return; }   // already flashing
-        b.setAttribute('data-orig', b.innerHTML);
-        b.innerHTML = '&#10003; Updated';
-        b.disabled = true;
-        setTimeout(function() {
-            b.innerHTML = b.getAttribute('data-orig');
-            b.removeAttribute('data-orig');
-            b.disabled = false;
-        }, 2500);
+        if ($('#sessUpdateNow').attr('data-key') === row.uid) {
+            $('#sessUpdateNow').html(SESS_UPDATED_LABEL);
+        }
     });
 }
 
