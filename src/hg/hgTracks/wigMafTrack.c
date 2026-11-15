@@ -2354,7 +2354,7 @@ static void resetCache()
 // reset the frames cache
 {
 extraPrevious = NULL;
-hashFree(&bbFramesBySpecies);
+hashFreeWithVals(&bbFramesBySpecies, mafFramesFreeList);  /* mfList is fetched again after this */
 }
 
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
@@ -2810,8 +2810,9 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 
     /* having these static here will allow the option 'codonDefault'
      * to run rapidly through the display without extra calls to SQL
-     * for the same answer over and over.  For other codon modes, it
-     * will still need to query the Frames table repeatedly.
+     * for the same answer over and over.  For other codon modes, a SQL
+     * frames table is still queried once per species (a frames bigBed is
+     * read once per draw when browser.mafFastCodons is on).
      * This was found to speed up dramatically by adding an index to
      * the table:
      * hgsql staAur2 -e 'CREATE INDEX src on multiz369wayFrames (src, bin);'
