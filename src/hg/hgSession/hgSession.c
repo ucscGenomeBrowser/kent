@@ -1807,7 +1807,7 @@ void doSaveLocal()
  * Return a message confirming what we did. */
 {
 char *fileName = textOutSanitizeHttpFileName(cartString(cart, hgsSaveLocalFileName));
-char *compressType = cartString(cart, hgsSaveLocalFileCompress);
+char *compressType = cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone);
 struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);

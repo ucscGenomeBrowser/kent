@@ -4,8 +4,8 @@
 // facelift strategy (#37996): hgSession.c emits the session list and page config as an inline JSON
 // global (hgSessionData) into an empty #sessionApp container, and this file builds the UI - a
 // save-current-view card, a searchable/sortable DataTable of saved sessions with inline
-// Overwrite/Share/Edit/Delete, and an "Advanced" panel (custom-track backup, a load column and a
-// save column).
+// Update/Share/Edit/Delete, and an "Advanced…" button that opens a dialog (custom-track backup, a
+// load column and a save column).
 //
 // The inline table actions POST to small JSON endpoints in hgSession.c (hgS_doDeleteJson, etc.) and
 // update the table in place.  Navigation actions (load a session, load from URL/file, save to file,
@@ -618,8 +618,10 @@ function sessAdvancedHtml(C) {
         '<form class="sessAdvRow" action="hgSession" method="POST">' + sid +
         '<input class="sessAdvInput" type="text" name="hgS_saveLocalFileName" ' +
         'placeholder="File name (blank = show in browser)">' +
-        '<label class="sessSaveCheck"><input type="checkbox" name="hgS_saveLocalFileCompress" ' +
-        'value="gzip"> gzip</label>' +
+        // A select, not a checkbox: an unchecked box sends nothing, so hgSession aborted and a
+        // gzip chosen once stayed in the cart.
+        '<select class="sessAdvInput sessAdvSelect" name="hgS_saveLocalFileCompress">' +
+        '<option value="none">plain text</option><option value="gzip">gzip</option></select>' +
         '<button type="submit" class="gbPill" name="hgS_doSaveLocal" value="submit" ' +
         'title="Download the current browser settings as a session file">Save</button></form></div>';
     var other =
@@ -637,17 +639,31 @@ function sessAdvancedHtml(C) {
 
     // Two columns - what you load from, and what you save to - rather than one undifferentiated
     // list; "Other" (reset) belongs to neither, so it spans both underneath.
-    return '<div class="sessAdv">' +
-        '<div class="sessAdvHead" id="sessAdvHead"><span class="caret">▸</span>' +
-        '<span>Advanced — back up custom tracks, load another user’s session, load from a URL ' +
-        'or file, save to a file, reset the browser</span></div>' +
-        '<div class="sessAdvBody" id="sessAdvBody" style="display:none">' +
+    return '<div class="gbModalTitle">Advanced</div>' +
+        '<div class="sessAdvBody">' +
         backup +
         '<div class="sessAdvCol"><div class="sessAdvColHead">Load</div>' +
         loadUser + loadUrl + loadFile + '</div>' +
         '<div class="sessAdvCol"><div class="sessAdvColHead">Save</div>' + saveFile + '</div>' +
         '<div class="sessAdvOther">' + other + '</div>' +
-        '</div></div>';
+        '</div>' +
+        '<div class="gbModalBtns">' +
+        '<button type="button" class="gbPill" id="sessAdvClose">Close</button></div>';
+}
+
+// The rarer options open in a dialog from a button, not a collapsible section: a collapsed bar is
+// easy to miss and opening it shoves the rest of the page down (#38157).  The "…" says it opens a
+// dialog.
+function sessAdvancedBarHtml() {
+    return '<div class="sessAdvBar">' +
+        '<button type="button" class="gbPill" id="sessAdvBtn">Advanced…</button>' +
+        '<span class="sessAdvHint">Back up custom tracks, load another user’s session, load from ' +
+        'a URL or file, save to a file, reset the browser</span></div>';
+}
+
+function sessOpenAdvanced(C) {
+    sessModalOpen(sessAdvancedHtml(C));
+    $('#sessAdvClose').on('click', sessModalClose);
 }
 
 // ---- build the whole page -----------------------------------------------
@@ -860,7 +876,7 @@ function sessionBuild() {
         '<div id="sessMsg" class="sessMsg"></div>' +
         sessRecentHtml(recent) +
         sessSaveCardHtml(C) +
-        sessAdvancedHtml(C) +
+        sessAdvancedBarHtml() +
         sessTableHtml(C)
     );
 
@@ -887,13 +903,7 @@ function sessionBuild() {
         });
     }
 
-    // Advanced toggle.
-    $('#sessAdvHead').on('click', function() {
-        var body = document.getElementById('sessAdvBody');
-        var open = body.style.display !== 'none';
-        body.style.display = open ? 'none' : 'grid';
-        $(this).find('.caret').html(open ? '▸' : '▾');
-    });
+    $('#sessAdvBtn').on('click', function() { sessOpenAdvanced(C); });
 
     // Session table, then the sessions our other servers hold, merged in as they arrive.
     if (C.loggedIn) { sessBuildTable(); sessScrollToTable(); sessMergeMirrors(); }

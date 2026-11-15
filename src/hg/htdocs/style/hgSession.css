@@ -91,15 +91,14 @@
 #sessionAppTable .sessLock { width:10px; height:12px; display:inline-block; vertical-align:-2px;
     color:var(--muted); }
 
-/* Advanced collapsible - the rarer load/backup/reset options.  Collapsed it is a thin bar; sits
- * between the save card and the sessions table. */
-#sessionApp .sessAdv { border:0; margin:0 0 20px; }
-#sessionApp .sessAdvHead { display:flex; align-items:center; gap:9px; padding:11px 14px;
-    background:#f6f8fa; cursor:pointer; font-size:14px; font-weight:700; color:var(--accent);
-    user-select:none; }
-#sessionApp .sessAdvHead .caret { width:12px; display:inline-block; }
-#sessionApp .sessAdvBody { padding:16px 16px; display:grid; grid-template-columns:1fr 1fr;
-    gap:18px 28px; background:#f6f8fa; font-size:14px; }
+/* "Advanced…" button - the rarer load/backup/reset options open in a dialog.  Sits between the
+ * save card and the sessions table. */
+#sessionApp .sessAdvBar { display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    margin:0 0 20px; }
+#sessionApp .sessAdvHint { color:var(--muted); font-size:13px; }
+/* Dialog body: wide enough for the two columns, the dialog itself supplies padding/background. */
+#sessionApp .sessAdvBody { display:grid; grid-template-columns:1fr 1fr; gap:18px 28px;
+    font-size:14px; width:min(760px, 86vw); box-sizing:border-box; margin-bottom:6px; }
 @media (max-width:820px) { #sessionApp .sessAdvBody { grid-template-columns:1fr; } }
 /* Load column and save column, so the panel reads as two purposes instead of one flat list. */
 #sessionApp .sessAdvCol { display:flex; flex-direction:column; gap:18px; }
@@ -118,6 +117,7 @@
 #sessionApp .sessAdvInput { flex:1 1 140px; min-width:110px; height:32px; box-sizing:border-box;
     border:1px solid var(--btnLine); border-radius:0; padding:0 9px; font-size:14px; background:#fff;
     font-family:inherit; }
+#sessionApp .sessAdvSelect { flex:0 0 auto; min-width:0; padding:0 4px; }
 #sessionApp .sessAdvLinks { display:flex; gap:16px; flex-wrap:wrap; }
 #sessionApp .sessAdvLinks a { color:var(--accent); }
 #sessionApp .sessAdvLinks a:hover { color:var(--accentHover); }
