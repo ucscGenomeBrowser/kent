@@ -25,6 +25,7 @@
 #include "bigBed.h"
 #include "hubConnect.h"
 #include "chromAlias.h"
+#include "hgConfig.h"
 
 
 #define GAP_ITEM_LABEL  "Gaps"
@@ -1992,19 +1993,24 @@ static struct mafAli *cachedFlankSubset(struct hash *flankCache, mafRetrieveFunc
 /* Return the alignment of reference bases start to end, the bases of a codon that are in
  * the next or previous exon.  Every species asks for the same few ranges, and loading one
  * means reading and decompressing a whole block for all species, so load each range only
- * once per draw.  The result belongs to the cache: do not free it or change its text. */
+ * once per draw.  The result belongs to the cache: do not free it or change its text.
+ * With no cache (browser.mafFastCodons off) every call loads the range again, as before. */
 {
 char key[64];
-safef(key, sizeof key, "%d-%d", start, end);
-struct hashEl *hel = hashLookup(flankCache, key);
-if (hel != NULL)
-    return hel->val;
+if (flankCache != NULL)
+    {
+    safef(key, sizeof key, "%d-%d", start, end);
+    struct hashEl *hel = hashLookup(flankCache, key);
+    if (hel != NULL)
+        return hel->val;
+    }
 struct mafAli *ali = func(closure, chromName, start, end);
 struct mafAli *sub = NULL;
 if (ali != NULL)
     sub = mafSubset(ali, masterChrom, start, end);
 mafAliFreeList(&ali);
-hashAdd(flankCache, key, sub);
+if (flankCache != NULL)
+    hashAdd(flankCache, key, sub);
 return sub;
 }
 
@@ -2277,13 +2283,42 @@ hFreeConn(&conn);
 return mfList;
 }
 
+static struct mafFrames *getFramesFromBbOneSpecies(char *framesTable, char *chromName,
+                                                   int seqStart, int seqEnd, char *component)
+/* Return the frames for one species in the window, opening the file for this one call.
+ * This is the path used when browser.mafFastCodons is off. */
+{
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi =  bigBedFileOpenAlias(framesTable, chromAliasFindAliases);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
+char *bedRow[11];
+char startBuf[16], endBuf[16];
+struct mafFrames *mfList = NULL, *mf;
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    if (sameString(bedRow[3], component))
+        {
+        mf = mafFramesLoad( bedRow );
+        slAddHead(&mfList, mf);
+        }
+    }
+
+bbiFileClose(&bbi);
+slReverse(&mfList);
+return mfList;
+}
+
 static struct hash *bbFramesBySpecies = NULL;  /* frames in the window, keyed by species */
 
-static struct mafFrames *getFramesFromBb(  char *framesTable, char *chromName, int seqStart, int seqEnd, char *component)
-/* Return the frames for one species in the window.  The first call in a draw reads every
- * species' frames from the file at once, and later calls look them up, so the file is
- * opened once per draw rather than once or twice per species. */
+static struct mafFrames *getFramesFromBb(  char *framesTable, char *chromName, int seqStart, int seqEnd, char *component, boolean fastCodons)
+/* Return the frames for one species in the window.  With fastCodons, the first call in a
+ * draw reads every species' frames from the file at once, and later calls look them up,
+ * so the file is opened once per draw rather than once or twice per species. */
 {
+if (!fastCodons)
+    return getFramesFromBbOneSpecies(framesTable, chromName, seqStart, seqEnd, component);
 if (bbFramesBySpecies == NULL)
     {
     bbFramesBySpecies = hashNew(0);
@@ -2338,7 +2373,10 @@ int i, x = xOff, y = yOff;
 struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
 struct hash *srcHash = newHash(0);
-struct hash *flankCache = hashNew(0);   /* see cachedFlankSubset() */
+/* browser.mafFastCodons: load the bases of split codons and the frames bigBed once per draw,
+ * and let a species with no frames of its own use the default species' frames.  refs #38763 */
+boolean fastCodons = cfgOptionBooleanDefault("browser.mafFastCodons", FALSE);
+struct hash *flankCache = fastCodons ? hashNew(0) : NULL;   /* see cachedFlankSubset() */
 char dbChrom[64];
 int alignLineLength = winBaseCount * 2;
         /* doubled to allow space for insert counts */
@@ -2811,7 +2849,15 @@ tryagain:
             {
             if (track->isBigBed)
                 {
-                mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd, framesSpecies);
+                char *species = framesSpecies;
+                if (!fastCodons)
+                    {
+                    /* the old lookup, which ignores the retry with the default species */
+                    species = mi->db;
+                    if (sameString("codonDefault", codonTransMode))
+                        species = defaultCodonSpecies;
+                    }
+                mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd, species, fastCodons);
                 }
             else
                 mfList = getFramesFromSql(  framesTable, chromName, seqStart, seqEnd, extra, newTableType);
