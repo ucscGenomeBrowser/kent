@@ -11,6 +11,9 @@ Subcommands:
   manifest  scan directories for *.bb and record what each one holds
   sample    pick a stratified sample from a manifest
   run       build each file in a list with both binaries and compare
+  errors    break copies of real inputs in many ways, and check that both
+            binaries report the same error, on the same line, with the same
+            exit code
 """
 
 import argparse
@@ -162,22 +165,16 @@ def sameFile(a, b):
     return subprocess.call(["cmp", "-s", a, b]) == 0
 
 
-def testOne(row, args):
+def prepInput(row, workDir):
+    """Rebuild the input of one bigBed in workDir.  Return (bed, sizes, opts), or
+    raise RuntimeError if bigBedToBed fails."""
     src = row["path"]
-    name = re.sub(r"[^A-Za-z0-9_.-]", "_", src.strip("/"))
-    workDir = os.path.join(args.work, name)
-    shutil.rmtree(workDir, ignore_errors=True)
-    os.makedirs(workDir)
     bed = os.path.join(workDir, "in.bed")
     asFile = os.path.join(workDir, "in.as")
     sizes = os.path.join(workDir, "chrom.sizes")
-    result = {"path": src, "bytes": row["bytes"], "itemCount": row["itemCount"],
-              "status": "", "detail": "", "refSecs": 0, "refKb": 0}
-
     r = run([BIGBEDTOBED, src, bed])
     if r.returncode != 0:
-        result.update(status="PREP_FAIL", detail=r.stderr.strip().replace("\n", " ")[:200])
-        return result
+        raise RuntimeError(r.stderr.strip().replace("\n", " ")[:200])
     r = run([BIGBEDINFO, "-chroms", src])
     with open(sizes, "w") as f:
         inChroms = False
@@ -201,15 +198,22 @@ def testOne(row, args):
         opts.append("-blockSize=%s" % row["blockSize"])
     if row["compressed"] == "no":
         opts.append("-unc")
+    return bed, sizes, opts
 
-    refOut = os.path.join(workDir, "ref.bb")
+
+def compareBuilds(bed, sizes, opts, workDir, args, result, tag=""):
+    """Build bed with the reference binary and with the new binary at each thread
+    count.  Fill in timings in result.  Return (problems, refRc, refErr)."""
+    refOut = os.path.join(workDir, tag + "ref.bb")
     refRc, refErr, result["refSecs"], result["refKb"] = timedRun(
-        [args.ref] + opts + [bed, sizes, refOut], workDir, "ref")
+        [args.ref] + opts + [bed, sizes, refOut], workDir, tag + "ref")
     problems = []
+    outs = [refOut]
     for t in args.threads:
-        newOut = os.path.join(workDir, "t%d.bb" % t)
+        newOut = os.path.join(workDir, "%st%d.bb" % (tag, t))
+        outs.append(newOut)
         newRc, newErr, secs, kb = timedRun(
-            [args.new, "-threads=%d" % t] + opts + [bed, sizes, newOut], workDir, "t%d" % t)
+            [args.new, "-threads=%d" % t] + opts + [bed, sizes, newOut], workDir, "%st%d" % (tag, t))
         result["t%dSecs" % t], result["t%dKb" % t] = secs, kb
         if newRc != refRc:
             problems.append("t%d exit %d vs ref %d" % (t, newRc, refRc))
@@ -217,11 +221,37 @@ def testOne(row, args):
             problems.append("t%d stderr differs" % t)
         elif refRc == 0 and not sameFile(refOut, newOut):
             problems.append("t%d output differs" % t)
+    if problems:
+        with open(os.path.join(workDir, tag + "opts"), "w") as f:
+            f.write(" ".join(opts) + "\n")
+    else:
+        for o in outs:
+            if os.path.exists(o):
+                os.remove(o)
+    return problems, refRc, refErr
 
+
+def workDirFor(args, src, suffix=""):
+    name = re.sub(r"[^A-Za-z0-9_.-]", "_", src.strip("/")) + suffix
+    workDir = os.path.join(args.work, name)
+    shutil.rmtree(workDir, ignore_errors=True)
+    os.makedirs(workDir)
+    return workDir
+
+
+def testOne(row, args):
+    src = row["path"]
+    workDir = workDirFor(args, src)
+    result = {"path": src, "bytes": row["bytes"], "itemCount": row["itemCount"],
+              "status": "", "detail": "", "refSecs": 0, "refKb": 0}
+    try:
+        bed, sizes, opts = prepInput(row, workDir)
+    except RuntimeError as e:
+        result.update(status="PREP_FAIL", detail=str(e))
+        return result
+    problems, refRc, refErr = compareBuilds(bed, sizes, opts, workDir, args, result)
     if problems:
         result.update(status="DIFF", detail="; ".join(problems))
-        with open(os.path.join(workDir, "opts"), "w") as f:
-            f.write(" ".join(opts) + "\n")
         return result      # keep workDir for inspection
     if refRc != 0:
         result.update(status="SAME_FAIL", detail=refErr.strip().replace("\n", " ")[:200])
@@ -259,6 +289,192 @@ def cmdRun(args):
     return 1 if counts["DIFF"] else 0
 
 
+# Each line mutation takes (fields, defined, extra) and returns the new fields, or
+# None when it does not apply to this BED type.
+def setField(i, value, minDefined=0):
+    def mutate(f, defined, extra):
+        if defined < minDefined or i >= len(f):
+            return None
+        f = list(f)
+        f[i] = value(f) if callable(value) else value
+        return f
+    return mutate
+
+
+def extraFieldText(f, defined, extra):
+    if extra == 0:
+        return None
+    f = list(f)
+    f[defined] = "notANumber"
+    return f
+
+
+def blockCountMismatch(f, defined, extra):
+    if defined < 12:
+        return None
+    f = list(f)
+    f[9] = str(int(f[9]) + 1)
+    return f
+
+
+def blockPastEnd(f, defined, extra):
+    if defined < 12:
+        return None
+    f = list(f)
+    sizes = f[10].rstrip(",").split(",")
+    sizes[-1] = str(int(sizes[-1]) + 1000)
+    f[10] = ",".join(sizes) + ","
+    return f
+
+
+LINE_MUTATIONS = {
+    "startAfterEnd": setField(1, lambda f: str(int(f[2]) + 10)),
+    "startNotNumber": setField(1, "abc"),
+    "negativeStart": setField(1, "-5"),
+    "endPastChrom": setField(2, "4000000000"),
+    "endNotNumber": setField(2, "12x"),
+    "unknownChrom": setField(0, "chrNoSuchChrom"),
+    "emptyChrom": setField(0, ""),
+    "tooFewFields": lambda f, d, e: f[:-1],
+    "tooManyFields": lambda f, d, e: f + ["extra"],
+    "scoreNotNumber": setField(4, "high", 5),
+    "scoreOver1000": setField(4, "5000", 5),
+    "badStrand": setField(5, "x", 6),
+    "thickStartBeforeStart": setField(6, lambda f: str(max(0, int(f[1]) - 100)), 8),
+    "thickEndNotNumber": setField(7, "n", 8),
+    "badItemRgb": setField(8, "1,2", 9),
+    "blockCountMismatch": blockCountMismatch,
+    "blockPastEnd": blockPastEnd,
+    "extraFieldText": extraFieldText,
+    "spaceInName": setField(3, "has space", 4),
+}
+
+
+def mutateLines(lines, kind, positions, defined, extra):
+    """Return a mutated copy of lines, or None if the mutation does not apply."""
+    out = list(lines)
+    if kind in LINE_MUTATIONS:
+        for pos in positions:
+            f = out[pos].rstrip("\n").split("\t")
+            g = LINE_MUTATIONS[kind](f, defined, extra)
+            if g is None:
+                return None
+            out[pos] = "\t".join(g) + "\n"
+        return out
+    pos = positions[0]
+    if kind == "swapWithNext":
+        if pos + 1 >= len(out):
+            return None
+        a, b = out[pos].split("\t"), out[pos + 1].split("\t")
+        if a[0] != b[0] or a[1] == b[1]:
+            return None
+        out[pos], out[pos + 1] = out[pos + 1], out[pos]
+    elif kind == "chromOutOfOrder":
+        last = out[-1]
+        if last.split("\t")[0] == out[0].split("\t")[0]:
+            return None
+        out = out[:-1]
+        out.insert(pos, last)
+    elif kind == "blankLine":
+        out.insert(pos, "\n")
+    elif kind == "commentLine":
+        out.insert(pos, "# a comment\n")
+    elif kind == "crlfLine":
+        out[pos] = out[pos].rstrip("\n") + "\r\n"
+    elif kind == "noFinalNewline":
+        out[-1] = out[-1].rstrip("\n")
+    elif kind == "emptyFile":
+        out = []
+    else:
+        raise ValueError(kind)
+    return out
+
+
+OTHER_MUTATIONS = ["swapWithNext", "chromOutOfOrder", "blankLine", "commentLine", "crlfLine"]
+WHOLE_FILE_MUTATIONS = ["noFinalNewline", "emptyFile"]
+
+
+def errorCases(lineCount):
+    """Yield (case name, mutation, positions)."""
+    named = [("first", [0]), ("middle", [lineCount // 2]), ("last", [lineCount - 1])]
+    for kind in list(LINE_MUTATIONS) + OTHER_MUTATIONS:
+        for where, positions in named:
+            yield "%s.%s" % (kind, where), kind, positions
+    # Two bad lines: the first one must be the one reported.
+    for kind in LINE_MUTATIONS:
+        yield "%s.middleAndLast" % kind, kind, [lineCount // 2, lineCount - 1]
+    for kind in WHOLE_FILE_MUTATIONS:
+        yield kind, kind, [0]
+
+
+def errorsOne(row, args):
+    src = row["path"]
+    workDir = workDirFor(args, src, ".errors")
+    try:
+        bed, sizes, opts = prepInput(row, workDir)
+    except RuntimeError as e:
+        return [{"path": src, "case": "-", "status": "PREP_FAIL", "detail": str(e)}]
+    with open(bed) as f:
+        lines = f.readlines()
+    if len(lines) < 3:
+        shutil.rmtree(workDir, ignore_errors=True)
+        return [{"path": src, "case": "-", "status": "SKIPPED", "detail": "fewer than 3 lines"}]
+    defined, extra = int(row["definedFieldCount"]), int(row["extraFieldCount"])
+    results = []
+    keep = False
+    for case, kind, positions in errorCases(len(lines)):
+        mutated = mutateLines(lines, kind, positions, defined, extra)
+        if mutated is None:
+            continue
+        caseBed = os.path.join(workDir, case + ".bed")
+        with open(caseBed, "w") as f:
+            f.writelines(mutated)
+        res = {"path": src, "case": case}
+        problems, refRc, refErr = compareBuilds(caseBed, sizes, opts, workDir, args, res, case + ".")
+        if problems:
+            res.update(status="DIFF", detail="; ".join(problems))
+            keep = True
+        else:
+            os.remove(caseBed)
+            res["status"] = "SAME_FAIL" if refRc else "SAME"
+            res["detail"] = normalizeStderr(refErr).strip().replace("\n", " ")[:200] if refRc else ""
+        results.append(res)
+    if not keep:
+        shutil.rmtree(workDir, ignore_errors=True)
+    return results
+
+
+def cmdErrors(args):
+    args.threads = [int(t) for t in args.threads.split(",")]
+    os.makedirs(args.work, exist_ok=True)
+    rows = [r for r in readTsv(args.list) if int(r["bytes"]) <= args.maxBytes]
+    perType = collections.defaultdict(list)
+    for r in rows:
+        perType[(r["definedFieldCount"], r["extraFieldCount"] != "0")].append(r)
+    picked = []
+    for key in sorted(perType):
+        group = sorted(perType[key], key=lambda r: int(r["bytes"]))
+        # the smallest and the largest of each type, so some errors land past the first batch
+        picked += [group[0]] + ([group[-1]] if len(group) > 1 else [])
+    print("%d files picked" % len(picked), file=sys.stderr)
+    fields = ["path", "case", "status", "detail"]
+    results = []
+    counts = collections.Counter()
+    start = time.time()
+    with concurrent.futures.ThreadPoolExecutor(args.jobs) as ex:
+        for resList in ex.map(lambda r: errorsOne(r, args), picked):
+            for res in resList:
+                results.append(res)
+                counts[res["status"]] += 1
+                if res["status"] in ("DIFF", "PREP_FAIL"):
+                    print("%s %s %s %s" % (res["status"], res["path"], res["case"], res["detail"]),
+                          file=sys.stderr)
+    writeTsv(args.results, results, fields)
+    print("%d cases in %.0f s: %s" % (len(results), time.time() - start,
+          ", ".join("%s=%d" % kv for kv in sorted(counts.items()))), file=sys.stderr)
+    return 1 if counts["DIFF"] else 0
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd")
@@ -281,6 +497,15 @@ def main():
     r.add_argument("--threads", default="1,32", help="comma-separated -threads values for --new")
     r.add_argument("--work", required=True, help="scratch directory, under /data/tmp")
     r.add_argument("--jobs", type=int, default=4, help="files tested at once")
+    e = sub.add_parser("errors", help="break copies of real inputs and compare the errors")
+    e.add_argument("list", help="manifest or sample file")
+    e.add_argument("results")
+    e.add_argument("--ref", required=True, help="reference bedToBigBed")
+    e.add_argument("--new", required=True, help="bedToBigBed under test")
+    e.add_argument("--threads", default="1,32", help="comma-separated -threads values for --new")
+    e.add_argument("--work", required=True, help="scratch directory, under /data/tmp")
+    e.add_argument("--jobs", type=int, default=8, help="files tested at once")
+    e.add_argument("--maxBytes", type=int, default=50 * 10**6, help="largest bigBed to use")
     args = p.parse_args()
     if args.cmd == "manifest":
         cmdManifest(args)
@@ -288,6 +513,8 @@ def main():
         cmdSample(args)
     elif args.cmd == "run":
         sys.exit(cmdRun(args))
+    elif args.cmd == "errors":
+        sys.exit(cmdErrors(args))
     else:
         p.print_help()
 
