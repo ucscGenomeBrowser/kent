@@ -747,7 +747,10 @@ function sessRecentHtml(recent) {
     if (!recent) { return ''; }
     var tip = 'Update this session: overwrite it with the currently active view; keeps the ' +
         'session name and description identical';
-    return '<div class="sessRecent">Most recently used session: <b>' + sessEnc(recent.name) +
+    // Styled like the save card's title so the two boxes read as a pair: save a new session /
+    // update an existing one.
+    return '<div class="sessRecent"><span class="sessSaveTitle">Update and overwrite the most ' +
+        'recently used session:</span> <b>' + sessEnc(recent.name) +
         '</b> <span class="sessRecentTime">(' + sessEnc(recent.lastUse) + ')</span> ' +
         '<button type="button" class="gbPill sessIconBtn" id="sessUpdateNow" title="' + tip + '">' +
         SESS_UPDATE_SVG + 'Update now</button> <span class="sessInfo" title="' + tip + '">&#9432;</span></div>';
@@ -874,8 +877,8 @@ function sessionBuild() {
     app.html(
         intro +
         '<div id="sessMsg" class="sessMsg"></div>' +
-        sessRecentHtml(recent) +
         sessSaveCardHtml(C) +
+        sessRecentHtml(recent) +
         sessAdvancedBarHtml() +
         sessTableHtml(C)
     );
