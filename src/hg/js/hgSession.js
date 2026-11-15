@@ -345,8 +345,7 @@ function sessOpenDelete(row) {
                 for (var i = 0; i < list.length; i++) {
                     if (list[i].uid === row.uid) { list.splice(i, 1); break; }
                 }
-                sessModalClose();
-                sessMsg('Deleted “' + row.name + '”.', 'ok');
+                sessModalClose();   // the row disappearing says enough, no status line (#38157)
             });
         }
     });
