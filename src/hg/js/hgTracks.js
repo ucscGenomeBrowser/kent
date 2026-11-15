@@ -6017,6 +6017,24 @@ var rightClick = {
                 }
             }
 
+            // Base Position track (ruler, also draws the sequence when zoomed in):
+            // offer the DNA download page for the current view, like View > DNA Sequence
+            if (rightClick.selectedMenuItem.id === "ruler") {
+                menu.push($.contextMenu.separator);
+                o = {};
+                o[rightClick.makeImgTag("dnaIcon.png") + " View DNA Sequence"] = {
+                    onclick: function(menuItemClicked, menuObject) {
+                        // #dnaLink in the View menu is kept current by genomePos.set()
+                        // when the view is scrolled without a page reload
+                        var dnaHref = $('#dnaLink').attr('href');
+                        if (dnaHref)
+                            window.location.href = dnaHref;
+                        else
+                            gotoGetDnaPage();
+                        return true; }
+                };
+                menu.push(o);
+            }
 
             menu.push($.contextMenu.separator);
             o = {};
