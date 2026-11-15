@@ -293,16 +293,37 @@ function sessDoOverwrite(row) {
         var r = sessRowByKey(row.uid);
         if (r) { r.data(row).draw(false); }
         sessModalClose();
-        sessMsg('Overwrote “' + row.name + '” with your current browser view.', 'ok');
+        // No status line at the top of the page (#38157: it read oddly, far from where the user
+        // clicked); the Update button(s) of this session say "Updated" for a moment instead.
+        sessFlashUpdated($('#sessionAppTable button[data-act="overwrite"]').filter(function() {
+            return this.getAttribute('data-key') === row.uid;
+        }));
+        if ($('#sessUpdateNow').attr('data-key') === row.uid) { sessFlashUpdated($('#sessUpdateNow')); }
+    });
+}
+
+function sessFlashUpdated(btns) {
+    // Show a check mark and "Updated" on the button for a moment, then put it back.
+    btns.each(function() {
+        var b = this;
+        if (b.getAttribute('data-orig')) { return; }   // already flashing
+        b.setAttribute('data-orig', b.innerHTML);
+        b.innerHTML = '&#10003; Updated';
+        b.disabled = true;
+        setTimeout(function() {
+            b.innerHTML = b.getAttribute('data-orig');
+            b.removeAttribute('data-orig');
+            b.disabled = false;
+        }, 2500);
     });
 }
 
 function sessOpenOverwrite(row) {
     sessConfirm({
-        title: 'Overwrite session',
+        title: 'Update session',
         bodyHtml: 'Replace the saved session <b>' + sessEnc(row.name) + '</b> with the view you are ' +
             'looking at now? The name and description stay the same; the previously saved view is lost.',
-        okLabel: 'Overwrite',
+        okLabel: 'Update',
         onOk: function() { sessDoOverwrite(row); }
     });
 }
@@ -752,7 +773,8 @@ function sessRecentHtml(recent) {
     return '<div class="sessRecent"><span class="sessSaveTitle">Update and overwrite the most ' +
         'recently used session:</span> <b>' + sessEnc(recent.name) +
         '</b> <span class="sessRecentTime">(' + sessEnc(recent.lastUse) + ')</span> ' +
-        '<button type="button" class="gbPill sessIconBtn" id="sessUpdateNow" title="' + tip + '">' +
+        '<button type="button" class="gbPill sessIconBtn" id="sessUpdateNow" data-key="' +
+        sessEnc(recent.uid) + '" title="' + tip + '">' +
         SESS_UPDATE_SVG + 'Update now</button> <span class="sessInfo" title="' + tip + '">&#9432;</span></div>';
 }
 
