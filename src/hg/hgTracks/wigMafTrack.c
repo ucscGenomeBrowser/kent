@@ -2783,10 +2783,12 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
     if (framesTable != NULL)
 	{
 	char extra[512];
+	char *framesSpecies = mi->db;  /* the species whose frames we use, as named in extra */
 
 	if (sameString("codonDefault", codonTransMode))
 	    {
 	    sqlSafef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
+	    framesSpecies = defaultCodonSpecies;
 
 	    found = TRUE;
 	    }
@@ -2809,10 +2811,7 @@ tryagain:
             {
             if (track->isBigBed)
                 {
-                char *species = mi->db;
-                if (sameString("codonDefault", codonTransMode))
-                    species = defaultCodonSpecies;
-                mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd, species);
+                mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd, framesSpecies);
                 }
             else
                 mfList = getFramesFromSql(  framesTable, chromName, seqStart, seqEnd, extra, newTableType);
@@ -2874,6 +2873,7 @@ tryagain:
 	    {
 	    /* try the default species */
 	    sqlSafef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
+	    framesSpecies = defaultCodonSpecies;
 
 	    found = TRUE; /* don't try again */
 	    goto tryagain;
