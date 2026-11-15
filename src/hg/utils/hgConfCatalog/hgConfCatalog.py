@@ -1978,6 +1978,15 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("hubGenomeNotFoundError", "flag", "hg/lib/cart.c", default="FALSE",
+          ticket="30832",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in hg/lib/cart.c. "
+               "Came in at 79ea85d0f5f, The hub genome error pages (no "
+               "twoBitPath, and hub_<id>_<name> from another server) are now "
+               "off by default and turned on with hubGenomeNotFoundError=on "
+               "in hg.conf, refs #30832.  Needs a description and a gate or "
+               "knob call."),
         h("browser.quickLiftMuteTriangles", "flag", "hg/lib/quickLift.c",
           default="FALSE", ticket="38693",
           note="Written down by --auto-register, not yet reviewed by a "
