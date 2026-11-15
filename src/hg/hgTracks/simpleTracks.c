@@ -668,6 +668,13 @@ int expandPack = 0;  // deactivating item boundary extention for now - working o
                         }
                     }
 
+                int leftPad = 0;
+                if (tg->itemLeftPixels)
+                // check if the item has special padding on the left
+                    {
+                    leftPad = tg->itemLeftPixels(tg, item);
+                    }
+
 		if (!tg->drawLabelInBox && !tg->drawName && withLabels && (!noLabel))
                 // add item label
 		    {
@@ -675,8 +682,10 @@ int expandPack = 0;  // deactivating item boundary extention for now - working o
 					       tg->itemName(tg, item)) + extraWidth;
 		    if (start - leftLabelSize + winOffset < 0)
 			leftLabelSize = start + winOffset;
-		    start -= leftLabelSize;
+                    if (leftLabelSize > leftPad)
+                        leftPad = leftLabelSize;
 		    }
+                start -= leftPad;
 
                 if (hasDecorators(tg) && expandPack)
                 // expand item start for packing if other decorations push it past the left label edge, for packing

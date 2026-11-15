@@ -277,7 +277,6 @@ return h;
 }
 
 
-
 int heatmapTotalHeight(struct heatmap *h)
 /*
  * Need to be able to say how high a heatmap is, including optional column labels
@@ -833,6 +832,25 @@ tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
 }
 
 
+int heatmapLeftPixels(struct track *tg, void *item)
+/* Return how many pixels left of the heatmap the row labels extend.  For packing. */
+{
+struct linkedFeatures *lf = (struct linkedFeatures *) item;
+struct heatmap *h = heatmapForLF(tg, lf);
+
+int i, maxWidth = 0;
+int extraWidth = tl.nWidth/2;
+MgFont *font = tl.font;
+for (i=0; i<h->rows; i++)
+    {
+    int labelWidth = mgFontStringWidth(font, h->rowLabels[i]) + extraWidth;
+    if (labelWidth > maxWidth)
+        maxWidth = labelWidth;
+    }
+return maxWidth;
+}
+
+
 void heatmapMethods(struct track *tg)
 /* This is intended to be invoked after commonBigBedMethods has already been applied to a track (really,
  * it's only expected to be invoked as part of bigBedMethods).
@@ -860,5 +878,6 @@ if (trackVis != tvDense)
     tg->drawItemLabel = heatmapDrawItemLabel;
     tg->mapItem = heatmapMapItem;
     tg->doItemMapAndArrows = heatmapItemMapAndArrows;
+    tg->itemLeftPixels = heatmapLeftPixels;
     }
 }

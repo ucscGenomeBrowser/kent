@@ -126,6 +126,11 @@ struct track
     int (*itemRightPixels)(struct track *tg, void *item);
     /* Return number of pixels needed to right of item for additional labeling. (Optional) */
 
+    int (*itemLeftPixels)(struct track *tg, void *item);
+    /* Return number of pixels needed to left of item for additional labeling. (Optional)
+     * Not additive with normal item labels (i.e. drawItemLabel) - the larger of the two
+     * values is used. */
+
     void (*preDrawMultiRegion)(struct track *tg);
     /* Handle multi-region issues after predraw and before draw such as autoScale for wigs. */
 
