@@ -1,7 +1,7 @@
 # #38756 (and #38763) -- MAF codon translation, with a frames bigBed that has only the
 # reference's frames, the case in Michael Hiller's 830-way report.
 #
-# Commits, on master 2026-11-15: 15cd288b52e (load the bases of split codons and the frames
+# Commits, on master 2026-11-15 and on genome-test the same day: 15cd288b52e (load the bases of split codons and the frames
 # bigBed once per draw), 52978391ea1 (bigMaf "otherwise use default species" falls back),
 # dc4f089aa32 (both behind hg.conf browser.mafFastCodons), be5558f42b2 (free the frames lists).
 #
@@ -45,6 +45,7 @@ proof:
   - "assertion-only 2026-11-15 -- written with the fix"
   - "xfail 2026-11-15 -- fails on genome-test at the last step (code without the fix): rm38756frameDef is drawn 127,127,127 (38%), the default row 200,220,255"
   - "sandbox-ab 2026-11-15 -- park 38763 (port 48094, hgTracks from be5558f42b2's tree): passes with browser.mafFastCodons=on; with =off added to the park's hg.conf the last step fails, rm38756frameDef drawn 127,127,127 (38%)"
+  - "server-flip 2026-11-15 -- failed on genome-test at step 10 (rm38756frameDef 127,127,127); passed there once be5558f42b2 was built with cgi-alpha (hgTracks 13:19), with browser.mafFastCodons=on in the shared hg.conf"
 
 target: genome-test
 db: hg38
