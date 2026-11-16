@@ -1,0 +1,39 @@
+## input/inRange.bed
+100 bases of 1000 (10.000%) in intersection
+exit 0
+## input/inRangeBlocks.bed
+100 bases of 1000 (10.000%) in intersection
+exit 0
+## input/inRangeBlocks.bed -countBlocks
+30 bases of 1000 (3.000%) in intersection
+exit 0
+## input/onePast.bed
+Coordinate out of allowed range [0,1000) for chrT
+exit 255
+## input/allPast.bed
+Coordinate out of allowed range [0,1000) for chrT
+exit 255
+## input/blockPast.bed
+90 bases of 1000 (9.000%) in intersection
+exit 0
+## input/blockPast.bed -countBlocks
+Coordinate out of allowed range [0,1000) for chrT
+exit 255
+## input/negBlock.bed -countBlocks
+Coordinate out of allowed range [0,1000) for chrT
+exit 255
+## input/overflow.bed
+100 bases of 1000 (10.000%) in intersection
+exit 0
+## input/overflow.bed -countBlocks
+Coordinate out of allowed range [0,1000) for chrT
+exit 255
+## output/inRange.bb
+100 bases of 1000 (10.000%) in intersection
+exit 0
+## output/inRange.bb -countBlocks
+30 bases of 1000 (3.000%) in intersection
+exit 0
+## output/pastEnd.bb
+Coordinate out of allowed range [0,1000) for chrT
+exit 255
