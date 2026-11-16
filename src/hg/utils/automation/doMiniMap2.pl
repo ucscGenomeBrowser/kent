@@ -74,10 +74,12 @@ my $minimapCpu = 8;		# -t N threads given to each minimap2 job
 # see the same kind of overlapping candidate alignments a lastz/blastz run
 # would give them, and can use genome-scale synteny context to arbitrate
 # ambiguous/duplicated regions -- rather than trusting minimap2's own local,
-# per-query-region primary/secondary call alone.  Defaults match minimap2's
-# own -N/-p defaults; only override via -minimapSecondaryN/-Ratio if you
-# have a specific reason to.
-my $minimapSecondaryN = 5;		# -N INT to minimap2
+# per-query-region primary/secondary call alone.  -N is left undef by
+# default so the asm5/asm10/asm20 preset's own -N (50) applies -- passing
+# minimap2's global default of 5 after -x would override the preset.  -p
+# matches minimap2's default.  Only override via -minimapSecondaryN/-Ratio
+# if you have a specific reason to.
+my $minimapSecondaryN;			# -N INT to minimap2, undef: preset's own
 my $minimapSecondaryRatio = 0.8;	# -p FLOAT to minimap2
 my $chainRam = '16g';		# -chainRam=Ng argument
 my $chainCpu = 1;		# -chainCpu=N argument
@@ -125,7 +127,8 @@ options:
                           default: $minimapCpu
     -ram Ng               Cluster ram size for minimap2, default: -ram=$ramG
     -minimapSecondaryN N  minimap2 -N: max secondary alignments retained per
-                          primary hit, default: $minimapSecondaryN.  Secondary
+                          primary hit, default: the -minimapPreset's own
+                          -N (50 for asm5/asm10/asm20).  Secondary
                           alignments are kept (not -secondary=no) so
                           axtChain/chainNet get the same kind of overlapping
                           candidate alignments a lastz run would give them,
@@ -350,6 +353,9 @@ sub doAlign {
 
   my ($paraHub, $tSeqScratch, $qSeqScratch) = &getClusterSeqs();
 
+  # Only pass -N when explicitly requested, so the preset's own -N applies.
+  my $minimapNArg = defined($minimapSecondaryN) ? "-N $minimapSecondaryN " : "";
+
   # Unlike blat -fastMap, minimap2 does not need the query pre-split into
   # small chunks or an .ooc repeat mask -- it indexes and aligns whole
   # sequences directly.  We only partition on the target side, one job
@@ -410,7 +416,7 @@ else
   twoBitToFa \$targetSpec target.fa
 fi
 
-minimap2 -cx $minimapPreset -N $minimapSecondaryN -p $minimapSecondaryRatio -t $minimapCpu \\
+minimap2 -cx $minimapPreset ${minimapNArg}-p $minimapSecondaryRatio -t $minimapCpu \\
     target.fa $runDir/query.fa > tmpOut.paf
 
 pafToPsl -tSizes=$tSizes -qSizes=$qSizes tmpOut.paf tmpOut.psl
@@ -455,7 +461,7 @@ else
 fi
 printf "minimap2 " >> $buildDir/version.txt
 minimap2 --version >> $buildDir/version.txt
-printf "minimap2 -cx $minimapPreset -N $minimapSecondaryN -p $minimapSecondaryRatio -t $minimapCpu target.fa query.fa > out.paf\\n" >> $buildDir/version.txt
+printf "minimap2 -cx $minimapPreset ${minimapNArg}-p $minimapSecondaryRatio -t $minimapCpu target.fa query.fa > out.paf\\n" >> $buildDir/version.txt
 
 # Convert the whole query 2bit to fasta once; every target job aligns
 # against this same file.

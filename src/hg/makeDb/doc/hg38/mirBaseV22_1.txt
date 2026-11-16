@@ -50,6 +50,11 @@ cd /hive/data/genomes/hg38/bed/mirBaseV22_1
 # /cluster/home/atanzer/.local/miniforge3/bin/RNAsubopt (RNASUBOPT in
 # mirBaseToBed.py). The field foldType says which structure is shown, with its
 # energy; the mfe field is always the MFE.
+# The MirGeneDB ID on the details page is taken from the MirGeneDB track of this
+# assembly (doc/hg38/mirGeneDbV3_0.txt, build it first): the MirGeneDB genes whose
+# miRBase accession, as MirGeneDB gives it, is this precursor's accession. Nothing is
+# inferred from positions; see the notes on MirGeneDB paralog swaps in
+# doc/hg38/mirGeneDbV3_0.txt.
 bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh
 #   1918 precursor sequences
 #   1918 precursors, 2883 matures, 1918 folds
@@ -74,6 +79,12 @@ bigBedInfo mirBaseArms.bb | grep itemCount
 #   itemCount: 2,883
 # All precursors and mature miRNAs of the GFF are in the track; every mature
 # miRNA lies inside exactly one precursor locus on the same strand.
+
+# Link the files into /gbdb:
+mkdir -p /gbdb/hg38/mirBaseV22_1
+for f in mirBase.bb mirBaseArms.bb mirBase.ix mirBase.ixx; do
+    ln -sf `pwd`/$f /gbdb/hg38/mirBaseV22_1/$f
+done
 
 # Checks done on the output:
 #   - every folded sequence equals the hg38 sequence at the precursor

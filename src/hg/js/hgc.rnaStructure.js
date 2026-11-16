@@ -104,6 +104,9 @@ function drawStructure(cell, dotBracket, sequence, arms, colors, labels) {
     box.style.width = VIEW_W + "px";
     box.style.height = VIEW_H + "px";
     box.style.border = "1px solid #ccc";
+    // fornac focuses its container for its keyboard shortcuts, which scrolls the page
+    // down to the viewer; keep the focus but not the scroll, so the page opens at the top
+    box.focus = () => HTMLElement.prototype.focus.call(box, {preventScroll: true});
     cell.appendChild(box);
 
     // legend: one swatch per colored arm type, 5' to 3'. Not in the order of the

@@ -40,6 +40,19 @@ bigBedInfo mirGeneDb.bb | grep itemCount
 bigBedInfo mirGeneDbArms.bb | grep itemCount
 #   itemCount: 913
 
+# Link the files into /gbdb:
+mkdir -p /gbdb/mm39/mirGeneDbV3_0
+for f in mirGeneDb.bb mirGeneDbArms.bb mirGeneDb.ix mirGeneDb.ixx; do
+    ln -sf `pwd`/$f /gbdb/mm39/mirGeneDbV3_0/$f
+done
+
+# miRBase IDs and accessions are shown as MirGeneDB gives them, not corrected. For
+# these paralog pairs MirGeneDB gives the accession of the other copy, so the miRBase
+# precursor at the locus is the other member of the pair:
+#   Mmu-Mir-506-P11b1/b2 (mmu-mir-465b-1/-2), Mmu-Mir-506-P11c1/c2 (mmu-mir-465c-1/-2).
+# Mmu-Mir-1271 has no miRBase accession, although miRBase 22.1 has mmu-mir-1271
+# (MI0039503) at this locus.
+
 # Checks done on the output:
 #   - every folded sequence equals the mm39 sequence at the pri coordinates
 #     (strand-aware), and every armPositions range cuts exactly the arm's mm39

@@ -333,7 +333,7 @@ def bed(bedFile, gffFile, browseFile, foldFile, twoBit, bedOut, armsOut):
             seq, dotBracket, mfe = folds[gene]
             if gene in refolded:
                 dotBracket = refolded[gene][0]
-            armPos, armText, armNames = [], defaultdict(list), defaultdict(list)
+            armPos, armText, armNames, armSeq = [], defaultdict(list), defaultdict(list), defaultdict(list)
             # MirGeneDB marks only one arm of a co-mature pair with _co (always the 3p on
             # hg38); the other is then co-mature too, not dominant
             hasCo = any(armClass(t) == "co" for s, e, t in geneArms)
@@ -343,8 +343,9 @@ def bed(bedFile, gffFile, browseFile, foldFile, twoBit, bedOut, armsOut):
                 s, e = armRange(start, end, strand, aStart, aEnd)
                 armPos.append((s, e, armType + "_co" if hasCo and armClass(armType) == "dominant"
                                else armType))
-                armText[armType[:2]].append("%s_%s %s:%d-%d" % (gene, armType, chrom, aStart + 1, aEnd))
+                armText[armType[:2]].append("%s:%d-%d" % (chrom, aStart + 1, aEnd))
                 armNames[armType[:2]].append("%s_%s" % (gene, armType))
+                armSeq[armType[:2]].append(seq[s - 1:e])
                 color, fill = ARM_COLORS[armType[:2]]
                 aOut.write("\t".join(str(x) for x in [
                     chrom, aStart, aEnd, "%s_%s" % (gene, armType), 0, strand,
@@ -356,9 +357,11 @@ def bed(bedFile, gffFile, browseFile, foldFile, twoBit, bedOut, armsOut):
             # address has no species prefix
             out.write("\t".join([chrom, str(start), str(end), gene, "0", strand,
                 "%s|%s" % (gene.split("-", 1)[1], gene),
-                m["mirbaseId"], m["family"], seed, mi, m["acc5p"], m["acc3p"],
-                ", ".join(armText["5p"]) or "-", ", ".join(armText["3p"]) or "-",
-                ", ".join(armNames["5p"]) or "-", ", ".join(armNames["3p"]) or "-",
+                m["mirbaseId"], m["family"], seed, mi,
+                ", ".join(armNames["5p"]) or "-", ", ".join(armText["5p"]) or "-",
+                ", ".join(armSeq["5p"]) or "-", m["acc5p"],
+                ", ".join(armNames["3p"]) or "-", ", ".join(armText["3p"]) or "-",
+                ", ".join(armSeq["3p"]) or "-", m["acc3p"],
                 mfe, foldType(refolded, gene),
                 seq, dotBracket,
                 ",".join("%d-%d:%s" % a for a in armPos)]) + "\n")

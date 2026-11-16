@@ -489,7 +489,8 @@ else
 
 
 /* forward declaration to reduce churn */
-static void getCustomName(char *database, struct cart *cart, struct psl *psl, char **pName, char **pDescription);
+static void getCustomName(char *database, struct cart *cart, struct psl *psl, char *pslName,
+                          char **pName, char **pDescription);
 
 static void printBlatHitLinks(struct psl *psl, char *database, char *browserUrl, char *hgcUrl,
     char *pslName, char *faName, char *customText, char *uiState, char *unhideTrack)
@@ -704,7 +705,7 @@ if (ctTdb != NULL)
 else if (autoBigPsl)
     {
     char *trackName = NULL, *trackDescription = NULL;
-    getCustomName(database, cart, pslList, &trackName, &trackDescription);
+    getCustomName(database, cart, pslList, pslName, &trackName, &trackDescription);
     jsonWriteString(jw, "trackName", trackName);
     jsonWriteString(jw, "trackDescription", trackDescription);
     }
@@ -1055,7 +1056,7 @@ else  // hyperlink
 	{
         char *trackName = NULL;
         char *trackDescription = NULL;
-        getCustomName(database, cart, pslList, &trackName, &trackDescription);
+        getCustomName(database, cart, pslList, pslName, &trackName, &trackDescription);
 
         psl = pslList;
         char item[1024];
@@ -1251,7 +1252,7 @@ else  // hyperlink
         {
         char *trackName = NULL;
         char *trackDescription = NULL;
-        getCustomName(database, cart, pslList, &trackName, &trackDescription);
+        getCustomName(database, cart, pslList, pslName, &trackName, &trackDescription);
         psl = pslList;
         printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
         printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
@@ -1627,9 +1628,24 @@ if (label == NULL)
 return label;
 }
 
-static void getCustomName(char *database, struct cart *cart, struct psl *psl, char **pName, char **pDescription)
-// Find a track name that isn't currently a custom track. Also fill in description.
+static void getCustomName(char *database, struct cart *cart, struct psl *psl, char *pslName,
+                          char **pName, char **pDescription)
+// Find a track name that isn't currently a custom track. Also fill in description.  If the cart
+// already has the results track of the search whose .pslx is pslName (a reload, Back, a reopened
+// link), return that track's name and description: hgc reuses that track, or rebuilds it under the
+// same name when its bigBed is gone, so the next free name would not be the track's name.
 {
+if (pslName != NULL)
+    {
+    struct customTrack *ctList = customTracksParseCart(database, cart, NULL, NULL);
+    struct customTrack *ct = blatFindSearchCt(ctList, pslName);
+    if (ct != NULL)
+        {
+        *pName = cloneString(ct->tdb->shortLabel);
+        *pDescription = cloneString(ct->tdb->longLabel);
+        return;
+        }
+    }
 struct slName *names = namesInPsl(psl);
 char shortName[4096];
 char description[4096];

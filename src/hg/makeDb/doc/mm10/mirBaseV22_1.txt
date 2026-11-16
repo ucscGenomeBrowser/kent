@@ -25,6 +25,11 @@ bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseDownload.sh mmu \
 # -712, -714, -1194, -2183, -7228 and -7238 have no coordinates.
 
 cd /hive/data/genomes/mm10/bed/mirBaseV22_1
+# The MirGeneDB ID on the details page is taken from the MirGeneDB track of this
+# assembly (doc/mm10/mirGeneDbV3_0.txt, build it first): the MirGeneDB genes whose
+# miRBase accession, as MirGeneDB gives it, is this precursor's accession. Nothing is
+# inferred from positions; see the notes on MirGeneDB paralog swaps in
+# doc/mm10/mirGeneDbV3_0.txt.
 bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh mm10 mmu
 #   1227 precursor sequences
 #   1227 precursors, 2110 matures, 1227 folds
@@ -55,6 +60,12 @@ bigBedInfo mirBase.bb | grep itemCount
 #   itemCount: 1,227
 bigBedInfo mirBaseArms.bb | grep itemCount
 #   itemCount: 2,110
+
+# Link the files into /gbdb:
+mkdir -p /gbdb/mm10/mirBaseV22_1
+for f in mirBase.bb mirBaseArms.bb mirBase.ix mirBase.ixx; do
+    ln -sf `pwd`/$f /gbdb/mm10/mirBaseV22_1/$f
+done
 
 # Checks done on the output:
 #   - every folded sequence equals the mm10 sequence at the precursor coordinates
