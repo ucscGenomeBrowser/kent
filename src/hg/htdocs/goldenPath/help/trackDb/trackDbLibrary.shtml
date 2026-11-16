@@ -1589,6 +1589,18 @@ There are no extra options that can appear on the type hic line.
     <P>The text can be set with the options "exonText" and "intronText". It defaults to "exon" and "intron", respectively.</P>
 </DIV>
 
+<DIV class="itemTypeLabel"><span class="types genePred bigGenePred bed bigBed psl bigPsl"></span>
+<div class="format"><code>itemTypeLabel &lt;text&gt;</code></div>
+    <P>The word(s) used to label the item name in the mouseover. The default is "Transcript".
+    Use this setting when the items in the track are not transcripts.
+    genePred and bigGenePred tracks have mouseovers on by default, so they only need
+    this setting to change the label. Other track types need
+    <A onclick="jumpTo(this)" HREF="#">exonNumbers</A> set to "on" and this setting to
+    change the label.</P>
+    <P><B>Example:</B></P>
+    <pre>   itemTypeLabel ORF</pre>
+</DIV>
+
 <DIV class="Filter"><span class="types bed bigBed narrowPeak bigNarrowPeak broadPeak"></span>
 <div class="format">
     <code>&lt;column&gt;Filter &lt;low&gt;[:&lt;high&gt;]</code><BR>
