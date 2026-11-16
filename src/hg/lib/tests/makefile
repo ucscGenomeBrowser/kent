@@ -142,6 +142,9 @@ botDelayTest: ${BIN_DIR}/botDelayTester mkdirs
 	${BIN_DIR}/botDelayTester silent on 1 0 output >> output/botDelayTest
 	${BIN_DIR}/botDelayTester silent on 99999 0 output >> output/botDelayTest
 	${BIN_DIR}/botDelayTester silent off 1 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester unreachable on 1 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester unreachable on 99999 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester unreachable off 2 0 output >> output/botDelayTest
 	diff expected/botDelayTest output/botDelayTest
 
 hVarSubstHtmlTest: mkdirs
