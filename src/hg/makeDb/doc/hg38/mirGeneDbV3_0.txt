@@ -113,3 +113,30 @@ done
 # and MEA (--MEA) structures fixed hardly any, and enforcing the 5p-to-3p arm
 # region as a hairpin is not needed, as the precursors fold into a hairpin once
 # the flanks cannot pair.
+
+##############################################################################
+# Rebuild for QA (DONE 2026-11-16, refs #36988, #38548)
+##############################################################################
+# Changes of the details page and search only; coordinates, sequences, folds,
+# structures and the arm decorators are the same as in the first build.
+#   - each arm: arm name, position, arm sequence (new, cut from the folded pri-miRNA
+#     sequence), miRBase accession; labels "5p arm"/"3p arm"; blocks with sepFields
+#   - co-mature genes: seed labeled per arm, 5p first, e.g. "5p: CGAGGAG, 3p: UAGACUG"
+#     (48 genes)
+#   - the miRBase precursor accession only from the locus' own pre_miRNA in the GFF, as
+#     MirGeneDB gives it; it is no longer copied from the -v1 locus, so 60 variant
+#     loci show "-"
+#   - every value MirGeneDB does not give is shown as "-" ("|-" in fields with a link,
+#     so the dash is not linked)
+#   - search index also has the arm names, with and without the *
+cd /hive/data/genomes/hg38/bed/mirGeneDbV3_0
+bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbBuild.sh
+bigBedInfo mirGeneDb.bb | grep itemCount
+#   itemCount: 573
+bigBedInfo mirGeneDbArms.bb | grep itemCount
+#   itemCount: 1,145
+# Checks: all fields not named above are identical to the first build; the set of
+# seeds is unchanged; every arm sequence equals the hg38 sequence at the arm
+# coordinates, strand-aware (1145 of 1145).
+# The miRBase track of this assembly reads mirGeneDb.bed for its MirGeneDB IDs, so
+# rebuild it after this one (doc/hg38/mirBaseV22_1.txt).

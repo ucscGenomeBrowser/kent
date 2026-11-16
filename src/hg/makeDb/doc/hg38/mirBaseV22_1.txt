@@ -112,3 +112,26 @@ done
 # MANUAL_STRUCTURES in mirBaseToBed.py (energy from RNAeval -d2, same miniforge).
 # Centroid (RNAfold -p) and MEA (--MEA) structures were also tried and fixed hardly
 # any.
+
+##############################################################################
+# Rebuild for QA (DONE 2026-11-16, refs #36988, #38548)
+##############################################################################
+# Changes of the details page and search only; coordinates, sequences, folds,
+# structures and the mature miRNA decorators are the same as in the first build.
+#   - new fields mirbaseId and mirGeneDbId after the strand: the MirGeneDB genes whose
+#     miRBase accession, as MirGeneDB gives it, is this precursor's accession
+#     (506 precursors; read from doc/hg38/mirGeneDbV3_0.txt's mirGeneDb.bed,
+#     so build MirGeneDB first)
+#   - each arm: mature names, positions, mature sequences (new, cut from the folded
+#     precursor sequence), miRBase accessions, in this order, with sepFields blocks;
+#     several matures on one arm (mmu-mir-3102) in precursor order, 5' to 3'
+#   - every missing value is shown as "-" ("|-" in fields with a link)
+cd /hive/data/genomes/hg38/bed/mirBaseV22_1
+bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh
+bigBedInfo mirBase.bb | grep itemCount
+#   itemCount: 1,918
+bigBedInfo mirBaseArms.bb | grep itemCount
+#   itemCount: 2,883
+# Checks: all fields not named above are identical to the first build; the decorator
+# bed and the search index terms are unchanged; every mature sequence equals the
+# hg38 sequence at the mature coordinates, strand-aware (2883 of 2883).
