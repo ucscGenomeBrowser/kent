@@ -1978,6 +1978,14 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("browser.mafFastCodons", "flag", "hg/hgTracks/wigMafTrack.c",
+          default="FALSE", ticket="38756",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/hgTracks/wigMafTrack.c.  Came in at dc4f089aa32, hgTracks: "
+               "put the faster MAF codon display behind hg.conf "
+               "browser.mafFastCodons, refs #38756, #38763.  Needs a "
+               "description and a gate or knob call."),
         h("hubGenomeNotFoundError", "flag", "hg/lib/cart.c", default="FALSE",
           ticket="30832",
           note="Written down by --auto-register, not yet reviewed by a "

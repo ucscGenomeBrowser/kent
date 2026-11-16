@@ -3,6 +3,7 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
+#include <limits.h>
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -461,6 +462,13 @@ lineFileClose(&lf);
 return numFields;
 }
 
+static int clampToInt(long long x)
+/* Return x, or INT_MAX if it is larger, so that a coordinate past the end of any
+ * chromosome stays past the end instead of wrapping around. */
+{
+return x > INT_MAX ? INT_MAX : x;
+}
+
 static void readBedRanges(struct fbFileRanges *fr, char *fileName)
 /* Add the extent of every bed in the file, or its blocks with -countBlocks. */
 {
@@ -473,12 +481,12 @@ for (bed = beds; bed != NULL; bed = bed->next)
 	int ii;
 	for (ii=0; ii < bed->blockCount; ii++)
 	    {
-	    int s = bed->chromStart + bed->chromStarts[ii];
-	    addRange(fr, bed->chrom, s, s + bed->blockSizes[ii], 0, 0);
+	    long long s = (long long)bed->chromStart + bed->chromStarts[ii];
+	    addRange(fr, bed->chrom, clampToInt(s), clampToInt(s + bed->blockSizes[ii]), 0, 0);
 	    }
 	}
-    else
-	addRange(fr, bed->chrom, bed->chromStart, bed->chromEnd, 0, 0);
+    else if (bed->chromEnd > bed->chromStart)	/* An empty item sets no bits and is not checked. */
+	addRange(fr, bed->chrom, clampToInt(bed->chromStart), clampToInt(bed->chromEnd), 0, 0);
     }
 bedFreeList(&beds);
 }
@@ -563,6 +571,17 @@ if (fr->errMessage != NULL)
     errAbort("%s", fr->errMessage);
 }
 
+static void checkFileRange(char *fileName, char *chrom, int chromSize,
+	long long start, long long end)
+/* Abort if [start,end) does not fit on chrom, as outOfRange() does for PSL and chain files.
+ * A BED or bigBed item past the chrom end would otherwise write past the end of the bit array.
+ * The arguments are 64-bit so that a start plus a huge block size cannot wrap around. */
+{
+if (start < 0 || end > chromSize)
+    errAbort("Coordinate out of allowed range [%d,%d) for %s: item %s:%lld-%lld in %s",
+	0, chromSize, chrom, chrom, start, end, fileName);
+}
+
 void fbOrBed(Bits *acc, char *track, char *chrom, int chromSize)
 /* Or in bits of bed file that correspond to chrom. */
 {
@@ -574,7 +593,12 @@ if (!fileExists(fileName))
 struct fbFileRanges *fr = fileRangesFor(fileName, readBedRanges, FALSE);
 struct fbChromRanges *cr = chromRanges(fr, chrom);
 if (cr != NULL)
+    {
+    int i;
+    for (i = 0; i < cr->count; ++i)
+	checkFileRange(fileName, chrom, chromSize, cr->ranges[i].start, cr->ranges[i].end);
     orRanges(acc, cr);
+    }
 }
 
 void fbOrBigBed(Bits *acc, char *track, char *chrom, int chromSize)
@@ -600,14 +624,21 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
         struct bed *bed = bedLoadN(bedRow, fieldCount);
         int ii;
         for(ii=0; ii < bed->blockCount; ii++)
-            bitSetRange(acc, bed->chromStart + bed->chromStarts[ii], bed->blockSizes[ii]);
+            {
+            long long s = (long long)bed->chromStart + bed->chromStarts[ii];
+            checkFileRange(fileName, chrom, chromSize, s, s + bed->blockSizes[ii]);
+            bitSetRange(acc, s, bed->blockSizes[ii]);
+            }
         bedFree(&bed);
         }
     else
         {
         int w = interval->end - interval->start;
         if (w > 0)
+            {
+            checkFileRange(fileName, chrom, chromSize, interval->start, interval->end);
             bitSetRange(acc, interval->start, w);
+            }
         }
     }
     

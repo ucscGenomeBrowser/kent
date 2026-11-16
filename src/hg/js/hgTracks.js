@@ -1953,24 +1953,37 @@ var myVariants = {
             // Move the collapsed explainer hgTracks emits (htdocs/inc/myVariantsHelp.html)
             // to the top of the dialog, above the form and above the log in prompt.
             let intro = document.getElementById("myVariantsHelpDiv");
+            // Show or hide the rest of the explainer text.
+            let showFullHelp = function() {};
             if (intro) {
                 intro.style.display = "";
                 dialog.appendChild(intro);
+                let helpMore = intro.querySelector("#myAnnotationsHelpMore");
+                let helpText = intro.querySelector("#myAnnotationsHelp");
+                let helpLess = intro.querySelector("#myAnnotationsHelpLess");
+                if (helpMore && helpText && helpLess) {
+                    showFullHelp = function(show) {
+                        helpMore.style.display = show ? "none" : "";
+                        helpText.style.display = show ? "" : "none";
+                    };
+                    helpMore.addEventListener("click", function() { showFullHelp(true); });
+                    helpLess.addEventListener("click", function() { showFullHelp(false); });
+                }
             }
 
             // An array, not an object: only this form can give the save button
             // the id that setSubmitEnabled turns off while a save is in flight.
             dialogButtons = [];
             // Call the function to build the form, but only if logged in already
-            // The dialog is not in the page yet, so look inside it.
-            let introDetails = dialog.querySelector("#myVariantsIntro");
             if (!userIsLoggedIn) {
-                // Without a form there is nothing else to read, so open the explainer.
-                if (introDetails) { introDetails.open = true; }
+                // Without a form there is nothing else to read, so show the full explainer.
+                showFullHelp(true);
                 let msg = document.createElement("div");
                 msg.id = "logInMessage";
                 msg.textContent = "Please log in to use this feature.";
-                dialog.appendChild(msg);
+                msg.style.marginBottom = "8px";
+                // Put it above the explainer so it is the first thing read.
+                dialog.insertBefore(msg, dialog.firstChild);
                 let href = (typeof myVariantsLoginUrl !== "undefined" && myVariantsLoginUrl)
                            ? myVariantsLoginUrl : "./hgSession";
                 dialogButtons.push({
@@ -1982,9 +1995,9 @@ var myVariants = {
                     click: function() { window.location.href = href; }
                 });
             } else {
-                // Someone with no tracks yet is new to this, so open the explainer.
-                if (introDetails && myVariants.projects().length === 0) {
-                    introDetails.open = true;
+                // Someone with no tracks yet is new to this, so show the full explainer.
+                if (myVariants.projects().length === 0) {
+                    showFullHelp(true);
                 }
                 let form = this.createBedForm(dialog);
 
