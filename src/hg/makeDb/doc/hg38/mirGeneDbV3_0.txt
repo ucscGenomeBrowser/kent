@@ -75,6 +75,22 @@ bigBedInfo mirGeneDbArms.bb | grep itemCount
 # 298 5p + 275 5p* + 275 3p + 249 3p* + 48 3p_co = 1145 arms, all inside their
 # pri region. All features of the source BED are accounted for.
 
+# Link the files into /gbdb:
+mkdir -p /gbdb/hg38/mirGeneDbV3_0
+for f in mirGeneDb.bb mirGeneDbArms.bb mirGeneDb.ix mirGeneDb.ixx; do
+    ln -sf `pwd`/$f /gbdb/hg38/mirGeneDbV3_0/$f
+done
+
+# miRBase IDs and accessions are shown as MirGeneDB gives them, not corrected. For
+# these paralog pairs MirGeneDB gives the accession of the other copy, so the miRBase
+# precursor at the locus is the other member of the pair:
+#   Hsa-Mir-3180-P1/-P2 (hsa-mir-3180-1/-2), Hsa-Mir-430-P33a/b (hsa-mir-520g/h),
+#   Hsa-Mir-430-P41a/b (hsa-mir-516a-1/-2), Hsa-Mir-506-P1a1/a2 (hsa-mir-514a-2/-3);
+#   Hsa-Mir-4662 gives hsa-mir-4662b, on the opposite strand (hsa-mir-4662a is on
+#   the same strand).
+# Hsa-Mir-3085, -3059 and -6529 have no miRBase accession, although miRBase 22.1 has
+# hsa-mir-3085, -3059 and -6529 (MI0039500, MI0039499, MI0039501) at these loci.
+
 # Checks done on the output:
 #   - every folded sequence equals the hg38 sequence at the pri coordinates
 #     (strand-aware), and every armPositions range cuts exactly the arm's hg38
