@@ -403,6 +403,17 @@ if ((cachedFile == NULL) || differentString(cachedFile, fileName))
 return cachedBeds;
 }
 
+static void checkFileRange(char *fileName, char *chrom, int chromSize,
+	long long start, long long end)
+/* Abort if [start,end) does not fit on chrom, as outOfRange() does for PSL and chain files.
+ * A BED or bigBed item past the chrom end would otherwise write past the end of the bit array.
+ * The arguments are 64-bit so that a start plus a huge block size cannot wrap around. */
+{
+if (start < 0 || end > chromSize)
+    errAbort("Coordinate out of allowed range [%d,%d) for %s: item %s:%lld-%lld in %s",
+	0, chromSize, chrom, chrom, start, end, fileName);
+}
+
 void fbOrBed(Bits *acc, char *track, char *chrom, int chromSize)
 /* Or in bits of bed file that correspond to chrom. */
 {
@@ -421,14 +432,21 @@ for(bed = beds; bed; bed = bed->next)
             {
             int ii;
             for(ii=0; ii < bed->blockCount; ii++)
-                bitSetRange(acc, bed->chromStart + bed->chromStarts[ii], bed->blockSizes[ii]);
+                {
+                long long s = (long long)bed->chromStart + bed->chromStarts[ii];
+                checkFileRange(fileName, chrom, chromSize, s, s + bed->blockSizes[ii]);
+                bitSetRange(acc, s, bed->blockSizes[ii]);
+                }
             }
         else
             {
             int w;
             w = bed->chromEnd - bed->chromStart;
             if (w > 0)
+                {
+                checkFileRange(fileName, chrom, chromSize, bed->chromStart, bed->chromEnd);
                 bitSetRange(acc, bed->chromStart, w);
+                }
             }
 	}
     }
@@ -457,14 +475,21 @@ for (interval = intervalList; interval != NULL; interval = interval->next)
         struct bed *bed = bedLoadN(bedRow, fieldCount);
         int ii;
         for(ii=0; ii < bed->blockCount; ii++)
-            bitSetRange(acc, bed->chromStart + bed->chromStarts[ii], bed->blockSizes[ii]);
+            {
+            long long s = (long long)bed->chromStart + bed->chromStarts[ii];
+            checkFileRange(fileName, chrom, chromSize, s, s + bed->blockSizes[ii]);
+            bitSetRange(acc, s, bed->blockSizes[ii]);
+            }
         bedFree(&bed);
         }
     else
         {
         int w = interval->end - interval->start;
         if (w > 0)
+            {
+            checkFileRange(fileName, chrom, chromSize, interval->start, interval->end);
             bitSetRange(acc, interval->start, w);
+            }
         }
     }
     
