@@ -17,6 +17,7 @@
 #include "agpGap.h"
 #include "chain.h"
 #include "chromInfo.h"
+#include "errCatch.h"
 
 
 static struct optionSpec optionSpecs[] =
@@ -315,55 +316,134 @@ else
 return fileName;
 }
 
-void outOfRange(struct lineFile *lf, char *chrom, int chromSize)
+void outOfRange(char *fileName, int lineIx, char *chrom, int chromSize)
 /* Complain that coordinate is out of range. */
 {
 errAbort("Coordinate out of allowed range [%d,%d) for %s near line %d of %s",
-	0, chromSize, chrom, lf->lineIx, lf->fileName);
+	0, chromSize, chrom, lineIx, fileName);
 }
 
-void setPslBits(struct lineFile *lf, 
-	Bits *bits, struct psl *psl, int winStart, int winEnd)
-/* Set bits that are in psl. */
-{
-int i, s, e, w, blockCount = psl->blockCount;
-boolean isRev = (psl->strand[1] == '-');
-for (i=0; i<blockCount; ++i)
+struct fbRange
+/* One range of bits to set. */
     {
-    s = psl->tStarts[i];
-    e = s + psl->blockSizes[i];
-    if (isRev)
-       {
-       /* Use w as a temp variable to reverse coordinates s&e. */
-       w = psl->tSize - e;
-       e = psl->tSize - s;
-       s = w;
-       }
-    /* Clip, and if anything left set it. */
-    if (s < winStart) outOfRange(lf, psl->tName, psl->tSize);
-    if (e > winEnd) outOfRange(lf, psl->tName, psl->tSize);
-    w = e - s;
-    if (w > 0)
-	bitSetRange(bits, s, w);
+    int start;		/* Start of range. */
+    int end;		/* End of range, not included. */
+    };
+
+struct fbChromRanges
+/* The ranges on one chromosome, in file order. */
+    {
+    struct fbRange *ranges;	/* Array of ranges. */
+    int count;			/* Number of ranges used. */
+    int alloc;			/* Number of ranges allocated. */
+    int chromSize;		/* Size of chromosome, or -1 if it will not be processed. */
+    int errLineIx;		/* Line of the first range out of [0,chromSize), or 0. */
+    int errTSize;		/* Target size of the psl on that line. */
+    };
+
+struct fbFileRanges
+/* All the ranges in one file, grouped by chromosome, so the file is read only once. */
+    {
+    struct hash *chromHash;	/* fbChromRanges keyed by chromosome name. */
+    char *errMessage;		/* Error that stopped the read of the file, or NULL. */
+    boolean checkRanges;	/* Note the first range out of range on each chromosome. */
+    struct fbChromRanges *lastRanges;	/* Ranges of the last chromosome added to. */
+    char *lastChrom;		/* Name of that chromosome, owned by chromHash. */
+    };
+
+static struct hash *fileRangesHash = NULL;	/* fbFileRanges keyed by file name. */
+static struct hash *chromSizeHash = NULL;	/* chromInfo keyed by chromosome name. */
+
+static int processedChromSize(char *chrom)
+/* Return the size of chrom if it is in the list of chromosomes processed, else -1. */
+{
+if (chromSizeHash == NULL)
+    {
+    struct chromInfo *ci;
+    chromSizeHash = hashNew(0);
+    for (ci = chromInfoList; ci != NULL; ci = ci->next)
+	hashAdd(chromSizeHash, ci->chrom, ci);
+    }
+struct chromInfo *ci = hashFindVal(chromSizeHash, chrom);
+return (ci == NULL ? -1 : ci->size);
+}
+
+static void addRange(struct fbFileRanges *fr, char *chrom, int start, int end,
+	int lineIx, int tSize)
+/* Add a range to the end of the list for chrom. */
+{
+struct fbChromRanges *cr = fr->lastRanges;
+if (cr == NULL || differentString(chrom, fr->lastChrom))
+    {
+    struct hashEl *hel = hashLookup(fr->chromHash, chrom);
+    if (hel == NULL)
+        {
+        AllocVar(cr);
+        cr->chromSize = processedChromSize(chrom);
+        hel = hashAdd(fr->chromHash, chrom, cr);
+        }
+    cr = hel->val;
+    fr->lastRanges = cr;
+    fr->lastChrom = hel->name;
+    }
+if (cr->chromSize < 0)
+    return;	/* Chromosome will not be processed, so don't keep its ranges. */
+if (cr->count >= cr->alloc)
+    {
+    int newAlloc = (cr->alloc == 0 ? 16 : 2 * cr->alloc);
+    ExpandArray(cr->ranges, cr->alloc, newAlloc);
+    cr->alloc = newAlloc;
+    }
+struct fbRange *r = &cr->ranges[cr->count++];
+r->start = start;
+r->end = end;
+/* The old reader stopped at the first such range in file order, so keep only that one. */
+if (fr->checkRanges && cr->errLineIx == 0
+    && (start < 0 || end > cr->chromSize))
+    {
+    cr->errLineIx = lineIx;
+    cr->errTSize = tSize;
     }
 }
 
-void fbOrPsl(Bits *acc, char *track, char *chrom, int chromSize)
-/* Or in bits of psl file that correspond to chrom. */
+static void readPslRanges(struct fbFileRanges *fr, char *fileName)
+/* Add the target blocks of every psl in the file. */
 {
-struct lineFile *lf;
-char fileName[512];
+struct lineFile *lf = pslFileOpen(fileName);
 struct psl *psl;
-
-chromFileName(track, chrom, fileName);
-if (!fileExists(fileName))
-    return;
-lf = pslFileOpen(fileName);
 while ((psl = pslNext(lf)) != NULL)
     {
-    if (sameString(psl->tName, chrom))
-	setPslBits(lf, acc, psl, 0, chromSize);
+    int i, s, e, w, blockCount = psl->blockCount;
+    boolean isRev = (psl->strand[1] == '-');
+    for (i=0; i<blockCount; ++i)
+	{
+	s = psl->tStarts[i];
+	e = s + psl->blockSizes[i];
+	if (isRev)
+	   {
+	   /* Use w as a temp variable to reverse coordinates s&e. */
+	   w = psl->tSize - e;
+	   e = psl->tSize - s;
+	   s = w;
+	   }
+	addRange(fr, psl->tName, s, e, lf->lineIx, psl->tSize);
+	}
     pslFree(&psl);
+    }
+lineFileClose(&lf);
+}
+
+static void readChainRanges(struct fbFileRanges *fr, char *fileName)
+/* Add the target blocks of every chain in the file. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct chain *chain;
+struct cBlock *b;
+while ((chain = chainRead(lf)) != NULL)
+    {
+    for (b = chain->blockList; b != NULL; b = b->next)
+	addRange(fr, chain->tName, b->tStart, b->tEnd, lf->lineIx, 0);
+    chainFree(&chain);
     }
 lineFileClose(&lf);
 }
@@ -381,26 +461,106 @@ lineFileClose(&lf);
 return numFields;
 }
 
-static struct bed *cacheBeds(char *fileName)
-/* Read in the beds from this file and keep them in a cache. */
+static void readBedRanges(struct fbFileRanges *fr, char *fileName)
+/* Add the extent of every bed in the file, or its blocks with -countBlocks. */
 {
-static char *cachedFile;
-static struct bed *cachedBeds;
-
-if ((cachedFile == NULL) || differentString(cachedFile, fileName))
+unsigned numFields = howManyFields(fileName);
+struct bed *bed, *beds = bedLoadNAllChrom(fileName, numFields > 12 ? 12 : numFields, NULL);
+for (bed = beds; bed != NULL; bed = bed->next)
     {
-    if (cachedBeds)
-        {
-        bedFreeList(&cachedBeds);
-        freez(&cachedFile);
-        }
-
-    cachedFile = cloneString(fileName);
-    unsigned numFields = howManyFields(cachedFile);
-    cachedBeds = bedLoadNAllChrom(fileName, numFields > 12 ? 12 : numFields, NULL);
+    if (countBlocks && (bed->blockCount > 0))
+	{
+	int ii;
+	for (ii=0; ii < bed->blockCount; ii++)
+	    {
+	    int s = bed->chromStart + bed->chromStarts[ii];
+	    addRange(fr, bed->chrom, s, s + bed->blockSizes[ii], 0, 0);
+	    }
+	}
+    else
+	addRange(fr, bed->chrom, bed->chromStart, bed->chromEnd, 0, 0);
     }
+bedFreeList(&beds);
+}
 
-return cachedBeds;
+static struct fbFileRanges *fileRangesFor(char *fileName,
+	void (*readRanges)(struct fbFileRanges *fr, char *fileName), boolean catchErrors)
+/* Read the file the first time it is asked for, and return its ranges.  If
+ * catchErrors is set, an error in the file is kept rather than raised, along with
+ * the ranges read before it, and the first range out of range on each chromosome is
+ * noted, so the caller can raise either error where the old one-chromosome-at-a-time
+ * reader would have. */
+{
+if (fileRangesHash == NULL)
+    fileRangesHash = hashNew(0);
+struct fbFileRanges *fr = hashFindVal(fileRangesHash, fileName);
+if (fr == NULL)
+    {
+    AllocVar(fr);
+    fr->chromHash = hashNew(0);
+    fr->checkRanges = catchErrors;
+    if (catchErrors)
+	{
+	struct errCatch *errCatch = errCatchNew();
+	if (errCatchStart(errCatch))
+	    readRanges(fr, fileName);
+	errCatchEnd(errCatch);
+	if (errCatch->gotError)
+	    {
+	    /* Drop only the newline errCatch adds, so the message is raised unchanged. */
+	    fr->errMessage = cloneString(errCatch->message->string);
+	    int len = strlen(fr->errMessage);
+	    if (len > 0 && fr->errMessage[len-1] == '\n')
+		fr->errMessage[len-1] = 0;
+	    }
+	else if (errCatch->gotWarning)
+	    fputs(errCatch->message->string, stderr);
+	errCatchFree(&errCatch);
+	}
+    else
+	readRanges(fr, fileName);
+    hashAdd(fileRangesHash, fileName, fr);
+    }
+return fr;
+}
+
+static struct fbChromRanges *chromRanges(struct fbFileRanges *fr, char *chrom)
+/* Return the ranges on chrom, or NULL if there are none. */
+{
+return hashFindVal(fr->chromHash, chrom);
+}
+
+static void orRanges(Bits *acc, struct fbChromRanges *cr)
+/* Set the bits in each range of cr. */
+{
+int i;
+for (i = 0; i < cr->count; ++i)
+    {
+    struct fbRange *r = &cr->ranges[i];
+    int w = r->end - r->start;
+    if (w > 0)
+	bitSetRange(acc, r->start, w);
+    }
+}
+
+void fbOrPsl(Bits *acc, char *track, char *chrom, int chromSize)
+/* Or in bits of psl file that correspond to chrom. */
+{
+char fileName[512];
+
+chromFileName(track, chrom, fileName);
+if (!fileExists(fileName))
+    return;
+struct fbFileRanges *fr = fileRangesFor(fileName, readPslRanges, TRUE);
+struct fbChromRanges *cr = chromRanges(fr, chrom);
+if (cr != NULL)
+    {
+    if (cr->errLineIx != 0)
+	outOfRange(fileName, cr->errLineIx, chrom, cr->errTSize);
+    orRanges(acc, cr);
+    }
+if (fr->errMessage != NULL)
+    errAbort("%s", fr->errMessage);
 }
 
 void fbOrBed(Bits *acc, char *track, char *chrom, int chromSize)
@@ -411,27 +571,10 @@ char fileName[512];
 chromFileName(track, chrom, fileName);
 if (!fileExists(fileName))
     return;
-struct bed *bed, *beds = cacheBeds(fileName);
-
-for(bed = beds; bed; bed = bed->next)
-    {
-    if (sameString(bed->chrom, chrom))
-        {
-        if (countBlocks && (bed->blockCount > 0))
-            {
-            int ii;
-            for(ii=0; ii < bed->blockCount; ii++)
-                bitSetRange(acc, bed->chromStart + bed->chromStarts[ii], bed->blockSizes[ii]);
-            }
-        else
-            {
-            int w;
-            w = bed->chromEnd - bed->chromStart;
-            if (w > 0)
-                bitSetRange(acc, bed->chromStart, w);
-            }
-	}
-    }
+struct fbFileRanges *fr = fileRangesFor(fileName, readBedRanges, FALSE);
+struct fbChromRanges *cr = chromRanges(fr, chrom);
+if (cr != NULL)
+    orRanges(acc, cr);
 }
 
 void fbOrBigBed(Bits *acc, char *track, char *chrom, int chromSize)
@@ -475,30 +618,21 @@ bbiFileClose(&bbi);
 void fbOrChain(Bits *acc, char *track, char *chrom, int chromSize)
 /* Or in a chain file. */
 {
-struct lineFile *lf;
 char fileName[512];
-struct chain *chain;
-struct cBlock *b;
 
 chromFileName(track, chrom, fileName);
 if (!fileExists(fileName))
     return;
-lf = lineFileOpen(fileName, TRUE);
-while ((chain = chainRead(lf)) != NULL)
+struct fbFileRanges *fr = fileRangesFor(fileName, readChainRanges, TRUE);
+struct fbChromRanges *cr = chromRanges(fr, chrom);
+if (cr != NULL)
     {
-    if (sameString(chrom, chain->tName))
-        {
-        for (b = chain->blockList; b != NULL; b = b->next)
-            {
-            int s = b->tStart, e = b->tEnd;
-            if (s < 0) outOfRange(lf, chrom, chromSize);
-            if (e > chromSize) outOfRange(lf, chrom, chromSize);
-            bitSetRange(acc, b->tStart, b->tEnd - b->tStart);
-            }
-        }
-    chainFree(&chain);
+    if (cr->errLineIx != 0)
+	outOfRange(fileName, cr->errLineIx, chrom, chromSize);
+    orRanges(acc, cr);
     }
-lineFileClose(&lf);
+if (fr->errMessage != NULL)
+    errAbort("%s", fr->errMessage);
 }
 
 
