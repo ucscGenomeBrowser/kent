@@ -31,7 +31,11 @@ bedToBigBed -tab -type=bed12+4 -as=$scriptDir/../../../lib/decoration.as \
     mirGeneDbArms.bed $sizes mirGeneDbArms.bb
 
 # search index, case-insensitive: MirGeneDB ID, the gene name without the variant
-# (-vN), miRBase ID, family, MI and MIMAT accessions
-awk -F'\t' '{g=$4; sub(/-v[0-9]+$/, "", g); print $4, g, $8, $9, $11, $15, $19}' mirGeneDb.bed \
+# (-vN), miRBase ID, family, MI and MIMAT accessions, arm names (also without the *)
+awk -F'\t' '{g=$4; sub(/-v[0-9]+$/, "", g); print $4, g, $8, $9, $11, $15, $19, $12, $16}' mirGeneDb.bed \
+    | tr ',' ' ' \
+    | awk '{s = $1; for (i = 2; i <= NF; i++) if ($i != "-" && $i != "|-") {
+              s = s " " $i; if ($i ~ /\*$/) s = s " " substr($i, 1, length($i) - 1) }
+            print s}' \
     > mirGeneDb.ix.txt
 ixIxx mirGeneDb.ix.txt mirGeneDb.ix mirGeneDb.ixx

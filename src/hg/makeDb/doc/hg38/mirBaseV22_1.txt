@@ -100,7 +100,7 @@ done
 # The 130 suboptimal hairpins are 0 to 7.6 kcal/mol above the MFE (median 1.1).
 # Matures still reach into the hairpin loop at 8 precursors, as no single hairpin
 # within 8 kcal/mol keeps them in the stem: hsa-mir-451a (MI0001729, processed by
-# Ago2, see Hsa-Mir-451 in doc/hg38/mirGeneDb.txt), hsa-mir-1237, -3620, -4302,
+# Ago2, see Hsa-Mir-451 in doc/hg38/mirGeneDbV3_0.txt), hsa-mir-1237, -3620, -4302,
 # -4326, -548bb, -5703 and -378j (MI0021273, a suboptimal hairpin, the others MFE).
 # hsa-mir-6134 (MI0021279), hsa-mir-6786 (MI0022631) and hsa-mir-6843 (MI0022689)
 # have no single hairpin within 8 kcal/mol. hsa-mir-6786 and hsa-mir-6843 keep their

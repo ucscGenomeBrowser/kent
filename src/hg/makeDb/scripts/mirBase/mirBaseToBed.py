@@ -272,7 +272,7 @@ def readMirGeneDb(mirGeneDbBed):
     genes = defaultdict(list)
     for line in open(mirGeneDbBed):
         c = line.rstrip("\n").split("\t")
-        if c[10]:
+        if c[10].startswith("MI"):
             genes[c[10]].append(c[6])
     return {acc: sorted(set(g)) for acc, g in genes.items()}
 
@@ -321,9 +321,9 @@ def bed(gffFile, foldFile, mirGeneDbBed, bedOut, armsOut):
             out.write("\t".join([p["chrom"], str(p["start"]), str(p["end"]), p["name"], "0",
                 p["strand"], p["name"], ",".join(mirGeneDb.get(p["acc"], [])) or "|-", p["acc"],
                 ", ".join(m["name"] for m in byArm["5p"]) or "-", ", ".join(armText["5p"]) or "-",
-                ", ".join(armSeq["5p"]) or "-", ",".join(m["acc"] for m in byArm["5p"]),
+                ", ".join(armSeq["5p"]) or "-", ",".join(m["acc"] for m in byArm["5p"]) or "|-",
                 ", ".join(m["name"] for m in byArm["3p"]) or "-", ", ".join(armText["3p"]) or "-",
-                ", ".join(armSeq["3p"]) or "-", ",".join(m["acc"] for m in byArm["3p"]),
+                ", ".join(armSeq["3p"]) or "-", ",".join(m["acc"] for m in byArm["3p"]) or "|-",
                 mfe, foldType(refolded, p["id"]), seq, dotBracket,
                 ",".join("%d-%d:%s" % a for a in armPos)]) + "\n")
     print("matures per arm: " + ", ".join("%s %d" % kv for kv in sorted(armCount.items())),
