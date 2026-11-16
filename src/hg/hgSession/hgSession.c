@@ -2610,7 +2610,7 @@ jsonWriteListEnd(jw);   // sessions
 }
 
 void doMainPageNew(char *userName, char *message)
-/* Render the experimental client-rendered Sessions page: framework header (gold "My Sessions"
+/* Render the experimental client-rendered Sessions page: framework header (gold "Saved sessions"
  * band), the experimental banner, an empty #sessionApp container, and the hgSessionData JSON that
  * hgSession.js reads to build the UI. */
 {
@@ -2618,7 +2618,7 @@ if (isNotEmpty(cartOptionalString(cart, "measureTiming")))
     hgSessionTiming = perfTimerNew();   /* times the page; emitted as hgSessionData.timing */
 cspWriteResponseHeader();
 cgiPrintContentType("text/html");
-cartWebStart(cart, NULL, "My Sessions");
+cartWebStart(cart, NULL, "Saved sessions");
 jsInit();
 jsIncludeDataTablesLibs();
 webIncludeResourceFile("gbModern.css");
