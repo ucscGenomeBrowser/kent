@@ -14,6 +14,7 @@
 struct cart;
 struct trackDb;
 struct dnaSeq;
+struct customTrack;
 
 boolean blatIsResultTrack(struct trackDb *tdb);
 /* Return TRUE if tdb is a BLAT results custom track, tagged blatResult=on by hgc's buildBigPsl. */
@@ -36,5 +37,16 @@ char *blatFindPinnedBigPsl(struct cart *cart);
  * trash / durable session-data dir.  A shared session (?u=&s=) can carry an arbitrary value here, so
  * this only ever accepts a local file on the isValidBigDataUrl trash/session-data allow-list - never
  * a remote URL or an arbitrary local path. */
+
+char *blatPslSetting(char *pslName);
+/* Return the value of the blatPsl track line setting for the search whose .pslx is pslName: the
+ * file's base name, cgiEncoded.  The base name, since a search and a reopen of it (blatPslId=)
+ * spell the trash path differently. */
+
+struct customTrack *blatFindSearchCt(struct customTrack *ctList, char *pslName);
+/* Return the BLAT results track in ctList that hgc built from the search whose .pslx is pslName,
+ * or NULL.  The track is returned also when its bigBed file could not be opened (networkErrMsg
+ * set, e.g. the trash cleaner removed it while the .pslx is still there), so callers that need a
+ * working track must check networkErrMsg. */
 
 #endif /* BLATSHARE_H */

@@ -15,6 +15,8 @@
 #include "bigBed.h"
 #include "bigPsl.h"
 #include "cart.h"
+#include "cheapcgi.h"
+#include "customTrack.h"
 #include "chromAlias.h"
 #include "hgConfig.h"
 #include "portable.h"
@@ -133,4 +135,31 @@ boolean blatIsResultTrack(struct trackDb *tdb)
 /* Return TRUE if tdb is a BLAT results custom track, tagged blatResult=on by hgc's buildBigPsl. */
 {
 return tdb != NULL && trackDbSettingOn(tdb, "blatResult");
+}
+
+char *blatPslSetting(char *pslName)
+/* Return the value of the blatPsl track line setting for the search whose .pslx is pslName: the
+ * file's base name, cgiEncoded.  The base name, since a search and a reopen of it (blatPslId=)
+ * spell the trash path differently. */
+{
+char dir[PATH_LEN], root[FILENAME_LEN], ext[FILEEXT_LEN], base[FILENAME_LEN + FILEEXT_LEN];
+splitPath(pslName, dir, root, ext);
+safef(base, sizeof base, "%s%s", root, ext);
+return cgiEncode(base);
+}
+
+struct customTrack *blatFindSearchCt(struct customTrack *ctList, char *pslName)
+/* Return the BLAT results track in ctList that hgc built from the search whose .pslx is pslName,
+ * or NULL.  The track is returned also when its bigBed file could not be opened (networkErrMsg
+ * set, e.g. the trash cleaner removed it while the .pslx is still there), so callers that need a
+ * working track must check networkErrMsg. */
+{
+char *pslSetting = blatPslSetting(pslName);
+struct customTrack *ct;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (blatIsResultTrack(ct->tdb) && sameOk(trackDbSetting(ct->tdb, "blatPsl"), pslSetting)
+    &&  trackDbSetting(ct->tdb, "bigDataUrl") != NULL)
+        break;
+freeMem(pslSetting);
+return ct;
 }
