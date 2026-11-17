@@ -22,16 +22,22 @@
 #define defaultWarnMs 10000    /* warning at 10 to 20 second delay */
 #define defaultExitMs 20000    /* error 429 Too Many Requests after 20+ second delay */
 #define maxFailureDelayMs 2000 /* sanity limit on bottleneck.failureDelay, see connectFailDelay */
-#define maxBottleneckTimeoutSec 10 /* upper limit on bottleneck.timeoutSeconds */
+#define maxBottleneckConnectSec 10 /* upper limit on the connect part of bottleneck.timeoutSeconds */
+#define maxBottleneckReadSec 300   /* upper limit on the read with serveOnFailure off */
 
 int botDelayWarnMs  = 0;       /* global so the previously used value can be retrieved */
 
+/* Which step of the last bottleneck exchange failed, for the abort message:  a refused
+ * connect and a server that takes the request and never answers are different
+ * problems for whoever reads the error log. */
+static char *bottleneckFailStep = "connect to";
+
 void abortAndExplainConnectFail()
-/* Signal that the bottleneck server is unreachable.  Raises errAbort so that
+/* Signal that the bottleneck server did not give us a delay.  Raises errAbort so that
  * callers with an errCatch (e.g. hubApi JSON endpoints) can intercept and
  * return a structured error instead of raw HTML. */
 {
-errAbort("Failed to connect to bottleneck server");
+errAbort("Failed to %s bottleneck server", bottleneckFailStep);
 }
 
 static void botDelayLogWarn(char *format, va_list args)
@@ -56,27 +62,44 @@ static int botDelayTimeMaybe(char *host, int port, char *botCheckString)
  * noWarnAbort(), which exits.  netGetString() returns NULL instead, warning first
  * on a read error and saying nothing when the server simply closes. */
 {
-/* One setting covers connect, send and read.  The stock values are a 10 second
- * connect and a 120 second read, both far longer than this exchange can ever
- * usefully take.  The connect is the one that matters: a bottleneck host that
- * drops packets instead of refusing costs that much on every request, which is
- * the outage this whole fallback exists to avoid. */
+/* The stock values are a 10 second connect and a 120 second read.  The connect is
+ * the one that matters:  a bottleneck host that drops packets instead of refusing
+ * costs that much on every request, which is the outage the serveOnFailure fallback
+ * exists to avoid.  So bottleneck.timeoutSeconds sets the connect, never above the
+ * stock 10 seconds.
+ *
+ * The read depends on the serveOnFailure gate.  A server that is merely slow still
+ * answers, and without the fallback a timed-out read is an abort, so with the gate
+ * off the read keeps its stock 120 seconds, or longer if timeoutSeconds asks for it,
+ * up to 300.
+ * With the gate on, a read that times out is served with the fallback delay, so it
+ * gets the same bound as the connect. */
 int timeout = atoi(cfgOptionDefault("bottleneck.timeoutSeconds", "10"));
-if (timeout < 1 || timeout > maxBottleneckTimeoutSec)
-    timeout = maxBottleneckTimeoutSec;
+if (timeout < 1)
+    timeout = maxBottleneckConnectSec;
+int connectTimeout = min(timeout, maxBottleneckConnectSec);
+int readTimeout = connectTimeout;
+if (!cfgOptionBooleanDefault("bottleneck.serveOnFailure", FALSE))
+    readTimeout = min(max(timeout, DEFAULTREADWRITETTIMEOUTSEC), maxBottleneckReadSec);
 
 int delay = -1;
 pushWarnHandler(botDelayLogWarn);
-int sd = netConnectWithTimeout(host, port, (long)timeout * 1000);
+bottleneckFailStep = "connect to";
+int sd = netConnectWithTimeout(host, port, (long)connectTimeout * 1000);
 if (sd >= 0)
     {
-    setReadWriteTimeouts(sd, timeout);
+    setReadWriteTimeouts(sd, readTimeout);
     char buf[256];
-    if (netSendString(sd, botCheckString) && netGetString(sd, buf) != NULL)
+    bottleneckFailStep = "send a request to";
+    if (netSendString(sd, botCheckString))
         {
-        delay = atoi(buf);
-        if (delay < 0)     /* the server never sends one, and -1 is our sentinel */
-            delay = 0;
+        bottleneckFailStep = "get an answer from";
+        if (netGetString(sd, buf) != NULL)
+            {
+            delay = atoi(buf);
+            if (delay < 0)     /* the server never sends one, and -1 is our sentinel */
+                delay = 0;
+            }
         }
     close(sd);
     }
