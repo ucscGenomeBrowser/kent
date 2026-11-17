@@ -1,0 +1,20 @@
+# Imprinting collection on hs1: only the two Kim et al 2026 HPRC2 tracks, the other subtracks of
+# the hg38 collection come from catalogs that exist only in hg38/hg19 coordinates.
+# See doc/hg38/imprinting.txt for the hg38 tracks and the download of the source files.
+
+# 2026-11-15 Claude (for max): Kim et al HPRC2 DMRs and mean methylation difference, refs #37599
+# The authors' CHM13v2.0 files were downloaded together with the hg38 ones, see
+# doc/hg38/imprinting.txt (2026-11-13), into /hive/data/genomes/hg38/bed/imprinting/phillipy:
+#   dmrs.N05_filt.all_chr.1e3.mrg.forPlotting.bed.gz
+#   all_chr.missingrate_5.createDiffDatasetFromMethylDataset.flipped.mean.bw
+# Chromosome names are already chr1..chrX, as in hs1. The same script as for hg38 builds both
+# files, with the hs1 input files and output directory:
+~/kent/src/hg/makeDb/scripts/hprcImprint/hprcImprintDmrToBigBed.sh hs1
+# 880 bed lines in, 880 bigBed records out (no liftOver here, so no regions lost as on hg38).
+# 433 maternal (126 strong), 447 paternal (24 strong).
+# The bigWig was rewritten with bigWigToBedGraph | bedGraphToBigWig as on hg38. Unlike the
+# CrossMap hg38 file, the CHM13 file was already compact (326 MB both before and after);
+# bigWigInfo of input and output is identical (26,498,448 bases, mean 0.000117,
+# min -0.952879, max 0.953465).
+mkdir -p /gbdb/hs1/imprinting
+ln -sfn /hive/data/genomes/hs1/bed/imprinting/hprcImprint /gbdb/hs1/imprinting/hprcImprint

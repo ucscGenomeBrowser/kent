@@ -2458,9 +2458,14 @@ if (loggedIn)
         struct sqlResult *sr = sqlGetResult(conn, query);
         perfTimerStep(hgSessionTiming, "load sessions from MySQL");
         char **row;
-        /* Cache one connection per assembly db so the per-session band/locus lookups don't
-         * re-open a connection for every row when many sessions share an assembly. */
-        struct hash *dbConnCache = hashNew(0);
+        /* One connection for the per-session band/locus lookups, kept while consecutive rows
+         * share an assembly.  Not one per assembly: the connection cache holds at most
+         * sqlConnCacheMax (16) at once, and a user with sessions on more assemblies than that got
+         * "Too many open sqlConnections for cache".  hFreeConn() returns the connection to the
+         * cache and the next hAllocConn() reuses it with a change of database, so switching is
+         * cheap. */
+        struct sqlConnection *dbConn = NULL;
+        char *dbConnDb = NULL;
         while ((row = sqlNextRow(sr)) != NULL)
             {
             char *encSessionName = row[0];
@@ -2532,11 +2537,13 @@ if (loggedIn)
                     }
                 if (parsed)
                     {
-                    struct sqlConnection *dbConn = hashFindVal(dbConnCache, db2);
-                    if (dbConn == NULL && sqlDatabaseExists(db2))
+                    if (dbConnDb == NULL || !sameString(dbConnDb, db2))
                         {
-                        dbConn = hAllocConn(db2);
-                        hashAdd(dbConnCache, db2, dbConn);
+                        hFreeConn(&dbConn);
+                        freez(&dbConnDb);
+                        if (sqlDatabaseExists(db2))
+                            dbConn = hAllocConn(db2);
+                        dbConnDb = cloneString(db2);   // remembered even if missing: no re-check
                         }
                     if (dbConn != NULL)
                         {
@@ -2594,15 +2601,8 @@ if (loggedIn)
             }
         sqlFreeResult(&sr);
         perfTimerStep(hgSessionTiming, "annotate positions (band + locus) + build JSON");
-        /* Release the cached per-assembly connections. */
-        struct hashEl *hel, *helList = hashElListHash(dbConnCache);
-        for (hel = helList; hel != NULL; hel = hel->next)
-            {
-            struct sqlConnection *dbConn = hel->val;
-            hFreeConn(&dbConn);
-            }
-        hashElFreeList(&helList);
-        hashFree(&dbConnCache);
+        hFreeConn(&dbConn);
+        freez(&dbConnDb);
         }
     hDisconnectCentral(&conn);
     }
@@ -2610,7 +2610,7 @@ jsonWriteListEnd(jw);   // sessions
 }
 
 void doMainPageNew(char *userName, char *message)
-/* Render the experimental client-rendered Sessions page: framework header (gold "My Sessions"
+/* Render the experimental client-rendered Sessions page: framework header (gold "Saved sessions"
  * band), the experimental banner, an empty #sessionApp container, and the hgSessionData JSON that
  * hgSession.js reads to build the UI. */
 {
@@ -2618,7 +2618,7 @@ if (isNotEmpty(cartOptionalString(cart, "measureTiming")))
     hgSessionTiming = perfTimerNew();   /* times the page; emitted as hgSessionData.timing */
 cspWriteResponseHeader();
 cgiPrintContentType("text/html");
-cartWebStart(cart, NULL, "My Sessions");
+cartWebStart(cart, NULL, "Saved sessions");
 jsInit();
 jsIncludeDataTablesLibs();
 webIncludeResourceFile("gbModern.css");

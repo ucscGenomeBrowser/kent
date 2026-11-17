@@ -1,0 +1,501 @@
+#!/usr/bin/env python3
+"""featureBitsAbTest - compare two featureBits binaries on real BED, PSL and chain files.
+
+The reference binary (by default /cluster/bin/x86_64/featureBits) and a new
+binary run on the same inputs with the same options.  For every case the exit
+code, stdout, stderr and the md5 of each output file (-bed, -bin, -fa) must
+match.  The reference results are kept, so each new build only needs its own
+runs.  refs #38774, #38773
+
+The release binary reads a file once per chromosome, so its runs take about
+250 CPU hours in all.  They go on the parasol cluster.  The cluster nodes have
+no /gbdb and no MySQL, so cluster cases use real paths under /hive, a
+-chromSize file and -countGaps.  A small set of cases that need the database
+(gap counts, -fa) run on hgwdev.
+
+Subcommands:
+  setup    copy the reference binary, dump chromInfo and PSL tables, convert a
+           sample of /gbdb bigBeds to BED, and write cases.tsv
+  run      run one binary on every case, on the cluster or locally
+  one      run one case (what a cluster job calls)
+  compare  compare the runs of one binary with the reference runs
+
+A case listed in WORK/expected.tsv (caseId, tab, reason) that differs is
+reported as EXPECTED instead of DIFF.  See README for how to reuse a work
+directory for a new build.
+"""
+
+import argparse
+import collections
+import concurrent.futures
+import csv
+import hashlib
+import json
+import math
+import os
+import random
+import re
+import shutil
+import subprocess
+import sys
+
+REF_BIN = "/cluster/bin/x86_64/featureBits"
+MANIFEST = "/hive/users/braney/fbAbTest38774/manifest38769.tsv"
+KENTBIN = os.path.expanduser("~/bin/x86_64")
+DBS = ["hg38", "hg19", "mm39", "hs1"]
+PSL_TABLES = ["refSeqAli", "ncbiRefSeqPsl", "all_mrna", "xenoMrna", "all_est", "intronEst"]
+OUT_FILES = ["out.bed", "out.bin", "out.fa"]
+CASE_FIELDS = ["caseId", "where", "args"]
+
+
+def sh(cmd, **kw):
+    return subprocess.run(cmd, shell=isinstance(cmd, str), check=True,
+                          stdout=subprocess.PIPE, universal_newlines=True, **kw).stdout
+
+
+def md5(path):
+    h = hashlib.md5()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def readCases(work):
+    with open(os.path.join(work, "cases.tsv")) as f:
+        return [dict(r, args=json.loads(r["args"]))
+                for r in csv.DictReader(f, delimiter="\t")]
+
+
+# ---------------------------------------------------------------- setup
+
+def dumpPsl(work, db, table):
+    """Dump one PSL table to a file, gzipped if large.  Return its path or None."""
+    try:
+        n = int(sh(["hgsql", "-N", db, "-e", "select count(*) from %s" % table],
+                   stderr=subprocess.DEVNULL))
+    except subprocess.CalledProcessError:
+        return None
+    gz = n > 1000000
+    out = os.path.join(work, "inputs", "psl", "%s.%s.psl%s" % (db, table, ".gz" if gz else ""))
+    if os.path.exists(out):
+        return out
+    cols = sh(["hgsql", "-N", db, "-e", "describe %s" % table]).split("\n")
+    skip = 2 if cols[0].startswith("bin\t") else 1
+    tmp = out + ".tmp"
+    cmd = "hgsql -N -e 'select * from %s' %s | cut -f%d-" % (table, db, skip)
+    cmd += (" | gzip -c > %s" if gz else " > %s") % tmp
+    sh(cmd)
+    os.rename(tmp, out)
+    return out
+
+
+def convertBigBed(work, row, gz):
+    """Turn one bigBed into a BED file.  Return its path or None."""
+    db = row["path"].split("/")[4]
+    name = re.sub(r"[^A-Za-z0-9_.-]", "_", os.path.basename(row["path"])[:-3])
+    out = os.path.join(work, "inputs", "bed", "%s.%s.%s.bed%s"
+                       % (db, name, hashlib.md5(row["path"].encode()).hexdigest()[:6],
+                          ".gz" if gz else ""))
+    if os.path.exists(out):
+        return out
+    tmp = out + ".tmp"
+    cmd = "%s/bigBedToBed %s stdout%s > %s" % (KENTBIN, row["path"],
+                                               " | gzip -c" if gz else "", tmp)
+    try:
+        sh("set -o pipefail; " + cmd, executable="/bin/bash")
+    except subprocess.CalledProcessError:
+        return None
+    os.rename(tmp, out)
+    return out
+
+
+def sampleBigBeds(manifest, dbs, perDb, maxItems, maxBytes, seed):
+    """Pick bigBeds of each db, spread over field counts and sizes."""
+    rng = random.Random(seed)
+    strata = collections.defaultdict(list)
+    with open(manifest) as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            parts = r["path"].split("/")
+            # The manifest holds real paths, so a /gbdb file shows up under genomes/<db>.
+            if (len(parts) < 6 or parts[1:3] != ["hive", "data"]
+                    or parts[3] not in ("gbdb", "genomes") or parts[4] not in dbs):
+                continue
+            items = int(r["itemCount"])
+            if items < 1 or items > maxItems or int(r["bytes"]) > maxBytes:
+                continue
+            fields = min(int(r["fieldCount"]), 12)
+            strata[(parts[4], fields, int(math.log10(items)))].append(r)
+    picked = {db: [] for db in dbs}
+    for db in dbs:
+        keys = sorted(k for k in strata if k[0] == db)
+        while len(picked[db]) < perDb and keys:
+            for k in list(keys):
+                if not strata[k]:
+                    keys.remove(k)
+                    continue
+                picked[db].append(strata[k].pop(rng.randrange(len(strata[k]))))
+                if len(picked[db]) >= perDb:
+                    break
+    return picked
+
+
+def splitByChrom(src, dest, chromCol, maxChroms):
+    """Write the lines of src into dest/<chrom>_x.<ext>, the per-chromosome file form."""
+    os.makedirs(dest, exist_ok=True)
+    ext = ".psl" if ".psl" in src else ".bed"
+    opener = "zcat" if src.endswith(".gz") else "cat"
+    p = subprocess.Popen([opener, src], stdout=subprocess.PIPE, universal_newlines=True)
+    files = {}
+    for line in p.stdout:
+        chrom = line.split("\t")[chromCol]
+        if chrom not in files:
+            if len(files) >= maxChroms:
+                continue
+            files[chrom] = open(os.path.join(dest, chrom + "_x" + ext), "w")
+        files[chrom].write(line)
+    p.wait()
+    for f in files.values():
+        f.close()
+    return os.path.join(dest, "_x" + ext)
+
+
+def chainPaths(db):
+    d = "/gbdb/%s/liftOver" % db
+    if not os.path.isdir(d):
+        return []
+    out = []
+    for name in sorted(os.listdir(d)):
+        if name.endswith(".over.chain.gz"):
+            real = os.path.realpath(os.path.join(d, name))
+            if real.startswith(("/hive/", "/cluster/")) and os.path.exists(real):
+                out.append((name[:-len(".over.chain.gz")], real))
+    return out
+
+
+def makeCases(work, dbs, chains, psls, beds, bbs, perChrom):
+    """Build the case list.  Each case is one featureBits command line."""
+    cases = []
+
+    def add(caseId, args, where="cluster"):
+        cases.append({"caseId": caseId, "where": where, "args": args})
+
+    for db in dbs:
+        common = ["-countGaps", "-chromSize=" + os.path.join(work, "sizes", db + ".tsv")]
+        chrom1 = "-chrom=chr1"
+        for i, (name, c) in enumerate(chains[db]):
+            base = "%s.chain.%s" % (db, name)
+            add(base, [db, c, "-bed=out.bed"] + common)
+            if i % 10 == 0:
+                add(base + ".not", [db, c, "-not"] + common)
+            if i % 10 == 5 and i + 1 < len(chains[db]):
+                add(base + ".orNext", [db, c, chains[db][i + 1][1], "-or"] + common)
+        for i, p in enumerate(psls[db]):
+            base = "%s.psl.%s" % (db, os.path.basename(p).split(".")[1])
+            add(base, [db, p, "-bed=out.bed"] + common)
+            add(base + ".minSize", [db, p, "-minSize=200", "-bed=out.bed"] + common)
+            if beds[db]:
+                add(base + ".enrichBed", [db, p, beds[db][i % len(beds[db])][0], "-enrichment"]
+                    + common)
+        for i, (b, fields) in enumerate(beds[db]):
+            base = "%s.bed.%s" % (db, os.path.basename(b).rsplit(".bed", 1)[0])
+            add(base, [db, b, "-bed=out.bed"] + common)
+            if fields >= 12:
+                add(base + ".countBlocks", [db, b, "-countBlocks", "-bed=out.bed"] + common)
+            if i % 7 == 0:
+                add(base + ".chrom1", [db, b, chrom1, "-bed=out.bed", "-bin=out.bin"] + common)
+            if i % 5 == 0 and i + 1 < len(beds[db]):
+                other = beds[db][i + 1][0]
+                op = (i // 5) % 4
+                if op == 0:
+                    add(base + ".andNext", [db, b, other, "-bed=out.bed"] + common)
+                elif op == 1:
+                    add(base + ".orNext", [db, b, other, "-or", "-bed=out.bed"] + common)
+                elif op == 2:
+                    add(base + ".notNext", [db, b, "!" + other, "-bed=out.bed"] + common)
+                else:
+                    add(base + ".enrichNext", [db, b, other, "-enrichment"] + common)
+            if chains[db] and i % 9 == 0:
+                add(base + ".andChain", [db, b, chains[db][i % len(chains[db])][1]] + common)
+        for b in bbs[db]:
+            add("%s.bb.%s" % (db, os.path.basename(b)[:-3]), [db, b, "-bed=out.bed"] + common)
+        for d in perChrom[db]:
+            add("%s.perChrom.%s" % (db, os.path.basename(os.path.dirname(os.path.dirname(d)))),
+                [db, d, "-bed=out.bed"] + common)
+
+    # Cases that need the database: gap counts from the gap table, and -fa.
+    if "hg38" in dbs and beds["hg38"]:
+        for i, (b, fields) in enumerate(beds["hg38"][:8]):
+            add("local.hg38.gaps.%d" % i, ["hg38", b, "-bed=out.bed"], "local")
+        for i, (b, fields) in enumerate(beds["hg38"][:3]):
+            add("local.hg38.fa.%d" % i,
+                ["hg38", b, "-chrom=chr21", "-faMerge", "-fa=out.fa"], "local")
+        if psls["hg38"]:
+            add("local.hg38.pslVsTable", ["hg38", psls["hg38"][0], "simpleRepeat", "-enrichment"],
+                "local")
+    return cases
+
+
+def cmdSetup(a):
+    work = os.path.abspath(a.work)
+    for d in ["bin", "sizes", "inputs/psl", "inputs/bed", "inputs/perChrom", "runs"]:
+        os.makedirs(os.path.join(work, d), exist_ok=True)
+    ref = os.path.join(work, "bin", "featureBits.ref")
+    if not os.path.exists(ref):
+        shutil.copy2(a.ref, ref)
+    with open(os.path.join(work, "bin", "featureBits.ref.md5"), "w") as f:
+        f.write(md5(ref) + "\n")
+    dbs = a.dbs.split(",")
+    for db in dbs:
+        out = os.path.join(work, "sizes", db + ".tsv")
+        if not os.path.exists(out):
+            try:
+                sh("hgsql -N -e 'select chrom,size,fileName from chromInfo' %s > %s.tmp"
+                   % (db, out), stderr=subprocess.DEVNULL)
+            except subprocess.CalledProcessError:
+                # A hub-backed assembly such as hs1 has no chromInfo table.
+                sh("awk -v OFS='\\t' '{print $1, $2, \"x\"}' /hive/data/genomes/%s/chrom.sizes"
+                   " > %s.tmp" % (db, out))
+            os.rename(out + ".tmp", out)
+
+    with concurrent.futures.ThreadPoolExecutor(a.jobs) as ex:
+        pslJobs = {(db, t): ex.submit(dumpPsl, work, db, t) for db in dbs for t in PSL_TABLES}
+        picked = sampleBigBeds(a.manifest, dbs, a.beds_per_db, a.max_items, a.max_bytes,
+                               a.seed)
+        bedJobs = {db: [(r, ex.submit(convertBigBed, work, r, i % 3 != 0))
+                        for i, r in enumerate(picked[db])] for db in dbs}
+        psls = {db: [p for (d, t), j in pslJobs.items() if d == db for p in [j.result()] if p]
+                for db in dbs}
+        beds = {db: [(j.result(), min(int(r["fieldCount"]), 12))
+                     for r, j in bedJobs[db] if j.result()] for db in dbs}
+    bbs = {db: [r["path"] for r in picked[db][::10]] for db in dbs}
+    chains = {db: chainPaths(db) for db in dbs}
+    perChrom = {}
+    for db in dbs:
+        perChrom[db] = []
+        for b, fields in beds[db][:2]:
+            dest = os.path.join(work, "inputs", "perChrom",
+                                os.path.basename(b).rsplit(".bed", 1)[0], "x")
+            perChrom[db].append(splitByChrom(b, dest, 0, 50))
+        for p in psls[db][:1]:
+            dest = os.path.join(work, "inputs", "perChrom", "%s.psl" % db, "x")
+            perChrom[db].append(splitByChrom(p, dest, 13, 50))
+
+    cases = makeCases(work, dbs, chains, psls, beds, bbs, perChrom)
+    dups = [k for k, n in collections.Counter(c["caseId"] for c in cases).items() if n > 1]
+    if dups:
+        sys.exit("duplicate case ids: " + " ".join(dups[:10]))
+    with open(os.path.join(work, "cases.tsv"), "w") as f:
+        w = csv.DictWriter(f, CASE_FIELDS, delimiter="\t")
+        w.writeheader()
+        for c in cases:
+            w.writerow(dict(c, args=json.dumps(c["args"])))
+    count = collections.Counter(c["caseId"].split(".")[1] if c["where"] == "cluster"
+                                else "local" for c in cases)
+    print("%d cases: %s" % (len(cases), ", ".join("%s %d" % kv for kv in sorted(count.items()))))
+
+
+# ---------------------------------------------------------------- run
+
+def caseDir(work, side, caseId):
+    return os.path.join(work, "runs", side, caseId)
+
+
+def cmdOne(a):
+    """Run one case, record exit, stdout, stderr, time and output md5s; drop big outputs."""
+    case = next(c for c in readCases(a.work) if c["caseId"] == a.caseId)
+    d = caseDir(a.work, a.side, a.caseId)
+    if os.path.exists(d):
+        shutil.rmtree(d)
+    os.makedirs(d)
+    with open(os.path.join(d, "stdout"), "w") as out, open(os.path.join(d, "stderr"), "w") as err:
+        p = subprocess.run(["/usr/bin/time", "-f", "%e %U %M", "-o", "time", a.bin] + case["args"],
+                           cwd=d, stdout=out, stderr=err)
+    sums = []
+    for name in OUT_FILES:
+        path = os.path.join(d, name)
+        if os.path.exists(path):
+            sums.append("%s %s %d" % (name, md5(path), os.path.getsize(path)))
+            os.remove(path)
+    with open(os.path.join(d, "files.md5"), "w") as f:
+        f.write("".join(s + "\n" for s in sums))
+    with open(os.path.join(d, "exit.tmp"), "w") as f:
+        f.write("%d\n" % p.returncode)
+    os.rename(os.path.join(d, "exit.tmp"), os.path.join(d, "exit"))
+
+
+def runCluster(work, side, binPath, cases, ram, rounds):
+    """Run cases on parasol.  Return how many are still not done.
+
+    Some nodes fail every job at once (hgcompute-01 and -13 did on 2026-11-16), which makes
+    para call the batch sick and stop.  So each round clears that and builds a new batch of
+    only the cases that have no result yet."""
+    script = os.path.abspath(__file__)
+    bdir = os.path.join(work, "batch", side)
+    for r in range(rounds):
+        todo = [c for c in cases
+                if not os.path.exists(os.path.join(caseDir(work, side, c["caseId"]), "exit"))]
+        if not todo:
+            return 0
+        print("cluster round %d: %d cases" % (r + 1, len(todo)), flush=True)
+        if os.path.exists(bdir):
+            shutil.rmtree(bdir)
+        # The nodes' own stderr files are often unreadable, so keep each job's stderr here.
+        os.makedirs(os.path.join(bdir, "logs"))
+        wrapper = os.path.join(bdir, "runOne.sh")
+        with open(wrapper, "w") as f:
+            f.write("#!/bin/bash\n/usr/bin/python3 %s one %s %s %s \"$1\" 2> %s/logs/\"$1\".err\n"
+                    % (script, work, side, binPath, bdir))
+        os.chmod(wrapper, 0o755)
+        with open(os.path.join(bdir, "jobList"), "w") as f:
+            for c in todo:
+                f.write("/bin/bash %s %s {check out exists %s}\n"
+                        % (wrapper, c["caseId"],
+                           os.path.join(caseDir(work, side, c["caseId"]), "exit")))
+        subprocess.run(["para", "make", "-retries=20", "-ram=%s" % ram, "jobList"], cwd=bdir)
+        subprocess.run(["para", "clearSickNodes"], cwd=bdir)
+    return sum(1 for c in cases
+               if not os.path.exists(os.path.join(caseDir(work, side, c["caseId"]), "exit")))
+
+
+def cmdRun(a):
+    work = os.path.abspath(a.work)
+    binPath = os.path.abspath(a.bin)
+    if a.side == "ref":
+        want = open(os.path.join(work, "bin", "featureBits.ref.md5")).read().strip()
+        if md5(binPath) != want:
+            sys.exit("ref binary does not match bin/featureBits.ref.md5")
+    else:
+        # Freeze the binary, so a rebuild during the run does not mix two builds.
+        frozen = os.path.join(work, "bin", "featureBits." + a.side)
+        if binPath != frozen:
+            shutil.copy2(binPath, frozen)
+        binPath = frozen
+    cases = [c for c in readCases(work)
+             if (not a.only or re.search(a.only, c["caseId"]))
+             and (a.force or not os.path.exists(os.path.join(caseDir(work, a.side, c["caseId"]),
+                                                             "exit")))]
+    if a.force:
+        for c in cases:
+            d = caseDir(work, a.side, c["caseId"])
+            if os.path.exists(d):
+                shutil.rmtree(d)
+    script = os.path.abspath(__file__)
+    local = [c for c in cases if c["where"] == "local" or not a.cluster]
+    remote = [c for c in cases if c["where"] == "cluster" and a.cluster]
+    print("%d cases to run: %d on the cluster, %d here" % (len(cases), len(remote), len(local)))
+    if remote:
+        clusterThread = concurrent.futures.ThreadPoolExecutor(1)
+        clusterDone = clusterThread.submit(runCluster, work, a.side, binPath, remote, a.ram,
+                                           a.rounds)
+    if local:
+        with concurrent.futures.ThreadPoolExecutor(a.jobs) as ex:
+            list(ex.map(lambda c: subprocess.run(
+                ["/usr/bin/python3", script, "one", work, a.side, binPath, c["caseId"]]), local))
+    if remote:
+        left = clusterDone.result()
+        if left:
+            sys.exit("%d cluster cases did not finish" % left)
+
+
+# ---------------------------------------------------------------- compare
+
+def readRun(d):
+    def read(name):
+        p = os.path.join(d, name)
+        return open(p, errors="replace").read() if os.path.exists(p) else None
+    t = (read("time") or "").strip().split("\n")[-1].split()
+    return {"exit": read("exit"), "stdout": read("stdout"), "stderr": read("stderr"),
+            "files": read("files.md5"),
+            "secs": float(t[0]) if len(t) == 3 else None,
+            "kb": int(t[2]) if len(t) == 3 else None}
+
+
+def readExpected(work):
+    """Return a dict of caseId to the reason it is expected to differ."""
+    p = os.path.join(work, "expected.tsv")
+    expected = {}
+    if os.path.exists(p):
+        for line in open(p):
+            line = line.rstrip("\n")
+            if line and not line.startswith("#"):
+                caseId, _, reason = line.partition("\t")
+                expected[caseId] = reason
+    return expected
+
+
+def cmdCompare(a):
+    work = os.path.abspath(a.work)
+    expected = readExpected(work)
+    rows, counts = [], collections.Counter()
+    for c in readCases(work):
+        ref = readRun(caseDir(work, "ref", c["caseId"]))
+        new = readRun(caseDir(work, a.side, c["caseId"]))
+        if ref["exit"] is None or new["exit"] is None:
+            res = "MISSING"
+            why = "ref" if ref["exit"] is None else a.side
+        else:
+            diffs = [k for k in ["exit", "stdout", "stderr", "files"] if ref[k] != new[k]]
+            res = "SAME"
+            why = ",".join(diffs)
+            if diffs:
+                res = "EXPECTED" if c["caseId"] in expected else "DIFF"
+                if res == "EXPECTED":
+                    why += " (%s)" % expected[c["caseId"]]
+        counts[res] += 1
+        rows.append([c["caseId"], res, why, ref["secs"], new["secs"], ref["kb"], new["kb"],
+                     (ref["exit"] or "").strip()])
+    out = os.path.join(work, "compare.%s.tsv" % a.side)
+    with open(out, "w") as f:
+        f.write("caseId\tresult\tdiffers\trefSecs\tnewSecs\trefKb\tnewKb\trefExit\n")
+        for r in rows:
+            f.write("\t".join("" if v is None else str(v) for v in r) + "\n")
+    print(", ".join("%s %d" % kv for kv in sorted(counts.items())))
+    for r in rows:
+        if r[1] == "DIFF":
+            print("DIFF %s (%s)" % (r[0], r[2]))
+    done = [r for r in rows if r[1] == "SAME" and r[3] is not None and r[4] is not None]
+    if done:
+        print("total time: ref %.0f s, %s %.0f s; peak memory up on %d cases, by more than 2x on %d"
+              % (sum(r[3] for r in done), a.side, sum(r[4] for r in done),
+                 sum(1 for r in done if r[6] > r[5]), sum(1 for r in done if r[6] > 2 * r[5])))
+    print("details in", out)
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    s = sub.add_parser("setup")
+    s.add_argument("work")
+    s.add_argument("--ref", default=REF_BIN)
+    s.add_argument("--dbs", default=",".join(DBS))
+    s.add_argument("--manifest", default=MANIFEST)
+    s.add_argument("--beds-per-db", type=int, default=60)
+    s.add_argument("--max-items", type=int, default=10000000)
+    s.add_argument("--max-bytes", type=int, default=200000000,
+                   help="largest bigBed to sample, in bytes")
+    s.add_argument("--seed", type=int, default=38774)
+    s.add_argument("-j", "--jobs", type=int, default=12)
+    s = sub.add_parser("run")
+    s.add_argument("work")
+    s.add_argument("side", help="'ref' for the reference binary, or a name for the new one")
+    s.add_argument("bin")
+    s.add_argument("--cluster", action="store_true", help="run the cluster cases on parasol")
+    s.add_argument("--ram", default="8g")
+    s.add_argument("--rounds", type=int, default=6, help="cluster rounds before giving up")
+    s.add_argument("--only", help="regular expression on caseId")
+    s.add_argument("--force", action="store_true", help="rerun cases that already have results")
+    s.add_argument("-j", "--jobs", type=int, default=8)
+    s = sub.add_parser("one")
+    for n in ["work", "side", "bin", "caseId"]:
+        s.add_argument(n)
+    s = sub.add_parser("compare")
+    s.add_argument("work")
+    s.add_argument("side")
+    a = ap.parse_args()
+    {"setup": cmdSetup, "run": cmdRun, "one": cmdOne, "compare": cmdCompare}[a.cmd](a)
+
+
+if __name__ == "__main__":
+    main()

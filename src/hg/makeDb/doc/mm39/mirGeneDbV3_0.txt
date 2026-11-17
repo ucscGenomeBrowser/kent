@@ -40,9 +40,49 @@ bigBedInfo mirGeneDb.bb | grep itemCount
 bigBedInfo mirGeneDbArms.bb | grep itemCount
 #   itemCount: 913
 
+# Link the files into /gbdb:
+mkdir -p /gbdb/mm39/mirGeneDbV3_0
+for f in mirGeneDb.bb mirGeneDbArms.bb mirGeneDb.ix mirGeneDb.ixx; do
+    ln -sf `pwd`/$f /gbdb/mm39/mirGeneDbV3_0/$f
+done
+
+# miRBase IDs and accessions are shown as MirGeneDB gives them, not corrected. For
+# these paralog pairs MirGeneDB gives the accession of the other copy, so the miRBase
+# precursor at the locus is the other member of the pair:
+#   Mmu-Mir-506-P11b1/b2 (mmu-mir-465b-1/-2), Mmu-Mir-506-P11c1/c2 (mmu-mir-465c-1/-2).
+# Mmu-Mir-1271 has no miRBase accession, although miRBase 22.1 has mmu-mir-1271
+# (MI0039503) at this locus.
+
 # Checks done on the output:
 #   - every folded sequence equals the mm39 sequence at the pri coordinates
 #     (strand-aware), and every armPositions range cuts exactly the arm's mm39
 #     sequence out of the folded sequence
 #   - sequences, structures, foldType and seeds of all 457 loci are identical to
 #     the mm10 track
+
+##############################################################################
+# Rebuild for QA (DONE 2026-11-16, refs #36988, #38548)
+##############################################################################
+# Changes of the details page and search only; coordinates, sequences, folds,
+# structures and the arm decorators are the same as in the first build.
+#   - each arm: arm name, position, arm sequence (new, cut from the folded pri-miRNA
+#     sequence), miRBase accession; labels "5p arm"/"3p arm"; blocks with sepFields
+#   - co-mature genes: seed labeled per arm, 5p first, e.g. "5p: CGAGGAG, 3p: UAGACUG"
+#     (39 genes)
+#   - the miRBase precursor accession only from the locus' own pre_miRNA in the GFF, as
+#     MirGeneDB gives it; it is no longer copied from the -v1 locus, so 53 variant
+#     loci show "-"
+#   - every value MirGeneDB does not give is shown as "-" ("|-" in fields with a link,
+#     so the dash is not linked)
+#   - search index also has the arm names, with and without the *
+cd /hive/data/genomes/mm39/bed/mirGeneDbV3_0
+bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbBuild.sh mm39 mmu
+bigBedInfo mirGeneDb.bb | grep itemCount
+#   itemCount: 457
+bigBedInfo mirGeneDbArms.bb | grep itemCount
+#   itemCount: 913
+# Checks: all fields not named above are identical to the first build; the set of
+# seeds is unchanged; every arm sequence equals the mm39 sequence at the arm
+# coordinates, strand-aware (913 of 913).
+# The miRBase track of this assembly reads mirGeneDb.bed for its MirGeneDB IDs, so
+# rebuild it after this one (doc/mm39/mirBaseV22_1.txt).

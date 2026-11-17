@@ -4517,10 +4517,12 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     else
         safef(setting,sizeof(setting),"%s.%s",descendentTdb->track,suffix);
     char *newVal = cartOptionalString(newCart,setting);
-    // A visibility this request created is the request asking for it, not a leftover,
+    // A visibility this request carries is the request asking for it, not a leftover,
     // even when it is "hide", which cartValueHasChanged() counts as unchanged.
-    // So a URL that turns on a container and hides one of its subtracks keeps the hide.
-    boolean setByThisRequest = vis && sameOk(hashFindVal(oldVars,setting),CART_VAR_EMPTY);
+    // So a URL that turns on a container and hides one of its subtracks keeps the hide,
+    // on the first such request and on every later one.  oldVars holds an entry for
+    // each CGI variable in this request and for nothing else (see storeInOldVars()).
+    boolean setByThisRequest = vis && hashLookup(oldVars,setting) != NULL;
     if (    newVal    != NULL
     && (   (parentVal != NULL && sameString(newVal,parentVal))
         || (!setByThisRequest

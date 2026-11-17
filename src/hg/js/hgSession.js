@@ -1,4 +1,4 @@
-// hgSession.js - the experimental client-rendered "My Sessions" page.
+// hgSession.js - the experimental client-rendered "Saved sessions" page.
 //
 // An opt-in modern alternative to the classic server-rendered hgSession page, applying hgBlat's
 // facelift strategy (#37996): hgSession.c emits the session list and page config as an inline JSON
@@ -625,10 +625,9 @@ function sessAdvancedHtml(C) {
         '<form class="sessAdvRow" action="hgSession" method="POST">' + sid +
         '<input class="sessAdvInput" type="text" name="hgS_saveLocalFileName" ' +
         'placeholder="File name (blank = show in browser)">' +
-        // A select, not a checkbox: an unchecked box sends nothing, so hgSession aborted and a
-        // gzip chosen once stayed in the cart.
-        '<select class="sessAdvInput sessAdvSelect" name="hgS_saveLocalFileCompress">' +
-        '<option value="none">plain text</option><option value="gzip">gzip</option></select>' +
+        // Always plain text, no gzip choice (#38157: not needed).  Sent explicitly so a gzip
+        // chosen earlier on the classic page, still in the cart, is not used.
+        '<input type="hidden" name="hgS_saveLocalFileCompress" value="none">' +
         '<button type="submit" class="gbPill" name="hgS_doSaveLocal" value="submit" ' +
         'title="Download the current browser settings as a session file">Save</button></form></div>';
     var other =

@@ -8,7 +8,8 @@ that lie inside it, as mirBaseToBed.py assigns them. A precursor and its matures
 kept only if all of them lift, to the chromosome and strand of the lifted precursor,
 with their lengths unchanged, so the mature positions in the precursor sequence stay
 the same. The other precursors are left out with their matures and listed on stderr.
-Comment lines are copied, with a line added that says the file was lifted.
+Comment lines are copied, with a line added that says the file was lifted, and the
+genome-build lines marked as the source assembly.
 """
 import subprocess
 import sys
@@ -66,10 +67,17 @@ def main(inGff, chain, outGff):
             dropped[attrs[p]["ID"]] = (attrs[p]["Name"], reason)
         else:
             keep.update(idx)
+    chainName = chain.split("/")[-1]
+    target = chainName.split("To", 1)[-1].split(".")[0]
+    target = target[:1].lower() + target[1:]          # mm10ToMm39.over.chain.gz -> mm39
     with open(outGff, "w") as out:
         out.write(header[0])
-        out.write("# lifted with mirBaseLift.py and %s\n" % chain.split("/")[-1])
-        out.writelines(header[1:])
+        out.write("# lifted with mirBaseLift.py and %s\n" % chainName)
+        for line in header[1:]:
+            # the genome-build lines name the source assembly, not the lifted coordinates
+            if "genome-build-" in line:
+                line = line.rstrip("\n") + "  (miRBase source; coordinates lifted to %s)\n" % target
+            out.write(line)
         for i, c in enumerate(feats):
             if i in keep:
                 chrom, start, end, strand = lifted[i]

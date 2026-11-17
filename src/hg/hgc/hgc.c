@@ -28462,34 +28462,12 @@ dnaSeqFreeList(&qSeqList);
 return dyStringCannibalize(&setting);
 }
 
-static char *blatPslSetting(char *pslName)
-/* Return the value of the blatPsl track line setting for the search whose .pslx is pslName: the
- * file's base name, cgiEncoded.  The base name, since a search and a reopen of it (blatPslId=)
- * spell the trash path differently. */
-{
-char dir[PATH_LEN], root[FILENAME_LEN], ext[FILEEXT_LEN], base[FILENAME_LEN + FILEEXT_LEN];
-splitPath(pslName, dir, root, ext);
-safef(base, sizeof base, "%s%s", root, ext);
-return cgiEncode(base);
-}
-
-static struct customTrack *blatFindResultCt(struct customTrack *ctList, char *pslSetting)
-/* Return the BLAT results track in ctList that was built from the search with this blatPsl
- * setting, or NULL. */
-{
-struct customTrack *ct;
-for (ct = ctList; ct != NULL; ct = ct->next)
-    if (blatIsResultTrack(ct->tdb) && sameOk(trackDbSetting(ct->tdb, "blatPsl"), pslSetting)
-    &&  trackDbSetting(ct->tdb, "bigDataUrl") != NULL)
-        return ct;
-return NULL;
-}
 
 static struct customTrack *blatNewResultCt(char *pslName, char *faName, char *pslSetting,
                                            char *trackName, char *trackDescription,
                                            char **retBigBedFile)
 /* Make the bigPsl file of a BLAT search and return a custom track for it.  The track line carries
- * blatPsl=pslSetting, so a reopen of the same search finds this track (blatFindResultCt). */
+ * blatPsl=pslSetting, so a reopen of the same search finds this track (blatFindSearchCt). */
 {
 struct tempName bigBedTn;
 trashDirDateFile(&bigBedTn, "hgBlat", "bp", ".bb");
@@ -28545,7 +28523,16 @@ parseSs(fileNames, &pslName, &faName, &qName);
  * the old name, so a rename always builds a new track. */
 struct customTrack *ctList = getCtList();
 char *pslSetting = blatPslSetting(pslName);
-struct customTrack *sameSearchCt = blatFindResultCt(ctList, pslSetting);
+struct customTrack *sameSearchCt = blatFindSearchCt(ctList, pslName);
+/* The track's bigBed can be gone while the .pslx is still there: the trash cleaner keeps hgBlat
+ * files for a shorter time than hgSs files.  The loader keeps such a track with networkErrMsg set,
+ * and reusing it would leave a track that never draws.  Drop it and build a new one from the
+ * .pslx; hgBlat sends the dead track's own name, so the new one gets its id. */
+if (sameSearchCt != NULL && sameSearchCt->networkErrMsg != NULL)
+    {
+    slRemoveEl(&ctList, sameSearchCt);
+    sameSearchCt = NULL;
+    }
 struct customTrack *newCts = NULL;
 char *bigBedFile = NULL;
 if (sameSearchCt != NULL)

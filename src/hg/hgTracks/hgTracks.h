@@ -1040,8 +1040,8 @@ struct linkedFeatures *linkedFeaturesFromGenePred(struct track *tg, struct geneP
 
 struct linkedFeatures *lfFromGenePredInRange(struct track *tg, char *table,
                                              char *chrom, int start, int end);
-/* Return linked features from range of a gene prediction table, quickLifting them
- * when the track is lifted. */
+/* Return linked features from range of tg's gene prediction table (tg->tdb->table),
+ * quickLifting them when the track is lifted.  The table argument is not read. */
 
 struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb *tdb,
 	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
@@ -1931,6 +1931,9 @@ void bigBaseViewMethods(struct track *track, struct trackDb *tdb,
 struct baseRange;
 
 struct baseRange *loadBaseRangesFromChain(char *chainFile, char *chrom, int start, int end);
+/* Return the source-coordinate ranges overlapping [start,end), read off the chain that
+ * maps this assembly back to its source.  Used to drive the main base position ruler in
+ * source coordinates. */
 
 char *sourceChromForWindow(char *chainFile, char *chrom, int start, int end);
 /* The source sequence this window maps back to, or NULL when it spans more than one. */
@@ -1979,8 +1982,6 @@ void mapSourceRangePositions(struct imgTrack *imgTrack, char *chainFile, char *c
                              int start, int end, int insideX, int width, int y1, int y2);
 /* Put a map box over the ruler for each source range in the window, whose mouseover is
  * the source position of the part on screen. */
-/* Open a baseView bigBed by url and return source-coordinate ranges overlapping
- * [start,end).  Used to drive the main base position ruler in source coords. */
 
 void drawSourceCoordRuler(struct hvGfx *hvg, struct baseRange *rangeList,
                           int seqStart, int seqEnd, int yOff, int rulerHeight, MgFont *font);

@@ -97,6 +97,9 @@
 #sessionApp .sessAdvBar { display:flex; align-items:center; gap:12px; flex-wrap:wrap;
     margin:0 0 20px; }
 #sessionApp .sessAdvHint { color:var(--muted); font-size:13px; }
+/* Any dialog on this page scrolls inside itself when the window is shorter than it, instead of
+ * running off the top and bottom of the screen. */
+#sessionApp .gbModal { max-height:92vh; overflow-y:auto; box-sizing:border-box; }
 /* Dialog body: wide enough for the two columns, the dialog itself supplies padding/background. */
 #sessionApp .sessAdvBody { display:grid; grid-template-columns:1fr 1fr; gap:18px 28px;
     font-size:14px; width:min(760px, 86vw); box-sizing:border-box; margin-bottom:6px; }
@@ -118,7 +121,6 @@
 #sessionApp .sessAdvInput { flex:1 1 140px; min-width:110px; height:32px; box-sizing:border-box;
     border:1px solid var(--btnLine); border-radius:0; padding:0 9px; font-size:14px; background:#fff;
     font-family:inherit; }
-#sessionApp .sessAdvSelect { flex:0 0 auto; min-width:0; padding:0 4px; }
 #sessionApp .sessAdvLinks { display:flex; gap:16px; flex-wrap:wrap; }
 #sessionApp .sessAdvLinks a { color:var(--accent); }
 #sessionApp .sessAdvLinks a:hover { color:var(--accentHover); }

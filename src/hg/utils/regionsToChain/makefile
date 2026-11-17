@@ -12,7 +12,9 @@ include $(kentSrc)/inc/cgiLoader.mk
 clean::
 	rm -rf tests/output
 
-test::
+# cgiLoader.mk's cgi targets leave the binary in the loader directory, not in
+# DESTBINDIR, so build the DESTBINDIR copy the tests run before running them.
+test:: ${DESTBINDIR}/${A}${EXE}
 	rm -rf tests/output
 	mkdir -p tests/output
 #	Regions on two source sequences lay into one synthetic sequence called "multi",

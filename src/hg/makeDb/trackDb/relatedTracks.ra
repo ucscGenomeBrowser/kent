@@ -18,6 +18,14 @@ hg38 knownGeneArchive knownGene View the latest GENCODE Genes version
 hg38 miRnaAtlas nonCodingRNAs View associated precursor miRnas
 hg38 nonCodingRNAs miRnaAtlas View expression of cleaved miRnas
 
+# MirGeneDB, miRBase, sno/miRNA
+hg38 mirGeneDbV3_0 mirBaseV22_1 All registered microRNA precursors, including those not in MirGeneDB
+hg38 mirBaseV22_1 mirGeneDbV3_0 Curated microRNA genes with their dominant and star arms
+hg38 mirGeneDbV3_0 wgRna MicroRNAs and snoRNAs from miRBase 22 and snoRNABase
+hg38 wgRna mirGeneDbV3_0 Curated microRNA genes with their dominant and star arms
+hg38 mirBaseV22_1 wgRna MicroRNAs and snoRNAs from miRBase 22 and snoRNABase
+hg38 wgRna mirBaseV22_1 MicroRNA precursors with mature miRNAs and predicted structures
+
 hg38 caddSuper gnomadVariants View associated variants
 hg38 gnomadVariants caddSuper View CADD scores for this variant and region
 
@@ -102,8 +110,14 @@ hg19 >avada varaico The latest variants mined from published papers. The AVADA t
 mm39 knownGene knownGeneArchive View previous versions of GENCODE Genes
 mm39 knownGeneArchive knownGene View the latest GENCODE Genes version
 
+mm39 mirGeneDbV3_0 mirBaseV22_1 All registered microRNA precursors, including those not in MirGeneDB
+mm39 mirBaseV22_1 mirGeneDbV3_0 Curated microRNA genes with their dominant and star arms
+
 # mm10 ENCODE4 Regulation:
 mm10 encode4Reg encode3Reg The previous version of this track
+
+mm10 mirGeneDbV3_0 mirBaseV22_1 All registered microRNA precursors, including those not in MirGeneDB
+mm10 mirBaseV22_1 mirGeneDbV3_0 Curated microRNA genes with their dominant and star arms
 mm10 encode3Reg encode4Reg The newer version of this track
 mm10 ~encode4Reg cCREs Related ENCODE4 data
 mm10 ~mouseDevTimecourse encode3Reg Related ENCODE track

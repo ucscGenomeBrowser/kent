@@ -5379,8 +5379,11 @@ spaceUserVirtModeType = cloneString(virtModeType);
  * makes before it uses its default window. */
 boolean enteringMode = !sameOk(lastVirtModeType, virtModeType);
 /* Picking another item from the menu while already in a single-item view is entering
- * a new view, not moving about in the old one:  open it on the whole item. */
-if (sameString(virtModeType, "singleTrans") &&
+ * a new view, not moving about in the old one:  open it on the whole item.  Only when
+ * the chain name is kept in the cart, which is when there are conditions (see above);
+ * without them lastChainName is always NULL and every request would look like a new
+ * item, re-opening the whole view on each one. */
+if (sameString(virtModeType, "singleTrans") && isNotEmpty(conditions) &&
     !sameOk(lastChainName, multiRegionSpaceChainName(chainFile)))
     enteringMode = TRUE;
 freeMem(lastChainName);
@@ -7836,17 +7839,8 @@ void ctLoadColoredExon(struct track *tg)
 struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-if (ct->dbTrack && (multiRegionSpaceForDb(database) != NULL))
-    {
-    struct bed *nextBed;
-    for (bed = ctDbBeds(tg, ct, ct->fieldCount); bed != NULL; bed = nextBed)
-        {
-        nextBed = bed->next;
-	lfs = lfsFromColoredExonBed(bed);
-	slAddHead(&lfsList, lfs);
-	}
-    }
-else
+/* No multi-region space branch:  liftTrackIntoSpace() does not carry this track into a
+ * space, so it is hidden there before it loads.  refs #37788 */
 if (ct->dbTrack)
     {
     int fieldCount = ct->fieldCount;
@@ -11569,9 +11563,18 @@ if (virtMode)
     jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
     }
 else if (spaceUserVirtModeType != NULL)
+    {
     /* A synthetic space is not in virtMode, and the multi-region dialog still has to say
      * which view it is in.  refs #37788 */
     jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(spaceUserVirtModeType));
+    /* The client has no hgTracks.windows here, so tell it plainly that the image is a
+     * space:  item links carry source coordinates, and the source position is what
+     * View DNA asks hgc for.  tracksDisplay() set nonVirtPosition before this.  */
+    jsonObjectAdd(jsonForClient, "inMultiRegionSpace", newJsonBoolean(TRUE));
+    char *spaceNonVirtPos = cartOptionalString(cart, "nonVirtPosition");
+    if (spaceNonVirtPos != NULL)
+        jsonObjectAdd(jsonForClient, "nonVirtPosition", newJsonString(spaceNonVirtPos));
+    }
 
 /* Offer "Make this my coordinate system" on gene items.  refs #37788 */
 if (multiRegionSpacesEnabled())
