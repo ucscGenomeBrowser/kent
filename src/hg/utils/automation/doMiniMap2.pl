@@ -46,6 +46,9 @@ use vars qw/
     $opt_minimapSecondaryRatio
     $opt_chainRam
     $opt_chainCpu
+    $opt_chainMinScore
+    $opt_chainMatrix
+    $opt_chainLinearGap
     $opt_regenerateMash
     $opt_swap
     $opt_swapDir
@@ -83,6 +86,7 @@ my $minimapSecondaryN;			# -N INT to minimap2, undef: preset's own
 my $minimapSecondaryRatio = 0.8;	# -p FLOAT to minimap2
 my $chainRam = '16g';		# -chainRam=Ng argument
 my $chainCpu = 1;		# -chainCpu=N argument
+my $chainLinearGap = 'medium';	# -chainLinearGap=loose|medium|filename
 # mash distance thresholds ($mashAsm5Max/$mashAsm10Max/$mashLastzMin/
 # $mashWarnMax) used to pick a preset (or reject the pair outright) come
 # from AssemblyDivergence.pm, shared with mashDistance.pl and anything
@@ -140,6 +144,13 @@ options:
                           $minimapSecondaryRatio
     -chainRam  Ng  Cluster ram size for chain step, default: -chainRam=$chainRam
     -chainCpu  N   Cluster CPUs number for chain step, default: -chainCpu=$chainCpu
+    -chainMinScore n      Add -minScore=n to the axtChain command
+                          (default: axtChain's own, 1000)
+    -chainMatrix file     Add -scoreScheme=file to the axtChain command, as
+                          doBlastzChainNet.pl does with BLASTZ_Q
+                          (default: axtChain's own matrix)
+    -chainLinearGap type  Add -linearGap=<loose|medium|filename> to the
+                          axtChain command (default: $chainLinearGap)
     -regenerateMash       Force the mash divergence check to re-sketch and
                           overwrite even if a cached .msh (GenArk mashSketch/
                           cache or \$buildDir/mashDistance.txt) already
@@ -256,6 +267,9 @@ sub checkOptions {
 		      'minimapSecondaryRatio=f',
 		      'chainRam=s',
 		      'chainCpu=i',
+		      'chainMinScore=i',
+		      'chainMatrix=s',
+		      'chainLinearGap=s',
 		      'regenerateMash',
 		      'swap',
 		      'swapDir=s',
@@ -268,6 +282,16 @@ sub checkOptions {
   my $err = $stepper->processOptions();
   usage(1) if ($err);
   $dbHost = $opt_dbHost if ($opt_dbHost);
+  if ($opt_chainMatrix && ! -s $opt_chainMatrix) {
+    die "-chainMatrix file '$opt_chainMatrix' does not exist or is empty\n";
+  }
+  if ($opt_chainLinearGap) {
+    if ($opt_chainLinearGap !~ /^(loose|medium)$/ && ! -s $opt_chainLinearGap) {
+      die "-chainLinearGap must be loose, medium, or an existing file " .
+	  "(got '$opt_chainLinearGap')\n";
+    }
+    $chainLinearGap = $opt_chainLinearGap;
+  }
   if ($opt_minimapPreset) {
     $minimapPreset = $opt_minimapPreset;
     if ($minimapPreset !~ /^asm(5|10|20)$/) {
@@ -506,6 +530,9 @@ sub doChain {
   # so the chain job list is simply the contents of $pafDir/*.psl.
   &HgAutomate::run("ls $pafDir/*.psl | xargs -n 1 basename > $runDir/pslParts.lst");
 
+  my $matrix = $opt_chainMatrix ? "-scoreScheme=$opt_chainMatrix" : "";
+  my $minScore = $opt_chainMinScore ? "-minScore=$opt_chainMinScore" : "";
+
   # script for a single job: chain one target-sequence's PSL.
   my $fh = &HgAutomate::mustOpen(">$runDir/job.sh");
   print $fh <<_EOF_
@@ -534,10 +561,10 @@ fi
 
 tmpOut=`mktemp -p \$TMPDIR doMm2.chain.XXXXXX`
 
-axtChain -verbose=0 -linearGap=medium -psl $pafDir/\$inPsl \\
+axtChain -verbose=0 $matrix $minScore -linearGap=$chainLinearGap -psl $pafDir/\$inPsl \\
     $tSeqScratch $qSeqScratch stdout \\
-| chainBridge -linearGap=medium stdin $tSeqScratch $qSeqScratch \\
-    \$tmpOut
+| chainAntiRepeat $tSeqScratch $qSeqScratch \\
+    stdin \$tmpOut
 mv \$tmpOut \$outChain
 chmod 664 \$outChain
 _EOF_
