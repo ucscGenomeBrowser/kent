@@ -288,10 +288,11 @@ slSort(&withTracks, grpCmpLabel);
 return withTracks;
 }
 
-static enum trackVisibility containerVis(struct cart *cart, char *db, struct trackDb *tdb,
+static enum trackVisibility containerVis(struct cart *cart, struct trackDb *tdb,
                                          struct slRef *superChildList,
                                          enum trackVisibility vis)
-/* Return hide for a visible container with no visible children, else vis. */
+/* Return hide for a visible container with no visible children, else vis.  For a
+ * composite the children are its leaf subtracks, under its views if it has any. */
 {
 if (vis == tvHide || !(tdbIsSuperTrack(tdb) || tdbIsComposite(tdb)))
     return vis;
@@ -304,14 +305,34 @@ if (tdbIsSuperTrack(tdb))
     }
 else
     {
-    struct trackDb *subTdb;
-    for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-        if (tdbVisLimitedByAncestors(cart, subTdb, TRUE, FALSE) != tvHide)
-            return vis;
+    struct slRef *ref, *leafList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+    boolean anyOn = FALSE;
+    for (ref = leafList; ref != NULL && !anyOn; ref = ref->next)
+        anyOn = (tdbVisLimitedByAncestors(cart, ref->val, TRUE, FALSE) != tvHide);
+    slFreeList(&leafList);
+    if (anyOn)
+        return vis;
     }
-fprintf(stderr, "trackFinder: container track '%s' (%s) is visible "
-    "but has no visible children\n", tdb->track, db);
 return tvHide;
+}
+
+static void jsonWriteTrackMetadata(struct jsonWrite *jw, struct trackDb *tdb)
+/* Write the "metadata" object for a track.  If its metadata cannot be read, for
+ * example from a dead metaTab url, write it empty so the other tracks still load. */
+{
+struct slPair *pairs = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    pairs = trackDbMetaPairs(tdb);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    pairs = NULL;
+errCatchFree(&errCatch);
+jsonWriteObjectStart(jw, "metadata");
+struct slPair *pair;
+for (pair = pairs; pair != NULL; pair = pair->next)
+    jsonWriteString(jw, pair->name, (char *)pair->val);
+jsonWriteObjectEnd(jw);
 }
 
 static void jsonWriteFinderTrack(struct jsonWrite *jw, struct cart *cart, char *db,
@@ -336,7 +357,6 @@ boolean isSuperTrack = tdbIsSuperTrack(tdb);
 jsonWriteBoolean(jw, "isSuperTrack", isSuperTrack);
 if ((tdbIsSuperTrackChild(tdb) || tdbIsCompositeChild(tdb)) && tdb->parent)
     jsonWriteString(jw, "parentTrack", tdb->parent->track);
-jsonWriteBoolean(jw, "isFacetedComposite", tdbIsFacetedComposite(tdb));
 
 jsonWriteTrackTags(jw, tdb);
 jsonWriteTrackFacets(jw, tdb, facetDefs);
@@ -346,7 +366,7 @@ if (isSuperTrack)
     superChildList = hashFindVal(superChildren, tdb->track);
 int subCount = 0;
 if (isComposite)
-    subCount = slCount(tdb->subtracks);
+    subCount = trackDbCountDescendantLeaves(tdb);
 else if (isSuperTrack)
     subCount = slCount(superChildList);
 jsonWriteNumber(jw, "subtrackCount", subCount);
@@ -357,18 +377,12 @@ if (viewing)
     enum trackVisibility vis = tdbVisLimitedByAncestors(cart, tdb, TRUE, TRUE);
     // Track's own visibility ignoring supertrack folder state
     enum trackVisibility ownVis = tdbVisLimitedByAncestors(cart, tdb, TRUE, FALSE);
-    vis = containerVis(cart, db, tdb, superChildList, vis);
+    vis = containerVis(cart, tdb, superChildList, vis);
     jsonWriteString(jw, "visibility", hStringFromTv(vis));
     jsonWriteString(jw, "ownVisibility", hStringFromTv(ownVis));
     }
 
-// Metadata key-value pairs
-jsonWriteObjectStart(jw, "metadata");
-struct slPair *pairs = trackDbMetaPairs(tdb);
-struct slPair *pair;
-for (pair = pairs; pair != NULL; pair = pair->next)
-    jsonWriteString(jw, pair->name, (char *)pair->val);
-jsonWriteObjectEnd(jw);
+jsonWriteTrackMetadata(jw, tdb);
 
 jsonWriteObjectEnd(jw);
 }
@@ -392,7 +406,7 @@ jsonWriteListEnd(jw);
 static void jsonWriteRelatedTracks(struct jsonWrite *jw, struct cart *cart, char *db,
                                    struct finderGroup *fgList)
 /* Write the tracks from the relatedTrack table that are related to a visible track
- * and are not visible themselves. */
+ * and are not visible themselves.  Only tracks in the finder's list are written. */
 {
 jsonWriteListStart(jw, "relatedTracks");
 if (!trackHubDatabase(db))
@@ -436,15 +450,14 @@ if (!trackHubDatabase(db))
                 char *relatedTo = row[0];
                 char *relTrack = row[1];
                 char *why = row[2];
-                if (hashLookup(visibleTracks, relTrack)
+                struct trackDb *relTdb = hashFindVal(tdbByName, relTrack);
+                if (relTdb == NULL || hashLookup(visibleTracks, relTrack)
                     || hashLookup(suggested, relTrack))
                     continue;
                 hashStore(suggested, relTrack);
-                struct trackDb *relTdb = hashFindVal(tdbByName, relTrack);
-                char *shortLabel = relTdb ? relTdb->shortLabel : relTrack;
                 jsonWriteObjectStart(jw, NULL);
                 jsonWriteString(jw, "track", relTrack);
-                jsonWriteString(jw, "shortLabel", shortLabel);
+                jsonWriteString(jw, "shortLabel", relTdb->shortLabel);
                 jsonWriteString(jw, "why", why);
                 jsonWriteString(jw, "relatedTo", relatedTo);
                 jsonWriteObjectEnd(jw);
@@ -474,7 +487,7 @@ char *db = cartJsonOptionalParam(paramHash, "db");
 if (isEmpty(db))
     db = cartDb;
 boolean viewing = sameString(db, cartDb);
-if (!viewing && !hDbExists(db))
+if (!viewing && !hDbIsActive(db))
     errAbort("Unknown database: %s", db);
 
 struct trackDb *tdbList = NULL;

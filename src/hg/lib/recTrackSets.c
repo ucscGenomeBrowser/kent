@@ -33,12 +33,11 @@ struct recTrackSet *loadRecTrackSets(char *db)
 /* Read from tab-sep file.  Return list or NULL if no track sets for this database */
 {
 struct recTrackSet *recTrackSet, *recTrackSets = NULL;
-struct lineFile *lf = lineFileOpen(recTrackSetsFile(db), TRUE);
+struct lineFile *lf = lineFileMayOpen(recTrackSetsFile(db), TRUE);
 if (!lf)
     return NULL;
-#define cols 4
-char *row[cols];
-while (lineFileNextRowTab(lf, row, cols))
+char *row[4];
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
     {
     AllocVar(recTrackSet);
     recTrackSet->label = cloneString(row[0]);

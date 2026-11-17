@@ -55,6 +55,10 @@ var trackSearchFacets = (function() {
     // until OK.  Both are reset whenever the dialog opens.
     let pendingVis = {};
     let tabOrder = null;
+    // Session id for links, read when the dialog opens
+    let sessionId = "";
+    // The first load of the dialog, while it runs
+    let loadingPromise = null;
 
     const rowKey = (db, track) => db + " " + track;
 
@@ -70,20 +74,22 @@ var trackSearchFacets = (function() {
         .split(/[_\s-]+/)
         .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
-    function getHgsid() {
-        var input = document.querySelector("input[name='hgsid']");
-        if (input)
-            return input.value;
-        var params = new URLSearchParams(window.location.search);
-        return params.get("hgsid") || "";
-    }
+    // DataTables puts display values into cells as HTML, and labels and
+    // metadata can come from track hubs
+    const textRender = (data, type) => type === "display" ? htmlEncode(data) : data;
 
     function fetchDbData(db) {
         // Fetch one assembly's track data once per page.  The prefetch hooks
         // and the dialog share the same promise, so a second call never
-        // refetches.
+        // refetches.  The page's visibilities are noted when the viewed
+        // assembly's fetch starts, so the first open picks up changes made
+        // after it.
         if (dataPromises[db])
             return dataPromises[db];
+        if (db === getDb()) {
+            lastPageVis = pageVisibilities();
+            lastDrawn = drawnTracks();
+        }
         var cmd = JSON.stringify({getTrackFinderData: {db: db}});
         var url = "../cgi-bin/hgTracks?hgsid=" + encodeURIComponent(getHgsid()) +
             "&cjCmd=" + encodeURIComponent(cmd);
@@ -126,7 +132,6 @@ var trackSearchFacets = (function() {
                 type: (rec.type || "").split(" ")[0],
                 isComposite: false,
                 isSuperTrack: false,
-                isFacetedComposite: false,
                 subtrackCount: 0,
                 visibility: vis,
                 ownVisibility: vis,
@@ -205,13 +210,14 @@ var trackSearchFacets = (function() {
 
     function buildFacetDimensions() {
         // Built-in facets: group and type
-        // Plus any metadata keys that appear in enough tracks
-        var dbCounts = {};
-        var groupCounts = {};
-        var typeCounts = {};
-        var tagCounts = {};
-        var facetCounts = {};    // trackFacets.ra name -> { value -> count }
-        var metaKeyCounts = {};  // key -> { value -> count }
+        // Plus any metadata keys that appear in enough tracks.  The counts
+        // have no prototype, since hub values like "__proto__" are keys.
+        var dbCounts = Object.create(null);
+        var groupCounts = Object.create(null);
+        var typeCounts = Object.create(null);
+        var tagCounts = Object.create(null);
+        var facetCounts = Object.create(null);    // trackFacets.ra name -> { value -> count }
+        var metaKeyCounts = Object.create(null);  // key -> { value -> count }
 
         allTracks.forEach(function(track) {
             dbCounts[track.db] = (dbCounts[track.db] || 0) + 1;
@@ -228,7 +234,7 @@ var trackSearchFacets = (function() {
             // trackFacets.ra facets, a track counts once for each value
             Object.keys(track.facets || {}).forEach(function(name) {
                 if (!facetCounts[name])
-                    facetCounts[name] = {};
+                    facetCounts[name] = Object.create(null);
                 track.facets[name].forEach(function(val) {
                     facetCounts[name][val] = (facetCounts[name][val] || 0) + 1;
                 });
@@ -237,7 +243,7 @@ var trackSearchFacets = (function() {
             if (track.metadata) {
                 Object.keys(track.metadata).forEach(function(key) {
                     if (!metaKeyCounts[key])
-                        metaKeyCounts[key] = {};
+                        metaKeyCounts[key] = Object.create(null);
                     var val = track.metadata[key];
                     metaKeyCounts[key][val] = (metaKeyCounts[key][val] || 0) + 1;
                 });
@@ -345,7 +351,6 @@ var trackSearchFacets = (function() {
                 type: track.type || "",
                 isComposite: track.isComposite,
                 isSuperTrack: track.isSuperTrack,
-                isFacetedComposite: track.isFacetedComposite,
                 parentTrack: track.parentTrack || null,
                 subtrackCount: track.subtrackCount || 0,
                 visibility: track.visibility || "hide",
@@ -437,7 +442,7 @@ var trackSearchFacets = (function() {
             var parent = superParentRow(row);
             if (type === "sort" && grouped && parent)
                 return parent[field];
-            return data;
+            return textRender(data, type);
         };
     }
 
@@ -455,8 +460,7 @@ var trackSearchFacets = (function() {
             }
         });
         if (!found) {
-            alert("Track '" + trackName + "' not found in results. " +
-                "It may be filtered out.");
+            alert("Track '" + trackName + "' is not in the track list.");
             return;
         }
         // Unfold the supertrack so the row can be shown
@@ -467,12 +471,14 @@ var trackSearchFacets = (function() {
         var displayOrder = dataTable.rows({order: 'applied', search: 'applied'})
             .indexes().toArray();
         var displayIdx = displayOrder.indexOf(targetRow);
-        if (displayIdx >= 0) {
-            var pageLen = dataTable.page.len();
-            if (pageLen > 0 && pageLen !== -1) {
-                dataTable.page(Math.floor(displayIdx / pageLen)).draw('page');
-            }
+        if (displayIdx < 0) {
+            alert("Track '" + getTrackLabel(trackName) + "' is selected, but the current " +
+                "search or filters hide it.");
+            return;
         }
+        var pageLen = dataTable.page.len();
+        if (pageLen > 0)
+            dataTable.page(Math.floor(displayIdx / pageLen)).draw('page');
     }
 
     function getTrackLabel(trackName) {
@@ -504,15 +510,17 @@ var trackSearchFacets = (function() {
             rtsLabel.title = "Clicking a set replaces your current tracks with that set";
             rtsDiv.appendChild(rtsLabel);
 
-            var hgsid = getHgsid();
             allRecTrackSets.forEach(function(rts) {
                 var chip = document.createElement("a");
                 chip.className = "rts-chip";
                 chip.textContent = rts.label;
                 chip.title = rts.description;
-                chip.href = "../cgi-bin/hgTracks?hgS_otherUserName=" + rts.userName +
+                // sessionName goes in as written in the track sets file, the
+                // way printRecTrackSets() in hgTracks writes it
+                chip.href = "../cgi-bin/hgTracks?hgS_otherUserName=" +
+                    encodeURIComponent(rts.userName) +
                     "&rtsLoad=" + rts.sessionName +
-                    "&hgsid=" + hgsid +
+                    "&hgsid=" + encodeURIComponent(sessionId) +
                     "&position=" + encodeURIComponent(serverPosition);
                 chip.style.display = "inline-block";
                 chip.style.margin = "1px 3px";
@@ -721,7 +729,7 @@ var trackSearchFacets = (function() {
         // Link to the row's assembly with the track turned on.  A supertrack
         // child needs its supertrack shown too.  hgTracks goes to the last
         // position used on that assembly, or to its default position.
-        var params = ["hgsid=" + encodeURIComponent(getHgsid()),
+        var params = ["hgsid=" + encodeURIComponent(sessionId),
                       "db=" + encodeURIComponent(row.db),
                       "position=lastDbPos",
                       encodeURIComponent(row.track) + "=" + (row.isSuperTrack ? "show" : "pack")];
@@ -752,7 +760,7 @@ var trackSearchFacets = (function() {
                     if (type === "sort")
                         return groupSortRender("shortLabel")(data, type, row);
                     if (type !== "display") return data;
-                    var label = data;
+                    var label = htmlEncode(data);
                     if (row.isComposite && row.subtrackCount > 0)
                         label += " (" + row.subtrackCount + " subtracks)";
                     var toggle = "";
@@ -771,12 +779,16 @@ var trackSearchFacets = (function() {
                     }
                     if (grouped && row.superParent)
                         toggle = '<span style="padding-left:1.5em;"></span>';
-                    var hgsid = getHgsid();
-                    var href = "../cgi-bin/hgTrackUi?hgsid=" + hgsid +
-                        "&db=" + encodeURIComponent(row.db) +
-                        "&g=" + encodeURIComponent(row.track);
-                    var html = toggle + '<a href="' + href + '" title="Configure track">' +
-                        label + '</a>';
+                    // Settings pages are only for the viewed assembly: hgTrackUi
+                    // would switch the session to the row's assembly
+                    var html = toggle + label;
+                    if (row.viewing) {
+                        var href = "../cgi-bin/hgTrackUi?hgsid=" + encodeURIComponent(sessionId) +
+                            "&db=" + encodeURIComponent(row.db) +
+                            "&g=" + encodeURIComponent(row.track);
+                        html = toggle + '<a href="' + href + '" title="Configure track">' +
+                            label + '</a>';
+                    }
                     if (multiDb)
                         html += '<span class="trackDbLabel">' + htmlEncode(row.db) + '</span>';
                     if (!row.viewing)
@@ -792,16 +804,16 @@ var trackSearchFacets = (function() {
                     // Tags show as pills after the description
                     if (type === "sort")
                         return groupSortRender("longLabel")(data, type, row);
-                    if (type !== "display" || row.tags.length === 0)
+                    if (type !== "display")
                         return data;
                     var pills = row.tags.map(function(tag) {
                         // Colors come from trackFacets.ra as #rrggbb codes
                         var style = "";
-                        if (tagColors[tag])
+                        if (Object.prototype.hasOwnProperty.call(tagColors, tag))
                             style = ' style="background-color:' + tagColors[tag] + '"';
                         return '<span class="trackTag"' + style + '>' + htmlEncode(tag) + '</span>';
                     }).join("");
-                    return data + pills;
+                    return htmlEncode(data) + pills;
                 }
             },
             { data: "groupLabel", title: "Group", render: groupSortRender("groupLabel") },
@@ -813,7 +825,7 @@ var trackSearchFacets = (function() {
                 data: null, visible: false, searchable: false,
                 render: function(data, type, row) {
                     var top = (grouped && superParentRow(row)) || row;
-                    return top.shortLabel + "\u0000" + top.key;
+                    return textRender(top.shortLabel + "\u0000" + top.key, type);
                 }
             },
             {
@@ -822,7 +834,7 @@ var trackSearchFacets = (function() {
                     return (grouped && superParentRow(row)) ? 1 : 0;
                 }
             },
-            { data: "shortLabel", visible: false, searchable: false }
+            { data: "shortLabel", visible: false, searchable: false, render: textRender }
         ];
 
         // Add metadata columns (hidden, for filtering)
@@ -830,9 +842,10 @@ var trackSearchFacets = (function() {
         metaFacets.forEach(function(f) {
             columns.push({
                 data: f.field,
-                title: f.name,
+                title: htmlEncode(f.name),
                 visible: false,
-                defaultContent: ""
+                defaultContent: "",
+                render: textRender
             });
         });
 
@@ -846,12 +859,12 @@ var trackSearchFacets = (function() {
                 data: field,
                 visible: false,
                 defaultContent: "",
-                render: function(data) { return (data || []).join(" "); }
+                render: function(data, type) { return textRender((data || []).join(" "), type); }
             });
         });
 
         // The Assembly facet filters on this
-        columns.push({ data: "db", visible: false });
+        columns.push({ data: "db", visible: false, render: textRender });
 
         grouped = true;
         expandedSupers = new Set();
@@ -1073,7 +1086,7 @@ var trackSearchFacets = (function() {
 
         facets.forEach(function(facet) {
             if (!facet.countNodes) return;
-            var counts = {};
+            var counts = Object.create(null);
             visibleData.forEach(function(row) {
                 if (facet.isList) {
                     (row[facet.field] || []).forEach(function(val) {
@@ -1140,8 +1153,9 @@ var trackSearchFacets = (function() {
     }
 
     function checkParentChildWarnings(changes) {
-        // Check if any newly-enabled parent tracks (supertracks/composites)
-        // have no visible children, and warn the user.
+        // Check if any newly-enabled supertracks have no visible children,
+        // and warn the user.  Composite subtracks are not in the track list,
+        // and the server already shows a composite with none on as hidden.
         // Build a map of parentTrack -> [child row data] from all tracks
         var childMap = {};
         if (!allTracks) return [];
@@ -1158,7 +1172,7 @@ var trackSearchFacets = (function() {
             if (changes[trackName] === "hide") continue;
             var trackRow = trackByKey[viewingKey(trackName)];
             if (!trackRow) continue;
-            if (!trackRow.isSuperTrack && !trackRow.isComposite) continue;
+            if (!trackRow.isSuperTrack) continue;
             var children = childMap[trackName];
             if (!children || children.length === 0) continue;
             // Check if any child is visible or being turned on
@@ -1176,8 +1190,8 @@ var trackSearchFacets = (function() {
             }
             if (!anyChildOn) {
                 warnings.push(trackRow.shortLabel + " (" + trackRow.track +
-                    ") is enabled but has no visible subtracks." +
-                    " Configure it to select which subtracks to display.");
+                    ") is enabled but has no visible tracks." +
+                    " Configure it to select which tracks to display.");
             }
         }
         return warnings;
@@ -1242,11 +1256,13 @@ var trackSearchFacets = (function() {
 
         // Update the track list below the image.  A supertrack child is listed
         // under its supertrack there, so add the supertrack.  vis.update runs
-        // after the add because a copied select does not keep its value.
+        // after the add because a copied select does not keep its value.  The
+        // visible tracks group is laid out again once, after all removals.
+        var removed = false;
         Object.keys(changes).forEach(function(t) {
             if (changes[t] === "hide") {
                 vis.update(t, "hide");
-                removeTrackFromVisibleGroup(t);
+                removed = removeTrackFromVisibleGroup(t, true) || removed;
             } else {
                 var row = rowByKey[viewingKey(t)];
                 var parent = row && superParentRow(row);
@@ -1258,6 +1274,8 @@ var trackSearchFacets = (function() {
                     lastDrawn.add(parent.track);
             }
         });
+        if (removed)
+            reflowVisibleGroup();
         // The selects now match the dialog, so later page changes are noticed
         lastPageVis = pageVisibilities();
 
@@ -1563,9 +1581,9 @@ var trackSearchFacets = (function() {
         // Track name
         var tdName = document.createElement("td");
         tdName.style.padding = "4px 8px";
-        var hgsid = getHgsid();
         var link = document.createElement("a");
-        link.href = "../cgi-bin/hgTrackUi?hgsid=" + hgsid + "&g=" + track.track;
+        link.href = "../cgi-bin/hgTrackUi?hgsid=" + encodeURIComponent(sessionId) +
+            "&db=" + encodeURIComponent(viewingDb) + "&g=" + encodeURIComponent(track.track);
         link.textContent = track.shortLabel;
         link.title = "Configure " + track.shortLabel;
         tdName.appendChild(link);
@@ -1612,10 +1630,11 @@ var trackSearchFacets = (function() {
 
     function pageVisibilities() {
         // Return {track: vis} from the visibility selects in the track list
-        // below the image
-        var result = {};
+        // below the image.  This can run before the table is built, so it
+        // keeps every select; setTrackVisibility skips tracks not listed.
+        var result = Object.create(null);
         $('select.normalText,select.hiddenText').each(function() {
-            if (rowByKey[viewingKey(this.name)] && !(this.name in result))
+            if (!(this.name in result))
                 result[this.name] = this.value;
         });
         return result;
@@ -1700,7 +1719,7 @@ var trackSearchFacets = (function() {
         frame.id = 'advancedSearchFrame';
         frame.title = 'Advanced track search';
         frame.src = "../cgi-bin/hgTracks?hgt_tSearch=track+search&hgt_tsEmbed=1&hgsid=" +
-                    encodeURIComponent(getHgsid());
+                    encodeURIComponent(sessionId);
         panel.appendChild(frame);
     }
 
@@ -1733,6 +1752,7 @@ var trackSearchFacets = (function() {
         // to open on the Advanced Search tab.
         var dlg = $('#trackDiscoveryDialog');
         if (dlg.length === 0) return;
+        sessionId = getHgsid();
 
         // If already open, reposition and focus it
         if (dlg.hasClass('ui-dialog-content') && dlg.dialog('isOpen')) {
@@ -1790,21 +1810,27 @@ var trackSearchFacets = (function() {
             return;
         }
 
+        // A second open while the first load runs waits for that load
+        if (loadingPromise)
+            return;
         var container = document.getElementById("facetSearchContainer");
         container.textContent = "Loading tracks...";
         viewingDb = getDb();
-        loadTracks()
+        loadingPromise = loadTracks()
             .then(function() {
                 renderUI(null, "");
-                lastPageVis = pageVisibilities();
-                lastDrawn = drawnTracks();
                 tableBuilt = true;
+                // Pick up page changes made since the fetch started
+                syncFromPage();
                 renderActiveTracks();
                 dataTable.columns.adjust();
                 $('#facetTextSearch').focus();
             })
             .catch(function(err) {
                 container.textContent = "Error loading track data: " + err.message;
+            })
+            .finally(function() {
+                loadingPromise = null;
             });
     }
 

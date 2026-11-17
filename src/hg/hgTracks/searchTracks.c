@@ -30,10 +30,6 @@
 #include "hubPublic.h"
 #include "hubSearchText.h"
 #include "errCatch.h"
-#include "jsonWrite.h"
-#include "trackDb.h"
-#include "ra.h"
-#include "htmlColor.h"
 
 #define TRACK_SEARCH_FORM        "trackSearch"
 #define SEARCH_RESULTS_FORM      "searchResults"
@@ -1076,10 +1072,10 @@ hashFree(&superHash);
 // "(GRCh38&#x2F;hg38)" in the blue bar.
 safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly",
       organism, hFreezeFromDb(database));
+webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 // The Find Tracks dialog has its own title, so the frame drops the menu bar
 if (embedded)
     hPrintf("<style>#main-menu-whole {display:none;}</style>\n");
-webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<div style='max-width:1080px;'>");
 hPrintf("<form action='%s' name='%s' id='%s' method='get'>\n\n",

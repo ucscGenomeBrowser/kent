@@ -4581,14 +4581,17 @@ jQuery.fn.panImages = function(){
 
 };
 
-function removeTrackFromVisibleGroup(track) {
+function removeTrackFromVisibleGroup(track, skipReflow) {
 /* When a track has been hidden by the user, remove its select and label from
- * the visible tracks group */
+ * the visible tracks group.  With skipReflow the caller lays the group out
+ * again itself, once for many removals.  Returns true if a cell was removed. */
     let rec = document.querySelector("[id^='visible-'] [data-track=\"" + track + "\"]");
-    if (rec) {
-        rec.parentElement.remove();
+    if (!rec)
+        return false;
+    rec.parentElement.remove();
+    if (!skipReflow)
         reflowVisibleGroup();
-    }
+    return true;
 }
 
 function reflowVisibleGroup() {

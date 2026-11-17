@@ -11083,8 +11083,8 @@ return email;
 
 static void updateRecentTracks()
 /* Put tracks turned on by this request at the front of the hgt.recentTracks cart
- * list that the Find Tracks dialog shows.  Older tracks are dropped once the list
- * has 50. */
+ * list that the Find Tracks dialog shows.  The list keeps at most 50 tracks, and
+ * older tracks are dropped first. */
 {
 struct hashEl *el, *elList = hashElListHash(oldVars);
 struct dyString *recent = dyStringNew(256);
@@ -11092,7 +11092,7 @@ char *existing = cartOptionalString(cart, "hgt.recentTracks");
 struct hash *seen = hashNew(6);
 boolean changed = FALSE;
 
-for (el = elList; el != NULL; el = el->next)
+for (el = elList; el != NULL && hashNumEntries(seen) < 50; el = el->next)
     {
     char *trackName = el->name;
     char *oldVis = (char *)el->val;
