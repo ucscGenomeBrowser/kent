@@ -4,6 +4,9 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants, Coverage, and Constraint
 group varRep
 html gnomad
+tags population
+facet.consortia gnomAD
+facet.variantType SNV/indel
 
     track gnomadCoverage
     compositeTrack on

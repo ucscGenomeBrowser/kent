@@ -609,6 +609,8 @@ pubsPslTrack bed psl bigPsl
 thickDrawItem bed
 table *
 tableBrowser *
+tags *
+facet.* *
 tdbType customTracks
 track *
 trackHandler *

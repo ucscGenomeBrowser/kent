@@ -29,6 +29,9 @@ searchDescription COSMIC Regions
 track cosmicMuts
 shortLabel COSMIC
 longLabel Catalogue of Somatic Mutations in Cancer V101
+tags clinical
+facet.evidence Curated
+facet.variantType SNV/indel
 type bigBed 6 + 3
 bigDataUrl /gbdb/hg19/cosmic/cosmic.bb
 group phenDis

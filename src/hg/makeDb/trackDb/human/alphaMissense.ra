@@ -5,6 +5,8 @@ type bigWig
 compositeTrack on
 visibility hide
 group phenDis
+tags pathogenicity
+facet.evidence Predicted
 color 100,130,160
 html alphaMissense.html
 maxWindowToDraw 10000000

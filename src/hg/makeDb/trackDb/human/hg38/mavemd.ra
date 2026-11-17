@@ -2,6 +2,8 @@ track mavemd
 superTrack on
 shortLabel MaveMD
 longLabel MaveMD: clinically calibrated multiplexed variant effect measurements
+tags pathogenicity
+facet.evidence Experimental
 group phenDis
 dataVersion /gbdb/$D/mavemd/version.txt
 

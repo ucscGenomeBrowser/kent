@@ -5,6 +5,7 @@ longLabel ENCODE Registry of cCREs (candidate Cis-Regulatory Elements)
 group regulation
 priority 0.8
 html cCREsSuper.html
+facet.consortia ENCODE
 
 track encodeCcreCombined override
 parent cCREs

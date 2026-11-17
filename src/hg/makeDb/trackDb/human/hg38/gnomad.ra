@@ -9,6 +9,9 @@ group varRep
 cartVersion 6
 pennantIcon Updated red ../goldenPath/newsarch.html#082626 "Updated Aug. 26, 2026"
 html gnomad
+tags population
+facet.consortia gnomAD
+facet.variantType SNV/indel,Structural variant,Tandem repeat
 
     track gnomadVariantsV2
     parent gnomadVariants
@@ -212,6 +215,7 @@ autoScale on
 priority 10
 dataVersion Release 3.1.2 (October 22, 2021)
 html gnomadConstraint
+tags population,constraint
 
 # The missense and pLI contraint tracks
 include gnomad.constraint.ra

@@ -3,6 +3,8 @@ compositeTrack off
 shortLabel GTEx cis-eQTLs
 longLabel GTEx fine-mapped cis-eQTLs
 group regulation
+tags eqtl
+facet.consortia GTEx
 type bigBed
 itemRgb on
 visibility hide

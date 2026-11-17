@@ -4,6 +4,9 @@ shortLabel DECIPHER
 longLabel DECIPHER
 cartVersion 7
 group phenDis
+tags clinical,rareDisease
+facet.evidence Curated
+facet.variantType SNV/indel,Structural variant
 dataVersion /gbdb/$D/decipher/version.txt
 
     track decipher

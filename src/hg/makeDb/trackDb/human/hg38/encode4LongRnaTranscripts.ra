@@ -2,6 +2,7 @@
 track encode4LongRnaTranscripts
 shortLabel ENCODE4 Transcripts
 longLabel ENCODE4 Long Read Transcripts
+facet.consortia ENCODE
 superTrack long_read_transcripts
 type bigBed 12 +
 bigDataUrl /gbdb/$D/encode4/encode4LongRnaTranscripts.bb
