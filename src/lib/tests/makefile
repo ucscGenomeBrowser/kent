@@ -7,7 +7,7 @@ BIN_DIR = bin/${MACHTYPE}
 
 pipelineTester = ${BIN_DIR}/pipelineTester
 
-test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests dyStringTest \
+test: errCatchTest htmlPageTest hiddenVarTest htmlExpandUrlTest htmlSanitizeTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
     dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest \
@@ -138,6 +138,14 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 	diff expected/google.out output/google.out
 	${BIN_DIR}/htmlPageTest input/valuelessAttrs.html > output/valuelessAttrs.out
 	diff expected/valuelessAttrs.out output/valuelessAttrs.out
+
+hiddenVarTest: hiddenVarTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/hiddenVarTest hiddenVarTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/hiddenVarTest${EXE}
+	${BIN_DIR}/hiddenVarTest write > output/hiddenVarTest.html
+	${BIN_DIR}/hiddenVarTest read output/hiddenVarTest.html > output/hiddenVarTest
+	diff expected/hiddenVarTest output/hiddenVarTest
 
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \
