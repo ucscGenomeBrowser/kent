@@ -2460,23 +2460,6 @@ jsonWriteObjectEnd(jw);
 apiSuccess(jw);
 }
 
-static void shareToJson(struct jsonWrite *jw, struct myVariantsShare *share,
-    char *projectLabel)
-/* Write a single share record as a JSON object into jw.  The label of the
- * shared project stands in for the share's own label: a share is a link on one
- * project, so the project's name is the only name it needs. */
-{
-jsonWriteObjectStart(jw, NULL);
-jsonWriteNumber(jw, "id", share->id);
-jsonWriteString(jw, "ownerUser", share->ownerUser);
-jsonWriteString(jw, "shareToken", share->shareToken);
-jsonWriteNumber(jw, "projectId", share->projectId);
-jsonWriteString(jw, "project", emptyForNull(projectLabel));
-jsonWriteNumber(jw, "permission", share->permission);
-jsonWriteString(jw, "createdAt", share->createdAt);
-jsonWriteObjectEnd(jw);
-}
-
 static boolean isStateChangingShareAction(char *action)
 /* Returns TRUE for actions that modify the share table.  Those require an
  * hgsid match to defend against CSRF; read-only actions don't, because the
@@ -2570,25 +2553,27 @@ if (sameString(action, "createShare"))
     hDisconnectCentral(&conn);
     apiSuccess(jw);
     }
-else if (sameString(action, "getShares"))
+else if (sameString(action, "getShare"))
     {
-    /* Every project, not just the one whose page this is: a share the user
-     * cannot see is a share the user cannot revoke. */
-    struct myVariantsShare *shares = myVariantsGetSharesForOwner(conn, userName);
+    /* The share link on one track.  The "share" key is left out when the track
+     * has none. */
+    struct myVariantsProject *proj = shareProjectFromCgi(userName);
+    struct myVariantsShare *share = myVariantsGetShareForProject(conn, proj->id);
     struct jsonWrite *jw = jsonWriteNew();
     jsonWriteObjectStart(jw, NULL);
     jsonWriteString(jw, "status", "ok");
-    jsonWriteListStart(jw, "shares");
-    struct myVariantsShare *share;
-    for (share = shares; share != NULL; share = share->next)
+    if (share != NULL)
         {
-        struct myVariantsProject *proj = myVariantsProjectById(conn, share->projectId);
-        shareToJson(jw, share, proj ? proj->label : NULL);
-        myVariantsProjectFreeList(&proj);
+        jsonWriteObjectStart(jw, "share");
+        jsonWriteNumber(jw, "id", share->id);
+        jsonWriteString(jw, "shareToken", share->shareToken);
+        jsonWriteNumber(jw, "permission", share->permission);
+        jsonWriteString(jw, "createdAt", share->createdAt);
+        jsonWriteObjectEnd(jw);
         }
-    jsonWriteListEnd(jw);
     jsonWriteObjectEnd(jw);
-    myVariantsShareFreeList(&shares);
+    myVariantsShareFree(&share);
+    myVariantsProjectFreeList(&proj);
     hDisconnectCentral(&conn);
     apiSuccess(jw);
     }
