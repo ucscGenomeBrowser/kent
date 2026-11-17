@@ -199,6 +199,8 @@ if (!startsWith("#:lav", line))
 
 while (lineFileNext(lf, &line, NULL))
     {
+    if (isEmpty(skipLeadingSpaces(line)))
+        continue;	/* a blank line after #:eof is harmless */
     atEof = startsWith("#:eof", line);
     if (startsWith("s {", line))
         {
