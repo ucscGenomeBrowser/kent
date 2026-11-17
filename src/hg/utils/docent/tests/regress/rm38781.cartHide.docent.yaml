@@ -22,6 +22,7 @@ proof:
   - "assertion-only 2026-11-16 -- written from Mark Diekhans's CR #38781 note, item 1"
   - "xfail 2026-11-16 -- fails on genome-test (master without the CR fix) at step 5 with clinvarCnv drawn"
   - "sandbox-ab 2026-11-16 -- passes on ts park 38781 built from ~/kentCr38781 branch cr38781, fails on genome-test as above"
+  - "server-flip 2026-11-16 -- passes on genome-test after the CR fixes were pushed and made into cgi-alpha (e06fcce8ef4)"
 
 target: genome-test
 db: hg38

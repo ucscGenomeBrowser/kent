@@ -28,6 +28,7 @@ proof:
   - "assertion-only 2026-11-16 -- written from Mark Diekhans's CR #38781 note, items 4 and 5"
   - "xfail 2026-11-16 -- fails on genome-test (master without the CR fix) at step 11, no second highlight box; with steps 4-11 cut out it fails at the cartDump check, which reads hg38#multi#117480025"
   - "sandbox-ab 2026-11-16 -- passes on ts park 38781 built from ~/kentCr38781 branch cr38781, fails on genome-test at both checks as above"
+  - "server-flip 2026-11-16 -- passes on genome-test after the CR fixes were pushed and made into cgi-alpha (e06fcce8ef4)"
 
 target: genome-test
 db: hg38
