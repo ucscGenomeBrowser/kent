@@ -2609,22 +2609,29 @@ There are no extra options that can appear on the type hic line.
     not part of the notation, and any brackets that do not balance.</P>
     <P>The structure is drawn whenever a base is wide enough to hold one character, which
     reaches well beyond the zoom at which the sequence itself appears.  At wider views, and
-    in dense and squish, where a row is too short for a character, the item is drawn as an
-    ordinary bed.  So is every item when the checkbox on the track configuration page,
-    which starts on, is turned off.  A row whose string does not match its blocks is
+    in squish, where a row is too short for a character, the blocks of the item are drawn as
+    plain boxes, without the arrows that usually show the strand, since those arrows look
+    like brackets.  In dense the item is drawn as an ordinary bed, and so is every item when
+    the checkbox on the track configuration page, which starts on, is turned off.  A row
+    whose string does not match its blocks is
     reported on the track in place of its data.</P>
     <P><B>Example:</B></P>
     <pre>   dotBracketField secStr</pre>
 </DIV>
 
 <DIV class="dotBracketColor"><span class="types bigBed"></span>
-<div class="format"><code>dotBracketColor &lt;red,green,blue&gt;</code></div>
+<div class="format"><code>dotBracketColor &lt;color&gt;</code></div>
     <P>The color to draw the secondary structure in, on a track that has
-    <a href="#dotBracketField">dotBracketField</a> set.  Written as three numbers from 0 to
-    255, the same way <a href="#color">color</a> is written.  Without this setting the
-    structure is drawn in whichever of black or white stands out against the item.</P>
-    <P><B>Example:</B></P>
+    <a href="#dotBracketField">dotBracketField</a> set.  The color can be written as red,
+    green and blue values from 0 to 255 separated by commas, as a hex code starting with #,
+    or as one of the 16 HTML color names in lowercase, such as blue or fuchsia.  Without
+    this setting the structure is drawn in whichever of black or white stands out against
+    the item.  A value that is not a color is reported on the track in place of its
+    data.</P>
+    <P><B>Examples:</B></P>
     <pre>   dotBracketColor 240,228,66</pre>
+    <pre>   dotBracketColor #f0e442</pre>
+    <pre>   dotBracketColor fuchsia</pre>
 </DIV>
 
 <DIV class="thickDrawItem"><span class="types bed bigBed"></span>
