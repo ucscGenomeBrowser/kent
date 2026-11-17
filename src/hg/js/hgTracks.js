@@ -4862,6 +4862,16 @@ var rightClick = {
                                 dragSelect.highlightThisRegion(newPos2, true);
                                 }
 
+                        } else if (hgTracks.inMultiRegionSpace) {
+                            // In a multi-region space the link carries the item's SOURCE
+                            // position, which is what the cart holds.  Only the server can
+                            // place it on the synthetic image, so add it to the cart with
+                            // the redraw request and let the redraw draw it.  refs #37788
+                            var srcHighlight = makeHighlightString(getDb(), chrom, chromStart,
+                                                                   chromEnd, dragSelect.loadHlColor());
+                            var hlList = hgTracks.highlight ? hgTracks.highlight + "|" + srcHighlight
+                                                            : srcHighlight;
+                            imageV2.navigateInPlace("highlight=" + encodeURIComponent(hlList), null, true);
                         } else {
                             var newChrom = hgTracks.chromName;
                             if (hgTracks.windows && hgTracks.virtualSingleChrom) {

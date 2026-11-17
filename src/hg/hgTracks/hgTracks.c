@@ -11569,9 +11569,18 @@ if (virtMode)
     jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
     }
 else if (spaceUserVirtModeType != NULL)
+    {
     /* A synthetic space is not in virtMode, and the multi-region dialog still has to say
      * which view it is in.  refs #37788 */
     jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(spaceUserVirtModeType));
+    /* The client has no hgTracks.windows here, so tell it plainly that the image is a
+     * space:  item links carry source coordinates, and the source position is what
+     * View DNA asks hgc for.  tracksDisplay() set nonVirtPosition before this.  */
+    jsonObjectAdd(jsonForClient, "inMultiRegionSpace", newJsonBoolean(TRUE));
+    char *spaceNonVirtPos = cartOptionalString(cart, "nonVirtPosition");
+    if (spaceNonVirtPos != NULL)
+        jsonObjectAdd(jsonForClient, "nonVirtPosition", newJsonString(spaceNonVirtPos));
+    }
 
 /* Offer "Make this my coordinate system" on gene items.  refs #37788 */
 if (multiRegionSpacesEnabled())
