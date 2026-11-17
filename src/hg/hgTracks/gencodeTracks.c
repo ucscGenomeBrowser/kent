@@ -614,6 +614,9 @@ gencodeQueryFree(&gencodeQuery);
 hashFree(&highlightIds);
 }
 
+/* How many transcript names one query of a lifted GENCODE track carries. */
+#define GENCODE_LIFTED_NAMES_PER_QUERY 1000
+
 static struct slName *lfUniqNames(struct linkedFeatures *lfList)
 /* The names of the items in lfList, each once. */
 {
@@ -649,26 +652,56 @@ if (names == NULL)
 struct sqlConnection *conn = hAllocConn(trackDbSetting(tg->tdb, "quickLiftDb"));
 unsigned enabledLabels = getEnabledLabels(tg);
 boolean needAttrs = (enabledLabels & ITEM_LABEL_GENE_ID) != 0;  // only for certain labels
-struct hash *highlightIds = NULL;
-if (anyFilterBy(tg, highlightBySetGet))
-    highlightIds = loadHighlightIds(conn, tg, names);
+boolean wantHighlights = anyFilterBy(tg, highlightBySetGet);
+struct hash *highlightIds = wantHighlights ? hashNew(0) : NULL;
 unsigned highlightColor = getHighlightColor(tg);
 
-/* the transcripts that pass the filters, with their gene ids */
-struct gencodeQuery *gencodeQuery = geneQueryConstruct(conn, tg, needAttrs, names);
-struct sqlResult *sr = executeQuery(conn, gencodeQuery);
+/* The transcripts that pass the filters, with their gene ids.  The names go into the
+ * queries as an "in (...)" list, so they are sent a batch at a time:  a whole
+ * chromosome of a GENCODE track is tens of thousands of names, and one statement
+ * holding all of them is most of a megabyte of SQL, twice over with a highlight. */
 struct hash *passed = hashNew(0);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
+boolean isGenePredX = FALSE, isFiltered = FALSE;
+struct slName *batch = names;
+while (batch != NULL)
     {
-    struct genePred *gp = gencodeQueryGenePred(gencodeQuery, row);
-    struct wgEncodeGencodeAttrs *attrs = gencodeQueryAttrs(gencodeQuery, row);  // maybe NULL
-    if (hashLookup(passed, gp->name) == NULL)
-        hashAdd(passed, gp->name, (attrs != NULL) ? cloneString(attrs->geneId) : NULL);
-    genePredFree(&gp);
-    wgEncodeGencodeAttrsFree(&attrs);
+    struct slName *last = batch;
+    int count;
+    for (count = 1; count < GENCODE_LIFTED_NAMES_PER_QUERY && last->next != NULL; count++)
+        last = last->next;
+    struct slName *nextBatch = last->next;
+    last->next = NULL;
+
+    if (wantHighlights)
+        {
+        struct hash *batchIds = loadHighlightIds(conn, tg, batch);
+        struct hashEl *hel, *helList = hashElListHash(batchIds);
+        for (hel = helList; hel != NULL; hel = hel->next)
+            hashStore(highlightIds, hel->name);
+        hashElFreeList(&helList);
+        hashFree(&batchIds);
+        }
+    struct gencodeQuery *gencodeQuery = geneQueryConstruct(conn, tg, needAttrs, batch);
+    struct sqlResult *sr = executeQuery(conn, gencodeQuery);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct genePred *gp = gencodeQueryGenePred(gencodeQuery, row);
+        struct wgEncodeGencodeAttrs *attrs = gencodeQueryAttrs(gencodeQuery, row);  // maybe NULL
+        if (hashLookup(passed, gp->name) == NULL)
+            hashAdd(passed, gp->name, (attrs != NULL) ? cloneString(attrs->geneId) : NULL);
+        genePredFree(&gp);
+        wgEncodeGencodeAttrsFree(&attrs);
+        }
+    sqlFreeResult(&sr);
+    /* the same in every batch:  they come from the track, not from the names */
+    isGenePredX = gencodeQuery->isGenePredX;
+    isFiltered = gencodeQuery->isFiltered;
+    gencodeQueryFree(&gencodeQuery);
+
+    last->next = nextBatch;     /* names is freed whole below */
+    batch = nextBatch;
     }
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 struct linkedFeatures *lf, *lfNext, *keepList = NULL;
@@ -679,7 +712,7 @@ for (lf = lfList; lf != NULL; lf = lfNext)
     if (hel == NULL)
         continue;
     /* the lift put the gene name in extra */
-    if (gencodeQuery->isGenePredX)
+    if (isGenePredX)
         lf->extra = getTranscriptLabel(enabledLabels, lf->name, lf->extra, hel->val);
     if ((highlightIds != NULL) && (hashLookup(highlightIds, lf->name) != NULL))
         {
@@ -690,9 +723,8 @@ for (lf = lfList; lf != NULL; lf = lfNext)
     }
 slReverse(&keepList);
 tg->items = keepList;
-if (gencodeQuery->isFiltered)
+if (isFiltered)
     labelTrackAsFiltered(tg);
-gencodeQueryFree(&gencodeQuery);
 hashFree(&passed);
 hashFree(&highlightIds);
 slFreeList(&names);
