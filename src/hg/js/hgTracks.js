@@ -3495,10 +3495,20 @@ var dragSelect = {
         if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
             // just set/overwrite the old highlight position, this used to be the default
             hgTracks.highlight = newHighlight;
+            if (hgTracks.highlightSpace !== undefined)
+                hgTracks.highlightSpace = newHighlight;
         }
         else {
             // add to the end of a |-separated list
             hgTracks.highlight = oldHighlight+"|"+newHighlight;
+            // In a multi-region space the drawer reads highlightSpace, one entry per cart
+            // entry.  The new entry is already in the image's coordinates, so it goes on
+            // both lists; the server maps the cart's copy back to the source on the next
+            // request.  refs #37788
+            if (hgTracks.highlightSpace)
+                hgTracks.highlightSpace = hgTracks.highlightSpace+"|"+newHighlight;
+            else if (hgTracks.highlightSpace !== undefined)
+                hgTracks.highlightSpace = newHighlight;
         }
         // we include enableHighlightingDialog because it may have been changed by the dialog
         var cartSettings = {             'highlight': hgTracks.highlight, 
@@ -5229,6 +5239,12 @@ var rightClick = {
             var highlights = hgTracks.highlight.split("|");
             highlights.splice(rightClick.clickedHighlightIdx, 1); // splice = remove element from array
             hgTracks.highlight = highlights.join("|");
+            // the same index in the drawer's list, which lines up with the cart's.  refs #37788
+            if (hgTracks.highlightSpace) {
+                var spaceHighlights = hgTracks.highlightSpace.split("|");
+                spaceHighlights.splice(rightClick.clickedHighlightIdx, 1);
+                hgTracks.highlightSpace = spaceHighlights.join("|");
+            }
             cart.setVarsObj({'highlight' : hgTracks.highlight});
             imageV2.drawHighlights();
         } else if (cmd === 'toggleMerge') {
@@ -6987,6 +7003,8 @@ function highlightCurrentPosition(mode) {
         dragSelect.highlightThisRegion(pos, true);
     else {
         hgTracks.highlight = "";
+        if (hgTracks.highlightSpace !== undefined)
+            hgTracks.highlightSpace = "";
         var cartSettings = {'highlight': ""};
         cart.setVarsObj(cartSettings);
         imageV2.drawHighlights();
