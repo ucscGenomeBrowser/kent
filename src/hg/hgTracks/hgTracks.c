@@ -5379,8 +5379,11 @@ spaceUserVirtModeType = cloneString(virtModeType);
  * makes before it uses its default window. */
 boolean enteringMode = !sameOk(lastVirtModeType, virtModeType);
 /* Picking another item from the menu while already in a single-item view is entering
- * a new view, not moving about in the old one:  open it on the whole item. */
-if (sameString(virtModeType, "singleTrans") &&
+ * a new view, not moving about in the old one:  open it on the whole item.  Only when
+ * the chain name is kept in the cart, which is when there are conditions (see above);
+ * without them lastChainName is always NULL and every request would look like a new
+ * item, re-opening the whole view on each one. */
+if (sameString(virtModeType, "singleTrans") && isNotEmpty(conditions) &&
     !sameOk(lastChainName, multiRegionSpaceChainName(chainFile)))
     enteringMode = TRUE;
 freeMem(lastChainName);
