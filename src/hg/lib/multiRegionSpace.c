@@ -586,8 +586,10 @@ struct dnaSeq *multiRegionSpaceDna(char *chainFile, char *sourceTwoBit,
 /* Read synthetic sequence out of the source assembly through the chain.
  * See multiRegionSpace.h. */
 {
+/* An empty range is an empty sequence, so callers of hChromSeq() and its family never
+ * see NULL.  (hFetchSeq() on a 2bit errAborts on an empty range instead.) */
 if (start >= end)
-    return NULL;
+    return newDnaSeq(cloneString(""), 0, chrom);
 long startMs = mrsTiming ? clock1000() : 0;
 char *linkFile = bigChainGetLinkFile(chainFile);
 struct chain *chain, *chainList = chainLoadIdRangeHub(NULL, chainFile, linkFile,

@@ -1,0 +1,33 @@
+#:lav
+d {
+  "lastz.v1.03.46 hg19.chrM.fa susScr3.chrM.fa M=50 T=2 O=400 E=30 Q=hg19.susScr3.chrM.Q.txt --output=hg19.susScr3.chrM.lav
+     A    C    G    T
+    79  -84  -55 -128
+   -84  100 -174  -55
+   -55 -174  100  -84
+  -128  -55  -84   79
+  O = 400, E = 30, K = 3000, L = 3000, M = 50"
+}
+#:lav
+s {
+  "hg19.chrM.fa" 1 16571 0 1
+  "susScr3.chrM.fa" 1 16613 0 1
+}
+h {
+   ">hg19_chrM"
+   ">susScr3_chrM"
+}
+a {
+  s 660086
+  b 576 1173
+  e 1124 1909
+  l 576 1173 630 1227 78
+  l 632 1228 769 1365 77
+  l 770 1368 870 1468 78
+}
+x {
+  n 0
+}
+m {
+  n 0
+}

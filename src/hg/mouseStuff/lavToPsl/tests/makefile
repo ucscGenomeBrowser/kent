@@ -9,7 +9,7 @@ pslRecalcMatch=${DESTBINDIR}/pslRecalcMatch
 
 all::
 
-test: oldStyleBlastz newStyleLastz redmine12502 trimEndsBug
+test: oldStyleBlastz newStyleLastz redmine12502 trimEndsBug redmine38796
 
 
 newStyleLastz:	mkdirs
@@ -85,6 +85,28 @@ redmine12502: mkdirs
 trimEndsBug: mkdirs
 	@${lavToPsl} input/$@.lav output/$@.psl
 	@${pslCheck} -verbose=0 output/$@.psl
+
+# truncated input, no #:eof line, must exit non-zero
+# write to /dev/full (disk full), must exit non-zero
+redmine38796: mkdirs
+	@for t in midLine noEof; do \
+	    if ${lavToPsl} input/$@.$$t.lav output/$@.$$t.psl \
+		2> output/$@.$$t.err; then \
+		echo "FAIL: $@ $$t: lavToPsl exit 0 on truncated input" 1>&2; \
+		exit 1; \
+	    fi; \
+	    grep -q "#:eof" output/$@.$$t.err || \
+		{ echo "FAIL: $@ $$t: wrong error message" 1>&2; exit 1; }; \
+	done
+	@if test -c /dev/full; then \
+	    if ${lavToPsl} input/newStyleLastz.lav /dev/full 2>/dev/null; then \
+		echo "FAIL: $@ write to /dev/full exit 0" 1>&2; exit 1; \
+	    fi; \
+	    if ${lavToPsl} -scoreFile=/dev/full input/newStyleLastz.lav \
+		output/$@.devFull.psl 2>/dev/null; then \
+		echo "FAIL: $@ -scoreFile=/dev/full exit 0" 1>&2; exit 1; \
+	    fi; \
+	fi
 
 mkdirs:
 	@${MKDIR} output

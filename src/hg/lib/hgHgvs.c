@@ -1342,8 +1342,11 @@ else
     char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
     if (isNotEmpty(chrom))
         {
+        /* In a multi-region space hGetChromInfo() knows only the synthetic sequence,
+         * while hgOfficialChromName() still resolves a source name through chromAlias,
+         * so a name can come back here with no chromInfo.  refs #37788 */
         struct chromInfo *ci = hGetChromInfo(db, chrom);
-        if (start >= 0 && start < ci->size && end > 0 && end <= ci->size)
+        if (ci != NULL && start >= 0 && start < ci->size && end > 0 && end <= ci->size)
             {
             coordsOK = TRUE;
             if ((hgvsBase != '\0') && (multiRegionSpaceForDb(db) != NULL))

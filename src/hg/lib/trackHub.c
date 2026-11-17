@@ -2043,27 +2043,7 @@ static boolean validateOneTdb(struct cart *cart, char *db, struct trackDb *tdb, 
 /* Make sure the tdb is a track type we grok.  badList may be NULL to validate
  * silently (no user-facing complaint about non-liftable types). */
 {
-// trackDb types are matched without regard to case since that's how the rest of the
-// browser reads them (some trackDb stanzas say "bigbed" rather than "bigBed").
-if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
-    !( startsWithNoCase("bigBed", tdb->type) || \
-       startsWithNoCase("bigWig", tdb->type) || \
-       startsWithNoCase("bigDbSnp", tdb->type) || \
-       startsWithNoCase("bigGenePred", tdb->type) || \
-       startsWithNoCase("gvf", tdb->type) || \
-       startsWithNoCase("genePred", tdb->type) || \
-       startsWithNoCase("narrowPeak", tdb->type) || \
-       startsWithNoCase("broadPeak", tdb->type) || \
-       startsWithNoCase("bigLolly", tdb->type) || \
-       (startsWithNoCase("bigNet", tdb->type) && trackHubBigNetEnabled()) || \
-       (isAlignmentType(tdb->type) && quickLiftAlignmentsEnabled(cart)) || \
-       (startsWithNoCase("bigBarChart", tdb->type) && quickLiftBarChartEnabled(cart)) || \
-       ((sameWord("wig", tdb->type) || startsWithNoCase("wig ", tdb->type)) &&
-        quickLiftWigEnabled(cart)) ||
-       ((sameWord("rmsk", tdb->type) || startsWithNoCase("bigRmsk", tdb->type)) &&
-        quickLiftRmskEnabled(cart)) ||
-       sameWord("bed", tdb->type) ||
-       startsWithNoCase("bed ", tdb->type)))
+if (!trackHubQuickLiftCanCarry(cart, tdb))
     {
     if (badList != NULL)
         slAddHead(badList, tdb);

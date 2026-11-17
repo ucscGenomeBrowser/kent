@@ -12,6 +12,9 @@ SEE ALSO: source tree file: src/product/README.trackDb
 	  http://genome.ucsc.edu/admin/hgFindSpecHowTo.html
 	  for instructions on hgFindSpec.
 
+          trackFacets.ra in this directory documents the tags and
+          facet.<name> settings used by the Find Tracks dialog.
+
 The bulk of the information about a track is
 contained in the trackDb.ra file.  Tracks are
 separated from each other in this file by

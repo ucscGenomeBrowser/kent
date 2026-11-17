@@ -1,6 +1,8 @@
 track clinGenComp
 shortLabel ClinGen
 longLabel ClinGen curation activities (Dosage Sensitivity and Gene-Disease Validity)
+tags clinical
+facet.evidence Curated
 visibility hide
 type bigBed 9 +
 group phenDis

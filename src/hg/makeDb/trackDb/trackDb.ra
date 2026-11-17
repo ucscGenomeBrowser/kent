@@ -254,6 +254,7 @@ type bed 6 .
 track knownAlt
 shortLabel UCSC Alt Events
 longLabel Alternative Splicing, Alternative Promoter and Similar Events in UCSC Genes
+tags splicing
 group genes
 visibility hide
 color 90,0,150
@@ -273,6 +274,7 @@ baseColorDefault genomicCodons
 track crispr
 shortLabel CRISPR
 longLabel CRISPR/Cas9 Sp. Pyog. target sites
+tags crispr
 group genes
 visibility hide
 type bed 3
@@ -308,6 +310,7 @@ track crispors
 superTrack on
 shortLabel Crispr kMers
 longLabel WGE Crisprs from Ensembl release v89 and kMer locations
+tags crispr
 group genes
 visibility hide
 type bed 3
@@ -766,6 +769,7 @@ idInUrlSql select name from sibTxGraph where id=%s
 track sibAltEvents
 shortLabel SIB Alt Events
 longLabel Alt-Splicing, Alternative Promoters, Alternative Poly-A etc from SIB
+tags splicing
 group rna
 visibility hide
 type bed 6 .

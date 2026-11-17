@@ -1,6 +1,7 @@
 track gdcCancer
 shortLabel TCGA Pan-Cancer
 longLabel TCGA Pan-Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+tags clinical
 compositeTrack on
 group phenDis
 type bigLolly 12 + 

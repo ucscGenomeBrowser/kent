@@ -6,7 +6,7 @@ compositeTrack on
 shortLabel hs1 on hg38 liftOver
 longLabel hs1 on hg38 chain comparisons
 subGroup1 view Views chain=Chains synten=Syntenic_chains rbest=Reciprocal_best_chains liftover=Lift_over_chains net=Nets synNet=Syntenic_nets rbestNet=Reciprocal_best_nets
-subGroup2 alignment Alignment s000=blat_hs1 s001=miniMap2_hs1 s002=T2T_project s003=lastz_hs1
+subGroup2 alignment Alignment s000=blat_hs1 s001=miniMap2_hs1 s001a=miniMap2_like_lastz__hs1 s002=T2T_project s003=lastz_hs1
 subGroup3 chainType Chain_type g00=all_chain g01=lift_over g02=quick_lift g03=before_chaining
 dragAndDrop subTracks
 visibility hide
@@ -62,6 +62,17 @@ html chainCompare
         linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverLastzHs1Link.bb
         otherDb hs1
         priority 5.455
+
+        track miniMap2LiftOverHs1LikeLastrz
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s001a chainType=g01
+        shortLabel miniMap2 liftOver/lastz
+        longLabel miniMap2 alignment liftOver Hs1 axtChain like lastz
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.liftOverMiniMap2Hs1LikeLastz.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.liftOverMiniMap2Hs1LikeLastzLink.bb
+        otherDb hs1
+        priority 5.485
 
         track miniMap2LiftOverHs1
         parent hs1ChainCompareViewchain off
@@ -142,6 +153,17 @@ html chainCompare
         otherDb hs1
         priority 6.015
 
+        track mm2ChainHs1LikeLastz
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s001a chainType=g00
+        shortLabel mm2 allChain/lastz
+        longLabel UCSC chain result of miniMap2 output hs1 on hg38 axtChain like lastz
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainMiniMap2Hs1LikeLastz.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainMiniMap2Hs1LikeLastzLink.bb
+        otherDb hs1
+        priority 6.125
+
         track mm2ChainHs1
         parent hs1ChainCompareViewchain off
         subGroups view=chain alignment=s001 chainType=g00
@@ -152,6 +174,17 @@ html chainCompare
         linkDataUrl /gbdb/$D/chainNet/$D.chainMiniMap2Hs1Link.bb
         otherDb hs1
         priority 6.225
+
+        track mm2RawChainHs1LikeLastz
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s001a chainType=g03
+        shortLabel mm2 rawChain/lastz
+        longLabel miniMap2 chain output before UCSC chaining hs1 on hg38 like lastz
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.rawChainMiniMap2Hs1LikeLastz.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.rawChainMiniMap2Hs1LikeLastzLink.bb
+        otherDb hs1
+        priority 6.255
 
         track mm2RawChainHs1
         parent hs1ChainCompareViewchain off
@@ -203,11 +236,18 @@ longLabel failed lastz/chain/net liftOver Gencode v50 genePred
 priority 4
 bigDataUrl /gbdb/hg38/chainCompare/lastzOverChain.unmapped.bb
 
+track failedMiniMap2LikeLastz
+parent chainCompareLiftFailures
+shortLabel failed miniMap2/lastz
+longLabel failed miniMap2 liftOver Gencode v50 genePred axtChain like lastz
+priority 5
+bigDataUrl /gbdb/hg38/chainCompare/miniMap2LiftOver.unmapped.likeLastz.bb
+
 track failedMiniMap2
 parent chainCompareLiftFailures
 shortLabel failed miniMap2
 longLabel failed miniMap2 liftOver Gencode v50 genePred
-priority 5
+priority 6
 bigDataUrl /gbdb/hg38/chainCompare/miniMap2LiftOver.unmapped.bb
 
 ##############################################################################
@@ -254,11 +294,18 @@ longLabel unique regions in the lastz/chain/net liftOver
 priority 4
 bigDataUrl /gbdb/hg38/chainCompare/lastz.bb
 
+track uniqueMiniMap2LikeLastz
+parent chainCompareOverlaps
+shortLabel unique miniMap2/lastz
+longLabel unique regions in the miniMap2 liftOver axtChain like lastz
+priority 5
+bigDataUrl /gbdb/hg38/chainCompare/miniMap2.likeLastz.bb
+
 track uniqueMiniMap2
 parent chainCompareOverlaps
 shortLabel unique miniMap2
 longLabel unique regions in the miniMap2 liftOver
-priority 5
+priority 6
 bigDataUrl /gbdb/hg38/chainCompare/miniMap2.bb
 
 ##############################################################################

@@ -28,8 +28,10 @@ nucleotides of the arms are highlighted in the colors of the track.
 <h2>Display Conventions and Configuration</h2>
 <p>
 Each item is labeled with its MirGeneDB ID, e.g. Mmu-Let-7-P1b. Some genes have
-several loci with the suffixes -v1 to -v4; these are variants of the same hairpin
-that MirGeneDB annotates with slightly different ends of the precursor and the arms. The
+several loci with the suffixes -v1 to -v4. These are processing variants of the same
+hairpin: MirGeneDB annotates them with different ends of the arms, and at some genes a
+different dominant arm. For example, Mmu-Mir-142-P2-v1 has a dominant 5p arm, while -v2
+and -v3 have a dominant 3p arm. The
 arms are drawn as colored blocks below the item, in the same colors as in the
 <a href="hgTrackUi?g=mirBaseV22_1">miRBase</a> track:
 </p>
@@ -51,12 +53,22 @@ can be searched in the position box by MirGeneDB ID, gene name without the -v su
 miRBase ID, family, and miRBase precursor and mature accessions.
 </p>
 
+<p>
+When zoomed out, the arms are hidden; by default this happens in windows larger than
+3,000 bases, which can be changed with the <b>Hide decorations when window is larger
+than</b> setting on the track configuration page, and <b>Block decoration placement</b>
+draws them below the items (Adjacent) or on top of them (Overlay). When zoomed in so that
+each base is a few pixels wide, the predicted secondary structure is drawn over each item
+in dot-bracket notation, in which matching parentheses mark paired bases and dots unpaired
+ones. <b>Draw the RNA secondary structure over each item</b> turns this off.
+</p>
+
 <h2>Methods</h2>
 <p>
 MirGeneDB annotates microRNAs from public small RNA sequencing data, found with miSRA, and
 genome assemblies. Reads are processed with miSRA or miRTrace, genomes are scanned with
 MirMachine for conserved families, and candidate loci predicted with MirMiner are curated by
-hand using synteny and comparisons of the sequences within each family. A locus is accepted
+hand using synteny, where available, and tree-based comparisons of sequence deviations. A locus is accepted
 only if it meets the MirGeneDB biogenesis criteria, which rely on the pattern of reads on both
 arms of the hairpin. The arm with more reads is the mature arm, the other the star arm; when
 the read counts of the two arms are within a factor of two of each other, MirGeneDB calls them
@@ -73,14 +85,15 @@ target="_blank">https://mirgenedb.org/gff/mmu?all=1&amp;sort=pos</a>
 for the miRBase precursor accessions and the
 <a href="https://mirgenedb.org/browse/mmu" target="_blank">mouse browse table</a>
 for the miRBase IDs, families and mature accessions. Variant loci (-v2 to -v4) take these
-from the gene's entry in the browse table, and the precursor accession from their -v1
-locus. Of the features in the BED file, the track uses the primary regions (457) as
+from the gene's entry in the browse table. The miRBase precursor accession is shown only
+where the GFF gives it, which is for one variant of each gene. Values that MirGeneDB does
+not give are shown as "-". Of the features in the BED file, the track uses the primary regions (457) as
 items and the 5p, 3p, 5p*, 3p* and 3p_co arms (913) as the colored blocks; the
 precursor, loop, flank and motif features are not shown. The seed of each locus,
 nucleotides 2 to 8 of its dominant or co-mature arms, was read from the genome at the seed
 features of the BED file and agrees with the browse table for all 404 genes. The seeds of
 52 of the 53 -v2 to -v4 loci differ from those of their -v1 locus, because their arms are
-shifted. The sequence of every primary region was taken from the genome and folded with
+shifted or, at some loci, the other arm is dominant. The sequence of every primary region was taken from the genome and folded with
 RNAfold (ViennaRNA 2.7.2, option <tt>-d2</tt>, default energy parameters) to predict the
 minimum free energy (MFE) structure. At 35 loci, the precursor part of the MFE structure
 is not one hairpin, mostly because the flanks pair into the arms, or an arm reaches into
@@ -141,7 +154,7 @@ This track was created by Andrea Tanzer, University of Vienna, from the MirGeneD
 mouse annotation.
 </p>
 <p>
-Secondary structure decoration by Mark Diekhans, Tricord Genomics.
+Secondary structure dot-bracket annotation by Mark Diekhans, Tricord Genomics.
 </p>
 <p>
 MirGeneDB is curated by Bastian Fromm at The Arctic University Museum of Norway, UiT

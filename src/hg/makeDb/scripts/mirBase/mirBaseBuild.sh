@@ -35,5 +35,7 @@ bedToBigBed -tab -type=bed12+4 -as=$scriptDir/../../../lib/decoration.as \
 
 # search index, case-insensitive: precursor name, MI accession, mature names and
 # MIMAT accessions
-awk -F'\t' '{print $4, $9, $10, $13, $14, $17}' mirBase.bed | tr ',' ' ' > mirBase.ix.txt
+awk -F'\t' '{print $4, $9, $10, $13, $14, $17}' mirBase.bed | tr ',' ' ' \
+    | awk '{s = $1; for (i = 2; i <= NF; i++) if ($i != "-" && $i != "|-") s = s " " $i; print s}' \
+    > mirBase.ix.txt
 ixIxx mirBase.ix.txt mirBase.ix mirBase.ixx

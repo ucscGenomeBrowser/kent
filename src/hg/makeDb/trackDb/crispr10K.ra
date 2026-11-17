@@ -1,6 +1,7 @@
 track crispr10K
 shortLabel CRISPR 10K
 longLabel CRISPR/Cas9 Sp. Pyog. target sites (exons +/- 10,000 bp)
+tags crispr
 group genes
 visibility hide
 type bed 3

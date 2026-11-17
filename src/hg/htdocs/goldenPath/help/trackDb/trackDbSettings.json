@@ -1315,6 +1315,25 @@
    "desc": "A mouseover that shows the exon and intron numbers can be explicitly shown or hidden using this setting."
   },
   {
+   "key": "itemTypeLabel",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "genePred",
+    "bigGenePred",
+    "bed",
+    "bigBed",
+    "psl",
+    "bigPsl"
+   ],
+   "level": "new",
+   "fmt": "itemTypeLabel <text>",
+   "ex": "itemTypeLabel ORF",
+   "desc": "The word(s) used to label the item name in the mouseover."
+  },
+  {
    "key": "scoreFilter",
    "category": "bigBed - Item or Region Track Settings",
    "roles": [
@@ -1495,7 +1514,7 @@
     "bigBed"
    ],
    "level": "new",
-   "fmt": "dotBracketColor <red,green,blue>",
+   "fmt": "dotBracketColor <color>",
    "ex": "dotBracketColor 240,228,66",
    "desc": "The color to draw the secondary structure in, on a track that has dotBracketField set."
   },

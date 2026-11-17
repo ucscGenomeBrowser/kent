@@ -3,6 +3,8 @@ superTrack on show
 shortLabel OMIM
 longLabel Online Mendelian Inheritance in Man
 group phenDis
+tags clinical,rareDisease
+facet.evidence Curated
 priority 1
 cartVersion 5
 

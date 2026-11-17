@@ -1477,12 +1477,12 @@ ABUSE = {
                "not slow users down.  Capped at 2000."),
         h("bottleneck.timeoutSeconds", "limit", "hg/lib/botDelay.c",
           default='"10"', verified=True, ticket="37738", family="bottleneck",
-          note="Connect, read and write timeout on the bottleneck socket.  The stock socket "
-               "default is 120 seconds for a read and 10 for the connect, both far "
-               "longer than a rate-limit lookup can usefully take.  The connect is the "
-               "one that matters: a bottleneck host that drops packets instead of "
-               "refusing costs that much on every request.  Values above 10 are "
-               "treated as 10."),
+          note="Timeout on the bottleneck socket.  It sets the connect, capped at the "
+               "stock 10 seconds:  a bottleneck host that drops packets instead of "
+               "refusing costs that much on every request.  With "
+               "bottleneck.serveOnFailure on it bounds the read the same way, since a "
+               "read that times out is served.  With it off the read keeps the stock "
+               "120 seconds, or this value if larger, up to 300."),
         h("hguidIpTracking.maxIps", "limit", "hg/lib/botDelay.c",
           default='"10"', verified=True, family="hguidIpTracking"),
         h("hguidIpTracking.windowSeconds", "limit", "hg/lib/botDelay.c",

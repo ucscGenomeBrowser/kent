@@ -4,6 +4,7 @@ longLabel Splicing Impact Prediction Scores and Databases
 superTrack on hide
 group phenDis
 cartVersion 8
+tags splicing
 
 include spliceAI.ra
 

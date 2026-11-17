@@ -2134,6 +2134,28 @@
   format: exonNumbers <on/off>
   examples:
   - exonNumbers off
+- name: itemTypeLabel
+  types:
+  - genePred
+  - bigGenePred
+  - bed
+  - bigBed
+  - psl
+  - bigPsl
+  roles:
+  - leaf
+  category: bigBed - Item or Region Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: The word(s) used to label the item name in the mouseover.
+  description: The word(s) used to label the item name in the mouseover. The default is "Transcript".
+    Use this setting when the items in the track are not transcripts. genePred and bigGenePred tracks
+    have mouseovers on by default, so they only need this setting to change the label. Other track types
+    need exonNumbers set to "on" and this setting to change the label.
+  format: itemTypeLabel <text>
+  examples:
+  - itemTypeLabel ORF
 - name: scoreFilter
   types:
   - bigBed
@@ -2405,10 +2427,11 @@
     character that is not part of the notation, and any brackets that do not balance.
 
     The structure is drawn whenever a base is wide enough to hold one character, which reaches well beyond
-    the zoom at which the sequence itself appears. At wider views, and in dense and squish, where a row
-    is too short for a character, the item is drawn as an ordinary bed. So is every item when the checkbox
-    on the track configuration page, which starts on, is turned off. A row whose string does not match
-    its blocks is reported on the track in place of its data.'
+    the zoom at which the sequence itself appears. At wider views, and in squish, where a row is too short
+    for a character, the blocks of the item are drawn as plain boxes, without the arrows that usually
+    show the strand, since those arrows look like brackets. In dense the item is drawn as an ordinary
+    bed, and so is every item when the checkbox on the track configuration page, which starts on, is turned
+    off. A row whose string does not match its blocks is reported on the track in place of its data.'
   format: dotBracketField <fieldName>
   examples:
   - dotBracketField secStr
@@ -2422,12 +2445,16 @@
   level: new
   required: false
   summary: The color to draw the secondary structure in, on a track that has dotBracketField set.
-  description: The color to draw the secondary structure in, on a track that has dotBracketField set.
-    Written as three numbers from 0 to 255, the same way color is written. Without this setting the structure
-    is drawn in whichever of black or white stands out against the item.
-  format: dotBracketColor <red,green,blue>
+  description: 'The color to draw the secondary structure in, on a track that has dotBracketField set.
+    The color can be written as red, green and blue values from 0 to 255 separated by commas, as a hex
+    code starting with #, or as one of the 16 HTML color names in lowercase, such as blue or fuchsia.
+    Without this setting the structure is drawn in whichever of black or white stands out against the
+    item. A value that is not a color is reported on the track in place of its data.'
+  format: dotBracketColor <color>
   examples:
   - dotBracketColor 240,228,66
+  - 'dotBracketColor #f0e442'
+  - dotBracketColor fuchsia
 - name: thickDrawItem
   types:
   - bed

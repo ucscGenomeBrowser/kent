@@ -28,6 +28,20 @@ silent, serveOnFailure=on, timeoutSeconds=99999, failureDelay=0:
   log: botDelay: no answer from bottleneck server 127.0.0.1:PORT, serving this request with a delay of 0 milliseconds
   net.c warnings sent to the log: 1
 silent, serveOnFailure=off, timeoutSeconds=1, failureDelay=0:
-  returned after the timeout and before the server let go: yes
+  waited for the server to let go: yes
+  aborted: Failed to get an answer from bottleneck server
+  net.c warnings sent to the log: 1
+unreachable, serveOnFailure=on, timeoutSeconds=1, failureDelay=0:
+  connect gave up at the timeout: yes
+  delay 0, server failed yes
+  log: botDelay: no answer from bottleneck server 127.0.0.1:PORT, serving this request with a delay of 0 milliseconds
+  net.c warnings sent to the log: 1
+unreachable, serveOnFailure=on, timeoutSeconds=99999, failureDelay=0:
+  connect gave up at the timeout: yes
+  delay 0, server failed yes
+  log: botDelay: no answer from bottleneck server 127.0.0.1:PORT, serving this request with a delay of 0 milliseconds
+  net.c warnings sent to the log: 1
+unreachable, serveOnFailure=off, timeoutSeconds=2, failureDelay=0:
+  connect gave up at the timeout: yes
   aborted: Failed to connect to bottleneck server
   net.c warnings sent to the log: 1

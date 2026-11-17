@@ -17,8 +17,9 @@ Two steps, with RNAfold in between (see mirGeneDbBuild.sh):
 MirGeneDB 3.0 has -v1, -v2 and -v3 loci for some genes, alternative processing
 variants of the same hairpin. The browse table lists such a gene once, under its
 name without the variant and marked "V"; all variants get miRBase ID, family and
-accessions from that row. The GFF only lists the -v1 locus, so the other variants
-get the MI accession of their -v1. The seed is read from the genome at each locus'
+accessions from that row. The MI accession is taken only from the locus' own
+pre_miRNA in the GFF, which MirGeneDB gives for one variant only; the others show
+"-", as does any value MirGeneDB does not give. The seed is read from the genome at each locus'
 own seed feature, and compared with the browse table for -v1 and single loci.
 """
 import re
@@ -318,13 +319,18 @@ def bed(bedFile, gffFile, browseFile, foldFile, twoBit, bedOut, armsOut):
                 noMeta += 1
                 print("no browse table row for " + gene, file=sys.stderr)
                 m = dict(mirbaseId="", family="", seed="", acc5p="", acc3p="")
-            mi = preAcc.get(gene) or preAcc.get(v1Name(gene), "")
+            mi = preAcc.get(gene, "")
 
             geneArms = sorted(arms.get(gene, []))
             # seed of the dominant arm(s), from the genome at this locus
             domSeeds = [seedSeq[(gene, t)] for s, e, t in geneArms
                         if armClass(t) != "star" and (gene, t) in seedSeq]
-            seed = ",".join(domSeeds)
+            # co-mature genes have a seed on each arm: label them, 5p first
+            armSeeds = sorted([(t[:2], seedSeq[(gene, t)]) for s, e, t in geneArms
+                               if armClass(t) != "star" and (gene, t) in seedSeq],
+                              key=lambda a: a[0] != "5p")
+            seed = (", ".join("%s: %s" % a for a in armSeeds) if len(armSeeds) > 1
+                    else ",".join(domSeeds))
             if v1Name(gene) == gene and m["seed"] and m["seed"] not in domSeeds:
                 seedDiff += 1
                 print("seed differs from browse table: %s %s %s" % (gene, seed, m["seed"]),
@@ -357,11 +363,11 @@ def bed(bedFile, gffFile, browseFile, foldFile, twoBit, bedOut, armsOut):
             # address has no species prefix
             out.write("\t".join([chrom, str(start), str(end), gene, "0", strand,
                 "%s|%s" % (gene.split("-", 1)[1], gene),
-                m["mirbaseId"], m["family"], seed, mi,
+                m["mirbaseId"] or "-", m["family"] or "|-", seed or "-", mi or "|-",
                 ", ".join(armNames["5p"]) or "-", ", ".join(armText["5p"]) or "-",
-                ", ".join(armSeq["5p"]) or "-", m["acc5p"],
+                ", ".join(armSeq["5p"]) or "-", m["acc5p"] or "|-",
                 ", ".join(armNames["3p"]) or "-", ", ".join(armText["3p"]) or "-",
-                ", ".join(armSeq["3p"]) or "-", m["acc3p"],
+                ", ".join(armSeq["3p"]) or "-", m["acc3p"] or "|-",
                 mfe, foldType(refolded, gene),
                 seq, dotBracket,
                 ",".join("%d-%d:%s" % a for a in armPos)]) + "\n")

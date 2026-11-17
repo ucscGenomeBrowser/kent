@@ -1,6 +1,7 @@
 track dbVarSv
 superTrack on
 group varRep
+facet.variantType Structural variant
 html dbVarCurated
 shortLabel dbVar Struct Var
 longLabel NCBI dbVar Structural Variants

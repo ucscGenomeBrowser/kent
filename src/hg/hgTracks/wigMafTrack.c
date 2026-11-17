@@ -2811,8 +2811,10 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
     /* having these static here will allow the option 'codonDefault'
      * to run rapidly through the display without extra calls to SQL
      * for the same answer over and over.  For other codon modes, a SQL
-     * frames table is still queried once per species (a frames bigBed is
-     * read once per draw when browser.mafFastCodons is on).
+     * frames table is still queried once per species, and once more for a
+     * species with no frames when codonFrameDef retries with the default
+     * species (the goto tryagain below).  A frames bigBed is read once per
+     * draw when browser.mafFastCodons is on.
      * This was found to speed up dramatically by adding an index to
      * the table:
      * hgsql staAur2 -e 'CREATE INDEX src on multiz369wayFrames (src, bin);'

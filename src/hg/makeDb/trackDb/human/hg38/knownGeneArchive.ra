@@ -2,6 +2,7 @@ track knownGeneArchive
 superTrack on
 shortLabel GENCODE Archive
 longLabel GENCODE Archive
+facet.consortia GENCODE
 group genes
 type bed 6 +
 html ../../knownGeneArchive

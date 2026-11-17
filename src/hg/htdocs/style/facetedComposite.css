@@ -265,6 +265,44 @@ a.facet-only:focus {
     font-size: 0.85em;
     white-space: nowrap;
 }
+/* "Show N more" link under a track finder facet's top values */
+a.facet-more {
+    font-size: 0.85em;
+    align-self: flex-start;
+}
+
+/* Tag pills after a track's description in the track finder */
+.trackTag {
+    display: inline-block;
+    margin-left: 0.4em;
+    padding: 0 0.5em;
+    background-color: #e0e8f0;
+    border-radius: 12px;
+    font-size: 0.85em;
+    color: #333;
+    white-space: nowrap;
+}
+/* Assembly name after a track's label when the finder lists more than one assembly */
+.trackDbLabel {
+    display: inline-block;
+    margin-left: 0.4em;
+    padding: 0 0.4em;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    font-size: 0.85em;
+    color: #555;
+    white-space: nowrap;
+}
+/* Assembly checkboxes and their loading status above the track finder table */
+#finderDbs {
+    margin-bottom: 8px;
+}
+#finderDbs label {
+    margin-right: 1em;
+}
+#finderDbStatus {
+    color: #777;
+}
 .filter-chip .remove-chip {
     background: none;
     border: none;
@@ -332,4 +370,12 @@ table.dt-rowReorder-float {
     background-color: #fff;
     opacity: 0.9;
     outline: 1px solid #aaa;
+}
+
+/* Track search page shown on the Find Tracks Advanced Search tab.  The height
+   leaves room for the dialog title, tab bar and buttons. */
+#advancedSearchFrame {
+    width: 100%;
+    height: calc(100vh - 230px);
+    border: 0;
 }

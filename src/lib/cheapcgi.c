@@ -2692,13 +2692,14 @@ printf("</SELECT>\n");
 void cgiMakeHiddenVarWithIdExtra(char *varName, char *id, char *string,char *extra)
 /* Store string in hidden input for next time around. */
 {
-// varName can carry a hub-supplied string (a bigBed field name from labelFields), escape
+// varName can carry a hub-supplied string (a bigBed field name from labelFields), and the
+// value often comes straight from the URL (cgiContinueHiddenVar), so escape both
 printf("<INPUT TYPE=HIDDEN NAME='%s'", htmlEncode(varName));
 if (id)
     printf(" ID='%s'", htmlEncode(id));
 if (extra)
     printf(" %s",extra);
-printf(" VALUE='%s'>\n", string);
+printf(" VALUE='%s'>\n", attributeEncode(string));
 }
 
 void cgiContinueHiddenVar(char *varName)

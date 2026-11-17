@@ -1,6 +1,7 @@
 track dosageSensitivity
 shortLabel Dosage Sensitivity
 longLabel pHaplo and pTriplo dosage sensitivity map from Collins et al 2022
+tags constraint
 visibility hide
 type bigBed 9 + 2
 group phenDis

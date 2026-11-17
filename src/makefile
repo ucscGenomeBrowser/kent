@@ -52,8 +52,12 @@ ifneq ($(wildcard hg/cgilib/makefile),)
    HGLIB_DIRS += hg/cgilib
 endif
 
+# topChecks is what runs submoduleSetup, and hg/lib compiles against the htslib
+# headers it checks out.  Without this, a parallel build of a tree whose submodules
+# are not in place yet starts hg/lib alongside topLibs and fails on htslib/sam.h.
+# refs #38792
 hgLib: ${HGLIB_CHECK} | ${HGLIB_DIRS:%=%.hgLib}
-%.hgLib:
+%.hgLib: topChecks
 	${MAKE} -C $*
 hgLibChecks:
 	@./hg/sqlEnvTest.sh

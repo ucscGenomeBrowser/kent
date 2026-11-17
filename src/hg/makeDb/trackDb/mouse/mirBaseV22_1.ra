@@ -8,13 +8,13 @@ color 0,100,0
 bigDataUrl /gbdb/$D/mirBaseV22_1/mirBase.bb
 decorator.default.bigDataUrl /gbdb/$D/mirBaseV22_1/mirBaseArms.bb
 decorator.default.blockMode Adjacent
-decorator.default.Overlaytoggle on
 decorator.default.maxLabelBases 0
 decorator.default.maxDrawBases 3000
 searchIndex name
 searchTrix /gbdb/$D/mirBaseV22_1/mirBase.ix
 skipEmptyFields on
-skipFields sequence,armPositions
+noScoreFilter on
+skipFields mirbaseId,sequence,armPositions
 sepFields mature5p,mature3p,mfe
 dotBracketField dotBracket
 detailsScript.rnaStructure.dotBracket {"exportFields":["sequence","armPositions"],"title":"Secondary structure","colors":{"5p":"#E69F00","3p":"#56B4E9"},"labels":{"5p":"5p mature","3p":"3p mature"}}
