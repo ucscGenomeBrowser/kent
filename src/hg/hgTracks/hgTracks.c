@@ -7839,17 +7839,8 @@ void ctLoadColoredExon(struct track *tg)
 struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-if (ct->dbTrack && (multiRegionSpaceForDb(database) != NULL))
-    {
-    struct bed *nextBed;
-    for (bed = ctDbBeds(tg, ct, ct->fieldCount); bed != NULL; bed = nextBed)
-        {
-        nextBed = bed->next;
-	lfs = lfsFromColoredExonBed(bed);
-	slAddHead(&lfsList, lfs);
-	}
-    }
-else
+/* No multi-region space branch:  liftTrackIntoSpace() does not carry this track into a
+ * space, so it is hidden there before it loads.  refs #37788 */
 if (ct->dbTrack)
     {
     int fieldCount = ct->fieldCount;
