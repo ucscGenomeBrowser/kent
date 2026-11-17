@@ -19,13 +19,20 @@ precursors are also part of the
 miRNAs and structures.
 </p>
 <p>
-Clicking an item opens a page with the miRBase accessions, the mature miRNAs and their
-positions, and the secondary structure of the precursor predicted with RNAfold. The
-structure is drawn with forna and can be moved and zoomed; the nucleotides of the mature
-miRNAs are highlighted in the colors of the track.
+Clicking an item opens a page with the miRBase accessions, the names, positions and
+sequences of the mature miRNAs, the MirGeneDB genes of the precursor, if any, with links
+to their MirGeneDB pages, and the secondary structure of the precursor predicted with
+RNAfold. The structure is drawn with forna and can be moved and zoomed; the nucleotides of
+the mature miRNAs are highlighted in the colors of the track.
+</p>
+<p>
+The MirGeneDB genes are the ones that MirGeneDB links to the miRBase accession of the
+precursor. At four pairs of paralogs, hsa-mir-3180-1 and -2, hsa-mir-514a-2 and -3,
+hsa-mir-516a-1 and -2, and hsa-mir-520g and -520h, MirGeneDB gives each gene the accession
+of the other copy, so the linked gene lies at the other locus.
 </p>
 
-<h2>Display Conventions and Configuration</h2>
+<h2>Display conventions and configuration</h2>
 <p>
 Each item is a precursor hairpin labeled with its miRBase name, e.g. hsa-mir-200b.
 The mature miRNAs are drawn as colored blocks below the item and labeled with their names:
@@ -69,8 +76,9 @@ The human annotation was downloaded from
 target="_blank">https://mirbase.org/download/hsa.gff3</a>.
 The header of the file gives the version as miRBase v22; the human annotation is the same
 in releases 22 and 22.1. It has coordinates for 1,913 of the 1,917 human precursors;
-hsa-mir-1973, -3713, -378g and -4456 have none and are not in the track. Each precursor (type miRNA_primary_transcript) became an item and
-each mature miRNA (type miRNA) a colored block. Three precursors are at more than one
+hsa-mir-1973, -3713, -378g and -4456 have none and are not in the track. Each precursor
+(type miRNA_primary_transcript) became an item and each mature miRNA (type miRNA) a
+colored block. Three precursors are at more than one
 locus (hsa-mir-10401 at four loci, hsa-mir-4477a and hsa-mir-4477b at two each), and the
 file links a mature miRNA only to the accession of its precursor, not to the locus, so each
 mature miRNA was assigned to the locus that contains it. The arm was taken from the -5p or
@@ -93,7 +101,7 @@ target="_blank">makeDoc file</a>, and the scripts are in the
 target="_blank">kent source tree</a>.
 </p>
 
-<h2>Data Access</h2>
+<h2>Data access</h2>
 <p>
 The data can be explored interactively in table format with the
 <a href="hgTables">Table Browser</a> or the
