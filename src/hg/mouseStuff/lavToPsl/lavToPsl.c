@@ -28,6 +28,8 @@ errAbort(
   "   -bed output bed instead of psl\n"
   "   -scoreFile=filename  output lav scores to side file, such that\n"
   "                        each psl line in out.psl is matched by a score line.\n"
+  "The input must end with the #:eof line that lastz writes, or lavToPsl\n"
+  "exits with an error. Output already written to out.psl is kept.\n"
   );
 }
 
