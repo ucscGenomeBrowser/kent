@@ -2816,7 +2816,7 @@ char *output = NULL;
 
 printf("<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
-printf("<INPUT TYPE=HIDDEN NAME=org VALUE=\"%s\">\n", organism);
+htmlPrintf("<INPUT TYPE=HIDDEN NAME=org VALUE=\"%s|attr|\">\n", organism);
 printf("<INPUT TYPE=HIDDEN NAME=db VALUE=\"%s\">\n", db);
 // all four come from the cart (user input) and go into value="" attributes; escape (XSS)
 type = cartUsualString(cart, "type", "");
@@ -3584,7 +3584,7 @@ if (isEmpty(userSeq) || orgChange)
     else
 	cartWebStart(theCart, db, "%s BLAT Search", trackHubSkipHubName(organism));
     if (differentString(oldDb, db))
-	printf("<HR><P><EM><B>Note:</B> BLAT search is not available for %s %s; "
+	htmlPrintf("<HR><P><EM><B>Note:</B> BLAT search is not available for %s %s; "
 	       "defaulting to %s %s</EM></P><HR>\n",
 	       hGenome(oldDb), hFreezeDate(oldDb), organism, hFreezeDate(db));
     if (newForm)
