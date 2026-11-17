@@ -189,6 +189,7 @@ boolean isRc = FALSE;
 char *tName = NULL, *qName = NULL;
 char *matrix = NULL, *command = NULL;
 int qSize = 0, tSize = 0;
+boolean atEof = FALSE;
 
 /* Check header. */
 if (!lineFileNext(lf, &line, NULL))
@@ -198,6 +199,7 @@ if (!startsWith("#:lav", line))
 
 while (lineFileNext(lf, &line, NULL))
     {
+    atEof = startsWith("#:eof", line);
     if (startsWith("s {", line))
         {
 	parseS(lf, &tSize, &qSize);
@@ -218,6 +220,9 @@ while (lineFileNext(lf, &line, NULL))
 	slFreeList(&blockList);
 	}
     }
+/* A complete lav file ends with "#:eof". */
+if (!atEof)
+    errAbort("%s does not end with #:eof, so it is truncated", lf->fileName);
 lineFileClose(&lf);
 }
 
