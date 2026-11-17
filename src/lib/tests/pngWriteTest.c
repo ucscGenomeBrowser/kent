@@ -1,13 +1,17 @@
 /* pngWriteTest - check that a memGfx image written as a PNG decodes to the same pixels.
  *
- * The browser's PNG writer has been changed for speed twice: it now pins the PNG row filter
- * to UP instead of letting libpng try all five on every row (refs #38107), and it links
+ * The browser's PNG writer has been changed for speed more than once: it limits the PNG row
+ * filter to NONE or UP instead of letting libpng try all five on every row (refs #38107,
+ * #38611), and it links
  * zlib-ng in place of the system zlib (refs #38125).  Both are meant to be lossless, so the
  * decoded image must be exactly the image that was drawn.  This test draws an image that
  * mixes noise, flat color, gradients and partial transparency, writes it with mgSaveToPng(),
  * reads it back with libpng, and compares every byte.  It also inflates the image data itself
  * and checks the filter byte at the start of every row, so a change that quietly brings back
- * the filter search shows up here rather than as a slower hgTracks. */
+ * the full filter search shows up here rather than as a slower hgTracks.  Which of NONE and
+ * UP libpng picks for a given row is its own heuristic and can differ between libpng
+ * versions, so the test does not pin the split:  it checks that no row used another
+ * filter, and that both NONE and UP were used. */
 
 /* Copyright (C) 2026 The Regents of the University of California
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
@@ -157,13 +161,17 @@ mgSavePng(mg, fileName, FALSE);
 int badRows = compareDecoded(fileName, mg);
 printf("decoded rows that differ from the image drawn: %d of %d\n", badRows, mg->height);
 
-/* Every row must carry the UP filter, the first row included. */
-static char *filterNames[5] = {"NONE", "SUB", "UP", "AVERAGE", "PAETH"};
-int filterCounts[5] = {0, 0, 0, 0, 0};
+/* Every row must carry NONE or UP.  The split between the two is libpng's choice. */
+int filterCounts[5] = {0, 0, 0, 0, 0};    /* NONE, SUB, UP, AVERAGE, PAETH */
 countRowFilters(fileName, mg->height, mg->width * 4, filterCounts);
-int i;
-for (i = 0; i < 5; i++)
-    printf("rows with filter %s: %d\n", filterNames[i], filterCounts[i]);
+printf("rows with filter NONE or UP: %d of %d\n", filterCounts[0] + filterCounts[2],
+    mg->height);
+printf("rows with filter SUB, AVERAGE or PAETH: %d\n",
+    filterCounts[1] + filterCounts[3] + filterCounts[4]);
+/* The image mixes noise with flat colour, so any libpng that is really choosing uses
+ * both;  a writer pinned to one filter (UP, before #38611) uses only that one. */
+printf("some rows use NONE and some use UP: %s\n",
+    (filterCounts[0] > 0 && filterCounts[2] > 0) ? "yes" : "no");
 mgFree(&mg);
 return 0;
 }

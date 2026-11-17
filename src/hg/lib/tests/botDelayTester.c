@@ -3,8 +3,9 @@
  *
  * Before #37738 an unreachable bottleneck server made every CGI abort with a 500.
  * bottleneck.serveOnFailure=on now serves the request with the bottleneck.failureDelay
- * fallback and writes a line to the error log, and bottleneck.timeoutSeconds bounds the
- * connect, send and read, capped at 10 seconds.
+ * fallback and writes a line to the error log.  bottleneck.timeoutSeconds bounds the
+ * connect, capped at 10 seconds.  With the gate on it bounds the read the same way;
+ * with it off the read keeps its stock 120 seconds, so a slow server is waited for.
  *
  * Each run writes its own hg.conf, sets HGDB_CONF to it and only then reads a setting,
  * because the config is read once per process.  The conf includes nothing, so no gate is
@@ -15,21 +16,29 @@
  *    mode     answer   the server answers 42
  *             refused  nothing listens on the port
  *             silent   the server accepts and never answers
+ *             unreachable  the connect itself never completes:  the port listens with a
+ *                      full accept queue, and Linux drops a SYN to a full queue rather
+ *                      than refusing it, which is what a host that drops packets does
  *    gate     on or off, for bottleneck.serveOnFailure
  *
- * Each run prints one line of result, and for "silent" a line saying whether the call
- * returned inside the window that the timeout allows.  The windows are wide (the call
- * waits 1 or 10 seconds against a server that holds the connection for 30), so a busy
- * machine cannot turn this red.  The error log line is printed with the port masked. */
+ * Each run prints one line of result.  For "unreachable" a line says whether the connect
+ * gave up at its timeout:  bottleneck.timeoutSeconds, capped at 10, whatever the gate.
+ * For "silent" a line says when the call returned.  With the gate on that is inside the window the timeout allows:  at least
+ * the timeout (to the millisecond, so a 1 second timeout is checked too) and well short
+ * of the 30 seconds the server holds the connection.  With the gate off it is when the
+ * server lets go.  The windows are wide, so a busy machine cannot turn this red.  The
+ * error log line is printed with the port masked. */
 
 #include "common.h"
 #include "errCatch.h"
+#include "portable.h"
 #include "net.h"
 #include "botDelay.h"
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <time.h>
 
@@ -53,6 +62,30 @@ if (getsockname(sd, (struct sockaddr *)&addr, &len) < 0)
     errnoAbort("getsockname");
 *retPort = ntohs(addr.sin_port);
 return sd;
+}
+
+static void fillAcceptQueue(int listenSd, int port)
+/* Shrink the accept queue to its minimum and fill it with connections nobody accepts, so
+ * the next connect to the port hangs in SYN_SENT until the caller's timeout.  The filler
+ * sockets are left open for the life of the process. */
+{
+if (listen(listenSd, 0) < 0)
+    errnoAbort("listen");
+struct sockaddr_in addr;
+ZeroVar(&addr);
+addr.sin_family = AF_INET;
+addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+addr.sin_port = htons(port);
+int i;
+for (i = 0; i < 3; i++)
+    {
+    int sd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sd < 0)
+        errnoAbort("socket");
+    fcntl(sd, F_SETFL, O_NONBLOCK);
+    connect(sd, (struct sockaddr *)&addr, sizeof(addr));   /* EINPROGRESS is expected */
+    }
+sleep(1);     /* let the handshakes that fit in the queue finish */
 }
 
 static pid_t startServer(int listenSd, boolean answer)
@@ -124,7 +157,7 @@ printf("  net.c warnings sent to the log: %d\n", netWarnings);
 int main(int argc, char *argv[])
 {
 if (argc != 6)
-    errAbort("usage: botDelayTester answer|refused|silent on|off timeoutSeconds failureDelay outDir");
+    errAbort("usage: botDelayTester answer|refused|silent|unreachable on|off timeoutSeconds failureDelay outDir");
 char *mode = argv[1], *gate = argv[2], *timeout = argv[3], *failureDelay = argv[4];
 char *outDir = argv[5];
 
@@ -137,6 +170,8 @@ else if (sameString(mode, "answer"))
     server = startServer(listenSd, TRUE);
 else if (sameString(mode, "silent"))
     server = startServer(listenSd, FALSE);
+else if (sameString(mode, "unreachable"))
+    fillAcceptQueue(listenSd, port);
 else
     errAbort("unknown mode %s", mode);
 
@@ -155,14 +190,14 @@ fflush(stdout);
 if (freopen(errFile, "w", stderr) == NULL)
     errnoAbort("freopen %s", errFile);
 
-time_t start = time(NULL);
+long startMs = clock1000();
 boolean failed = FALSE;
 int delay = -1;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     delay = hgBotDelayTimeFracWithStatus(1.0, &failed);
 errCatchEnd(errCatch);
-long elapsed = time(NULL) - start;
+long elapsedMs = clock1000() - startMs;
 fflush(stderr);
 
 if (server > 0)
@@ -171,14 +206,29 @@ if (server > 0)
         kill(server, SIGTERM);
     waitpid(server, NULL, 0);
     }
-if (sameString(mode, "silent"))
+if (sameString(mode, "unreachable"))
     {
-    int limit = atoi(timeout);
-    if (limit < 1 || limit > 10)
-        limit = 10;
+    long limitMs = atoi(timeout) * 1000L;
+    if (limitMs < 1000 || limitMs > 10000)
+        limitMs = 10000;
+    /* The connect cap applies with the gate on or off. */
+    printf("  connect gave up at the timeout: %s\n",
+        (elapsedMs >= limitMs - 50 && elapsedMs < limitMs + 5000) ? "yes" : "no");
+    }
+else if (sameString(mode, "silent") && sameString(gate, "on"))
+    {
+    long limitMs = atoi(timeout) * 1000L;
+    if (limitMs < 1000 || limitMs > 10000)
+        limitMs = 10000;
     /* At least the timeout, and well short of the server's 30 seconds. */
     printf("  returned after the timeout and before the server let go: %s\n",
-        (elapsed >= limit - 1 && elapsed < limit + 10) ? "yes" : "no");
+        (elapsedMs >= limitMs - 50 && elapsedMs < limitMs + 10000) ? "yes" : "no");
+    }
+else if (sameString(mode, "silent"))
+    {
+    /* No fallback, so no short read timeout:  the call waits for the server. */
+    printf("  waited for the server to let go: %s\n",
+        (elapsedMs >= 29000 && elapsedMs < 60000) ? "yes" : "no");
     }
 if (errCatch->gotError)
     printf("  aborted: %s\n", trimSpaces(errCatch->message->string));

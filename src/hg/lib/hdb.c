@@ -1413,8 +1413,7 @@ if (spaceChain != NULL)
     {
     struct dnaSeq *seq = multiRegionSpaceDna(spaceChain, multiRegionSpaceSourceTwoBit(db),
                                              chrom, start, end);
-    if (seq != NULL)
-        tolowers(seq->dna);
+    tolowers(seq->dna);
     return seq;
     }
 char fileName[HDB_MAX_PATH_STRING];

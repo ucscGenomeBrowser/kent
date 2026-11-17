@@ -3495,10 +3495,20 @@ var dragSelect = {
         if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
             // just set/overwrite the old highlight position, this used to be the default
             hgTracks.highlight = newHighlight;
+            if (hgTracks.highlightSpace !== undefined)
+                hgTracks.highlightSpace = newHighlight;
         }
         else {
             // add to the end of a |-separated list
             hgTracks.highlight = oldHighlight+"|"+newHighlight;
+            // In a multi-region space the drawer reads highlightSpace, one entry per cart
+            // entry.  The new entry is already in the image's coordinates, so it goes on
+            // both lists; the server maps the cart's copy back to the source on the next
+            // request.  refs #37788
+            if (hgTracks.highlightSpace)
+                hgTracks.highlightSpace = hgTracks.highlightSpace+"|"+newHighlight;
+            else if (hgTracks.highlightSpace !== undefined)
+                hgTracks.highlightSpace = newHighlight;
         }
         // we include enableHighlightingDialog because it may have been changed by the dialog
         var cartSettings = {             'highlight': hgTracks.highlight, 
@@ -4862,6 +4872,16 @@ var rightClick = {
                                 dragSelect.highlightThisRegion(newPos2, true);
                                 }
 
+                        } else if (hgTracks.inMultiRegionSpace) {
+                            // In a multi-region space the link carries the item's SOURCE
+                            // position, which is what the cart holds.  Only the server can
+                            // place it on the synthetic image, so add it to the cart with
+                            // the redraw request and let the redraw draw it.  refs #37788
+                            var srcHighlight = makeHighlightString(getDb(), chrom, chromStart,
+                                                                   chromEnd, dragSelect.loadHlColor());
+                            var hlList = hgTracks.highlight ? hgTracks.highlight + "|" + srcHighlight
+                                                            : srcHighlight;
+                            imageV2.navigateInPlace("highlight=" + encodeURIComponent(hlList), null, true);
                         } else {
                             var newChrom = hgTracks.chromName;
                             if (hgTracks.windows && hgTracks.virtualSingleChrom) {
@@ -5219,6 +5239,12 @@ var rightClick = {
             var highlights = hgTracks.highlight.split("|");
             highlights.splice(rightClick.clickedHighlightIdx, 1); // splice = remove element from array
             hgTracks.highlight = highlights.join("|");
+            // the same index in the drawer's list, which lines up with the cart's.  refs #37788
+            if (hgTracks.highlightSpace) {
+                var spaceHighlights = hgTracks.highlightSpace.split("|");
+                spaceHighlights.splice(rightClick.clickedHighlightIdx, 1);
+                hgTracks.highlightSpace = spaceHighlights.join("|");
+            }
             cart.setVarsObj({'highlight' : hgTracks.highlight});
             imageV2.drawHighlights();
         } else if (cmd === 'toggleMerge') {
@@ -6885,15 +6911,23 @@ function addKeyboardHelpEntries() {
 // A function for the keyboard shortcut:
 // View DNA
 function gotoGetDnaPage() {
+    // hgc's l= is 0-based.  hgTracks.winStart already is; the position box and
+    // nonVirtPosition are 1-based, as a user reads them, so take one off those.
     var position = hgTracks.chromName+":"+hgTracks.winStart+"-"+hgTracks.winEnd;
-    if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") === 0)) {
+    var oneBased = false;
+    if (hgTracks.virtualSingleChrom && (hgTracks.chromName.search("multi") === 0)) {
         position = genomePos.get().replace(/,/g,'');
-    } else if (hgTracks.windows && hgTracks.nonVirtPosition) {
+        oneBased = true;
+    } else if ((hgTracks.windows || hgTracks.inMultiRegionSpace) && hgTracks.nonVirtPosition) {
+        // a multi-region space is drawn on "multi", which hgc has no sequence for, so
+        // ask for the source position the position box shows.  refs #37788
         position = hgTracks.nonVirtPosition;
+        oneBased = true;
     }
     var pos = parsePosition(position);
     if (pos) {
-        var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+pos.chrom+"&l="+pos.start+"&r="+pos.end+"&db="+getDb();
+        var start = oneBased ? pos.start - 1 : pos.start;
+        var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+pos.chrom+"&l="+start+"&r="+pos.end+"&db="+getDb();
         window.location.href = url;
     }
     return false;
@@ -6977,6 +7011,8 @@ function highlightCurrentPosition(mode) {
         dragSelect.highlightThisRegion(pos, true);
     else {
         hgTracks.highlight = "";
+        if (hgTracks.highlightSpace !== undefined)
+            hgTracks.highlightSpace = "";
         var cartSettings = {'highlight': ""};
         cart.setVarsObj(cartSettings);
         imageV2.drawHighlights();

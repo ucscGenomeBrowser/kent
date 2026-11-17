@@ -2268,7 +2268,8 @@ return gp;
 
 struct genePred *genePredForTrackItem(char *db, struct trackDb *tdb, char *name, char *chrom)
 /* Load one item of a genePred or bigGenePred track by name, or NULL if there is no such
- * item, the track is of another type, or its file cannot be read.  A name can be on two
+ * item, the track is of another type, or its bigGenePred file cannot be read (a SQL
+ * error on a genePred table aborts, as other table reads do).  A name can be on two
  * chroms (the chrX/chrY PAR copies), so the copy on chrom is taken when there is one,
  * and otherwise the first copy, the same rule for both kinds of track:  a caller in
  * multi-region view may only know the virtual chrom.  The chrom in the answer is always

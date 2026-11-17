@@ -1,6 +1,4 @@
 decoded rows that differ from the image drawn: 0 of 300
-rows with filter NONE: 36
-rows with filter SUB: 0
-rows with filter UP: 264
-rows with filter AVERAGE: 0
-rows with filter PAETH: 0
+rows with filter NONE or UP: 300 of 300
+rows with filter SUB, AVERAGE or PAETH: 0
+some rows use NONE and some use UP: yes

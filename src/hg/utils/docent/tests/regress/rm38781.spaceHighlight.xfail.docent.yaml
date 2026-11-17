@@ -1,0 +1,63 @@
+# #38781 (CR of #37788) -- highlights in a multi-region space.
+#
+# In a space the cart holds highlights in SOURCE coordinates (chr7) and the server sends the
+# same list mapped onto the synthetic image as hgTracks.highlightSpace, which is what the
+# page draws from.  Two bugs, both in hg/js/hgTracks.js:
+#   * Add, remove and clear edited only hgTracks.highlight, so the drawn list went stale:
+#     a second highlight never appeared, and a removed one stayed drawn.
+#   * "Highlight <item>" from the right-click menu wrote the item's source coordinates under
+#     the synthetic chromosome name ("hg38#multi#117480025#..."), because a space has no
+#     hgTracks.windows and the code fell through to hgTracks.chromName.
+# The CR fix keeps highlightSpace in step on every edit, and in a space adds the item's
+# source range to the cart and redraws (new hgTracks.inMultiRegionSpace flag from hgTracks.c).
+#
+# Checks, in exon view over CFTR:
+#   1. After a Single Highlight and a page reload (so the server sends highlightSpace), an
+#      Add Highlight draws a SECOND box.  Fails on the old code: still one box.
+#   2. "Highlight ENST00000003084.11" (CFTR) puts hg38#chr7#117480025#117668665 in the cart,
+#      read back from cartDump.  Fails on the old code: hg38#multi#117480025#117668665.
+#
+# Needs multiRegionSpaces=on in hg.conf, which hgwdev's shared hg.conf sets:
+#   grep multiRegionSpaces /usr/local/apache/cgi-bin/hg.conf
+# With it off, exon view is the old virtual chromosome and this script tests that instead.
+#
+# NOT asserted: box positions, or the removal path on its own.  Removing the first of two
+# boxes on the old code leaves one stale box, which looks the same as a correct removal of
+# one box to every check docent has.
+proof:
+  - "assertion-only 2026-11-16 -- written from Mark Diekhans's CR #38781 note, items 4 and 5"
+  - "xfail 2026-11-16 -- fails on genome-test (master without the CR fix) at step 11, no second highlight box; with steps 4-11 cut out it fails at the cartDump check, which reads hg38#multi#117480025"
+  - "sandbox-ab 2026-11-16 -- passes on ts park 38781 built from ~/kentCr38781 branch cr38781, fails on genome-test at both checks as above"
+
+target: genome-test
+db: hg38
+position: chr7:117480025-117668665
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:117480025-117668665"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:117480025-117668665&hideTracks=1&knownGene=pack&virtModeType=exonMostly&virtMode=1&highlight="
+  - expect:
+      rows: [ruler, knownGene]
+      noHas: '.highlightItem'
+  - drag: {fromFrac: 0.20, toFrac: 0.30, then: highlight, track: knownGene}
+  - expect:
+      has: '.highlightItem'
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      has: '.highlightItem'
+      noHas: '.highlightItem ~ .highlightItem'
+  - drag: {fromFrac: 0.60, toFrac: 0.70, then: none, track: knownGene}
+  - click: '.ui-dialog-buttonset button:has-text("Add Highlight")'
+  - sleep: 1000
+  - expect:
+      has: '.highlightItem ~ .highlightItem'
+
+  - goto: "/cgi-bin/hgTracks?highlight="
+  - rightClick: {track: knownGene, item: "ENST00000003084.11", pick: "Highlight"}
+  - sleep: 4000
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text: "hg38#chr7#117480025#117668665"
+      noText: "hg38#multi#117480025"

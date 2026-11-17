@@ -106,10 +106,13 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 slSort(&rangeList, baseRangeCmp);
 chainFreeList(&chainList);
 /* Every read of the chain in this file comes through here, so one line each says
- * how many there were and how much of the chain each one walked.  refs #37788 */
+ * how many there were and how much of the chain each one walked.  Printed in the
+ * same form as uglyTime(), but timed from startMs:  uglyTime() would add its own time
+ * since its last call and reset that clock from inside drawing code.  refs #37788 */
 if (measureTiming)
-    uglyTime("multiRegion: read %d chain blocks over %s:%d-%d in %ld millis",
-             slCount(rangeList), chrom, start+1, end, clock1000() - startMs);
+    printf("<span class='timing'>multiRegion: read %d chain blocks over %s:%d-%d: "
+           "%ld millis<BR></span>\n",
+           slCount(rangeList), chrom, start+1, end, clock1000() - startMs);
 return rangeList;
 }
 

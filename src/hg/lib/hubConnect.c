@@ -571,7 +571,13 @@ for(tdb = tdbList; tdb; tdb = tdb->next)
 void quickLiftAssignChainOne(struct trackDb *tdb, char *quickLiftChain, char *db)
 /* Assign a quickLift chain to one track.  See hubConnect.h. */
 {
-addQuickToHash( tdb->settingsHash, quickLiftChain, db);
+/* trackDbHashSettings(), because settingsHash is built lazily and a native tdb that
+ * nothing has asked for a setting yet still has none.  hashReplace(), because a
+ * track can be stamped on more than one request path, and hashAdd() would leave the
+ * first stamp shadowed underneath the second.  refs #37788 */
+struct hash *settings = trackDbHashSettings(tdb);
+hashReplace(settings, "quickLiftUrl", quickLiftChain);
+hashReplace(settings, "quickLiftDb", db);
 }
 
 // a string to define trackDb for quickLift chain
