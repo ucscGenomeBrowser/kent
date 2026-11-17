@@ -236,11 +236,18 @@ longLabel failed lastz/chain/net liftOver Gencode v50 genePred
 priority 4
 bigDataUrl /gbdb/hg38/chainCompare/lastzOverChain.unmapped.bb
 
+track failedMiniMap2LikeLastz
+parent chainCompareLiftFailures
+shortLabel failed miniMap2/lastz
+longLabel failed miniMap2 liftOver Gencode v50 genePred axtChain like lastz
+priority 5
+bigDataUrl /gbdb/hg38/chainCompare/miniMap2LiftOver.unmapped.likeLastz.bb
+
 track failedMiniMap2
 parent chainCompareLiftFailures
 shortLabel failed miniMap2
 longLabel failed miniMap2 liftOver Gencode v50 genePred
-priority 5
+priority 6
 bigDataUrl /gbdb/hg38/chainCompare/miniMap2LiftOver.unmapped.bb
 
 ##############################################################################
@@ -287,11 +294,18 @@ longLabel unique regions in the lastz/chain/net liftOver
 priority 4
 bigDataUrl /gbdb/hg38/chainCompare/lastz.bb
 
+track uniqueMiniMap2LikeLastz
+parent chainCompareOverlaps
+shortLabel unique miniMap2/lastz
+longLabel unique regions in the miniMap2 liftOver axtChain like lastz
+priority 5
+bigDataUrl /gbdb/hg38/chainCompare/miniMap2.likeLastz.bb
+
 track uniqueMiniMap2
 parent chainCompareOverlaps
 shortLabel unique miniMap2
 longLabel unique regions in the miniMap2 liftOver
-priority 5
+priority 6
 bigDataUrl /gbdb/hg38/chainCompare/miniMap2.bb
 
 ##############################################################################

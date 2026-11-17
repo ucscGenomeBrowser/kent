@@ -31,6 +31,7 @@ The track data was obtained:
 <li>T2T liftOver - from files supplied by the CHM13 T2T project</li>
 <li>BLAT/sameSpecies - result from UCSC procedure doSameSpeciesLiftOver.pl - uses: axtChain | chainBridge, linearGap=medium, minScore=1000, scoreScheme default HOXD70</li>
 <li>lastz/chain/net - result from UCSC procedure doBlastzChainNet.pl - uses: axtChain | chainAntiRepeat, linearGap=medium, minScore=5000, scoreScheme=human_chimp.v2.q</li>
+<li>miniMap2/like lastz - result from UCSC procedure updated to same chaining ast lastz/chain/net and same chaining parameters - doMiniMap2.pl - uses: pafToPsl | axtChain | chainAntiRepeat, arguments: -cx asm5 -N 5 -p 0.8 -t 8, chaining linearGap=medium, minScore=5000, scoreScheme=human_chimp.v2.q </li>
 <li>miniMap2 - result from UCSC procedure doMiniMap2.pl - uses: axtChain | chainBridge | pafToPsl, arguments: -cx asm5 -N 5 -p 0.8 -t 8 </li>
 </ul>
 
@@ -48,6 +49,7 @@ script in the kent source tree:
 <tr><th>T2T</th><td style='text-align:right'>636,964</td><td style='text-align:right'>94.97%</td><td style='text-align:right'>33,706</td><td style='text-align:right'>5.03%</td></tr>
 <tr><th>blat</th><td style='text-align:right'>664,105</td><td style='text-align:right'>99.02%</td><td style='text-align:right'>6,565</td><td style='text-align:right'>0.98%</td></tr>
 <tr><th>lastz</th><td style='text-align:right'>661,673</td><td style='text-align:right'>98.66%</td><td style='text-align:right'>8,997</td><td style='text-align:right'>1.34%</td></tr>
+<tr><th>miniMap2<br>like lastz</th><td style='text-align:right'>653,473</td><td style='text-align:right'>97.44%</td><td style='text-align:right'>17,197</td><td style='text-align:right'>2.56%</td></tr>
 <tr><th>miniMap2</th><td style='text-align:right'>653,480</td><td style='text-align:right'>97.44%</td><td style='text-align:right'>17,190</td><td style='text-align:right'>2.56%</td></tr>
 </tbody></table>
 
@@ -75,6 +77,7 @@ almost all because of the chrUn/_alt/_fix/_random contigs, there are only
 <tr><th>T2T</th><td style='text-align:right'>26,378</td><td style='text-align:right'>5,048</td><td style='text-align:right'>2,273</td><td style='text-align:right'>7</td></tr>
 <tr><th>blat</th><td style='text-align:right'>4</td><td style='text-align:right'>4,665</td><td style='text-align:right'>1,869</td><td style='text-align:right'>27</td></tr>
 <tr><th>lastz</th><td style='text-align:right'>4,052</td><td style='text-align:right'>2,664</td><td style='text-align:right'>2,273</td><td style='text-align:right'>8</td></tr>
+<tr><th>miniMap2<br>like lastz</th><td style='text-align:right'>9,389</td><td style='text-align:right'>5,825</td><td style='text-align:right'>1,960</td><td style='text-align:right'>23</td></tr>
 <tr><th>miniMap2</th><td style='text-align:right'>9,434</td><td style='text-align:right'>5,790</td><td style='text-align:right'>1,943</td><td style='text-align:right'>23</td></tr>
 </tbody></table>
 
@@ -92,6 +95,7 @@ files perform very similar and very well:
 <tr><th>T2T</th><td style='text-align:right'>636,964</td><td style='text-align:right'>98.86%</td><td style='text-align:right'>7,328</td><td style='text-align:right'>1.14%</td></tr>
 <tr><th>blat</th><td style='text-align:right'>638,625</td><td style='text-align:right'>99.12%</td><td style='text-align:right'>5,667</td><td style='text-align:right'>0.88%</td></tr>
 <tr><th>lastz</th><td style='text-align:right'>638,605</td><td style='text-align:right'>99.12%</td><td style='text-align:right'>5,687</td><td style='text-align:right'>0.88%</td></tr>
+<tr><th>miniMap2<br>like lastz</th><td style='text-align:right'>637,368</td><td style='text-align:right'>98.93%</td><td style='text-align:right'>6,924</td><td style='text-align:right'>1.07%</td></tr>
 <tr><th>miniMap2</th><td style='text-align:right'>637,569</td><td style='text-align:right'>98.96%</td><td style='text-align:right'>6,723</td><td style='text-align:right'>1.04%</td></tr>
 </tbody></table>
 
@@ -105,6 +109,7 @@ files perform very similar and very well:
 <tr><th>T2T</th><td style='text-align:right'>0</td><td style='text-align:right'>5,048</td><td style='text-align:right'>2,273</td><td style='text-align:right'>7</td></tr>
 <tr><th>blat</th><td style='text-align:right'>1</td><td style='text-align:right'>3,895</td><td style='text-align:right'>1,745</td><td style='text-align:right'>26</td></tr>
 <tr><th>lastz</th><td style='text-align:right'>0</td><td style='text-align:right'>3,614</td><td style='text-align:right'>2,070</td><td style='text-align:right'>3</td></tr>
+<tr><th>miniMap2<br>like lastz</th><td style='text-align:right'>6</td><td style='text-align:right'>5,011</td><td style='text-align:right'>1,885</td><td style='text-align:right'>22</td></tr>
 <tr><th>miniMap2</th><td style='text-align:right'>6</td><td style='text-align:right'>4,819</td><td style='text-align:right'>1,876</td><td style='text-align:right'>22</td></tr>
 </tbody></table>
 
@@ -121,6 +126,7 @@ chromosomes are used, the results are quite varied:
 <tr><th>T2T</th><td style='text-align:right'>0</td><td style='text-align:right'>0.00%</td><td style='text-align:right'>26,378</td><td style='text-align:right'>100.00%</td></tr>
 <tr><th>blat</th><td style='text-align:right'>25,480</td><td style='text-align:right'>96.60%</td><td style='text-align:right'>898</td><td style='text-align:right'>3.40%</td></tr>
 <tr><th>lastz</th><td style='text-align:right'>23,068</td><td style='text-align:right'>87.45%</td><td style='text-align:right'>3,310</td><td style='text-align:right'>12.55%</td></tr>
+<tr><th>miniMap2<br>like lastz</th><td style='text-align:right'>16,105</td><td style='text-align:right'>61.05%</td><td style='text-align:right'>10,273</td><td style='text-align:right'>38.95%</td></tr>
 <tr><th>miniMap2</th><td style='text-align:right'>15,911</td><td style='text-align:right'>60.32%</td><td style='text-align:right'>10,467</td><td style='text-align:right'>39.68%</td></tr>
 </tbody></table>
 
@@ -134,6 +140,7 @@ chromosomes are used, the results are quite varied:
 <tr><th>T2T</th><td style='text-align:right'>26,378</td><td style='text-align:right'>0</td><td style='text-align:right'>0</td><td style='text-align:right'>0</td></tr>
 <tr><th>blat</th><td style='text-align:right'>3</td><td style='text-align:right'>770</td><td style='text-align:right'>124</td><td style='text-align:right'>1</td></tr>
 <tr><th>lastz</th><td style='text-align:right'>2,664</td><td style='text-align:right'>438</td><td style='text-align:right'>203</td><td style='text-align:right'>5</td></tr>
+<tr><th>miniMap2<br>like lastz</th><td style='text-align:right'>9,383</td><td style='text-align:right'>814</td><td style='text-align:right'>75</td><td style='text-align:right'>1</td></tr>
 <tr><th>miniMap2</th><td style='text-align:right'>9,428</td><td style='text-align:right'>971</td><td style='text-align:right'>67</td><td style='text-align:right'>1</td></tr>
 </tbody></table>
 
@@ -172,6 +179,11 @@ chromosomes are used, the results are quite varied:
       <th>lastz</th>
       <td style='text-align:right'>7,706</td><td>823,517</td><td style='text-align:right'>106.87</td><td>3,036,957,179</td><td style='text-align:right'>582,710,582</td><td style='text-align:right'>637,875,116</td>
       <td style='text-align:right'>8,808</td><td style='text-align:right'>138,293,707</td><td>3,036,957,179</td><td>92.05%</td><td>2,869,005,268</td><td>92.04%</td>
+    </tr>
+    <tr>
+      <th>miniMap2<br>like lastz</th>
+      <td style='text-align:right'>3,036</td><td>785,220</td><td style='text-align:right'>258.64</td><td>3,041,614,691</td><td style='text-align:right'>423,018,725</td><td style='text-align:right'>554,093,533</td>
+      <td style='text-align:right'>8,768</td><td style='text-align:right'>138,293,691</td><td>3,041,614,691</td><td>92.19%</td><td>2,897,397,516</td><td>92.95%</td>
     </tr>
     <tr>
       <th>miniMap2</th>
