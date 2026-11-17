@@ -2306,6 +2306,13 @@ int gcOnTheFlyCompute(char *db, char *chrom, int start, int end, int winSize,
  * Values are 0-100 (percent).  Returns count of windows computed and fills
  * retWindows with an allocated array.  Caller must freeMem(*retWindows). */
 {
+/* hChromSeq() of an empty range is an empty sequence in a multi-region space, and the
+ * partial-window loop below would read past it. */
+if (start >= end)
+    {
+    *retWindows = NULL;
+    return 0;
+    }
 struct dnaSeq *seq = hChromSeq(db, chrom, start, end);
 if (seq == NULL)
     {

@@ -168,7 +168,8 @@ struct dnaSeq *multiRegionSpaceDna(char *chainFile, char *sourceTwoBit,
  * sourceTwoBit is passed in rather than looked up from a database name on purpose.
  * In a space the source and the display assembly have the same name, and that name
  * means the display coordinates;  a source read that went looking for its own
- * sequence by that name would get the synthetic answer back.  refs #37788 */
+ * sequence by that name would get the synthetic answer back.
+ * Never returns NULL:  an empty range gives an empty sequence.  refs #37788 */
 
 
 /* ---- Drawing in a space ---- */
