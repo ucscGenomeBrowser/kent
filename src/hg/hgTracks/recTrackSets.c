@@ -19,47 +19,9 @@
 #include "cheapcgi.h"
 #include "cart.h"
 #include "hubConnect.h"
+#include "jsonWrite.h"
+#include "recTrackSets.h"
 
-
-/* Recommended track sets are Special 'curated' sessions, created by browser team, e.g. for clinical users
- *      This is expected to be a very limited number (under 10 ?)
- *      The list references sessions in namedSessionDb table, by userName and sessionName
- *      (unfortunately not required to be unique, so depending on curator to 
- *      just make one (code willl pick the first one)
- */      
-struct recTrackSet
-    {
-    struct recTrackSet *next;
-    char *label;        // short label for display on browser and dialogs
-    char *userName;     // field in named sessions table
-    char *sessionName;  // field in named sessions table (CGI encoded)
-    char *description;  // descriptive phrase or sentence.  Display uses this
-                                // instead of description in session settings to allow
-                                // updating by other than session author (e.g. QA)
-    };
-
-#define REC_TRACK_SETS_FILE  "recTrackSets"
-#define REC_TRACK_SETS_EXT  "tab"
-#define REC_TRACK_SETS_DATA_DIR  "data/recTrackSets"
-
-char *recTrackSetsFile()
-/* Generate path to file specifying menu of recommended track sets.
- *      eg, DOCUMENT_ROOT/data/recTrackSets/recTrackSets.hg19.tab */
-{
-char *root = hDocumentRoot();
-char buf[200];
-safef(buf, sizeof buf, "%s/%s/%s.%s.%s", 
-        root, REC_TRACK_SETS_DATA_DIR, REC_TRACK_SETS_FILE, database, REC_TRACK_SETS_EXT);
-return cloneString(buf);
-}
-
-boolean recTrackSetsEnabled()
-/* Return TRUE if feature is available */
-{
-char *cfgEnabled = cfgOption("browser.recTrackSets");
-return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) &&
-        fileExists(recTrackSetsFile());
-}
 
 boolean recTrackSetsChangeDetectEnabled()
 /* Return TRUE if feature is available, in hgConf */
@@ -70,33 +32,10 @@ if (cfgChanges && (sameString(cfgChanges, "on") || sameString(cfgChanges, "true"
 return FALSE;
 }
 
-struct recTrackSet *loadRecTrackSets()
-/* Read from tab-sep file.  Return list or NULL if no track sets for this database */
-{
-struct recTrackSet *recTrackSet, *recTrackSets = NULL;
-struct lineFile *lf = lineFileOpen(recTrackSetsFile(), TRUE);
-if (!lf)
-    return NULL;
-#define cols 4
-char *row[cols];
-while (lineFileNextRowTab(lf, row, cols))
-    {
-    AllocVar(recTrackSet);
-    recTrackSet->label = cloneString(row[0]);
-    recTrackSet->userName = cloneString(row[1]);
-    recTrackSet->sessionName = cloneString(row[2]);
-    recTrackSet->description = cloneString(row[3]);
-    slAddHead(&recTrackSets, recTrackSet);
-    }
-slReverse(&recTrackSets);
-lineFileClose(&lf);
-return recTrackSets;
-}
-
 int recTrackSetsForDb()
 /* Return number of recommended track sets for this database */
 {
-return slCount(loadRecTrackSets());
+return slCount(loadRecTrackSets(database));
 }
 
 static char *recTrackSetContentsFile(char *sessionName)
@@ -251,9 +190,9 @@ return TRUE;
 boolean hasRecTrackSet(struct cart *cart)
 /* Check if currently loaded session is in the recommended track set */
 {
-if (!recTrackSetsEnabled())
+if (!recTrackSetsEnabled(database))
     return FALSE;
-struct recTrackSet *ts, *recTrackSets = loadRecTrackSets();
+struct recTrackSet *ts, *recTrackSets = loadRecTrackSets(database);
 if (!recTrackSets)
     return FALSE;
 char *session = cartOptionalString(cart, hgsOtherUserSessionName);
@@ -272,9 +211,9 @@ return FALSE;
 void printRecTrackSets()
 /* Create dialog with list of recommended track sets */
 {
-if (!recTrackSetsEnabled())
+if (!recTrackSetsEnabled(database))
     return;
-struct recTrackSet *recTrackSet, *recTrackSets = loadRecTrackSets();
+struct recTrackSet *recTrackSet, *recTrackSets = loadRecTrackSets(database);
 if (!recTrackSets)
     return;
 

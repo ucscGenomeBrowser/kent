@@ -24,7 +24,7 @@ COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrac
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\
 	wiki.o wikiTrack.o imageV2.o extTools.o hicTrack.o heatmap.o dotBracketTrack.o
 
-O = mainMain.o ${COMMONO} 
+O = mainMain.o trackFinder.o ${COMMONO}
 
 export RENDERO = renderMain.o ${COMMONO}
 
@@ -51,6 +51,7 @@ compile: compileMain ${RENDERA}
 compileMain: $O ${MYLIBS}
 	${CC} ${CFLAGS} -o $A $O ${MYLIBS} ${L}
 	cp extTools.ra ${CGI_BIN_DEST}
+	cp ../makeDb/trackDb/trackFacets.ra ${CGI_BIN_DEST}
 
 ${RENDERA}: ${RENDERO}
 	${MAKE} -f makefile.hgRenderTracks ${MAKECMDGOALS}

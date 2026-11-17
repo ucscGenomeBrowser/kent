@@ -30,7 +30,10 @@
 #include "hubPublic.h"
 #include "hubSearchText.h"
 #include "errCatch.h"
-
+#include "jsonWrite.h"
+#include "trackDb.h"
+#include "ra.h"
+#include "htmlColor.h"
 
 #define TRACK_SEARCH_FORM        "trackSearch"
 #define SEARCH_RESULTS_FORM      "searchResults"
@@ -758,7 +761,7 @@ if ((startFrom + MAX_FOUND_TRACKS) < tracksFound)
 }
 
 static void displayFoundTracks(struct cart *cart, struct slRef *tracks, int tracksFound,
-                               enum sortBy sortBy)
+                               enum sortBy sortBy, boolean embedded)
 // Routine for displaying found tracks
 {
 char id[256];
@@ -770,8 +773,10 @@ if (tracksFound < 1)
     }
 else
     {
-    hPrintf("<form action='%s' name='%s' id='%s' method='post'>\n\n",
-            hgTracksName(),SEARCH_RESULTS_FORM,SEARCH_RESULTS_FORM);
+    // In the Find Tracks dialog the results go to the browser page, not the frame
+    hPrintf("<form action='%s' name='%s' id='%s' method='post'%s>\n\n",
+            hgTracksName(),SEARCH_RESULTS_FORM,SEARCH_RESULTS_FORM,
+            embedded ? " target='_top'" : "");
     cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
     int startFrom = 0;
@@ -1018,6 +1023,7 @@ char *groupSearch = cartUsualString(  cart, TRACK_SEARCH_ON_GROUP,ANYLABEL);
 boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search")
                    || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
 boolean includeHubResults = cartUsualBoolean(cart, TRACK_SEARCH_ON_HUBS, TRUE);
+boolean embedded = cgiVarExists(TRACK_SEARCH_EMBED);
 struct sqlConnection *conn = NULL;
 boolean metaDbExists = FALSE;
 if (!isHubTrack(database))
@@ -1070,6 +1076,9 @@ hashFree(&superHash);
 // "(GRCh38&#x2F;hg38)" in the blue bar.
 safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly",
       organism, hFreezeFromDb(database));
+// The Find Tracks dialog has its own title, so the frame drops the menu bar
+if (embedded)
+    hPrintf("<style>#main-menu-whole {display:none;}</style>\n");
 webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<div style='max-width:1080px;'>");
@@ -1078,6 +1087,8 @@ hPrintf("<form action='%s' name='%s' id='%s' method='get'>\n\n",
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 safef(buf, sizeof(buf), "%lu", clock1());
 cgiMakeHiddenVar("hgt_", buf);  // timestamps page to avoid browser cache
+if (embedded)
+    cgiMakeHiddenVar(TRACK_SEARCH_EMBED, "1");
 
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
@@ -1107,8 +1118,9 @@ hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' "
 hPrintf("<input type='button'id='doSTClear1' name='clear' value='Clear' class='clear' "
         "style='font-size:.8em;'>\n");
 jsOnEventById("click", "doSTClear1", "findTracks.clear();");
-hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' "
-        "style='font-size:.8em;'>\n");
+if (!embedded)  // The Find Tracks dialog has its own Cancel
+    hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' "
+            "style='font-size:.8em;'>\n");
 hPrintf("</div>\n");
 
 // Advanced tab
@@ -1188,8 +1200,9 @@ hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' "
 hPrintf("<input type='button' id='doSTClear2' name='clear' value='Clear' class='clear' "
         "style='font-size:.8em;'>\n");
 jsOnEventById("click", "doSTClear2", "findTracks.clear();");
-hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' "
-        "style='font-size:.8em;'>\n");
+if (!embedded)
+    hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' "
+            "style='font-size:.8em;'>\n");
 //hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 hPrintf("</div>\n");
 
@@ -1225,7 +1238,7 @@ if (doSearch)
         if (tracksFound > 1)
             findTracksSort(&tracks,sortBy);
 
-        displayFoundTracks(cart,tracks,tracksFound,sortBy);
+        displayFoundTracks(cart,tracks,tracksFound,sortBy,embedded);
 
         if (measureTiming)
             measureTime("Displayed found tracks");

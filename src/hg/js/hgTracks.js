@@ -4609,6 +4609,37 @@ function reflowVisibleGroup() {
         row.remove();
 }
 
+function addTrackToVisibleGroup(track) {
+/* When a hidden track has been turned on, copy its select and label from its
+ * own group into the visible tracks group */
+    let visibleRows = document.querySelectorAll("tr[id^='visible-']");
+    if (visibleRows.length === 0)
+        return;
+    if (document.querySelector("[id^='visible-'] [data-track=\"" + track + "\"]"))
+        return;
+    let link = document.querySelector("tr:not([id^='visible-']) a.trackLink[data-track=\"" +
+                                      track + "\"]");
+    let cell = link ? link.closest("td") : null;
+    if (!cell)
+        return;
+    let copy = $(cell).clone(true)[0];  // true keeps the vis select's change handler
+    let lastRow = visibleRows[visibleRows.length - 1];
+    // the group's header spans the full width of the grid
+    let header = document.querySelector("th.visibleTracksToggleBar");
+    let columns = header ? header.colSpan : visibleRows[0].cells.length;
+    let filler = lastRow.querySelector("td:not(.trackLabelTd)");
+    if (filler) {
+        filler.replaceWith(copy);
+    } else if (lastRow.cells.length < columns) {
+        lastRow.appendChild(copy);
+    } else {
+        let newRow = lastRow.cloneNode(false);
+        newRow.id = "visible-added-" + track;
+        newRow.appendChild(copy);
+        lastRow.after(newRow);
+    }
+}
+
   ///////////////////////////////////////
  //// rightClick (aka context menu) ////
 ///////////////////////////////////////

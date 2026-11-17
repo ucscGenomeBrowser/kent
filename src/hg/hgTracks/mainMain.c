@@ -29,6 +29,7 @@
 #include "hgConfig.h"
 #include "myVariants.h"
 #include "myVariantsShare.h"
+#include "cartJson.h"
 #include <sys/time.h>
 #include <sys/resource.h>
 
@@ -96,6 +97,13 @@ else if (cfgOptionBooleanDefault("doMyVariants", FALSE)
     myVariantsDownloadCheckParams(cgiString(MYVARIANTS_DOWNLOAD_CGI_VAR));
     cart = cartForSession(hUserCookie(), NULL, NULL);
     myVariantsDownloadApiHandler(cgiString(MYVARIANTS_DOWNLOAD_CGI_VAR));
+    }
+else if (trackFinderEnabled() && cgiVarExists(CARTJSON_COMMAND))
+    {
+    // Track list for the Find Tracks dialog.  Return now so nothing follows the JSON.
+    trackFinderCartJson();
+    cgiExitTime("hgTracks", enteredMainTime);
+    return 0;
     }
 else
     {

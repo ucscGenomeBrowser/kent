@@ -1847,6 +1847,12 @@ void registerTrackHandler(char *name, TrackHandler handler);
 
 void doSearchTracks(struct group *groupList);
 
+boolean trackFinderEnabled();
+/* Return TRUE if hg.conf turns on the Find Tracks dialog. */
+
+void trackFinderCartJson();
+/* Answer the Find Tracks dialog's cartJson request.  The cart is read but never saved. */
+
 boolean superTrackHasVisibleMembers(struct trackDb *tdb);
 
 enum trackVisibility limitedVisFromComposite(struct track *subtrack);
@@ -2147,9 +2153,6 @@ Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg);
 void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height);
-
-boolean recTrackSetsEnabled();
-/* Return TRUE if feature is available */
 
 boolean recTrackSetsChangeDetectEnabled();
 /* Return TRUE if feature is available, in hgConf */

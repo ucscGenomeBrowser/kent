@@ -89,6 +89,7 @@
 #include "myVariants.h"
 #include "quickLift.h"
 #include "snapshotSession.h"
+#include "recTrackSets.h"
 
 //#include "bed3Sources.h"
 
@@ -109,6 +110,8 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
 	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
+             TRACK_SEARCH_EMBED,
+            "hgt.findTracks",
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
             "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",hgsMergeCart,"ctTest",
             "myVarShare", MYVARIANTS_ADD_CGI_VAR, MYVARIANTS_MANAGE_CGI_VAR,
@@ -10873,14 +10876,25 @@ jsonObjectAdd(jsonForClient, "myVariantsDefaultLabel",
     newJsonString(MYVARIANTS_DEFAULT_PROJECT));
 }
 
+boolean trackFinderEnabled()
+/* Return TRUE if hg.conf turns on the Find Tracks dialog. */
+{
+return cfgOptionBooleanDefault("trackFinder", FALSE);
+}
+
 void printShortcutButtons(struct cart *cart, bool hasCustomTracks, bool revCmplDisp, bool multiRegionButtonTop)
 /* Display bottom control panel. */
 {
-if (isSearchTracksSupported(database,cart))
+if (trackFinderEnabled())
+    {
+    cgiMakeOnClickButtonWithMsg("hgt.findTracks",
+        "if (typeof trackSearchFacets !== 'undefined') trackSearchFacets.openDialog();",
+        "Find Tracks", "Open track discovery panel to find and enable tracks");
+    }
+else if (isSearchTracksSupported(database,cart))
     {
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     }
-
 
 hPrintf("&nbsp;");
 // Not a submit button, because this is not a CGI function, it only calls Javascript function
@@ -11067,6 +11081,64 @@ hDisconnectCentral(&conn);
 return email;
 }
 
+static void updateRecentTracks()
+/* Put tracks turned on by this request at the front of the hgt.recentTracks cart
+ * list that the Find Tracks dialog shows.  Older tracks are dropped once the list
+ * has 50. */
+{
+struct hashEl *el, *elList = hashElListHash(oldVars);
+struct dyString *recent = dyStringNew(256);
+char *existing = cartOptionalString(cart, "hgt.recentTracks");
+struct hash *seen = hashNew(6);
+boolean changed = FALSE;
+
+for (el = elList; el != NULL; el = el->next)
+    {
+    char *trackName = el->name;
+    char *oldVis = (char *)el->val;
+    char *newVis = cartOptionalString(cart, trackName);
+    if (trackHash == NULL || hashLookup(trackHash, trackName) == NULL)
+        continue;
+    boolean wasHidden = (oldVis == NULL || sameString(oldVis, "hide")
+                         || sameString(oldVis, CART_VAR_EMPTY));
+    boolean nowVisible = (newVis != NULL && !sameString(newVis, "hide"));
+    if (wasHidden && nowVisible && !hashLookup(seen, trackName))
+        {
+        hashAdd(seen, trackName, NULL);
+        if (dyStringLen(recent) > 0)
+            dyStringAppendC(recent, ',');
+        dyStringAppend(recent, trackName);
+        changed = TRUE;
+        }
+    }
+
+if (existing)
+    {
+    int count = hashNumEntries(seen);
+    struct slName *prev = slNameListFromComma(existing);
+    struct slName *n;
+    for (n = prev; n != NULL && count < 50; n = n->next)
+        {
+        if (!hashLookup(seen, n->name))
+            {
+            hashAdd(seen, n->name, NULL);
+            if (dyStringLen(recent) > 0)
+                dyStringAppendC(recent, ',');
+            dyStringAppend(recent, n->name);
+            count++;
+            }
+        }
+    slNameFreeList(&prev);
+    }
+
+if (changed)
+    cartSetString(cart, "hgt.recentTracks", recent->string);
+
+hashFree(&seen);
+dyStringFree(&recent);
+hashElFreeList(&elList);
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -11142,6 +11214,9 @@ if (cgiVarExists("hgt.defaultImgOrder"))
     safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
     cartRemoveLike(cart, wildCard);
     }
+
+if (trackFinderEnabled())
+    updateRecentTracks();
 
 // Subtrack settings must be removed when composite/view settings are updated
 parentChildCartCleanup(trackList,cart,oldVars);
@@ -13479,7 +13554,7 @@ boolean gotExtTools = extToolsEnabled();
 setupHotkeys(gotExtTools);
 if (gotExtTools)
     printExtMenuData(chromName);
-if (recTrackSetsEnabled())
+if (recTrackSetsEnabled(database))
     printRecTrackSets();
 if (exportedDataHubsEnabled())
     printExportedDataHubs(database);
@@ -14008,7 +14083,13 @@ dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 
 // buttons
 dyStringPrintf(dy,"Mousetrap.bind('c f', function() { gotoConfigurePage() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').submit().click() }); \n");
+if (trackFinderEnabled())
+    {
+    dyStringPrintf(dy,"Mousetrap.bind('t s', function() { if (typeof trackSearchFacets !== 'undefined') trackSearchFacets.openDialog('advanced'); }); \n");
+    dyStringPrintf(dy,"Mousetrap.bind('f t', function() { if (typeof trackSearchFacets !== 'undefined') trackSearchFacets.openDialog(); }); \n");
+    }
+else
+    dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('#defaultTracksMenuLink')[0].click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('#defaultTrackOrderMenuLink')[0].click() }); \n");
@@ -14453,6 +14534,15 @@ if(!trackImgOnly)
     jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
     jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
+    if (trackFinderEnabled())
+        {
+        jsIncludeFile("dataTables-2.2.2.min.js", NULL);
+        jsIncludeFile("dataTables.select-3.0.0.min.js", NULL);
+        webIncludeResourceFile("dataTables-2.2.2.min.css");
+        webIncludeResourceFile("dataTables.select-3.0.0.min.css");
+        webIncludeResourceFile("facetedComposite.css");
+        jsIncludeFile("trackSearchFacets.js", NULL);
+        }
     jsIncludeFile("hui.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
     jsIncludeFile("myVariantsBlocks.js", NULL);
@@ -14510,6 +14600,26 @@ if(!trackImgOnly)
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
     hPrintf("<div id='hgTracksDialog' style='display: none'></div>\n");
+    if (!searching && trackFinderEnabled())
+        {
+        boolean oldSearch = isSearchTracksSupported(database, cart);
+        hPrintf("<div id='trackDiscoveryDialog' style='display: none'>"
+                "<div id='discoveryTabs'>"
+                "<ul><li><a href='#discoverySearchTab'>Search</a></li>"
+                "<li><a href='#discoveryActiveTab'>Visible Tracks</a></li>");
+        if (oldSearch)
+            hPrintf("<li><a href='#discoveryAdvancedTab'>Advanced Search</a></li>");
+        hPrintf("</ul>"
+                "<div id='discoverySearchTab'>"
+                "<div id='facetSearchContainer'></div>"
+                "</div>"
+                "<div id='discoveryActiveTab'>"
+                "<div id='activeTracksContainer'></div>"
+                "</div>");
+        if (oldSearch)
+            hPrintf("<div id='discoveryAdvancedTab'></div>");
+        hPrintf("</div></div>\n");
+        }
     if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE))
         {
         jsIncludeFile("hgc.js", NULL);
