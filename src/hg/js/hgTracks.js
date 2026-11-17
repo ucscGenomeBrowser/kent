@@ -6911,15 +6911,23 @@ function addKeyboardHelpEntries() {
 // A function for the keyboard shortcut:
 // View DNA
 function gotoGetDnaPage() {
+    // hgc's l= is 0-based.  hgTracks.winStart already is; the position box and
+    // nonVirtPosition are 1-based, as a user reads them, so take one off those.
     var position = hgTracks.chromName+":"+hgTracks.winStart+"-"+hgTracks.winEnd;
-    if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") === 0)) {
+    var oneBased = false;
+    if (hgTracks.virtualSingleChrom && (hgTracks.chromName.search("multi") === 0)) {
         position = genomePos.get().replace(/,/g,'');
-    } else if (hgTracks.windows && hgTracks.nonVirtPosition) {
+        oneBased = true;
+    } else if ((hgTracks.windows || hgTracks.inMultiRegionSpace) && hgTracks.nonVirtPosition) {
+        // a multi-region space is drawn on "multi", which hgc has no sequence for, so
+        // ask for the source position the position box shows.  refs #37788
         position = hgTracks.nonVirtPosition;
+        oneBased = true;
     }
     var pos = parsePosition(position);
     if (pos) {
-        var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+pos.chrom+"&l="+pos.start+"&r="+pos.end+"&db="+getDb();
+        var start = oneBased ? pos.start - 1 : pos.start;
+        var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+pos.chrom+"&l="+start+"&r="+pos.end+"&db="+getDb();
         window.location.href = url;
     }
     return false;
