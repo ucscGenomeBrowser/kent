@@ -14,7 +14,7 @@ searchIndex name
 searchTrix /gbdb/hg38/mirBaseV22_1/mirBase.ix
 skipEmptyFields on
 noScoreFilter on
-skipFields sequence,armPositions
+skipFields mirbaseId,sequence,armPositions
 sepFields mature5p,mature3p,mfe
 dotBracketField dotBracket
 detailsScript.rnaStructure.dotBracket {"exportFields":["sequence","armPositions"],"title":"Secondary structure","colors":{"5p":"#E69F00","3p":"#56B4E9"},"labels":{"5p":"5p mature","3p":"3p mature"}}

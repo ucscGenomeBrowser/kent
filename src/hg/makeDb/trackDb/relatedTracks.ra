@@ -113,11 +113,12 @@ mm39 knownGeneArchive knownGene View the latest GENCODE Genes version
 mm39 mirGeneDbV3_0 mirBaseV22_1 All registered microRNA precursors, including those not in MirGeneDB
 mm39 mirBaseV22_1 mirGeneDbV3_0 Curated microRNA genes with their dominant and star arms
 
-# mm10 ENCODE4 Regulation:
-mm10 encode4Reg encode3Reg The previous version of this track
-
+# mm10 MirGeneDB, miRBase:
 mm10 mirGeneDbV3_0 mirBaseV22_1 All registered microRNA precursors, including those not in MirGeneDB
 mm10 mirBaseV22_1 mirGeneDbV3_0 Curated microRNA genes with their dominant and star arms
+
+# mm10 ENCODE4 Regulation:
+mm10 encode4Reg encode3Reg The previous version of this track
 mm10 encode3Reg encode4Reg The newer version of this track
 mm10 ~encode4Reg cCREs Related ENCODE4 data
 mm10 ~mouseDevTimecourse encode3Reg Related ENCODE track
