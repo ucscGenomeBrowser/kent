@@ -392,7 +392,9 @@ if (cr->chromSize < 0)
 if (cr->count >= cr->alloc)
     {
     int newAlloc = (cr->alloc == 0 ? 16 : 2 * cr->alloc);
-    ExpandArray(cr->ranges, cr->alloc, newAlloc);
+    /* Unlike ExpandArray, don't zero the new half: each range is written before it is
+     * read, and pages never written stay out of memory until they are needed. */
+    cr->ranges = needLargeMemResize(cr->ranges, newAlloc * sizeof(cr->ranges[0]));
     cr->alloc = newAlloc;
     }
 struct fbRange *r = &cr->ranges[cr->count++];
@@ -470,12 +472,17 @@ return x > INT_MAX ? INT_MAX : x;
 }
 
 static void readBedRanges(struct fbFileRanges *fr, char *fileName)
-/* Add the extent of every bed in the file, or its blocks with -countBlocks. */
+/* Add the extent of every bed in the file, or its blocks with -countBlocks.  Each bed
+ * is parsed as bedLoadNAllChrom() would, but freed at once instead of kept in a list. */
 {
 unsigned numFields = howManyFields(fileName);
-struct bed *bed, *beds = bedLoadNAllChrom(fileName, numFields > 12 ? 12 : numFields, NULL);
-for (bed = beds; bed != NULL; bed = bed->next)
+if (numFields > 12)
+    numFields = 12;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[numFields];
+while (lineFileRow(lf, row))
     {
+    struct bed *bed = bedLoadN(row, numFields);
     if (countBlocks && (bed->blockCount > 0))
 	{
 	int ii;
@@ -487,8 +494,9 @@ for (bed = beds; bed != NULL; bed = bed->next)
 	}
     else if (bed->chromEnd > bed->chromStart)	/* An empty item sets no bits and is not checked. */
 	addRange(fr, bed->chrom, clampToInt(bed->chromStart), clampToInt(bed->chromEnd), 0, 0);
+    bedFree(&bed);
     }
-bedFreeList(&beds);
+lineFileClose(&lf);
 }
 
 static struct fbFileRanges *fileRangesFor(char *fileName,
