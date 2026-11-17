@@ -393,7 +393,8 @@ struct genePredExt  *genePredFromBigGenePredRow(char **row);
 struct trackDb;
 struct genePred *genePredForTrackItem(char *db, struct trackDb *tdb, char *name, char *chrom);
 /* Load one item of a genePred or bigGenePred track by name, or NULL if there is no such
- * item, the track is of another type, or its file cannot be read.  The copy on chrom is
+ * item, the track is of another type, or its bigGenePred file cannot be read (a SQL
+ * error on a genePred table aborts).  The copy on chrom is
  * taken when there is one, and otherwise the first copy.  Free with genePredFree(). */
 
 /* options to genePredTranslate */

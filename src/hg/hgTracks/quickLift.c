@@ -49,8 +49,9 @@ if (highlightColors == NULL)
 
 
 static Color muteColor(Color color, int pct)
-/* Fade a triangle color pct percent of the way to white.  The faded color stays opaque,
- * so triangles that overlap each other do not stack back up to the full color. */
+/* Fade a triangle color pct percent of the way to white.  The faded color is opaque,
+ * even when hg.conf gave the color an alpha below 255, so triangles that overlap each
+ * other do not stack back up to the full color. */
 {
 int r = COLOR_32_RED(color);
 int g = COLOR_32_GREEN(color);
@@ -58,7 +59,7 @@ int b = COLOR_32_BLUE(color);
 r += (255 - r) * pct / 100;
 g += (255 - g) * pct / 100;
 b += (255 - b) * pct / 100;
-return MAKECOLOR_32_A(r, g, b, COLOR_32_ALPHA(color));
+return MAKECOLOR_32(r, g, b);
 }
 
 #define QUICKLIFT_MAX_MUTE_PCT 90

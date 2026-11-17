@@ -149,9 +149,11 @@ struct slName *multiRegionSpaceChromNames(char *chainFile);
 
 char *multiRegionSpaceSoleChrom(char *chainFile);
 /* The name of the one synthetic sequence this space has, or NULL for an empty chain.
- * A space always has exactly one:  regions from a single source sequence lay into a
- * sequence named after it, and regions from several lay into one called "multi",
- * since a browser can only display one sequence at a time.  Do not free the result. */
+ * A space built by regionsToChain has exactly one:  regions from a single source
+ * sequence lay into a sequence named after it, and regions from several lay into one
+ * called "multi", since a browser can only display one sequence at a time.  This does
+ * not check that:  given a chain with more than one, it returns the first name.  Do not
+ * free the result. */
 
 int multiRegionSpaceChromSize(char *chainFile, char *chrom);
 /* The size of one synthetic sequence, or -1 if there is no such sequence. */
