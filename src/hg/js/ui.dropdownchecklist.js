@@ -464,7 +464,7 @@
             var text = option.html();
             var value = option.val();
             var optCss = option.attr('style');
-            var selected = option.attr("selected");
+            var selected = option.prop("selected");
 			var disabled = (forceDisabled || option.attr("disabled"));
 			// Use the same tab index as the selector replacement
 			var tabIndex = self.controlSelector.attr("tabindex");
@@ -479,7 +479,7 @@
             var selectOptions = sourceSelect.get(0).options;
             var allCheckboxes = dropWrapper.find("input.active");
             if (options.firstItemChecksAll) {
-            	if ((senderCheckbox == null) && $(selectOptions[0]).attr("selected") ) {
+            	if ((senderCheckbox == null) && $(selectOptions[0]).prop("selected") ) {
             		// Initialization call with first item active so force all to be active
                     allCheckboxes.prop("checked", true);
                 } else if ((senderCheckbox != null) && (senderCheckbox.attr("index") == 0)) {
@@ -505,7 +505,7 @@
             // do the actual synch with the source select
             allCheckboxes = dropWrapper.find("input");
             allCheckboxes.each(function(index) {
-                $(selectOptions[index]).attr("selected", $(this).prop("checked"));
+                $(selectOptions[index]).prop("selected", $(this).prop("checked"));
             });
             // update the text shown in the control
             self._updateControlText();
@@ -544,14 +544,14 @@
                 } catch(ex) {
                 	alert( 'textFormatFunction failed: ' + ex );
                 }
-            } else if (firstItemChecksAll && (firstOption != null) && firstOption.attr("selected")) {
+            } else if (firstItemChecksAll && (firstOption != null) && firstOption.prop("selected")) {
                 // just set the text from the first item
                 text = firstOption.html();
             } else {
                 // concatenate the text from the checked items
                 text = "";
                 selectOptions.each(function() {
-                    if ($(this).attr("selected")) {
+                    if ($(this).prop("selected")) {
                         if ( text != "" ) { text += ", "; }
                         /* NOTE use of .html versus .text, which can screw up ampersands for IE */
                         var optCss = $(this).attr('style');
@@ -832,7 +832,7 @@
 				var opt = $(this);
 				var disabled = opt.attr("disabled");
                 if (opt.is("option")) {
-                	var selected = opt.attr("selected");
+                	var selected = opt.prop("selected");
                 	var anItem = $(allCheckBoxes[optionCount]);
                     self._refreshOption(anItem, disabled, selected);
                     optionCount += 1;
@@ -846,7 +846,7 @@
 					opt.children("option").each(function() {
 		                var subopt = $(this);
 						var subdisabled = (disabled || subopt.attr("disabled"));
-                		var selected = subopt.attr("selected");
+                		var selected = subopt.prop("selected");
                 		var subItem = $(allCheckBoxes[optionCount]);
 		                self._refreshOption(subItem, subdisabled, selected );
 		                optionCount += 1;

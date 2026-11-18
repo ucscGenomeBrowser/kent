@@ -1978,6 +1978,15 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("trackFinder", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+          ticket="33217",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/hgTracks/hgTracks.c.  Came in at b41624f97e8, Track "
+               "finder: Find Tracks dialog in hgTracks behind the trackFinder "
+               "hg.conf setting, with the old track search as an Advanced "
+               "Search tab, recommended track set loading moved to hg/lib, "
+               "refs #33217.  Needs a description and a gate or knob call."),
         h("browser.mafFastCodons", "flag", "hg/hgTracks/wigMafTrack.c",
           default="FALSE", ticket="38756",
           note="Written down by --auto-register, not yet reviewed by a "

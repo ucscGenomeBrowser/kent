@@ -120,14 +120,9 @@ var ddcl = {
         }
         catch (err) {} // OK if filterCompositeExcludeOptions is not defined.
 
-        // Show only first as selected if it is selected
-        if (allCheckboxes[0].checked === true) {
-            allCheckboxes.each(function(index) {
-                if (index > 0) {
-                    $(this).prop('checked',false);
-                }
-            });
-        }
+        // When "All" is checked, all other items stay checked too, so a click on one item
+        // removes just that item. This code used to uncheck all items except "All" here, but
+        // that stopped working with jQuery 3 in 2024 and users are used to the current behavior.
 
 
         var hideCount = 0;
