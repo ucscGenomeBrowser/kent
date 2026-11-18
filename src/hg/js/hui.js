@@ -1718,119 +1718,88 @@ function myVariantsShareApiUrl(action, params) {
     return url;
 }
 
+function myVariantsShareRender(content, s) {
+    // Show the track's one share link: the URL with a Copy link, a View/Edit
+    // dropdown, the date it was made, and Revoke.
+    let p = document.createElement("p");
+    p.appendChild(document.createTextNode("This track's share link: "));
+    let urlInput = document.createElement("input");
+    urlInput.type = "text";
+    urlInput.readOnly = true;
+    urlInput.value = myVariantsShareUrl(s.shareToken);
+    urlInput.size = urlInput.value.length;
+    urlInput.style.maxWidth = "100%";
+    p.appendChild(urlInput);
+    let copyLink = document.createElement("a");
+    copyLink.href = "#";
+    copyLink.textContent = "Copy";
+    copyLink.style.marginLeft = "4px";
+    copyLink.addEventListener("click", function(e) {
+        e.preventDefault();
+        urlInput.select();
+        navigator.clipboard.writeText(urlInput.value);
+    });
+    p.appendChild(copyLink);
+    content.appendChild(p);
+
+    // Applies on change, to everyone who already has the link.
+    p = document.createElement("p");
+    p.appendChild(document.createTextNode("Anyone with the link can "));
+    let permSel = document.createElement("select");
+    permSel.title = "Changes what everyone who already has this link can do";
+    [["0", "view"], ["1", "view and edit"]].forEach(function(opt) {
+        let o = document.createElement("option");
+        o.value = opt[0];
+        o.textContent = opt[1];
+        permSel.appendChild(o);
+    });
+    permSel.value = String(s.permission);
+    permSel.addEventListener("change", function() {
+        myVariantsShareSetPermission(s.shareToken, this.value);
+    });
+    p.appendChild(permSel);
+    p.appendChild(document.createTextNode(" this track. Link made " + s.createdAt + ". "));
+    let revokeLink = document.createElement("a");
+    revokeLink.href = "#";
+    revokeLink.className = "shareRevokeLink";
+    revokeLink.textContent = "Revoke";
+    revokeLink.addEventListener("click", function(e) {
+        e.preventDefault();
+        if (!confirm('Revoke the share link for this track?\n\n' +
+                     'Everyone who has this link loses access to the track. ' +
+                     'This cannot be undone; a new link would be a different URL.'))
+            return;
+        myVariantsShareRevoke(s.shareToken);
+    });
+    p.appendChild(revokeLink);
+    content.appendChild(p);
+}
+
 function myVariantsShareLoad() {
-    let content = document.getElementById("shareListContent");
-    if (!content) return;
+    // Show this track's share link if it has one, otherwise the create controls.
+    let content = document.getElementById("shareCurrent");
+    let createSection = document.getElementById("shareCreateSection");
+    let trackField = document.getElementById("shareTrackName");
+    if (!content || !createSection || !trackField) return;
     content.textContent = "Loading...";
-    fetch(myVariantsShareApiUrl("getShares", {}), { credentials: "same-origin" })
+    fetch(myVariantsShareApiUrl("getShare", { track: trackField.value }),
+          { credentials: "same-origin" })
     .then(function(response) { return response.json(); })
     .then(function(data) {
-        // Build the share list with DOM APIs (textContent everywhere) so that
-        // an owner-controlled field like the project name cannot inject markup
-        // or script.
         while (content.firstChild) content.removeChild(content.firstChild);
         if (data.error) {
             content.textContent = "Error: " + data.error;
             return;
         }
-        if (!data.shares || data.shares.length === 0) {
-            let em = document.createElement("em");
-            em.textContent = "No active shares";
-            content.appendChild(em);
-            return;
+        if (data.share) {
+            createSection.style.display = "none";
+            myVariantsShareRender(content, data.share);
+        } else {
+            createSection.style.display = "block";
         }
-        let table = document.createElement("table");
-        table.style.width = "100%";
-        table.style.borderCollapse = "collapse";
-        table.style.fontSize = "0.9em";
-        let header = document.createElement("tr");
-        header.style.borderBottom = "1px solid #ccc";
-        // The list covers every project, not just the one whose page this is,
-        // so each row has to name its track.
-        ["Track", "Link", "Permission", "Created", ""].forEach(function(label) {
-            let th = document.createElement("th");
-            th.style.textAlign = "left";
-            th.textContent = label;
-            header.appendChild(th);
-        });
-        table.appendChild(header);
-        data.shares.forEach(function(s) {
-            let tr = document.createElement("tr");
-            tr.style.borderBottom = "1px solid #eee";
-
-            // Track (plain text)
-            let projTd = document.createElement("td");
-            projTd.textContent = s.project ? s.project : "";
-            tr.appendChild(projTd);
-
-            // The link itself, so it can be copied again later
-            let urlTd = document.createElement("td");
-            let urlInput = document.createElement("input");
-            urlInput.type = "text";
-            urlInput.readOnly = true;
-            urlInput.style.width = "220px";
-            urlInput.value = myVariantsShareUrl(s.shareToken);
-            urlTd.appendChild(urlInput);
-            let copyLink = document.createElement("a");
-            copyLink.href = "#";
-            copyLink.textContent = "Copy";
-            copyLink.style.marginLeft = "4px";
-            copyLink.addEventListener("click", function(e) {
-                e.preventDefault();
-                urlInput.select();
-                navigator.clipboard.writeText(urlInput.value);
-            });
-            urlTd.appendChild(copyLink);
-            tr.appendChild(urlTd);
-
-            // Permission: a View/Edit dropdown that applies immediately on
-            // change.  There is one link per track, so this changes what
-            // everyone already holding that link can do.
-            let permTd = document.createElement("td");
-            let permSel = document.createElement("select");
-            permSel.dataset.token = s.shareToken;
-            permSel.title = "Changes what everyone who already has this link can do";
-            [["0", "Can view"], ["1", "Can edit"]].forEach(function(opt) {
-                let o = document.createElement("option");
-                o.value = opt[0];
-                o.textContent = opt[1];
-                permSel.appendChild(o);
-            });
-            permSel.value = String(s.permission);
-            permSel.addEventListener("change", function() {
-                myVariantsShareSetPermission(this.dataset.token, this.value);
-            });
-            permTd.appendChild(permSel);
-            tr.appendChild(permTd);
-
-            let createdTd = document.createElement("td");
-            createdTd.textContent = s.createdAt;
-            tr.appendChild(createdTd);
-
-            let actionTd = document.createElement("td");
-            let revokeLink = document.createElement("a");
-            revokeLink.href = "#";
-            revokeLink.className = "shareRevokeLink";
-            revokeLink.dataset.token = s.shareToken;
-            revokeLink.textContent = "Revoke";
-            revokeLink.addEventListener("click", function(e) {
-                e.preventDefault();
-                // The link stops working for everyone who has it, and a new one
-                // would be a different URL.
-                if (!confirm('Revoke the share link for "' + s.project + '"?\n\n' +
-                             'Everyone who has this link loses access to the track. ' +
-                             'This cannot be undone; a new link would be a different URL.'))
-                    return;
-                myVariantsShareRevoke(this.dataset.token);
-            });
-            actionTd.appendChild(revokeLink);
-            tr.appendChild(actionTd);
-            table.appendChild(tr);
-        });
-        content.appendChild(table);
     })
     .catch(function(err) {
-        content.textContent = "Error loading shares: " + err.message;
+        content.textContent = "Error loading the share link: " + err.message;
     });
 }
 
@@ -1860,8 +1829,6 @@ function myVariantsShareCreate() {
             warn("Error creating share: " + data.error);
             return;
         }
-        document.getElementById("shareUrlField").value = myVariantsShareUrl(data.token);
-        document.getElementById("shareResult").style.display = "block";
         myVariantsShareLoad();
     })
     .catch(function(err) {
@@ -1902,17 +1869,9 @@ function myVariantsShareSetPermission(token, permission) {
 }
 
 function myVariantsShareInit() {
-    // Wire up the create/copy buttons and load existing shares
+    // Wire up the create button and load this track's share link
     let createBtn = document.getElementById("shareCreateBtn");
     if (!createBtn) return;
     createBtn.addEventListener("click", myVariantsShareCreate);
-    let copyBtn = document.getElementById("shareCopyBtn");
-    if (copyBtn) {
-        copyBtn.addEventListener("click", function() {
-            let urlField = document.getElementById("shareUrlField");
-            urlField.select();
-            navigator.clipboard.writeText(urlField.value);
-        });
-    }
     myVariantsShareLoad();
 }

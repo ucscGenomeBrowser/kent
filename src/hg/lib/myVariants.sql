@@ -18,8 +18,9 @@ CREATE TABLE myVariants (
     ref varchar(255) not null,       # reference allele
     alt varchar(255) not null,       # alternate allele
     mouseover varchar(255) not null, # short mouseover text for hover display
-    itemType varchar(16) not null default 'snv',  # transcript|snv|cnv
-    cnvType varchar(32) not null default '',      # gnomAD term, empty for snv/transcript
+    itemType varchar(16) not null default 'snv',  # transcript|snv|cnv|regulatory|primer|other
+    subType varchar(32) not null default '',      # kind of cnv, regulatory element or primer
+    exonFrames longblob not null,    # reading frame of each block, empty unless a coding transcript
     id int auto_increment,           # Unique ID for item
               #Indices
     PRIMARY KEY(id),
