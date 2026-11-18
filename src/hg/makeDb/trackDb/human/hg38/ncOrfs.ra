@@ -35,7 +35,7 @@ itemTypeLabel ORF
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    mouseOver <b>$name</b> in <b>${geneName2}</b> ($geneType)<br><b>Kozak</b>: $kozakStrength (TE $kozakTE)<br><b>Replicated</b>: $replicated<br><b>Peptidein</b>: $isPeptidein<br><b>HLA tier</b>: $hlaFinalTier<br><b>HLA peptides</b>: $hlaNPeptides
+    mouseOver <b>$name</b> in <b>${geneName2}</b> ($geneType)<br><b>Kozak</b>: $kozakStrength (TE $kozakTE)<br><b>Replicated</b>: $replicated<br><b>Peptidein</b>: $isPeptidein<br><b>HLA tier</b>: $hlaFinalTier<br><b>HLA peptides</b>: $hlaNPeptides<br><b>Non-HLA tier</b>: $nonHlaFinalTier<br><b>Non-HLA peptides</b>: $nonHlaNPeptides
     filterValues.startCodon ATG,other
     filterType.startCodon multipleListOr
     filterLabel.startCodon Start codon read from genome
