@@ -77,6 +77,9 @@ CONFIG = {
     'MODEL_DRAFT_FALLBACK': 'sonnet',
     'ASK_TIMEOUT': 180,          # seconds per claude -p call
     'CALL_CAP': 60,              # claude -p calls per run before the run stops and alerts
+    # A new ticket's draft waits this long after the email arrived, and is skipped if
+    # staff have replied in the thread by then (Lou, 2026-11-18).
+    'DRAFT_DELAY_MINUTES': 15,
 
     'LOCK_STALE_SECONDS': 2 * 3600,
     'ALERT_REPEAT_SECONDS': 24 * 3600,
@@ -230,7 +233,9 @@ create table if not exists messages (
     observedAt text,
     moderationDone text,            -- live: 'approved' or 'held', once done
     writtenTicket integer,          -- live: the ticket this message was filed on, once done
-    writeAttempts integer default 0
+    writeAttempts integer default 0,
+    draftState text,                -- 'due', then 'done', 'skipped' or 'failed'
+    draftInput text                 -- JSON: what the draft needs once it is due
 );
 create table if not exists threads (
     gmailThreadId text primary key,
@@ -265,7 +270,8 @@ def openState(stateDir):
                           ('oldAction', 'text'), ('oldTicketId', 'integer'),
                           ('oldReopened', 'integer'), ('oldRef', 'text'),
                           ('observedAt', 'text'), ('moderationDone', 'text'),
-                          ('writtenTicket', 'integer'), ('writeAttempts', 'integer default 0')):
+                          ('writtenTicket', 'integer'), ('writeAttempts', 'integer default 0'),
+                          ('draftState', 'text'), ('draftInput', 'text')):
         if column not in have:
             conn.execute(f"alter table messages add column {column} {ctype}")
     conn.commit()
@@ -1436,6 +1442,43 @@ def decideAction(rec, verdict, facts):
     return act
 
 
+SAME_NOTE_HOURS = 24        # how far apart a staff note and its emailed copy can be
+SAME_NOTE_SHARE = 0.8       # share of the email's words that must be in the note
+
+
+def staffNoteRepeat(ticketId, login, body, receivedAt):
+    """The note number of a note this staff member posted on the ticket within
+    SAME_NOTE_HOURS of the email that already holds most of the email's text, or None.
+
+    Staff often paste a reply into the ticket and email the same text. The email is
+    then posted as a pointer to that note, not as a second copy (Lou, 2026-11-18).
+    Only the sender's own notes count, so nothing anyone else wrote is ever hidden.
+    The team's standard closing ("I hope this is helpful. ...") and a final name line
+    are often in the email and not the note, so they are set aside before comparing;
+    any other text that is only in the email still makes it a full post."""
+    paras = [p for p in re.split(r'\n\s*\n', (body or '').strip()) if p.strip()]
+    if paras and len(paras[-1].split()) <= 4:
+        paras.pop()
+    paras = [p for p in paras if not re.match(r'\s*I hope this (is|was) helpful', p, re.I)]
+    words = re.findall(r'[a-z0-9]+', '\n'.join(paras).lower())
+    if len(words) < 8:
+        return None
+    lo, hi = toDbTime(receivedAt, -SAME_NOTE_HOURS), toDbTime(receivedAt, SAME_NOTE_HOURS)
+    rows = dbQuery("select j.id, j.notes, j.created_on, u.login from journals j "
+                   "join users u on u.id=j.user_id where j.journalized_id=%s order by j.id",
+                   (ticketId,))
+    import difflib
+    for n, j in enumerate(rows, 1):     # Redmine numbers every journal, notes or not
+        if j['login'] != login or not j['notes'] or not lo <= str(j['created_on']) <= hi:
+            continue
+        noteWords = re.findall(r'[a-z0-9]+', j['notes'].lower())
+        blocks = difflib.SequenceMatcher(None, words, noteWords, autojunk=False) \
+            .get_matching_blocks()
+        if sum(b.size for b in blocks) >= SAME_NOTE_SHARE * len(words):
+            return n
+    return None
+
+
 def stage1(conn, rec, facts):
     """Classify one message, decide its action, and log both."""
     matchedSubject = None
@@ -1459,6 +1502,13 @@ def stage1(conn, rec, facts):
     if not facts['ticketId'] and verdict['disposition'] not in NOT_FILED:
         facts = subjectMatchStage(conn, rec, verdict, facts)
     act = decideAction(rec, verdict, facts)
+    if facts.get('staffLogin') and facts['ticketId'] and act.get('render'):
+        n = staffNoteRepeat(facts['ticketId'], facts['staffLogin'], verdict['cleanBodyTextile'],
+                            rec['receivedAt'])
+        if n:
+            act['sameAsNote'] = n
+            act['render'] = (f"--- New Email Update ---\n\nFrom: {rec['fromAddr']}\n\n"
+                             f"Sent by email, same text as \"note #{n}\":#note-{n}.")
     if act['reopen'].startswith('Stage 3'):
         reopenStage(rec, verdict, facts, act)
     if verdict['hubName'] or verdict['hubUrl']:
@@ -2185,12 +2235,13 @@ def loadPlaybooks(names):
 
 
 def staffAlreadyAnswered(conn, rec):
-    """True if someone on an active Redmine account wrote in this thread earlier.
-    A thread that becomes a new ticket after staff replied needs no draft (1c #8)."""
+    """True if someone on an active Redmine account has written in this thread, before
+    or after this message. A thread staff already answered needs no draft (1c #8); the
+    draft waits DRAFT_DELAY_MINUTES so a quick staff reply is seen here."""
     return conn.execute(
         "select 1 from messages m join accounts a on a.address=m.fromAddr "
-        "where m.gmailThreadId=? and m.receivedAt<? limit 1",
-        (rec['gmailThreadId'], rec['receivedAt'])).fetchone() is not None
+        "where m.gmailThreadId=? and m.messageId<>? limit 1",
+        (rec['gmailThreadId'], rec['messageId'])).fetchone() is not None
 
 
 def relatedTicketsBlock(stateDir, ticketIds):
@@ -2204,6 +2255,51 @@ def relatedTicketsBlock(stateDir, ticketIds):
         lines.append(f"* #{tid} {row[0] if row else ''}".rstrip())
     idx.close()
     return "\n\n*Related RM tickets:*\n" + '\n'.join(lines)
+
+
+def draftWanted(conn, rec, verdict, act):
+    """True if this message's new ticket gets a draft, once the draft is due: a
+    question or reply that opens a ticket, from someone not on staff."""
+    return (INDEX_OK and verdict['disposition'] in DRAFTED
+            and act.get('render', '').startswith('*Summary:*')
+            and not staffLogin(conn, rec['fromAddr']))
+
+
+def runDueDrafts(conn):
+    """Write the drafts that have waited DRAFT_DELAY_MINUTES, oldest first. Live, the
+    draft goes on the ticket the email was filed on; a draft whose ticket is not filed
+    yet waits for a later run. A usage limit leaves the rest due for the next run."""
+    if not INDEX_OK:
+        return 0
+    cutoff = (datetime.now(timezone.utc) - timedelta(minutes=CONFIG['DRAFT_DELAY_MINUTES'])
+              ).isoformat(timespec='seconds')
+    rows = conn.execute("select messageId, draftInput, writtenTicket from messages "
+                        "where draftState='due' and receivedAt<=? order by receivedAt",
+                        (cutoff,)).fetchall()
+    done = 0
+    for messageId, draftInput, ticketId in rows:
+        if not SHADOW and not ticketId:
+            continue
+        inp = json.loads(draftInput)
+        rec, verdict, act = inp['rec'], inp['verdict'], {'render': '*Summary:*'}
+        outcome = draftStage(conn, STATE_DIR, rec, verdict, act) or 'skipped'
+        state = 'done' if outcome.startswith('drafted') else \
+            'failed' if outcome.startswith('failed') else 'skipped'
+        if state == 'done' and not SHADOW:
+            try:
+                # Checked again just before posting, so a crash after a post never doubles it.
+                if not dbQuery("select 1 from journals where journalized_id=%s and notes like %s",
+                               (ticketId, '%--- AI Suggested Response (Draft) ---%')):
+                    postNote(ticketId, act['_draftPost'])
+                logWrite(rec, 'draft', True, ticketId=ticketId)
+            except WriteError as e:
+                logWrite(rec, 'draft', False, ticketId=ticketId, error=str(e))
+                state = 'failed'
+        conn.execute("update messages set draftState=? where messageId=?", (state, messageId))
+        conn.commit()
+        logger.info(f"  Draft for {rec['fromAddr']} | {rec['subject'][:50]}: {outcome}")
+        done += 1
+    return done
 
 
 def draftStage(conn, stateDir, rec, verdict, act):
@@ -2610,13 +2706,8 @@ def writeMessage(conn, rec, act):
     conn.commit()
     logWrite(rec, kind, True, ticketId=ticketId, attachments=len(uploads), reopen=act['reopen'])
 
-    # 3. Extras that must not block or repeat the filing: the draft and hub routing.
-    if kind == 'create' and act.get('_draftPost'):
-        try:
-            postNote(ticketId, act['_draftPost'])
-            logWrite(rec, 'draft', True, ticketId=ticketId)
-        except WriteError as e:
-            logWrite(rec, 'draft', False, ticketId=ticketId, error=str(e))
+    # 3. Extras that must not block or repeat the filing: hub routing. The draft comes
+    # later, from runDueDrafts.
     hubWrites(rec, act, ticketId)
     return True
 
@@ -2663,10 +2754,19 @@ def runStage1(conn, rec, facts, counts):
     # raises before the attempt is counted, so it never spends this message's retries.
     act = stage1(conn, rec, facts)
     drafted = None
-    if act and INDEX_OK:
-        drafted = draftStage(conn, STATE_DIR, rec, act['_verdict'], act)
-        if drafted:
-            counts['drafts'] = counts.get('drafts', 0) + 1
+    if act and draftWanted(conn, rec, act['_verdict'], act):
+        # The draft itself is written later by runDueDrafts, once the email is
+        # DRAFT_DELAY_MINUTES old, so a quick staff reply can make it unnecessary.
+        v = act['_verdict']
+        draftInput = {'rec': {k: rec[k] for k in ('messageId', 'from', 'fromAddr', 'subject',
+                                                  'receivedAt', 'gmailThreadId')},
+                      'verdict': {k: v.get(k) for k in ('disposition', 'category', 'playbooks',
+                                                        'canonicalSubject', 'summaryLine',
+                                                        'cleanBodyTextile')}}
+        conn.execute("update messages set draftState='due', draftInput=? "
+                     "where messageId=? and draftState is null",
+                     (json.dumps(draftInput), rec['messageId']))
+        drafted = f"due {CONFIG['DRAFT_DELAY_MINUTES']} min after arrival"
     conn.execute("update messages set attempts=coalesce(attempts, 0)+1 where messageId=?",
                  (rec['messageId'],))
     status = 'classified' if act else 'error'
@@ -2764,6 +2864,9 @@ def runShadowInner(conn, days, started):
                     + (f" #{facts['ticketId']} via {facts['matchedBy']}" if facts['ticketId']
                        else ''))
         runStage1(conn, rec, facts, classified)
+    # After every message of this run is recorded, so a staff reply that came in
+    # minutes after the question counts against its draft.
+    classified['drafts'] = runDueDrafts(conn)
     observed = observeOldScript(conn) if SHADOW else {k: 0 for k in observedNow}
     for k, v in observedNow.items():
         observed[k] += v
@@ -2981,6 +3084,11 @@ def main():
                         'then exit (reads the state file and decision log only)')
     parser.add_argument('--playbooks', help='Directory of approved playbooks (<category>.md); '
                         'without it drafts use past tickets only')
+    parser.add_argument('--draft-delay', type=int, default=CONFIG['DRAFT_DELAY_MINUTES'],
+                        metavar='MINUTES',
+                        help="Minutes after an email arrives before its new ticket gets a draft; "
+                        "no draft if staff reply in the thread first "
+                        f"(default {CONFIG['DRAFT_DELAY_MINUTES']})")
     parser.add_argument('--build-index', action='store_true',
                         help='Rebuild the index of answered MLQs (for drafts), then exit')
     parser.add_argument('--verbose', action='store_true')
@@ -2992,6 +3100,7 @@ def main():
     ALERT_TO_OVERRIDE = args.alert_to
     CONFIG['CALL_CAP'] = args.call_cap
     CONFIG['PLAYBOOK_DIR'] = args.playbooks
+    CONFIG['DRAFT_DELAY_MINUTES'] = args.draft_delay
 
     makeStateDir(args.state_dir)
     setupLogging(args.state_dir, args.verbose)

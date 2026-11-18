@@ -276,8 +276,7 @@ struct myVariantsShare *myVariantsGetSharesForOwner(struct sqlConnection *conn,
     char *ownerUser)
 /* Get every share this user has created, newest first.  A share covers its
  * project on every assembly the project has annotations on, so there is
- * nothing to filter by assembly.  A share the owner cannot see is a share the
- * owner cannot revoke, so this lists all of them. */
+ * nothing to filter by assembly. */
 {
 char query[512];
 sqlSafef(query, sizeof(query),

@@ -387,7 +387,8 @@ if (item != NULL)
         {
         boolean isTranscript = sameOk(item->itemType, "transcript");
         boolean isCnv = sameOk(item->itemType, "cnv");
-        boolean isOther = sameOk(item->itemType, "other");
+        boolean isSnv = sameOk(item->itemType, "snv");
+        boolean isPrimerPair = sameOk(item->itemType, "primer") && sameOk(item->subType, "pair");
         webIncludeResourceFile("spectrum.min.css");
         jsIncludeFile("spectrum.min.js", NULL);
         printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgTracksName());
@@ -409,21 +410,17 @@ if (item != NULL)
         printf("<div style=\"font-weight:bold; font-size:12px; color:#555; "
                "margin-bottom:4px;\">Annotation type</div>\n<div>\n");
             {
-            /* Same order and labels as the create dialog. */
-            char *typeValues[] = { "snv", "cnv", "transcript", "other" };
-            char *typeLabels[] = { "Short variant (SNV)", "Copy number variant (CNV)",
-                                   "Transcript", "Other" };
             char *current = myVariantsCanonicalItemType(item->itemType);
             if (current == NULL)
                 current = "snv";
             int ti;
-            for (ti = 0; ti < ArraySize(typeValues); ti++)
+            for (ti = 0; ti < myVariantsNumItemTypes; ti++)
                 htmlPrintf("<label style='margin-right:20px;'>"
                     "<input type='radio' name='%s|attr|' class='mvTypeRadio' "
                     "value='%s|attr|'%s|none|> %s</label>\n",
-                    varName, typeValues[ti],
-                    sameString(current, typeValues[ti]) ? " checked" : "",
-                    typeLabels[ti]);
+                    varName, myVariantsItemTypes[ti],
+                    sameString(current, myVariantsItemTypes[ti]) ? " checked" : "",
+                    myVariantsItemTypeLabels[ti]);
             }
         printf("</div>\n</div>\n");
 
@@ -480,7 +477,7 @@ if (item != NULL)
 
             {
             /* Transcript-only fields.  Always rendered so the type can be
-             * switched here; the browser shows or hides the block. */
+             * switched here; the browser shows or hides them. */
             printf("<div id=\"mvTranscriptFields\"%s>\n",
                 isTranscript ? "" : " style=\"display:none\"");
             /* Editable CDS Start / CDS End (stored as thickStart/thickEnd). */
@@ -497,15 +494,22 @@ if (item != NULL)
             cgiMakeIntVarInRange(varName, item->thickEnd, NULL, 80, "0", chromSizeString);
             printInfoIcon("BED thickEnd: end of the coding region.");
             printf("<BR>\n");
+            printf("</div>\n");
 
-            /* Blocks (BED12). Hidden inputs are kept in sync by the widget;
-             * updateBlocksFields in hgTracks reads them on submit. */
-            char vBC[128], vBS[128], vBT[128];
+            /* Blocks (BED12): a transcript's exons.  Hidden inputs are kept in
+             * sync by the widget; applyItemEdits in hgTracks reads them on
+             * submit.  Exon frames ride along, one per block.  A primer pair's
+             * blocks are its primer sites, and have no frames. */
+            printf("<div id=\"mvBlockFields\"%s>\n",
+                isTranscript || isPrimerPair ? "" : " style=\"display:none\"");
+            char vBC[128], vBS[128], vBT[128], vBF[128];
             safef(vBC, sizeof(vBC), "%s_blockCount", trackName);
             safef(vBS, sizeof(vBS), "%s_blockSizes", trackName);
             safef(vBT, sizeof(vBT), "%s_chromStarts", trackName);
+            safef(vBF, sizeof(vBF), "%s_exonFrames", trackName);
             struct dyString *sizesCsv = dyStringNew(64);
             struct dyString *startsCsv = dyStringNew(64);
+            struct dyString *framesCsv = dyStringNew(64);
             int bi;
             for (bi = 0; bi < item->blockCount; bi++)
                 {
@@ -513,19 +517,36 @@ if (item != NULL)
                     {
                     dyStringAppendC(sizesCsv, ',');
                     dyStringAppendC(startsCsv, ',');
+                    if (item->exonFrames != NULL)
+                        dyStringAppendC(framesCsv, ',');
                     }
                 dyStringPrintf(sizesCsv, "%d", item->blockSizes[bi]);
                 dyStringPrintf(startsCsv, "%d", item->chromStarts[bi]);
+                if (item->exonFrames != NULL)
+                    dyStringPrintf(framesCsv, "%d", item->exonFrames[bi]);
                 }
             char countStr[32];
             safef(countStr, sizeof(countStr), "%u", item->blockCount);
-            printf("<B>Blocks:</B> ");
-            printInfoIcon("BED12-style blocks. Leave empty to store a single full-span block.");
-            printf("<BR>\n");
+            printf("<span id=\"mvBlocksTitleTx\"%s><B>Blocks:</B> ",
+                isPrimerPair ? " style=\"display:none\"" : "");
+            printInfoIcon("BED12-style blocks, the exons of the transcript.  "
+                "Leave empty to store a single full-span block.  "
+                "A transcript's exon frame is the reading frame of the exon's first "
+                "coding base, or -1 if it has none.  Leave the frames blank to work "
+                "them out from CDS Start.");
+            printf("</span>");
+            printf("<span id=\"mvBlocksTitlePrimer\"%s><B>Primer sites:</B> ",
+                isPrimerPair ? "" : " style=\"display:none\"");
+            printInfoIcon("One block for each primer: the forward primer at the start of "
+                "the position, the reverse primer at its end.  The position is the whole "
+                "PCR product.");
+            printf("</span><BR>\n");
             cgiMakeHiddenVarWithIdExtra(vBC, vBC, countStr, NULL);
             cgiMakeHiddenVarWithIdExtra(vBS, vBS, dyStringContents(sizesCsv), NULL);
             cgiMakeHiddenVarWithIdExtra(vBT, vBT, dyStringContents(startsCsv), NULL);
-            printf("<div id=\"myVariantsBlocksUi\" style=\"margin:4px 0 12px 0;\"></div>\n");
+            cgiMakeHiddenVarWithIdExtra(vBF, vBF, dyStringContents(framesCsv), NULL);
+            printf("<div id=\"myVariantsBlocksUi\"%s style=\"margin:4px 0 12px 0;\"></div>\n",
+                isTranscript ? "" : " class=\"mvNoFrames\"");
             jsIncludeFile("myVariantsBlocks.js", NULL);
             /* Block offsets are relative to the start of the position box, so the
              * widget reads the range out of that box. */
@@ -534,23 +555,26 @@ if (item != NULL)
                 "  if (typeof myVariantsBlocks === 'undefined') { return; }\n"
                 "  var sizesEl = document.getElementById('%s');\n"
                 "  var startsEl = document.getElementById('%s');\n"
+                "  var framesEl = document.getElementById('%s');\n"
                 "  var posEl = document.getElementById('%s');\n"
-                "  var sizes = sizesEl.value ? sizesEl.value.split(',').map(Number) : [];\n"
-                "  var starts = startsEl.value ? startsEl.value.split(',').map(Number) : [];\n"
+                "  var toNums = function(el){ return el.value ? el.value.split(',').map(Number) : []; };\n"
                 "  var range = function(){ return parseBedRange(posEl.value); };\n"
                 "  myVariantsBlocks.mount('myVariantsBlocksUi', {\n"
-                "    initialSizes: sizes,\n"
-                "    initialStarts: starts,\n"
+                "    initialSizes: toNums(sizesEl),\n"
+                "    initialStarts: toNums(startsEl),\n"
+                "    initialFrames: toNums(framesEl),\n"
                 "    getStart: function(){ var r = range(); return r ? r.start : NaN; },\n"
                 "    getEnd:   function(){ var r = range(); return r ? r.end : NaN; },\n"
                 "    hiddenCountInput:  document.getElementById('%s'),\n"
                 "    hiddenSizesInput:  sizesEl,\n"
-                "    hiddenStartsInput: startsEl\n"
+                "    hiddenStartsInput: startsEl,\n"
+                "    hiddenFramesInput: framesEl\n"
                 "  });\n"
                 "});\n",
-                vBS, vBT, posVarName, vBC);
+                vBS, vBT, vBF, posVarName, vBC);
             dyStringFree(&sizesCsv);
             dyStringFree(&startsCsv);
+            dyStringFree(&framesCsv);
             printf("</div>\n");
             }
 
@@ -573,38 +597,55 @@ if (item != NULL)
             varName);
         printf("<br>");
 
-        /* Alleles.  CNV gets a type vocabulary and calls the alt field
-         * "Sequence"; SNV gets Ref and Alt; transcript and other get neither.
-         * One alt input serves both so the form cannot post two values for it,
-         * matching the create dialog. */
-        printf("<div id=\"mvCnvFields\"%s>\n", isCnv ? "" : " style=\"display:none\"");
-        safef(varName, sizeof(varName), "%s_%s", trackName, "cnvType");
-        printf("<B>CNV type:</B> ");
-        htmlPrintf("<select name='%s|attr|' id='%s|attr|'>", varName, varName);
+        /* Subtype: one menu per type that has subtypes.  Only the current
+         * type's menu is enabled, so the form posts a single value; the type
+         * radios switch which one that is. */
+        safef(varName, sizeof(varName), "%s_%s", trackName, "subType");
             {
-            int ci;
-            for (ci = 0; ci < myVariantsNumCnvTypes; ci++)
+            int ti;
+            for (ti = 0; ti < myVariantsNumItemTypes; ti++)
                 {
-                boolean sel = sameOk(item->cnvType, myVariantsCnvTypes[ci]);
-                htmlPrintf("<option value='%s|attr|'%s|none|>%s</option>",
-                    myVariantsCnvTypes[ci], sel ? " selected" : "",
-                    myVariantsCnvTypes[ci]);
+                char *type = myVariantsItemTypes[ti];
+                int subCount, si;
+                char **subTypes = myVariantsSubTypes(type, &subCount);
+                if (subCount == 0)
+                    continue;
+                boolean isCurrent = sameOk(item->itemType, type);
+                htmlPrintf("<div class='mvSubTypeFields' data-type='%s|attr|'%s|none|>\n",
+                    type, isCurrent ? "" : " style=\"display:none\"");
+                htmlPrintf("<B>%s:</B> ", myVariantsSubTypeLabel(type));
+                htmlPrintf("<select name='%s|attr|'%s|none|>", varName,
+                    isCurrent ? "" : " disabled");
+                for (si = 0; si < subCount; si++)
+                    htmlPrintf("<option value='%s|attr|'%s|none|>%s</option>",
+                        subTypes[si], sameOk(item->subType, subTypes[si]) ? " selected" : "",
+                        subTypes[si]);
+                printf("</select>");
+                if (sameString(type, "cnv"))
+                    printInfoIcon("CNV vocabulary follows gnomAD");
+                else if (sameString(type, "regulatory"))
+                    printInfoIcon("The kind of cis-regulatory element: a promoter, an enhancer, "
+                        "a transcription factor binding site, or a boundary element such as "
+                        "an insulator.");
+                else if (sameString(type, "primer"))
+                    printInfoIcon("A pair is one annotation covering the PCR product, "
+                        "drawn with a block at each primer.  Forward, reverse and probe "
+                        "are a single oligo.");
+                printf("<BR>\n</div>\n");
                 }
             }
-        printf("</select>");
-        printInfoIcon("CNV vocabulary follows gnomAD");
-        printf("<BR>\n</div>\n");
 
-        printf("<div id=\"mvRefField\"%s>\n", isCnv || isTranscript || isOther ?
-               " style=\"display:none\"" : "");
+        /* Alleles.  CNV calls the alt field "Sequence"; SNV gets Ref and Alt;
+         * the other types get neither.  One alt input serves both so the form
+         * cannot post two values for it, matching the create dialog. */
+        printf("<div id=\"mvRefField\"%s>\n", isSnv ? "" : " style=\"display:none\"");
         safef(varName, sizeof(varName), "%s_%s", trackName, "ref");
         printf("<B>Ref:</B> ");
         makeVarcharTextVar(varName, item->ref, 17);
         printInfoIcon("Reference allele sequence at this position.");
         printf("<BR>\n</div>\n");
 
-        printf("<div id=\"mvAltField\"%s>\n", isTranscript || isOther ?
-               " style=\"display:none\"" : "");
+        printf("<div id=\"mvAltField\"%s>\n", isSnv || isCnv ? "" : " style=\"display:none\"");
         printf("<B id=\"mvAltLabel\">%s</B> ", isCnv ? "Sequence:" : "Alt:");
         safef(varName, sizeof(varName), "%s_%s", trackName, "alt");
         makeVarcharTextVar(varName, item->alt, isCnv ? 40 : 17);
@@ -679,8 +720,20 @@ if (item != NULL)
             "    if (el) { el.style.display = on ? '' : 'none'; }\n"
             "  };\n"
             "  var applyType = function(type) {\n"
+            "    var primerSel = null;\n"
+            "    document.querySelectorAll('.mvSubTypeFields').forEach(function(div) {\n"
+            "      var on = div.getAttribute('data-type') === type;\n"
+            "      div.style.display = on ? '' : 'none';\n"
+            "      div.querySelector('select').disabled = !on;\n"
+            "      if (on && type === 'primer') { primerSel = div.querySelector('select'); }\n"
+            "    });\n"
+            "    var isPair = primerSel !== null && primerSel.value === 'pair';\n"
             "    show('mvTranscriptFields', type === 'transcript');\n"
-            "    show('mvCnvFields', type === 'cnv');\n"
+            "    show('mvBlockFields', type === 'transcript' || isPair);\n"
+            "    show('mvBlocksTitleTx', !isPair);\n"
+            "    show('mvBlocksTitlePrimer', isPair);\n"
+            "    var blocksUi = document.getElementById('myVariantsBlocksUi');\n"
+            "    if (blocksUi) { blocksUi.classList.toggle('mvNoFrames', type !== 'transcript'); }\n"
             "    show('mvRefField', type === 'snv');\n"
             "    show('mvAltField', type === 'snv' || type === 'cnv');\n"
             "    var altLabel = document.getElementById('mvAltLabel');\n"
@@ -690,6 +743,13 @@ if (item != NULL)
             "  var radios = document.querySelectorAll('.mvTypeRadio');\n"
             "  radios.forEach(function(r) {\n"
             "    r.addEventListener('change', function() { applyType(this.value); });\n"
+            "  });\n"
+            /* A primer's subtype decides whether the primer sites show. */
+            "  document.querySelectorAll('.mvSubTypeFields select').forEach(function(sel) {\n"
+            "    sel.addEventListener('change', function() {\n"
+            "      var checked = document.querySelector('.mvTypeRadio:checked');\n"
+            "      if (checked) { applyType(checked.value); }\n"
+            "    });\n"
             "  });\n"
             "})();\n");
 
@@ -786,8 +846,22 @@ if (item != NULL)
         printf("<B>Color:</B> <span style='background:%s; padding:2px 12px'>&nbsp;</span> %s<BR>\n",
             colorHex, colorHex);
         boolean roIsCnv = sameOk(item->itemType, "cnv");
-        if (roIsCnv && isNotEmpty(item->cnvType))
-            htmlPrintf("<B>CNV type:</B> %s<BR>\n", item->cnvType);
+            {
+            int ti;
+            for (ti = 0; ti < myVariantsNumItemTypes; ti++)
+                if (sameOk(item->itemType, myVariantsItemTypes[ti]))
+                    htmlPrintf("<B>Annotation type:</B> %s<BR>\n", myVariantsItemTypeLabels[ti]);
+            }
+        if (isNotEmpty(item->subType))
+            htmlPrintf("<B>Subtype:</B> %s<BR>\n", item->subType);
+        if (item->exonFrames != NULL)
+            {
+            printf("<B>Exon frames:</B> ");
+            int fi;
+            for (fi = 0; fi < item->blockCount; fi++)
+                printf("%s%d", fi > 0 ? ", " : "", item->exonFrames[fi]);
+            printf("<BR>\n");
+            }
         if (isNotEmpty(item->ref))
             htmlPrintf("<B>Ref:</B> %s<BR>\n", item->ref);
         if (isNotEmpty(item->alt))

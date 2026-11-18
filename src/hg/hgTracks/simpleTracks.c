@@ -59,6 +59,7 @@
 #include "bactigPos.h"
 #include "genePred.h"
 #include "genePredReader.h"
+#include "myVariants.h"
 #include "gencodeTracks.h"
 #include "isochores.h"
 #include "spDb.h"
@@ -5053,7 +5054,8 @@ if (vis == tvSquish)
     }
 
 struct genePred *gp = NULL;
-if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
+if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type)
+    || isMyVariantsType(tg->tdb->type))
     gp = (struct genePred *)(lf->original);
 
 boolean baseColorNeedsCodons = (drawOpt == baseColorDrawItemCodons ||

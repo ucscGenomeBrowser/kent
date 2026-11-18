@@ -10874,6 +10874,29 @@ jsonObjectAdd(jsonForClient, "myVariantsDefaultProject",
  * a second time. */
 jsonObjectAdd(jsonForClient, "myVariantsDefaultLabel",
     newJsonString(MYVARIANTS_DEFAULT_PROJECT));
+/* The annotation types and their subtypes, so the dialog lists the same ones
+ * the server accepts. */
+struct jsonElement *typeList = newJsonList(NULL);
+int ti;
+for (ti = 0; ti < myVariantsNumItemTypes; ti++)
+    {
+    struct jsonElement *typeObj = newJsonObject(newHash(0));
+    jsonObjectAdd(typeObj, "value", newJsonString(myVariantsItemTypes[ti]));
+    jsonObjectAdd(typeObj, "label", newJsonString(myVariantsItemTypeLabels[ti]));
+    struct jsonElement *subList = newJsonList(NULL);
+    int subCount, si;
+    char **subTypes = myVariantsSubTypes(myVariantsItemTypes[ti], &subCount);
+    for (si = 0; si < subCount; si++)
+        jsonListAdd(subList, newJsonString(subTypes[si]));
+    slReverse(&subList->val.jeList);
+    jsonObjectAdd(typeObj, "subTypes", subList);
+    char *subTypeLabel = myVariantsSubTypeLabel(myVariantsItemTypes[ti]);
+    if (subTypeLabel != NULL)
+        jsonObjectAdd(typeObj, "subTypeLabel", newJsonString(subTypeLabel));
+    jsonListAdd(typeList, typeObj);
+    }
+slReverse(&typeList->val.jeList);
+jsonObjectAdd(jsonForClient, "myVariantsTypes", typeList);
 }
 
 boolean trackFinderEnabled()

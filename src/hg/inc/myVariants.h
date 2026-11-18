@@ -7,7 +7,7 @@
 #include "cart.h"
 #include "customTrack.h"
 #include "myVariantsProject.h"
-#define MYVARIANTS_NUM_COLS 21 /* number of default columns before any user-added custom columns */
+#define MYVARIANTS_NUM_COLS 22 /* number of default columns before any user-added custom columns */
 
 /* Track-name and type identifiers for myVariants custom tracks.  A project's
  * track name is its SQL table name with the database qualifier removed, so the
@@ -98,8 +98,9 @@ struct myVariants
     char *ref;          /* reference allele */
     char *alt;          /* alternate allele */
     char *mouseover;    /* short mouseover text for hover display */
-    char *itemType;     /* transcript, snv, or cnv */
-    char *cnvType;      /* gnomAD CNV term; empty for snv/transcript */
+    char *itemType;     /* transcript, snv, cnv, regulatory, primer or other */
+    char *subType;      /* kind of cnv, regulatory element or primer; empty otherwise */
+    int *exonFrames;    /* reading frame of each block, -1 if not coding; NULL unless coding */
     unsigned id;        /* Unique ID for item */
     struct slPair *customFields; /* user-defined custom field name/value pairs */
     };
@@ -149,17 +150,24 @@ struct asObject *myVariantsAsObj();
 /* Return asObject describing fields of myVariants */
 
 extern char *myVariantsItemTypes[];
+extern char *myVariantsItemTypeLabels[];
 extern int myVariantsNumItemTypes;
-extern char *myVariantsCnvTypes[];
-extern int myVariantsNumCnvTypes;
 
 char *myVariantsCanonicalItemType(char *s);
 /* Return the matching canonical entry from myVariantsItemTypes (case-insensitive),
  * or NULL if s is empty or not in the allow-list. */
 
-char *myVariantsCanonicalCnvType(char *s);
-/* Return the matching canonical entry from myVariantsCnvTypes (case-insensitive),
- * or NULL if s is empty or not in the allow-list. */
+char **myVariantsSubTypes(char *itemType, int *retCount);
+/* Return the allowed subtypes of itemType and set *retCount to how many there
+ * are.  Returns NULL with a count of 0 for a type that has no subtypes. */
+
+char *myVariantsSubTypeLabel(char *itemType);
+/* Return the label for the subtype of itemType, such as "CNV type", or NULL
+ * for a type that has no subtypes. */
+
+char *myVariantsCanonicalSubType(char *itemType, char *s);
+/* Return the matching canonical subtype of itemType (case-insensitive), or NULL
+ * if s is empty or is not one of that type's subtypes. */
 
 char *myVariantsGetDatabaseForUser(char *userName);
 /* Hash the userName and map it to 1..31 inclusive for deciding what

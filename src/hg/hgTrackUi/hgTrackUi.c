@@ -3528,11 +3528,14 @@ if (isNotEmpty(projectLabel))
     htmlPrintf("<h3>Share the track \"%s\"</h3>\n", projectLabel);
 else
     printf("<h3>Share this track</h3>\n");
-printf("<div id=\"shareCreateSection\">\n");
 /* The track this page is for.  The API takes the track name and resolves the
  * project from it, so the owner cannot be talked into sharing another one. */
 if (isNotEmpty(trackName))
     htmlPrintf("<input type=\"hidden\" id=\"shareTrackName\" value=\"%s|attr|\">\n", trackName);
+/* The track's link, if it has one.  hui.js fills this in and shows either it
+ * or the create controls below. */
+printf("<div id=\"shareCurrent\">Loading...</div>\n");
+printf("<div id=\"shareCreateSection\" style=\"display:none\">\n");
 printf("<div>\n");
 printf("<label><input type=\"radio\" name=\"sharePerm\" value=\"0\" checked>"
     " Anyone with the link can view</label><br>\n");
@@ -3541,19 +3544,6 @@ printf("<label><input type=\"radio\" name=\"sharePerm\" value=\"1\">"
 printf("</div>\n");
 printf("<button type=\"button\" id=\"shareCreateBtn\" style=\"margin-top:6px\">"
     "Create share link</button>\n");
-printf("<div id=\"shareResult\" style=\"display:none; margin-top:8px; padding:8px;"
-    " background:#e8f5e9; border-radius:4px\">"
-    "<span>Share URL: </span>"
-    "<input type=\"text\" id=\"shareUrlField\" readonly style=\"width:350px\">"
-    " <button type=\"button\" id=\"shareCopyBtn\">Copy</button></div>\n");
-printf("</div>\n");
-
-printf("<hr>\n");
-printf("<div id=\"shareListSection\">\n");
-printf("<h4>Active shares</h4>\n");
-/* Every project's share, not just this page's: a share the owner cannot see is
- * a share the owner cannot revoke. */
-printf("<div id=\"shareListContent\">Loading...</div>\n");
 printf("</div>\n");
 
 jsInline("if (typeof myVariantsShareInit === 'function') myVariantsShareInit();\n");
@@ -3771,14 +3761,23 @@ dotBracketCfgUi(cart, tdb);
 if (tdbSupportsColorOverride(tdb))
     colorTrackOption(cart, tdb->track, tdb);
 
-/* myVariants own track: render inline share management. Skip shared tracks
- * (myVariants_shared_*) - you can't re-share someone else's data. */
-if (cfgOptionBooleanDefault("doMyVariants", FALSE)
-    && isMyVariantsTrack(tdb->track)
-    && !isMyVariantsSharedTrack(tdb->track))
+/* myVariants tracks: the type filter and codon coloring on every one, and
+ * download and share management only on the user's own.  You can't re-share
+ * someone else's data. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(tdb->track))
     {
-    myVariantsDownloadUi(tdb->track);
-    myVariantsShareUi(tdb->track, NULL);
+    baseColorDrawOptDropDown(cart, tdb);
+    filterBy_t *filters = filterBySetGet(tdb, cart, tdb->track);
+    if (filters != NULL)
+        {
+        filterBySetCfgUi(cart, tdb, filters, TRUE, tdb->track);
+        filterBySetFree(&filters);
+        }
+    if (!isMyVariantsSharedTrack(tdb->track))
+        {
+        myVariantsDownloadUi(tdb->track);
+        myVariantsShareUi(tdb->track, NULL);
+        }
     }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg

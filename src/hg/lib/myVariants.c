@@ -15,14 +15,65 @@
 #include "hui.h"
 #include "hVarSubst.h"
 
-char *myVariantsItemTypes[] = { "transcript", "snv", "cnv", "other" };
+/* In the order the add dialog and the details page list them. */
+char *myVariantsItemTypes[] = { "snv", "cnv", "transcript", "regulatory", "primer", "other" };
 int myVariantsNumItemTypes = ArraySize(myVariantsItemTypes);
 
-char *myVariantsCnvTypes[] = {
+/* Labels for myVariantsItemTypes, in the same order. */
+char *myVariantsItemTypeLabels[] = {
+    "Short variant (SNV)", "Copy number variant (CNV)", "Transcript",
+    "Cis-regulatory element", "Primer", "Other"
+};
+
+/* Subtypes of the item types that have them.  CNV terms follow gnomAD. */
+static char *cnvSubTypes[] = {
     "deletion", "duplication", "insertion", "inversion",
     "translocation", "complex", "breakend"
 };
-int myVariantsNumCnvTypes = ArraySize(myVariantsCnvTypes);
+static char *regulatorySubTypes[] = {
+    "promoter", "enhancer", "TF binding site", "boundary element"
+};
+static char *primerSubTypes[] = {
+    "pair", "forward", "reverse", "probe"
+};
+
+char **myVariantsSubTypes(char *itemType, int *retCount)
+/* Return the allowed subtypes of itemType and set *retCount to how many there
+ * are.  Returns NULL with a count of 0 for a type that has no subtypes. */
+{
+char **list = NULL;
+int count = 0;
+if (sameOk(itemType, "cnv"))
+    {
+    list = cnvSubTypes;
+    count = ArraySize(cnvSubTypes);
+    }
+else if (sameOk(itemType, "regulatory"))
+    {
+    list = regulatorySubTypes;
+    count = ArraySize(regulatorySubTypes);
+    }
+else if (sameOk(itemType, "primer"))
+    {
+    list = primerSubTypes;
+    count = ArraySize(primerSubTypes);
+    }
+*retCount = count;
+return list;
+}
+
+char *myVariantsSubTypeLabel(char *itemType)
+/* Return the label for the subtype of itemType, such as "CNV type", or NULL
+ * for a type that has no subtypes. */
+{
+if (sameOk(itemType, "cnv"))
+    return "CNV type";
+if (sameOk(itemType, "regulatory"))
+    return "Element type";
+if (sameOk(itemType, "primer"))
+    return "Primer type";
+return NULL;
+}
 
 char *myVariantsCanonicalItemType(char *s)
 /* Return the matching canonical entry from myVariantsItemTypes (case-insensitive),
@@ -34,14 +85,16 @@ int ix = stringArrayIx(s, myVariantsItemTypes, myVariantsNumItemTypes);
 return ix < 0 ? NULL : myVariantsItemTypes[ix];
 }
 
-char *myVariantsCanonicalCnvType(char *s)
-/* Return the matching canonical entry from myVariantsCnvTypes (case-insensitive),
- * or NULL if s is empty or not in the allow-list. */
+char *myVariantsCanonicalSubType(char *itemType, char *s)
+/* Return the matching canonical subtype of itemType (case-insensitive), or NULL
+ * if s is empty or is not one of that type's subtypes. */
 {
 if (isEmpty(s))
     return NULL;
-int ix = stringArrayIx(s, myVariantsCnvTypes, myVariantsNumCnvTypes);
-return ix < 0 ? NULL : myVariantsCnvTypes[ix];
+int count;
+char **list = myVariantsSubTypes(itemType, &count);
+int ix = stringArrayIx(s, list, count);
+return ix < 0 ? NULL : list[ix];
 }
 
 boolean isMyVariantsType(char *type)
@@ -60,6 +113,18 @@ boolean isMyVariantsSharedTrack(char *trackName)
 /* TRUE if trackName is a myVariants shared custom track. NULL-safe. */
 {
 return trackName != NULL && startsWith(MYVARIANTS_SHARED_TRACK_PREFIX, trackName);
+}
+
+static int *exonFramesFromString(char *s, unsigned blockCount)
+/* Parse an exonFrames list.  Returns NULL when it is empty, which it is for
+ * anything but a coding transcript, else one frame per block. */
+{
+int *frames = NULL;
+int count = 0;
+sqlSignedDynamicArray(s, &frames, &count);
+if (count != 0 && count != blockCount)
+    errAbort("myVariants: %d exonFrames for %u blocks", count, blockCount);
+return frames;
 }
 
 void myVariantsStaticLoad(char **row, struct myVariants *ret)
@@ -87,8 +152,9 @@ ret->ref = row[15];
 ret->alt = row[16];
 ret->mouseover = row[17];
 ret->itemType = row[18];
-ret->cnvType = row[19];
-ret->id = sqlUnsigned(row[20]);
+ret->subType = row[19];
+ret->exonFrames = exonFramesFromString(row[20], ret->blockCount);
+ret->id = sqlUnsigned(row[21]);
 }
 
 struct myVariants *myVariantsLoadByQuery(struct sqlConnection *conn, char *query)
@@ -127,7 +193,7 @@ void myVariantsSaveToDb(struct sqlConnection *conn, struct myVariants *el, char 
  * connections. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,blockCount,blockSizes,chromStarts,description,db,ref,alt,mouseover,itemType,cnvType", tableName);
+sqlDyStringPrintf(update, "insert into %s (bin,chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,blockCount,blockSizes,chromStarts,description,db,ref,alt,mouseover,itemType,subType,exonFrames", tableName);
 
 /* Append custom field column names, quoted because one can be named order. */
 struct slPair *cf;
@@ -137,14 +203,17 @@ for (cf = el->customFields; cf != NULL; cf = cf->next)
 char *insertName = isEmpty(el->name) ? "" : el->name;
 char *blockSizesStr = commaIntList(el->blockSizes, el->blockCount);
 char *chromStartsStr = commaIntList(el->chromStarts, el->blockCount);
-sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s'",
+char *exonFramesStr = commaIntList(el->exonFrames, el->exonFrames ? el->blockCount : 0);
+sqlDyStringPrintf(update, ") values (%u,'%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'",
     el->bin, el->chrom, el->chromStart, el->chromEnd, insertName, el->score, el->strand,
     el->thickStart, el->thickEnd, el->itemRgb, el->blockCount, blockSizesStr, chromStartsStr,
     el->description, el->db, el->ref, el->alt, el->mouseover,
     isEmpty(el->itemType) ? "snv" : el->itemType,
-    isEmpty(el->cnvType) ? "" : el->cnvType);
+    isEmpty(el->subType) ? "" : el->subType,
+    exonFramesStr);
 freeMem(blockSizesStr);
 freeMem(chromStartsStr);
+freeMem(exonFramesStr);
 
 /* Append custom field values */
 for (cf = el->customFields; cf != NULL; cf = cf->next)
@@ -196,8 +265,9 @@ ret->ref = cloneString(row[15]);
 ret->alt = cloneString(row[16]);
 ret->mouseover = cloneString(row[17]);
 ret->itemType = cloneString(row[18]);
-ret->cnvType = cloneString(row[19]);
-ret->id = sqlUnsigned(row[20]);
+ret->subType = cloneString(row[19]);
+ret->exonFrames = exonFramesFromString(row[20], ret->blockCount);
+ret->id = sqlUnsigned(row[21]);
 return ret;
 }
 
@@ -276,7 +346,20 @@ ret->ref = sqlStringComma(&s);
 ret->alt = sqlStringComma(&s);
 ret->mouseover = sqlStringComma(&s);
 ret->itemType = sqlStringComma(&s);
-ret->cnvType = sqlStringComma(&s);
+ret->subType = sqlStringComma(&s);
+    {
+    /* Empty braces for anything but a coding transcript. */
+    s = sqlEatChar(s, '{');
+    if (*s != '}' && ret->blockCount > 0)
+        {
+        int i;
+        AllocArray(ret->exonFrames, ret->blockCount);
+        for (i=0; i<ret->blockCount; ++i)
+            ret->exonFrames[i] = sqlSignedComma(&s);
+        }
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
 ret->id = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
@@ -297,7 +380,8 @@ freeMem(el->ref);
 freeMem(el->alt);
 freeMem(el->mouseover);
 freeMem(el->itemType);
-freeMem(el->cnvType);
+freeMem(el->subType);
+freeMem(el->exonFrames);
 slPairFreeValsAndList(&el->customFields);
 freez(pEl);
 }
@@ -392,8 +476,19 @@ fprintf(f, "%s", el->itemType ? el->itemType : "");
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->cnvType ? el->cnvType : "");
+fprintf(f, "%s", el->subType ? el->subType : "");
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+    {
+    int i;
+    if (sep == ',') fputc('{',f);
+    for (i=0; el->exonFrames != NULL && i<el->blockCount; ++i)
+        {
+        fprintf(f, "%d", el->exonFrames[i]);
+        fputc(',', f);
+        }
+    if (sep == ',') fputc('}',f);
+    }
 fputc(sep,f);
 fprintf(f, "%u", el->id);
 fputc(lastSep,f);
@@ -422,8 +517,9 @@ static char *myVariantsAutoSqlString =
 "    string ref;       \"Reference allele on the forward genomic strand\"\n"
 "    string alt;       \"Alternate allele on the forward genomic strand\"\n"
 "    string mouseover;  \"Short text shown when hovering over the annotation\"\n"
-"    string itemType;   \"Annotation type: transcript, snv, cnv or other\"\n"
-"    string cnvType;    \"gnomAD CNV term; empty unless itemType is cnv\"\n"
+"    string itemType;   \"Annotation type: transcript, snv, cnv, regulatory, primer or other\"\n"
+"    string subType;    \"Kind of cnv, regulatory element or primer; empty for other types\"\n"
+"    lstring exonFrames; \"Reading frame of each block, -1 if not coding; empty unless a coding transcript\"\n"
 "    uint id;          \"Row identifier used internally; not part of the annotation\"\n"
 "    )\n"
 ;
@@ -517,7 +613,8 @@ struct dyString *createTable = sqlDyStringCreate(
         "    alt varchar(255) not null,\n"
         "    mouseover varchar(255) not null,\n"
         "    itemType varchar(16) not null default 'snv',\n"
-        "    cnvType varchar(32) not null default '',\n"
+        "    subType varchar(32) not null default '',\n"
+        "    exonFrames longblob not null,\n"
         "    id int auto_increment,\n"
         "    PRIMARY KEY(id),\n"
         "    INDEX(chrom(16),bin),\n"
@@ -953,6 +1050,42 @@ ctAddToSettings(ct, "group", MYVARIANTS_GROUP_NAME);
 char countBuf[32];
 safef(countBuf, sizeof countBuf, "%d", itemCount);
 ctAddToSettings(ct, "itemCount", cloneString(countBuf));
+/* Transcripts draw codons and amino acids when zoomed in.  Their coding region
+ * is given by thickStart and thickEnd, which is what makes the track settings
+ * page offer the codon coloring menu. */
+ctAddToSettings(ct, BASE_COLOR_DEFAULT, BASE_COLOR_DRAW_GENOMIC_CODONS);
+ctAddToSettings(ct, BASE_COLOR_USE_CDS, "given");
+/* Filters on annotation type and on subtype, as
+ * itemType:Annotation_type="value|label,..." subType:Subtype="value|label,...".
+ * A subtype's label names its type, since the list holds every type's. */
+if (ArraySize(myVariantsItemTypeLabels) != myVariantsNumItemTypes)
+    errAbort("myVariantsItemTypeLabels does not match myVariantsItemTypes");
+struct dyString *filter = dyStringNew(0);
+dyStringAppend(filter, "itemType:Annotation_type=\"");
+int ix;
+for (ix = 0; ix < myVariantsNumItemTypes; ix++)
+    {
+    if (ix > 0)
+        dyStringAppendC(filter, ',');
+    dyStringPrintf(filter, "%s|%s", myVariantsItemTypes[ix], myVariantsItemTypeLabels[ix]);
+    }
+dyStringAppend(filter, "\" subType:Subtype=\"");
+boolean first = TRUE;
+for (ix = 0; ix < myVariantsNumItemTypes; ix++)
+    {
+    int subCount, subIx;
+    char **subTypes = myVariantsSubTypes(myVariantsItemTypes[ix], &subCount);
+    for (subIx = 0; subIx < subCount; subIx++)
+        {
+        if (!first)
+            dyStringAppendC(filter, ',');
+        first = FALSE;
+        dyStringPrintf(filter, "%s|%s: %s", subTypes[subIx], myVariantsItemTypeLabels[ix],
+            subTypes[subIx]);
+        }
+    }
+dyStringAppendC(filter, '"');
+ctAddToSettings(ct, FILTER_BY, dyStringCannibalize(&filter));
 return ct;
 }
 
@@ -1135,7 +1268,7 @@ static const char *builtInColumns[] = {
     "bin", "chrom", "chromStart", "chromEnd", "name", "score", "strand",
     "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
     "chromStarts", "description", "db", "ref", "alt",
-    "mouseover", "itemType", "cnvType", "id",
+    "mouseover", "itemType", "subType", "exonFrames", "id",
 };
 
 static boolean isBuiltInColumn(char *name)

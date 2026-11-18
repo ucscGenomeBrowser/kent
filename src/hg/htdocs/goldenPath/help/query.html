@@ -41,7 +41,7 @@ Valid position queries can include:</p>
   Exon positions: <code>SYMBOL exon N</code> or <code>SYMBOL:e.N[+/-offset]</code>
   (e.g. <code>TP53 exon 5</code>, <code>BRCA2:e.10</code>, <code>NM_000546:e.5+2</code>)</li>
   <li>
-  Codon (amino acid) positions and ranges, with or without the amino acid letters; a bare
+  Codon (amino acid) positions and ranges, with or without the amino acid letters. A bare
   number after a gene symbol is a codon (e.g. <code>BRAF 600</code>, <code>KAT6A 495-532</code>).
   Nucleotide positions and ranges need <code>c.</code> or <code>n.</code>
   (e.g. <code>KAT6A c.1483_1596</code>)</li>
@@ -96,9 +96,9 @@ paper describes a variant or a domain that covers more than one codon. Write the
 an underscore between them, as HGVS does: <code>KAT6A p.495_532</code> or
 <code>KAT6A c.1483_1596</code>. The amino acid letters are optional, so
 <code>KAT6A p.Lys495_Ser532</code> works as well, and an Ensembl or RefSeq transcript can stand in
-for the gene symbol, e.g. <code>ENST00000265713.8 p.495_532</code>. So can a RefSeq protein,
-where the <code>p.</code> may be left out, e.g. <code>NP_006757.2 495_532</code>; older
-versions of a RefSeq protein work too.</p>
+for the gene symbol, e.g. <code>ENST00000265713.8 p.495_532</code>. A RefSeq protein can also
+stand in for the gene symbol, and the <code>p.</code> can be left out, e.g.
+<code>NP_006757.2 495_532</code>. Older versions of a RefSeq protein work too.</p>
 
 <p>
 For codons you can use a hyphen instead of the underscore, so <code>BRCA1 100-200</code> and
