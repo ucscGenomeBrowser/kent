@@ -56,7 +56,7 @@ endif
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} ${DEPGEN} -o $@ -c $<
 
-../../lib/$(MACHTYPE)/jkhgap.a: $(O) libDir
+../../lib/$(MACHTYPE)/jkhgap.a: $(O) | libDir
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 
 libDir:
