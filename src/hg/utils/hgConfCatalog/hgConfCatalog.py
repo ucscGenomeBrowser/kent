@@ -311,15 +311,20 @@ RELEASE_GATES = {
                "is wanted, in which case flip it, or it is not, in which case "
                "the flag and the code behind it should go."),
         h("storeUserFiles", "flag", "hg/hgHubConnect/hgHubConnect.c",
-          default="FALSE", role="gate", verified=True,
+          default="FALSE", role="knob", verified=True,
           note="Hub space, the user file store behind hgHubConnect's upload "
                "wizard.  Added v447 and briefly defaulted TRUE around v454 "
                "before going back to FALSE, so the history shows a flip that "
-               "was reverted.  Four call sites."),
+               "was reverted.  Four call sites.  A knob, not a gate: the "
+               "feature's owner said in the v506 wrap-up reply that a mirror "
+               "cannot necessarily support the upload store, so the default "
+               "stays FALSE and mirrors opt in."),
         h("hgSession.shortLink", "flag", "hg/hgSession/hgSession.c",
-          default="FALSE", role="gate", verified=True,
-          note="Short session links.  Added v374 and never flipped, which is "
-               "the longest-running dark feature here."),
+          default="FALSE", role="knob", verified=True,
+          note="Short session links.  Added v374 and never flipped.  A knob, "
+               "not a gate: the feature's owner said in the v506 wrap-up reply "
+               "that a mirror cannot necessarily support it, so the default "
+               "stays FALSE and mirrors opt in."),
         h("showHubApiKey", "flag", "hg/hgHubConnect/hgHubConnect.c",
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
@@ -632,14 +637,17 @@ RELEASE_GATES = {
                "last test in bedItemRgb is the only thing it controls, so "
                "deleting it is a two-line change."),
         h("hgHubConnect.validateHub", "flag",
-          "hg/hgHubConnect/hgHubConnect.c", default="TRUE", role="gate",
-          verified=True,
+          "hg/hgHubConnect/hgHubConnect.c", default="TRUE", role="knob",
+          public=True, verified=True,
           note="The Hub Development tab on hgHubConnect, which is where a hub "
                "author runs hubCheck from the browser.  Two call sites, the "
                "tab itself and hgHubConnectDeveloperMode below it.  Public "
                "since v427.  Described here as \"run hubCheck when a hub is "
                "attached\" until the call site was read: it gates the tab, "
-               "not attachment, so a hub is validated on attach either way."),
+               "not attachment, so a hub is validated on attach either way.  "
+               "A knob, not a gate: the feature's owner said in the v506 "
+               "wrap-up reply that a mirror cannot necessarily support it, "
+               "and product/ex.hg.conf already documents turning it off."),
         h("blatNewForm", "flag", "hg/hgBlat/hgBlat.c", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Replaces hgBlat's classic C-generated search form with the "
