@@ -179,18 +179,15 @@ jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("hgCustom.js", NULL);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
-if (cfgOptionBooleanDefault("showTutorial", TRUE))
+jsIncludeFile("shepherd.min.js", NULL);
+webIncludeResourceFile("shepherd.css");
+jsIncludeFile("jquery-ui.js", NULL);
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("tutorialPopup.js", NULL);
+jsIncludeFile("customTrackTutorial.js", NULL);
+if (sameOk(cgiOptionalString("startCustomTutorial"), "true"))
     {
-    jsIncludeFile("shepherd.min.js", NULL);
-    webIncludeResourceFile("shepherd.css");
-    jsIncludeFile("jquery-ui.js", NULL);
-    webIncludeResourceFile("jquery-ui.css");
-    jsIncludeFile("tutorialPopup.js", NULL);
-    jsIncludeFile("customTrackTutorial.js", NULL);
-    if (sameOk(cgiOptionalString("startCustomTutorial"), "true"))
-        {
-        jsInline("var startCustomTutorialOnLoad = true;");
-        }
+    jsInline("var startCustomTutorialOnLoad = true;");
     }
 
 /* main form */
@@ -739,19 +736,17 @@ struct slPair *valsAndLabels = makeOtherCgiValsAndLabels();
 // Default to the first CGI in the menu.
 char *defaultCgi = valsAndLabels->name;
 char *selected = cartUsualString(cart, hgCtNavDest, defaultCgi);
-if (cfgOptionBooleanDefault("showTutorial", TRUE))
+jsIncludeFile("shepherd.min.js", NULL);
+webIncludeResourceFile("shepherd.css");
+jsIncludeFile("jquery-ui.js", NULL);
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("tutorialPopup.js", NULL);
+jsIncludeFile("customTrackTutorial.js", NULL);
+if (sameOk(cgiOptionalString("startCustomTutorial"), "true"))
     {
-    jsIncludeFile("shepherd.min.js", NULL);
-    webIncludeResourceFile("shepherd.css");
-    jsIncludeFile("jquery-ui.js", NULL);
-    webIncludeResourceFile("jquery-ui.css");
-    jsIncludeFile("tutorialPopup.js", NULL);
-    jsIncludeFile("customTrackTutorial.js", NULL);
-    if (sameOk(cgiOptionalString("startCustomTutorial"), "true"))
-        {
-        jsInline("var startCustomTutorialOnLoad = true;");
-        }
+    jsInline("var startCustomTutorialOnLoad = true;");
     }
+
 printf("<FORM STYLE=\"margin-bottom:0;\" METHOD=\"GET\" NAME=\"navForm\" ID=\"navForm\""
        " ACTION=\"%s\">\n", selected);
 cartSaveSession(cart);

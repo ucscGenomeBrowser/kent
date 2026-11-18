@@ -1891,28 +1891,18 @@ for (;item!=NULL;item=item->next)
     if (item->title != NULL && strlen(item->title) > 0)
         {
         char *encodedString = attributeEncode(item->title);
-        if (cfgOptionBooleanDefault("showMouseovers", FALSE))
+        if (isNotEmpty(item->tooltip))
             {
-            if (isNotEmpty(item->tooltip))
-                {
-                char *sanitized = htmlSanitize(item->tooltip);
-                char *encoded = attributeEncode(sanitized);
-                hPrintf(" title='%s' data-tooltip='%s'", encodedString, encoded);
-                freeMem(encoded);
-                freeMem(sanitized);
-                }
-            else
-                hPrintf(" TITLE='%s'", encodedString);
+            char *sanitized = htmlSanitize(item->tooltip);
+            char *encoded = attributeEncode(sanitized);
+            hPrintf(" title='%s' data-tooltip='%s'", encodedString, encoded);
+            freeMem(encoded);
+            freeMem(sanitized);
             }
         else
-            {
-            // for TITLEs, which we use for mouseOvers,  since they can't have HTML in
-            // them, we substitute a unicode new line for <br> after we've encoded it.
-            // This is stop-gap until we start doing mouseOvers entirely in Javascript
-            hPrintf(" TITLE='%s'", replaceChars(encodedString,"&#x3C;br&#x3E;", "&#8232;"));
-            }
+            hPrintf(" TITLE='%s'", encodedString);
         }
-    else if (isNotEmpty(item->tooltip) && cfgOptionBooleanDefault("showMouseovers", FALSE))
+    else if (isNotEmpty(item->tooltip))
         {
         // some items have no title string (no item name) but do have tooltips
         char *sanitized = htmlSanitize(item->tooltip);
@@ -2002,11 +1992,7 @@ else
             btnType = "btnGreen";
         hPrintf(" width:9px; display:none;' class='%s %sbtn btnN %s'>",
                 trackName,(slice->link == NULL ? "inset " : ""), btnType);
-        // insert the gear spans with display: none
-        if (cfgOptionBooleanDefault("greyBarIcons", TRUE))
-            {
-            hPrintf("<span title='Configure track' id='gear_%s' class='hgTracksGearIcon ui-icon ui-icon-gear' style='display: none;'></span>", name);
-            }
+        hPrintf("<span title='Configure track' id='gear_%s' class='hgTracksGearIcon ui-icon ui-icon-gear' style='display: none;'></span>", name);
         hPrintf("</p>");
         }
     else
@@ -2272,8 +2258,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         else
             hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
-        if (cfgOptionBooleanDefault("greyBarIcons", TRUE))
-            hPrintf("<span id='close_btn_%s' title='Hide track' class='hgTracksCloseIcon ui-icon ui-icon-close' style='display: none'></span>", trackName);
+        hPrintf("<span id='close_btn_%s' title='Hide track' class='hgTracksCloseIcon ui-icon ui-icon-close' style='display: none'></span>", trackName);
         hPrintf("</TD>\n");
         }
 
@@ -2302,8 +2287,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         else
             hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
-        if (cfgOptionBooleanDefault("greyBarIcons", TRUE))
-            hPrintf("<span id='close_btn_%s' title='Hide track' class='hgTracksCloseIcon ui-icon ui-icon-close' style='display: none'></span>", trackName);
+        hPrintf("<span id='close_btn_%s' title='Hide track' class='hgTracksCloseIcon ui-icon ui-icon-close' style='display: none'></span>", trackName);
         hPrintf("</TD>\n");
         // button
         safef(name, sizeof(name), "btn_%s", trackName);

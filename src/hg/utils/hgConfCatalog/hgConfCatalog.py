@@ -21,9 +21,7 @@ needed a mechanism the others do not have:
   master through QA without blocking the release train, then have its default
   flipped to TRUE once it is released, then have the flag deleted.  That last
   step is the one nobody does.  Nothing in the tree records that a flag was
-  meant to be temporary, so shipped gates accumulate: showTutorial has been
-  defaulting TRUE since v466, greyBarIcons since v492, and both are still
-  branch points in hgTracks today.
+  meant to be temporary, so shipped gates accumulate.
 
 So the registry separates two populations that look identical in the source:
 
@@ -302,14 +300,6 @@ RELEASE_GATES = {
                "a link sets the track's visibility but the track stays hidden "
                "inside its supertrack.  On for genome-test and hgwdev since "
                "2026-11-13; flip to TRUE once released."),
-        h("showMouseovers", "flag", "hg/hgTracks/config.c", default="FALSE",
-          role="gate", verified=True,
-          note="Mouseover text on track items instead of the browser's own "
-               "title tooltips.  Added v446 and still defaulting FALSE, which "
-               "makes it the oldest gate in the tree that never shipped.  Four "
-               "call sites across config.c and imageV2.c.  Either the feature "
-               "is wanted, in which case flip it, or it is not, in which case "
-               "the flag and the code behind it should go."),
         h("storeUserFiles", "flag", "hg/hgHubConnect/hgHubConnect.c",
           default="FALSE", role="knob", verified=True,
           note="Hub space, the user file store behind hgHubConnect's upload "
@@ -595,29 +585,13 @@ RELEASE_GATES = {
                "the dialog rework that came with the same ticket -- output "
                "format first, page-sized font and buttons, the position on "
                "its own line -- which is not GenBank-specific and lands for "
-               "everyone.  Sits behind showDownloadUi, the gate on the dialog "
-               "itself, which has defaulted TRUE since v467.  Added in the "
+               "everyone. Added in the "
                "current release, so it is doing exactly what a gate is "
                "supposed to do and has not earned a deadline yet.  On in "
                "cgi-bin-max's hg.conf for testing; not yet turned on anywhere "
                "shared."),
         # Gates whose default has flipped TRUE.  These are the deletable ones:
         # the feature is public and the flag is now only an off switch.
-        h("showTutorial", "flag", "hg/hgCustom/hgCustom.c", default="TRUE",
-          role="gate", verified=True,
-          note="The interactive tutorials.  Public since v466, five call "
-               "sites across four CGIs.  Nothing is gating any more."),
-        h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c",
-          default="TRUE", role="gate", verified=True,
-          note="The download-current-track UI.  Public since v467."),
-        h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c", default="TRUE",
-          role="gate", verified=True,
-          note="Details pages in a popup instead of a page load.  Public "
-               "since v492.  Three call sites."),
-        h("greyBarIcons", "flag", "hg/hgTracks/hgTracks.c",
-          default="TRUE", role="gate", verified=True,
-          note="The grey side-bar icons on track images.  Public since v492.  "
-               "Four call sites in hgTracks.c and imageV2.c."),
         h("newBotDelay", "flag", "hg/lib/botDelay.c", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),
@@ -1627,9 +1601,8 @@ BRANDING = {
           public=True, verified=True),
         h("mouseOverEnabled", "internal", "hg/hgTracks/hgTracks.c",
           default='"on"', verified=True,
-          note="Not the same thing as the showMouseovers gate: this one is on "
-               "by default and controls the existing tooltip behaviour.  The "
-               "near-identical names are a trap worth fixing."),
+          note="This one is on "
+               "by default and controls the wiggle tooltip behaviour."),
         h("bigWarn", "internal", "hg/hgTracks/bigWarn.c", default='"on"',
           public=True, verified=True),
         h("defaultGenome", "internal", "hg/lib/hdb.c",
