@@ -213,7 +213,8 @@ def compareBuilds(bed, sizes, opts, workDir, args, result, tag=""):
         newOut = os.path.join(workDir, "%st%d.bb" % (tag, t))
         outs.append(newOut)
         newRc, newErr, secs, kb = timedRun(
-            [args.new, "-threads=%d" % t] + opts + [bed, sizes, newOut], workDir, "%st%d" % (tag, t))
+            [args.new] + (["-threads=%d" % t] if t else []) + opts + [bed, sizes, newOut],
+            workDir, "%st%d" % (tag, t))
         result["t%dSecs" % t], result["t%dKb" % t] = secs, kb
         if newRc != refRc:
             problems.append("t%d exit %d vs ref %d" % (t, newRc, refRc))
@@ -518,7 +519,8 @@ def main():
     r.add_argument("results")
     r.add_argument("--ref", required=True, help="reference bedToBigBed")
     r.add_argument("--new", required=True, help="bedToBigBed under test")
-    r.add_argument("--threads", default="1,32", help="comma-separated -threads values for --new")
+    r.add_argument("--threads", default="1,32", help="comma-separated -threads values for --new.  0 runs --new "
+                   "without -threads, for a build that has no such option")
     r.add_argument("--work", required=True, help="scratch directory, under /data/tmp")
     r.add_argument("--jobs", type=int, default=4, help="files tested at once")
     r.add_argument("--minBytes", type=int, default=0, help="skip bigBeds smaller than this")
@@ -530,7 +532,8 @@ def main():
     e.add_argument("results")
     e.add_argument("--ref", required=True, help="reference bedToBigBed")
     e.add_argument("--new", required=True, help="bedToBigBed under test")
-    e.add_argument("--threads", default="1,32", help="comma-separated -threads values for --new")
+    e.add_argument("--threads", default="1,32", help="comma-separated -threads values for --new.  0 runs --new "
+                   "without -threads, for a build that has no such option")
     e.add_argument("--work", required=True, help="scratch directory, under /data/tmp")
     e.add_argument("--jobs", type=int, default=8, help="files tested at once")
     e.add_argument("--maxBytes", type=int, default=50 * 10**6, help="largest bigBed to use")

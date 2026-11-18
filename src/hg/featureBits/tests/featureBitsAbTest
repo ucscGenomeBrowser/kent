@@ -40,7 +40,7 @@ import subprocess
 import sys
 
 REF_BIN = "/cluster/bin/x86_64/featureBits"
-MANIFEST = "/hive/users/braney/fbAbTest38774/manifest38769.tsv"
+MANIFEST = "/hive/groups/browser/kentUtilAbTest/bedToBigBed/manifest.tsv"
 KENTBIN = os.path.expanduser("~/bin/x86_64")
 DBS = ["hg38", "hg19", "mm39", "hs1"]
 PSL_TABLES = ["refSeqAli", "ncbiRefSeqPsl", "all_mrna", "xenoMrna", "all_est", "intronEst"]
