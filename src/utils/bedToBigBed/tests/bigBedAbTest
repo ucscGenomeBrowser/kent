@@ -262,14 +262,33 @@ def testOne(row, args):
 
 
 def cmdRun(args):
+    """Results are appended as each file finishes, so a long run can be stopped
+    and started again; files already in the results file are skipped."""
     args.threads = [int(t) for t in args.threads.split(",")]
     os.makedirs(args.work, exist_ok=True)
-    rows = readTsv(args.list)
+    rows = [r for r in readTsv(args.list)
+            if args.minBytes <= int(r["bytes"]) <= args.maxBytes]
     fields = ["path", "bytes", "itemCount", "status", "refSecs", "refKb"]
     for t in args.threads:
         fields += ["t%dSecs" % t, "t%dKb" % t]
     fields.append("detail")
-    results = []
+    done = set()
+    earlierDiffs = 0
+    if os.path.exists(args.results) and os.path.getsize(args.results) > 0:
+        with open(args.results) as f:
+            header = f.readline().rstrip("\n").split("\t")
+        if header != fields:
+            sys.exit("%s has columns %s, but this run would write %s.  Use the same --threads "
+                     "as the first run, or a new results file." % (args.results, header, fields))
+        earlier = readTsv(args.results)
+        done = set(r["path"] for r in earlier)
+        earlierDiffs = sum(1 for r in earlier if r["status"] == "DIFF")
+        out = open(args.results, "a")
+    else:
+        out = open(args.results, "w")
+        out.write("\t".join(fields) + "\n")
+    rows = [r for r in rows if r["path"] not in done]
+    print("%d files to test, %d already done" % (len(rows), len(done)), file=sys.stderr)
     counts = collections.Counter()
     start = time.time()
     with concurrent.futures.ThreadPoolExecutor(args.jobs) as ex:
@@ -278,15 +297,18 @@ def cmdRun(args):
             res = fut.result()
             for k in fields:
                 res.setdefault(k, 0)
-            results.append(res)
+            out.write("\t".join(str(res[k]) for k in fields) + "\n")
+            out.flush()
             counts[res["status"]] += 1
-            if res["status"] not in ("SAME",):
+            if res["status"] != "SAME":
                 print("%s %s %s" % (res["status"], res["path"], res["detail"]), file=sys.stderr)
-    results.sort(key=lambda r: int(r["bytes"]))
-    writeTsv(args.results, results, fields)
-    print("%d files in %.0f s: %s" % (len(results), time.time() - start,
+    out.close()
+    print("%d files in %.0f s: %s" % (len(rows), time.time() - start,
           ", ".join("%s=%d" % kv for kv in sorted(counts.items()))), file=sys.stderr)
-    return 1 if counts["DIFF"] else 0
+    if earlierDiffs:
+        print("%d DIFF rows from earlier runs are in %s" % (earlierDiffs, args.results),
+              file=sys.stderr)
+    return 1 if counts["DIFF"] or earlierDiffs else 0
 
 
 # Each line mutation takes (fields, defined, extra) and returns the new fields, or
@@ -497,6 +519,8 @@ def main():
     r.add_argument("--threads", default="1,32", help="comma-separated -threads values for --new")
     r.add_argument("--work", required=True, help="scratch directory, under /data/tmp")
     r.add_argument("--jobs", type=int, default=4, help="files tested at once")
+    r.add_argument("--minBytes", type=int, default=0, help="skip bigBeds smaller than this")
+    r.add_argument("--maxBytes", type=int, default=10**15, help="skip bigBeds larger than this")
     e = sub.add_parser("errors", help="break copies of real inputs and compare the errors")
     e.add_argument("list", help="manifest or sample file")
     e.add_argument("results")
