@@ -8,7 +8,7 @@ The test runs two featureBits binaries on the same real inputs with the same
 options. For every case it compares the exit code, stdout, stderr and the md5
 of each output file (-bed, -bin, -fa). Run it after any change to featureBits.c.
 
-The current work directory is /hive/users/braney/fbAbTest38774/full:
+The current work directory is /hive/groups/browser/kentUtilAbTest/featureBits/full:
 
   - 1,850 cases over hg38, hg19, mm39 and hs1: liftOver chains, PSL tables,
     BED files made from a sample of bigBeds, a few bigBeds read directly, and
@@ -24,7 +24,7 @@ Checking a new build
 --------------------
 
     T=~/kent/src/hg/featureBits/tests/featureBitsAbTest
-    W=/hive/users/braney/fbAbTest38774/full
+    W=/hive/groups/browser/kentUtilAbTest/featureBits/full
     $T run $W myChange ~/bin/x86_64/featureBits --cluster
     $T compare $W myChange
 
@@ -103,6 +103,6 @@ To build a new work directory from scratch:
 setup copies the release binary, dumps chrom sizes from chromInfo (hs1 uses
 /hive/data/genomes/hs1/chrom.sizes), dumps the PSL tables, converts a sample
 of bigBeds to BED, and writes cases.tsv. The bigBed sample comes from the
-#38769 manifest, kept at /hive/users/braney/fbAbTest38774/manifest38769.tsv.
+#38769 manifest, kept at /hive/groups/browser/kentUtilAbTest/bedToBigBed/manifest.tsv.
 bigBeds over 10M items or 200 MB are skipped, so the test does not cover
 larger BED files.
