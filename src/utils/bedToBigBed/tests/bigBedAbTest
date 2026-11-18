@@ -249,6 +249,8 @@ def testOne(row, args):
     except RuntimeError as e:
         result.update(status="PREP_FAIL", detail=str(e))
         return result
+    if args.maxAlloc:
+        opts.append("-maxAlloc=%d" % args.maxAlloc)
     problems, refRc, refErr = compareBuilds(bed, sizes, opts, workDir, args, result)
     if problems:
         result.update(status="DIFF", detail="; ".join(problems))
@@ -521,6 +523,8 @@ def main():
     r.add_argument("--jobs", type=int, default=4, help="files tested at once")
     r.add_argument("--minBytes", type=int, default=0, help="skip bigBeds smaller than this")
     r.add_argument("--maxBytes", type=int, default=10**15, help="skip bigBeds larger than this")
+    r.add_argument("--maxAlloc", type=int, default=0,
+                   help="pass -maxAlloc=N to both builds, for inputs with more than about 700 million items")
     e = sub.add_parser("errors", help="break copies of real inputs and compare the errors")
     e.add_argument("list", help="manifest or sample file")
     e.add_argument("results")
