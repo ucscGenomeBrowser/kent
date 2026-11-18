@@ -20,6 +20,7 @@
 #include "customComposite.h"
 #include "stdlib.h"
 #include "wikiLink.h"
+#include "hCommon.h"
 
 /* Tool tips */
 #define COLLECTION_TITLE  "Double-click to edit name and color"
@@ -1013,8 +1014,9 @@ if (userName == NULL)
     char *retEnc = wikiLinkEncodeCurrentPageReturnUrl(hgsid);
     char *loginUrl = retEnc ? wikiLinkUserLoginUrlReturning(hgsid, retEnc)
                             : wikiLinkUserLoginUrl(hgsid);
-    errAbort("You must be logged in to edit collections. Visit our "
-             "<A HREF=\"%s\">login page.</A>", loginUrl);
+    // Not being logged in is not a program error, so hUserAbort keeps it out of the stack dumps.
+    hUserAbort("You must be logged in to edit collections. Visit our "
+               "<A HREF=\"%s\">login page.</A>", loginUrl);
     }
 
 char *db;
