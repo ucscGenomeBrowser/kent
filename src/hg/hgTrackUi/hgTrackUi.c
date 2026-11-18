@@ -3761,14 +3761,23 @@ dotBracketCfgUi(cart, tdb);
 if (tdbSupportsColorOverride(tdb))
     colorTrackOption(cart, tdb->track, tdb);
 
-/* myVariants own track: render inline share management. Skip shared tracks
- * (myVariants_shared_*) - you can't re-share someone else's data. */
-if (cfgOptionBooleanDefault("doMyVariants", FALSE)
-    && isMyVariantsTrack(tdb->track)
-    && !isMyVariantsSharedTrack(tdb->track))
+/* myVariants tracks: the type filter and codon coloring on every one, and
+ * download and share management only on the user's own.  You can't re-share
+ * someone else's data. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE) && isMyVariantsTrack(tdb->track))
     {
-    myVariantsDownloadUi(tdb->track);
-    myVariantsShareUi(tdb->track, NULL);
+    baseColorDrawOptDropDown(cart, tdb);
+    filterBy_t *filters = filterBySetGet(tdb, cart, tdb->track);
+    if (filters != NULL)
+        {
+        filterBySetCfgUi(cart, tdb, filters, TRUE, tdb->track);
+        filterBySetFree(&filters);
+        }
+    if (!isMyVariantsSharedTrack(tdb->track))
+        {
+        myVariantsDownloadUi(tdb->track);
+        myVariantsShareUi(tdb->track, NULL);
+        }
     }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg

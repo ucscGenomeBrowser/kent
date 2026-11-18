@@ -12,6 +12,7 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "bed.h"
+#include "genePred.h"
 #include "binRange.h"
 #include "myVariants.h"
 #include "myVariantsShare.h"
@@ -41,7 +42,7 @@ static char *reservedFieldNames[] = {
     "bin", "chrom", "chromStart", "chromEnd", "name", "score", "strand",
     "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
     "chromStarts", "description", "db", "ref", "alt",
-    "mouseover", "itemType", "cnvType", "id",
+    "mouseover", "itemType", "subType", "exonFrames", "id",
     "delete", "cancel", "moveTo", "moveToNew", "moveSave", "moveSaveMsg", "moveWarn",
     "projectSelect", "position", NULL
 };
@@ -465,6 +466,125 @@ item->blockSizes[0] = item->chromEnd - item->chromStart;
 item->chromStarts[0] = 0;
 }
 
+static boolean isPrimerPair(struct myVariants *item)
+/* TRUE for a primer pair, whose two blocks are its primer sites. */
+{
+return sameOk(item->itemType, "primer") && sameOk(item->subType, "pair");
+}
+
+static struct genePred *transcriptGenePred(struct myVariants *item)
+/* Return a genePred for a coding transcript on a known strand, or NULL for
+ * anything else: codons cannot be read off a transcript without a strand.
+ * Without exon frames, the codon drawing counts the frame from the coding
+ * start. */
+{
+if (differentString(item->itemType, "transcript") || item->thickStart >= item->thickEnd
+    || (item->strand[0] != '+' && item->strand[0] != '-'))
+    return NULL;
+struct genePred *gp;
+AllocVar(gp);
+gp->name = cloneString(item->name);
+gp->chrom = cloneString(item->chrom);
+gp->strand[0] = item->strand[0];
+gp->txStart = item->chromStart;
+gp->txEnd = item->chromEnd;
+gp->cdsStart = item->thickStart;
+gp->cdsEnd = item->thickEnd;
+gp->exonCount = item->blockCount;
+AllocArray(gp->exonStarts, item->blockCount);
+AllocArray(gp->exonEnds, item->blockCount);
+int i;
+for (i = 0; i < item->blockCount; i++)
+    {
+    gp->exonStarts[i] = item->chromStart + item->chromStarts[i];
+    gp->exonEnds[i] = gp->exonStarts[i] + item->blockSizes[i];
+    }
+if (item->exonFrames != NULL)
+    {
+    gp->optFields |= genePredExonFramesFld;
+    gp->exonFrames = cloneMem(item->exonFrames, item->blockCount * sizeof(int));
+    }
+return gp;
+}
+
+static char *exonFramesProblem(struct myVariants *item)
+/* Check a transcript's exon frames against its strand and coding region with
+ * genePredCheck.  Returns a message for the user, or NULL when it has no frames
+ * or they fit. */
+{
+if (item->exonFrames == NULL)
+    return NULL;
+if (item->strand[0] != '+' && item->strand[0] != '-')
+    return cloneString("Exon frames need the strand of the transcript, + or -.");
+struct genePred *gp = transcriptGenePred(item);
+if (gp == NULL)
+    return cloneString("Exon frames need a coding region.  Set CDS Start and CDS End, "
+        "or leave the frames blank.");
+/* genePredCheck numbers exons from 0, so its own messages are not shown. */
+FILE *devNull = mustOpen("/dev/null", "w");
+int errorCount = genePredCheck("exonFrames", devNull, -1, gp);
+carefulClose(&devNull);
+genePredFree(&gp);
+if (errorCount == 0)
+    return NULL;
+return cloneString("These exon frames do not fit the coding region.  An exon that overlaps "
+    "CDS Start to CDS End needs a frame of 0, 1 or 2, and an exon outside it needs -1.");
+}
+
+static char *setItemExonFrames(struct myVariants *item, char *s)
+/* Set item->exonFrames from a comma list such as "0,2,-1", one frame per block
+ * in genomic order, as in a genePred.  An empty s, or an item that is not a
+ * transcript, clears them.  Call after the blocks are final.  Returns a message
+ * for the user when the list is wrong, else NULL. */
+{
+freez(&item->exonFrames);
+if (isEmpty(s) || differentString(item->itemType, "transcript"))
+    return NULL;
+char *copy = cloneString(s);
+eraseWhiteSpace(copy);
+char *trimmed = copy;
+if (lastChar(trimmed) == ',')
+    trimmed[strlen(trimmed) - 1] = '\0';
+if (isEmpty(trimmed))
+    {
+    freeMem(copy);
+    return NULL;
+    }
+int count = chopByChar(trimmed, ',', NULL, 0);
+if (count != item->blockCount)
+    {
+    freeMem(copy);
+    struct dyString *dy = dyStringCreate("There are %d exon frames for %u exons.  "
+        "Give one frame per exon, in order along the genome.", count, item->blockCount);
+    return dyStringCannibalize(&dy);
+    }
+char **words;
+AllocArray(words, count);
+chopByChar(trimmed, ',', words, count);
+int *frames;
+AllocArray(frames, count);
+int i;
+for (i = 0; i < count; i++)
+    {
+    if (sameString(words[i], "-1") || sameString(words[i], "0")
+        || sameString(words[i], "1") || sameString(words[i], "2"))
+        frames[i] = atoi(words[i]);
+    else
+        {
+        struct dyString *dy = dyStringCreate("\"%s\" is not an exon frame.  "
+            "An exon frame is 0, 1 or 2, or -1 for an exon with no coding bases.", words[i]);
+        freeMem(frames);
+        freeMem(words);
+        freeMem(copy);
+        return dyStringCannibalize(&dy);
+        }
+    }
+freeMem(words);
+freeMem(copy);
+item->exonFrames = frames;
+return NULL;
+}
+
 void myVariantsJsCommand(char *command, struct track *trackList, struct hash *trackHash)
 /* Execute some command sent to us from the javaScript.  All we know for sure is that
  * the first word of the command is "myVariants."  We expect it to be of format:
@@ -575,12 +695,15 @@ AllocVar(item);
         jsonOptionalStringField(json, "itemType", "snv"));
     if (itemType == NULL)
         errAbort("invalid itemType");
-    char *cnvType = "";
-    if (sameString(itemType, "cnv"))
+    char *subType = "";
+    int subTypeCount;
+    myVariantsSubTypes(itemType, &subTypeCount);
+    if (subTypeCount > 0)
         {
-        cnvType = myVariantsCanonicalCnvType(jsonOptionalStringField(json, "cnvType", ""));
-        if (cnvType == NULL)
-            errAbort("invalid cnvType");
+        subType = myVariantsCanonicalSubType(itemType,
+            jsonOptionalStringField(json, "subType", ""));
+        if (subType == NULL)
+            errAbort("invalid subType");
         }
     unsigned color;
     htmlColorForCode(colorCode, &color);
@@ -607,10 +730,10 @@ AllocVar(item);
     item->chrom = cloneString(chrom);
     item->chromStart = chromStart;
     item->chromEnd = chromEnd;
-    /* SNV/CNV/other items don't carry a thick range or BED12 blocks; force defaults
-     * so a stale value from a view toggle in the client can't leak through. */
-    if (sameString(itemType, "snv") || sameString(itemType, "cnv")
-        || sameString(itemType, "other"))
+    /* Only a transcript has a thick range of its own; the rest are drawn thick
+     * end to end.  Force that so a stale value from a view toggle in the client
+     * can't leak through. */
+    if (differentString(itemType, "transcript"))
         {
         item->thickStart = chromStart;
         item->thickEnd = chromEnd;
@@ -634,7 +757,8 @@ AllocVar(item);
     item->description = cloneString(description);
     /* A browser sends a textarea's line breaks as CR LF; keep only the LF. */
     stripChar(item->description, '\r');
-    if (sameString(itemType, "transcript") || sameString(itemType, "other"))
+    if (sameString(itemType, "transcript") || sameString(itemType, "other")
+        || sameString(itemType, "regulatory") || sameString(itemType, "primer"))
         {
         item->ref = cloneString("");
         item->alt = cloneString("");
@@ -653,7 +777,7 @@ AllocVar(item);
     item->db = database;
     item->mouseover = cloneString(mouseover);
     item->itemType = cloneString(itemType);
-    item->cnvType = cloneString(cnvType);
+    item->subType = cloneString(subType);
     }
 
 if (!item)
@@ -697,8 +821,21 @@ if (blockSizesJson && blockSizesJson->type == jsonList &&
             }
         }
     }
+if (differentString(item->itemType, "transcript") && !isPrimerPair(item)
+    && item->blockCount > 0)
+    {
+    /* Only a transcript or a primer pair has blocks of its own. */
+    item->blockCount = 0;
+    freez(&item->blockSizes);
+    freez(&item->chromStarts);
+    }
 ensureItemBlocks(item);
 validateItemBlocks(item);
+char *framesProblem = setItemExonFrames(item, jsonOptionalStringField(json, "exonFrames", ""));
+if (framesProblem == NULL)
+    framesProblem = exonFramesProblem(item);
+if (framesProblem != NULL)
+    hUserAbort("%s", framesProblem);
 
 /* Check every custom field name before anything is written, so a bad one
  * leaves no new track and no new column behind. */
@@ -1032,6 +1169,7 @@ if (item == NULL)
     return NULL;
 char problem[512];
 struct slPair *customVals = NULL;
+unsigned oldBlockCount = item->blockCount;
 
 /* The type decides which of the other fields the row keeps, so read it first. */
 char *newType = itemEditValue(trackName, "itemType");
@@ -1076,18 +1214,18 @@ if (newVal != NULL)
     item->itemRgb = color;
     }
 
-newVal = itemEditValue(trackName, "cnvType");
+newVal = itemEditValue(trackName, "subType");
 if (newVal != NULL)
     {
     if (isEmpty(newVal))
-        item->cnvType = cloneString("");
+        item->subType = cloneString("");
     else
         {
-        char *canonical = myVariantsCanonicalCnvType(newVal);
+        char *canonical = myVariantsCanonicalSubType(item->itemType, newVal);
         if (canonical == NULL)
-            return refuseItemEdit(trackName, "That is not one of the CNV types.",
-                &item, &customVals);
-        item->cnvType = cloneString(canonical);
+            return refuseItemEdit(trackName, "That is not one of the subtypes of this "
+                "annotation type.", &item, &customVals);
+        item->subType = cloneString(canonical);
         }
     }
 
@@ -1180,11 +1318,13 @@ if (thickStartStr != NULL && thickEndStr != NULL)
     }
 
 /* Blocks.  The details page submits its hidden block inputs whatever the type
- * is; only a transcript keeps them, and the collapse below owns the rest. */
+ * is; only a transcript or primer pair keeps them, and the collapse below owns
+ * the rest.  A primer pair's blocks are its primer sites. */
 char *countStr = itemEditValue(trackName, "blockCount");
 char *sizesStr = itemEditValue(trackName, "blockSizes");
 char *startsStr = itemEditValue(trackName, "chromStarts");
-if (isTranscript && countStr != NULL && sizesStr != NULL && startsStr != NULL)
+if ((isTranscript || isPrimerPair(item))
+    && countStr != NULL && sizesStr != NULL && startsStr != NULL)
     {
     if (!isAllDigits(countStr) || !isNumberList(sizesStr) || !isNumberList(startsStr))
         return refuseItemEdit(trackName,
@@ -1225,27 +1365,45 @@ slFreeList(&customCols);
 
 /* Fields the row's type no longer has: a type change must not leave alleles on
  * a transcript or a CNV term on a short variant. */
-if (isTranscript || sameOk(item->itemType, "other"))
+if (differentString(item->itemType, "snv") && differentString(item->itemType, "cnv"))
     {
     item->ref = cloneString("");
     item->alt = cloneString("");
-    item->cnvType = cloneString("");
     }
-else if (sameOk(item->itemType, "snv"))
-    item->cnvType = cloneString("");
 else if (sameOk(item->itemType, "cnv"))
     item->ref = cloneString("");
-/* Only a transcript draws as an exon structure, so every other type collapses
- * to one full-span block with no separate coding range. */
+if (myVariantsCanonicalSubType(item->itemType, item->subType) == NULL)
+    item->subType = cloneString("");
+/* Only a transcript has a coding range, and only a transcript or primer pair
+ * has blocks, so the rest collapse to one full-span block. */
 if (!isTranscript)
     {
     item->thickStart = item->chromStart;
     item->thickEnd = item->chromEnd;
+    }
+if (!isTranscript && !isPrimerPair(item))
+    {
     item->blockCount = 0;
     freez(&item->blockSizes);
     freez(&item->chromStarts);
     }
 ensureItemBlocks(item);
+
+/* Exon frames, checked against the blocks as they now stand.  Frames left from
+ * before an edit that changed the number of exons no longer line up, so drop
+ * them. */
+char *framesStr = itemEditValue(trackName, "exonFrames");
+if (framesStr != NULL)
+    {
+    char *framesProblem = setItemExonFrames(item, framesStr);
+    if (framesProblem != NULL)
+        return refuseItemEdit(trackName, framesProblem, &item, &customVals);
+    }
+else if (!isTranscript || item->blockCount != oldBlockCount)
+    freez(&item->exonFrames);
+char *framesProblem = exonFramesProblem(item);
+if (framesProblem != NULL)
+    return refuseItemEdit(trackName, framesProblem, &item, &customVals);
 
 char *textProblem = itemTextProblem(item, customVals);
 if (textProblem != NULL)
@@ -1297,7 +1455,12 @@ if (errCatchStart(errCatch))
     sqlDyStringPrintf(upd, ", alt='%s'", item->alt);
     sqlDyStringPrintf(upd, ", mouseover='%s'", item->mouseover);
     sqlDyStringPrintf(upd, ", itemType='%s'", item->itemType);
-    sqlDyStringPrintf(upd, ", cnvType='%s'", item->cnvType);
+    sqlDyStringPrintf(upd, ", subType='%s'", item->subType);
+    struct dyString *framesCsv = dyStringNew(64);
+    for (i = 0; item->exonFrames != NULL && i < item->blockCount; i++)
+        dyStringPrintf(framesCsv, "%d,", item->exonFrames[i]);
+    sqlDyStringPrintf(upd, ", exonFrames='%s'", dyStringContents(framesCsv));
+    dyStringFree(&framesCsv);
     struct slPair *cv;
     for (cv = customVals; cv != NULL; cv = cv->next)
         sqlDyStringPrintf(upd, ", `%s`='%s'", cv->name, (char *)cv->val);
@@ -1400,6 +1563,20 @@ if (idString != NULL)
     }
 }
 
+static int countMyVariantsItems(struct sqlConnection *conn, char *tableName, char *whereExtra)
+/* Count the items in the current window matching the whereExtra clause. */
+{
+struct dyString *query = sqlDyStringCreate("select count(*) from %s where ", tableName);
+hAddBinToQueryGeneral("bin", winStart, winEnd, query);
+sqlDyStringPrintf(query, " chrom='%s' and chromStart < %d and chromEnd > %d",
+        chromName, winEnd, winStart);
+if (isNotEmpty(whereExtra))
+    sqlDyStringPrintf(query, " and (%-s)", whereExtra);
+int count = sqlQuickNum(conn, query->string);
+dyStringFree(&query);
+return count;
+}
+
 static struct linkedFeatures *loadMyVariantsItems(struct sqlConnection *conn,
     char *tableName, struct trackDb *tdb, char *whereExtra)
 /* Query tableName for myVariants items in the current window matching the
@@ -1446,6 +1623,7 @@ while ((row = sqlNextRow(sr)) != NULL)
                                     item->blockCount * sizeof(int));
         }
     lf = bedMungToLinkedFeatures(&bed, tdb, 12, 0, 1000, TRUE);
+    lf->original = transcriptGenePred(item);
     /* The tooltip is written into the DOM as HTML, so the user's own text is
      * escaped and only the <br> separators below are markup.  These tracks get
      * shared, so the text can come from someone else. */
@@ -1460,6 +1638,14 @@ while ((row = sqlNextRow(sr)) != NULL)
         char *escaped = htmlEncode(item->name);
         dyStringPrintf(mouseover, "%s", escaped);
         freeMem(escaped);
+        if ((sameOk(item->itemType, "cnv") || sameOk(item->itemType, "regulatory"))
+            && isNotEmpty(item->subType))
+            {
+            escaped = htmlEncode(item->subType);
+            dyStringPrintf(mouseover, "<br>%s: %s", myVariantsSubTypeLabel(item->itemType),
+                escaped);
+            freeMem(escaped);
+            }
         if (item->ref != NULL && isNotEmpty(item->ref))
             {
             escaped = htmlEncode(item->ref);
@@ -1567,11 +1753,34 @@ if (!sqlTableExists(conn, ct->dbTableName))
     hFreeConn(&conn);
     return;
     }
-char *whereClause = myVariantsScopeWhere(database, track->track);
+struct dyString *where = dyStringNew(0);
+char *scopeClause = myVariantsScopeWhere(database, track->track);
+if (scopeClause != NULL)
+    sqlDyStringPrintf(where, "%-s", scopeClause);
+filterBy_t *filterBySet = filterBySetGet(track->tdb, cart, NULL);
+char *filterClause = filterBySetClause(filterBySet);
+if (filterClause != NULL)
+    {
+    if (scopeClause != NULL)
+        sqlDyStringPrintf(where, " and ");
+    sqlDyStringPrintf(where, "%-s", filterClause);
+    }
 struct linkedFeatures *lfList = loadMyVariantsItems(conn, ct->dbTableName,
-    track->tdb, whereClause);
+    track->tdb, dyStringContents(where));
+/* The filter is applied in the query, so the items it left out are counted
+ * apart, for the label to say how many. */
+if (filterClause != NULL)
+    {
+    int total = countMyVariantsItems(conn, ct->dbTableName, scopeClause);
+    int shown = slCount(lfList);
+    if (total > shown)
+        labelTrackAsFilteredNumber(track, total - shown);
+    }
 hFreeConn(&conn);
-freeMem(whereClause);
+freeMem(scopeClause);
+freeMem(filterClause);
+filterBySetFree(&filterBySet);
+dyStringFree(&where);
 slReverse(&lfList);
 track->items = lfList;
 }
@@ -1956,7 +2165,7 @@ item->db = cloneString(db);
 item->description = cloneString(emptyForNull(pos->description));
 item->mouseover = cloneString("");
 item->itemType = cloneString("snv");
-item->cnvType = cloneString("");
+item->subType = cloneString("");
 /* The alleles are read off a term the parser takes; the label keeps the
  * user's own spelling. */
 char *term = hgvsTermOnAccession(db, input);
@@ -1985,8 +2194,8 @@ if (row != NULL && sameString(row->chrom, pos->chrom))
         {
         freeMem(item->itemType);
         item->itemType = cloneString("cnv");
-        freeMem(item->cnvType);
-        item->cnvType = cloneString(cnvTypeForChange(changeType));
+        freeMem(item->subType);
+        item->subType = cloneString(cnvTypeForChange(changeType));
         item->ref = cloneString("");
         item->alt = cloneString("");
         }
@@ -2061,7 +2270,7 @@ item->db = cloneString(db);
 item->description = cloneString(emptyForNull(pos->description));
 item->mouseover = cloneString("");
 item->itemType = cloneString("");
-item->cnvType = cloneString("");
+item->subType = cloneString("");
 }
 
 struct mvMatch
@@ -2135,7 +2344,7 @@ jsonWriteString(jw, "alt", emptyForNull(item->alt));
 jsonWriteString(jw, "name", emptyForNull(item->name));
 jsonWriteString(jw, "description", emptyForNull(item->description));
 jsonWriteString(jw, "itemType", emptyForNull(item->itemType));
-jsonWriteString(jw, "cnvType", emptyForNull(item->cnvType));
+jsonWriteString(jw, "subType", emptyForNull(item->subType));
 }
 
 static boolean fillItemFromGnomadTerm(char *db, char *input, struct myVariants *item,
@@ -2202,7 +2411,7 @@ item->db = cloneString(db);
 item->description = cloneString("");
 item->mouseover = cloneString("");
 item->itemType = cloneString("snv");
-item->cnvType = cloneString("");
+item->subType = cloneString("");
 item->alt = alt;
 item->ref = ref;
 if (strlen(ref) <= MYVARIANTS_TEXT_MAX)

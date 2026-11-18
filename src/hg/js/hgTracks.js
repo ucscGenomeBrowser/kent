@@ -657,7 +657,7 @@ var myVariants = {
     reservedFieldNames: ["bin", "chrom", "chromStart", "chromEnd", "name", "score",
         "strand", "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
         "chromStarts", "description", "db", "ref", "alt", "mouseover",
-        "itemType", "cnvType", "id",
+        "itemType", "subType", "exonFrames", "id",
         "delete", "cancel", "moveTo", "moveToNew", "moveSave", "moveSaveMsg", "moveWarn",
         "projectSelect", "position"],
 
@@ -894,9 +894,13 @@ var myVariants = {
             { label: "Description", id: "description", type: "textarea", placeholder: "Longer description/notes",
               info: "Longer notes or comments about this annotation. Displayed on the details page" },
         ];
-        // CNV vocabulary, mirrored on the server in myVariantsTrack.c:validCnvTypes
-        const cnvTypeOptions = ["deletion", "duplication", "insertion", "inversion",
-                                "translocation", "complex", "breakend"];
+        // The annotation types, each with its label and subtypes, as the server
+        // lists them in myVariantsItemTypes and myVariantsSubTypes.
+        const itemTypes = hgTracks.myVariantsTypes || [];
+        let typeInfo = function(value) {
+            return itemTypes.find(function(t) { return t.value === value; }) ||
+                   {value: value, label: value, subTypes: []};
+        };
 
         const form = document.createElement("form");
         form.className = "myVariants-form";
@@ -950,23 +954,52 @@ var myVariants = {
             syncPositionFields();
         };
 
-        // Switch the form into one of four modes and remember the choice so the
+        // Switch the form to one annotation type and remember the choice so the
         // next dialog open restarts in the same place.
         let applyMode = function(mode) {
             const isTranscript = mode === "transcript";
             const isSnv = mode === "snv";
             const isCnv = mode === "cnv";
-            const isOther = mode === "other";
+            const isPrimer = mode === "primer";
 
-            document.getElementById("typeTranscript").checked = isTranscript;
-            document.getElementById("typeSnv").checked = isSnv;
-            document.getElementById("typeCnv").checked = isCnv;
-            document.getElementById("typeOther").checked = isOther;
+            typeRadioBar.querySelectorAll("input[type=radio]").forEach(function(r) {
+                r.checked = r.value === mode;
+            });
 
-            document.getElementById("refWrapper").style.display = isSnv ? "" : "none";
-            document.getElementById("altWrapper").style.display = (isSnv || isCnv) ? "" : "none";
-            document.getElementById("altLabel").textContent = isCnv ? "Sequence" : "Alt";
-            document.getElementById("cnvTypeWrapper").style.display = isCnv ? "" : "none";
+            refWrapper.style.display = isSnv ? "" : "none";
+            altWrapper.style.display = (isSnv || isCnv) ? "" : "none";
+            altLabel.textContent = isCnv ? "Sequence" : "Alt";
+
+            // The subtype menu holds the picked type's subtypes, keeping the
+            // current choice when the new type has it too.
+            let info = typeInfo(mode);
+            let keep = subTypeSelect.value;
+            subTypeSelect.textContent = "";
+            info.subTypes.forEach(function(t) {
+                let opt = document.createElement("option");
+                opt.value = t;
+                opt.textContent = t;
+                subTypeSelect.appendChild(opt);
+            });
+            if (info.subTypes.indexOf(keep) >= 0) { subTypeSelect.value = keep; }
+            subTypeLabel.textContent = info.subTypeLabel || "";
+            Object.keys(subTypeIcons).forEach(function(type) {
+                subTypeIcons[type].style.display = type === mode ? "" : "none";
+            });
+            subTypeWrapper.style.display = info.subTypes.length > 0 ? "" : "none";
+
+            // A primer pair uses the block editor for its primer sites, without
+            // exon frames.
+            const isPrimerPair = isPrimer && subTypeSelect.value === "pair";
+            blocksContainer.classList.toggle("mvNoFrames", !isTranscript);
+            blocksLabel.textContent = isPrimerPair ? "Primer sites (optional)" : "Blocks (optional)";
+            blocksHint.textContent = isPrimerPair ?
+                "One block for each primer: the forward primer at the start of the position " +
+                "range, the reverse primer at its end. The position is the whole PCR product. " +
+                "First offset must be 0; last block must reach the end of the range." :
+                "Offsets are relative to the start of the position range. " +
+                "First offset must be 0; last block must reach the end of the " +
+                "range. Leave empty for a single full-span block.";
 
             if (isTranscript) {
                 advancedDiv.style.display = "none";
@@ -984,7 +1017,7 @@ var myVariants = {
                     mouseoverWrap, descriptionWrap,
                     blocksSection,
                     advancedDiv, cdsBlocksDiv,
-                    refWrapper, cnvTypeWrapper, altWrapper,
+                    refWrapper, subTypeWrapper, altWrapper,
                     customFieldsSection
                 ];
                 order.forEach(function(el) { manualInpDiv.appendChild(el); });
@@ -1001,12 +1034,17 @@ var myVariants = {
                     trackWrap, newTrackRow, trackDivider,
                     advancedDiv,
                     nameWrap, colorWrap,
-                    refWrapper, cnvTypeWrapper, altWrapper,
+                    refWrapper, subTypeWrapper, altWrapper,
                     posWraps[1], posWraps[2],
                     cdsBlocksDiv,
                     mouseoverWrap, descriptionWrap,
                     customFieldsSection
                 ];
+                // A primer pair keeps the blocks, without the coding range.
+                if (isPrimerPair) {
+                    blocksSection.style.display = "";
+                    order.splice(order.indexOf(cdsBlocksDiv), 0, blocksSection);
+                }
                 order.forEach(function(el) { manualInpDiv.appendChild(el); });
             }
 
@@ -1015,10 +1053,8 @@ var myVariants = {
         };
 
         let currentType = function() {
-            if (document.getElementById("typeTranscript").checked) return "transcript";
-            if (document.getElementById("typeCnv").checked) return "cnv";
-            if (document.getElementById("typeOther").checked) return "other";
-            return "snv";
+            let checked = typeRadioBar.querySelector("input[type=radio]:checked");
+            return checked ? checked.value : "snv";
         };
 
         // The term the position box held before a lookup replaced it with the
@@ -1049,8 +1085,7 @@ var myVariants = {
                 if (lookupType === null) { typeBeforeLookup = currentType(); }
                 lookupType = res.itemType;
                 applyMode(res.itemType);
-                let cnvSelect = form.querySelector("#cnvType");
-                if (cnvSelect && res.cnvType) { cnvSelect.value = res.cnvType; }
+                if (res.subType) { subTypeSelect.value = res.subType; }
             }
             setPositionFields(res.chrom, res.start, res.end);
             let thickStartEl = form.querySelector("#thickStart");
@@ -1245,14 +1280,13 @@ var myVariants = {
 
         // Helper function to create form field (uses createInfoIcon from utils.js)
         let createField = function(field, container) {
+            // mvRow puts the label in a fixed column (HGStyle.css).
             const wrapper = document.createElement("div");
-            wrapper.style.marginBottom = "8px";
+            wrapper.className = field.type === "textarea" ? "mvRow mvRowTop" : "mvRow";
 
             const label = document.createElement("label");
             label.htmlFor = field.id;
             label.textContent = field.label;
-            label.style.display = "inline-block";
-            label.style.minWidth = "140px";
 
             let input;
             if (field.type === "textarea") {
@@ -1316,14 +1350,24 @@ var myVariants = {
         let typeRadioBar = document.createElement("div");
         typeRadioBar.id = "typeRadioBar";
         typeRadioBar.style.cssText = "margin-bottom:12px; padding:8px 10px; background:#f7f7f7; border:1px solid #ddd;";
-        typeRadioBar.innerHTML =
-            "<div style='font-weight:bold; font-size:12px; color:#555; margin-bottom:4px;'>Annotation type</div>" +
-            "<div>" +
-                "<label style='margin-right:20px;'><input type='radio' name='myVariantsType' id='typeSnv' value='snv' checked> Short variant (SNV)</label>" +
-                "<label style='margin-right:20px;'><input type='radio' name='myVariantsType' id='typeCnv' value='cnv'> Copy number variant (CNV)</label>" +
-                "<label style='margin-right:20px;'><input type='radio' name='myVariantsType' id='typeTranscript' value='transcript'> Transcript</label>" +
-                "<label><input type='radio' name='myVariantsType' id='typeOther' value='other'> Other</label>" +
-            "</div>";
+        let typeBarTitle = document.createElement("div");
+        typeBarTitle.style.cssText = "font-weight:bold; font-size:12px; color:#555; margin-bottom:4px;";
+        typeBarTitle.textContent = "Annotation type";
+        typeRadioBar.appendChild(typeBarTitle);
+        let typeBarRow = document.createElement("div");
+        itemTypes.forEach(function(t, ix) {
+            let label = document.createElement("label");
+            label.style.marginRight = "20px";
+            let radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "myVariantsType";
+            radio.value = t.value;
+            radio.checked = ix === 0;
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(" " + t.label));
+            typeBarRow.appendChild(label);
+        });
+        typeRadioBar.appendChild(typeBarRow);
         manualInpDiv.insertBefore(typeRadioBar, manualInpDiv.firstChild);
 
         let onTypeRadioChange = function() {
@@ -1339,11 +1383,10 @@ var myVariants = {
         // a new one.
         let trackWrap = document.createElement("div");
         trackWrap.id = "trackWrapper";
-        trackWrap.style.marginBottom = "8px";
+        trackWrap.className = "mvRow";
         let trackLabel = document.createElement("label");
         trackLabel.htmlFor = "myVarTrackSelect";
         trackLabel.textContent = "Track";
-        trackLabel.style.cssText = "display:inline-block; min-width:140px;";
         let trackSelect = document.createElement("select");
         trackSelect.id = "myVarTrackSelect";
         trackSelect.style.maxWidth = "260px";
@@ -1465,36 +1508,43 @@ var myVariants = {
         createField(snvOnlyFields[0], refWrapper);
         manualInpDiv.appendChild(refWrapper);
 
-        // CNV-only type select
-        let cnvTypeWrapper = document.createElement("div");
-        cnvTypeWrapper.id = "cnvTypeWrapper";
-        cnvTypeWrapper.style.marginBottom = "8px";
-        let cnvTypeLabel = document.createElement("label");
-        cnvTypeLabel.htmlFor = "cnvType";
-        cnvTypeLabel.textContent = "CNV type";
-        cnvTypeLabel.style.cssText = "display:inline-block; min-width:140px;";
-        let cnvTypeSelect = document.createElement("select");
-        cnvTypeSelect.id = "cnvType";
-        cnvTypeOptions.forEach(function(t) {
-            let opt = document.createElement("option");
-            opt.value = t;
-            opt.textContent = t;
-            cnvTypeSelect.appendChild(opt);
+        // Subtype menu, for the types that have subtypes.  applyMode fills it
+        // in with the picked type's.
+        let subTypeWrapper = document.createElement("div");
+        subTypeWrapper.id = "subTypeWrapper";
+        subTypeWrapper.className = "mvRow";
+        let subTypeLabel = document.createElement("label");
+        subTypeLabel.htmlFor = "subType";
+        let subTypeSelect = document.createElement("select");
+        subTypeSelect.id = "subType";
+        subTypeWrapper.appendChild(subTypeLabel);
+        subTypeWrapper.appendChild(subTypeSelect);
+        // One info icon per type; applyMode shows the picked type's.
+        const subTypeHelp = {
+            cnv: "CNV terms follow gnomAD.",
+            regulatory: "The kind of cis-regulatory element: a promoter, an enhancer, " +
+                "a transcription factor binding site, or a boundary element such as " +
+                "an insulator.",
+            primer: "A pair is one annotation covering the PCR product, with a block " +
+                "at each primer site.  Forward, reverse and probe are a single oligo."
+        };
+        let subTypeIcons = {};
+        Object.keys(subTypeHelp).forEach(function(type) {
+            subTypeIcons[type] = createInfoIcon(subTypeHelp[type]);
+            subTypeWrapper.appendChild(subTypeIcons[type]);
         });
-        cnvTypeWrapper.appendChild(cnvTypeLabel);
-        cnvTypeWrapper.appendChild(cnvTypeSelect);
-        cnvTypeWrapper.appendChild(createInfoIcon("CNV vocabulary follows gnomAD"));
-        manualInpDiv.appendChild(cnvTypeWrapper);
+        manualInpDiv.appendChild(subTypeWrapper);
+        // A primer pair has blocks and the other primers do not.
+        subTypeSelect.addEventListener("change", function() { applyMode(currentType()); });
 
         // Alt / Sequence input (shared between SNV and CNV; label switches in applyMode)
         let altWrapper = document.createElement("div");
         altWrapper.id = "altWrapper";
-        altWrapper.style.marginBottom = "8px";
+        altWrapper.className = "mvRow";
         let altLabel = document.createElement("label");
         altLabel.htmlFor = "alt";
         altLabel.id = "altLabel";
         altLabel.textContent = "Alt";
-        altLabel.style.cssText = "display:inline-block; min-width:140px;";
         let altInput = document.createElement("input");
         altInput.type = "text";
         altInput.id = "alt";
@@ -1548,9 +1598,11 @@ var myVariants = {
         let hCount = document.createElement("input"); hCount.type = "hidden"; hCount.id = "blockCount";
         let hSizes = document.createElement("input"); hSizes.type = "hidden"; hSizes.id = "blockSizes";
         let hStarts = document.createElement("input"); hStarts.type = "hidden"; hStarts.id = "chromStarts";
+        let hFrames = document.createElement("input"); hFrames.type = "hidden"; hFrames.id = "exonFrames";
         blocksSection.appendChild(hCount);
         blocksSection.appendChild(hSizes);
         blocksSection.appendChild(hStarts);
+        blocksSection.appendChild(hFrames);
         cdsBlocksDiv.appendChild(blocksSection);
         manualInpDiv.appendChild(cdsBlocksDiv);
 
@@ -1862,8 +1914,7 @@ var myVariants = {
             lookupDone = null;
             lookupType = null;
             typeBeforeLookup = null;
-            let cnvSelect = form.querySelector("#cnvType");
-            if (cnvSelect) { cnvSelect.selectedIndex = 0; }
+            subTypeSelect.selectedIndex = 0;
             if (colorInput) {
                 colorInput.value = "#000000";
                 // createItem reads the color out of the picker, so the picker
@@ -1930,7 +1981,8 @@ var myVariants = {
                 },
                 hiddenCountInput: hCount,
                 hiddenSizesInput: hSizes,
-                hiddenStartsInput: hStarts
+                hiddenStartsInput: hStarts,
+                hiddenFramesInput: hFrames
             });
         }
 
@@ -2060,7 +2112,8 @@ var myVariants = {
                     if (form && form.applyMode) {
                         let saved;
                         try { saved = localStorage.getItem("myVariantsLastMode"); } catch (e) { saved = null; }
-                        const validModes = ["snv", "cnv", "transcript", "other"];
+                        const validModes = (hgTracks.myVariantsTypes || []).map(
+                            function(t) { return t.value; });
                         form.applyMode(validModes.indexOf(saved) >= 0 ? saved : "snv");
                     }
                 },
@@ -2102,11 +2155,19 @@ var myVariants = {
             // DOM swap on the description field), e.target is now detached
             // and `.contains(e.target)` would falsely report "outside". Skip.
             if (!document.contains(e.target)) return;
-            // The warn box, the match picker, the modal backdrop and the autocomplete
-            // menu all render outside the dialog, so a click in one of them is not a
-            // click away. Dismissing a warning must not take the form with it.
-            if (e.target.closest(".ui-dialog, .ui-widget-overlay, .ui-autocomplete, #warnBox"))
+            // The warn box, the match picker and the autocomplete menu all render
+            // outside the dialog, so a click in one of them is not a click away.
+            // Dismissing a warning must not take the form with it.
+            if (e.target.closest(".ui-dialog, .ui-autocomplete, #warnBox"))
                 return;
+            // The dialog is modal, so a click away lands on the backdrop.  That
+            // closes the form unless another dialog, like the match picker, is
+            // open on top of it and the backdrop is that one's.
+            if (e.target.closest(".ui-widget-overlay")) {
+                let formDialog = $(dialogEl).closest(".ui-dialog");
+                if ($(".ui-dialog:visible").not(formDialog).length > 0)
+                    return;
+            }
             $("#myVariantsDialog").dialog("close");
         });
     },
@@ -2442,11 +2503,15 @@ var myVariants = {
             if (posInput) { posInput.focus(); }
             return;
         }
-        // Block validation only matters for the transcript path; SNV/CNV don't carry blocks.
+        // Only a transcript or a primer pair carries blocks.
         let blockResult = {ok: true, noBlocks: true};
-        const isTranscript = !!(document.getElementById("typeTranscript") &&
-                                document.getElementById("typeTranscript").checked);
-        if (isTranscript && form.blocksWidget && form.blocksWidget.getRowCount() > 0) {
+        let checkedType = form.querySelector("input[name=myVariantsType]:checked");
+        const itemType = checkedType ? checkedType.value : "snv";
+        const isTranscript = itemType === "transcript";
+        let subTypeEl = form.querySelector("#subType");
+        const keepsBlocks = isTranscript ||
+            (itemType === "primer" && subTypeEl && subTypeEl.value === "pair");
+        if (keepsBlocks && form.blocksWidget && form.blocksWidget.getRowCount() > 0) {
             blockResult = form.blocksWidget.validate();
             if (!blockResult.ok) {
                 alert("Block error: " + blockResult.msg);
@@ -2456,10 +2521,6 @@ var myVariants = {
         // Submit always uses the manual form; the search box only fills it in.
         const data = {};
         {
-            let itemType = "snv";
-            if (isTranscript) itemType = "transcript";
-            else if (document.getElementById("typeCnv").checked) itemType = "cnv";
-            else if (document.getElementById("typeOther").checked) itemType = "other";
             Array.from(form.elements).forEach( (ele) => {
                 if (ele.name === "hgt_doJsCommand" ||
                         ele.name === "myVariantsType" || ele.id === "positionRange" ||
@@ -2484,10 +2545,10 @@ var myVariants = {
             data.projectId = projectId;
             if (projectId === "")
                 data.newProject = myVariants.defaultProjectLabel();
-            data.cnvType = (itemType === "cnv") ? document.getElementById("cnvType").value : "";
+            // Selects are not collected above, so the subtype is read here.
+            data.subType = (subTypeEl && subTypeEl.options.length > 0) ? subTypeEl.value : "";
             if (itemType === "cnv") data.ref = "";
-            else if (itemType === "transcript") { data.ref = ""; data.alt = ""; }
-            else if (itemType === "other") { data.ref = ""; data.alt = ""; }
+            else if (itemType !== "snv") { data.ref = ""; data.alt = ""; }
             // Collect custom fields from the dynamic rows. A bad name stops the
             // submit here so the message stays next to the field it is about.
             let customRows = document.querySelectorAll("#customFieldsList .customFieldRow");
@@ -2516,15 +2577,18 @@ var myVariants = {
                 }
             }
             // Convert hidden block fields from CSV strings to arrays of ints.
-            // Drop blocks entirely for SNV/CNV; server synthesizes a single full-span
-            // block. For transcript with noBlocks (rows added but every size empty),
-            // also drop and let the server synthesize.
+            // Drop blocks for a type that has none; the server synthesizes a single
+            // full-span block.  With noBlocks (rows added but every size empty),
+            // also drop and let the server synthesize.  Exon frames go with the
+            // blocks, as a comma list.
             let bc = parseInt(data.blockCount, 10);
-            if (!isTranscript || !bc || blockResult.noBlocks) {
+            if (!keepsBlocks || !bc || blockResult.noBlocks) {
                 delete data.blockCount;
                 delete data.blockSizes;
                 delete data.chromStarts;
+                delete data.exonFrames;
             } else {
+                if (!isTranscript) { delete data.exonFrames; }
                 data.blockCount = bc;
                 data.blockSizes = data.blockSizes.split(",").map(Number);
                 data.chromStarts = data.chromStarts.split(",").map(Number);
@@ -2772,7 +2836,7 @@ var myVariants = {
                 ref: res.ref || "",
                 alt: res.alt || "",
                 itemType: itemType,
-                cnvType: res.cnvType || "",
+                subType: res.subType || "",
                 projectId: myVariants.currentProjectId()
             };
             // Say which track it went into; the dialog is where to pick another.
@@ -2865,15 +2929,6 @@ var myVariants = {
             trackIsNew = Object.keys(newJson.trackDb).some(function(id) {
                 return !(id in hgTracks.trackDb);
             });
-        }
-        // Saving into a new track creates it, which is worth saying out loud:
-        // the annotation is not in the track the user was looking at.
-        if (trackIsNew && data && data.newProject) {
-            let known = myVariants.projects().some(function(proj) {
-                return proj.label === data.newProject;
-            });
-            if (!known)
-                warn("New track " + htmlEncode(data.newProject) + " created for this annotation.");
         }
         // The next save defaults to the track this one went into, the way the
         // server's own record of it does. A new track arrives with the reload.

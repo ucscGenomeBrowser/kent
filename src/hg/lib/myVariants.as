@@ -19,7 +19,8 @@ table myVariants
     string ref;        "Reference allele on the forward genomic strand"
     string alt;        "Alternate allele on the forward genomic strand"
     string mouseover;  "Short text shown when hovering over the annotation"
-    string itemType;   "Annotation type: transcript, snv, cnv or other"
-    string cnvType;    "gnomAD CNV term; empty unless itemType is cnv"
+    string itemType;   "Annotation type: transcript, snv, cnv, regulatory, primer or other"
+    string subType;    "Kind of cnv, regulatory element or primer; empty for other types"
+    lstring exonFrames; "Reading frame of each block, -1 if not coding; empty unless a coding transcript"
     uint id;           "Row identifier used internally; not part of the annotation"
     )

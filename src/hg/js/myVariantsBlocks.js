@@ -10,7 +10,35 @@
 
 var myVariantsBlocks = (function () {
 
-    function makeRow(offsetVal, sizeVal, onChange, onRemove) {
+    // The frame of a block is the genePred exonFrames value: 0, 1 or 2 for the
+    // first coding base of the exon, -1 for an exon with no coding bases.
+    // Blank means not given; frames are given for every block or for none.
+    var frameChoices = [["", "frame"], ["-1", "-1 (not coding)"],
+                        ["0", "0"], ["1", "1"], ["2", "2"]];
+
+    function makeFrameSpan(frameVal, onChange) {
+        var span = document.createElement("span");
+        span.className = "blockFrameSpan";
+        span.appendChild(document.createTextNode(" frame "));
+        var sel = document.createElement("select");
+        sel.className = "blockFrame";
+        sel.title = "Reading frame of the first coding base of this exon, " +
+            "or -1 if it has none.  Give one for every exon or for none.";
+        frameChoices.forEach(function (c) {
+            var o = document.createElement("option");
+            o.value = c[0];
+            o.textContent = c[1];
+            sel.appendChild(o);
+        });
+        if (frameVal !== undefined && frameVal !== null) {
+            sel.value = String(frameVal);
+        }
+        sel.addEventListener("change", onChange);
+        span.appendChild(sel);
+        return span;
+    }
+
+    function makeRow(offsetVal, sizeVal, frameVal, withFrames, onChange, onRemove) {
         var row = document.createElement("div");
         row.className = "blockRow";
         row.style.cssText = "display:flex; align-items:center; gap:6px; margin-bottom:4px;";
@@ -54,6 +82,9 @@ var myVariantsBlocks = (function () {
         row.appendChild(offsetInput);
         row.appendChild(document.createTextNode(" size "));
         row.appendChild(sizeInput);
+        if (withFrames) {
+            row.appendChild(makeFrameSpan(frameVal, onChange));
+        }
         row.appendChild(removeBtn);
         return row;
     }
@@ -62,15 +93,34 @@ var myVariantsBlocks = (function () {
         var rows = listEl.querySelectorAll(".blockRow");
         var starts = [];
         var sizes = [];
+        var frames = [];
         for (var i = 0; i < rows.length; i++) {
             var s = rows[i].querySelector(".blockStart");
             var z = rows[i].querySelector(".blockSize");
+            var f = rows[i].querySelector(".blockFrame");
             var sv = parseInt(s.value, 10);
             var zv = parseInt(z.value, 10);
+            var fv = f ? parseInt(f.value, 10) : NaN;
             starts.push(isNaN(sv) ? null : sv);
             sizes.push(isNaN(zv) ? null : zv);
+            frames.push(isNaN(fv) ? null : fv);
         }
-        return {starts: starts, sizes: sizes, rows: rows};
+        return {starts: starts, sizes: sizes, frames: frames, rows: rows};
+    }
+
+    // Frames are all given or all blank.  Returns the first blank row when
+    // some are given, else -1.
+    function partialFrameRow(frames) {
+        var given = frames.some(function (f) { return f !== null; });
+        if (!given) {
+            return -1;
+        }
+        for (var i = 0; i < frames.length; i++) {
+            if (frames[i] === null) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     // Light row-level sanity check while the user is mid-edit. Only flags
@@ -147,6 +197,9 @@ var myVariantsBlocks = (function () {
             return null;
         }
         container.textContent = "";
+        // Each row gets a frame menu when the caller has somewhere to put the
+        // frames.
+        var withFrames = !!opts.hiddenFramesInput;
 
         var listDiv = document.createElement("div");
         listDiv.className = "blockListDiv";
@@ -171,6 +224,11 @@ var myVariantsBlocks = (function () {
             }
             if (opts.hiddenStartsInput) {
                 opts.hiddenStartsInput.value = commaList(data.starts);
+            }
+            if (opts.hiddenFramesInput) {
+                // Empty when no frame is given, so the server works them out.
+                var anyFrame = data.frames.some(function (f) { return f !== null; });
+                opts.hiddenFramesInput.value = anyFrame ? commaList(data.frames) : "";
             }
         }
 
@@ -203,6 +261,16 @@ var myVariantsBlocks = (function () {
             }
             var result = strictValidate(data.starts, data.sizes,
                                         opts.getStart, opts.getEnd);
+            // Frame menus the caller has hidden (mvNoFrames) are not the
+            // user's to fill in, so they are not checked.
+            if (result.ok && !result.noBlocks && withFrames &&
+                    !container.classList.contains("mvNoFrames")) {
+                var blankRow = partialFrameRow(data.frames);
+                if (blankRow >= 0) {
+                    result = {ok: false, row: blankRow,
+                              msg: "Give a frame for every exon, or for none"};
+                }
+            }
             if (!result.ok && data.rows[result.row]) {
                 data.rows[result.row].style.outline = "1px solid #c00";
             }
@@ -211,14 +279,14 @@ var myVariantsBlocks = (function () {
             return result;
         }
 
-        function addRow(offsetVal, sizeVal) {
+        function addRow(offsetVal, sizeVal, frameVal) {
             // First row's offset is always 0 per BED12 spec; pre-fill it so
             // the user doesn't have to think about that constraint.
             if (offsetVal === undefined &&
                 listDiv.querySelectorAll(".blockRow").length === 0) {
                 offsetVal = 0;
             }
-            var row = makeRow(offsetVal, sizeVal, refresh, function () {
+            var row = makeRow(offsetVal, sizeVal, frameVal, withFrames, refresh, function () {
                 listDiv.removeChild(row);
                 refresh();
             });
@@ -235,8 +303,11 @@ var myVariantsBlocks = (function () {
 
         if (opts.initialSizes && opts.initialStarts &&
             opts.initialSizes.length === opts.initialStarts.length) {
+            var frames = opts.initialFrames || [];
+            var haveFrames = frames.length === opts.initialSizes.length;
             for (var i = 0; i < opts.initialSizes.length; i++) {
-                addRow(opts.initialStarts[i], opts.initialSizes[i]);
+                addRow(opts.initialStarts[i], opts.initialSizes[i],
+                       haveFrames ? frames[i] : null);
             }
         }
         refresh();

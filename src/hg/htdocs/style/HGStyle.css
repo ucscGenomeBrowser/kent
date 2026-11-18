@@ -1524,3 +1524,25 @@ font-size: 1rem;
     padding: 0;
     margin-bottom: 24px;
 }
+
+/* My Annotations add dialog: one field per row, labels in a fixed column so
+ * every input starts at the same place */
+.myVariants-form .mvRow {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.myVariants-form .mvRow.mvRowTop {
+    align-items: flex-start;
+}
+
+.myVariants-form .mvRow > label:first-child {
+    flex: 0 0 140px;
+}
+
+/* My Annotations block editor: only a transcript's blocks have exon frames */
+.mvNoFrames .blockFrameSpan {
+    display: none;
+}
