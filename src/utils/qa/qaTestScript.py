@@ -390,7 +390,9 @@ driver.find_element(By.NAME, "hgt.positionInput").send_keys("NP_002993.1:p.D92E"
 driver.find_element(By.ID, "goButton").click()
 wait_for_position_input().clear()
 driver.find_element(By.NAME, "hgt.positionInput").send_keys("BRCA1 Ala744Cys")
-driver.find_element(By.ID, "goButton").click()
+goButton = driver.find_element(By.ID, "goButton")
+goButton.click()
+WebDriverWait(driver, 10).until(EC.staleness_of(goButton)) # wait for the BRCA1 page to replace the previous search's page before finding area[3]
 WebDriverWait(driver, 10).until(
     EC.presence_of_element_located(
         (By.XPATH, "//td[@id='td_data_ncbiRefSeqCurated']/div[2]/map/area[3]"))).click()
