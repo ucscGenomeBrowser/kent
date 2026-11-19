@@ -24,7 +24,31 @@ groupLabels = {
   # both forms appear for the same species, one label for both
   "chytrids": "chytrids",
   "chytrids & allies": "chytrids",
+  # group names isGroupName() can not tell from a common name
+  "mosquito": "mosquito",
+  "brown algae": "brown algae",
+  "grasshoppers, crickets & katydids": "grasshoppers",
+  "animals": "",
 }
+
+### an NCBI group name given in place of a common name is lower case
+### plural: sea cucumbers, tardigrades, butterflies
+### a common name is singular: giant kelp, dry rot fungus, chicken-of-the-woods
+def isGroupName(name):
+    words = name.split()
+    if len(words) < 1 or name != name.lower() or "'" in name:
+      return False
+    last = words[-1]
+    # even-toed ungulates is a group, chicken-of-the-woods is not
+    if '-' in last:
+      return False
+    return last.endswith('s') and not last.endswith(('ss', 'us', 'is'))
+
+### the sciName words after the genus, a hybrid second genus is abbreviated
+### the same as the first: floridae x Branchiostoma japonicum
+###   -> floridae x B.japonicum
+def restOfName(words):
+    return re.sub(r'(?<= x )([A-Z])[a-z]+ (?=[a-z])', r'\1.', ' '.join(words[1:]))
 
 ####################################################################
 ### this is kinda like an environment setting, it gets everything
@@ -92,7 +116,7 @@ def extractNames(asmRpt, hapX):
               orgName = sciName
             elif orgName in groupLabels:
               words = sciName.split()
-              orgName = f"{groupLabels[orgName]} {words[0][0].upper()}.{' '.join(words[1:])}"
+              orgName = f"{groupLabels[orgName]} {words[0][0].upper()}.{restOfName(words)}".strip()
             else:
               pat = r'apicomplexans|ants|bacteria|bryozoans|bugs|ciliates|crustaceans|diatoms|hydrozoans|dinoflagellates|gastropods|hemichordates|nematodes|flatworms?|pelagophytes|scorpions|ascomycetes?|basidiomycetes?|budding|microsporidians?|smut|fungi|eukaryotes|flies|beetles|mosquitos|bees|moths|sponges|^mites|ticks|^comb|jellies|jellyfishes|chitons|bivalves|bony fishes|birds|eudicots|snakes|bats|tunicates|tsetse fly|cellular slime molds|stony corals'
               # whole words only, 'ants' must not match 'flowering plants'
@@ -144,7 +168,7 @@ def extractNames(asmRpt, hapX):
                 elif re.search('basidiomycete', order):
                   order = "basidiomycetes"
                 words = sciName.split()
-                restWords = " ".join(words[1:])
+                restWords = restOfName(words)
                 if re.search("eukaryotes", orgName):
                   orgName = words[0][0].upper() + "." + restWords
                 elif re.search("apicomplexans", orgName):
@@ -189,6 +213,9 @@ def extractNames(asmRpt, hapX):
                 orgName = pat.sub('', orgName)
                 pat = re.compile(r'\s+\(.*\)$')
                 orgName = pat.sub('', orgName)
+              elif isGroupName(orgName):
+                words = sciName.split()
+                orgName = f"{orgName} {words[0][0].upper()}.{restOfName(words)}"
 
           elif "Date:" in line:
             words = line.split()
@@ -294,6 +321,9 @@ def processList(inFh):
         extraStrings = re.sub(r'\s+', ' ', extraStrings)
         # drop the cultivar and isolate from orgName only as whole phrases,
         # word by word would turn: brown hare + breed=Cape hare -> brown
+        # = separates strain synonyms, a space lets the strain match as a
+        # whole phrase: Rhizophagus irregularis DAOM 181602=DAOM 197198
+        orgName = orgName.replace('=', ' ')
         for phrase in (cultivar, isolate):
           # orgName has had these characters removed, match that form too
           for qMark in ('', ' '):
@@ -335,21 +365,28 @@ def addTag(name, tag, atEnd=False):
     if name.endswith(')') and '(' in name:
       if atEnd:
         return f"{name[:-1]} {tag})"
-      i = name.rindex('(')
+      # the ( that matches the final ), they can nest: (p50T (= Dazao) 2008)
+      depth = 0
+      for i in range(len(name) - 1, -1, -1):
+        if name[i] == ')':
+          depth += 1
+        elif name[i] == '(':
+          depth -= 1
+          if depth == 0:
+            break
       return f"{name[:i+1]}{tag} {name[i+1:]}"
     return f"{name} ({tag})"
 
 ### the asmName part of an asmId when it says something about the assembly,
 ### empty for NCBI default names (ASM1411746v1), bare versions (v2.0) and
-### ToL names (dmCerClav1.hap1.1), those are not wanted in a common name
+### accession look-alikes (GCA_900093555), the hap suffix is dropped since
+### the name already has it: idAnoCruz5.1_alternate_haplotype -> idAnoCruz5.1
 def asmNameTag(asmId):
     p = asmId.split('_', 2)
     if len(p) < 3:
       return ""
-    asmName = p[2]
-    if re.fullmatch(r'ASM\d+v\d+|[vV]?\d+(\.\d+)*', asmName):
-      return ""
-    if re.match(r'[a-z]{1,3}[A-Z][a-z]+[A-Z][a-z]+\d+(\.|$)', asmName):
+    asmName = re.sub(r'_(alternate|primary)_haplotype$|[._](hap|alt)\d*(\.\d+)?$', '', p[2])
+    if re.fullmatch(r'ASM\d+v\d+|[vV]?\d+(\.\d+)*|GC[AF]_\d+(\.\d+)?', asmName):
       return ""
     return asmName
 
