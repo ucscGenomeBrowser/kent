@@ -10981,10 +10981,6 @@ if (cfgOptionBooleanDefault("doMyVariants", FALSE))
         }
     }
 
-// put the track download interface behind hg.conf control
-if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
-    jsInline("var showDownloadButton = true;\n");
-
 // remove the hg.conf option once this feature is released
 if (cfgOptionBooleanDefault("showGenbankDownload", FALSE))
     {
@@ -12537,16 +12533,9 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 cartSaveSession(cart);
 puts("</FORM>");
 
-// put the track download interface behind hg.conf control
-if (cfgOptionBooleanDefault("showMouseovers", FALSE))
-    jsInline("var showMouseovers = true;\n");
-
 // if the configure page allows hgc popups tell the javascript about it
-if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE) && cartUsualBoolean(cart, "doHgcInPopUp", TRUE))
+if (cartUsualBoolean(cart, "doHgcInPopUp", TRUE))
     jsInline("var doHgcInPopUp = true;\n");
-
-if (cfgOptionBooleanDefault("greyBarIcons", TRUE))
-    jsInline("var greyBarIcons = true;\n");
 
 // measure how long the track image takes to reach the reader, on one page load
 // in pngTimingSampleRate.  Zero, or the setting left out, turns it off.
@@ -14593,31 +14582,28 @@ if(!trackImgOnly)
         webIncludeResourceFile("ui.dropdownchecklist.css");
         jsIncludeFile("ui.dropdownchecklist.js", NULL);
         jsIncludeFile("ddcl.js", NULL);
-        if (cfgOptionBooleanDefault("showTutorial", TRUE))
+        jsIncludeFile("shepherd.min.js", NULL);
+        webIncludeResourceFile("shepherd.css");
+        jsIncludeFile("tutorialPopup.js", NULL);
+        jsIncludeFile("basicTutorial.js",NULL);
+        jsIncludeFile("clinicalTutorial.js",NULL);
+        // if the user is logged in, we won't show the notification
+        // that a tutorial is available, just leave the link in the
+        // blue bar under "Help"
+        if (wikiLinkUserName())
+            jsInline("var userLoggedIn = true;");
+        // if the CGI variable startTutorial=true is present (in that exact
+        // spelling/case), immediately start the tutorial, for example
+        // when the user clicks a link from a help page. Note that this
+        // means it is a one time link that won't work on refresh because
+        // the variable isn't saved onto the URL
+        if (sameOk(cgiOptionalString("startTutorial"), "true"))
             {
-            jsIncludeFile("shepherd.min.js", NULL);
-            webIncludeResourceFile("shepherd.css");
-            jsIncludeFile("tutorialPopup.js", NULL);
-            jsIncludeFile("basicTutorial.js",NULL);
-            jsIncludeFile("clinicalTutorial.js",NULL);
-            // if the user is logged in, we won't show the notification
-            // that a tutorial is available, just leave the link in the
-            // blue bar under "Help"
-            if (wikiLinkUserName())
-                jsInline("var userLoggedIn = true;");
-            // if the CGI variable startTutorial=true is present (in that exact
-            // spelling/case), immediately start the tutorial, for example
-            // when the user clicks a link from a help page. Note that this
-            // means it is a one time link that won't work on refresh because
-            // the variable isn't saved onto the URL
-            if (sameOk(cgiOptionalString("startTutorial"), "true"))
-                {
-                jsInline("var startTutorialOnLoad = true;");
-                }
-            if (sameOk(cgiOptionalString("startClinical"), "true"))
-                {
-                jsInline("var startClinicalOnLoad = true;");
-                }
+            jsInline("var startTutorialOnLoad = true;");
+            }
+        if (sameOk(cgiOptionalString("startClinical"), "true"))
+            {
+            jsInline("var startClinicalOnLoad = true;");
             }
         }
 
@@ -14643,12 +14629,9 @@ if(!trackImgOnly)
             hPrintf("<div id='discoveryAdvancedTab'></div>");
         hPrintf("</div></div>\n");
         }
-    if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE))
-        {
-        jsIncludeFile("hgc.js", NULL);
-        jsIncludeFile("alleles.js", NULL);
-        hPrintf("<div id='hgcDialog' style='display: none'></div>\n");
-        }
+    jsIncludeFile("hgc.js", NULL);
+    jsIncludeFile("alleles.js", NULL);
+    hPrintf("<div id='hgcDialog' style='display: none'></div>\n");
 
     cartFlushHubWarnings();
     }

@@ -4117,83 +4117,81 @@ var dragReorder = {
                 // currentMapItem gets set by mapItemMapOver.   This is just backup
             }
 
-            if (typeof greyBarIcons !== 'undefined' && greyBarIcons === true) {
-                // show the gear icon over the grey bar to bring up the context menu
-                let tdBtn = document.getElementById("td_btn_" + id);
-                if (tdBtn) {
-                    let span = document.getElementById("gear_btn_" + id);
-                    if (span) {
-                        // hide any gears that may be present from dragging
-                        $(document.querySelectorAll("[id^=gear_btn]")).hide();
-                        $(span).show();
-                        if (!span.dataset.alreadySetup) {
-                            tdBtn.style.position = "relative";
-                            let tdbKey = tdBtn.id.replace("td_btn_","");
-                            let tdb = hgTracks.trackDb[tdbKey];
-                            let tooltip = " click or right click to configure... drag to reorder";
-                            if (typeof tdb.parentLabel !== 'undefined') {
-                                addMouseover(span, htmlEncode(tdb.parentLabel + tooltip + " highlighted subtracks"));
-                            } else {
-                                addMouseover(span, htmlEncode(tdb.shortLabel + tooltip));
-                            }
-                            span.addEventListener("click", (e) => {
-                                // trigger a click on the <a> of the td
-                                e.preventDefault();
-                                e.stopPropagation();
-                                e.stopImmediatePropagation();
-                                const clickEvent = new MouseEvent("click", {
-                                    bubbles: true,
-                                    cancelable: true,
-                                    view: window,
-                                    clientX: tdBtn.getBoundingClientRect().left + 15,
-                                    clientY: tdBtn.getBoundingClientRect().top,
-                                    button: 1,
-                                });
-                                tdBtn.children[0].dispatchEvent(clickEvent);
-                            });
-                            let tdp = tdBtn.querySelector("p.btn");
-                            if (tdp) {
-                                span.addEventListener("pointerenter", (e) => {
-                                    // trigger a mouseover on the actual btn
-                                    dragReorder.buttonMouseOver.call(tdp, e);
-                                });
-                                span.addEventListener("pointerleave", (e) => {
-                                    dragReorder.buttonMouseOut.call(tdp, e);
-                                });
-                            }
-                            // prevent attaching multiple events every time the tr is moused over
-                            span.dataset.alreadySetup = "true";
+            // show the gear icon over the grey bar to bring up the context menu
+            let tdBtn = document.getElementById("td_btn_" + id);
+            if (tdBtn) {
+                let span = document.getElementById("gear_btn_" + id);
+                if (span) {
+                    // hide any gears that may be present from dragging
+                    $(document.querySelectorAll("[id^=gear_btn]")).hide();
+                    $(span).show();
+                    if (!span.dataset.alreadySetup) {
+                        tdBtn.style.position = "relative";
+                        let tdbKey = tdBtn.id.replace("td_btn_","");
+                        let tdb = hgTracks.trackDb[tdbKey];
+                        let tooltip = " click or right click to configure... drag to reorder";
+                        if (typeof tdb.parentLabel !== 'undefined') {
+                            addMouseover(span, htmlEncode(tdb.parentLabel + tooltip + " highlighted subtracks"));
+                        } else {
+                            addMouseover(span, htmlEncode(tdb.shortLabel + tooltip));
                         }
+                        span.addEventListener("click", (e) => {
+                            // trigger a click on the <a> of the td
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            const clickEvent = new MouseEvent("click", {
+                                bubbles: true,
+                                cancelable: true,
+                                view: window,
+                                clientX: tdBtn.getBoundingClientRect().left + 15,
+                                clientY: tdBtn.getBoundingClientRect().top,
+                                button: 1,
+                            });
+                            tdBtn.children[0].dispatchEvent(clickEvent);
+                        });
+                        let tdp = tdBtn.querySelector("p.btn");
+                        if (tdp) {
+                            span.addEventListener("pointerenter", (e) => {
+                                // trigger a mouseover on the actual btn
+                                dragReorder.buttonMouseOver.call(tdp, e);
+                            });
+                            span.addEventListener("pointerleave", (e) => {
+                                dragReorder.buttonMouseOut.call(tdp, e);
+                            });
+                        }
+                        // prevent attaching multiple events every time the tr is moused over
+                        span.dataset.alreadySetup = "true";
                     }
                 }
+            }
 
-                // add an 'x' icon in the label area to hide the track
-                let tdSide = document.getElementById("td_side_" + id);
-                if (tdSide) {
-                    // mouseover event fires if you stop moving the mouse while still
-                    // hovering the element and then move it again, don't make
-                    // duplicate btns in that case
-                    let btn = document.getElementById("close_btn_" + id);
-                    if (btn) {
-                        // hide any shown 'x' buttons from dragging
-                        $(document.querySelectorAll("[id^=close_btn]")).hide();
-                        $(btn).show();
-                        if (!btn.dataset.alreadySetup) {
-                            addMouseover(btn, btn.title);
-                            tdSide.style.position = "relative";
-                            if (hgTracks && hgTracks.revCmplDisp) {
-                                // set up 'x' icon to the right
-                                btn.classList.add("hgTracksCloseIconRight");
-                            } else {
-                                // set up 'x' icon to the left
-                                btn.classList.add("hgTracksCloseIconLeft");
-                            }
-                            btn.addEventListener("click", (e) => {
-                               rightClick.hideTracks([id]);
-                            });
-                            // prevent attaching multiple events every time the tr is moused over
-                            btn.dataset.alreadySetup = "true";
+            // add an 'x' icon in the label area to hide the track
+            let tdSide = document.getElementById("td_side_" + id);
+            if (tdSide) {
+                // mouseover event fires if you stop moving the mouse while still
+                // hovering the element and then move it again, don't make
+                // duplicate btns in that case
+                let btn = document.getElementById("close_btn_" + id);
+                if (btn) {
+                    // hide any shown 'x' buttons from dragging
+                    $(document.querySelectorAll("[id^=close_btn]")).hide();
+                    $(btn).show();
+                    if (!btn.dataset.alreadySetup) {
+                        addMouseover(btn, btn.title);
+                        tdSide.style.position = "relative";
+                        if (hgTracks && hgTracks.revCmplDisp) {
+                            // set up 'x' icon to the right
+                            btn.classList.add("hgTracksCloseIconRight");
+                        } else {
+                            // set up 'x' icon to the left
+                            btn.classList.add("hgTracksCloseIconLeft");
                         }
+                        btn.addEventListener("click", (e) => {
+                           rightClick.hideTracks([id]);
+                        });
+                        // prevent attaching multiple events every time the tr is moused over
+                        btn.dataset.alreadySetup = "true";
                     }
                 }
             }

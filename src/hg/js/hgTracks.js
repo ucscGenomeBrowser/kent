@@ -7620,9 +7620,7 @@ var imageV2 = {
             if (id) { // The remainder is only needed for full reload
                 imageV2.markAsDirtyPage(); // vis of cfg change
                 imageV2.drawHighlights();
-                if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-                    convertTitleTagsToMouseovers();
-                }
+                convertTitleTagsToMouseovers();
                 return;
             }
         }
@@ -7644,9 +7642,7 @@ var imageV2 = {
         } else {
             imageV2.markAsDirtyPage();
         }
-        if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-            convertTitleTagsToMouseovers();
-        }
+        convertTitleTagsToMouseovers();
         if(typeof window.igvBrowser !== "undefined") {
            window.igvBrowser.search(genomePos.get());
         }
@@ -10219,20 +10215,18 @@ $(document).ready(function()
     });
 
 
-    // add a 'link' to download the current track data (under hg.conf control)
-    if (typeof showDownloadButton !== 'undefined' && showDownloadButton) {
-        newListEl = document.createElement("li");
-        newLink = document.createElement("a");
-        newLink.setAttribute("id", "hgTracksDownload");
-        newLink.setAttribute("name", "downloadTracks");
-        newLink.textContent = "Download Current Track Data";
-        newLink.href = "#";
-        newListEl.appendChild(newLink);
-        let opt = document.querySelector("#downloads > ul");
-        if (opt) {
-            opt.appendChild(newListEl);
-            $("#hgTracksDownload").on("click", downloadCurrentTrackData.showDownloadUi);
-        }
+    // add a 'link' to download the current track data
+    newListEl = document.createElement("li");
+    newLink = document.createElement("a");
+    newLink.setAttribute("id", "hgTracksDownload");
+    newLink.setAttribute("name", "downloadTracks");
+    newLink.textContent = "Download Current Track Data";
+    newLink.href = "#";
+    newListEl.appendChild(newLink);
+    let opt = document.querySelector("#downloads > ul");
+    if (opt) {
+        opt.appendChild(newListEl);
+        $("#hgTracksDownload").on("click", downloadCurrentTrackData.showDownloadUi);
     }
 
     if (typeof doMyVariants !== 'undefined' && doMyVariants) {
@@ -10376,9 +10370,7 @@ $(document).ready(function()
         }
     }
 
-    if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-        convertTitleTagsToMouseovers();
-    }
+    convertTitleTagsToMouseovers();
 
     if (typeof pngTimingSampleRate !== 'undefined' && pngTimingSampleRate > 0) {
         reportPngTiming(pngTimingSampleRate);

@@ -428,26 +428,19 @@ jsInlineF("function checkForCsv(event) {\n"
     , hgtaOutSep, hgtaOutSep);
 jsAddEventForId("change", "outputTypeDropdown", "checkForCsv");
 
-/*
- * Code to add in the interactive tutorial*/
-if (cfgOptionBooleanDefault("showTutorial", TRUE))
+jsIncludeFile("shepherd.min.js", NULL);
+webIncludeResourceFile("shepherd.css");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+webIncludeResourceFile("jquery-ui.css");
+
+jsIncludeFile("tutorialPopup.js", NULL);
+jsIncludeFile("tableBrowserTutorial.js",NULL);
+if (sameOk(cgiOptionalString("startTutorial"), "true"))
     {
-    jsIncludeFile("shepherd.min.js", NULL);
-    webIncludeResourceFile("shepherd.css");
-    jsIncludeFile("jquery.js", NULL);
-    jsIncludeFile("jquery-ui.js", NULL);
-    webIncludeResourceFile("jquery-ui.css");
-
-    jsIncludeFile("tutorialPopup.js", NULL);
-    jsIncludeFile("tableBrowserTutorial.js",NULL);
-    if (sameOk(cgiOptionalString("startTutorial"), "true"))
-        {
-        jsInline("var startTableBrowserOnLoad = true;");
-        jsInline("tableBrowserTour.start();");
-        }
+    jsInline("var startTableBrowserOnLoad = true;");
+    jsInline("tableBrowserTour.start();");
     }
-
-
 
 if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     {

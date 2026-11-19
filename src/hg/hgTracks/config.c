@@ -836,52 +836,49 @@ if (freeTypeOn())
         freeTypeTuneUi();
     }
 
-if (cfgOptionBooleanDefault("showMouseovers", FALSE))
+/* I predict most people will want the browser text size as the tooltip text size
+ * but just in case, users can change the value and it will remain independent
+ * of the font size by saving to localStorage. */
+hPrintf("<tr><td>Tooltip text size:</td>");
+hPrintf("<td style=\"text-align: right\">");
+static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
+int i;
+hPrintf("<select name='tooltipTextSize'>");
+for (i = 0; i < ArraySize(sizes); i++)
     {
-    /* I predict most people will want the browser text size as the tooltip text size
-     * but just in case, users can change the value and it will remain independent
-     * of the font size by saving to localStorage. */
-    hPrintf("<tr><td>Tooltip text size:</td>");
-    hPrintf("<td style=\"text-align: right\">");
-    static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
-    int i;
-    hPrintf("<select name='tooltipTextSize'>");
-    for (i = 0; i < ArraySize(sizes); i++)
-        {
-        hPrintf("<option ");
-        if (sameString(tl.textSize,sizes[i])) {hPrintf("selected");}
-        hPrintf(">%s</option>", sizes[i]);
-        }
-    hPrintf("</select>");
-    hPrintf("</td>");
-    hPrintf("</tr>");
-    jsInlineF(""
-        "function updateSelectedTooltipSize(newSize) {\n"
-        "    let options = document.getElementsByName('tooltipTextSize')[0];\n"
-        "    let i = 0;\n"
-        "    for (i; i < options.length; i++) {\n"
-        "        if (options[i].value === newSize) {\n"
-        "            options[i].selected = true;\n"
-        "            localStorage.setItem('tooltipTextSize', options[i].value);\n"
-        "        } else {\n"
-        "            options[i].selected = false;\n"
-        "        }\n"
-        "    }\n"
-        "}\n"
-        "\n"
-        "// set the tooltip text size based on localStorage values\n"
-        "let currTooltipSize = localStorage.getItem('tooltipTextSize');\n"
-        "let browserTextSize = document.getElementsByName('textSize')[0];\n"
-        "if (currTooltipSize === null) {\n"
-        "    localStorage.setItem('tooltipTextSize', browserTextSize.value);\n"
-        "} else {\n"
-        "    updateSelectedTooltipSize(currTooltipSize);\n"
-        "}"
-        "document.getElementsByName('tooltipTextSize')[0].addEventListener('change', function(e) {\n"
-        "    updateSelectedTooltipSize(document.getElementsByName('tooltipTextSize')[0].selectedOptions[0].value);\n"
-        "});\n"
-        );
+    hPrintf("<option ");
+    if (sameString(tl.textSize,sizes[i])) {hPrintf("selected");}
+    hPrintf(">%s</option>", sizes[i]);
     }
+hPrintf("</select>");
+hPrintf("</td>");
+hPrintf("</tr>");
+jsInlineF(""
+    "function updateSelectedTooltipSize(newSize) {\n"
+    "    let options = document.getElementsByName('tooltipTextSize')[0];\n"
+    "    let i = 0;\n"
+    "    for (i; i < options.length; i++) {\n"
+    "        if (options[i].value === newSize) {\n"
+    "            options[i].selected = true;\n"
+    "            localStorage.setItem('tooltipTextSize', options[i].value);\n"
+    "        } else {\n"
+    "            options[i].selected = false;\n"
+    "        }\n"
+    "    }\n"
+    "}\n"
+    "\n"
+    "// set the tooltip text size based on localStorage values\n"
+    "let currTooltipSize = localStorage.getItem('tooltipTextSize');\n"
+    "let browserTextSize = document.getElementsByName('textSize')[0];\n"
+    "if (currTooltipSize === null) {\n"
+    "    localStorage.setItem('tooltipTextSize', browserTextSize.value);\n"
+    "} else {\n"
+    "    updateSelectedTooltipSize(currTooltipSize);\n"
+    "}"
+    "document.getElementsByName('tooltipTextSize')[0].addEventListener('change', function(e) {\n"
+    "    updateSelectedTooltipSize(document.getElementsByName('tooltipTextSize')[0].selectedOptions[0].value);\n"
+    "});\n"
+    );
 
 hPrintf("<TR><TD>Maximum track load time: ");
 printInfoIcon("Maximum time in seconds the Genome Browser will wait for any individual track to "
@@ -956,15 +953,11 @@ hPrintf("Enable highlight with drag-and-select "
         "(if unchecked, drag-and-select always zooms to selection)");
 hPrintf("</TD></TR>\n");
 
-// check if we can do hgc pages in a pop up before putting up the user control
-if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE))
-    {
-    // put a checkbox, on by default, to control whether item clicks stay on hgTracks or
-    // go to hgTracks
-    hPrintf("<tr><td>");
-    hCheckBox("doHgcInPopUp", cartUsualBoolean(cart, "doHgcInPopUp", TRUE));
-    hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
-    }
+// put a checkbox, on by default, to control whether item clicks stay on hgTracks or
+// go to hgTracks
+hPrintf("<tr><td>");
+hCheckBox("doHgcInPopUp", cartUsualBoolean(cart, "doHgcInPopUp", TRUE));
+hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
 
 hTableEnd();
 

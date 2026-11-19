@@ -203,10 +203,8 @@
 			var cmenu=this, x=e.pageX, y=e.pageY;
 
             // prevent tooltips from showing up while contextmenu is open
-            if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-                suppressTooltips = true;
-                hideMouseoverText(mouseoverContainer);
-            }
+            suppressTooltips = true;
+            hideMouseoverText(mouseoverContainer);
 
 			cmenu.target = t; // Preserve the object that triggered this context menu so menu item click methods can see it
 			if (cmenu.beforeShow(e)!==false) {
@@ -270,9 +268,7 @@
 			}
 			cmenu.shown = false;
             // re-enable tooltips on contextmenu close
-            if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-                suppressTooltips = false;
-            }
+            suppressTooltips = false;
 		}
 	};
 	
