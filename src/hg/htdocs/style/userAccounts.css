@@ -127,11 +127,15 @@ input.error {
 }
 
 a.socialButton {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     box-sizing: border-box;
     width: 100%;
+    min-height: 38px;
     margin: 8px 0;
-    padding: 9px 12px;
+    padding: 6px 12px;
     text-align: center;
     font-weight: 700;
     color: #222 !important;
@@ -144,4 +148,17 @@ a.socialButton {
 a.socialButton:hover {
     background: #d5d5d5;
     border-color: #666;
+}
+
+/* Provider logo on a white tile: Google requires its "G" on a white background, and the
+ * same tile behind every logo keeps the buttons consistent. */
+img.socialIcon {
+    flex: none;
+    box-sizing: border-box;
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+    background: #fff;
+    border: 1px solid #999;
+    border-radius: 3px;
 }

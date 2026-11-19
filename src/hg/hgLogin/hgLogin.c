@@ -2302,6 +2302,28 @@ returnToURL(150);
 
 /* ---- Social login (OAuth) and passwordless email-link login ---- */
 
+static char *socialIconFile(char *provider)
+/* Return the htdocs/images file holding the logo for a well-known provider, or NULL for a
+ * provider configured in hg.conf that we have no logo for (its button stays text-only). */
+{
+if (sameWord(provider, "google"))
+    return "signInGoogle.png";
+else if (sameWord(provider, "github"))
+    return "signInGithub.svg";
+else if (sameWord(provider, "orcid"))
+    return "signInOrcid.svg";
+else if (sameWord(provider, "cilogon"))
+    return "signInCilogon.svg";
+return NULL;
+}
+
+static void printSocialIcon(char *file)
+/* Print a small logo image at the start of a socialButton, if file is not NULL. */
+{
+if (file != NULL)
+    hPrintf("<img class=\"socialIcon\" src=\"../images/%s\" alt=\"\">", file);
+}
+
 static void printSocialButtons(boolean dividerAbove, boolean dividerBelow, char *action)
 /* Print social login buttons for any enabled providers, optionally bracketed by "or"
  * dividers.  action is the button verb ("Sign in" on the login page, "Sign up" on the signup
@@ -2315,9 +2337,12 @@ if (dividerAbove)
     hPrintf("<div class=\"orDivider\"><span>or</span></div>");
 struct slName *prov, *providers = oauthProviderNames();
 for (prov = providers;  prov != NULL;  prov = prov->next)
-    hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.oauthStart=1&provider=%s\">"
-            "%s with %s</a>",
-            hgLoginUrl, cgiEncode(prov->name), action, oauthProviderLabel(prov->name));
+    {
+    hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.oauthStart=1&provider=%s\">",
+            hgLoginUrl, cgiEncode(prov->name));
+    printSocialIcon(socialIconFile(prov->name));
+    hPrintf("%s with %s</a>", action, oauthProviderLabel(prov->name));
+    }
 if (dividerBelow)
     hPrintf("<div class=\"orDivider\"><span>or</span></div>");
 hPrintf("</div>");
@@ -2351,8 +2376,9 @@ if (!emailLinkEnabled())
     return;
 if (dividerAbove)
     hPrintf("<div class=\"orDivider\"><span>or</span></div>");
-hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.emailLinkPage=1\">"
-    "Email me a sign-in link</a>", hgLoginUrl);
+hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.emailLinkPage=1\">", hgLoginUrl);
+printSocialIcon("signInEmail.svg");
+hPrintf("Email me a sign-in link</a>");
 }
 
 static void printUsernameNote()

@@ -21008,6 +21008,35 @@ retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
 # Scripts copied ucscRetroAli5.psl, ucscRetroInfo5.bed and ucscRetroCds5.tab
 # to /hive/data/genomes/hg19/bed/retro/
 
+# clip ucscRetroInfo5 thickStart/thickEnd to the alignment (DONE 2026-11-18 markd)
+# refs #38753
+# Same damage as hg38 ucscRetroInfo9: analyseExpress.sh overwrote
+# thickStart/thickEnd with the CDS of the expressed transcript model in
+# ucscRetroExpressed5, which is wider than the retro alignment, so 837 of the
+# 13742 rows had thick coordinates outside their own chromStart..chromEnd and
+# the first 12 columns would not load as BED.  The unclipped ORF is still in
+# ucscRetroExpressed5.
+cd /hive/data/genomes/hg19/bed/retro
+hgsql hg19 -N -e "select * from ucscRetroInfo5" > ucscRetroInfo5.preThickFix.bed
+awk -F'\t' 'BEGIN{OFS="\t"}
+{
+  if ($7 > $3 || $8 < $2) { $7 = $2; $8 = $2 }
+  else {
+    if ($7 < $2) $7 = $2
+    if ($8 > $3) $8 = $3
+  }
+  print
+}' ucscRetroInfo5.preThickFix.bed > ucscRetroInfo5.thickClipped.bed
+hgsql hg19 -e "create table ucscRetroInfo5New like ucscRetroInfo5"
+hgLoadSqlTab -oldTable -notOnServer hg19 ucscRetroInfo5New /dev/null ucscRetroInfo5.thickClipped.bed
+hgsql hg19 -e "rename table ucscRetroInfo5 to ucscRetroInfo5PreThickFix, ucscRetroInfo5New to ucscRetroInfo5"
+hgsql hg19 -e "drop table ucscRetroInfo5PreThickFix"
+# 725 rows clipped at one end and 112, whose codons miss the alignment
+# entirely, now say no CDS.  Nothing but thickStart and thickEnd changed:
+# cut --complement -f7,8 of the old and new dumps have the same md5.
+# ucscRetroInfo5.preThickFix.bed is the copy of what was replaced; the backup
+# table was dropped once that dump was checked against it.
+
 ############################################################################
 # LASTZ Tenrec EchTel2 (DONE - 2013-06-12 - Hiram)
     screen -S hg19EchTel2  # use screen to manage the long running job
