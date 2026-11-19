@@ -1440,3 +1440,32 @@ rm -rf pieces
 # (443 GB) + .tbi; concat --naive took minutes, tabix ~37 h. 436,319,161 records,
 # same as the pVCFs and the per-chrom counts of SFARI's AF table; 45,178 samples.
 # APOE rs429358: 965 1/1 + 11,222 0/1 -> AC 13,152, as in sfariSparkWgs45kAsd.
+
+##########
+# 2026-11-19 Claude max
+# AGB Autism Gene Browser (agb.broadinstitute.org), Satterstrom, Auwerx, Fu et al.,
+# medRxiv 2026, doi 10.64898/2026.08.24.26360398. Rare (max AF <= 0.1%) coding
+# variants from exomes of 62,429 autistic and 33,316 non-autistic individuals.
+# Allele counts only (de novo/transmitted/untransmitted in families, case/control),
+# no AN/AF. Already GRCh38, chr names, biallelic.
+mkdir -p /hive/data/genomes/hg38/bed/varFreqs/agb/download
+cd /hive/data/genomes/hg38/bed/varFreqs/agb/download
+B=https://storage.googleapis.com/exome-results-browsers-public/downloads/2026-10-12/AGB
+for f in gene_results.tsv.bgz variant_results.tsv.bgz variant_results.vcf.bgz; do
+    curl -sS -o AGB_$f $B/AGB_$f
+done
+# The TSV has the same 7,045,150 variants as the VCF, the VCF is used.
+cd ..
+# adds INFO descriptions (all empty in the source), "stop gained" -> stop_gained,
+# AC_AUT (de novo + transmitted in probands + cases), AC_NONAUT (de novo in siblings
+# + controls), AC = AC_AUT + AC_NONAUT, AC_UNTRANS (untransmitted parental alleles),
+# and merges 20 records that occur twice (PTV copy with the de novo count, Mis0
+# copy with the inherited counts) by summing the counts.
+python3 -I ~/kent/src/hg/makeDb/scripts/varFreqs/agbToVcf.py \
+    download/AGB_variant_results.vcf.bgz agb.vcf
+# input records: 7045150, output records: 7045130, duplicates merged: 20
+bgzip -@8 agb.vcf
+tabix -p vcf agb.vcf.gz
+# 40 records have a REF that does not match hg38 (e.g. chr1:12794381 C>G), left in;
+# the varFreqs merge drops them (norm --check-ref x).
+bcftools norm -c w -f /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa agb.vcf.gz -Ou > /dev/null
