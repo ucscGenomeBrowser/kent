@@ -283,11 +283,15 @@ def processList(inFh):
         extraStrings = pat.sub(' ', extraStrings)
         extraStrings = re.sub(re.escape(asmNameAbbrev) + ' ', '', extraStrings)
         extraStrings = re.sub(r'\s+', ' ', extraStrings)
-        words = extraStrings.split()
-        # orgName has had its parens removed, match against that form too
-        words += [re.sub(r'[()]', '', w) for w in words]
-        orgList = orgName.split()
-        orgName = " ".join([orgWord for orgWord in orgList if orgWord not in words])
+        # drop the cultivar and isolate from orgName only as whole phrases,
+        # word by word would turn: brown hare + breed=Cape hare -> brown
+        for phrase in (cultivar, isolate):
+          # orgName has had these characters removed, match that form too
+          for qMark in ('', ' '):
+            p = re.sub(r'[()\[\]+*]', '', phrase).replace('?', qMark)
+            p = re.sub(r'\s+', ' ', p).strip()
+            if len(p):
+              orgName = re.sub(r'(?<!\S)' + re.escape(p) + r'(?!\S)', '', orgName)
         orgName = re.sub(r'=|\s+$|^\s+', '', orgName)
         orgName = re.sub(r'\s+', ' ', orgName).strip()
         orgName = dropUnbalanced(orgName)
