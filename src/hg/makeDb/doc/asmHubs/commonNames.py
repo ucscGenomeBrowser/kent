@@ -112,7 +112,9 @@ def extractNames(asmRpt, hapX):
             sciName = pat.sub(' ', sciName)
 
             pat = r'agent of|aquificales|archaea|bacteria|chlamydias|crenarchaeotes|euryarchaeotes|kinetoplastids|firmicutes|mycoplasmas|planctomycetes|proteobacteria|high G|enterobacteria|s__|spirochetes|verrucomicrobia|thermotogales'
-            if re.search(pat, orgName):
+            # a quoted parenthetical is a historical synonym, not a common name:
+            #   Brucella suis 1330 ("Organism resembling Bacillus abortus" Traum 1914)
+            if re.search(pat, orgName) or '"' in orgName:
               orgName = sciName
             elif orgName in groupLabels:
               words = sciName.split()
@@ -232,6 +234,22 @@ def extractNames(asmRpt, hapX):
         else:
           break
       readFile.close()
+      # submitters repeat the organism in the strain or isolate, sometimes an
+      # older name of the same genus: Psychrobacter aquimaris SW-210,
+      # Vogesella sp., Cupriavidus taiwanensis STM 6160, Nitrospira sp. E2OT
+      # the whole sciName first, it can carry pv./subsp./serovar:
+      #   Xanthomonas arboricola pv. juglandis CPBF 1494
+      if len(sciName.strip()):
+        pat = r'^' + re.escape(sciName.strip()) + r'(\s+|$)'
+        cultivar = re.sub(pat, '', cultivar)
+        isolate = re.sub(pat, '', isolate)
+      words = [w for w in sciName.split() if w != "Candidatus"]
+      if len(words):
+        pat = r'^(Candidatus\s+)?' + re.escape(words[0]) + r'\s+(sp\.?|[a-z][\w-]*)(\s+|$)'
+        cultivar = re.sub(pat, '', cultivar)
+        isolate = re.sub(pat, '', isolate)
+      cultivar = re.sub(r'^strain\s+', '', cultivar, flags=re.IGNORECASE)
+      isolate = re.sub(r'^strain\s+', '', isolate, flags=re.IGNORECASE)
       if len(isolate) and len(cultivar):
         extraStrings = f"{cultivar} {isolate}{asmType} {yearDate}"
       elif len(isolate):
@@ -323,11 +341,12 @@ def processList(inFh):
         # word by word would turn: brown hare + breed=Cape hare -> brown
         # = separates strain synonyms, a space lets the strain match as a
         # whole phrase: Rhizophagus irregularis DAOM 181602=DAOM 197198
-        orgName = orgName.replace('=', ' ')
+        orgName = re.sub(r'\s+', ' ', orgName.replace('=', ' '))
         for phrase in (cultivar, isolate):
-          # orgName has had these characters removed, match that form too
+          # orgName has had these characters removed, match that form too,
+          # the = also in the phrase: DSM 2637 = ATCC 25755 = JCM 11008
           for qMark in ('', ' '):
-            p = re.sub(r'[()\[\]*]', '', phrase).replace('?', qMark)
+            p = re.sub(r'[()\[\]*]', '', phrase).replace('?', qMark).replace('=', ' ')
             p = re.sub(r'\s+', ' ', p).strip()
             if len(p):
               orgName = re.sub(r'(?<!\S)' + re.escape(p) + r'(?!\S)', '', orgName)
