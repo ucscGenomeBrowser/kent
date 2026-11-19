@@ -18,18 +18,19 @@
 # THE FIXTURE is ours, at ~/public_html/docentFixtures/rm38819/, and deliberately damaged.
 # A native track would not do: the hg19 ENCODE signal tracks that show this on a build
 # without the fix stop showing it the day #38820 repairs their files, and the script would
-# then pass on a build without the fix. rm38819good.bw and rm38819bad.bw hold the same data; the bad one
-# is a copy with the high 32 bits set on the last zoom-1 block size, made by
-# lib/tests/input/bbiZoomCap/corrupt.py, which is what the old programs wrote in a 2-4 GB
-# file. The good track is the control: it must draw the same way on every build.
+# then pass on a build without the fix. rm38819good.bw and rm38819bad.bw hold the same
+# data; the bad one is a copy with the high 32 bits set on the last zoom-1 block size,
+# made by lib/tests/input/bbiZoomCap/corrupt.py, which is what the old programs wrote in a
+# 2-4 GB file. The good track is the control: it must draw the same way on every build.
 #
 # WHY THIS WINDOW. Zoom 1 of these files has reduction 8000 and zoom 2 has 32000.
 # hgTracks asks for half the bases per pixel, so it reads zoom 1 between 16,000 and 64,000
-# bases per pixel. chr21:25,000,000-46,709,983 at docent's default size is about 31,500
-# (the data area is about 690 px), and it covers the damaged last block, which spans
-# chr21:45,970,000-46,706,000. All of chr21 is about 68,000 and reads zoom 2, a window
-# under 11 Mb reads zoom 0 or the raw data, and either passes on the broken build. The
-# first draft of this script used all of chr21 and passed on genome-test for that reason.
+# bases per pixel, and only then reaches the damaged last block, which spans
+# chr21:45,970,000-46,706,000. The window is 40 Mb ending at the end of chr21, so it
+# reads zoom 1 at any image width from 854 to 2400 px, measured on hgwbeta: docent's
+# default size and a person's browser both land in it. A narrower window reads the raw
+# data and passes on the broken build. The first link given out for this used
+# chr21:25,000,000-46,709,983, which showed the error at 854 px and not at 1600 px or wider.
 #
 # The hub declares `visibility full`, so there is no `track:` step: a hub track's cart
 # name carries a per-run hub_<n>_ prefix that `track:` cannot write.
@@ -38,12 +39,12 @@ proof:
 
 target: genome-test
 db: hg38
-position: chr21:25000000-46709983
+position: chr21:6700000-46709983
 reset: true
 fast: true
 steps:
   - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38819/hub.txt", db: hg38}
-  - go: chr21:25000000-46709983
+  - go: chr21:6700000-46709983
 
   # Setup, not the assertion: the broken build draws both rows too.
   - expect:
