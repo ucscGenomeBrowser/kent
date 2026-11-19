@@ -12,7 +12,7 @@ test: errCatchTest htmlPageTest hiddenVarTest htmlExpandUrlTest htmlSanitizeTest
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
     dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest \
     hmacTest netSlurpMaxTest htmlEncodeTest cgiDecodeTest udcDotsTest pngWriteTest \
-    colorSpecTest
+    colorSpecTest bbiZoomCapTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -30,6 +30,15 @@ colorSpecTest: colorSpecTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/colorSpecTest${EXE}
 	${BIN_DIR}/colorSpecTest > output/colorSpecTest
 	diff expected/colorSpecTest output/colorSpecTest
+
+bbiZoomCapTest: bbiZoomCapTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/bbiZoomCapTest bbiZoomCapTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/bbiZoomCapTest${EXE}
+	${BIN_DIR}/bbiZoomCapTest input/bbiZoomCap/zoomCap.bb input/bbiZoomCap/zoomCapHigh.bb \
+	    input/bbiZoomCap/zoomCapWrap.bb input/bbiZoomCap/zoomCap.bw \
+	    input/bbiZoomCap/zoomCapHigh.bw input/bbiZoomCap/zoomCapWrap.bw > output/bbiZoomCapTest
+	diff expected/bbiZoomCapTest output/bbiZoomCapTest
 
 hmacTest: hmacTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)
