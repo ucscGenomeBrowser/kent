@@ -180,9 +180,36 @@ def extractNames(asmRpt, hapX):
       print(f"Error: File '{asmRpt}' not found.", file=sys.stderr)
       sys.exit(1)
 
+### given a list of asmIds, return a dict with key accession, value
+### (organismName, taxId) from the genark database assemblySummary tables.
+### Those follow NCBI taxonomy, the assembly_report.txt files keep the
+### names from when the assembly was submitted and become obsolete.
+### Accessions not found are not in the dict.
+def ncbiSciNames(asmIdList):
+    tables = {"GCA": "assemblySummaryGenbank", "GCF": "assemblySummaryRefseq"}
+    accList = {"GCA": [], "GCF": []}
+    for asmId in asmIdList:
+      m = re.match(r'(GC[AF])_([0-9]+\.[0-9]+)', asmId)
+      if m:
+        accList[m.group(1)].append(f"{m.group(1)}_{m.group(2)}")
+    ncbiNames = {}
+    for gcX, accs in accList.items():
+      for table in (tables[gcX], tables[gcX] + "Historical"):
+        for i in range(0, len(accs), 1000):
+          inList = ",".join(f"'{acc}'" for acc in accs[i:i+1000])
+          sql = f"select assemblyAccession,organismName,taxId from {table} where assemblyAccession in ({inList})"
+          hgsqlReturn = subprocess.run(['hgsql', 'genark', '-N', '-e', sql], stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf-8')
+          if hgsqlReturn.returncode != 0:
+            print(f"# warning: hgsql query failed on genark.{table}, using assembly_report names", file=sys.stderr)
+            continue
+          for line in hgsqlReturn.stdout.splitlines():
+            acc, orgName, taxId = line.split('\t')
+            ncbiNames[acc] = (orgName, taxId)
+    return ncbiNames
+
 ### inFh is a file handle to a list of assembly identifiers,
 ###  might be a multi column file, ignore anything after the first column
-def processList(inFh, dbGcaGcfDict):
+def processList(inFh, dbGcaGcfDict, ncbiNames):
     outStr = f"# taxId\tasmId\tgenBankAcc\trefSeqAcc\tidentical\tsciName\tcomName\tucscBrowser"
     print(outStr, file=sys.stderr)
     schema = [
@@ -274,6 +301,8 @@ def processList(inFh, dbGcaGcfDict):
           ab = hapX.replace(hx,'')
           hapX = ab
         asmType, sciName, orgName, yearDate, isolate, cultivar, extraStrings, genBankAcc, refSeqAcc, identical, taxId = extractNames(asmRpt, hapX)
+        if accession in ncbiNames:
+          sciName, taxId = ncbiNames[accession]
         if len(extraStrings):
           pat = re.compile(r'[()\[\]+*]')
           extraStrings = pat.sub('', extraStrings)
@@ -363,7 +392,11 @@ def main():
           print(f"Error: File '{listFile}' not found.", file=sys.stderr)
           sys.exit(1)
 
-    processList(fileIn, dbGcaGcfDict)
+    lineList = fileIn.readlines()
+    asmIdList = [line.split('\t')[0] for line in lineList if not line.startswith('#')]
+    ncbiNames = ncbiSciNames(asmIdList)
+
+    processList(lineList, dbGcaGcfDict, ncbiNames)
 
 if __name__ == "__main__":
     main()

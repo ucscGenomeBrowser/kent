@@ -13,7 +13,7 @@ use Exporter;
 # This is a listing of the public methods and variables (which should be
 # treated as constants) exported by this module:
 @EXPORT_OK = (
-  qw( otherHubLinks htmlFooter )
+  qw( otherHubLinks htmlFooter ncbiSciNames )
 );
 
 # otherHubLinks: arg one: vgpIndex, arg two: asmHubName, arg three: orderList
@@ -152,4 +152,46 @@ print <<"END"
 </body></html>
 END
 }
+############################################################################
+# ncbiSciNames: given a list of asmIds, return a hash reference with
+# key accession (GCA_012345678.1), value [ organismName, taxId ] from the
+# genark database assemblySummary* tables.  Those tables follow NCBI
+# taxonomy, the assembly_report.txt files keep the organism name and taxId
+# from when the assembly was submitted and become obsolete.
+# Only GCA/GCF asmIds are looked up, accessions not found are not in the
+# hash, and the caller keeps its assembly_report values for those.
+sub ncbiSciNames(@) {
+  my @asmIds = @_;
+  my %table = ( "GCA" => "assemblySummaryGenbank",
+                "GCF" => "assemblySummaryRefseq" );
+  my %accList;	# key is GCA or GCF, value is list of accessions
+  foreach my $asmId (@asmIds) {
+    next if ($asmId !~ m/^(GC[AF])_([0-9]+\.[0-9]+)/);
+    push @{$accList{$1}}, "$1_$2";
+  }
+  my %ncbiNames;
+  foreach my $gcX (sort keys %accList) {
+    my @accs = @{$accList{$gcX}};
+    foreach my $t ($table{$gcX}, "$table{$gcX}Historical") {
+      for (my $i = 0; $i < scalar(@accs); $i += 1000) {
+        my $j = $i + 999;
+        $j = $#accs if ($j > $#accs);
+        my $inList = join(",", map { "'$_'" } @accs[$i..$j]);
+        my $query = "select assemblyAccession,organismName,taxId from $t where assemblyAccession in ($inList)";
+        open (my $fh, "-|", "/cluster/bin/x86_64/hgsql", "-N", "-e", $query, "genark") or die "can not run hgsql on genark.$t";
+        while (my $line = <$fh>) {
+          chomp $line;
+          my ($acc, $orgName, $taxId) = split('\t', $line);
+          $ncbiNames{$acc} = [ $orgName, $taxId ];
+        }
+        if (! close ($fh)) {
+          printf STDERR "# warning: hgsql query failed on genark.%s, using assembly_report names\n", $t;
+        }
+      }
+    }
+  }
+  printf STDERR "# %d of %d accessions found in genark assemblySummary tables\n", scalar(keys %ncbiNames), scalar(@asmIds);
+  return \%ncbiNames;
+}	#	sub ncbiSciNames(@)
+
 ############################################################################
