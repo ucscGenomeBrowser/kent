@@ -21030,11 +21030,12 @@ awk -F'\t' 'BEGIN{OFS="\t"}
 hgsql hg19 -e "create table ucscRetroInfo5New like ucscRetroInfo5"
 hgLoadSqlTab -oldTable -notOnServer hg19 ucscRetroInfo5New /dev/null ucscRetroInfo5.thickClipped.bed
 hgsql hg19 -e "rename table ucscRetroInfo5 to ucscRetroInfo5PreThickFix, ucscRetroInfo5New to ucscRetroInfo5"
+hgsql hg19 -e "drop table ucscRetroInfo5PreThickFix"
 # 725 rows clipped at one end and 112, whose codons miss the alignment
 # entirely, now say no CDS.  Nothing but thickStart and thickEnd changed:
 # cut --complement -f7,8 of the old and new dumps have the same md5.
-# ucscRetroInfo5PreThickFix is kept until the new table is pushed to the RR;
-# ucscRetroInfo5.preThickFix.bed is the copy of what was replaced.
+# ucscRetroInfo5.preThickFix.bed is the copy of what was replaced; the backup
+# table was dropped once that dump was checked against it.
 
 ############################################################################
 # LASTZ Tenrec EchTel2 (DONE - 2013-06-12 - Hiram)
