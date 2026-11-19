@@ -1,0 +1,76 @@
+# #38764 (follow-up, reported by Christopher Lee) -- on a track settings page, a filter menu
+# (a "dropdown checklist", e.g. ClinVar's clinical significance filter) forgot every pick
+# when it was closed by a click outside it. It went back to "All", so the filter could not
+# be changed at all.
+#
+# bebad87c8ea (the attr() -> prop() sweep for Track Search) set an <option>'s selected
+# state with prop() in ddcl.js. Once a script sets that property, the browser no longer
+# lets the option's "selected" attribute decide whether it is selected -- and the plugin,
+# ui.dropdownchecklist.js, still wrote the user's picks with attr("selected"). Fixed in
+# 00cddb6fd4b: the plugin reads and writes the selected state with prop() too.
+# 7e77f51ec0a then kept the menus looking as they have on the RR since 2024: with "All"
+# set, every item shows ticked, and a click on one item removes just that item.
+#
+# The steps, on hgTrackUi for clinvarMain, filter fbc_clinvarMain1:
+#   1. fresh cart: only "All" is selected in the real <select>.
+#   2. open the menu, click "pathogenic" (i4), close by clicking the page title: the
+#      <select> now holds everything except All and pathogenic. On the bug it held "All".
+#   3. the same with "likely benign" (i2): also gone, benign still there.
+#   4. Submit, then reopen the page: the cart gave back exactly that selection.
+# The assertions read the hidden <select>'s options, which is what the form sends.
+#
+# No hg.conf gate.
+#
+# Not asserted: the filter Clear button, and the edge case "untick All, then tick one item"
+# (the RR gives "All + benign" there, master gives "benign").
+proof:
+  - "assertion-only 2026-11-18 -- written after 00cddb6fd4b and 7e77f51ec0a reached genome-test"
+  - "sandbox-ab 2026-11-18 -- hgwdev-max with ui.dropdownchecklist.js and ddcl.js from 00cddb6fd4b^ fails at step 6, its own check: All still selected, BN and LB not; with master js it passes, as do genome-test and the RR"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=clinvarMain"
+  - expect:
+      has:
+        - "#ddcl-fbc_clinvarMain1"
+        - "#fbc_clinvarMain1 option[value='All']:checked"
+      noHas: "#fbc_clinvarMain1 option[value='PG']:checked"
+
+  # untick "pathogenic"
+  - click: "#ddcl-fbc_clinvarMain1 .ui-dropdownchecklist-selector"
+  - click: "#ddcl-fbc_clinvarMain1-i4"
+  - click: "b[style*='133%']"
+  - expect:
+      has:
+        - "#fbc_clinvarMain1 option[value='BN']:checked"
+        - "#fbc_clinvarMain1 option[value='LB']:checked"
+      noHas:
+        - "#fbc_clinvarMain1 option[value='All']:checked"
+        - "#fbc_clinvarMain1 option[value='PG']:checked"
+
+  # untick "likely benign"
+  - click: "#ddcl-fbc_clinvarMain1 .ui-dropdownchecklist-selector"
+  - click: "#ddcl-fbc_clinvarMain1-i2"
+  - click: "b[style*='133%']"
+  - expect:
+      has: "#fbc_clinvarMain1 option[value='BN']:checked"
+      noHas:
+        - "#fbc_clinvarMain1 option[value='All']:checked"
+        - "#fbc_clinvarMain1 option[value='PG']:checked"
+        - "#fbc_clinvarMain1 option[value='LB']:checked"
+
+  # the cart keeps it
+  - click: "#Submit"
+  - wait: "#imgTbl"
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=clinvarMain"
+  - expect:
+      has:
+        - "#fbc_clinvarMain1 option[value='BN']:checked"
+        - "#fbc_clinvarMain1 option[value='CF']:checked"
+      noHas:
+        - "#fbc_clinvarMain1 option[value='All']:checked"
+        - "#fbc_clinvarMain1 option[value='PG']:checked"
+        - "#fbc_clinvarMain1 option[value='LB']:checked"
