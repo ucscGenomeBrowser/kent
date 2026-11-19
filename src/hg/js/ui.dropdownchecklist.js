@@ -250,7 +250,8 @@
             item.append(checkBox);
 
             // the text
-            var label = $("<label for=" + id + "/>");
+            // jQuery >= 3.5 no longer rewrites "<label for=X/>", so for= would get the "/"
+            var label = $('<label for="' + id + '"></label>');
             label.addClass("ui-dropdownchecklist-text");
             if ( optCss != null ) label.attr('style',optCss);
             label.css({ cursor: "default" });

@@ -1,0 +1,39 @@
+# #38764 (follow-up) -- in a filter menu on a track settings page (a "dropdown checklist",
+# e.g. ClinVar's clinical significance filter), a click on an item's TEXT did nothing. Only
+# the checkbox itself, or the blank part of the row, changed the item.
+#
+# ui.dropdownchecklist.js built the text as $("<label for=" + id + "/>"). jQuery before 3.5
+# rewrote "<x .../>" to "<x ...></x>"; 3.5 dropped that, so since the jQuery 3.7.1 update
+# (572d31a9744, 2024-08-29) the label came out as for="ddcl-...-i2/" and pointed at nothing.
+# The label also stops its click from reaching the row, so the click was lost. The fix
+# writes the label as '<label for="ID"></label>'. Same symptom on the RR.
+#
+# Steps, on hgTrackUi for clinvarMain, filter fbc_clinvarMain1:
+#   1. fresh cart: only "All" is selected in the real <select>.
+#   2. open the menu, click the TEXT "pathogenic", close by clicking the page title: the
+#      <select> holds everything except All and pathogenic.
+# rm38764clinvarFilter.docent.yaml covers the checkbox clicks and the cart round trip.
+#
+# No hg.conf gate.
+proof:
+  - "assertion-only 2026-11-18 -- written with the label fix, before it reached genome-test"
+  - "xfail 2026-11-18 -- fails on genome-test at step 6, its own check: All still selected, BN not, after clicking the text pathogenic"
+  - "sandbox-ab 2026-11-18 -- passes on hgwdev-max with the label fix in its htdocs js; genome-test without it fails at step 6 as above"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=clinvarMain"
+  - expect:
+      has: "#fbc_clinvarMain1 option[value='All']:checked"
+
+  - click: "#ddcl-fbc_clinvarMain1 .ui-dropdownchecklist-selector"
+  - click: "#ddcl-fbc_clinvarMain1-i4 + label"
+  - click: "b[style*='133%']"
+  - expect:
+      has: "#fbc_clinvarMain1 option[value='BN']:checked"
+      noHas:
+        - "#fbc_clinvarMain1 option[value='All']:checked"
+        - "#fbc_clinvarMain1 option[value='PG']:checked"
