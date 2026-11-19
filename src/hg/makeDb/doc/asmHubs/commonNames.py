@@ -21,6 +21,9 @@ groupLabels = {
   "conifers": "conifer",
   "green algae": "green algae",
   "red algae": "red algae",
+  # both forms appear for the same species, one label for both
+  "chytrids": "chytrids",
+  "chytrids & allies": "chytrids",
 }
 
 ####################################################################
@@ -78,7 +81,8 @@ def extractNames(asmRpt, hapX):
             sciName = pat.sub('', line)
             pat = re.compile(r'\s+\(.*\)$')
             sciName = pat.sub('', sciName)
-            pat = re.compile(r'[()\[\]+*]')
+            # keep +, it is the mating type: Podospora anserina S mat+
+            pat = re.compile(r'[()\[\]*]')
             sciName = pat.sub('', sciName)
             pat = re.compile(r'\?')
             sciName = pat.sub(' ', sciName)
@@ -196,6 +200,8 @@ def extractNames(asmRpt, hapX):
           elif "Infraspecific name:" in line:
             pat = re.compile(r'.*cultivar=|.*ecotype=|.*strain=|.*breed=')
             cultivar = pat.sub('', line)
+            # submitter text inside the value: strain=type strain:CBS 4417
+            cultivar = re.sub(r'^type strain:\s*', '', cultivar, flags=re.IGNORECASE)
         else:
           break
       readFile.close()
@@ -277,17 +283,24 @@ def processList(inFh):
       outName = dropUnbalanced(orgName)
       if len(extraStrings):
         # Preserve parentheses for viral strain nomenclature, only remove brackets and other chars
-        pat = re.compile(r'[\[\]+*]')
+        pat = re.compile(r'[\[\]*]')
         extraStrings = pat.sub('', extraStrings)
         pat = re.compile(r'\?')
         extraStrings = pat.sub(' ', extraStrings)
-        extraStrings = re.sub(re.escape(asmNameAbbrev) + ' ', '', extraStrings)
+        # the asmName is noise in an isolate (dmCerClav1 hap1.1), but when
+        # it is the strain itself (strain=Foc013) it is the identifier, keep it
+        if asmNameAbbrev != cultivar.strip():
+          extraStrings = re.sub(r'(?<!\S)' + re.escape(asmNameAbbrev) + ' ', '', extraStrings)
         extraStrings = re.sub(r'\s+', ' ', extraStrings)
-        words = extraStrings.split()
-        # orgName has had its parens removed, match against that form too
-        words += [re.sub(r'[()]', '', w) for w in words]
-        orgList = orgName.split()
-        orgName = " ".join([orgWord for orgWord in orgList if orgWord not in words])
+        # drop the cultivar and isolate from orgName only as whole phrases,
+        # word by word would turn: brown hare + breed=Cape hare -> brown
+        for phrase in (cultivar, isolate):
+          # orgName has had these characters removed, match that form too
+          for qMark in ('', ' '):
+            p = re.sub(r'[()\[\]*]', '', phrase).replace('?', qMark)
+            p = re.sub(r'\s+', ' ', p).strip()
+            if len(p):
+              orgName = re.sub(r'(?<!\S)' + re.escape(p) + r'(?!\S)', '', orgName)
         orgName = re.sub(r'=|\s+$|^\s+', '', orgName)
         orgName = re.sub(r'\s+', ' ', orgName).strip()
         orgName = dropUnbalanced(orgName)
@@ -326,10 +339,25 @@ def addTag(name, tag, atEnd=False):
       return f"{name[:i+1]}{tag} {name[i+1:]}"
     return f"{name} ({tag})"
 
+### the asmName part of an asmId when it says something about the assembly,
+### empty for NCBI default names (ASM1411746v1), bare versions (v2.0) and
+### ToL names (dmCerClav1.hap1.1), those are not wanted in a common name
+def asmNameTag(asmId):
+    p = asmId.split('_', 2)
+    if len(p) < 3:
+      return ""
+    asmName = p[2]
+    if re.fullmatch(r'ASM\d+v\d+|[vV]?\d+(\.\d+)*', asmName):
+      return ""
+    if re.match(r'[a-z]{1,3}[A-Z][a-z]+[A-Z][a-z]+\d+(\.|$)', asmName):
+      return ""
+    return asmName
+
 ### names that collide, within this list or with the orderList, when they
 ### are all the same accession number: the version (v2) first when the
 ### versions differ, genbank/refseq last when both GCA and GCF are there,
-### otherwise the accession itself
+### otherwise the asmName when it is informative and unique in the group
+### (IHEM_4915, BMD700), else the accession itself
 def makeUnique(results, taken):
     groups = {}
     for r in results:
@@ -343,10 +371,15 @@ def makeUnique(results, taken):
       sameNumber = len(set(a.split('.')[0] for a in accs)) == 1
       useVersion = len(set(accs)) > 1
       useSource = len(gcxs) > 1
+      asmTags = Counter(asmNameTag(asmId) for asmId in allIds)
       for r in group:
         p = r[0].split('_')
         if not sameNumber:
-          r[1] = addTag(name, f"{p[0]}_{p[1]}")
+          tag = asmNameTag(r[0])
+          if len(tag) and asmTags[tag] == 1:
+            r[1] = addTag(name, tag)
+          else:
+            r[1] = addTag(name, f"{p[0]}_{p[1]}")
           continue
         newName = name
         if useVersion:
