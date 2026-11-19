@@ -419,6 +419,15 @@ struct cirTreeFile *ctf = cirTreeFileAttach(bbi->fileName, bbi->udc);
 struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
 struct fileOffsetSize *block, *beforeGap, *afterGap;
 
+/* A zoom level's data ends where its index starts.  bedToBigBed and bedGraphToBigWig
+ * before #38819 wrote a wrong size for the last block of the first zoom level in files
+ * over 2 GB, so cap each block at the index.  This changes nothing for a correct file. */
+for (block = blockList; block != NULL; block = block->next)
+    {
+    if (block->offset < zoom->indexOffset && block->size > zoom->indexOffset - block->offset)
+        block->size = zoom->indexOffset - block->offset;
+    }
+
 /* Set up for uncompression optionally. */
 char *uncompressBuf = NULL;
 if (bbi->uncompressBufSize > 0)

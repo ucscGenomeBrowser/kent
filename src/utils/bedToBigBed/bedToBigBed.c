@@ -532,7 +532,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 bbiSumOutStreamClose(&stream);
 
 /* Write out 1st zoom index. */
-int indexOffset = *retIndexStart = ftell(f);
+bits64 indexOffset = *retIndexStart = ftell(f);
 assert(boundsPt == boundsEnd);
 cirTreeFileBulkIndexToOpenFile(boundsArray, sizeof(boundsArray[0]), initialReductionCount,
     blockSize, itemsPerSlot, NULL, bbiBoundsArrayFetchKey, bbiBoundsArrayFetchOffset, 
