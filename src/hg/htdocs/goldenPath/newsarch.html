@@ -64,6 +64,79 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="111826"></a>
+<h2>Nov. 18, 2026 &nbsp;&nbsp; Non-canonical ORFs: PeptideAtlas evidence for GENCODE ncORFs (Phase I) and 5ULTRA uORFs (hg38)</h2>
+<p>
+We are happy to announce the release of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs" target="_blank"><b>GENCODE
+ncORFs (Phase I)</b></a> track, which includes peptide evidence from
+<a href="https://peptideatlas.org/" target="_blank">PeptideAtlas</a>, and the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=fiveUltraUorfs" target="_blank"><b>5ULTRA
+uORFs</b></a> track. Both are part of the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=ncOrfs" target="_blank">Non-canonical ORFs</a>
+track collection on hg38 and described below:
+</p>
+
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs#TRACK_HTML" target="_blank"><b>GENCODE
+      ncORFs (Phase I)</b></a> shows non-canonical translated open reading
+      frames (ncORFs) identified from ribosome profiling (Ribo-seq) data and
+      mapped to the GENCODE annotation by the GENCODE / TransCODE consortium.
+      The Phase I catalog contains 7,264 ncORFs, with a peptidein
+      classification (121 ORFs) and peptide evidence. A peptidein is a
+      translation product detectable by mass spectrometry but not yet
+      annotatable as a protein. ncORFs can be colored by
+      <button disabled style="font-size:small">Evidence type</button>:
+      <table class="stdTbl">
+        <tr><th style="background-color:#E6A817;width:1.5em">&nbsp;</th>
+            <td><b>Gold</b>: Annotated as a <b>peptidein</b> by Deutsch et al. (121 ORFs,
+                Table S12).</td></tr>
+        <tr><th style="background-color:#4682B4;width:1.5em">&nbsp;</th>
+            <td><b>Steel blue</b>: Detected only by HLA (Human Leukocyte Antigen)
+                immunopeptidomics (1,667 ORFs).</td></tr>
+        <tr><th style="background-color:#4C9900;width:1.5em">&nbsp;</th>
+            <td><b>Forest green</b>: Detected only by non-HLA (whole-cell tryptic) proteomics
+                (51 ORFs).</td></tr>
+        <tr><th style="background-color:#E66400;width:1.5em">&nbsp;</th>
+            <td><b>Orange</b>: Detected by both methods (21 ORFs).</td></tr>
+        <tr><th style="background-color:#808080;width:1.5em">&nbsp;</th>
+            <td><b>Gray</b>: No peptide evidence (5,404 ORFs). This includes ORFs whose only
+                non-HLA peptides also map to known proteins and were excluded by the
+                authors.</td></tr>
+      </table>
+      By default, ncORFs are colored by
+      <button disabled style="font-size:small">Kozak strength</button>. They
+      can also be colored by
+      <button disabled style="font-size:small">HLA class</button>. See the
+      <a href="/cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs#TRACK_HTML" target="_blank">track
+      description page</a> for more information.</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=fiveUltraUorfs#TRACK_HTML" target="_blank"><b>5ULTRA
+      uORFs</b></a> includes 22,567 ATG-initiated upstream open reading
+      frames (uORFs) defined on MANE Select transcripts, which provide a
+      single well-supported, clinically relevant transcript per gene matched
+      between Ensembl/GENCODE and RefSeq. In the track, uORFs are classified
+      as non-overlapping, overlapping, or N-terminal extension based on the
+      position of each uORF's stop codon relative to the main coding
+      sequence. They were compiled by the
+      <a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA</a>
+      project for annotating 5' UTR variants. The uORFs are colored by Kozak
+      context strength. See the
+      <a href="/cgi-bin/hgTrackUi?db=hg38&g=fiveUltraUorfs#TRACK_HTML" target="_blank">track
+      description page</a> for more information.</li>
+</ul>
+
+<p>
+We would like to thank Jonathan Mudge, Jorge Ruiz-Orera, John Prensner,
+Sebastiaan van Heesch, and the
+<a href="https://www.gencodegenes.org/" target="_blank">GENCODE</a> /
+TransCODE consortium for creating and maintaining the GENCODE ncORFs
+(Phase I) annotations. We also thank Matthieu Chaldebas and the
+<a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA</a>
+team for making the uORF reference data publicly available as part of the
+5ULTRA package. We would also like to thank Max Haeussler, Jairo Navarro,
+and Gerardo Perez for their efforts on this release.
+</p>
+
 <a name="111326"></a>
 <h2>Nov. 13, 2026 &nbsp;&nbsp; New ways to sign in to the Genome Browser</h2>
 <p>

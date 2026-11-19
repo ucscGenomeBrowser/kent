@@ -4,6 +4,7 @@ shortLabel Non-canonical ORFs
 longLabel Non-canonical Open Reading Frames
 group genes
 itemTypeLabel ORF
+pennantIcon Updated red ../goldenPath/newsarch.html#111826 "Updated Nov. 18, 2026"
 
     track utrAnnotUorfs
     parent ncOrfs
@@ -63,6 +64,7 @@ itemTypeLabel ORF
     colorFields default="Kozak strength" colorByEvidence="Evidence type" colorByHlaClass="HLA class"
     skipFields colorByEvidence,colorByHlaClass
     html gencNcOrfs
+    pennantIcon New red ../goldenPath/newsarch.html#111826 "Released Nov. 18, 2026"
     visibility pack
 
     track gencNcOrfsPrimary
@@ -117,6 +119,7 @@ itemTypeLabel ORF
     filterType.uorfType multipleListOr
     filterValues.kozak Strong,Moderate,Weak,NA
     filterType.kozak multipleListOr
+    pennantIcon New red ../goldenPath/newsarch.html#111826 "Released Nov. 18, 2026"
     visibility pack
 
     track metamorf
