@@ -1115,14 +1115,15 @@ STAGE1_SCHEMA = {
     'type': 'object',
     'additionalProperties': False,
     'required': ['disposition', 'dispositionReason', 'confidence', 'sensitivePersonalInfo',
-                 'canonicalSubject', 'digestTopic', 'summaryLine', 'cleanBodyTextile',
-                 'category', 'playbooks', 'hubName', 'hubUrl', 'assemblies', 'urls',
-                 'attachmentRoles'],
+                 'teamOnly', 'canonicalSubject', 'digestTopic', 'summaryLine',
+                 'cleanBodyTextile', 'category', 'playbooks', 'hubName', 'hubUrl', 'assemblies',
+                 'urls', 'attachmentRoles'],
     'properties': {
         'disposition': {'type': 'string', 'enum': DISPOSITIONS},
         'dispositionReason': {'type': 'string'},
         'confidence': {'type': 'number', 'minimum': 0, 'maximum': 1},
         'sensitivePersonalInfo': {'type': 'boolean'},
+        'teamOnly': {'type': 'boolean'},
         'canonicalSubject': {'type': 'string'},
         'digestTopic': {'type': 'string'},
         'summaryLine': {'type': 'string'},
@@ -1176,6 +1177,20 @@ sensitivePersonalInfo: true only if the email contains sensitive personal medica
 information about an identifiable person (names with genetic test results, medical
 conditions, family medical history, personal health details). General questions about
 genetic data are not.
+
+teamOnly: true if the email is a private matter between the sender and the Browser team,
+something they would not want posted on a public, archived list for anyone on the internet
+to read, even though it is not spam. That covers:
+- licensing and permissions: whether a company needs a license, terms for commercial use
+  or redistribution of the Browser, BLAT, other UCSC software or UCSC data, permission to
+  reproduce images or data in a publication or product, and buying, renewing or pricing a
+  license (quotes, purchase orders, invoices, contracts, payments). Such a message names the
+  company or its plans, and posting it makes that public.
+- a security vulnerability report.
+- a message the sender explicitly asks to keep private or confidential.
+A boilerplate confidentiality footer added by a mail server does not count. A question about
+how to use the Browser, its data or its software is not teamOnly, even when it comes from a
+company. When teamOnly is true, end dispositionReason with one sentence saying why.
 
 confidence: how sure you are of the disposition, 0 to 1.
 
@@ -1377,7 +1392,8 @@ def classify(conn, rec, facts, matchedSubject):
             and not facts['staffLogin']):
         cached = {k: verdict[k] for k in ('disposition', 'dispositionReason', 'confidence',
                                            'category')}
-        cached.update({'sensitivePersonalInfo': False, 'canonicalSubject': '', 'playbooks': [],
+        cached.update({'sensitivePersonalInfo': False, 'teamOnly': False,
+                       'canonicalSubject': '', 'playbooks': [],
                        'digestTopic': '', 'summaryLine': '', 'cleanBodyTextile': '',
                        'hubName': '', 'hubUrl': '', 'assemblies': [], 'urls': [],
                        'attachmentRoles': []})
@@ -1403,11 +1419,15 @@ def decideAction(rec, verdict, facts):
     moderated = any(l in CONFIG['MODERATED_LISTS'] for l in rec['lists'])
     unsure = verdict['confidence'] < UNSURE_BELOW
     sensitive = moderated and verdict['sensitivePersonalInfo']
+    # Only a message still on the queue can be kept off the list; one already delivered
+    # is public, so it is filed as usual.
+    teamOnly = moderated and rec['source'] == 'pending' and verdict.get('teamOnly', False)
     act = {'disposition': d, 'unsure': unsure, 'moderated': moderated,
            'moderation': 'n/a', 'ticket': 'none', 'reopen': 'n/a', 'why': ''}
-    if d in NOT_FILED or sensitive or unsure:
+    if d in NOT_FILED or sensitive or teamOnly or unsure:
         act['why'] = ('not sure (confidence %.2f)' % verdict['confidence'] if unsure
                       else 'sensitive personal information on a public list' if sensitive
+                      else 'private to the team, not for a public list' if teamOnly
                       else d)
         if moderated:
             act['moderation'] = 'hold'
@@ -1518,6 +1538,7 @@ def stage1(conn, rec, facts):
                 disposition=verdict['disposition'], reason=verdict['dispositionReason'],
                 confidence=verdict['confidence'],
                 sensitivePersonalInfo=verdict['sensitivePersonalInfo'],
+                teamOnly=verdict.get('teamOnly', False),
                 category=verdict['category'], playbooks=verdict.get('playbooks', []),
                 canonicalSubject=verdict['canonicalSubject'],
                 digestTopic=verdict['digestTopic'], summaryLine=verdict['summaryLine'],
