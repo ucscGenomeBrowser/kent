@@ -49,7 +49,13 @@ Sunset policy, all in versions (releases are about three weeks apart):
                         it along with every branch that reads it.
   QA_GRACE        = 6   a gate still defaulting FALSE this long after it landed
                         is not being gated, it is being forgotten.  Either turn
-                        it on or delete the feature.
+                        it on or delete the feature.  The exception is a gate
+                        the RR, genome-euro, genome-asia or hgwbeta already
+                        turns on in its own hg.conf: that feature shipped by
+                        configuration, so the action is to flip the default,
+                        and it is reported as liveByConf rather than stalled.
+                        The production confs are read from the weekly copies
+                        in kent/confs.
 
 Verification status.  Rows carry verified=True only where the classification
 was confirmed by reading the code at the cited source file.  --check counts what
@@ -88,7 +94,9 @@ on, on every machine somebody had appended the flag to by hand.  What the flip
 does is make those lines pointless, and a pointless line is not harmless, since
 while it is there the flag reads on locally whatever the tree says.  So this
 mode reads the hg.conf files it can see from hgwdev, joins them against the
-catalog, and names the lines to delete.  Like --reconcile it is silent and exits
+catalog, and names the lines to delete.  That includes the weekly copies of the
+RR, genome-euro, genome-asia and hgwbeta confs in kent/confs; a line found in
+one of those is QA's to delete on the real machine, not in the copy.  Like --reconcile it is silent and exits
 0 when there is nothing to do, which is what lets the nightly cron run it and
 mail only the news.
 """
@@ -104,7 +112,16 @@ import sys
 KEEP_AFTER_FLIP = 4
 QA_GRACE = 6
 
-# The gates already known to be overdue or stalled, so --sunset-new can report
+# The weekly copies of the production hg.conf files, harvested by a cron into
+# kent/confs ("Installing updated hg.conf files from UCSC servers").  They are
+# how a run on hgwdev can tell that a gate whose code default is still FALSE is
+# on for real users anyway.  HGCONF_CONFS_DIR points a test at a fixture.
+CONFS_DIR = os.environ.get("HGCONF_CONFS_DIR") or os.path.normpath(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "confs"))
+PROD_CONFS = [("rr", "the RR"), ("euro", "genome-euro"),
+              ("asia", "genome-asia"), ("hgwbeta", "hgwbeta")]
+
+# The gates already known to be overdue, stalled or liveByConf, so --sunset-new can report
 # what changed rather than the whole standing list.  Regenerate with
 # --update-baseline and commit it; the diff is then the release-to-release
 # history of the backlog, in the git log rather than in somebody's memory.
@@ -2109,6 +2126,7 @@ def gate_lifecycle(cat, ages):
     first_true = ages.get("firstTrue", {})
     cur = ages.get("current")
     hh = load_harvester()
+    live = production_on()
     out = []
     for v in gates(cat):
         name = v["name"]
@@ -2134,14 +2152,18 @@ def gate_lifecycle(cat, ages):
             "current": cur,
             "age": (cur - added) if (cur and added) else None,
             "tickets": tickets, "ticketFrom": ticket_from,
+            "liveOn": live.get(name, []),
         })
     return out
 
 
 def gate_states(life, cur):
-    """name -> "overdue" or "stalled", for the gates a release can act on.
+    """name -> "overdue", "stalled" or "liveByConf", for the gates a release
+    can act on.
 
-    The two states the backlog file tracks.  A gate in neither is scheduled,
+    The states the backlog file tracks.  liveByConf is a gate that would be
+    stalled by its code default but is turned on in a production hg.conf, so
+    users already have the feature and the fix is to flip the default.  A gate in neither is scheduled,
     inside its QA grace period, or undatable, and none of those is news.  The
     precedence matches sunset_report: an overdue gate is reported as overdue
     even if it would also qualify as stalled.
@@ -2152,7 +2174,7 @@ def gate_states(life, cur):
             states[g["name"]] = "overdue"
         elif (not g["shipped"] and g["age"] is not None
               and g["age"] > QA_GRACE):
-            states[g["name"]] = "stalled"
+            states[g["name"]] = "liveByConf" if g["liveOn"] else "stalled"
     return states
 
 
@@ -2199,7 +2221,8 @@ def write_backlog(states, cur, life=None, path=None):
     with open(path, "w") as f:
         f.write("""\
 # hgConfGateBacklog.txt - the hg.conf release gates already known to be overdue
-# for deletion or stalled in QA.  Refs #37925.
+# for deletion, stalled in QA, or on in production hg.conf with the code default
+# still FALSE (liveByConf).  Refs #37925.
 #
 # hgConfCatalog.py --sunset-new reports only the gates that are not in here, so
 # this is what lets the weekly build's wrap-up say "two gates went overdue this
@@ -2213,7 +2236,7 @@ def write_backlog(states, cur, life=None, path=None):
 # being in here is not evidence that anybody reviewed it; only the ones added
 # since, which arrive a few at a time in a reviewable diff, carry that weight.
 #
-# Fields: name, state (overdue or stalled), and the release it was first
+# Fields: name, state (overdue, stalled or liveByConf), and the release it was first
 # reported at.  hgConfCatalog.py --sunset prints the full list with dates.
 """)
         for name in sorted(states):
@@ -2256,7 +2279,8 @@ def sunset_delta(cat, ages, sites=None, out=sys.stdout):
     moved = sorted(n for n in now if n in was and was[n][0] != now[n])
     gone = sorted(n for n in was if n not in now)
 
-    print("hg.conf release gates at v%s: %d newly overdue or stalled, "
+    print("hg.conf release gates at v%s: %d newly overdue, stalled or "
+          "liveByConf, "
           "%d resolved, %d in the standing backlog (%s)"
           % (cur, len(fresh) + len(moved), len(gone), len(now),
              os.path.basename(BACKLOG_FILE)), file=out)
@@ -2398,9 +2422,19 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
     for g in due:
         print(line(g), file=out)
 
-    stalled = sorted([g for g in life
-                      if not g["shipped"] and g["age"] is not None
-                      and g["age"] > QA_GRACE], key=lambda g: -g["age"])
+    old = [g for g in life if not g["shipped"] and g["age"] is not None
+           and g["age"] > QA_GRACE]
+    live = sorted([g for g in old if g["liveOn"]], key=lambda g: -g["age"])
+    stalled = sorted([g for g in old if not g["liveOn"]],
+                     key=lambda g: -g["age"])
+    print("\nON IN PRODUCTION HG.CONF (default still FALSE %d+ releases after "
+          "it landed): %d" % (QA_GRACE, len(live)), file=out)
+    print("  Users already have these.  Flip the code default to TRUE, or mark "
+          "the row\n  a knob if mirrors should leave it off.  Read from the "
+          "copies in kent/confs.", file=out)
+    for g in live:
+        print(line(g) + "  on in %s" % "/".join(g["liveOn"]), file=out)
+
     print("\nSTALLED IN QA (default still FALSE %d+ releases after it landed): "
           "%d" % (QA_GRACE, len(stalled)), file=out)
     print("  Either turn these on or delete the feature.  A flag nobody "
@@ -2438,13 +2472,16 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
 # tree says.  That is the mechanism by which a wrong default survives: the
 # people most likely to notice are on the one machine that cannot see it.
 #
-# These are the conf files readable from hgwdev.  hgwbeta, the RR and every
-# mirror keep their own, none of which can be read from here, so the report
-# covers what it can see and says what it cannot.  Those are QA's to clean up.
+# These are the conf files readable from hgwdev, then the weekly copies of the
+# production confs in kent/confs.  A line found in a copy is QA's to delete on
+# the real machine; deleting it from the copy does nothing, and the next weekly
+# harvest puts it back.  Mirrors keep their own and none of them can be read.
 MACHINE_CONFS = [
     ("/usr/local/apache/cgi-bin/hg.conf", "shared dev conf, genome-test reads it"),
     ("/usr/local/apache/cgi-bin-beta/hg.conf", "the beta CGI install on this host"),
-]
+] + [(os.path.join(CONFS_DIR, "%s.hg.conf" % c),
+      "copy of %s's conf; QA edits the real one" % label)
+     for c, label in PROD_CONFS]
 
 # The six words cfgOptionBooleanDefault accepts, lowercase only, from
 # hg/lib/hgConfig.c.  Anything else there is not a falsy value, it is an
@@ -2502,6 +2539,26 @@ def parse_conf(path):
                 out.append((n, name.strip(), val.strip()))
     except (IOError, OSError):
         return []
+    return out
+
+
+def production_on():
+    """{name: [conf, ...]}: the settings each production conf copy turns on.
+
+    Read from the kent/confs copies named in PROD_CONFS.  When a name is set
+    twice in one file the last line wins, as it does in hgConfig.c.  A missing
+    copy is skipped, so a checkout without kent/confs reads as "on nowhere"
+    and the report falls back to the code default alone.
+    """
+    out = {}
+    for conf, _ in PROD_CONFS:
+        last = {}
+        for _, name, val in parse_conf(os.path.join(CONFS_DIR,
+                                                    "%s.hg.conf" % conf)):
+            last[name] = val
+        for name, val in last.items():
+            if val in TRUE_WORDS:
+                out.setdefault(name, []).append(conf)
     return out
 
 
@@ -2595,9 +2652,10 @@ def redundant_report(cat, ages=None, verbose=False, out=sys.stdout):
               "default is installed\n  on the machine that reads the file.  "
               "Until then the line is what is turning\n  the feature on there, "
               "and removing it turns the feature off.\n"
-              "\n  hgwbeta, the RR and the mirrors keep their own hg.conf and "
-              "none of them can\n  be read from hgwdev, so a line may be "
-              "waiting there too.  Those are QA's.", file=out)
+              "\n  A line in kent/confs is a copy of a production conf.  QA "
+              "deletes it on the\n  real machine; the copy follows at the "
+              "next weekly harvest.  Mirrors keep\n  their own hg.conf and "
+              "cannot be read from here.", file=out)
 
     if found["unparsable"]:
         print("\nNOT A BOOLEAN (%d): hg.conf takes yes, no, on, off, true or "
@@ -3367,7 +3425,7 @@ def render_html(cat, ages=None, sites=None):
         cur = ages.get("current")
         overdue = [g for g in life if g["sunset"] and cur
                    and g["sunset"] <= cur]
-        stalled = [g for g in life if not g["shipped"]
+        stalled = [g for g in life if not g["shipped"] and not g["liveOn"]
                    and g["age"] is not None and g["age"] > QA_GRACE]
         sunset_html = (
             '<div class="policy"><b>Sunset status at v%s.</b> '
