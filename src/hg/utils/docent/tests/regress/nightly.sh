@@ -39,6 +39,10 @@
 
 set -u
 export PATH=/usr/bin:/bin:/usr/local/bin:$PATH
+# cron gives no locale, and then mail (s-nail) refuses to send a report that holds any
+# non-ASCII text, such as the non-breaking space in an hgTracks tooltip that a failed
+# check quotes.  The report went to dead.letter instead, every night from 2026-11-15.
+export LC_ALL=C.UTF-8
 
 HERE=$(cd "$(dirname "$0")" && pwd)
 PW=/hive/groups/browser/uiTest/pw
