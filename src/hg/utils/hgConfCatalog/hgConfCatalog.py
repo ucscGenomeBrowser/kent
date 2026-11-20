@@ -2491,7 +2491,7 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
     print("\nON IN PRODUCTION HG.CONF (default still FALSE %d+ releases after "
           "it landed): %d" % (QA_GRACE, len(live)), file=out)
     print("  Users already have these.  Flip the code default to TRUE, or mark "
-          "the row\n  a knob if mirrors should leave it off.  Read from the "
+          "the row\n  as a knob if mirrors should leave it off.  Read from the "
           "copies in kent/confs.", file=out)
     for g in live:
         print(line(g) + "  on in %s" % "/".join(g["liveOn"]), file=out)
@@ -3371,6 +3371,7 @@ span.gate { background: #fde9c8; color: #7a4a00; }
 span.knob { background: #d9ead9; color: #24541f; }
 span.overdue { background: #f8d3d3; color: #8a1f1f; font-weight: 600; }
 span.stalled { background: #fdf0c0; color: #6b5300; font-weight: 600; }
+span.liveByConf { background: #d6ecf3; color: #1d4f60; font-weight: 600; }
 span.dep { background: #eee; color: #777; }
 span.req { background: #dce6f8; color: #1a3a6b; }
 div.note { color: #555; margin-top: 3px; font-size: 0.95em; }
@@ -3438,8 +3439,12 @@ def var_rows(vs, life_by_name=None, tickets=None, sites=None):
                             % life["sunset"])
             if (not life.get("shipped") and life.get("age") is not None
                     and life["age"] > QA_GRACE):
-                tags.append('<span class="kind stalled">stalled %d</span>'
-                            % life["age"])
+                if life.get("liveOn"):
+                    tags.append('<span class="kind liveByConf">on in %s</span>'
+                                % esc("/".join(life["liveOn"])))
+                else:
+                    tags.append('<span class="kind stalled">stalled %d</span>'
+                                % life["age"])
         extra = ""
         if life and life.get("added"):
             extra = "added v%d" % life["added"]

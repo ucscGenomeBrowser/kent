@@ -35,7 +35,8 @@
 # The hub declares `visibility full`, so there is no `track:` step: a hub track's cart
 # name carries a per-run hub_<n>_ prefix that `track:` cannot write.
 proof:
-  - "sandbox-ab 2026-11-19 -- fails at step 4 on hgwdev-braney (built 11-17, no fix): rm38819bad 240,240,180 for 80% of the row, rm38819good 0,0,200; passes on the #38819 ticket sandbox on port 48120 (hgTracks built from eb6f208cdf1). Also fails the same way on hgwbeta v506 and passes on genome-test"
+  - "release-ab 2026-11-20 -- run on the current window, chr21:6700000-46709983: fails at step 4 on hgwbeta v506 (no fix): rm38819bad 240,240,180 for 80% of the row; passes on genome-test, which has eb6f208cdf1"
+  - "sandbox-ab 2026-11-19 -- on the earlier window chr21:25,000,000-46,709,983, fails at step 4 on hgwdev-braney (built 11-17, no fix): rm38819bad 240,240,180 for 80% of the row, rm38819good 0,0,200; passes on the #38819 ticket sandbox on port 48120 (hgTracks built from eb6f208cdf1). Also fails the same way on hgwbeta v506 and passes on genome-test"
 
 target: genome-test
 db: hg38
