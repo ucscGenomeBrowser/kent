@@ -56,8 +56,14 @@ update: clean userApps
 	${MAKE} fetchSource
 	${MAKE} utils
 
+# Keep this list in sync with the files in kent/src/userApps/
+userAppsFiles = GenomeBrowserLicense.pdf Makefile README fetchKentSource.sh \
+	licenseBlat.txt licenseUcscGenomeBrowser.txt
+
 userApps:
-	git archive --format=zip -9 \
-	    --remote=https://github.com/ucscGenomeBrowser/kent.git \
-	    HEAD src/userApps > userApps.zip
-	unzip -q -o -d . -j userApps.zip 
+	for f in ${userAppsFiles} ; do \
+	    curl -fsSL -o $$f \
+	      https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/userApps/$$f \
+	      || exit 1 ; \
+	done
+	chmod +x fetchKentSource.sh

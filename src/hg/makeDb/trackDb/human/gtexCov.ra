@@ -1,6 +1,7 @@
 track gtexCov
 shortLabel GTEx RNA-Seq Coverage
 longLabel GTEx V8 RNA-Seq Read Coverage by Tissue
+facet.consortia GTEx
 group expression
 priority 10.20
 type bigWig

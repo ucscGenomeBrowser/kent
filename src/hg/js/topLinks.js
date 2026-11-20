@@ -13,7 +13,8 @@
 // overlay so it works on static pages too (no jQuery UI dependency).
 
 /* jshint esversion: 8 */
-/* global $, document, window, URL, navigator, getHgsid, copyToClipboard, copyButtonSaysCopied */
+/* global $, document, window, URL, navigator, getHgsid, copyToClipboard, copyButtonSaysCopied,
+          getDb, urlWithPortableDb */
 
 var topLinks = (function() {
     "use strict";
@@ -248,6 +249,7 @@ var topLinks = (function() {
                         {background: "#f0f0f0", padding: "6px 8px", borderRadius: "4px",
                          wordBreak: "break-all", userSelect: "all", fontFamily: "monospace"});
         urlBox.setAttribute("data-copy", url);   // copyToClipboard() reads data-copy or innerText
+        urlBox.tabIndex = 0;                     // focusable, so the link can be put under the cursor
         body.appendChild(urlBox);
 
         var btnRow = el("div", {}, {marginTop: "8px"});
@@ -298,6 +300,15 @@ var topLinks = (function() {
         else if (opts.pageNote)
             body.appendChild(el("p", {textContent: "This link shows the page only. It does not " +
                 "restore the tracks you currently have displayed."}, {marginTop: "14px"}));
+
+        // Put the cursor on the link and select it, so Ctrl-C/Cmd-C copies it right away.  Done
+        // last, after the auto-copy above, which may move the focus and selection itself.
+        urlBox.focus();
+        var range = document.createRange();
+        range.selectNodeContents(urlBox);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
     }
 
     // The "Specify name" editor: rename the session, then show the updated link.
@@ -371,6 +382,8 @@ var topLinks = (function() {
         var clean = stripHgsid(url);
         if (opts.ensureDb)
             clean = ensureParam(clean, "db", opts.ensureDb);
+        // without the hgsid, a hub assembly's db=hub_<id>_<name> opens the default assembly
+        clean = urlWithPortableDb(clean);
         if (opts.superTrack) {
             var supers = opts.superTrack.split(",");
             for (var i = 0; i < supers.length; i++)
@@ -387,7 +400,7 @@ var topLinks = (function() {
         // hgTrackUi etc.: the shareable thing is just this page's URL without the hgsid.  Note
         // that it opens the page, not the user's session/tracks (like the hgc popup link).
         if (mode === "url") {
-            shareUrlDialog(window.location.href, {pageNote: true});
+            shareUrlDialog(window.location.href, {pageNote: true, ensureDb: getDb()});
             return;
         }
 
@@ -574,6 +587,8 @@ var topLinks = (function() {
         body.appendChild(row);
         body.appendChild(status);
         appendManageNote(body, opts.loggedIn);
+        if (nameInput)
+            nameInput.focus();
     }
 
     // ---- Wire up the menu items --------------------------------------------------------------

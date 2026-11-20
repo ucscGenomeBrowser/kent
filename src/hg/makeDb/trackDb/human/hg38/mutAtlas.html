@@ -1,0 +1,267 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=cancerMutations">Cancer Mutations</a>
+collection. It shows the somatic variants of the
+<a href="https://cancermutationatlas.org/" target="_blank">Cancer Mutation Atlas (CMA)</a>,
+made by the Karchin Lab at Johns Hopkins University. CMA combines somatic
+mutation calls from 12 tumor sequencing studies, including AACR Project GENIE,
+TCGA, Foundation Medicine and CPTAC, and counts for each variant how many
+patients carry it and how many patients were sequenced at this position, separately for
+more than 800 cancer types of the
+<a href="https://oncotree.mskcc.org/" target="_blank">OncoTree</a> classification.
+The atlas contains 3.9 million variants. 87% of them were found in only one patient,
+while about 20,000 were found in ten or more patients.
+</p>
+
+<p>
+The same data is shown in two ways: the "Cancer Mutation Atlas" track draws
+every variant as a colored feature, and the "CMA Lollipops" track draws it
+as a lollipop whose height is the log10 of the number of carriers, so a variant with
+10 carriers is drawn at height 1 and one with 1000 carriers at height 3.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item is one variant, which is one combination of position, reference allele and alternate
+allele. Several alternate alleles at the same position are separate items. The item
+label is the gene and protein change for variants in coding sequence, for example
+<tt>BRAF V600E</tt>, and the nucleotide change otherwise, e.g. <tt>C&gt;T</tt>,
+<tt>delAG</tt> or <tt>ins26bp</tt>. Insertions are drawn as zero-length features
+at the insertion point, deletions cover the deleted bases.
+</p>
+
+<p>Items are colored by the number of patients that carry the variant:</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#6E0000;width:2em">&nbsp;</th>
+      <td>100 or more carriers</td></tr>
+  <tr><th style="background-color:#C80000;width:2em">&nbsp;</th>
+      <td>20 to 99 carriers</td></tr>
+  <tr><th style="background-color:#E04B00;width:2em">&nbsp;</th>
+      <td>5 to 19 carriers</td></tr>
+  <tr><th style="background-color:#F09600;width:2em">&nbsp;</th>
+      <td>2 to 4 carriers</td></tr>
+  <tr><th style="background-color:#969696;width:2em">&nbsp;</th>
+      <td>1 carrier</td></tr>
+</table>
+
+<p>
+Hovering over an item shows its effect, the number of carriers and tested patients over all
+studies, and the three cancer types with the most carriers. Clicking an item opens a
+page with a table of all cancer types and all studies with the variant.
+</p>
+
+<p>
+The prevalence of a variant is the number of patients with the variant divided by the
+number of patients tested at its position. The number of tested patients changes from
+position to position, as most patients were sequenced with gene panels that cover only some
+genes. The field "Max. prevalence" is the highest prevalence in a single
+cancer type. To avoid values like 1 carrier out of 2 tested patients, only cancer types
+with at least 50 tested patients at the position are used for it, and it is empty if there
+is no such type.
+</p>
+
+<p>
+The CMA counts are for patients and the cancer type that was assigned to them, without
+adding up related cancer types. For example, the counts for lung adenocarcinoma are
+not included in those for non-small cell lung cancer. The CMA website and its OpenCRAVAT
+annotator add up the counts along the OncoTree hierarchy.
+</p>
+
+<p>
+Variants can be filtered by number of carriers, maximum prevalence, variant type,
+effect, OncoTree tissue and study. When zoomed out beyond 200 kbp, the "Cancer Mutation Atlas"
+track switches to a density graph. The lollipop track is only drawn for windows
+up to 2 Mbp.
+</p>
+
+<h2>Methods</h2>
+<p>
+CMA collects somatic variant calls from targeted panels, exomes and genomes of
+AACR Project GENIE release 18.0, the TCGA MC3 call set, Foundation Medicine, CPTAC, OrigiMed,
+the Chernobyl papillary thyroid cancer study (REBC), ALCHEMIST, Prostate 1000,
+METABRIC, IWG-MDS, Broad CLL and Duke DLBCL. Both tumor-only and matched tumor-normal
+studies are included. Variants are converted to GRCh38, checked against the
+reference genome and limited to the regions assayed by each sample's panel.
+Multiple samples of the same patient and cancer type are counted as one patient.
+Germline variants are removed if their allele frequency is above 0.04% in gnomAD v4,
+ALFA, Regeneron, All of Us, ESP6500 or 1000 Genomes, or if they are in the GATK panel of
+normals, unless they are a hotspot in Cancer Hotspots v2. See the
+<a href="https://cancermutationatlas.org/" target="_blank">CMA website</a> and its
+<a href="https://cancermutationatlas.org/studies.html" target="_blank">list of studies</a>
+for details.
+</p>
+
+<p>
+We downloaded the file
+<a href="https://cancermutationatlas.org/version/2026.09.15/atlas.tsv" target="_blank">atlas.tsv</a>
+of CMA version 2026.09.15 (beta1). The OncoTree names and tissues of the cancer types
+are from the OncoTree API, version oncotree_2025_10_03.
+We annotated the variants with
+<a href="https://samtools.github.io/bcftools/howtos/csq-calling.html" target="_blank">bcftools csq</a>
+using the Ensembl release 115 gene annotation. For each variant we show the most
+severe effect on an Ensembl canonical transcript, or, if no canonical transcript is
+affected, the most severe effect on any transcript. Variants outside all transcripts are
+labeled "intergenic". All 3,918,034 variants in the input file are in the track.
+The commands are in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/cancerMutations.txt"
+target="_blank">makeDoc file</a> and the scripts are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/cancerMutations"
+target="_blank">cancerMutations scripts directory</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there
+to spreadsheet or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>mutAtlas</i>.
+</p>
+
+<p>
+For automated download and analysis, the annotation is stored in a bigBed file
+that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/cancerMutations/" target="_blank">our download server</a>.
+The file for this track is called <tt>mutAtlas.bb</tt>. Individual regions or the whole
+annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled
+from the source code or downloaded as a precompiled binary for your system. Instructions
+for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/cancerMutations/mutAtlas.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+The original data can be downloaded from the
+<a href="https://cancermutationatlas.org/" target="_blank">Cancer Mutation Atlas website</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Karchin Lab at Johns Hopkins University for making the Cancer Mutation Atlas.
+The CMA authors thank the AACR Project GENIE Consortium and support from AACR and the
+Consortium members for access to GENIE release 18.0.
+</p>
+
+<h2>References</h2>
+
+<p>
+AACR Project GENIE Consortium.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28572459" target="_blank">
+AACR Project GENIE: Powering Precision Medicine through an International Consortium</a>.
+<em>Cancer Discov</em>. 2017 Aug;7(8):818-831.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28572459" target="_blank">28572459</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5611790/" target="_blank">PMC5611790</a>
+</p>
+
+<p>
+Ellrott K, Bailey MH, Saksena G, Covington KR, Kandoth C, Stewart C, Hess J, Ma S, Chiotti KE,
+McLellan M <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29596782" target="_blank">
+Scalable Open Science Approach for Mutation Calling of Tumor Exomes Using Multiple Genomic
+Pipelines</a>.
+<em>Cell Syst</em>. 2018 Mar 28;6(3):271-281.e7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29596782" target="_blank">29596782</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6075717/" target="_blank">PMC6075717</a>
+</p>
+
+<p>
+Hartmaier RJ, Albacker LA, Chmielecki J, Bailey M, He J, Goldberg ME, Ramkissoon S, Suh J, Elvin JA,
+Chiacchia S <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28235761" target="_blank">
+High-Throughput Genomic Profiling of Adult Solid Tumors Reveals Novel Insights into Cancer
+Pathogenesis</a>.
+<em>Cancer Res</em>. 2017 May 1;77(9):2464-2475.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28235761" target="_blank">28235761</a>
+</p>
+
+<p>
+Li Y, Dou Y, Da Veiga Leprevost F, Geffen Y, Calinawan AP, Aguet F, Akiyama Y, Anand S, Birger C,
+Cao S <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/37582339" target="_blank">
+Proteogenomic data and resources for pan-cancer analysis</a>.
+<em>Cancer Cell</em>. 2023 Aug 14;41(8):1397-1406.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37582339" target="_blank">37582339</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10506762/" target="_blank">PMC10506762</a>
+</p>
+
+<p>
+Wu L, Yao H, Chen H, Wang A, Guo K, Gou W, Yu Y, Li X, Yao M, Yuan S <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35871175" target="_blank">
+Landscape of somatic alterations in large-scale solid tumors from an Asian population</a>.
+<em>Nat Commun</em>. 2022 Jul 23;13(1):4264.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35871175" target="_blank">35871175</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9308789/" target="_blank">PMC9308789</a>
+</p>
+
+<p>
+Morton LM, Karyadi DM, Stewart C, Bogdanova TI, Dawson ET, Steinberg MK, Dai J, Hartley SW,
+Schonfeld SJ, Sampson JN <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33888599" target="_blank">
+Radiation-related genomic profile of papillary thyroid carcinoma after the Chernobyl accident</a>.
+<em>Science</em>. 2021 May 14;372(6543).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33888599" target="_blank">33888599</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9022889/" target="_blank">PMC9022889</a>
+</p>
+
+<p>
+Govindan R, Mandrekar SJ, Gerber DE, Oxnard GR, Dahlberg SE, Chaft J, Malik S, Mooney M, Abrams JS,
+Jänne PA <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/26672084" target="_blank">
+ALCHEMIST Trials: A Golden Opportunity to Transform Outcomes in Early-Stage Non-Small Cell Lung
+Cancer</a>.
+<em>Clin Cancer Res</em>. 2015 Dec 15;21(24):5439-44.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26672084" target="_blank">26672084</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4683399/" target="_blank">PMC4683399</a>
+</p>
+
+<p>
+Armenia J, Wankowicz SAM, Liu D, Gao J, Kundra R, Reznik E, Chatila WK, Chakravarty D, Han GC,
+Coleman I <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29610475" target="_blank">
+The long tail of oncogenic drivers in prostate cancer</a>.
+<em>Nat Genet</em>. 2018 May;50(5):645-651.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29610475" target="_blank">29610475</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6107367/" target="_blank">PMC6107367</a>
+</p>
+
+<p>
+Pereira B, Chin SF, Rueda OM, Vollan HK, Provenzano E, Bardwell HA, Pugh M, Jones L, Russell R,
+Sammut SJ <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27161491" target="_blank">
+The somatic mutation profiles of 2,433 breast cancers refines their genomic and transcriptomic
+landscapes</a>.
+<em>Nat Commun</em>. 2016 May 10;7:11479.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27161491" target="_blank">27161491</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4866047/" target="_blank">PMC4866047</a>
+</p>
+
+<p>
+Bernard E, Tuechler H, Greenberg PL, Hasserjian RP, Arango Ossa JE, Nannya Y, Devlin SM, Creignou M,
+Pinel P, Monnier L <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/38319256" target="_blank">
+Molecular International Prognostic Scoring System for Myelodysplastic Syndromes</a>.
+<em>NEJM Evid</em>. 2022 Jul;1(7):EVIDoa2200008.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38319256" target="_blank">38319256</a>
+</p>
+
+<p>
+Knisbacher BA, Lin Z, Hahn CK, Nadeu F, Duran-Ferrer M, Stevenson KE, Tausch E, Delgado J, Barbera-
+Mourelle A, Taylor-Weiner A <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35927489" target="_blank">
+Molecular map of chronic lymphocytic leukemia and its impact on outcome</a>.
+<em>Nat Genet</em>. 2022 Nov;54(11):1664-1674.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35927489" target="_blank">35927489</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10084830/" target="_blank">PMC10084830</a>
+</p>
+
+<p>
+Reddy A, Zhang J, Davis NS, Moffitt AB, Love CL, Waldrop A, Leppa S, Pasanen A, Meriranta L,
+Karjalainen-Lindsberg ML <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28985567" target="_blank">
+Genetic and Functional Drivers of Diffuse Large B Cell Lymphoma</a>.
+<em>Cell</em>. 2017 Oct 5;171(2):481-494.e15.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28985567" target="_blank">28985567</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5659841/" target="_blank">PMC5659841</a>
+</p>
+

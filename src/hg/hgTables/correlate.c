@@ -2408,6 +2408,10 @@ tableList = NULL;	/*	initialize the list	*/
  *	the mainPage to only these types of tables.
  */
 correlateOK1 = correlateTrackOK(curTrack);
+/* A hand-built URL can reach here for a track the main page offers no
+ * correlation for. */
+if (!correlateTrackTableOK(curTrack, curTable))
+    errAbort("Correlation is not available for this track.");
 
 table2onEntry = cartUsualString(cart, hgtaNextCorrelateTable, "none");
 if (isNoGenomeDisabled(database, table2onEntry))

@@ -1,0 +1,33 @@
+# #38694 -- a quickLifted bigWig with a bigMaf sequence logo stopped hgTracks at base level.
+#
+# The bigMaf form of rm38694.  phyloP241wayBW has `logoMaf` naming cactus241way.bigMaf, a file
+# in hg38 coordinates.  wigLogoMafCheck() in hg/hgTracks/wigTrack.c read it with hs1
+# coordinates and the hub assembly's name, and hgBigMafProbs() stopped with "maf first
+# component isn't hub_<n>_hs1.chr7".  No rows were drawn.  Fixed by 12c6ac42e2f:  a track
+# with quickLiftUrl does not read the alignment, and the logo draws the hs1 base sized by the
+# score.
+#
+# hg38 chr7:155,799,529-155,812,871 lifts to hs1 chr7:156,982,676-156,996,015;  the script
+# zooms to the first 141 bases there.  The positive check is the rows:  the broken build draws
+# none.  browser.quickLiftWig is a cart gate as well as an hg.conf one, so the first URL turns
+# it on.
+proof:
+  - "assertion-only 2026-11-05 -- written with the fix"
+  - "xfail 2026-11-05 -- fails on genome-test at step 6 (v506 code without the fix): rows none, page contains \"maf first component\""
+  - "sandbox-ab 2026-11-05 -- passes on park 38694, port 48121 (branch ql38694, hgTracks with the fix); fails at step 6 on park 38693, port 48120 (qlMuteTriangles, without it): rows none, page contains \"maf first component\""
+  - "server-flip 2026-11-05 -- failed on genome-test at step 6 (rows none, page contains \"maf first component\"); passed there once 12c6ac42e2f was built with cgi-alpha (hgTracks 14:40)"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7%3A155799529-155812871&hideTracks=1&cons241way=full&phyloP241wayBW=full&phyloP241wayBW_sel=1&pix=1100&browser.quickLiftWig=on"
+  - expect: {rows: [phyloP241wayBW], noText: "Warning/Error"}
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr7:156982676-156982816
+  - expect:
+      rows: [quickLiftChain, phyloP241wayBW, cactus241wayBM]
+      noText: ["maf first component", "Warning/Error"]

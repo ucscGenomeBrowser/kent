@@ -1,14 +1,29 @@
+kentSrc = ../../..
+include ${kentSrc}/inc/common.mk
 
-test:
-	mkdir -p out
-	matrixNormalize row sum test.in out/rowSum.out
-	diff expected/rowSum.out out/rowSum.out
-	matrixNormalize row length test.in out/rowLength.out
-	diff expected/rowLength.out out/rowLength.out
-	matrixNormalize column sum test.in out/colSum.out
-	diff expected/colSum.out out/colSum.out
-	matrixNormalize column length test.in out/colLength.out
-	diff expected/colLength.out out/colLength.out
+matrixNormalize = ${DESTBINDIR}/matrixNormalize
+
+test: rowSum rowLength colSum colLength
+
+rowSum:
+	@${MKDIR} -p output
+	${matrixNormalize} row sum input/test.in output/$@.out
+	diff expected/$@.out output/$@.out
+
+rowLength:
+	@${MKDIR} -p output
+	${matrixNormalize} row length input/test.in output/$@.out
+	diff expected/$@.out output/$@.out
+
+colSum:
+	@${MKDIR} -p output
+	${matrixNormalize} column sum input/test.in output/$@.out
+	diff expected/$@.out output/$@.out
+
+colLength:
+	@${MKDIR} -p output
+	${matrixNormalize} column length input/test.in output/$@.out
+	diff expected/$@.out output/$@.out
 
 clean:
-	rm -rf out/
+	rm -rf output

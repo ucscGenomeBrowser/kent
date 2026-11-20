@@ -123,6 +123,45 @@ hashElFreeList(&helList);
 }
 
 
+static void downloadOneFile(char *url, char *fileName)
+/* wget url to fileName unless fileName already exists from a previous clone */
+{
+// don't re-download big data files that are already present from
+// a previous clone of this hub (like "wget -nc", but done ourselves
+// since -nc is not honored by wget when -O is also given)
+if (fileExists(fileName))
+    {
+    verbose(1, "skipping already-downloaded file: %s\n", fileName);
+    return;
+    }
+char *cmd[] = {"wget", "-q", "-O", fileName, url, NULL};
+// use pipelineNoAbort so the loop continues if a url is typo'd or something,
+// but still warn the user
+struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
+if (pipelineWait(pl) != 0)
+    warn("wget failed for url: %s", url);
+}
+
+static char *impliedCompanionSuffix(struct hash *stanza, char *settingName, char *fileName)
+/* Return the suffix of a file the browser expects next to fileName without
+ * any setting naming it, or NULL if there is none: the .ixx of a searchTrix
+ * .ix, or the index of a BAM, CRAM or VCF bigDataUrl when no bigDataIndex is
+ * given.  Decided by file suffix since the track type may be inherited. */
+{
+if (sameString(settingName, "searchTrix"))
+    return "x";
+if (sameString(settingName, "bigDataUrl") && !hashLookup(stanza, "bigDataIndex"))
+    {
+    if (endsWith(fileName, ".bam"))
+        return ".bai";
+    if (endsWith(fileName, ".cram"))
+        return ".crai";
+    if (endsWith(fileName, ".vcf.gz"))
+        return ".tbi";
+    }
+return NULL;
+}
+
 void printTrackDbStanza(struct hash *stanza, FILE *out, char *baseUrl, char *downloadDir)
 /* print a trackDb stanza but with relative references replaced by remote links */
 {
@@ -161,25 +200,15 @@ for (hel = helList; hel != NULL; hel = hel->next)
                     }
                 fprintf(out, "%s %s\n", hel->name, relName);
 
-                // don't re-download big data files that are already present from
-                // a previous clone of this hub (like "wget -nc", but done ourselves
-                // since -nc is not honored by wget when -O is also given)
-                if (fileExists(dyStringContents(fname)))
+                downloadOneFile(urlToData, dyStringContents(fname));
+                char *suffix = impliedCompanionSuffix(stanza, hel->name, hel->val);
+                if (suffix != NULL)
                     {
-                    verbose(1, "skipping already-downloaded file: %s\n", dyStringContents(fname));
-                    }
-                else
-                    {
-                    char *cmd[] = {"wget", "-q", "-O", dyStringContents(fname), urlToData, NULL};
-
-                    // use pipelineNoAbort so the loop continues if a url is typo'd or something,
-                    // but still warn the user
-                    struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
-                    int ret = pipelineWait(pl);
-                    if (ret != 0)
-                        {
-                        warn("wget failed for url: %s", urlToData);
-                        }
+                    char *companionUrl = catTwoStrings(urlToData, suffix);
+                    char *companionFile = catTwoStrings(dyStringContents(fname), suffix);
+                    downloadOneFile(companionUrl, companionFile);
+                    freeMem(companionUrl);
+                    freeMem(companionFile);
                     }
                 }
             else

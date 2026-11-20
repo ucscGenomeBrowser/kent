@@ -696,7 +696,8 @@ if (tg->isBigBed)
             rm->description = cloneString(bedRow[13]);
             rm->layoutLevel = -1;  // Indicates layout has not been calculated.
             rm->leftLabel = 0;     // Flag for labels that need to be leftLabeled
-            if (liftedRecordInWindow(rm, quickLiftChainHashForItem(chainHash, bb)) &&
+            if (liftedRecordInWindow(rm, quickLiftChainHashForRange(chainHash, bb, rm->chrom,
+                                                               rm->chromStart, rm->chromEnd)) &&
                 (detailView || (rm->blockCount > 1)))
                 slAddHead(&detailList, rm);
             else
@@ -727,10 +728,19 @@ static void bigRmskLoadItems(struct track *tg)
  * of the layout to determine how many "items" to generate.
  */
 {
-if (quickLiftIsLifted(tg->tdb) && quickLiftRmskEnabled(cart))
+if (quickLiftIsLifted(tg->tdb))
     {
-    // a quickLifted track reads its items from the assembly they came from, refs #37437
-    liftedBigRmskLoadItems(tg);
+    // a quickLifted track reads its items from the assembly they came from, refs #37437.  One
+    // in a quickLift hub written while browser.quickLiftRmsk was on, drawn with it off, has no
+    // items:  the code below would read the source assembly's file at this assembly's
+    // coordinates.
+    if (quickLiftRmskEnabled(cart))
+        liftedBigRmskLoadItems(tg);
+    else
+        {
+        tg->items = NULL;
+        bigRmskLayoutItems(tg);
+        }
     return;
     }
 makeClassHashBR();

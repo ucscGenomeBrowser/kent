@@ -967,12 +967,12 @@ body.oldStaticPage .sectionContent {
 /* a notifBox that is only shown on the page where something happened, e.g. after a session
  * was loaded. Card grey of the Sessions page, and left-aligned, as the text is a paragraph */
 .notifBoxOnce {
-    background-color: #f6f8fa;
-    border: 1px solid #d0d0d0;
-    padding: 10px 14px;
+    background-color: beige;
+    border: 1px solid grey;
+    padding: 5px;
     /* the width is not set, so that the box cannot stick out to the right of the window */
     margin: 5px 10px 5px 100px;
-    text-align: left;
+    text-align: center;
 }
 
 /* For jquery-ui dialog box */
@@ -983,6 +983,16 @@ div.warnDialog .ui-dialog-content { background-color: #FFFEE8; font-size: 1em; }
 div.warnDialog .ui-dialog-buttonpane { border-width: 0; text-align: center; }
 div.warnDialog .ui-dialog-buttonset { width: 100%; display: inline-block; }
 body > div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable * { font-size: 14px; }
+
+/* My Data > Restore Previous Session, hgTracks.js sessionLoadDialog */
+table.recentViewsTable { width: 100%; border-collapse: collapse; }
+table.recentViewsTable th, table.recentViewsTable td {
+    border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+table.recentViewsTable th { background: #4c759c; color: #f8f8f8; font-weight: bold; }
+table.recentViewsTable tbody tr { background: #fff; }
+table.recentViewsTable tbody tr:nth-child(even) { background: #f4f7fb; }
+table.recentViewsTable td.nowrap { white-space: nowrap; }
+table.recentViewsTable button.recentViewOpen { cursor: pointer; }
 
 .centeredImage
 {
@@ -1513,4 +1523,26 @@ font-size: 1rem;
     background: none;
     padding: 0;
     margin-bottom: 24px;
+}
+
+/* My Annotations add dialog: one field per row, labels in a fixed column so
+ * every input starts at the same place */
+.myVariants-form .mvRow {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.myVariants-form .mvRow.mvRowTop {
+    align-items: flex-start;
+}
+
+.myVariants-form .mvRow > label:first-child {
+    flex: 0 0 140px;
+}
+
+/* My Annotations block editor: only a transcript's blocks have exon frames */
+.mvNoFrames .blockFrameSpan {
+    display: none;
 }

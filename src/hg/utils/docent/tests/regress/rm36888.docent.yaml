@@ -1,0 +1,87 @@
+# #36888 -- a bigMethyl track drew nothing at all once the window held more items than
+# bigBedMaxItems.
+#
+# Mark's report: a bigMethyl track shows its data at base level, and two 100x zoom-outs
+# later the data is simply gone. No "zoom in to see the track" message, no empty row, no
+# error -- the left label and the center label are still drawn, and there is nothing
+# between them.
+#
+# The cause was one missing method. bigBedSelectRangeExt (hg/hgTracks/bigBedTrack.c) asks
+# the bigBed for bigBedMaxItems()+1 intervals and throws the whole list away when the
+# count is over the limit, recording it in the trackDb setting bigBedItemsCount. Every
+# other bigBed type recovers from that, because commonBigBedMethods installs
+# track->loadSummary = loadBigBedSummary, which reads that setting and falls back to the
+# coverage graph. bigMethylMethods (hg/hgTracks/simpleTracks.c) set isBigBed and its own
+# loadItems but never loadSummary, so an overflowed window got an empty item list and
+# nothing else. The fix installs loadBigBedSummary on bigMethyl.
+#
+# WATCHED TO FAIL AND TO PASS. This script was an .xfail until the fix was committed:
+#
+#     genome-test        unfixed               no img_data_ row, no note
+#     ts park 48090      master plus the fix   row drawn, note present
+#
+# Both checks flipped together.
+#
+# THE FIXTURE IS OURS, on purpose. The ticket's own hub is a 24 GB file in another user's
+# public_html, and #37490 already lost a fixture that way. ~/public_html/docentFixtures/
+# bigMethyl36888/ is a single-file hub over a 6 MB synthetic bigBed: four bedMethyl rows
+# for every base between chr1:1,000,000 and chr1:1,150,000 on hg38, so 600,000 items over
+# 150 kb. makeBigMethyl.py beside the hub regenerates it.
+#
+# The two windows straddle the 100,000-item bigBedMaxItems that genome-test and the RR
+# use: 100 bases holds 400 items, the full 150 kb holds 600,000. Six times the limit, so
+# raising bigBedMaxItems a little cannot quietly defeat the test. Raising it past 600,000
+# would, and that is what the note check is for: with no overflow there is no density
+# fallback and no note, so the script fails loudly rather than passing for the wrong
+# reason.
+#
+# WHY THE NOTE IS CHECKED WITH has: AND WHY THE SELECTOR IS SPELLED TWICE.
+# labelTrackAsDensityTooManyItems (hg/hgTracks/hgTracks.c) appends the note to longLabel,
+# and hgTracks draws longLabel into the center-label IMAGE, so innerText never carries it
+# and text: is blind to it. The one textual copy is on the track's own control link. In
+# the SOURCE that is title=; in the live DOM it usually is not, because addMouseover() in
+# hg/js/utils.js empties title= and moves the text to mouseovertext= so the browser can
+# draw its own tooltip. That rewrite is gated on the showMouseovers hg.conf setting, so
+# the selector matches either spelling rather than depending on a flag that has nothing
+# to do with this bug. data-track is named so another track's note cannot satisfy it.
+# Two links carry the long label and only one of them gets the note, which is why the
+# check is "at least one matches" and not a count.
+#
+# WHAT THE NOTE SAYS. The note this bug produces is the too-many-items one,
+# "density graph: too many items, zoom in or use dense" (labelTrackAsDensityTooManyItems).
+# The check asserts that full sentence, so neither the window-too-large note nor the
+# user-asked "turn off on the track settings page" note can satisfy it. A bigBedMaxItems
+# raised past 600,000 produces no note at all and fails loudly.
+#
+# The hub declares `visibility pack` itself, so there is no `hide: all` and no `track:`
+# step here: a track inside an attached hub carries a hub_<n>_ prefix that differs every
+# run and cannot be named in a cart variable.
+proof:
+  - "xfail 2026-09-09 -- red on every server; bigMethylMethods installs no loadSummary, and the one-liner that fixes it is not committed"
+  - "xfail 2026-09-18 -- still red for its own reason after 07f0635fd35 reworded the density labels. Run against genome-test under a plain name so the text prints: `rows not drawn: rm36888Methyl`, the data row, with the note check second. Both selectors retranslated to the new wording the same day"
+  - "sandbox-ab 2026-11-11 -- ts park 48090 with master plus the fix passes; genome-test without it fails at `rows not drawn: rm36888Methyl`. Note check tightened to the full too-many-items sentence the same day"
+
+target: genome-test
+reset: true
+fast: true
+db: hg38
+pix: 1100
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/bigMethyl36888/hub.txt", db: hg38, position: "chr1:1075000-1075100"}
+
+  # Control. 400 items is well under the limit, so the items are drawn one by one. This
+  # step is what separates "the bug is back" from "the hub went away" -- without it the
+  # xfail below would be satisfied by a fixture that had simply stopped resolving, and an
+  # xfail cannot tell those apart on its own. noHas: pins the other half: the note belongs
+  # only to a window that overflowed.
+  - expect:
+      rows: [ruler, rm36888Methyl]
+      noHas: 'a.trackLink[data-track$="rm36888Methyl"][mouseovertext*="density graph: too many items, zoom in or use dense"], a.trackLink[data-track$="rm36888Methyl"][title*="density graph: too many items, zoom in or use dense"]'
+
+  # The bug. 600,000 items in the window, six times bigBedMaxItems. Without loadSummary
+  # the data row was not drawn at all; with it the track falls back to the coverage graph
+  # and says so in its long label.
+  - go: chr1:1000001-1150000
+  - expect:
+      rows: [ruler, rm36888Methyl]
+      has: 'a.trackLink[data-track$="rm36888Methyl"][mouseovertext*="density graph: too many items, zoom in or use dense"], a.trackLink[data-track$="rm36888Methyl"][title*="density graph: too many items, zoom in or use dense"]'

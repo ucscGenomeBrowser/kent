@@ -30,7 +30,7 @@
 #   if it looks stale (lists commits already on the branch). Each id is checked to
 #   exist and to not be a merge commit (NO merge commits in a cherry-pick).
 #   It is a forced-only phase (never auto-detected from the calendar) and is
-#   repeatable: each run is one patch round (logs/v${NN}.patch<N>.log), and the
+#   repeatable: each run is one patch round ($BUILDHOME/logs/weekly/v${NN}.patch<N>.log), and the
 #   checkpoint state file is cleared on success so the next round starts fresh.
 #
 #   The phase branches on pushedToRR.flag (written by tagBeta at wrap-up, removed
@@ -77,7 +77,11 @@ set -eEu -o pipefail
 SCRIPT_NAME="$(basename "$0")"
 WEEKLYBLD="/hive/groups/browser/newBuild/kent/src/utils/qa/weeklybld"
 BUILDENV="$WEEKLYBLD/buildEnv.csh"
-LOGDIR="$WEEKLYBLD/logs"
+# Logs and build state live outside the kent tree (buildEnv.csh BUILDLOGS /
+# BUILDSTATE), so they never show up in the build checkout's git status.
+BUILDHOME_DIR="/hive/groups/browser/newBuild"
+LOGDIR="$BUILDHOME_DIR/logs/weekly"
+STATEDIR="$BUILDHOME_DIR/state"
 LOCKFILE="/tmp/autoBuild.lock"
 GCAL_ICAL_URL="https://calendar.google.com/calendar/ical/ucsc.edu_vaaiq62mh73n78jonljfrnoof4%40group.calendar.google.com/public/basic.ics"
 DRY_RUN=false
@@ -178,18 +182,53 @@ ensure_binfmt() {
 # Called at the start of do_wrapup and the post-RR cherry-pick regen path (both run
 # doZip). Not a checkpointed step -- it is a cheap precondition that must re-verify
 # on every (re-)run.
+#
+# Being logged in is not enough: in v505 a valid token passed `gh auth status` and
+# then got HTTP 403 from `gh release create`. kent is public, so any token can read
+# it, and a read proves nothing. Without making a write, check what we can:
+#   - classic token (ghp_): the X-OAuth-Scopes header must include repo/public_repo.
+#   - fine-grained token (github_pat_): the collaborator-permission endpoint, which
+#     GitHub serves only to tokens with access to the repo beyond public reads. A
+#     token still pending org approval should fail it (untested). This cannot see
+#     whether the token was granted Contents: write -- doZip's warning still covers that.
 ensure_gh_auth() {
     if $DRY_RUN; then
-        log "(dry-run) would verify gh auth status"
+        log "(dry-run) would verify gh auth status and write access"
         return 0
     fi
-    if gh auth status >/dev/null 2>&1; then
-        log "OK: gh authenticated"
-    else
-        die "gh is not authenticated (gh auth status failed). Run 'gh auth login' as
-    the build user, then re-run. doZip.csh needs gh to attach the source archives to
-    the GitHub release ($WEEKLYBLD/doZip.csh, refs #37741)."
+    local repo="ucscGenomeBrowser/kent"
+    local fix="Run 'gh auth login' as the build user with a classic token that has
+    the 'repo' and 'read:org' scopes, then re-run. doZip.csh needs gh to create the
+    GitHub release and attach the source archives ($WEEKLYBLD/doZip.csh, refs #37741)."
+    if ! gh auth status >/dev/null 2>&1; then
+        die "gh is not authenticated (gh auth status failed). $fix"
     fi
+    # The `|| true` on each gh api call is load-bearing under `set -e`: gh exits
+    # non-zero on any HTTP error, which would abort here with no FATAL line and no
+    # alert email. An empty result falls through to the die() below instead.
+    local scopes
+    scopes=$(gh api -i "repos/$repo" 2>/dev/null | tr -d '\r' \
+        | sed -n 's/^[Xx]-[Oo][Aa]uth-[Ss]copes: *//p') || true
+    if [[ -n "$scopes" ]]; then
+        if [[ ",$scopes," =~ [,\ ](public_)?repo, ]]; then
+            log "OK: gh authenticated (classic token, scopes: $scopes)"
+        else
+            die "gh token lacks the 'repo' scope (scopes: $scopes). $fix"
+        fi
+        return 0
+    fi
+    local login perm
+    login=$(gh api user --jq .login 2>/dev/null) || true
+    perm=$(gh api "repos/$repo/collaborators/$login/permission" --jq .permission 2>/dev/null) \
+        || true
+    case "$perm" in
+        admin|maintain|write)
+            log "OK: gh authenticated (fine-grained token, $login has $perm on $repo;"
+            log "    cannot verify the token itself has Contents: write)" ;;
+        *)
+            die "gh token cannot see $repo beyond public reads (fine-grained token
+    not approved by the org, or not granted this repo?). $fix" ;;
+    esac
 }
 
 # Check that we are on the master branch (in the WEEKLYBLD git repo).
@@ -297,7 +336,7 @@ smoke_failed_list() {
 
 state_init() {
     # $1 = phase name, $2 = version (NN) this phase produces
-    mkdir -p "$LOGDIR"
+    mkdir -p "$LOGDIR" "$STATEDIR"
     STATE_FILE="$LOGDIR/.autobuild.state.v${2}.${1}"
     if [[ -f "$STATE_FILE" ]]; then
         local done_steps
@@ -596,12 +635,12 @@ final_tag_branch() {
 }
 
 final_git_reports() {
-    if ! $DRY_RUN && [[ -e "$WEEKLYBLD/GitReports.ok" ]]; then
-        rm -f "$WEEKLYBLD/GitReports.ok"
+    if ! $DRY_RUN && [[ -e "$STATEDIR/GitReports.ok" ]]; then
+        rm -f "$STATEDIR/GitReports.ok"
     fi
-    run_tcsh "./buildGitReports.csh branch real >& doNewGit.log" || return 1
-    if ! $DRY_RUN && [[ ! -e "$WEEKLYBLD/GitReports.ok" ]]; then
-        die "git-reports completed but GitReports.ok not found. See doNewGit.log"
+    run_tcsh "./buildGitReports.csh branch real >& $LOGDIR/doNewGit.log" || return 1
+    if ! $DRY_RUN && [[ ! -e "$STATEDIR/GitReports.ok" ]]; then
+        die "git-reports completed but GitReports.ok not found. See $LOGDIR/doNewGit.log"
     fi
     return 0
 }
@@ -878,7 +917,7 @@ do_final() {
 
 generate_release_markdown() {
     local ver="$1"
-    local outdir="$WEEKLYBLD/markdownReleaseNotes"
+    local outdir="$STATEDIR/markdownReleaseNotes"
     local outfile="$outdir/v${ver}_markdown.txt"
     local url="https://genecats.gi.ucsc.edu/builds/versions-all/v${ver}.html"
 
@@ -887,8 +926,10 @@ generate_release_markdown() {
     log "Generating markdown release notes for v${ver}..."
 
     local html
-    html=$(curl -s "$url") || {
-        log "WARNING: Could not fetch $url - skipping markdown generation"
+    # -f: a missing versions page (404) must fail here; without it the 404 page
+    # was taken as the notes and an empty file was written (v505).
+    html=$(curl -sf "$url") || {
+        log "WARNING: Could not fetch $url (versions page not written yet?) - skipping markdown generation"
         return 0
     }
 
@@ -906,9 +947,18 @@ generate_release_markdown() {
         | sed 's| ([^)]*)\. [A-Z][a-z]*$||' \
         | sed 's|\. [A-Z][a-z]*$||' \
         | sed 's|[[:space:]]*$||' \
-        | sed 's|&lt;|<|g; s|&gt;|>|g; s|&amp;|\&|g; s|&quot;|"|g' \
+        | sed "s|&lt;|<|g; s|&gt;|>|g; s|&quot;|\"|g; s|&#x27;|'|g; s|&#39;|'|g; s|&amp;|\\&|g" \
         | sed 's|^|- |' \
-        > "$outfile"
+        > "$outfile.tmp"
+
+    # Replace the notes only with a non-empty result, so an earlier run's notes for this
+    # version survive a page with no code changes, and doZip.csh never gets an empty file.
+    if [[ ! -s "$outfile.tmp" ]]; then
+        log "WARNING: No code changes found in $url - skipping markdown generation"
+        rm -f "$outfile.tmp"
+        return 0
+    fi
+    mv -f "$outfile.tmp" "$outfile"
 
     log "Markdown release notes written to $outfile"
 }
@@ -1121,7 +1171,7 @@ wrapup_refresh_containers() {
 # The age cache is rebuilt into $LOGDIR, not in place: the committed
 # hgConfAges.json lives inside the source tree and refreshing it there would
 # leave the build tree's checkout dirty. The rebuild walks git history and takes
-# ~4 minutes. logs/ is untracked, so the cache adds no git noise.
+# ~4 minutes. $LOGDIR is outside the tree, so the cache adds no git noise.
 wrapup_sunset_report() {
     local catalog="$BUILDHOME/kent/src/hg/utils/hgConfCatalog/hgConfCatalog.py"
     local slog="$LOGDIR/v${BRANCHNN}.hgConfSunset.log"
@@ -1178,6 +1228,40 @@ wrapup_sunset_report() {
     return 0
 }
 
+# Email each engineer the overdue and stalled release gates they own, cc the
+# build meister (refs #37925).  sunsetNotify.py takes the gate list from
+# hgConfCatalog.py itself, so it agrees with the sunset-report step above, and
+# reads the age cache that step just rebuilt.  It mails the full standing list,
+# not just what is new, every release: the point is that it keeps arriving
+# until the gate is gone.  Like the report this is hygiene, not shipping, so a
+# failure warns and returns 0.  Preview: sunsetNotify.py --cache <ages.json>
+wrapup_sunset_notify() {
+    local notify="$WEEKLYBLD/sunsetNotify.py"
+    local cache="$LOGDIR/v${BRANCHNN}.hgConfAges.json"
+    local nlog="$LOGDIR/v${BRANCHNN}.sunsetNotify.log"
+    local cc="${BUILDMEISTEREMAIL:-braney@ucsc.edu}"
+
+    if $DRY_RUN; then
+        log "(dry-run) would email each owner of an overdue/stalled hg.conf" \
+            "gate, cc $cc"
+        return 0
+    fi
+    if [[ ! -f "$cache" ]]; then
+        log "WARNING: no age cache at $cache (sunset-report skipped?);" \
+            "not sending hg.conf gate notices"
+        return 0
+    fi
+    if KENT_SRC="$BUILDHOME/kent/src" "$notify" --cache "$cache" \
+            --cc "$cc" --send >& "$nlog"; then
+        log "hg.conf gate notices:"
+    else
+        log "WARNING: some hg.conf gate notices failed; to resend:" \
+            "$notify --cache $cache --cc $cc --send"
+    fi
+    while IFS= read -r line; do log "  $line"; done < <(grep -E '^(sent|FAILED|no overdue)' "$nlog")
+    return 0
+}
+
 # Generate markdown release notes for GitHub
 wrapup_release_markdown() {
     if ! $DRY_RUN; then
@@ -1214,13 +1298,15 @@ do_wrapup() {
     step smoke-mirror     final_smoke_mirror
     # Last: a report, so nothing that matters waits on its ~4 minutes.
     step sunset-report    wrapup_sunset_report
+    # Its own step so a re-run of wrap-up does not mail the engineers twice.
+    step sunset-notify    wrapup_sunset_notify
 
     log "Wrap-up complete for v${BRANCHNN}."
     log "Manual steps remaining:"
     log "  - Push to genome browser store: sudo /cluster/bin/scripts/gbib_gbic_push"
     log "  - Verify the GitHub release doZip.csh created (with submodule-complete"
     log "    source archives attached): https://github.com/ucscGenomeBrowser/kent/releases"
-    log "    Edit its notes if needed; source: $WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+    log "    Edit its notes if needed; source: $STATEDIR/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
     log "    Note: GitHub's own auto-generated 'Source code' zip/tar.gz omit submodules;"
     log "    users should download the attached kent.src.zip / kent.src.tar.gz instead."
     log "  - Wait 1 day for nightly rsync, then verify hgdownload: https://hgdownload.soe.ucsc.edu/admin/exe/"
@@ -1297,7 +1383,7 @@ cherrypick_refresh_rel() {
 #
 # Every id is also checked to exist and to not be a merge commit either way.
 cherrypick_prepare_commits() {
-    local conf="$WEEKLYBLD/CherryPickCommits.conf"
+    local conf="$STATEDIR/CherryPickCommits.conf"
     local -a shas=()
     local from_cmdline=false
 
@@ -1395,7 +1481,7 @@ do_cherrypick() {
     # artifacts (re-run the relevant wrap-up steps). Absent => still in the QA
     # window; just land the patch + rebuild beta, wrap-up tags/artifacts later.
     local post_rr=false
-    if [[ -e "$WEEKLYBLD/pushedToRR.flag" ]]; then
+    if [[ -e "$STATEDIR/pushedToRR.flag" ]]; then
         post_rr=true
         log "pushedToRR.flag present -> POST-RR patch: will regenerate release artifacts."
         # This path re-runs doZip (GitHub upload), so require gh auth up front too.
@@ -1531,7 +1617,7 @@ patchtickets_query() {
 
     if $DRY_RUN; then
         # Later dry-run steps still need the list, so keep it in a temp file
-        # rather than writing the real worklist under logs/.
+        # rather than writing the real worklist under $LOGDIR.
         log "(dry-run) would write ${eligible} ticket(s) to $PATCHTICKETS_WORKLIST"
         PATCHTICKETS_WORKLIST=$(mktemp)
         printf '%s\n' "${lines[@]}" > "$PATCHTICKETS_WORKLIST"

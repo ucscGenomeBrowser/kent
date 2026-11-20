@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Compare;
+use FindBin qw($Bin);
+use lib "$Bin";
+use commonHtml;
 
 my %commonName;	# key is asmId, value is common name
 my @monthNumber = qw( Zero Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sep. Oct. Nov. Dec. );
@@ -288,6 +291,9 @@ while (my $line = <FH>) {
 }
 close (FH);
 
+# current NCBI scientific name and taxId, key is accession
+my $ncbiNames = commonHtml::ncbiSciNames(@orderList);
+
 my $buildDone = 0;
 my $orderKey = 0;
 foreach my $asmId (@orderList) {
@@ -338,6 +344,9 @@ printf STDERR "# %03d genomes.txt %s/%s %s\n", $buildDone, $accessionDir, $acces
   chomp $descr;
   my $orgName=`grep -i "organism name:" $asmReport | head -1 | tr -d \$'\\r' | sed -e 's#.* name: .* (##; s#).*##;'`;
   chomp $orgName;
+  if (defined($ncbiNames->{$accessionId})) {
+    ($descr, $taxId) = @{$ncbiNames->{$accessionId}};
+  }
   my $asmDate=`grep -i "Date:" $asmReport | head -1 | tr -d \$'\\r'`;
   chomp $asmDate;
   $asmDate =~ s/.*Date:\s+//;

@@ -245,11 +245,17 @@ SESSIONS = {
           note="Load a named session belonging to another user. Pair with "
                "hgS_otherUserName and hgS_otherUserSessionName."),
         c("hgS_otherUserName", "action", "hg/lib/cart.c", value="<user>",
-          public=True, verified=True, leaks=True, note="Session owner."),
+          public=True, verified=True, note="Session owner."),
         c("hgS_otherUserSessionName", "action", "hg/lib/cart.c",
-          value="<name>", public=True, verified=True, leaks=True,
+          value="<name>", public=True, verified=True,
           note="Session name. Only the action variable is removed after the "
-               "load, so this and hgS_otherUserName stay in the session."),
+               "load, so this and hgS_otherUserName stay in the live cart on "
+               "purpose: the session-load note and the recommended track set "
+               "panel read them.  They no longer reach a saved session: since "
+               "f60a8267953 (2026-10-12) setAsideSessionJustLoadedMarker() in "
+               "hgSession.c takes both out while a named session or a local "
+               "file is written and puts them back after.  Sessions saved "
+               "before that still hold them."),
         c("hgS_merge", "action", "hg/lib/cart.c",
           verified=True,
           note="Merge the loaded session into the current cart instead of "
@@ -257,6 +263,12 @@ SESSIONS = {
         c("hgS_doLoadUrl", "action", "hg/lib/cart.c", value="submit",
           public=True, verified=True, droppedBy="hg/lib/cart.c:1335",
           note="Load session settings from a URL. Pair with hgS_loadUrlName."),
+        c("hgS_showRecentViews", "action", "hg/hgTracks/hgTracks.c",
+          value="1", verified=True,
+          note="Open the Recent Browser Views dialog.  The My Data menu link "
+               "(hg/lib/web.c) sends it, and hgTracks removes it as soon as it "
+               "is read.  Does nothing unless the hg.conf gate "
+               "recentSessions.enable is on."),
         c("hgS_loadUrlName", "action", "hg/lib/cart.c", value="<url>",
           public=True, verified=True, leaks=True,
           note="URL of a saved session settings file. Stays in the session "
@@ -1008,6 +1020,14 @@ OTHER_CGIS = {
                    "running a new search.  How the banner and the table's "
                    "'Old BLAT result page' link switch format without "
                    "resubmitting the query."),
+            c("blatCt", "action", "hg/hgBlat/hgBlat.c", value="<track>",
+              verified=True,
+              note="Rebuild the results table from one BLAT results custom "
+                   "track of this cart, by its name.  The 'Back to BLAT "
+                   "results' link on that track's hgc item page and the "
+                   "hgTracks right-click menu send it.  Only a track tagged "
+                   "blatResult=on whose bigDataUrl is a trash or session-data "
+                   "file is used.  In hgBlat's excludeVars."),
             c("blatPslId", "action", "hg/hgBlat/hgBlat.c", value="<file>",
               verified=True, leaks=True,
               note="Half of the stable shareable link: with blatFaId, rebuild "

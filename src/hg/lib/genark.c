@@ -292,7 +292,10 @@ if (genarkPrefix == NULL)
 
 struct sqlConnection *conn = hConnectCentral();
 if (!sqlTableExists(conn, genarkTableName()))
+    {
+    hDisconnectCentral(&conn);
     return NULL;
+    }
 
 char *url = NULL;
 char query[4096];

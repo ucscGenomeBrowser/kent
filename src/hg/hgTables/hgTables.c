@@ -720,13 +720,14 @@ else if (isCustomTrack(table) || isMyVariantsTrack(table) ||
          (strchr(table, '.') != NULL &&
           isMyVariantsTrack(strchr(table, '.') + 1)))
     {
-    /* Accept the qualified myVariants storage form
-     * ("customDataNN.myVariants_<user>") as well as the bare track name;
-     * the ct list is keyed on the bare track name. */
     char *dot = strchr(table, '.');
-    char *trackName = (dot != NULL && isMyVariantsTrack(dot + 1)) ? dot + 1 : table;
-    struct customTrack *ct = ctLookupName(trackName);
-    hti = ctToHti(ct);
+    if (dot != NULL && isMyVariantsTrack(dot + 1))
+        /* The qualified storage form ("customDataNN.myVariants_<user>_<suffix>")
+         * names the SQL table this describes rather than picking out a track to
+         * ask.  Read the fields off the table, the way getRegionAsBed does. */
+        hti = hFindTableInfo(db, hDefaultChrom(database), table);
+    else
+        hti = ctToHti(ctLookupName(table));
     }
 else if (sameWord(table, WIKI_TRACK_TABLE))
     {
@@ -951,7 +952,7 @@ static char *findSelectedTable(struct trackDb *track, char *var)
 {
 if (track == NULL)
     return cartString(cart, var);
-else if (isCustomTrack(track->table))
+else if (isCustomTrack(track->table) || isMyVariantsTrack(track->table))
     return track->table;
 else
     {
@@ -983,7 +984,7 @@ else
 boolean htiIsPositional(struct hTableInfo *hti)
 /* Return TRUE if hti looks like it's from a positional table. */
 {
-return isCustomTrack(hti->rootName) || hti->isPos;
+return isCustomTrack(hti->rootName) || isMyVariantsTrack(hti->rootName) || hti->isPos;
 #ifdef OLD
     ((hti->startField[0] && hti->endField[0]) &&
 	(hti->chromField[0] || sameString(hti->rootName, "gl")));
@@ -1000,7 +1001,7 @@ if (hti != NULL && hti->nameField[0] != 0)
 else if (track != NULL && !tdbIsComposite(track))
     {
     struct hTableInfo *trackHti = maybeGetHtiOnDb(db, track->table);
-    if (trackHti != NULL && isCustomTrack(table))
+    if (trackHti != NULL && (isCustomTrack(table) || isMyVariantsTrack(table)))
         idField = cloneString(trackHti->nameField);
     else if (hti != NULL && trackHti != NULL && trackHti->nameField[0] != 0)
         {
@@ -1030,8 +1031,8 @@ else if (track != NULL && !tdbIsComposite(track))
  * chain/net subtracks -- arrives here with hti NULL.  Describing a table that
  * does not exist aborts in the middle of the page, leaving unclosed table rows
  * behind. */
-if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos)
-    && !trackHubDatabase(db))
+if (idField == NULL && !isCustomTrack(table) && !isMyVariantsTrack(table)
+    && (hti == NULL || !hti->isPos) && !trackHubDatabase(db))
     {
     struct sqlConnection *conn = track ? hAllocConnTrack(db, track) : hAllocConn(db);
     if (sqlTableExists(conn, table))
@@ -1087,7 +1088,7 @@ int rgb;
 
 /*	Print up to itemRgbCol	*/
 for (colIx = 0; (colIx < itemRgbCol) && (colIx < lastCol); ++colIx)
-    hOrFPrintf(f, "%s\t", row[colIx]);
+    hOrFPrintf(f, "%s\t", emptyForNull(row[colIx]));
 
 /*	Print out the itemRgbCol column	*/
 rgb = atoi(row[itemRgbCol]);
@@ -1099,8 +1100,8 @@ if (itemRgbCol < lastCol)
     {
     hOrFPrintf(f, "\t");
     for (colIx = itemRgbCol+1; colIx < lastCol; ++colIx)
-	hOrFPrintf(f, "%s\t", row[colIx]);
-    hOrFPrintf(f, "%s\n", row[lastCol]);
+	hOrFPrintf(f, "%s\t", emptyForNull(row[colIx]));
+    hOrFPrintf(f, "%s\n", emptyForNull(row[lastCol]));
     }
 else
     hOrFPrintf(f, "\n");	/*	itemRgbCol was the last column	*/
@@ -1136,6 +1137,31 @@ else
 return(ret);
 }
 
+static void tabOutCell(FILE *f, char *val, char outSep, boolean escapeText)
+/* Write one cell of tab or comma separated output, a NULL as an empty cell.
+ * With escapeText, tabs and newlines are written as \t and \n and a quote in
+ * comma separated output is doubled, so free text cannot split a row. */
+{
+char *s = emptyForNull(val);
+char *escaped = NULL;
+if (escapeText)
+    {
+    escaped = sqlEscapeTabFileString(s);
+    if (outSep == ',')
+        {
+        char *doubled = replaceChars(escaped, "\"", "\"\"");
+        freeMem(escaped);
+        escaped = doubled;
+        }
+    s = escaped;
+    }
+if (outSep == ',')
+    hOrFPrintf(f, "\"%s\"", s);
+else
+    hOrFPrintf(f, "%s", s);
+freeMem(escaped);
+}
+
 void doTabOutDb( char *db, char *dbVarName, char *table, char *tableVarName,
         FILE *f, struct sqlConnection *conn, char *fields, char outSep)
 /* Do tab-separated output on fields of a single table. */
@@ -1153,6 +1179,9 @@ boolean showItemRgb = FALSE;
 int itemRgbCol = -1;        /*        -1 means not found        */
 boolean printedColumns = FALSE;
 struct trackDb *tdb = findTdbForTable(db, curTrack, table, ctLookupName);
+/* My Annotations values are typed by the user, and a description can hold a
+ * tab or a newline that would split one record across lines. */
+boolean escapeText = isMyVariantsTrack(tableVarName);
 
 hti = getHti(db, table, conn);
 idField = getIdField(db, curTrack, table, hti);
@@ -1177,7 +1206,9 @@ else
 char *identifierFilter = NULL;
 if (idField != NULL)
     {
-    idHash = identifierHash(db, table);
+    /* Pasted identifiers are kept under the name the user picked, which for a
+     * custom track is not its SQL table. */
+    idHash = identifierHash(dbVarName, tableVarName);
     if (idHash != NULL)
         {
         identifierFilter = identifierWhereClause(idField, idHash);
@@ -1210,7 +1241,13 @@ for (region = regionList; region != NULL; region = region->next)
         // because identifierFilter can get enormous (like 126kB for 12,500 rsIDs).
         char *filterNoIds = filterClause(dbVarName, tableVarName, region->chrom, NULL);
         if (filterNoIds != NULL)
-            hOrFPrintf(f, "#filter: %s\n", filterNoIds+NOSQLINJ_SIZE);
+            {
+            /* A custom track's SQL table name is internal; show the track name. */
+            char *shown = filterNoIds+NOSQLINJ_SIZE;
+            if (differentString(table, tableVarName))
+                shown = replaceChars(shown, table, tableVarName);
+            hOrFPrintf(f, "#filter: %s\n", shown);
+            }
         hOrFPrintf(f, "#");
         if (showItemRgb)
             {
@@ -1244,14 +1281,10 @@ for (region = regionList; region != NULL; region = region->next)
                 {
                 for (colIx = 0; colIx < lastCol; ++colIx)
                     {
-                    if (outSep == ',') hOrFPrintf(f, "\"");
-                    hOrFPrintf(f, "%s", row[colIx]);
-                    if (outSep == ',') hOrFPrintf(f, "\"");
+                    tabOutCell(f, row[colIx], outSep, escapeText);
                     hOrFPrintf(f, "%c", outSep);
                     }
-                if (outSep == ',') hOrFPrintf(f, "\"");
-                hOrFPrintf(f, "%s", row[lastCol]);
-                if (outSep == ',') hOrFPrintf(f, "\"");
+                tabOutCell(f, row[lastCol], outSep, escapeText);
                 hOrFPrintf(f, "\n");
                 }
             ++outCount;
@@ -1330,12 +1363,8 @@ else if (isCustomTrack(table) || isMyVariantsTrack(table))
                 sameWord("bedMethyl", type) ||
                 sameWord("pgSnp", type))
             {
-            if (isMyVariantsType(type))
-                {
-                ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
-                }
             fieldList = sqlListFields(conn, ct->dbTableName);
-            if (isMyVariantsSharedTrack(table))
+            if (isMyVariantsTrack(table))
                 myVariantsStripHiddenFields(&fieldList);
             }
         hFreeConn(&conn);

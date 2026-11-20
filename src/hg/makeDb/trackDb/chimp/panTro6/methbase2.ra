@@ -4,7 +4,7 @@ parent dnaMethylation
 metaDataUrl /gbdb/panTro6/methBase2/mb2_panTro6_metadata.tsv
 colorSettingsUrl /gbdb/panTro6/methBase2/mb2_panTro6_colors.json
 primaryKey accession
-dataTypes hmr levels reads
+dataTypes hmr pmd levels reads
 maxCheckboxes 20
 shortLabel Methbase
 longLabel Methbase
@@ -13,7 +13,7 @@ visibility hide
 subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ study=https://www.ncbi.nlm.nih.gov/sra/$$ sample=https://www.ncbi.nlm.nih.gov/sra/$$
 
 track Methbase_SRX081763_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP007400/SRS213862/SRX081763/SRX081763.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP007400/SRS213862/SRX081763/SRX081763.hmr.bb
 type bigBed
 shortLabel Sperm
 longLabel Sperm SRX081763
@@ -21,9 +21,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00001
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX081763_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP007400/SRS213862/SRX081763/SRX081763.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP007400/SRS213862/SRX081763/SRX081763.sym_counts.bw
 type bigWig
 shortLabel Sperm
 longLabel Sperm SRX081763
@@ -35,12 +36,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00002
 onlyVisibility full
+visibility full
 
 track Methbase_SRX081763_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP007400/SRS213862/SRX081763/SRX081763.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP007400/SRS213862/SRX081763/SRX081763.sym_coverage.bw
 type bigWig
-shortLabel Sperm
-longLabel Sperm SRX081763
+shortLabel Sperm Reads
+longLabel Sperm Reads SRX081763
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -49,9 +51,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00003
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX081765_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP007400/SRS213863/SRX081765/SRX081765.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP007400/SRS213863/SRX081765/SRX081765.hmr.bb
 type bigBed
 shortLabel Sperm
 longLabel Sperm SRX081765
@@ -59,9 +62,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00004
 onlyVisibility dense
+visibility dense
 
 track Methbase_SRX081765_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP007400/SRS213863/SRX081765/SRX081765.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP007400/SRS213863/SRX081765/SRX081765.sym_counts.bw
 type bigWig
 shortLabel Sperm
 longLabel Sperm SRX081765
@@ -73,12 +77,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00005
 onlyVisibility full
+visibility full
 
 track Methbase_SRX081765_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP007400/SRS213863/SRX081765/SRX081765.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP007400/SRS213863/SRX081765/SRX081765.sym_coverage.bw
 type bigWig
-shortLabel Sperm
-longLabel Sperm SRX081765
+shortLabel Sperm Reads
+longLabel Sperm Reads SRX081765
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -87,9 +92,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00006
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX140479_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP012161/SRS308848/SRX140479/SRX140479.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP012161/SRS308848/SRX140479/SRX140479.hmr.bb
 type bigBed
 shortLabel Prefrontal Cortex
 longLabel Prefrontal Cortex SRX140479
@@ -97,9 +103,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00007
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX140479_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP012161/SRS308848/SRX140479/SRX140479.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP012161/SRS308848/SRX140479/SRX140479.sym_counts.bw
 type bigWig
 shortLabel Prefrontal Cortex
 longLabel Prefrontal Cortex SRX140479
@@ -111,12 +118,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00008
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX140479_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP012161/SRS308848/SRX140479/SRX140479.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP012161/SRS308848/SRX140479/SRX140479.sym_coverage.bw
 type bigWig
-shortLabel Prefrontal Cortex
-longLabel Prefrontal Cortex SRX140479
+shortLabel Prefrontal Cortex Reads
+longLabel Prefrontal Cortex Reads SRX140479
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -125,9 +133,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00009
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX140480_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP012161/SRS308849/SRX140480/SRX140480.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP012161/SRS308849/SRX140480/SRX140480.hmr.bb
 type bigBed
 shortLabel Prefrontal Cortex
 longLabel Prefrontal Cortex SRX140480
@@ -135,9 +144,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00010
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX140480_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP012161/SRS308849/SRX140480/SRX140480.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP012161/SRS308849/SRX140480/SRX140480.sym_counts.bw
 type bigWig
 shortLabel Prefrontal Cortex
 longLabel Prefrontal Cortex SRX140480
@@ -149,12 +159,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00011
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX140480_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP012161/SRS308849/SRX140480/SRX140480.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP012161/SRS308849/SRX140480/SRX140480.sym_coverage.bw
 type bigWig
-shortLabel Prefrontal Cortex
-longLabel Prefrontal Cortex SRX140480
+shortLabel Prefrontal Cortex Reads
+longLabel Prefrontal Cortex Reads SRX140480
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -163,9 +174,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00012
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX140481_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP012161/SRS308850/SRX140481/SRX140481.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP012161/SRS308850/SRX140481/SRX140481.hmr.bb
 type bigBed
 shortLabel Prefrontal Cortex
 longLabel Prefrontal Cortex SRX140481
@@ -173,9 +185,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00013
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX140481_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP012161/SRS308850/SRX140481/SRX140481.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP012161/SRS308850/SRX140481/SRX140481.sym_counts.bw
 type bigWig
 shortLabel Prefrontal Cortex
 longLabel Prefrontal Cortex SRX140481
@@ -187,12 +200,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00014
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX140481_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP012161/SRS308850/SRX140481/SRX140481.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP012161/SRS308850/SRX140481/SRX140481.sym_coverage.bw
 type bigWig
-shortLabel Prefrontal Cortex
-longLabel Prefrontal Cortex SRX140481
+shortLabel Prefrontal Cortex Reads
+longLabel Prefrontal Cortex Reads SRX140481
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -201,9 +215,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00015
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX266514_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413524/SRX266514/SRX266514.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413524/SRX266514/SRX266514.hmr.bb
 type bigBed
 shortLabel SRS413524
 longLabel SRS413524 SRX266514
@@ -211,9 +226,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00016
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX266514_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413524/SRX266514/SRX266514.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413524/SRX266514/SRX266514.sym_counts.bw
 type bigWig
 shortLabel SRS413524
 longLabel SRS413524 SRX266514
@@ -225,12 +241,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00017
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX266514_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413524/SRX266514/SRX266514.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413524/SRX266514/SRX266514.sym_coverage.bw
 type bigWig
-shortLabel SRS413524
-longLabel SRS413524 SRX266514
+shortLabel SRS413524 Reads
+longLabel SRS413524 Reads SRX266514
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -239,9 +256,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00018
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX266525_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413527/SRX266525/SRX266525.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413527/SRX266525/SRX266525.hmr.bb
 type bigBed
 shortLabel Neutriphils
 longLabel Neutriphils SRX266525
@@ -249,9 +267,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00019
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX266525_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413527/SRX266525/SRX266525.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413527/SRX266525/SRX266525.sym_counts.bw
 type bigWig
 shortLabel Neutriphils
 longLabel Neutriphils SRX266525
@@ -263,12 +282,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00020
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX266525_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413527/SRX266525/SRX266525.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413527/SRX266525/SRX266525.sym_coverage.bw
 type bigWig
-shortLabel Neutriphils
-longLabel Neutriphils SRX266525
+shortLabel Neutriphils Reads
+longLabel Neutriphils Reads SRX266525
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -277,9 +297,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00021
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX266748_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413757/SRX266748/SRX266748.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413757/SRX266748/SRX266748.hmr.bb
 type bigBed
 shortLabel CD34+
 longLabel CD34+ SRX266748
@@ -287,9 +308,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00022
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX266748_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413757/SRX266748/SRX266748.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413757/SRX266748/SRX266748.sym_counts.bw
 type bigWig
 shortLabel CD34+
 longLabel CD34+ SRX266748
@@ -301,12 +323,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00023
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX266748_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413757/SRX266748/SRX266748.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413757/SRX266748/SRX266748.sym_coverage.bw
 type bigWig
-shortLabel CD34+
-longLabel CD34+ SRX266748
+shortLabel CD34+ Reads
+longLabel CD34+ Reads SRX266748
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -315,9 +338,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00024
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX266749_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413759/SRX266749/SRX266749.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413759/SRX266749/SRX266749.hmr.bb
 type bigBed
 shortLabel CD34+
 longLabel CD34+ SRX266749
@@ -325,9 +349,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00025
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX266749_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413759/SRX266749/SRX266749.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413759/SRX266749/SRX266749.sym_counts.bw
 type bigWig
 shortLabel CD34+
 longLabel CD34+ SRX266749
@@ -339,12 +364,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00026
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX266749_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP021118/SRS413759/SRX266749/SRX266749.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP021118/SRS413759/SRX266749/SRX266749.sym_coverage.bw
 type bigWig
-shortLabel CD34+
-longLabel CD34+ SRX266749
+shortLabel CD34+ Reads
+longLabel CD34+ Reads SRX266749
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -353,9 +379,10 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00027
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX2847134_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP107883/SRS2220114/SRX2847134/SRX2847134.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP107883/SRS2220114/SRX2847134/SRX2847134.hmr.bb
 type bigBed
 shortLabel Bone
 longLabel Bone SRX2847134
@@ -363,9 +390,10 @@ color 56,113,193
 parent Methbase off
 priority 0.00028
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX2847134_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP107883/SRS2220114/SRX2847134/SRX2847134.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP107883/SRS2220114/SRX2847134/SRX2847134.sym_counts.bw
 type bigWig
 shortLabel Bone
 longLabel Bone SRX2847134
@@ -377,12 +405,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00029
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX2847134_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP107883/SRS2220114/SRX2847134/SRX2847134.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP107883/SRS2220114/SRX2847134/SRX2847134.sym_coverage.bw
 type bigWig
-shortLabel Bone
-longLabel Bone SRX2847134
+shortLabel Bone Reads
+longLabel Bone Reads SRX2847134
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -391,23 +420,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00030
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192969_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403804/SRX4192969/SRX4192969.hmr.bb
+track Methbase_SRX31649114_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623362/SRX31649114/SRX31649114.hmr.bb
 type bigBed
-shortLabel Heart
-longLabel Heart SRX4192969
+shortLabel iPSC-derived cranial neural crest cells
+longLabel iPSC-derived cranial neural crest cells SRX31649114
 color 56,113,193
 parent Methbase off
 priority 0.00031
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192969_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403804/SRX4192969/SRX4192969.sym_counts.bw
+track Methbase_SRX31649114_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623362/SRX31649114/SRX31649114.sym_counts.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192969
-color 176,80,32
+shortLabel iPSC-derived cranial neural crest cells
+longLabel iPSC-derived cranial neural crest cells SRX31649114
+color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -415,12 +446,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00032
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192969_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403804/SRX4192969/SRX4192969.sym_coverage.bw
+track Methbase_SRX31649114_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623362/SRX31649114/SRX31649114.sym_coverage.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192969
+shortLabel iPSC-derived cranial neural crest cells Reads
+longLabel iPSC-derived cranial neural crest cells Reads SRX31649114
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -429,23 +461,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00033
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192970_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403806/SRX4192970/SRX4192970.hmr.bb
+track Methbase_SRX31649115_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623363/SRX31649115/SRX31649115.hmr.bb
 type bigBed
-shortLabel Kidney
-longLabel Kidney SRX4192970
+shortLabel iPSC-derived cranial neural crest cells
+longLabel iPSC-derived cranial neural crest cells SRX31649115
 color 56,113,193
 parent Methbase off
 priority 0.00034
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192970_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403806/SRX4192970/SRX4192970.sym_counts.bw
+track Methbase_SRX31649115_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623363/SRX31649115/SRX31649115.sym_counts.bw
 type bigWig
-shortLabel Kidney
-longLabel Kidney SRX4192970
-color 192,0,192
+shortLabel iPSC-derived cranial neural crest cells
+longLabel iPSC-derived cranial neural crest cells SRX31649115
+color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -453,12 +487,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00035
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192970_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403806/SRX4192970/SRX4192970.sym_coverage.bw
+track Methbase_SRX31649115_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623363/SRX31649115/SRX31649115.sym_coverage.bw
 type bigWig
-shortLabel Kidney
-longLabel Kidney SRX4192970
+shortLabel iPSC-derived cranial neural crest cells Reads
+longLabel iPSC-derived cranial neural crest cells Reads SRX31649115
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -467,23 +502,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00036
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192971_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403805/SRX4192971/SRX4192971.hmr.bb
+track Methbase_SRX31649122_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623370/SRX31649122/SRX31649122.hmr.bb
 type bigBed
-shortLabel Kidney
-longLabel Kidney SRX4192971
+shortLabel Primary Dental Pulp Stem Cell
+longLabel Primary Dental Pulp Stem Cell SRX31649122
 color 56,113,193
 parent Methbase off
 priority 0.00037
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192971_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403805/SRX4192971/SRX4192971.sym_counts.bw
+track Methbase_SRX31649122_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623370/SRX31649122/SRX31649122.sym_counts.bw
 type bigWig
-shortLabel Kidney
-longLabel Kidney SRX4192971
-color 192,0,192
+shortLabel Primary Dental Pulp Stem Cell
+longLabel Primary Dental Pulp Stem Cell SRX31649122
+color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -491,12 +528,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00038
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192971_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403805/SRX4192971/SRX4192971.sym_coverage.bw
+track Methbase_SRX31649122_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623370/SRX31649122/SRX31649122.sym_coverage.bw
 type bigWig
-shortLabel Kidney
-longLabel Kidney SRX4192971
+shortLabel Primary Dental Pulp Stem Cell Reads
+longLabel Primary Dental Pulp Stem Cell Reads SRX31649122
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -505,23 +543,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00039
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192972_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403807/SRX4192972/SRX4192972.hmr.bb
+track Methbase_SRX31649123_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623371/SRX31649123/SRX31649123.hmr.bb
 type bigBed
-shortLabel Liver
-longLabel Liver SRX4192972
+shortLabel Primary Dental Pulp Stem Cell
+longLabel Primary Dental Pulp Stem Cell SRX31649123
 color 56,113,193
 parent Methbase off
 priority 0.00040
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192972_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403807/SRX4192972/SRX4192972.sym_counts.bw
+track Methbase_SRX31649123_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623371/SRX31649123/SRX31649123.sym_counts.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192972
-color 255,136,56
+shortLabel Primary Dental Pulp Stem Cell
+longLabel Primary Dental Pulp Stem Cell SRX31649123
+color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -529,12 +569,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00041
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192972_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403807/SRX4192972/SRX4192972.sym_coverage.bw
+track Methbase_SRX31649123_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623371/SRX31649123/SRX31649123.sym_coverage.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192972
+shortLabel Primary Dental Pulp Stem Cell Reads
+longLabel Primary Dental Pulp Stem Cell Reads SRX31649123
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -543,23 +584,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00042
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192973_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403808/SRX4192973/SRX4192973.hmr.bb
+track Methbase_SRX31649125_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623373/SRX31649125/SRX31649125.hmr.bb
 type bigBed
-shortLabel Liver
-longLabel Liver SRX4192973
+shortLabel iPSC-derived dopaminergic neurons
+longLabel iPSC-derived dopaminergic neurons SRX31649125
 color 56,113,193
 parent Methbase off
 priority 0.00043
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192973_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403808/SRX4192973/SRX4192973.sym_counts.bw
+track Methbase_SRX31649125_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623373/SRX31649125/SRX31649125.sym_counts.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192973
-color 255,136,56
+shortLabel iPSC-derived dopaminergic neurons
+longLabel iPSC-derived dopaminergic neurons SRX31649125
+color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -567,12 +610,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00044
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192973_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403808/SRX4192973/SRX4192973.sym_coverage.bw
+track Methbase_SRX31649125_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP658917/SRS27623373/SRX31649125/SRX31649125.sym_coverage.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192973
+shortLabel iPSC-derived dopaminergic neurons Reads
+longLabel iPSC-derived dopaminergic neurons Reads SRX31649125
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -581,23 +625,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00045
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192975_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403809/SRX4192975/SRX4192975.hmr.bb
+track Methbase_SRX4192969_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403804/SRX4192969/SRX4192969.hmr.bb
 type bigBed
-shortLabel Lung
-longLabel Lung SRX4192975
+shortLabel Heart
+longLabel Heart SRX4192969
 color 56,113,193
 parent Methbase off
 priority 0.00046
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192975_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403809/SRX4192975/SRX4192975.sym_counts.bw
+track Methbase_SRX4192969_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403804/SRX4192969/SRX4192969.sym_counts.bw
 type bigWig
-shortLabel Lung
-longLabel Lung SRX4192975
-color 240,17,17
+shortLabel Heart
+longLabel Heart SRX4192969
+color 176,80,32
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -605,12 +651,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00047
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192975_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403809/SRX4192975/SRX4192975.sym_coverage.bw
+track Methbase_SRX4192969_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403804/SRX4192969/SRX4192969.sym_coverage.bw
 type bigWig
-shortLabel Lung
-longLabel Lung SRX4192975
+shortLabel Heart Reads
+longLabel Heart Reads SRX4192969
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -619,23 +666,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00048
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192976_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403810/SRX4192976/SRX4192976.hmr.bb
+track Methbase_SRX4192970_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403806/SRX4192970/SRX4192970.hmr.bb
 type bigBed
-shortLabel Lung
-longLabel Lung SRX4192976
+shortLabel Kidney
+longLabel Kidney SRX4192970
 color 56,113,193
 parent Methbase off
 priority 0.00049
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192976_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403810/SRX4192976/SRX4192976.sym_counts.bw
+track Methbase_SRX4192970_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403806/SRX4192970/SRX4192970.sym_counts.bw
 type bigWig
-shortLabel Lung
-longLabel Lung SRX4192976
-color 240,17,17
+shortLabel Kidney
+longLabel Kidney SRX4192970
+color 192,0,192
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -643,12 +692,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00050
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192976_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403810/SRX4192976/SRX4192976.sym_coverage.bw
+track Methbase_SRX4192970_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403806/SRX4192970/SRX4192970.sym_coverage.bw
 type bigWig
-shortLabel Lung
-longLabel Lung SRX4192976
+shortLabel Kidney Reads
+longLabel Kidney Reads SRX4192970
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -657,23 +707,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00051
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192977_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403811/SRX4192977/SRX4192977.hmr.bb
+track Methbase_SRX4192971_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403805/SRX4192971/SRX4192971.hmr.bb
 type bigBed
-shortLabel Heart
-longLabel Heart SRX4192977
+shortLabel Kidney
+longLabel Kidney SRX4192971
 color 56,113,193
 parent Methbase off
 priority 0.00052
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192977_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403811/SRX4192977/SRX4192977.sym_counts.bw
+track Methbase_SRX4192971_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403805/SRX4192971/SRX4192971.sym_counts.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192977
-color 176,80,32
+shortLabel Kidney
+longLabel Kidney SRX4192971
+color 192,0,192
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -681,12 +733,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00053
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192977_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403811/SRX4192977/SRX4192977.sym_coverage.bw
+track Methbase_SRX4192971_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403805/SRX4192971/SRX4192971.sym_coverage.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192977
+shortLabel Kidney Reads
+longLabel Kidney Reads SRX4192971
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -695,23 +748,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00054
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192978_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403812/SRX4192978/SRX4192978.hmr.bb
+track Methbase_SRX4192972_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403807/SRX4192972/SRX4192972.hmr.bb
 type bigBed
-shortLabel Heart
-longLabel Heart SRX4192978
+shortLabel Liver
+longLabel Liver SRX4192972
 color 56,113,193
 parent Methbase off
 priority 0.00055
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192978_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403812/SRX4192978/SRX4192978.sym_counts.bw
+track Methbase_SRX4192972_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403807/SRX4192972/SRX4192972.sym_counts.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192978
-color 176,80,32
+shortLabel Liver
+longLabel Liver SRX4192972
+color 255,136,56
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -719,12 +774,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00056
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192978_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403812/SRX4192978/SRX4192978.sym_coverage.bw
+track Methbase_SRX4192972_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403807/SRX4192972/SRX4192972.sym_coverage.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192978
+shortLabel Liver Reads
+longLabel Liver Reads SRX4192972
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -733,23 +789,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00057
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192980_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403814/SRX4192980/SRX4192980.hmr.bb
+track Methbase_SRX4192973_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403808/SRX4192973/SRX4192973.hmr.bb
 type bigBed
-shortLabel Kidney
-longLabel Kidney SRX4192980
+shortLabel Liver
+longLabel Liver SRX4192973
 color 56,113,193
 parent Methbase off
 priority 0.00058
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192980_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403814/SRX4192980/SRX4192980.sym_counts.bw
+track Methbase_SRX4192973_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403808/SRX4192973/SRX4192973.sym_counts.bw
 type bigWig
-shortLabel Kidney
-longLabel Kidney SRX4192980
-color 192,0,192
+shortLabel Liver
+longLabel Liver SRX4192973
+color 255,136,56
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -757,12 +815,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00059
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192980_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403814/SRX4192980/SRX4192980.sym_coverage.bw
+track Methbase_SRX4192973_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403808/SRX4192973/SRX4192973.sym_coverage.bw
 type bigWig
-shortLabel Kidney
-longLabel Kidney SRX4192980
+shortLabel Liver Reads
+longLabel Liver Reads SRX4192973
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -771,23 +830,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00060
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192981_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403815/SRX4192981/SRX4192981.hmr.bb
+track Methbase_SRX4192975_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403809/SRX4192975/SRX4192975.hmr.bb
 type bigBed
-shortLabel Liver
-longLabel Liver SRX4192981
+shortLabel Lung
+longLabel Lung SRX4192975
 color 56,113,193
 parent Methbase off
 priority 0.00061
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192981_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403815/SRX4192981/SRX4192981.sym_counts.bw
+track Methbase_SRX4192975_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403809/SRX4192975/SRX4192975.sym_counts.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192981
-color 255,136,56
+shortLabel Lung
+longLabel Lung SRX4192975
+color 240,17,17
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -795,12 +856,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00062
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192981_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403815/SRX4192981/SRX4192981.sym_coverage.bw
+track Methbase_SRX4192975_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403809/SRX4192975/SRX4192975.sym_coverage.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192981
+shortLabel Lung Reads
+longLabel Lung Reads SRX4192975
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -809,23 +871,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00063
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192982_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403816/SRX4192982/SRX4192982.hmr.bb
+track Methbase_SRX4192976_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403810/SRX4192976/SRX4192976.hmr.bb
 type bigBed
-shortLabel Liver
-longLabel Liver SRX4192982
+shortLabel Lung
+longLabel Lung SRX4192976
 color 56,113,193
 parent Methbase off
 priority 0.00064
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192982_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403816/SRX4192982/SRX4192982.sym_counts.bw
+track Methbase_SRX4192976_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403810/SRX4192976/SRX4192976.sym_counts.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192982
-color 255,136,56
+shortLabel Lung
+longLabel Lung SRX4192976
+color 240,17,17
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -833,12 +897,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00065
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192982_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403816/SRX4192982/SRX4192982.sym_coverage.bw
+track Methbase_SRX4192976_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403810/SRX4192976/SRX4192976.sym_coverage.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192982
+shortLabel Lung Reads
+longLabel Lung Reads SRX4192976
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -847,23 +912,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00066
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192983_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403817/SRX4192983/SRX4192983.hmr.bb
+track Methbase_SRX4192977_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403811/SRX4192977/SRX4192977.hmr.bb
 type bigBed
-shortLabel Lung
-longLabel Lung SRX4192983
+shortLabel Heart
+longLabel Heart SRX4192977
 color 56,113,193
 parent Methbase off
 priority 0.00067
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192983_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403817/SRX4192983/SRX4192983.sym_counts.bw
+track Methbase_SRX4192977_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403811/SRX4192977/SRX4192977.sym_counts.bw
 type bigWig
-shortLabel Lung
-longLabel Lung SRX4192983
-color 240,17,17
+shortLabel Heart
+longLabel Heart SRX4192977
+color 176,80,32
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -871,12 +938,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00068
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192983_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403817/SRX4192983/SRX4192983.sym_coverage.bw
+track Methbase_SRX4192977_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403811/SRX4192977/SRX4192977.sym_coverage.bw
 type bigWig
-shortLabel Lung
-longLabel Lung SRX4192983
+shortLabel Heart Reads
+longLabel Heart Reads SRX4192977
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -885,23 +953,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00069
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192984_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403818/SRX4192984/SRX4192984.hmr.bb
+track Methbase_SRX4192978_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403812/SRX4192978/SRX4192978.hmr.bb
 type bigBed
-shortLabel Lung
-longLabel Lung SRX4192984
+shortLabel Heart
+longLabel Heart SRX4192978
 color 56,113,193
 parent Methbase off
 priority 0.00070
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192984_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403818/SRX4192984/SRX4192984.sym_counts.bw
+track Methbase_SRX4192978_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403812/SRX4192978/SRX4192978.sym_counts.bw
 type bigWig
-shortLabel Lung
-longLabel Lung SRX4192984
-color 240,17,17
+shortLabel Heart
+longLabel Heart SRX4192978
+color 176,80,32
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -909,12 +979,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00071
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192984_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403818/SRX4192984/SRX4192984.sym_coverage.bw
+track Methbase_SRX4192978_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403812/SRX4192978/SRX4192978.sym_coverage.bw
 type bigWig
-shortLabel Lung
-longLabel Lung SRX4192984
+shortLabel Heart Reads
+longLabel Heart Reads SRX4192978
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -923,23 +994,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00072
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192985_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403819/SRX4192985/SRX4192985.hmr.bb
+track Methbase_SRX4192980_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403814/SRX4192980/SRX4192980.hmr.bb
 type bigBed
-shortLabel Heart
-longLabel Heart SRX4192985
+shortLabel Kidney
+longLabel Kidney SRX4192980
 color 56,113,193
 parent Methbase off
 priority 0.00073
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX4192985_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403819/SRX4192985/SRX4192985.sym_counts.bw
+track Methbase_SRX4192980_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403814/SRX4192980/SRX4192980.sym_counts.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192985
-color 176,80,32
+shortLabel Kidney
+longLabel Kidney SRX4192980
+color 192,0,192
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -947,12 +1020,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00074
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX4192985_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403819/SRX4192985/SRX4192985.sym_coverage.bw
+track Methbase_SRX4192980_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403814/SRX4192980/SRX4192980.sym_coverage.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192985
+shortLabel Kidney Reads
+longLabel Kidney Reads SRX4192980
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -961,19 +1035,226 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00075
 onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192981_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403815/SRX4192981/SRX4192981.hmr.bb
+type bigBed
+shortLabel Liver
+longLabel Liver SRX4192981
+color 56,113,193
+parent Methbase off
+priority 0.00076
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX4192981_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403815/SRX4192981/SRX4192981.sym_counts.bw
+type bigWig
+shortLabel Liver
+longLabel Liver SRX4192981
+color 255,136,56
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00077
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192981_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403815/SRX4192981/SRX4192981.sym_coverage.bw
+type bigWig
+shortLabel Liver Reads
+longLabel Liver Reads SRX4192981
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00078
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192982_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403816/SRX4192982/SRX4192982.hmr.bb
+type bigBed
+shortLabel Liver
+longLabel Liver SRX4192982
+color 56,113,193
+parent Methbase off
+priority 0.00079
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX4192982_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403816/SRX4192982/SRX4192982.sym_counts.bw
+type bigWig
+shortLabel Liver
+longLabel Liver SRX4192982
+color 255,136,56
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00080
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192982_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403816/SRX4192982/SRX4192982.sym_coverage.bw
+type bigWig
+shortLabel Liver Reads
+longLabel Liver Reads SRX4192982
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00081
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192983_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403817/SRX4192983/SRX4192983.hmr.bb
+type bigBed
+shortLabel Lung
+longLabel Lung SRX4192983
+color 56,113,193
+parent Methbase off
+priority 0.00082
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX4192983_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403817/SRX4192983/SRX4192983.sym_counts.bw
+type bigWig
+shortLabel Lung
+longLabel Lung SRX4192983
+color 240,17,17
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00083
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192983_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403817/SRX4192983/SRX4192983.sym_coverage.bw
+type bigWig
+shortLabel Lung Reads
+longLabel Lung Reads SRX4192983
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00084
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192984_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403818/SRX4192984/SRX4192984.hmr.bb
+type bigBed
+shortLabel Lung
+longLabel Lung SRX4192984
+color 56,113,193
+parent Methbase off
+priority 0.00085
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX4192984_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403818/SRX4192984/SRX4192984.sym_counts.bw
+type bigWig
+shortLabel Lung
+longLabel Lung SRX4192984
+color 240,17,17
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00086
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192984_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403818/SRX4192984/SRX4192984.sym_coverage.bw
+type bigWig
+shortLabel Lung Reads
+longLabel Lung Reads SRX4192984
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00087
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192985_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403819/SRX4192985/SRX4192985.hmr.bb
+type bigBed
+shortLabel Heart
+longLabel Heart SRX4192985
+color 56,113,193
+parent Methbase off
+priority 0.00088
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX4192985_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403819/SRX4192985/SRX4192985.sym_counts.bw
+type bigWig
+shortLabel Heart
+longLabel Heart SRX4192985
+color 176,80,32
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00089
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX4192985_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403819/SRX4192985/SRX4192985.sym_coverage.bw
+type bigWig
+shortLabel Heart Reads
+longLabel Heart Reads SRX4192985
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00090
+onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192986_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403820/SRX4192986/SRX4192986.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403820/SRX4192986/SRX4192986.hmr.bb
 type bigBed
 shortLabel Heart
 longLabel Heart SRX4192986
 color 56,113,193
 parent Methbase off
-priority 0.00076
+priority 0.00091
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX4192986_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403820/SRX4192986/SRX4192986.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403820/SRX4192986/SRX4192986.sym_counts.bw
 type bigWig
 shortLabel Heart
 longLabel Heart SRX4192986
@@ -983,35 +1264,38 @@ windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:1
 yLineOnOff on
-priority 0.00077
+priority 0.00092
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192986_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403820/SRX4192986/SRX4192986.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403820/SRX4192986/SRX4192986.sym_coverage.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192986
+shortLabel Heart Reads
+longLabel Heart Reads SRX4192986
 color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:10
 yLineOnOff on
-priority 0.00078
+priority 0.00093
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192990_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403824/SRX4192990/SRX4192990.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403824/SRX4192990/SRX4192990.hmr.bb
 type bigBed
 shortLabel Kidney
 longLabel Kidney SRX4192990
 color 56,113,193
 parent Methbase off
-priority 0.00079
+priority 0.00094
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX4192990_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403824/SRX4192990/SRX4192990.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403824/SRX4192990/SRX4192990.sym_counts.bw
 type bigWig
 shortLabel Kidney
 longLabel Kidney SRX4192990
@@ -1021,35 +1305,38 @@ windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:1
 yLineOnOff on
-priority 0.00080
+priority 0.00095
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192990_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403824/SRX4192990/SRX4192990.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403824/SRX4192990/SRX4192990.sym_coverage.bw
 type bigWig
-shortLabel Kidney
-longLabel Kidney SRX4192990
+shortLabel Kidney Reads
+longLabel Kidney Reads SRX4192990
 color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:10
 yLineOnOff on
-priority 0.00081
+priority 0.00096
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192991_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403825/SRX4192991/SRX4192991.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403825/SRX4192991/SRX4192991.hmr.bb
 type bigBed
 shortLabel Liver
 longLabel Liver SRX4192991
 color 56,113,193
 parent Methbase off
-priority 0.00082
+priority 0.00097
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX4192991_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403825/SRX4192991/SRX4192991.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403825/SRX4192991/SRX4192991.sym_counts.bw
 type bigWig
 shortLabel Liver
 longLabel Liver SRX4192991
@@ -1059,35 +1346,38 @@ windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:1
 yLineOnOff on
-priority 0.00083
+priority 0.00098
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192991_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403825/SRX4192991/SRX4192991.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403825/SRX4192991/SRX4192991.sym_coverage.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192991
+shortLabel Liver Reads
+longLabel Liver Reads SRX4192991
 color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:10
 yLineOnOff on
-priority 0.00084
+priority 0.00099
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192992_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403826/SRX4192992/SRX4192992.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403826/SRX4192992/SRX4192992.hmr.bb
 type bigBed
 shortLabel Liver
 longLabel Liver SRX4192992
 color 56,113,193
 parent Methbase off
-priority 0.00085
+priority 0.00100
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX4192992_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403826/SRX4192992/SRX4192992.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403826/SRX4192992/SRX4192992.sym_counts.bw
 type bigWig
 shortLabel Liver
 longLabel Liver SRX4192992
@@ -1097,35 +1387,38 @@ windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:1
 yLineOnOff on
-priority 0.00086
+priority 0.00101
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192992_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403826/SRX4192992/SRX4192992.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403826/SRX4192992/SRX4192992.sym_coverage.bw
 type bigWig
-shortLabel Liver
-longLabel Liver SRX4192992
+shortLabel Liver Reads
+longLabel Liver Reads SRX4192992
 color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:10
 yLineOnOff on
-priority 0.00087
+priority 0.00102
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192994_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403828/SRX4192994/SRX4192994.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403828/SRX4192994/SRX4192994.hmr.bb
 type bigBed
 shortLabel Lung
 longLabel Lung SRX4192994
 color 56,113,193
 parent Methbase off
-priority 0.00088
+priority 0.00103
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX4192994_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403828/SRX4192994/SRX4192994.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403828/SRX4192994/SRX4192994.sym_counts.bw
 type bigWig
 shortLabel Lung
 longLabel Lung SRX4192994
@@ -1135,35 +1428,38 @@ windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:1
 yLineOnOff on
-priority 0.00089
+priority 0.00104
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192994_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403828/SRX4192994/SRX4192994.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403828/SRX4192994/SRX4192994.sym_coverage.bw
 type bigWig
-shortLabel Lung
-longLabel Lung SRX4192994
+shortLabel Lung Reads
+longLabel Lung Reads SRX4192994
 color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:10
 yLineOnOff on
-priority 0.00090
+priority 0.00105
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192996_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403831/SRX4192996/SRX4192996.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403831/SRX4192996/SRX4192996.hmr.bb
 type bigBed
 shortLabel Heart
 longLabel Heart SRX4192996
 color 56,113,193
 parent Methbase off
-priority 0.00091
+priority 0.00106
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX4192996_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403831/SRX4192996/SRX4192996.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403831/SRX4192996/SRX4192996.sym_counts.bw
 type bigWig
 shortLabel Heart
 longLabel Heart SRX4192996
@@ -1173,35 +1469,38 @@ windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:1
 yLineOnOff on
-priority 0.00092
+priority 0.00107
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192996_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403831/SRX4192996/SRX4192996.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403831/SRX4192996/SRX4192996.sym_coverage.bw
 type bigWig
-shortLabel Heart
-longLabel Heart SRX4192996
+shortLabel Heart Reads
+longLabel Heart Reads SRX4192996
 color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:10
 yLineOnOff on
-priority 0.00093
+priority 0.00108
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX4192999_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403834/SRX4192999/SRX4192999.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403834/SRX4192999/SRX4192999.hmr.bb
 type bigBed
 shortLabel Kidney
 longLabel Kidney SRX4192999
 color 56,113,193
 parent Methbase off
-priority 0.00094
+priority 0.00109
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX4192999_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403834/SRX4192999/SRX4192999.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403834/SRX4192999/SRX4192999.sym_counts.bw
 type bigWig
 shortLabel Kidney
 longLabel Kidney SRX4192999
@@ -1211,204 +1510,15 @@ windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:1
 yLineOnOff on
-priority 0.00095
-onlyVisibility full
-
-track Methbase_SRX4192999_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403834/SRX4192999/SRX4192999.sym_coverage.bw
-type bigWig
-shortLabel Kidney
-longLabel Kidney SRX4192999
-color 0,0,0
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:10
-yLineOnOff on
-priority 0.00096
-onlyVisibility full
-
-track Methbase_SRX4193000_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403835/SRX4193000/SRX4193000.hmr.bb
-type bigBed
-shortLabel Liver
-longLabel Liver SRX4193000
-color 56,113,193
-parent Methbase off
-priority 0.00097
-onlyVisibility dense
-
-track Methbase_SRX4193000_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403835/SRX4193000/SRX4193000.sym_counts.bw
-type bigWig
-shortLabel Liver
-longLabel Liver SRX4193000
-color 255,136,56
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:1
-yLineOnOff on
-priority 0.00098
-onlyVisibility full
-
-track Methbase_SRX4193000_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403835/SRX4193000/SRX4193000.sym_coverage.bw
-type bigWig
-shortLabel Liver
-longLabel Liver SRX4193000
-color 0,0,0
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:10
-yLineOnOff on
-priority 0.00099
-onlyVisibility full
-
-track Methbase_SRX4193001_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403836/SRX4193001/SRX4193001.hmr.bb
-type bigBed
-shortLabel Liver
-longLabel Liver SRX4193001
-color 56,113,193
-parent Methbase off
-priority 0.00100
-onlyVisibility dense
-
-track Methbase_SRX4193001_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403836/SRX4193001/SRX4193001.sym_counts.bw
-type bigWig
-shortLabel Liver
-longLabel Liver SRX4193001
-color 255,136,56
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:1
-yLineOnOff on
-priority 0.00101
-onlyVisibility full
-
-track Methbase_SRX4193001_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP136499/SRS3403836/SRX4193001/SRX4193001.sym_coverage.bw
-type bigWig
-shortLabel Liver
-longLabel Liver SRX4193001
-color 0,0,0
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:10
-yLineOnOff on
-priority 0.00102
-onlyVisibility full
-
-track Methbase_SRX6810740_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP220230/SRS5354705/SRX6810740/SRX6810740.hmr.bb
-type bigBed
-shortLabel LCL
-longLabel LCL SRX6810740
-color 56,113,193
-parent Methbase off
-priority 0.00103
-onlyVisibility dense
-
-track Methbase_SRX6810740_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP220230/SRS5354705/SRX6810740/SRX6810740.sym_counts.bw
-type bigWig
-shortLabel LCL
-longLabel LCL SRX6810740
-color 80,32,224
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:1
-yLineOnOff on
-priority 0.00104
-onlyVisibility full
-
-track Methbase_SRX6810740_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP220230/SRS5354705/SRX6810740/SRX6810740.sym_coverage.bw
-type bigWig
-shortLabel LCL
-longLabel LCL SRX6810740
-color 0,0,0
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:10
-yLineOnOff on
-priority 0.00105
-onlyVisibility full
-
-track Methbase_SRX6810741_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP220230/SRS5354706/SRX6810741/SRX6810741.hmr.bb
-type bigBed
-shortLabel LCL
-longLabel LCL SRX6810741
-color 56,113,193
-parent Methbase off
-priority 0.00106
-onlyVisibility dense
-
-track Methbase_SRX6810741_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP220230/SRS5354706/SRX6810741/SRX6810741.sym_counts.bw
-type bigWig
-shortLabel LCL
-longLabel LCL SRX6810741
-color 80,32,224
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:1
-yLineOnOff on
-priority 0.00107
-onlyVisibility full
-
-track Methbase_SRX6810741_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP220230/SRS5354706/SRX6810741/SRX6810741.sym_coverage.bw
-type bigWig
-shortLabel LCL
-longLabel LCL SRX6810741
-color 0,0,0
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:10
-yLineOnOff on
-priority 0.00108
-onlyVisibility full
-
-track Methbase_SRX6810742_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP220230/SRS5354707/SRX6810742/SRX6810742.hmr.bb
-type bigBed
-shortLabel LCL
-longLabel LCL SRX6810742
-color 56,113,193
-parent Methbase off
-priority 0.00109
-onlyVisibility dense
-
-track Methbase_SRX6810742_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP220230/SRS5354707/SRX6810742/SRX6810742.sym_counts.bw
-type bigWig
-shortLabel LCL
-longLabel LCL SRX6810742
-color 80,32,224
-parent Methbase off
-windowingFunction mean
-maxHeightPixels 24:24:24
-viewLimits 0:1
-yLineOnOff on
 priority 0.00110
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX6810742_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP220230/SRS5354707/SRX6810742/SRX6810742.sym_coverage.bw
+track Methbase_SRX4192999_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403834/SRX4192999/SRX4192999.sym_coverage.bw
 type bigWig
-shortLabel LCL
-longLabel LCL SRX6810742
+shortLabel Kidney Reads
+longLabel Kidney Reads SRX4192999
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1417,23 +1527,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00111
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468528_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151149/SRX8468528/SRX8468528.hmr.bb
+track Methbase_SRX4193000_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403835/SRX4193000/SRX4193000.hmr.bb
 type bigBed
-shortLabel Brain
-longLabel Brain SRX8468528
+shortLabel Liver
+longLabel Liver SRX4193000
 color 56,113,193
 parent Methbase off
 priority 0.00112
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468528_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151149/SRX8468528/SRX8468528.sym_counts.bw
+track Methbase_SRX4193000_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403835/SRX4193000/SRX4193000.sym_counts.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468528
-color 240,192,0
+shortLabel Liver
+longLabel Liver SRX4193000
+color 255,136,56
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -1441,12 +1553,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00113
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468528_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151149/SRX8468528/SRX8468528.sym_coverage.bw
+track Methbase_SRX4193000_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403835/SRX4193000/SRX4193000.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468528
+shortLabel Liver Reads
+longLabel Liver Reads SRX4193000
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1455,23 +1568,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00114
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468529_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151153/SRX8468529/SRX8468529.hmr.bb
+track Methbase_SRX4193001_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403836/SRX4193001/SRX4193001.hmr.bb
 type bigBed
-shortLabel Brain
-longLabel Brain SRX8468529
+shortLabel Liver
+longLabel Liver SRX4193001
 color 56,113,193
 parent Methbase off
 priority 0.00115
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468529_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151153/SRX8468529/SRX8468529.sym_counts.bw
+track Methbase_SRX4193001_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403836/SRX4193001/SRX4193001.sym_counts.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468529
-color 240,192,0
+shortLabel Liver
+longLabel Liver SRX4193001
+color 255,136,56
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -1479,12 +1594,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00116
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468529_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151153/SRX8468529/SRX8468529.sym_coverage.bw
+track Methbase_SRX4193001_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP136499/SRS3403836/SRX4193001/SRX4193001.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468529
+shortLabel Liver Reads
+longLabel Liver Reads SRX4193001
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1493,23 +1609,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00117
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468530_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151154/SRX8468530/SRX8468530.hmr.bb
+track Methbase_SRX6810740_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP220230/SRS5354705/SRX6810740/SRX6810740.hmr.bb
 type bigBed
-shortLabel Brain
-longLabel Brain SRX8468530
+shortLabel LCL
+longLabel LCL SRX6810740
 color 56,113,193
 parent Methbase off
 priority 0.00118
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468530_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151154/SRX8468530/SRX8468530.sym_counts.bw
+track Methbase_SRX6810740_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP220230/SRS5354705/SRX6810740/SRX6810740.sym_counts.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468530
-color 240,192,0
+shortLabel LCL
+longLabel LCL SRX6810740
+color 80,32,224
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -1517,12 +1635,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00119
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468530_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151154/SRX8468530/SRX8468530.sym_coverage.bw
+track Methbase_SRX6810740_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP220230/SRS5354705/SRX6810740/SRX6810740.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468530
+shortLabel LCL Reads
+longLabel LCL Reads SRX6810740
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1531,23 +1650,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00120
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468531_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151156/SRX8468531/SRX8468531.hmr.bb
+track Methbase_SRX6810741_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP220230/SRS5354706/SRX6810741/SRX6810741.hmr.bb
 type bigBed
-shortLabel Brain
-longLabel Brain SRX8468531
+shortLabel LCL
+longLabel LCL SRX6810741
 color 56,113,193
 parent Methbase off
 priority 0.00121
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468531_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151156/SRX8468531/SRX8468531.sym_counts.bw
+track Methbase_SRX6810741_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP220230/SRS5354706/SRX6810741/SRX6810741.sym_counts.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468531
-color 240,192,0
+shortLabel LCL
+longLabel LCL SRX6810741
+color 80,32,224
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -1555,12 +1676,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00122
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468531_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151156/SRX8468531/SRX8468531.sym_coverage.bw
+track Methbase_SRX6810741_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP220230/SRS5354706/SRX6810741/SRX6810741.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468531
+shortLabel LCL Reads
+longLabel LCL Reads SRX6810741
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1569,23 +1691,25 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00123
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468532_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151155/SRX8468532/SRX8468532.hmr.bb
+track Methbase_SRX6810742_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP220230/SRS5354707/SRX6810742/SRX6810742.hmr.bb
 type bigBed
-shortLabel Brain
-longLabel Brain SRX8468532
+shortLabel LCL
+longLabel LCL SRX6810742
 color 56,113,193
 parent Methbase off
 priority 0.00124
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468532_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151155/SRX8468532/SRX8468532.sym_counts.bw
+track Methbase_SRX6810742_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP220230/SRS5354707/SRX6810742/SRX6810742.sym_counts.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468532
-color 240,192,0
+shortLabel LCL
+longLabel LCL SRX6810742
+color 80,32,224
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
@@ -1593,12 +1717,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00125
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468532_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151155/SRX8468532/SRX8468532.sym_coverage.bw
+track Methbase_SRX6810742_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP220230/SRS5354707/SRX6810742/SRX6810742.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468532
+shortLabel LCL Reads
+longLabel LCL Reads SRX6810742
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1607,22 +1732,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00126
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468533_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151157/SRX8468533/SRX8468533.hmr.bb
+track Methbase_SRX8468528_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151149/SRX8468528/SRX8468528.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468533
+longLabel Brain SRX8468528
 color 56,113,193
 parent Methbase off
 priority 0.00127
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468533_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151157/SRX8468533/SRX8468533.sym_counts.bw
+track Methbase_SRX8468528_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151149/SRX8468528/SRX8468528.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468533
+longLabel Brain SRX8468528
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1631,12 +1758,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00128
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468533_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151157/SRX8468533/SRX8468533.sym_coverage.bw
+track Methbase_SRX8468528_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151149/SRX8468528/SRX8468528.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468533
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468528
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1645,22 +1773,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00129
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468545_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151137/SRX8468545/SRX8468545.hmr.bb
+track Methbase_SRX8468529_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151153/SRX8468529/SRX8468529.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468545
+longLabel Brain SRX8468529
 color 56,113,193
 parent Methbase off
 priority 0.00130
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468545_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151137/SRX8468545/SRX8468545.sym_counts.bw
+track Methbase_SRX8468529_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151153/SRX8468529/SRX8468529.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468545
+longLabel Brain SRX8468529
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1669,12 +1799,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00131
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468545_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151137/SRX8468545/SRX8468545.sym_coverage.bw
+track Methbase_SRX8468529_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151153/SRX8468529/SRX8468529.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468545
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468529
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1683,22 +1814,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00132
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468546_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151138/SRX8468546/SRX8468546.hmr.bb
+track Methbase_SRX8468530_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151154/SRX8468530/SRX8468530.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468546
+longLabel Brain SRX8468530
 color 56,113,193
 parent Methbase off
 priority 0.00133
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468546_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151138/SRX8468546/SRX8468546.sym_counts.bw
+track Methbase_SRX8468530_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151154/SRX8468530/SRX8468530.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468546
+longLabel Brain SRX8468530
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1707,12 +1840,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00134
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468546_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151138/SRX8468546/SRX8468546.sym_coverage.bw
+track Methbase_SRX8468530_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151154/SRX8468530/SRX8468530.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468546
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468530
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1721,22 +1855,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00135
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468547_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151139/SRX8468547/SRX8468547.hmr.bb
+track Methbase_SRX8468531_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151156/SRX8468531/SRX8468531.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468547
+longLabel Brain SRX8468531
 color 56,113,193
 parent Methbase off
 priority 0.00136
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468547_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151139/SRX8468547/SRX8468547.sym_counts.bw
+track Methbase_SRX8468531_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151156/SRX8468531/SRX8468531.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468547
+longLabel Brain SRX8468531
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1745,12 +1881,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00137
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468547_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151139/SRX8468547/SRX8468547.sym_coverage.bw
+track Methbase_SRX8468531_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151156/SRX8468531/SRX8468531.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468547
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468531
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1759,22 +1896,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00138
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468548_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151140/SRX8468548/SRX8468548.hmr.bb
+track Methbase_SRX8468532_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151155/SRX8468532/SRX8468532.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468548
+longLabel Brain SRX8468532
 color 56,113,193
 parent Methbase off
 priority 0.00139
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468548_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151140/SRX8468548/SRX8468548.sym_counts.bw
+track Methbase_SRX8468532_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151155/SRX8468532/SRX8468532.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468548
+longLabel Brain SRX8468532
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1783,12 +1922,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00140
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468548_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151140/SRX8468548/SRX8468548.sym_coverage.bw
+track Methbase_SRX8468532_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151155/SRX8468532/SRX8468532.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468548
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468532
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1797,22 +1937,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00141
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468549_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151141/SRX8468549/SRX8468549.hmr.bb
+track Methbase_SRX8468533_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151157/SRX8468533/SRX8468533.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468549
+longLabel Brain SRX8468533
 color 56,113,193
 parent Methbase off
 priority 0.00142
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468549_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151141/SRX8468549/SRX8468549.sym_counts.bw
+track Methbase_SRX8468533_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151157/SRX8468533/SRX8468533.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468549
+longLabel Brain SRX8468533
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1821,12 +1963,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00143
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468549_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151141/SRX8468549/SRX8468549.sym_coverage.bw
+track Methbase_SRX8468533_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151157/SRX8468533/SRX8468533.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468549
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468533
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1835,22 +1978,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00144
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468550_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS6769263/SRX8468550/SRX8468550.hmr.bb
+track Methbase_SRX8468545_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151137/SRX8468545/SRX8468545.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468550
+longLabel Brain SRX8468545
 color 56,113,193
 parent Methbase off
 priority 0.00145
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468550_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS6769263/SRX8468550/SRX8468550.sym_counts.bw
+track Methbase_SRX8468545_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151137/SRX8468545/SRX8468545.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468550
+longLabel Brain SRX8468545
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1859,12 +2004,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00146
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468550_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS6769263/SRX8468550/SRX8468550.sym_coverage.bw
+track Methbase_SRX8468545_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151137/SRX8468545/SRX8468545.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468550
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468545
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1873,22 +2019,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00147
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468551_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151142/SRX8468551/SRX8468551.hmr.bb
+track Methbase_SRX8468546_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151138/SRX8468546/SRX8468546.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468551
+longLabel Brain SRX8468546
 color 56,113,193
 parent Methbase off
 priority 0.00148
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468551_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151142/SRX8468551/SRX8468551.sym_counts.bw
+track Methbase_SRX8468546_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151138/SRX8468546/SRX8468546.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468551
+longLabel Brain SRX8468546
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1897,12 +2045,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00149
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468551_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151142/SRX8468551/SRX8468551.sym_coverage.bw
+track Methbase_SRX8468546_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151138/SRX8468546/SRX8468546.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468551
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468546
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1911,22 +2060,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00150
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468552_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151143/SRX8468552/SRX8468552.hmr.bb
+track Methbase_SRX8468547_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151139/SRX8468547/SRX8468547.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468552
+longLabel Brain SRX8468547
 color 56,113,193
 parent Methbase off
 priority 0.00151
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468552_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151143/SRX8468552/SRX8468552.sym_counts.bw
+track Methbase_SRX8468547_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151139/SRX8468547/SRX8468547.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468552
+longLabel Brain SRX8468547
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1935,12 +2086,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00152
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468552_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151143/SRX8468552/SRX8468552.sym_coverage.bw
+track Methbase_SRX8468547_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151139/SRX8468547/SRX8468547.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468552
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468547
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1949,22 +2101,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00153
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468569_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151144/SRX8468569/SRX8468569.hmr.bb
+track Methbase_SRX8468548_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151140/SRX8468548/SRX8468548.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468569
+longLabel Brain SRX8468548
 color 56,113,193
 parent Methbase off
 priority 0.00154
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468569_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151144/SRX8468569/SRX8468569.sym_counts.bw
+track Methbase_SRX8468548_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151140/SRX8468548/SRX8468548.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468569
+longLabel Brain SRX8468548
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -1973,12 +2127,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00155
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468569_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151144/SRX8468569/SRX8468569.sym_coverage.bw
+track Methbase_SRX8468548_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151140/SRX8468548/SRX8468548.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468569
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468548
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -1987,22 +2142,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00156
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468570_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151145/SRX8468570/SRX8468570.hmr.bb
+track Methbase_SRX8468549_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151141/SRX8468549/SRX8468549.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468570
+longLabel Brain SRX8468549
 color 56,113,193
 parent Methbase off
 priority 0.00157
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468570_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151145/SRX8468570/SRX8468570.sym_counts.bw
+track Methbase_SRX8468549_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151141/SRX8468549/SRX8468549.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468570
+longLabel Brain SRX8468549
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -2011,12 +2168,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00158
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468570_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151145/SRX8468570/SRX8468570.sym_coverage.bw
+track Methbase_SRX8468549_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151141/SRX8468549/SRX8468549.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468570
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468549
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -2025,22 +2183,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00159
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468571_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151146/SRX8468571/SRX8468571.hmr.bb
+track Methbase_SRX8468550_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS6769263/SRX8468550/SRX8468550.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468571
+longLabel Brain SRX8468550
 color 56,113,193
 parent Methbase off
 priority 0.00160
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468571_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151146/SRX8468571/SRX8468571.sym_counts.bw
+track Methbase_SRX8468550_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS6769263/SRX8468550/SRX8468550.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468571
+longLabel Brain SRX8468550
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -2049,12 +2209,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00161
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468571_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151146/SRX8468571/SRX8468571.sym_coverage.bw
+track Methbase_SRX8468550_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS6769263/SRX8468550/SRX8468550.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468571
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468550
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -2063,22 +2224,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00162
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468572_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151147/SRX8468572/SRX8468572.hmr.bb
+track Methbase_SRX8468551_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151142/SRX8468551/SRX8468551.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468572
+longLabel Brain SRX8468551
 color 56,113,193
 parent Methbase off
 priority 0.00163
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468572_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151147/SRX8468572/SRX8468572.sym_counts.bw
+track Methbase_SRX8468551_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151142/SRX8468551/SRX8468551.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468572
+longLabel Brain SRX8468551
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -2087,12 +2250,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00164
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468572_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151147/SRX8468572/SRX8468572.sym_coverage.bw
+track Methbase_SRX8468551_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151142/SRX8468551/SRX8468551.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468572
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468551
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -2101,22 +2265,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00165
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468573_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151150/SRX8468573/SRX8468573.hmr.bb
+track Methbase_SRX8468552_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151143/SRX8468552/SRX8468552.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468573
+longLabel Brain SRX8468552
 color 56,113,193
 parent Methbase off
 priority 0.00166
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468573_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151150/SRX8468573/SRX8468573.sym_counts.bw
+track Methbase_SRX8468552_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151143/SRX8468552/SRX8468552.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468573
+longLabel Brain SRX8468552
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -2125,12 +2291,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00167
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468573_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151150/SRX8468573/SRX8468573.sym_coverage.bw
+track Methbase_SRX8468552_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151143/SRX8468552/SRX8468552.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468573
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468552
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -2139,22 +2306,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00168
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468574_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151151/SRX8468574/SRX8468574.hmr.bb
+track Methbase_SRX8468569_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151144/SRX8468569/SRX8468569.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468574
+longLabel Brain SRX8468569
 color 56,113,193
 parent Methbase off
 priority 0.00169
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468574_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151151/SRX8468574/SRX8468574.sym_counts.bw
+track Methbase_SRX8468569_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151144/SRX8468569/SRX8468569.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468574
+longLabel Brain SRX8468569
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -2163,12 +2332,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00170
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468574_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151151/SRX8468574/SRX8468574.sym_coverage.bw
+track Methbase_SRX8468569_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151144/SRX8468569/SRX8468569.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468574
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468569
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -2177,22 +2347,24 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00171
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468575_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151148/SRX8468575/SRX8468575.hmr.bb
+track Methbase_SRX8468570_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151145/SRX8468570/SRX8468570.hmr.bb
 type bigBed
 shortLabel Brain
-longLabel Brain SRX8468575
+longLabel Brain SRX8468570
 color 56,113,193
 parent Methbase off
 priority 0.00172
 onlyVisibility dense
+visibility hide
 
-track Methbase_SRX8468575_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151148/SRX8468575/SRX8468575.sym_counts.bw
+track Methbase_SRX8468570_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151145/SRX8468570/SRX8468570.sym_counts.bw
 type bigWig
 shortLabel Brain
-longLabel Brain SRX8468575
+longLabel Brain SRX8468570
 color 240,192,0
 parent Methbase off
 windowingFunction mean
@@ -2201,12 +2373,13 @@ viewLimits 0:1
 yLineOnOff on
 priority 0.00173
 onlyVisibility full
+visibility hide
 
-track Methbase_SRX8468575_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151148/SRX8468575/SRX8468575.sym_coverage.bw
+track Methbase_SRX8468570_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151145/SRX8468570/SRX8468570.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468575
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468570
 color 0,0,0
 parent Methbase off
 windowingFunction mean
@@ -2215,19 +2388,226 @@ viewLimits 0:10
 yLineOnOff on
 priority 0.00174
 onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468571_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151146/SRX8468571/SRX8468571.hmr.bb
+type bigBed
+shortLabel Brain
+longLabel Brain SRX8468571
+color 56,113,193
+parent Methbase off
+priority 0.00175
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX8468571_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151146/SRX8468571/SRX8468571.sym_counts.bw
+type bigWig
+shortLabel Brain
+longLabel Brain SRX8468571
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00176
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468571_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151146/SRX8468571/SRX8468571.sym_coverage.bw
+type bigWig
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468571
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00177
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468572_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151147/SRX8468572/SRX8468572.hmr.bb
+type bigBed
+shortLabel Brain
+longLabel Brain SRX8468572
+color 56,113,193
+parent Methbase off
+priority 0.00178
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX8468572_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151147/SRX8468572/SRX8468572.sym_counts.bw
+type bigWig
+shortLabel Brain
+longLabel Brain SRX8468572
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00179
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468572_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151147/SRX8468572/SRX8468572.sym_coverage.bw
+type bigWig
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468572
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00180
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468573_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151150/SRX8468573/SRX8468573.hmr.bb
+type bigBed
+shortLabel Brain
+longLabel Brain SRX8468573
+color 56,113,193
+parent Methbase off
+priority 0.00181
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX8468573_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151150/SRX8468573/SRX8468573.sym_counts.bw
+type bigWig
+shortLabel Brain
+longLabel Brain SRX8468573
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00182
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468573_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151150/SRX8468573/SRX8468573.sym_coverage.bw
+type bigWig
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468573
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00183
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468574_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151151/SRX8468574/SRX8468574.hmr.bb
+type bigBed
+shortLabel Brain
+longLabel Brain SRX8468574
+color 56,113,193
+parent Methbase off
+priority 0.00184
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX8468574_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151151/SRX8468574/SRX8468574.sym_counts.bw
+type bigWig
+shortLabel Brain
+longLabel Brain SRX8468574
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00185
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468574_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151151/SRX8468574/SRX8468574.sym_coverage.bw
+type bigWig
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468574
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00186
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468575_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151148/SRX8468575/SRX8468575.hmr.bb
+type bigBed
+shortLabel Brain
+longLabel Brain SRX8468575
+color 56,113,193
+parent Methbase off
+priority 0.00187
+onlyVisibility dense
+visibility hide
+
+track Methbase_SRX8468575_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151148/SRX8468575/SRX8468575.sym_counts.bw
+type bigWig
+shortLabel Brain
+longLabel Brain SRX8468575
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00188
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX8468575_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151148/SRX8468575/SRX8468575.sym_coverage.bw
+type bigWig
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468575
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00189
+onlyVisibility full
+visibility hide
 
 track Methbase_SRX8468576_hmr
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151152/SRX8468576/SRX8468576.hmr.bb
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151152/SRX8468576/SRX8468576.hmr.bb
 type bigBed
 shortLabel Brain
 longLabel Brain SRX8468576
 color 56,113,193
 parent Methbase off
-priority 0.00175
+priority 0.00190
 onlyVisibility dense
+visibility hide
 
 track Methbase_SRX8468576_levels
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151152/SRX8468576/SRX8468576.sym_counts.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151152/SRX8468576/SRX8468576.sym_counts.bw
 type bigWig
 shortLabel Brain
 longLabel Brain SRX8468576
@@ -2237,19 +2617,21 @@ windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:1
 yLineOnOff on
-priority 0.00176
+priority 0.00191
 onlyVisibility full
+visibility hide
 
 track Methbase_SRX8468576_reads
-bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP265909/SRS4151152/SRX8468576/SRX8468576.sym_coverage.bw
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP265909/SRS4151152/SRX8468576/SRX8468576.sym_coverage.bw
 type bigWig
-shortLabel Brain
-longLabel Brain SRX8468576
+shortLabel Brain Reads
+longLabel Brain Reads SRX8468576
 color 0,0,0
 parent Methbase off
 windowingFunction mean
 maxHeightPixels 24:24:24
 viewLimits 0:10
 yLineOnOff on
-priority 0.00177
+priority 0.00192
 onlyVisibility full
+visibility hide

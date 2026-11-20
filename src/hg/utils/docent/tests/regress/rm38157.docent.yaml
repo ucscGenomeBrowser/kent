@@ -10,7 +10,9 @@
 #
 # The script saves rm38157 with a description on the new Sessions page, then opens it the way
 # a session link does (hgS_doOtherUser).  It asserts the note's own sentences -- the name, "saved
-# by yourself" (the owner is signed in), the description, and the warning -- and then that the
+# by user docentTest" (since #35736 the owner is named also when they are signed in), the
+# description, and the word "replaced", which the note has with recentSessions.enable on or off
+# -- and then that the
 # next hgTracks page has no note.  #imgTbl is the positive check that the page really drew.
 #
 # The rest of the facelift is covered elsewhere or not at all.  rm38311 watches Replace on the
@@ -53,9 +55,9 @@ steps:
   - wait: '.notifBoxOnce'
   - expect:
       text:
-        - "You have opened the saved session rm38157, saved by yourself on "
+        - "You have opened the saved session rm38157, saved by user docentTest on "
         - "Session description: rm38157 load notice"
-        - "tracks, position, and settings you had in the browser"
+        - "replaced"
       has: ['#imgTbl', '.notifBoxOnce']
 
   # And only on that page.

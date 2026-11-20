@@ -120,11 +120,16 @@ struct slName  *hubConnectHubsInCart(struct cart *cart);
 int hubIdFromCartName(char *trackName);
 /* Given something like "hgHubConnect.hub.123" return 123 */
 
+boolean hubIdFromTrackNameNoAbort(char *trackName, unsigned *retId);
+/* Like hubIdFromTrackName(), but return FALSE instead of aborting when trackName is not
+ * hub_<digits>_<rest>. */
+
 unsigned hubIdFromTrackName(char *trackName);
 /* Given something like "hub_123_myWig" return 123 */
 
 char *hubNameFromGroupName(char *groupName);
-/* Given something like "hub_123_myWig" return hub_123 */
+/* Given something like "hub_123_myWig" return hub_123.  A name that is not a hub's, like
+ * "map", comes back unchanged. */
 
 void hubConnectAddDescription(char *database, struct trackDb *tdb);
 /* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
@@ -171,6 +176,11 @@ struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boole
 char *hubConnectLoadHubs(struct cart *cart);
 /* load the track data hubs.  Set a static global to remember them */
 
+void hubConnectPortHubStatus(struct cart *cart);
+/* When a session has been saved on a different host it may have cart variables that reference
+ * hubStatus id's that are different than what the local machine has.  Use the "assumesHub" cart
+ * variable, which maps id numbers to URL's, to rename them to the local id's. */
+
 struct hubConnectStatus *hubConnectGetHubs();
 /* return the static global to the track data hubs */
 
@@ -207,6 +217,21 @@ boolean hubPublicHasEmail(struct sqlConnection *conn);
 char *hubNameFromUrl(char *hubUrl);
 /* Given the URL for a hub, return its hub_# name. */
 
+char *hubConnectPortableDb(char *db, char **retHubUrl);
+/* Return the name that selects assembly db in any cart, also one that has never connected db's
+ * hub, and set *retHubUrl to the URL of a hub that has to be connected with it, or NULL: the bare
+ * name for the curated or GenArk copy of an assembly, the bare name plus the hub URL for any
+ * other assembly hub, db unchanged for anything else.  Do not free either result. */
+
+char *hubConnectDbUrlArgs(char *db);
+/* Return the CGI arguments, URL-encoded and without a leading '&', that select the assembly db in
+ * any cart, also one that has never connected db's hub: "db=<name>" for a native assembly, a
+ * curated hub or a GenArk assembly, else "hubUrl=<url>&genome=<name>".  Use this for every link
+ * that can be opened outside the current cart (share links, address-bar URLs, links in email);
+ * a bare "db=hub_<id>_<name>" silently opens the default assembly there.  A hub no longer in
+ * hubStatus still comes back as db=hub_<id>_<name>.  Up to four hgcentral queries for a hub
+ * assembly, none for a native one.  Free with freeMem(). */
+
 void addPublicHubsToHubStatus(struct cart *cart, struct sqlConnection *conn, char *publicTable, char  *statusTable);
 /* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
 
@@ -228,5 +253,11 @@ boolean hubConnectIsCuratedHubUrl(char *db, char *hubUrl);
 boolean hubConnectIdIsCuratedHub(char *db, unsigned hubId);
 /* Return TRUE if the hub with this hubStatus id is a curated copy of the assembly
  * hub for db.  Only reads the hub's URL, never fetches the hub. */
+
+void quickLiftAssignChainOne(struct trackDb *tdb, char *quickLiftChain, char *db);
+/* Give ONE track the quickLiftUrl/quickLiftDb pair that makes it lift through this
+ * chain.  A quickLift hub stamps every track, subtrack and parent;  this is for a
+ * caller that has already decided which tracks it wants lifted, such as a synthetic
+ * multi-region coordinate space, which stamps the NATIVE trackDb.  refs #37788 */
 
 #endif /* HUBCONNECT_H */

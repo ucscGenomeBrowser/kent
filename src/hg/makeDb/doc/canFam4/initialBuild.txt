@@ -1163,3 +1163,22 @@ wget --timestamping \
 	| hgLoadBed -type=bed3 canFam4 filledGaps stdin
 
 #########################################################################
+# LIFTOVER TO canFam2 (DONE - 2025-10-16 - Hiram)
+    screen -r -d rm36483
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam4/bed/blat.canFam2.2025-10-16
+    cd /hive/data/genomes/canFam4/bed/blat.canFam2.2025-10-16
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
+         canFam4 canFam2
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=hgwdev -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
+         canFam4 canFam2) > doLiftOverToCanFam4.log 2>&1
+XXX - running Thu Oct 16 12:00:18 PDT 2025
+    # real    231m10.701s
+
+    # see if the liftOver menus function in the browser from canFam4 to canFam2
+
+#########################################################################

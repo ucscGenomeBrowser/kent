@@ -175,12 +175,19 @@ struct sqlConnection *sqlConnCacheProfileAllocMaybe(struct sqlConnCache *cache,
 /* Allocate a cached connection given a profile and/or database. Return NULL
  * if the database doesn't exist.  */
 
-unsigned sqlConnCacheMark();
-/* The number of connections handed out so far, to pass to sqlConnCacheReleaseSince. */
+unsigned sqlConnCacheGeneration(void);
+/* The current connection generation.  Every connection any cache hands out is stamped
+ * with the next value of one process-wide counter, and that stamp is its generation.
+ * This reads the counter without bumping it, so it takes no connection and the value
+ * names none: it says only how many have gone out so far.  Read it before a piece of work
+ * and hand it to sqlConnCacheFreeNewerThan afterwards to name the connections that went
+ * out during that work. */
 
-void sqlConnCacheReleaseSince(struct sqlConnCache *cache, unsigned mark);
-/* Put back every connection this cache has handed out since the mark.  For a caller that
- * catches an errAbort, where the code that would have put them back never ran. */
+void sqlConnCacheFreeNewerThan(struct sqlConnCache *cache, unsigned generation);
+/* Put back every connection this cache handed out to the calling thread after the given
+ * generation.  For a caller that catches an errAbort, where the code that would have put
+ * them back never ran.  Connections stamped at or before the generation are left alone,
+ * and so are newer ones belonging to another thread. */
 
 void sqlConnCacheDealloc(struct sqlConnCache *cache,struct sqlConnection **pConn);
 /* Free up a cached connection. */
@@ -457,6 +464,11 @@ unsigned long sqlLastAutoId64(struct sqlConnection *conn);
 unsigned int sqlLastAutoId(struct sqlConnection *conn);
 /* Return last automatically incremented id inserted into database (not 64-bit). */
 
+long long sqlAffectedRows(struct sqlConnection *conn);
+/* Return how many rows the last query inserted, updated or deleted.  Call it
+ * straight after the sqlUpdate() of that query.  Unlike sqlUpdateRows() this
+ * works for INSERT and DELETE, not only UPDATE. */
+
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args);
 /* Error message handler. */
 
@@ -666,6 +678,10 @@ void sqlCheckIdentifiersList(char* buffer, int bufSize, char *identifiers);
 #define sqlCkId sqlCheckIdentifier
 char *sqlCheckIdentifier(char *identifier);
 /* Check that only valid identifier characters are used */
+
+boolean sqlIsReservedWord(char *word);
+/* Return TRUE if word, in any case, is one MariaDB 10.6 or MySQL 8 will not
+ * take as an unquoted identifier, such as select or order. */
 
 
 // =============================

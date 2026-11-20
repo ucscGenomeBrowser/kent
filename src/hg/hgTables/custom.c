@@ -502,8 +502,6 @@ if (type != NULL && (isMyVariantsType(type) ||
         sameWord("bedMethyl", type) ||
         sameWord("pgSnp", type)))
     {
-    if (isMyVariantsType(type) && ct->dbTableName == NULL)
-        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     bedList = dbGetFilteredBedsOnRegions(conn, CUSTOM_TRASH, db, ct->dbTableName, name,
     	regionList, lm, retFieldCount);
@@ -614,12 +612,28 @@ if (isMyVariantsType(type) ||
         sameWord("bedMethyl", type) ||
         sameWord("pgSnp", type))
     {
-    if (isMyVariantsType(type))
-        {
-        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
-        }
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    struct dyString *allFields = NULL;
+    if (fields == NULL && isMyVariantsTrack(table))
+        {
+        /* Name the columns rather than select *, so hidden fields stay out.  A
+         * field named order or group is written as table.field. */
+        struct slName *fieldList = sqlListFields(conn, ct->dbTableName), *fld;
+        myVariantsStripHiddenFields(&fieldList);
+        allFields = dyStringNew(256);
+        for (fld = fieldList; fld != NULL; fld = fld->next)
+            {
+            if (dyStringLen(allFields) > 0)
+                dyStringAppendC(allFields, ',');
+            if (sqlIsReservedWord(fld->name))
+                dyStringPrintf(allFields, "%s.", ct->dbTableName);
+            dyStringAppend(allFields, fld->name);
+            }
+        slFreeList(&fieldList);
+        fields = dyStringContents(allFields);
+        }
     doTabOutDb(CUSTOM_TRASH, db, ct->dbTableName, table, f, conn, fields, outSep);
+    dyStringFree(&allFields);
     hFreeConn(&conn);
     }
 else

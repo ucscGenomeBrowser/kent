@@ -577,6 +577,124 @@ while (tdbNames != NULL)
     }
 }
 
+#define IGV_DESKTOP_PORT 60151
+
+static boolean igvDesktopGbdbPrivate(char *path)
+/* Return TRUE if path is a /gbdb file with a directory or file name starting with '_'.
+ * These hold restricted data and are not copied to the download server. */
+{
+if (path == NULL || !startsWith("/gbdb/", path))
+    return FALSE;
+char *rest = path + strlen("/gbdb/");
+return rest[0] == '_' || strstr(rest, "/_") != NULL;
+}
+
+static char *igvDesktopFileUrl(char *db, char *path)
+/* Return a URL that IGV Desktop can open for a bigDataUrl or bigDataIndex value: a remote
+ * URL as it is, a /gbdb file on the download server (hg.conf igvDesktop.gbdbUrl). Return NULL
+ * for anything else, and for a /gbdb file with a directory or file name starting with '_',
+ * as these are not copied to the download server. Result must be freed. */
+{
+if (isEmpty(path))
+    return NULL;
+char *url = NULL;
+char *expanded = replaceChars(path, "$D", db);
+if (isRemoteUrl(expanded))
+    url = cloneString(expanded);
+else if (startsWith("/gbdb/", expanded))
+    {
+    if (!igvDesktopGbdbPrivate(expanded))
+        {
+        char *base = cfgOptionDefault("igvDesktop.gbdbUrl",
+                                      "https://hgdownload.soe.ucsc.edu/gbdb/");
+        url = catTwoStrings(base, expanded + strlen("/gbdb/"));
+        }
+    }
+freeMem(expanded);
+return url;
+}
+
+static void igvUrlAddParam(struct dyString *igvUrl, char *name, char *val)
+/* Append &name=<val, URL-encoded> to an IGV batch command URL. */
+{
+char *encoded = cgiEncodeFull(val);
+dyStringPrintf(igvUrl, "&%s=%s", name, encoded);
+freeMem(encoded);
+}
+
+static void printIgvDesktopButton(char *db, struct trackDb *tdb, struct cart *cart)
+/* If hg.conf igvDesktopButton is on and the track is a single indexed file that IGV Desktop
+ * can read (bigBed and relatives, bigWig, BAM/CRAM, VCF), print a button that asks a
+ * running IGV Desktop to load the file, at the current position, through its batch port. */
+{
+if (!cfgOptionBooleanDefault("igvDesktopButton", FALSE))
+    return;
+if (!(tdbIsBigBed(tdb) || startsWithWord("bigWig", tdb->type) || tdbIsBam(tdb)
+      || tdbIsVcf(tdb)))
+    return;
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+if (startsWithWord("off", trackDbSettingOrDefault(tdb, "tableBrowser", ""))
+    || igvDesktopGbdbPrivate(bigDataUrl))
+    {
+    // restricted data: say why there is no button, but do not hand out the file
+    puts("<p><i>(Track restricted by license - cannot open in IGV Desktop)</i></p>");
+    return;
+    }
+char *fileUrl = igvDesktopFileUrl(db, bigDataUrl);
+if (fileUrl == NULL)
+    return;
+
+struct dyString *igvUrl = dyStringCreate("http://127.0.0.1:%d/load?merge=true",
+                                         IGV_DESKTOP_PORT);
+igvUrlAddParam(igvUrl, "file", fileUrl);
+char *indexUrl = igvDesktopFileUrl(db, trackDbSetting(tdb, "bigDataIndex"));
+if (indexUrl != NULL)
+    igvUrlAddParam(igvUrl, "index", indexUrl);
+igvUrlAddParam(igvUrl, "genome", trackHubSkipHubName(db));
+igvUrlAddParam(igvUrl, "name", tdb->shortLabel);
+
+char *position = cartOptionalString(cart, "position");
+char *chrom = NULL;
+int start = 0, end = 0;
+if (position != NULL && hgParseChromRange(db, position, &chrom, &start, &end))
+    {
+    char locus[512];
+    safef(locus, sizeof locus, "%s:%d-%d", chrom, start + 1, end);
+    igvUrlAddParam(igvUrl, "locus", locus);
+    }
+
+printf("<p><button type='button' id='igvDesktopButton' data-igv-url='%s' "
+       "title='Load this file into the IGV Desktop application running on your computer. "
+       "In IGV, the port %d must be enabled under View &gt; Preferences &gt; Advanced.'>"
+       "Open in IGV Desktop</button> <span id='igvDesktopMsg'></span></p>\n",
+       attributeEncode(igvUrl->string), IGV_DESKTOP_PORT);
+// fetch with no-cors: the reply cannot be read, but the promise fails if nothing listens.
+// It also fails when the browser refuses requests to the local machine (Chrome's local
+// network access), so offer the same URL as a link: a top-level navigation is not blocked.
+jsInlineF(
+    "document.getElementById('igvDesktopButton').addEventListener('click', function() {\n"
+    "    var url = this.dataset.igvUrl;\n"
+    "    var msg = document.getElementById('igvDesktopMsg');\n"
+    "    msg.textContent = 'Sending to IGV Desktop...';\n"
+    "    fetch(url, {mode: 'no-cors'}).then(function() {\n"
+    "        msg.textContent = 'Sent. Switch to the IGV Desktop window.';\n"
+    "    }).catch(function() {\n"
+    "        msg.textContent = 'Could not reach IGV Desktop. Start IGV, enable port %d "
+    "under View > Preferences > Advanced, and try again. If your browser blocked the "
+    "request, ';\n"
+    "        var link = document.createElement('a');\n"
+    "        link.href = url;\n"
+    "        link.target = '_blank';\n"
+    "        link.textContent = 'send it in a new tab';\n"
+    "        msg.appendChild(link);\n"
+    "        msg.appendChild(document.createTextNode('.'));\n"
+    "    });\n"
+    "});\n", IGV_DESKTOP_PORT);
+dyStringFree(&igvUrl);
+freeMem(indexUrl);
+freeMem(fileUrl);
+}
+
 void extraUiLinks(char *db, struct trackDb *tdb, struct cart *cart)
 // Show metadata, and downloads, schema links where appropriate
 {
@@ -631,6 +749,8 @@ if (downloadLink)
 
 if (links > 1)
     printf("</td></tr></table>");
+
+printIgvDesktopButton(db, tdb, cart);
 }
 
 
@@ -3079,7 +3199,7 @@ if (members->count == 0)
 // First tally all subtrack counts
 int ixIn=0;
 struct slRef *subtrackRef, *subtrackRefList =
-				    trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+			    trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
 struct trackDb *subtrack;
 members->subtrackCount    = needMem(members->count * sizeof(int));
 members->currentlyVisible = needMem(members->count * sizeof(int));
@@ -3359,7 +3479,9 @@ if (filtering && !sameWord(filtering,"off"))
 	    for (;abcIx < membersForAll->dimMax && membersForAll->letters[abcIx] != letter;abcIx++)
 		; // Advance to correct letter
 	    if (abcIx >= membersForAll->dimMax)
-		errAbort("Invalid 'filterComposite' trackDb setting. Dimension '%s' not found.",
+		errAbort("Invalid 'filterComposite' trackDb setting. Dimension '%s' not found: "
+			 "it must be declared in the 'dimensions' setting, and at least one "
+			 "subtrack's 'subGroups' setting must use that dimension's subgroup.",
 			 dim);
 	    if (sameWord(filterGroups[ix],"one"))
 		membersForAll->members[abcIx]->fcType = fctOne;
@@ -4436,7 +4558,7 @@ jsInlineF("$(function () { "
     "$('#filterClearButton').click( "
        "     function(ev) { ev.preventDefault(); "
        "     $('.filterBy option[value=\"All\"]').removeAttr(\"selected\");"
-       "     $('.filterBy option[Value=\"All\"]').attr('selected', 'selected');"
+       "     $('.filterBy option[Value=\"All\"]').prop('selected', true);"
        "     $('.filterBy').dropdownchecklist('refresh'); "
        " }); "
 "});");
@@ -5493,6 +5615,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	     && cfgTypeFromTdb(parentTdb,FALSE) != cfgNone) // but the composite is configurable.
 	    cType = cfgNone;
 	}
+    // A container (multiWig) subtrack is configured on its own hgTrackUi page, which also lists
+    // its children, so it gets a link there instead of an embedded cfg dialog.
+    boolean isContainer = (subtrack->subtracks != NULL);
+    if (isContainer)
+	cType = cfgNone;
 
     if (sortOrder == NULL && !useDragAndDrop)
 	{
@@ -5607,6 +5734,15 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                     "<span class='link'>&nbsp;Configure</span></span>\n"
 	    printf(SUBTRACK_CFG_WRENCH,id, (visibleCB ? "":" disabled"));
 	    jsOnEventByIdF("click", id, "return subCfg.cfgToggle(this,\"%s\");", subtrack->track);
+	    }
+	else if (isContainer)  // a link to the container's own page; submitting the form on the
+	    {                  // way keeps any unsaved changes made here, as on supertrack pages
+	    safef(id, sizeof id, "%s_cfgLink", subtrack->track);
+	    printf("<a id='%s' href='%s?db=%s&g=%s&%s' title='Configure this track and its subtracks'>"
+		   "<img src='../images/wrench.png'>&nbsp;Configure</a>\n",
+		   id, hTrackUiForTrack(subtrack->track), db, cgiEncode(subtrack->track),
+		   cartSidUrlString(cart));
+	    jsOnEventById("click", id, "return superT.submitAndLink(this);");
 	    }
 	}
     printf("</TD>");
@@ -5732,7 +5868,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     puts("</TD></TR>\n");
 
     boolean showCfg = trackDbSettingOn(subtrack, "showCfg");
-    if (showCfg)
+    if (showCfg && !isContainer)
         jsInlineF(" subCfg.cfgToggle(document.getElementById(\"%s_toggle\"),\"%s\");",  subtrack->track, subtrack->track);
 
     }
@@ -5894,8 +6030,10 @@ static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *pa
 char buffer[SMALLBUF];
 struct trackDb *subtrack;
 
-// Get list of leaf subtracks to work with
-struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+// Get list of leaf subtracks to work with.  Container (multiWig) subtracks are listed as a
+// single subtrack rather than as their individual children.
+struct slRef *subtrackRef, *subtrackRefList =
+                    trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
 
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
 sortOrder_t* sortOrder = sortOrderGet(cart, parentTdb);
@@ -5973,7 +6111,8 @@ assert(primarySubtrack != NULL);
 char *primaryType = getPrimaryType(primarySubtrack, parentTdb);
 char htmlIdentifier[SMALLBUF];
 
-// Get list of leaf subtracks to work with and sort them
+// Get list of leaf subtracks to work with and sort them.  Unlike compositeUiSubtracks, this
+// (used by hgTables) descends into container multiWigs, as hgTables works on individual tables.
 struct slRef *subtrackRef, *subtrackRefList =
 			    trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
 if (NULL != trackDbSetting(parentTdb, "sortOrder")
@@ -9506,7 +9645,7 @@ memset(chked, 0, sizeof(chked));
 memset(enabd, 0, sizeof(chked));
 
 struct slRef *subtrackRef, *subtrackRefList =
-                                    trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+                            trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
 struct trackDb *subtrack;
 if (dimensionX || dimensionY) // Must be an X or Y dimension
     {
@@ -9777,7 +9916,8 @@ else
 button = cgiOptionalString(buttonVar);
 if (isNotEmpty(button))
     {
-    struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+    struct slRef *tdbRefList =
+                    trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
     struct slRef *tdbRef;
     for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
         {
@@ -9828,7 +9968,8 @@ for (i = 0; i < MAX_SUBGROUP; i++)
         button = cgiOptionalString(buttonVar);
         if (isEmpty(button))
             continue;
-	struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+	struct slRef *tdbRefList =
+                    trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
 	struct slRef *tdbRef;
 	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
             {

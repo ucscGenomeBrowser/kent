@@ -157,3 +157,32 @@ python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py
 #   mv /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb
 # done
 # and enigma.html (Changelog and Methods text) into /hive/data/outside/enigma/.
+
+##############################################################################
+# ENIGMA PP4/BP5: Zanti "No evidence*" ccLRs not used in the combined LR
+# (2026-11-04, Lou, refs #38666)
+# Zanti et al. 2025 Supplementary Data 4 labels 8,487 ccLRs "No evidence*" in
+# its suggested evidence column (footnote h: fewer than 3 individuals combined
+# and/or, for BRCA2, only one dataset). Per the ENIGMA VCEP, these are treated
+# as not informative. BRCAmlaZanti.py still writes the value to the
+# caseControlLR field but leaves it out of the combined LR and the direction
+# conflict check. Same inputs as #38467 (archive/v1.1 and ZantiSuppData4.xlsx).
+mkdir /hive/data/inside/enigmaTracksData/rm38666
+cd /hive/data/inside/enigmaTracksData/rm38666
+python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py > build.log
+# Result: 13,182 variants per assembly, same names and positions as #38467.
+# 4,242 variants change ACMG code: 3,584 that have only a "No evidence*" ccLR
+# have no combined LR and are now grey, and 658 with other evidence are
+# recoded from that evidence alone. directionConflicts.tsv drops from 210 to
+# 112 variants. codeChanges.tsv lists every variant whose code changed
+# (compared with rm38467/BRCAmfaZantiHg38.bed).
+
+# Release (2026-11-05). The #38467 bigBeds were first saved to
+# /hive/data/inside/enigmaTracksData/archive/v1.3-rm38666/:
+# for db in Hg19 Hg38; do
+#   cp -p /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb /hive/data/inside/enigmaTracksData/archive/v1.3-rm38666/
+#   cp /hive/data/inside/enigmaTracksData/rm38666/BRCAmfaZanti$db.bb /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.tmp
+#   mv /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.tmp /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb
+# done
+# and enigma.html (Methods, Changelog, link to the Changelog in the NOTE box,
+# Credits) into /hive/data/outside/enigma/.

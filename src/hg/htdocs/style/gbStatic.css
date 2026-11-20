@@ -269,9 +269,8 @@ img.gbsAlignRight {
  * Copyright (C) 2016 The Regents of the University of California
  */
 
-/* TODO: Move to style/gbLogoInMenu.css for sharing with CGI's
-
-/* NOTE: negative positioning compensates for indents in parent rules */
+/* Use the UCSC Genome Browser 'bridge' logo as the home link.
+ * NOTE: negative positioning compensates for indents in parent rules */
 span#home-link {
     background-position: 0 0 !important;
     background-size: contain !important;

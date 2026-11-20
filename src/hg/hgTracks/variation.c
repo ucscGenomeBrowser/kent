@@ -528,6 +528,10 @@ char                 *orthoTable    = snp125OrthoTable(tg->tdb, NULL);
 struct sqlResult     *sr            = NULL;
 int                   cmp           = 0;
 
+/* A lifted track would read the ortho table at the reference's coordinates, so it
+ * has no orthologous info either.  refs #37788 */
+if (liftedInSpace(tg))
+    orthoTable = NULL;
 /* if orthologous info is not available, show only observed alleles */
 if(isEmpty(orthoTable) || !sqlTableExists(conn, orthoTable))
     {
@@ -913,9 +917,25 @@ for (snp = tg->items;  snp != NULL;  snp = snp->next)
     }
 }
 
+static void snp125LiftAdjust(void *item, boolean flipped, int clippedStart)
+/* Turn a lifted snp125 or snp132Ext around if the lift did;  the two begin alike up to
+ * the strand. */
+{
+struct snp125 *snp = item;
+if (flipped)
+    snp->strand[0] = (snp->strand[0] == '-') ? '+' : '-';
+}
+
 static void loadSnp125Basic(struct track *tg, int version, void *(loadFunction)(char **))
 /* load snp125 or snp132Ext items from table */
 {
+if (liftedInSpace(tg))
+    {
+    /* The items keep their own fields, so they are colored and drawn as SNPs. */
+    tg->items = quickLiftSqlLoadItems(tg->tdb, tg->table, chromName, winStart, winEnd, NULL,
+                                      (void *)loadFunction, snp125LiftAdjust, FALSE);
+    return;
+    }
 struct sqlConnection *conn = hAllocConn(database);
 struct snp132Ext *itemList = NULL;
 int rowOffset = 0;

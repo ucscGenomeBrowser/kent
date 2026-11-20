@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "hgTracks.h"
+#include "multiRegionSpace.h"
 #include "switchGear.h"
 
 struct slList *switchDbTssLoadConduit(char **row)
@@ -48,6 +49,14 @@ lf->codons = CloneVar(sf);
 return lf;
 }
 
+static void switchDbTssLiftAdjust(void *item, boolean flipped, int clippedStart)
+/* Turn a lifted TSS around if the lift did. */
+{
+struct switchDbTss *tss = item;
+if (flipped)
+    tss->strand[0] = (tss->strand[0] == '-') ? '+' : '-';
+}
+
 void loadItemsSwitchDbTss(struct track *tg)
 /* Load switchDbTss items into a linkedFeatures list. */
 {
@@ -56,6 +65,11 @@ safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
       tg->tdb->track);
 if (!cartVarExists(cart, optionScoreStr))
     cartSetInt(cart, optionScoreStr, SWITCHDBTSS_FILTER); 
+if (multiRegionSpacesEnabled())
+    loadLinkedFeaturesWithLoadersLift(tg, switchDbTssLoadConduit, lfFromSwitchDbTss,
+                                      "confScore", NULL, switchDbTssFilterPseudo,
+                                      switchDbTssLiftAdjust);
+else
 loadLinkedFeaturesWithLoaders(tg, switchDbTssLoadConduit, lfFromSwitchDbTss, 
 			      "confScore", NULL, switchDbTssFilterPseudo);
 }

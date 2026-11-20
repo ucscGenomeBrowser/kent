@@ -60,6 +60,7 @@ UTILS_APPLIST = \
 	pslLiftSubrangeBlat \
 	pslToBigPsl \
 	raSqlQuery \
+	regionsToChain \
 	rmskAlignToPsl \
 	tdbQuery \
 	transMapPslToGenePred \
@@ -121,6 +122,7 @@ TEST_DIRS = \
 	overlapSelect \
 	pslToBigPsl \
 	refSeqGet \
+	regionsToChain \
 	transMapPslToGenePred \
 	vcfToHgvs
 

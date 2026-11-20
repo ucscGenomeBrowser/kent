@@ -56,8 +56,8 @@ echo "Now beginning to build new branch $BRANCHNN [${0}: `date`]"
 echo
 
 #echo debug: disabled ok cleanup
-if ( -e GitReports.ok ) then
-    rm GitReports.ok
+if ( -e $BUILDSTATE/GitReports.ok ) then
+    rm $BUILDSTATE/GitReports.ok
 endif
 
 #echo debug: disabled cgiVersion
@@ -84,9 +84,9 @@ echo
 echo
 echo  "NOW STARTING Git-Reports ON HGWDEV IN PARALLEL [${0}: `date`]"
 echo
-rm -f doNewGit.log
+rm -f $BUILDLOGS/weekly/doNewGit.log
 #echo debug: disabled buildGitReports
-$WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
+$WEEKLYBLD/buildGitReports.csh branch real >& $BUILDLOGS/weekly/doNewGit.log &
 # note - we are now running it in the background on hgwdev
 
 #echo
@@ -151,7 +151,7 @@ echo
 echo "Waiting for the background beta:git-reports to finish [${0}: `date`]"
 wait
 echo "Wait complete, checking results. [${0}: `date`]"
-if ( -e GitReports.ok ) then
+if ( -e $BUILDSTATE/GitReports.ok ) then
     echo "Git Reports finished ok. [${0}: `date`]"
     echo "buildGitReports.csh done on hgwdev, sending email... [${0}: `date`]"
     echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.gi.ucsc.edu/git-reports/ (history at http://genecats.gi.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." ${BUILDMEISTEREMAIL}  clayfischer@ucsc.edu jnavarr5@ucsc.edu 

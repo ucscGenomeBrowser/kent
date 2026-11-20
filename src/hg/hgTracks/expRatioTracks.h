@@ -11,4 +11,7 @@ void mapBoxHcTwoItems(struct hvGfx *hvg, int start, int end, int x, int y, int w
 
 void illuminaProbesMethods(struct track *tg);
 
+void illuminaProbesLoadItems(struct track *tg);
+/* Just call the flexible linkedFeatures loader with a few custom fns. */
+
 #endif

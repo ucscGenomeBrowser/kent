@@ -12,8 +12,8 @@ reading frames of known genes.
 
 <p>
 Several subtypes of non-canonical ORFs are commonly distinguished. <b>Upstream ORFs (uORFs)</b>
-are located in 5' UTRs and can regulate translation of the downstream main coding sequence;
-ribosomes that translate a uORF may fail to reinitiate at the main start codon, reducing
+are located in 5' UTRs and can regulate translation of the downstream main coding sequence.
+Ribosomes that translate a uORF may fail to reinitiate at the main start codon, reducing
 protein output. <b>Small ORFs (sORFs)</b>, generally defined as encoding fewer than 100 amino
 acids, have been systematically overlooked by gene annotation pipelines due to their short
 length, but many produce functional micropeptides involved in signaling, metabolism, and
@@ -22,7 +22,7 @@ development. Other types include <b>downstream ORFs (dORFs)</b> in 3' UTRs,
 and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
 </p>
 <p>This track collection imports various databases and annotates all ORFs with their Kozak strength, 
-and colors the features by Kozak strength.</p>
+and colors the items by Kozak strength.</p>
 
 <p>Click any of the track names below to show their configuration/documentation page:</p>
 
@@ -194,22 +194,22 @@ human 5' UTRs from
 <a href="http://www.sorfs.org" target="_blank">sorfs.org</a>, which contains ORFs supported
 by Ribo-Seq.
 See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=utrAnnotUorfs">UTRannotator uORFs subtrack page</a>
-for more details. Data from sorfs.org is also part of the Metamorf track (see below).
-This track is useful if you have a prediction from the VEP plugin and want to see the context.
+for more details. Data from sorfs.org is also part of the MetamORF track (see below).
+This track is useful for viewing the context of a prediction from the VEP plugin.
 </p>
 <p>
 The UTRannotator source data is distributed as single-span features with no exon/intron
 structure, so the uORFs would appear as continuous blocks even across introns of their host
-transcripts. To recover the splicing structure we look up, for each uORF, a same-strand
+transcripts. To recover the splicing structure, each uORF is matched to a same-strand
 <a href="../cgi-bin/hgTrackUi?db=hg38&g=mane">MANE Select / MANE Plus Clinical</a>
 transcript whose coordinates overlap the uORF range. The host transcript's exons are
 clipped to the uORF range so that any MANE intron inside the overlap is preserved as an
 intron of the displayed bed12 record. A uORF that extends past either end of MANE keeps
 the MANE introns inside the overlap and gets a single bridging block for the orphan
 portion. If a uORF endpoint falls inside a MANE intron (i.e. UTRannotator originally used
-a transcript whose UTR exon boundaries differ from MANE's), we fall back to the full
-<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE comprehensive</a> set and apply
-the same projection. If no donor in either pool can host the uORF, it stays single-block.
+a transcript whose UTR exon boundaries differ from MANE's), the full
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE comprehensive</a> set is used as a
+fallback, with the same projection applied. If no donor in either pool can host the uORF, it stays single-block.
 The chosen donor transcript ID is recorded in the <b>intronsSource</b> field
 (or <tt>none</tt> if no host was found).
 </p>
@@ -221,7 +221,6 @@ unannotated ORF database) is a Broad Institute database of non-canonical open re
 with evidence of translation from ribosome profiling (Ribo-seq). ORF types include uORFs,
 dORFs, out-of-frame ORFs, pseudogene ORFs, lincRNA ORFs, and others.
 See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=nuorfdb">nuORFdb subtrack page</a> for more details.
-The nuORFdb database is a very consistent dataset, from a well-known paper.
 </p>
 
 <h3>MetamORF</h3>
@@ -231,9 +230,6 @@ small ORFs (sORFs) in the human genome, consolidated from several primary data s
 many individual ribosome profiling datasets. It integrates bioinformatic predictions,
 ribosome profiling experiments, and mass spectrometry studies into a unified format.
 See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=metamorf">MetamORF subtrack page</a> for more details.
-Metamorf has many predictions, and not all may be relevant, but gives an example of
-a database with as many models as possible, and is the only complete archive of sorfs.org 
-that we are aware of.
 </p>
 
 <h3>OpenProt</h3>
@@ -245,8 +241,8 @@ known canonical proteins), Isoforms (alternative products of canonical genes), a
 non-coding RNAs). Each ORF is annotated with mass spectrometry and ribosome profiling
 evidence; a pre-filtered Mass-Spec-supported subset (&ge;2 unique peptides) is also available.
 See the <a href="../cgi-bin/hgTrackUi?db=hg38&g=openprot">OpenProt subtrack page</a> for more details.
-OpenProt is widely known and has by far the most predictions, even more than Metamorf, which is
-why a subset exists with only the more reliable ORFs with Mass-Spec data.
+OpenProt has more predictions than MetamORF, which is why a subset exists with only the
+more reliable ORFs with Mass-Spec data.
 </p>
 
 <h2>Kozak Strength Annotation</h2>
@@ -255,22 +251,23 @@ Every ORF in every subtrack carries three additional annotation fields derived f
 genomic sequence around its start codon:
 </p>
 <ul>
-  <li><b>startCodon</b>: first three bases of the ORF on the transcript strand
+  <li><b>startCodon</b> (not present on 5ULTRA uORFs): first three bases of the ORF on the transcript strand
       (ATG / CTG / GTG / TTG / ACG / other).</li>
-  <li><b>kozakStrength</b>: categorical Kozak label. <i>Strong</i> if both position
+  <li><b>kozakStrength</b> (kozak on 5ULTRA uORFs): categorical Kozak label. <i>Strong</i> if both position
       &minus;3 is A/G and position +4 is G. <i>Moderate</i> if only one of those holds.
       <i>Weak</i> if neither. <i>non-ATG</i> for non-AUG starts where the Kozak rule
-      does not apply. <i>None</i> if the context could not be retrieved.</li>
-  <li><b>kozakTE</b>: numeric Kozak translational efficiency (TE), looked up from the
+      does not apply. <i>None</i> if the context could not be retrieved (5ULTRA uORFs
+      calls this value "NA" instead).</li>
+  <li><b>kozakTE</b> (not present on 5ULTRA uORFs): numeric Kozak translational efficiency (TE), looked up from the
       11-base TIS context in the Noderer 2014 FACS-seq TE table and divided by 100.
       <code>-1</code> for non-ATG starts and rows with no lookup.</li>
 </ul>
 
 <p>
-Features in every subtrack are colored by the categorical <b>kozakStrength</b>
-field. The same legend applies to all subtracks except the three GENCODE ncORF tracks
-(Phase I, Phase II Primary, Phase II Comprehensive), which use a similar but visually
-distinct palette; see the
+Items in every subtrack are colored by the categorical <b>kozakStrength</b> field
+(<b>kozak</b> on 5ULTRA uORFs). The same legend applies to all subtracks except the
+three GENCODE ncORF tracks (Phase I, Phase II Primary, Phase II Comprehensive), which
+use a similar but visually distinct palette. See the
 <a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs">GENCODE ncORFs page</a> for their
 exact colors:
 </p>
@@ -279,7 +276,7 @@ exact colors:
 <span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>Moderate</b>: only one of position &minus;3 (A/G) or position +4 (G) matches.<br>
 <span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>Weak</b>: neither position &minus;3 (A/G) nor position +4 (G) matches.<br>
 <span style="display:inline-block; background-color:#000000; width:18px; height:12px; vertical-align:middle;"></span> <b>non-ATG</b>: near-cognate start codon. The Kozak rule does not apply.<br>
-<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b>: chromosome edge or other case where the 11-base context could not be read.
+<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b> (called "NA" on 5ULTRA uORFs): chromosome edge or other case where the 11-base context could not be read.
 </p>
 
 <p>
@@ -292,8 +289,8 @@ fraction. GENCODE Phase I restricted itself to ATG-only starts.
 <p>
 The 11-base Kozak context is fetched directly from the genome at the position of the start
 codon. For multi-exon ORFs with an intron immediately upstream of the start codon, the
-upstream bases of the context are genomic rather than the host transcript's true 5' UTR;
-in that uncommon case the computed Kozak value may be inaccurate.
+upstream bases of the context are genomic rather than the host transcript's true 5' UTR.
+In that uncommon case the computed Kozak value may be inaccurate.
 </p>
 
 <p>

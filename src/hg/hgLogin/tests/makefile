@@ -14,10 +14,12 @@ mkdirs:
 	@${MKDIR} output ${BIN_DIR}
 
 # Writes gbMembers rows to hgcentralregress, so central.user needs UPDATE and DELETE there;
-# see hg/lib/tests/makeHgCentralRegress.sh, which this runs first.
+# see hg/lib/tests/makeHgCentralRegress.sh, which this runs first.  The script reads hg.conf
+# through hgConfValue, which is built in hg/lib/tests, so build it there first.
 activationTokenTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -I.. -o ${BIN_DIR}/activationTokenTester activationTokenTester.c ../gbMembers.c ${MYLIBS} $L
-	../../lib/tests/makeHgCentralRegress.sh > /dev/null
+	${MAKE} -C ../../lib/tests bin/${MACHTYPE}/hgConfValue
+	HG_CONF_VALUE=../../lib/tests/bin/${MACHTYPE}/hgConfValue ../../lib/tests/makeHgCentralRegress.sh > /dev/null
 	echo "include ${HOME}/.hg.conf" > output/regress.conf
 	echo "central.db=hgcentralregress" >> output/regress.conf
 	HGDB_CONF=output/regress.conf ${BIN_DIR}/activationTokenTester > output/activationTokenTest

@@ -1,0 +1,43 @@
+# #37077 -- an empty subtrack in a packed container drew 0 pixels high, and hgTracks still
+# gave it a "Click to alter the display density" map box.  On hgwdev and genome-test, where
+# imgTrackAddMapItem() checks map boxes against the track's bounds (hIsPrivateHost()), that
+# box put this warning at the top of the page:
+#
+#   imgTrackAddMapItem(hmaSummaryPutEnhancers,...) mapItem (157,131)(1546,130) spills over
+#   track bounds(0,0)(0,0)
+#
+# Fix: b1ec6b9c97e, hg/hgTracks/hgTracks.c.  The draw loop makes a data slice only when
+# sliceHeight > 0, and the toggle box below it now has the same guard.
+#
+# The state is Lou's session (hgwdev /s/lou/mapItemError), cut down to URL settings: the
+# Human Methylation Atlas Summary container in pack, at a 1.4 kb window of chr11 where none
+# of its subtracks has an item.  Putative Enhancers is the subtrack with no height there.
+# centerLabels=0 is required: a packed subtrack gets the toggle box only when it has no
+# center label, so without it the page is clean on both builds.
+#
+# The warning never shows on hgwbeta or the RR, so this script only means something on
+# genome-test or a hgwdev sandbox.
+#
+# Checks:
+#   * noText on the warning's own words, "spills over track bounds".
+#   * A positive check that the container really drew: the Top 250 UMRs/Cell subtrack row,
+#     which is in dense and keeps its toggle box.  Without it an empty page would pass.
+#
+# NOT asserted: the toggle box of a subtrack that has data.  Map box titles are moved to
+# data-tooltip by the page's JavaScript, and the sandbox A/B by curl showed those boxes are
+# the same with and without the fix.
+proof:
+  - "assertion-only 2026-11-11 -- written from #37077 and b1ec6b9c97e"
+  - "sandbox-ab 2026-11-11 -- fails on genome-test (v506, no fix) with the server warning for hmaSummaryPutEnhancers, passes on hgwdev-braney built from master with b1ec6b9c97e"
+  - "server-flip 2026-11-11 -- passes on genome-test after b1ec6b9c97e was pushed and installed with cgi-alpha; it failed there earlier the same day"
+
+target: genome-test
+db: hg38
+position: chr11:2159779-2161209
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr11:2159779-2161209&hideTracks=1&dnaMethylation=show&humanMethylationAtlasSummary=pack&hmaSummaryPutEnhancers_sel=1&hmaSummaryU250_sel=1&hmaSummaryU250=dense&hmaSummaryUnmethylated_sel=0&centerLabels=0"
+  - expect:
+      has: '#tr_hmaSummaryU250'
+      noText: "spills over track bounds"

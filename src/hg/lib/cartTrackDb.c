@@ -11,6 +11,7 @@
 #include "hgMaf.h"
 #include "hubConnect.h"
 #include "joiner.h"
+#include "myVariants.h"
 #include "trackHub.h"
 #include "wikiTrack.h"
 
@@ -94,6 +95,29 @@ struct trackDb *track;
  * Warnings at this stage mess up CGIs that may produce text output like hgTables & hgIntegrator,
  * so don't warn, just put CTs in group user and others in group x. */
 groupsAll = hLoadGrps(db);
+/* hgTracks synthesizes the "My Annotations" group in code, so it is not a row in grp.  Add it
+ * here at the priority hgTracks gives it, or the loop below would take its tracks for members
+ * of a group that doesn't exist, move them into another group, and leave the group itself out
+ * of the group list a table browser offers.  Inserted in place rather than appended and
+ * re-sorted, so groups that share a priority keep the order hLoadGrps returned them in. */
+if (cfgOptionBooleanDefault("doMyVariants", FALSE))
+    {
+    struct grp *mvGrp;
+    AllocVar(mvGrp);
+    mvGrp->name = cloneString(MYVARIANTS_GROUP_NAME);
+    mvGrp->label = cloneString(MYVARIANTS_GROUP_LABEL);
+    mvGrp->priority = MYVARIANTS_GROUP_PRIORITY;
+    struct grp *prev = NULL, *g;
+    for (g = groupsAll; g != NULL && g->priority <= mvGrp->priority; g = g->next)
+        prev = g;
+    if (prev == NULL)
+        slAddHead(&groupsAll, mvGrp);
+    else
+        {
+        mvGrp->next = prev->next;
+        prev->next = mvGrp;
+        }
+    }
 if (!trackHubDatabase(db))
     {
     struct hash *allGroups = hashNew(0);

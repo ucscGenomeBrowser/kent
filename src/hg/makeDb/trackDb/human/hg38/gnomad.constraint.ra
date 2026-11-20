@@ -5,6 +5,7 @@ longLabel Genome Aggregation Database (gnomAD) Predicted Constraint Metrics (LOE
 pennantIcon Updated red ../goldenPath/newsarch.html#082626 "Updated Aug. 26, 2026"
 compositeTrack On
 group varRep
+tags population,constraint,clinical
 type bigBed 12
 labelFields name,geneName
 dataVersion Release v4.1.1 (March 30, 2026), Release v4.1 (April 19, 2024), Release v4 (November 2023), Release 2.1.1 (March 6, 2019)

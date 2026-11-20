@@ -48,7 +48,8 @@ if (quickLiftIsLifted(tdb) && quickLiftWigEnabled(cart))
 // nothing for such a track.  A wigMaf's wiggles are not hub tracks and keep the path below.
 if (quickLiftIsLifted(tdb) && isHubTrack(tdb->track))
     {
-    printf("<P>Lifted wig tracks are not enabled on this server.</P>\n");
+    printf("<P>Values are not available for this track because QuickLift is turned off for "
+           "this type of track.</P>\n");
     return;
     }
 
@@ -427,6 +428,7 @@ struct liftedSink
     size_t valueCount, valueAlloc;	/* Used and allocated size of values. */
     struct bbiInterval *few;		/* The first LIFTED_FEW_VALUES, for a short list. */
     struct lm *lm;			/* Where few is allocated. */
+    boolean sawMinus;			/* A value came through a '-' strand piece. */
     };
 
 static void liftedSinkInit(struct liftedSink *sink, boolean keepValues)
@@ -510,7 +512,11 @@ for (piece = pieceList; piece != NULL; piece = piece->next)
         refStart = max(refStart, start);
         refEnd = min(refEnd, end);
         if (refStart < refEnd)
+            {
             liftedSinkAdd(sink, refStart, refEnd, array[i].val);
+            if (piece->strand == '-')
+                sink->sawMinus = TRUE;
+            }
         }
     }
 }
@@ -640,6 +646,17 @@ static void printLiftedFrom(struct trackDb *tdb)
 printf("<B>Lifted from: </B> %s<BR>\n", htmlEncode(trackDbSetting(tdb, "quickLiftDb")));
 }
 
+static void printLiftedOrientation(struct trackDb *tdb, struct liftedSink *sink)
+/* Say so when some of the values came through a part of the alignment that runs the other
+ * way, where they are in the reverse order of the same bases on the assembly they came from. */
+{
+if (!sink->sawMinus)
+    return;
+char *liftDb = htmlEncode(trackDbSetting(tdb, "quickLiftDb"));
+printf("<P>Some or all values below are in reverse order compared to %s.</P>\n", liftDb);
+freeMem(liftDb);
+}
+
 static void liftedWiggleClick(struct trackDb *tdb)
 /* Display details for a quickLifted wig:  the values from the assembly it came from that
  * land in the window, where the chain puts them. */
@@ -671,6 +688,7 @@ if (quickLiftWigTableOk(wig.db, wig.table))
     liftedValuesToSink(tdb, seqName, winStart, winEnd, fetchWigValues, &wig, &sink);
     hFreeConn(&wig.conn);
     }
+printLiftedOrientation(tdb, &sink);
 
 if (sink.stats.count == 0)
     printf("<P>No data overlapping current position.</P>");
@@ -730,6 +748,7 @@ printf("<B>Position: </B> %s:%s-%s<BR>\n", seqName, num1Buf, num2Buf);
 sprintLongWithCommas(num1Buf, winEnd-winStart);
 printf("<B>Total Bases in view: </B> %s <BR>\n", num1Buf);
 printLiftedFrom(tdb);
+printLiftedOrientation(tdb, &sink);
 
 if (sink.stats.count > 0)
     {

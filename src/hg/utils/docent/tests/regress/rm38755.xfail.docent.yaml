@@ -1,0 +1,43 @@
+# #38755 -- hgTracks still crashed (SIGSEGV) on a paired-end BAM CUSTOM track in squish/full.
+#
+# Follow-up to #38717 (rm38717.docent.yaml, which covers the trackDb track). 5ae0bd3c0d8
+# fixed the mismatch mouseovers only where the track's mapItemName is
+# linkedFeaturesSeriesName. A BAM or CRAM custom track has ctMapItemName instead
+# (hgTracks.c, after bamMethods()), which calls tg->itemName, also
+# linkedFeaturesSeriesName, on the single read, so it crashed the same way. Found by braney
+# in code review of build patch #38755. Fixed in 2ac2a7b4121 and the commit after it:
+# addAliMarkMouseOverPx() in cds.c gives the name methods a linkedFeaturesSeries around the
+# read whenever the track's items are series.
+#
+# The custom track is braney's reproduction: the hg19 Caltech HepG2 paired-end RNA-seq BAM
+# from hgdownload, with pairEndsByName=on on the track line. Without pairEndsByName it never
+# crashed.
+#
+# What is asserted:
+#   * At least one mismatch mouseover on the custom track, the code that crashed. A crash
+#     stops the page before the image map, so it is missing there.
+#   * The mouseover for the C>T mismatch at chr3:128,198,444 links to read
+#     311B7AAXX_HWUSI-EAS627_1:4:52:823:404 under the custom track's file name
+#     ("...bed+<read>"), the name ctMapItemName gives. A fix that named the mouseover with
+#     the bare read name would break the hgc click and fails here.
+#   * The box for the whole read carries the same name, so the mouseover and the read open
+#     the same hgc page.
+# NOT asserted: the number of mismatch boxes (8 on the fixed build), and the ct file name,
+# which is different on every run.
+proof:
+  - "assertion-only 2026-11-13 -- written from braney's #38755 review note and 2ac2a7b4121"
+  - "xfail 2026-11-13 -- fails on genome-test, which has 5ae0bd3c0d8 but not the follow-up: all three checks miss, track not drawn"
+  - "sandbox-ab 2026-11-13 -- same script passes on hgwdev-max with the follow-up built in"
+
+target: genome-test
+db: hg19
+position: chr3:128198400-128198500
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr3%3A128198400-128198500&pix=1200&hgt.customText=track%20type%3Dbam%20name%3Drm38755pairCt%20pairEndsByName%3Don%20visibility%3Dsquish%20bigDataUrl%3Dhttps%3A%2F%2Fhgdownload.soe.ucsc.edu%2FgoldenPath%2Fhg19%2FencodeDCC%2FwgEncodeCaltechRnaSeq%2FwgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam"
+  - expect:
+      has:
+        - 'map area[href*="g=ct_rm38755pairCt"][data-tooltip^="Mismatch (red)"]'
+        - 'map area[href*="g=ct_rm38755pairCt"][href*=".bed+311B7AAXX_HWUSI%2DEAS627_1%3A4%3A52%3A823%3A404"][data-tooltip*="chr3:128,198,444 C>T"]'
+        - 'map area[href*="g=ct_rm38755pairCt"][href*=".bed+311B7AAXX_HWUSI%2DEAS627_1%3A4%3A52%3A823%3A404"]:not([data-tooltip^="Mismatch"])'

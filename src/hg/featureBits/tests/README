@@ -1,0 +1,108 @@
+featureBitsAbTest: check a featureBits build against the release binary
+=======================================================================
+
+Redmine #38774 (test bed), first used for #38773 (speedup) and #38780
+(range check).
+
+The test runs two featureBits binaries on the same real inputs with the same
+options. For every case it compares the exit code, stdout, stderr and the md5
+of each output file (-bed, -bin, -fa). Run it after any change to featureBits.c.
+
+The current work directory is /hive/groups/browser/kentUtilAbTest/featureBits/full:
+
+  - 1,850 cases over hg38, hg19, mm39 and hs1: liftOver chains, PSL tables,
+    BED files made from a sample of bigBeds, a few bigBeds read directly, and
+    cases that use -or, -not, -enrichment, -minSize, -countBlocks, -bed, -fa.
+  - 19 GB of inputs.
+  - Reference results from the release binary, frozen as bin/featureBits.ref
+    (checked against bin/featureBits.ref.md5).
+
+The reference results are kept, so a new build only needs its own runs.
+
+
+Checking a new build
+--------------------
+
+    T=~/kent/src/hg/featureBits/tests/featureBitsAbTest
+    W=/hive/groups/browser/kentUtilAbTest/featureBits/full
+    $T run $W myChange ~/bin/x86_64/featureBits --cluster
+    $T compare $W myChange
+
+"myChange" is any name for the build. The binary is copied to
+bin/featureBits.myChange, so a later rebuild does not change a run that is in
+progress. Results go to runs/myChange/<caseId>/.
+
+The new code takes about 2.6 CPU hours in all. Without --cluster every case
+runs on hgwdev (-j sets how many at once).
+
+compare prints counts of SAME, DIFF, EXPECTED and MISSING and lists each
+DIFF. compare.myChange.tsv has one row per case with times and peak memory
+for both binaries.
+
+  - SAME: exit code, stdout, stderr and output files all match.
+  - DIFF: something differs. The "differs" column says what. Compare
+    runs/ref/<caseId>/ with runs/myChange/<caseId>/.
+  - EXPECTED: differs, and the case is listed in expected.tsv with a reason.
+  - MISSING: one side has no result yet.
+
+Other options for run:
+
+    --only REGEX   run only cases whose caseId matches
+    --force        rerun cases that already have results
+    --ram 8g       parasol -ram per job
+    --rounds 6     cluster rounds before giving up (see below)
+
+
+expected.tsv
+------------
+
+A case whose result is meant to change goes in expected.tsv as
+"caseId<TAB>reason". It is then reported as EXPECTED, not DIFF. At present it
+lists the 13 cases where a BED or bigBed item ends past its chromosome. The
+release binary crashes on them; since #38780 featureBits stops with a
+"Coordinate out of allowed range" error.
+
+When a release binary with an intended change becomes the reference, rerun
+the ref side (below) and empty expected.tsv.
+
+
+Cluster notes
+-------------
+
+hgwdev is the parasol head node. The cluster nodes have no /gbdb and no
+MySQL, so cluster cases use real paths under /hive, -chromSize and
+-countGaps. The 12 cases that need the database (gap counts, -fa) are named
+local.* and always run on hgwdev.
+
+Each job runs through batch/<side>/runOne.sh, which writes stderr to
+batch/<side>/logs/ because the nodes' own stderr files cannot be read from
+hgwdev.
+
+In November 2026 hgcompute-01 and hgcompute-13 failed every job with exit 1.
+para marks a node sick after 25 failures in a row. run therefore loops: para
+make, then para clearSickNodes, then resubmit the cases that have no exit
+file, up to --rounds times.
+
+
+Rebuilding the reference or the inputs
+--------------------------------------
+
+To make the release binary the new reference, rerun the ref side. It reads
+each file once per chromosome, so it needs about 260 CPU hours on the cluster,
+and the slowest cases take over 4 hours:
+
+    $T run $W ref /cluster/bin/x86_64/featureBits --cluster --force
+
+run refuses a ref binary that does not match bin/featureBits.ref.md5. Replace
+bin/featureBits.ref and its md5 first.
+
+To build a new work directory from scratch:
+
+    $T setup NEWDIR
+
+setup copies the release binary, dumps chrom sizes from chromInfo (hs1 uses
+/hive/data/genomes/hs1/chrom.sizes), dumps the PSL tables, converts a sample
+of bigBeds to BED, and writes cases.tsv. The bigBed sample comes from the
+#38769 manifest, kept at /hive/groups/browser/kentUtilAbTest/bedToBigBed/manifest.tsv.
+bigBeds over 10M items or 200 MB are skipped, so the test does not cover
+larger BED files.

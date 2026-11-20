@@ -40,8 +40,11 @@
  *  On the other hand, if the QUICKEXIT time of < 500 ms is noted, then
  *  something else is wrong about the connection.
  *  (these are used in gfClient and hgBlat for dynamic blat server messages)
+ *  dynamic blat gets a longer timeout, it can be working on much larger
+ *  assemblies and can legitimately take 2 to 3 minutes to successfully complete
  */
 #define NET_TIMEOUT_MS	110000
+#define NET_TIMEOUT_DYNAMIC_BLAT_MS	200000
 #define NET_QUICKEXIT_MS	500
 
 struct gfConnection

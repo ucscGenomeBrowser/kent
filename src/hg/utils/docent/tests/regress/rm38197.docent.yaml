@@ -88,7 +88,9 @@ steps:
         - "Until that link is opened, the email address cannot be used to sign in"
       noText: ["ORCID", "Please log in first"]
 
-  # hgSession's account list carries the same entry.
-  - goto: "/cgi-bin/hgSession?hgS_doMainPage=1"
+  # hgSession's account list carries the same entry.  sessionNewPage=0, because only the classic
+  # page has that list.  The newer Sessions page, the default where hg.conf sets sessionNewPage,
+  # leaves the account links to the menu bar on purpose, and the #loginLink checks above cover it.
+  - goto: "/cgi-bin/hgSession?hgS_doMainPage=1&sessionNewPage=0"
   - expect:
       has: 'a[href*="changeRecovEmailPage"]:text-is("Change recovery email")'

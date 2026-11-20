@@ -10,6 +10,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
+#include "multiRegionSpace.h"
 #include "cheapcgi.h"
 #include "expRecord.h"
 #include "microarray.h"
@@ -1816,9 +1817,43 @@ lf->extra = intToPt(theBed->itemRgb);
 return lf;
 }
 
+static void illuminaProbesLiftAdjust(void *item, boolean flipped, int clippedStart)
+/* Fix up a probe placed whole by a quickLift:  its blocks are counted from chromStart, so
+ * they turn around with it and move past a clipped start.  Every probe is thick from end
+ * to end. */
+{
+struct bed *bed = item;
+int i;
+if (flipped)
+    {
+    int size = bed->chromEnd - bed->chromStart + clippedStart;
+    reverseInts(bed->blockSizes, bed->blockCount);
+    reverseInts(bed->chromStarts, bed->blockCount);
+    for (i = 0; i < bed->blockCount; i++)
+        bed->chromStarts[i] = size - (bed->chromStarts[i] + bed->blockSizes[i]);
+    bed->strand[0] = (bed->strand[0] == '-') ? '+' : '-';
+    }
+for (i = 0; i < bed->blockCount; i++)
+    {
+    int relStart = bed->chromStarts[i] - clippedStart;
+    if (relStart < 0)
+        {
+        bed->blockSizes[i] = max(bed->blockSizes[i] + relStart, 0);
+        relStart = 0;
+        }
+    bed->chromStarts[i] = relStart;
+    }
+bed->thickStart = bed->chromStart;
+bed->thickEnd = bed->chromEnd;
+}
+
 void illuminaProbesLoadItems(struct track *tg)
 /* Just call the flexible linkedFeatures loader with a few custom fns. */
 {
+if (multiRegionSpacesEnabled())
+    loadLinkedFeaturesWithLoadersLift(tg, illuminaProbesAlmostLoad, lfFromIlluminaProbesBed,
+                                      "score", NULL, NULL, illuminaProbesLiftAdjust);
+else
 loadLinkedFeaturesWithLoaders(tg, illuminaProbesAlmostLoad, lfFromIlluminaProbesBed,
 			      "score", NULL, NULL);
 }

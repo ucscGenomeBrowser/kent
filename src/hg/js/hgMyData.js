@@ -523,8 +523,10 @@ const uppy = new Uppy.Uppy({
             // checked: that hub.txt replaces the hub's definition, its genomes
             // included.
             let existing = hubCreate.uiState.filesHash[file.meta.parentDir];
+            // Older uploads stored a GenArk or curated assembly under its cart name
+            // (hub_<id>_GCF_...), new ones under the bare name, so compare without the prefix.
             if (!isSplitHub && existing && existing.genome &&
-                    existing.genome !== file.meta.genome) {
+                    trackHubSkipHubName(existing.genome) !== trackHubSkipHubName(file.meta.genome)) {
                 // If the existing hub is an assembly hub, adopt its genome
                 // automatically rather than erroring - the UI hid the picker
                 // for this case, so the mismatch is just stale metadata.
@@ -1390,6 +1392,7 @@ var hubCreate = (function() {
         "bigChain": [".bigchain"],
         "bamIndex": [".bam.bai", ".bai"],
         "tabixIndex": [".vcf.gz.tbi", "vcf.bgz.tbi"],
+        "cramIndex": [".cram.crai", ".crai"],
         "hub.txt": ["hub.txt"],
         "2bit": [".2bit"],
         "text": [".txt", ".text"],
@@ -1911,7 +1914,13 @@ var hubCreate = (function() {
         let hubUrl = uiState.userUrl + cgiEncode(hubTxtPathForHub(hubName));
         let dbParam = isAssemblyHub(hubName) ? "genome" : "db";
         let genome = dirRow.genome || findHubGenome(hubName) || "";
-        return window.location.origin + "/cgi-bin/hgTracks?" + dbParam + "=" + genome +
+        // A hub_<id>_ name means nothing in another cart.  For the page's own assembly
+        // dbUrlArgs() knows what to send instead, also the URL of a user assembly hub; for
+        // a GenArk or curated assembly stored under its cart name the bare name does it.
+        let dbArgs = dbParam + "=" + encodeURIComponent(trackHubSkipHubName(genome));
+        if (dbParam === "db" && genome.startsWith("hub_") && !dbUrlArgs(genome).startsWith("db=hub_"))
+            dbArgs = dbUrlArgs(genome);
+        return window.location.origin + "/cgi-bin/hgTracks?" + dbArgs +
             "&hubUrl=" + encodeURIComponent(hubUrl);
     }
 
@@ -2026,14 +2035,15 @@ var hubCreate = (function() {
     function deleteFileList(ev) {
         // same as deleteFile() but acts on the selectedData variable
         let data = selectedData;
-        // Block deletion of an assembly hub's defining 2bit unless the whole hub
+        // Block deletion of an assembly hub's 2bit unless a directory holding it
         // is also in this batch. Removing the 2bit alone leaves hub.txt with a
         // twoBitPath pointing at a missing file and the surviving rows still
-        // flagged hubType=assemblyHub. The user must delete the entire hub
-        // instead, or replace the 2bit by uploading a new one with the same name.
+        // flagged hubType=assemblyHub. The user must delete the 2bit's folder
+        // or the entire hub instead, or replace the 2bit by uploading a new one
+        // with the same name.
         let selectedValues = Object.values(data);
-        let selectedHubDirs = new Set(
-            selectedValues.filter(x => x.fileType === "dir").map(x => x.fullPath));
+        let selectedDirs = selectedValues.filter(x => x.fileType === "dir").map(x => x.fullPath);
+        let inSelectedDir = (path) => selectedDirs.some(dir => path.startsWith(dir + "/"));
         let blockedTwoBits = [];
         for (let d of selectedValues) {
             if (d.fileType !== "2bit") continue;
@@ -2042,12 +2052,13 @@ var hubCreate = (function() {
             let hubRoot = hubRootFromPath(d.fullPath);
             let hub = uiState.filesHash[hubRoot];
             if (!hub || hub.hubType !== "assemblyHub") continue;
-            if (!selectedHubDirs.has(hubRoot)) blockedTwoBits.push(d);
+            if (!inSelectedDir(d.fullPath)) blockedTwoBits.push(d);
         }
         if (blockedTwoBits.length > 0) {
             let names = blockedTwoBits.map(d => d.fullPath).join("\n  ");
             alert(`Cannot delete the following 2bit file(s) because they are part of ` +
-                  `an assembly hub:\n  ${names}\n\nDelete the whole hub instead, ` +
+                  `an assembly hub:\n  ${names}\n\nDelete the folder holding the 2bit ` +
+                  `or the whole hub instead, ` +
                   `or replace the 2bit by uploading a new one with the same name.`);
             return;
         }
@@ -2437,7 +2448,7 @@ var hubCreate = (function() {
             return folderIcon;
         } else {
             // only offer the button if this is a track file
-            if (rowData.fileType !== "hub.txt" && rowData.fileType !== "text" && rowData.fileType !== "tabixIndex" && rowData.fileType !== "bamIndex" && rowData.fileType !== "2bit" && rowData.fileType in extensionMap) {
+            if (rowData.fileType !== "hub.txt" && rowData.fileType !== "text" && rowData.fileType !== "tabixIndex" && rowData.fileType !== "bamIndex" && rowData.fileType !== "cramIndex" && rowData.fileType !== "2bit" && rowData.fileType in extensionMap) {
                 let container = document.createElement("div");
                 let viewBtn = document.createElement("button");
                 viewBtn.textContent = "View in Genome Browser";

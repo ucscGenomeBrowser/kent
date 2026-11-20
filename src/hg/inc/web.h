@@ -398,7 +398,9 @@ void webIncludeLocalJs();
 /* some mirrors want special JS on their site */
 
 char *menuBar(struct cart *cart, char *db);
-// return HTML for the menu bar (read from a configuration file).
+// return HTML for the menu bar (read from a configuration file).  Also writes the page's script
+// includes and, when db is a hub assembly, the inline window.hubDbUrlArgs, which costs up to four
+// hgcentral queries (see hubConnectDbUrlArgs()).
 
 void checkForGeoMirrorRedirect(struct cart *cart);
 // Implement Geo/IP based redirection

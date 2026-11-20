@@ -53,8 +53,8 @@ if ( $status ) then
 endif
 echo "new branch and tag v$BRANCHNN created. [${0}: `date`]"
 
-if (-e pushedToRR.flag ) then
-    rm pushedToRR.flag
+if (-e $BUILDSTATE/pushedToRR.flag ) then
+    rm $BUILDSTATE/pushedToRR.flag
 endif
 
 exit 0

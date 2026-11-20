@@ -9,7 +9,7 @@ longLabel RNA sequences that do not code for a protein
     shortLabel tRNA Genes
     longLabel Transfer RNA Genes Identified with tRNAscan-SE
     group genes
-    visibility hide
+    visibility pack
     color 0,20,150
     type bed 6 +
     nextItemButton on
@@ -20,7 +20,7 @@ longLabel RNA sequences that do not code for a protein
     shortLabel sno/miRNA
     longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from snoRNABase and miRBase
     group genes
-    visibility hide
+    visibility pack
     color 200,80,0
     type bed 8 +
     noScoreFilter .

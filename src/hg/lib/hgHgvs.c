@@ -5,6 +5,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 #include "common.h"
 #include "hgHgvs.h"
+#include "multiRegionSpace.h"
 #include "bPlusTree.h"
 #include "chromInfo.h"
 #include "genbank.h"
@@ -1341,10 +1342,27 @@ else
     char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
     if (isNotEmpty(chrom))
         {
+        /* In a multi-region space hGetChromInfo() knows only the synthetic sequence,
+         * while hgOfficialChromName() still resolves a source name through chromAlias,
+         * so a name can come back here with no chromInfo.  refs #37788 */
         struct chromInfo *ci = hGetChromInfo(db, chrom);
-        if (start >= 0 && start < ci->size && end > 0 && end <= ci->size)
+        if (ci != NULL && start >= 0 && start < ci->size && end > 0 && end <= ci->size)
             {
             coordsOK = TRUE;
+            if ((hgvsBase != '\0') && (multiRegionSpaceForDb(db) != NULL))
+                {
+                /* a database drawn in a multi-region space has no sequence file, and
+                 * hChromSeq() knows where its bases come from.  refs #37788 */
+                struct dnaSeq *refBase = hChromSeq(db, chrom, start, end);
+                if (refBase != NULL)
+                    {
+                    touppers(refBase->dna);
+                    if (refBase->dna[0] != hgvsBase)
+                        *retDiffRefAllele = cloneString(refBase->dna);
+                    dnaSeqFree(&refBase);
+                    }
+                }
+            else
             if (hgvsBase != '\0')
                 {
                 struct dnaSeq *refBase = hFetchSeq(ci->fileName, chrom, start, end);

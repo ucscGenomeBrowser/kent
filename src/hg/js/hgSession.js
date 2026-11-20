@@ -1,11 +1,11 @@
-// hgSession.js - the experimental client-rendered "My Sessions" page.
+// hgSession.js - the experimental client-rendered "Saved sessions" page.
 //
 // An opt-in modern alternative to the classic server-rendered hgSession page, applying hgBlat's
 // facelift strategy (#37996): hgSession.c emits the session list and page config as an inline JSON
 // global (hgSessionData) into an empty #sessionApp container, and this file builds the UI - a
 // save-current-view card, a searchable/sortable DataTable of saved sessions with inline
-// Overwrite/Share/Edit/Delete, and an "Advanced" panel (custom-track backup, a load column and a
-// save column).
+// Update/Share/Edit/Delete, and an "Advanced…" button that opens a dialog (custom-track backup, a
+// load column and a save column).
 //
 // The inline table actions POST to small JSON endpoints in hgSession.c (hgS_doDeleteJson, etc.) and
 // update the table in place.  Navigation actions (load a session, load from URL/file, save to file,
@@ -215,28 +215,34 @@ function sessApplyTooltips() {
 
 // Inline icons (Font Awesome solid paths, embedded as SVG so they do not depend on the site's Font
 // Awesome version).  fill:currentColor picks up the button's text/danger color.
-var SESS_TRASH_SVG = '<svg class="sessIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"' +
+var SESS_TRASH_SVG = '<svg class="sessIcon sessTrash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"' +
     ' aria-hidden="true"><path fill="currentColor" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3' +
     ' 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8' +
     'c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7' +
     ' 47.9-45L416 128z"/></svg>';
-// Font Awesome "floppy-disk" (save) regular/outline path - reads more clearly as a save icon.
-var SESS_SAVE_SVG = '<svg class="sessIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"' +
-    ' aria-hidden="true"><path fill="currentColor" d="M160 144C151.2 144 144 151.2 144 160L144 480C144' +
-    ' 488.8 151.2 496 160 496L480 496C488.8 496 496 488.8 496 480L496 237.3C496 233.1 494.3 229 491.3' +
-    ' 226L416 150.6L416 240C416 257.7 401.7 272 384 272L224 272C206.3 272 192 257.7 192 240L192 144L160' +
-    ' 144zM240 144L240 224L368 224L368 144L240 144zM96 160C96 124.7 124.7 96 160 96L402.7 96C419.7 96' +
-    ' 436 102.7 448 114.7L525.3 192C537.3 204 544 220.3 544 237.3L544 480C544 515.3 515.3 544 480' +
-    ' 544L160 544C124.7 544 96 515.3 96 480L96 160zM256 384C256 348.7 284.7 320 320 320C355.3 320 384' +
-    ' 348.7 384 384C384 419.3 355.3 448 320 448C284.7 448 256 419.3 256 384z"/></svg>';
 // Font Awesome "lock" solid path - marks a private (not-shared) session, since sharing is the default.
 var SESS_LOCK_SVG = '<svg class="sessLock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"' +
     ' aria-hidden="true"><path fill="currentColor" d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80' +
     ' 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0' +
     ' 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/></svg>';
+// Lucide "share", "pen-line" and "arrow-down-to-line" (stroke icons, ISC license);
+// stroke:currentColor like the others.
+var SESS_LUCIDE_OPEN = '<svg class="sessIcon sessLucide" xmlns="http://www.w3.org/2000/svg"' +
+    ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"' +
+    ' stroke-linejoin="round" aria-hidden="true">';
+var SESS_SHARE_SVG = SESS_LUCIDE_OPEN + '<path d="M12 2v13"/><path d="m16 6-4-4-4 4"/>' +
+    '<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>';
+var SESS_EDIT_SVG = SESS_LUCIDE_OPEN + '<path d="M13 21h8"/><path d="M21.174 6.812a1 1 0 0 0' +
+    '-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0' +
+    ' .83-.497z"/></svg>';
+var SESS_UPDATE_SVG = SESS_LUCIDE_OPEN + '<path d="M12 17V3"/><path d="m6 11 6 6 6-6"/>' +
+    '<path d="M19 21H5"/></svg>';
+// Label of an Update button once that session has been updated on this page view.
+var SESS_UPDATED_LABEL = '&#10003; Updated';
 
 function sessActionsHtml(row) {
-    // Order: Share, Edit, then the icon-only Overwrite (floppy) and Delete (trash).
+    // Order: Share, Edit, Update (overwrite with the current view), each an icon plus a word, then
+    // the icon-only Delete (trash).
     if (row.remote) {
         // A session on another server can only be shown here: sharing, renaming, overwriting and
         // deleting all go through the cart and the session table of the server that holds it. So
@@ -247,13 +253,14 @@ function sessActionsHtml(row) {
             sessEnc(row.server || 'server') + '</button>';
     }
     var e = sessEnc(row.uid);
-    return '<button type="button" class="gbPill" data-act="share" data-key="' + e + '" ' +
-        'title="Copy a shareable link or change who can see this session">Share</button>' +
-        '<button type="button" class="gbPill" data-act="edit" data-key="' + e + '" ' +
-        'title="Rename this session or edit its description">Edit</button>' +
-        '<button type="button" class="gbPill" data-act="overwrite" data-key="' + e + '" ' +
-        'aria-label="Overwrite with current view" ' +
-        'title="Overwrite this session with your current browser view">' + SESS_SAVE_SVG + '</button>' +
+    return '<button type="button" class="gbPill sessIconBtn" data-act="share" data-key="' + e + '" ' +
+        'title="Copy a shareable link or change who can see this session">' + SESS_SHARE_SVG +
+        'Share</button>' +
+        '<button type="button" class="gbPill sessIconBtn" data-act="edit" data-key="' + e + '" ' +
+        'title="Rename this session or edit its description">' + SESS_EDIT_SVG + 'Edit</button>' +
+        '<button type="button" class="gbPill sessIconBtn" data-act="overwrite" data-key="' + e + '" ' +
+        'title="Update this session: overwrite it with your current browser view">' +
+        (row.justUpdated ? SESS_UPDATED_LABEL : SESS_UPDATE_SVG + 'Update') + '</button>' +
         '<button type="button" class="gbPill danger" data-act="delete" data-key="' + e + '" ' +
         'aria-label="Delete this session" title="Delete this session">' + SESS_TRASH_SVG + '</button>';
 }
@@ -285,19 +292,25 @@ function sessDoOverwrite(row) {
         row.useCount = resp.useCount;
         if (resp.created) { row.created = resp.created; }
         if (resp.db) { row.db = resp.db; }
+        // No status line at the top of the page (#38157: it read oddly, far from where the user
+        // clicked); this session's Update button(s) say "Updated" until the page is reloaded.  It
+        // stays clickable to update again.  The flag on the row survives redraws (sort, paging).
+        row.justUpdated = true;
         var r = sessRowByKey(row.uid);
         if (r) { r.data(row).draw(false); }
         sessModalClose();
-        sessMsg('Overwrote “' + row.name + '” with your current browser view.', 'ok');
+        if ($('#sessUpdateNow').attr('data-key') === row.uid) {
+            $('#sessUpdateNow').html(SESS_UPDATED_LABEL);
+        }
     });
 }
 
 function sessOpenOverwrite(row) {
     sessConfirm({
-        title: 'Overwrite session',
+        title: 'Update session',
         bodyHtml: 'Replace the saved session <b>' + sessEnc(row.name) + '</b> with the view you are ' +
             'looking at now? The name and description stay the same; the previously saved view is lost.',
-        okLabel: 'Overwrite',
+        okLabel: 'Update',
         onOk: function() { sessDoOverwrite(row); }
     });
 }
@@ -319,8 +332,7 @@ function sessOpenDelete(row) {
                 for (var i = 0; i < list.length; i++) {
                     if (list[i].uid === row.uid) { list.splice(i, 1); break; }
                 }
-                sessModalClose();
-                sessMsg('Deleted “' + row.name + '”.', 'ok');
+                sessModalClose();   // the row disappearing says enough, no status line (#38157)
             });
         }
     });
@@ -613,8 +625,9 @@ function sessAdvancedHtml(C) {
         '<form class="sessAdvRow" action="hgSession" method="POST">' + sid +
         '<input class="sessAdvInput" type="text" name="hgS_saveLocalFileName" ' +
         'placeholder="File name (blank = show in browser)">' +
-        '<label class="sessSaveCheck"><input type="checkbox" name="hgS_saveLocalFileCompress" ' +
-        'value="gzip"> gzip</label>' +
+        // Always plain text, no gzip choice (#38157: not needed).  Sent explicitly so a gzip
+        // chosen earlier on the classic page, still in the cart, is not used.
+        '<input type="hidden" name="hgS_saveLocalFileCompress" value="none">' +
         '<button type="submit" class="gbPill" name="hgS_doSaveLocal" value="submit" ' +
         'title="Download the current browser settings as a session file">Save</button></form></div>';
     var other =
@@ -632,17 +645,31 @@ function sessAdvancedHtml(C) {
 
     // Two columns - what you load from, and what you save to - rather than one undifferentiated
     // list; "Other" (reset) belongs to neither, so it spans both underneath.
-    return '<div class="sessAdv">' +
-        '<div class="sessAdvHead" id="sessAdvHead"><span class="caret">▸</span>' +
-        '<span>Advanced — back up custom tracks, load another user’s session, load from a URL ' +
-        'or file, save to a file, reset the browser</span></div>' +
-        '<div class="sessAdvBody" id="sessAdvBody" style="display:none">' +
+    return '<div class="gbModalTitle">Advanced</div>' +
+        '<div class="sessAdvBody">' +
         backup +
         '<div class="sessAdvCol"><div class="sessAdvColHead">Load</div>' +
         loadUser + loadUrl + loadFile + '</div>' +
         '<div class="sessAdvCol"><div class="sessAdvColHead">Save</div>' + saveFile + '</div>' +
         '<div class="sessAdvOther">' + other + '</div>' +
-        '</div></div>';
+        '</div>' +
+        '<div class="gbModalBtns">' +
+        '<button type="button" class="gbPill" id="sessAdvClose">Close</button></div>';
+}
+
+// The rarer options open in a dialog from a button, not a collapsible section: a collapsed bar is
+// easy to miss and opening it shoves the rest of the page down (#38157).  The "…" says it opens a
+// dialog.
+function sessAdvancedBarHtml() {
+    return '<div class="sessAdvBar">' +
+        '<button type="button" class="gbPill" id="sessAdvBtn">Advanced…</button>' +
+        '<span class="sessAdvHint">Back up custom tracks, load another user’s session, load from ' +
+        'a URL or file, save to a file, reset the browser</span></div>';
+}
+
+function sessOpenAdvanced(C) {
+    sessModalOpen(sessAdvancedHtml(C));
+    $('#sessAdvClose').on('click', sessModalClose);
 }
 
 // ---- build the whole page -----------------------------------------------
@@ -691,6 +718,8 @@ function sessSaveCardHtml(C) {
         sessEnc(C.userName) + '/[sessionName].';
     var descTip = 'Shown when the session is loaded, in the table below on mouseover, and in ' +
         'the Public Sessions gallery if this session is made public.';
+    var privTip = 'To load saved session links later that were marked as private, you will need ' +
+        'to be logged in.';
     return '<div class="sessSaveCard">' +
         '<div class="sessSaveHead"><span class="sessSaveTitle">' +
         'Save the current view as a stable session link</span>' + what + '</div>' +
@@ -699,15 +728,21 @@ function sessSaveCardHtml(C) {
         '<input id="sessSaveName" class="sessSaveInput" type="text" maxlength="255" ' +
         'placeholder="Session name, default ' + randName + '">' +
         '<span class="sessInfo" title="' + nameTip + '">&#9432;</span></div>' +
+        // The (i) sits outside the label, so clicking it does not toggle the checkbox.
+        '<div class="sessSaveField">' +
         '<label class="sessSaveCheck"><input type="checkbox" id="sessSavePrivate"> ' +
-        'Private: Session can only be loaded by myself</label>' +
-        '<button type="button" class="gbPill primary" id="sessSaveBtn" ' +
-        'title="Save your current browser view as a named session">Save session</button>' +
+        'Private: only I can load this session</label>' +
+        '<span class="sessInfo" title="' + privTip + '">&#9432;</span></div>' +
         '</div>' +
+        // Save sits after the description, the last field, so the form reads top to bottom.
+        '<div class="sessSaveRow">' +
         '<div class="sessSaveField">' +
         '<input id="sessSaveDesc" class="sessSaveInput" type="text" maxlength="512" ' +
         'placeholder="Description (optional)">' +
         '<span class="sessInfo" title="' + descTip + '">&#9432;</span></div>' +
+        '<button type="button" class="gbPill primary" id="sessSaveBtn" ' +
+        'title="Save your current browser view as a named session">Save session</button>' +
+        '</div>' +
         '</div>';
 }
 
@@ -716,12 +751,16 @@ function sessRecentHtml(recent) {
     // description.  Hidden when there are no saved sessions.  The button's own mouseover is easy to
     // miss, so a visible (i) bubble carries the same text.
     if (!recent) { return ''; }
-    var tip = 'Overwrite this session with the currently active view; keeps the session name and ' +
-        'description identical';
-    return '<div class="sessRecent">Most recently used session: <b>' + sessEnc(recent.name) +
+    var tip = 'Update this session: overwrite it with the currently active view; keeps the ' +
+        'session name and description identical';
+    // Styled like the save card's title so the two boxes read as a pair: save a new session /
+    // update an existing one.
+    return '<div class="sessRecent"><span class="sessSaveTitle">Update and overwrite the most ' +
+        'recently used session:</span> <b>' + sessEnc(recent.name) +
         '</b> <span class="sessRecentTime">(' + sessEnc(recent.lastUse) + ')</span> ' +
-        '<button type="button" class="gbPill" id="sessUpdateNow" title="' + tip + '">' +
-        'Overwrite now</button> <span class="sessInfo" title="' + tip + '">&#9432;</span></div>';
+        '<button type="button" class="gbPill sessIconBtn" id="sessUpdateNow" data-key="' +
+        sessEnc(recent.uid) + '" title="' + tip + '">' +
+        SESS_UPDATE_SVG + 'Update now</button> <span class="sessInfo" title="' + tip + '">&#9432;</span></div>';
 }
 
 function sessScrollToTable() {
@@ -815,11 +854,14 @@ function sessionBuild() {
     var app = $('#sessionApp');
 
     var acctHtml = sessAccountHtml(C);
-    var intro = '<div class="sessIntro">' + (acctHtml ? '<p>' + acctHtml + '</p>' : '') +
-        '<p>A session is a stable link to a Genome Browser view that you can save, load later, ' +
-        'share or copy into a manuscript. See the ' +
+    // The sign-in line uses the yellow banner style of the "experimental page" note, so a
+    // signed-out user does not miss why there is no save form and no session list.
+    var intro = '<div class="sessIntro">' +
+        '<p>A saved session is a stable link to a Genome Browser view that you can save, load ' +
+        'later, share or copy into a manuscript. See the ' +
         '<a href="' + sessEnc(C.helpUrl) + '" target="_blank">Sessions User’s Guide</a> and the ' +
-        '<a href="' + sessEnc(C.galleryUrl) + '" target="_blank">Session Gallery</a>.</p></div>';
+        '<a href="' + sessEnc(C.galleryUrl) + '" target="_blank">Session Gallery</a>.</p>' +
+        (acctHtml ? '<p class="gbBanner sessSignIn">' + acctHtml + '</p>' : '') + '</div>';
 
     // Every row carries the server it lives on; at this point they are all this server's own.
     // The sessions merged in later from the other nodes get theirs in sessMergeMirrors().
@@ -831,8 +873,8 @@ function sessionBuild() {
     });
 
     // The session most recently used (max lastUse: saved, overwritten or opened), for the one-click
-    // "Overwrite now".
-    // Only this server's own sessions: "Overwrite now" saves through this server's cart.
+    // "Update now".
+    // Only this server's own sessions: "Update now" saves through this server's cart.
     var recent = null;
     (sessData.sessions || []).forEach(function(s) {
         if (s.remote) { return; }
@@ -842,9 +884,9 @@ function sessionBuild() {
     app.html(
         intro +
         '<div id="sessMsg" class="sessMsg"></div>' +
-        sessRecentHtml(recent) +
         sessSaveCardHtml(C) +
-        sessAdvancedHtml(C) +
+        sessRecentHtml(recent) +
+        sessAdvancedBarHtml() +
         sessTableHtml(C)
     );
 
@@ -853,27 +895,25 @@ function sessionBuild() {
     $('#sessSaveName, #sessSaveDesc').on('keydown', function(ev) {
         if (ev.key === 'Enter') { ev.preventDefault(); sessDoSave(); }
     });
+    // Saving is what most people come here for, so the cursor starts in the name box (only there
+    // when signed in).  preventScroll: the box is near the top, do not jump if the page is scrolled.
+    var nameBox = document.getElementById('sessSaveName');
+    if (nameBox) { nameBox.focus({preventScroll: true}); }
 
     // One-click overwrite of the most recently used session.
     if (recent) {
         $('#sessUpdateNow').on('click', function() {
             sessConfirm({
-                title: 'Overwrite session',
+                title: 'Update session',
                 bodyHtml: 'Overwrite <b>' + sessEnc(recent.name) + '</b> with the view you are ' +
                     'looking at now? The session name and description stay the same.',
-                okLabel: 'Overwrite now',
+                okLabel: 'Update now',
                 onOk: function() { sessDoOverwrite(recent); }
             });
         });
     }
 
-    // Advanced toggle.
-    $('#sessAdvHead').on('click', function() {
-        var body = document.getElementById('sessAdvBody');
-        var open = body.style.display !== 'none';
-        body.style.display = open ? 'none' : 'grid';
-        $(this).find('.caret').html(open ? '▸' : '▾');
-    });
+    $('#sessAdvBtn').on('click', function() { sessOpenAdvanced(C); });
 
     // Session table, then the sessions our other servers hold, merged in as they arrive.
     if (C.loggedIn) { sessBuildTable(); sessScrollToTable(); sessMergeMirrors(); }
@@ -970,7 +1010,7 @@ function sessBuildTable() {
             { title: 'Session', className: 'sessNameCol', data: 'name',
               render: function(d, type, row) {
                   return (type === 'display') ? sessNameCellHtml(row) : row.name; } },
-            { title: 'Assembly', data: 'db',
+            { title: 'Assembly and Locus', data: 'db',
               render: function(d, type, row) {
                   if (type !== 'display') { return row.db || ''; }
                   var html = sessEnc(row.db || 'n/a');
@@ -1063,11 +1103,11 @@ function sessBuildTable() {
     // Column-header tooltips (set title, then let utils.js convert to styled mouseovers).
     var tips = {
         'Session': 'Click a name to load that session in the Genome Browser',
-        'Assembly': 'The genome assembly this session was saved on',
+        'Assembly and Locus': 'The genome assembly and the position this session was saved on',
         'Created': 'When the session was first saved',
         'Last used': 'When the session was last saved or loaded',
         'Views': 'How many times this session has been loaded',
-        'Actions': 'Overwrite with your current view, share, edit, or delete'
+        'Actions': 'Share, edit, update with your current view, or delete'
     };
     $('#sessionAppTable thead th').each(function() {
         var t = tips[$(this).text().trim()];

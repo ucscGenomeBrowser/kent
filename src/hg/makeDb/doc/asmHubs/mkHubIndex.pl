@@ -27,6 +27,7 @@ my $sciNameOverrideFile = "$toolsDir/sciNameOverride.txt";
 my %sciNameOverride;	# key is accession, value is corrected scientific name
 my %taxIdOverride;	# key is accession, value is corrected taxId
 			# keys for both of those can also be the asmId
+my $ncbiNames;	# key is accession, value is [ NCBI sciName, taxId ]
 
 if ( -s "${sciNameOverrideFile}" ) {
   open (my $sn, "<", "${sciNameOverrideFile}") or die "can not read ${sciNameOverrideFile}";
@@ -424,6 +425,11 @@ sub tableContents() {
           }
         }
         close (FH);
+        if (defined($ncbiNames->{$accessionId})) {
+          ($sciName, $taxId) = @{$ncbiNames->{$accessionId}};
+        }
+        $sciName = $sciNameOverride{$accessionId} if (defined($sciNameOverride{$accessionId}));
+        $taxId = $taxIdOverride{$accessionId} if (defined($taxIdOverride{$accessionId}));
     } elsif ( -s "${configRa}" ) {	#	if ( -s "${asmReport}" )
 # ncbiAssemblyName Sscrofa10.2
 # genBankAccessionID GCA_000003025.4
@@ -599,6 +605,8 @@ while (my $acc = <$ga>) {
 }
 close ($ga) or die "failed: $genarkQuery";
 printf STDERR "# %d accessions in hgcentral.genark\n", scalar(keys %genarkAcc);
+
+$ncbiNames = commonHtml::ncbiSciNames(@orderList);
 
 startHtml();
 startTable();

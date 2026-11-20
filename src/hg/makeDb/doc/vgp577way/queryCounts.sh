@@ -27,4 +27,4 @@ do
 done
 
 cat queryCounts/* > all.counts
-~/kent/src/hg/makeDb/doc/vgp577way/sumBlocks.py sumBlocks.py all.counts | sort -rn > order.list
+~/kent/src/hg/makeDb/doc/vgp577way/sumBlocks.py all.counts | sort -rn > order.list

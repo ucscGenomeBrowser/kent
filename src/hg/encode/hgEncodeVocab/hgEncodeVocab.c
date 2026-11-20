@@ -798,8 +798,11 @@ if (requestVal)
     {
     (void)stripChar(requestVal,'\"');
     requestCount = chopCommasLen(requestVal);
-    requested = needMem(requestCount * sizeof(char *));
-    chopByChar(requestVal,',',requested,requestCount);
+    if (requestCount > 0)   // an empty value such as term="" asks for nothing
+        {
+        requested = needMem(requestCount * sizeof(char *));
+        chopByChar(requestVal,',',requested,requestCount);
+        }
     }
 
 char *org = NULL;

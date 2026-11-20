@@ -1,5 +1,8 @@
 #!/bin/bash
 
+### XXX ### Obsolete process here, kept in the source tree only for
+###         historical reference.
+
 ##########################################################################
 ###  this script from the source tree in:
 ###    src/hg/utils/otto/genArk/pushRR/pullHgwdev.sh

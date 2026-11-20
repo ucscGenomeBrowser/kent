@@ -8,9 +8,12 @@ Two steps, with RNAfold in between (see mirBaseBuild.sh):
       coordinates, as FASTA for RNAfold. The FASTA names are the GFF IDs, which are
       unique per locus (MI0033425, MI0033425_2, ...), unlike the precursor names.
 
-  mirBaseToBed.py bed hsa.gff3 pre.fold mirBase.bed mirBaseArms.bed
+  mirBaseToBed.py bed hsa.gff3 pre.fold mirGeneDb.bed mirBase.bed mirBaseArms.bed
       Write the precursor track (bed6+, see mirBase.as) and the mature miRNA
       decorators (bed12+4, kent/src/hg/lib/decoration.as).
+      mirGeneDb.bed is the MirGeneDB track of the same assembly (mirGeneDbBuild.sh);
+      its miRBase precursor accessions, as MirGeneDB gives them, link each precursor
+      to its MirGeneDB genes. No link is inferred from positions.
       Precursors whose MFE structure is not one hairpin get the lowest-energy
       suboptimal structure that is one (see hairpinRefold), from RNAsubopt.
       A few structures are chosen by hand (MANUAL_STRUCTURES).
@@ -263,8 +266,19 @@ def preFa(gffFile, twoBit, faOut):
             out.write(">%s\n%s\n" % (p["id"], s))
     print("%d precursor sequences" % len(pres), file=sys.stderr)
 
-def bed(gffFile, foldFile, bedOut, armsOut):
+def readMirGeneDb(mirGeneDbBed):
+    """miRBase precursor accession -> MirGeneDB IDs that MirGeneDB gives it, as
+    "<gene page>|<MirGeneDB ID>" for the urls setting, like the MirGeneDB track."""
+    genes = defaultdict(list)
+    for line in open(mirGeneDbBed):
+        c = line.rstrip("\n").split("\t")
+        if c[10].startswith("MI"):
+            genes[c[10]].append(c[6])
+    return {acc: sorted(set(g)) for acc, g in genes.items()}
+
+def bed(gffFile, foldFile, mirGeneDbBed, bedOut, armsOut):
     pres, matures = readGff(gffFile)
+    mirGeneDb = readMirGeneDb(mirGeneDbBed)
     folds = readFold(foldFile)
     assigned = assignMatures(pres, matures)
     print("%d precursors, %d matures, %d folds" % (len(pres), len(matures), len(folds)),
@@ -278,15 +292,21 @@ def bed(gffFile, foldFile, bedOut, armsOut):
     armCount = defaultdict(int)
     with open(bedOut, "w") as out, open(armsOut, "w") as aOut:
         for p in pres:
-            ms = sorted(assigned.get(p["id"], []), key=lambda x: x[0]["start"])
+            # matures in precursor order, 5' to 3' (one arm can have two, mmu-mir-3102)
+            ms = sorted(assigned.get(p["id"], []), key=lambda x: x[0]["start"],
+                        reverse=p["strand"] == "-")
+            seq, dotBracket, mfe = folds[p["id"]]
+            if p["id"] in refolded:
+                dotBracket = refolded[p["id"]][0]
             byArm = defaultdict(list)
-            armPos, armText = [], []
+            armPos, armText, armSeq = [], defaultdict(list), defaultdict(list)
             for m, arm in ms:
                 armCount[arm] += 1
                 byArm[arm].append(m)
                 s, e = armRange(p, m["start"], m["end"])
                 armPos.append((s, e, arm))
-                armText.append("%s %s:%d-%d" % (m["name"], m["chrom"], m["start"] + 1, m["end"]))
+                armText[arm].append("%s:%d-%d" % (m["chrom"], m["start"] + 1, m["end"]))
+                armSeq[arm].append(seq[s - 1:e])
                 color, fill = ARM_COLORS[arm]
                 aOut.write("\t".join(str(x) for x in [
                     m["chrom"], m["start"], m["end"], m["name"], 0, m["strand"],
@@ -298,14 +318,13 @@ def bed(gffFile, foldFile, bedOut, armsOut):
                     print("%s has %d matures on the %s arm" % (p["id"], len(byArm[arm]), arm),
                           file=sys.stderr)
             armPos.sort()
-            seq, dotBracket, mfe = folds[p["id"]]
-            if p["id"] in refolded:
-                dotBracket = refolded[p["id"]][0]
             out.write("\t".join([p["chrom"], str(p["start"]), str(p["end"]), p["name"], "0",
-                p["strand"], p["acc"],
-                ",".join(m["name"] for m in byArm["5p"]), ",".join(m["acc"] for m in byArm["5p"]),
-                ",".join(m["name"] for m in byArm["3p"]), ",".join(m["acc"] for m in byArm["3p"]),
-                ", ".join(armText), mfe, foldType(refolded, p["id"]), seq, dotBracket,
+                p["strand"], p["name"], ",".join(mirGeneDb.get(p["acc"], [])) or "|-", p["acc"],
+                ", ".join(m["name"] for m in byArm["5p"]) or "-", ", ".join(armText["5p"]) or "-",
+                ", ".join(armSeq["5p"]) or "-", ",".join(m["acc"] for m in byArm["5p"]) or "|-",
+                ", ".join(m["name"] for m in byArm["3p"]) or "-", ", ".join(armText["3p"]) or "-",
+                ", ".join(armSeq["3p"]) or "-", ",".join(m["acc"] for m in byArm["3p"]) or "|-",
+                mfe, foldType(refolded, p["id"]), seq, dotBracket,
                 ",".join("%d-%d:%s" % a for a in armPos)]) + "\n")
     print("matures per arm: " + ", ".join("%s %d" % kv for kv in sorted(armCount.items())),
           file=sys.stderr)
@@ -313,7 +332,7 @@ def bed(gffFile, foldFile, bedOut, armsOut):
 if __name__ == "__main__":
     if len(sys.argv) == 5 and sys.argv[1] == "preFa":
         preFa(*sys.argv[2:])
-    elif len(sys.argv) == 6 and sys.argv[1] == "bed":
+    elif len(sys.argv) == 7 and sys.argv[1] == "bed":
         bed(*sys.argv[2:])
     else:
         sys.exit(__doc__)

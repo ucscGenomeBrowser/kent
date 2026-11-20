@@ -2,6 +2,7 @@ track hprcArrV1
 compositeTrack on
 shortLabel Rearrangements
 longLabel Rearrangements including indels, inversions, and duplications
+facet.variantType Structural variant
 visibility hide 
 group hprc 
 #noInherit on 

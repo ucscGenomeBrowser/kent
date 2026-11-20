@@ -1,0 +1,53 @@
+# #38762 -- a link that turns on a track inside a supertrack that is hidden, e.g.
+# hgTracks?hmc=dense, drew nothing: the track's own visibility was set, but its
+# supertrack stayed hidden, so the track was never shown. Links like this come from
+# hgSearch, from other sites and from AI agents.
+#
+# Fixed in 9f1dba70647 (hg/hgTracks/hgTracks.c). A track named on the request with a
+# visibility other than hide now gets the same _sel mark the Track Search checkbox and the
+# hgTrackUi menu send, so cart.c opens its supertrack and hides the supertrack's other
+# tracks: a link to one track means that track, not the rest of the container.
+#
+# hg.conf GATE: urlTrackOpensContainer, default off. With it off every check below except
+# the last fails, and that is a configuration answer, not a regression:
+#     grep urlTrackOpensContainer /usr/local/apache/cgi-bin/hg.conf
+# It was turned on for genome-test (the shared cgi-bin hg.conf) on 2026-11-13.
+#
+# hmc, jarvis and ukbDepletion are the members of constraintSuper ("Constraint scores"),
+# which is hidden on a fresh cart; jarvis and ukbDepletion are on inside it by default.
+#   1. hmc alone: hmc drawn, the two other members not.
+#   2. hmc and jarvis on one link: both drawn, ukbDepletion not.
+#   3. the supertrack itself set to hide on the same request, as its own settings page
+#      does when the user hides it: nothing is drawn. Passes on every build; it guards
+#      against the fix overruling an explicit hide.
+proof:
+  - "assertion-only 2026-11-13 -- written from 9f1dba70647 before it reached genome-test"
+  - "xfail 2026-11-13 -- fails on genome-test at step 3, its own check: rows not drawn: hmc (its alpha hgTracks predates 9f1dba70647; the gate is already on there)"
+  - "sandbox-ab 2026-11-13 -- all three cases pass on hgwdev-max with 9f1dba70647 and urlTrackOpensContainer=on"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-1100000&hmc=dense"
+  - wait: "#imgTbl"
+  - expect:
+      rows: [hmc]
+      noRows: [jarvis, ukbDepletion]
+
+  - goto: "/cgi-bin/cartReset"
+  - sleep: 3000
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-1100000&hmc=dense&jarvis=dense"
+  - wait: "#imgTbl"
+  - expect:
+      rows: [hmc, jarvis]
+      noRows: [ukbDepletion]
+
+  - goto: "/cgi-bin/cartReset"
+  - sleep: 3000
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-1100000&constraintSuper=hide&hmc=full"
+  - wait: "#imgTbl"
+  - expect:
+      noRows: [hmc, jarvis, ukbDepletion]
+      rows: [ruler]

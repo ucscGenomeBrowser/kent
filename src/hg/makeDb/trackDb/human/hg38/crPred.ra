@@ -1,5 +1,5 @@
 track crPred
-superTrack on show
+superTrack on
 shortLabel Cis-reg. Predictions
 longLabel Cis-regulatory Element Predictions
 visibility hide

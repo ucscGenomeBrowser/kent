@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest quickLiftMergeTest quickLiftMafSummaryTest refLinkNoRowTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest quickLiftMergeTest quickLiftMafSummaryTest refLinkNoRowTest ctLongFieldTest cartContentsValTest cartPcrVarTest botDelayTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -79,6 +79,8 @@ quickLiftTest: ${BIN_DIR}/quickLiftTester mkdirs
 	        input/quickLift/lift.bb input/quickLift/items.bb > output/quickLiftIntervals.$$g \
 	        && diff expected/quickLiftIntervals.$$g output/quickLiftIntervals.$$g || exit 1; \
 	done
+	HGDB_CONF=input/quickLift/snap.hg.conf ${BIN_DIR}/quickLiftTester snap > output/quickLiftSnap
+	diff expected/quickLiftSnap output/quickLiftSnap
 
 quickLiftJoinedTest: ${BIN_DIR}/quickLiftJoinedTester mkdirs
 	${BIN_DIR}/quickLiftJoinedTester input/quickLift/joined.chain > output/quickLiftJoinedTest
@@ -127,6 +129,24 @@ mallocTopPadTest: ${BIN_DIR}/mallocTopPadTester mkdirs
 	HGDB_CONF=output/topPadOn.conf ${BIN_DIR}/mallocTopPadTester >> output/mallocTopPadTest
 	diff expected/mallocTopPadTest output/mallocTopPadTest
 
+# The bottleneck server answering, refusing, and holding the connection without an answer,
+# with bottleneck.serveOnFailure on and off.  The tester writes its own conf for each run
+# and includes nothing, so no gate comes from the developer's conf.  The two silent runs
+# wait 1 and 10 seconds, so this target takes about 12 seconds.  refs #37738
+botDelayTest: ${BIN_DIR}/botDelayTester mkdirs
+	${BIN_DIR}/botDelayTester answer on 2 0 output > output/botDelayTest
+	${BIN_DIR}/botDelayTester refused on 2 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester refused on 2 250 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester refused on 2 99999 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester refused off 2 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester silent on 1 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester silent on 99999 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester silent off 1 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester unreachable on 1 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester unreachable on 99999 0 output >> output/botDelayTest
+	${BIN_DIR}/botDelayTester unreachable off 2 0 output >> output/botDelayTest
+	diff expected/botDelayTest output/botDelayTest
+
 hVarSubstHtmlTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hVarSubstHtmlTester hVarSubstHtmlTester.c ${MYLIBS} $L
 	${BIN_DIR}/hVarSubstHtmlTester > output/hVarSubstHtmlTest
@@ -140,9 +160,9 @@ cartHubDatabaseTest: mkdirs
 # Run twice, with the collectionHubCopyOnWrite gate set on and off by name.  Outside a CGI the
 # trash directory is ".", so it runs in a fresh output/run each time, with sessionDataDir
 # there too, and it writes hubStatus rows to hgcentralregress.
-collectionHubCopyTest: mkdirs
+collectionHubCopyTest: mkdirs ${BIN_DIR}/hgConfValue
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/collectionHubCopyTester collectionHubCopyTester.c ${MYLIBS} $L
-	./makeHgCentralRegress.sh > /dev/null
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
 	rm -f output/collectionHubCopyTest
 	for gate in on off; do \
 	    echo "include ${HOME}/.hg.conf" > output/collection.$$gate.conf; \
@@ -171,9 +191,13 @@ quickLiftMergeTest: mkdirs
 	diff expected/quickLiftMergeTest output/quickLiftMergeTest
 
 # Includes hgTracks/mafTrack.h for inSummaryMode, an inline there.  Reads hg19.
+# quickLiftSplitRanges is set on by name.  It changes the exact source ranges, and an
+# hg.conf that includes the shared one turns it on, so the answer would depend on who runs it.
 quickLiftMafSummaryTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -I../../hgTracks -o ${BIN_DIR}/quickLiftMafSummaryTester quickLiftMafSummaryTester.c ${MYLIBS} $L
-	${BIN_DIR}/quickLiftMafSummaryTester input/quickLift/lift.bb > output/quickLiftMafSummaryTest
+	echo "include ${HOME}/.hg.conf" > output/quickLiftMafSummary.conf
+	echo "quickLiftSplitRanges=on" >> output/quickLiftMafSummary.conf
+	HGDB_CONF=output/quickLiftMafSummary.conf ${BIN_DIR}/quickLiftMafSummaryTester input/quickLift/lift.bb > output/quickLiftMafSummaryTest
 	diff expected/quickLiftMafSummaryTest output/quickLiftMafSummaryTest
 
 refLinkNoRowTest: mkdirs
@@ -188,9 +212,9 @@ dataVersionPathTest: mkdirs
 
 # Writes dbDb, asmAlias and genark rows to hgcentralregress, like hubSpaceKeysTest.
 # genarkHubPrefix is set by name, since isGenArk() needs it and ~/.hg.conf need not have it.
-asmAliasActiveDbTest: mkdirs
+asmAliasActiveDbTest: mkdirs ${BIN_DIR}/hgConfValue
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/asmAliasActiveDbTester asmAliasActiveDbTester.c ${MYLIBS} $L
-	./makeHgCentralRegress.sh > /dev/null
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
 	echo "include ${HOME}/.hg.conf" > output/asmAlias.conf
 	echo "central.db=hgcentralregress" >> output/asmAlias.conf
 	echo "genarkHubPrefix=/gbdb/genark" >> output/asmAlias.conf
@@ -246,9 +270,9 @@ geoMirrorSelfTest: mkdirs
 # on it; see makeHgCentralRegress.sh for the grant.  makeHgCentralRegress.sh creates it and
 # is safe to run every time.  login.cookieSalt is set because the sync signature is made with
 # it; the value is a test value and means nothing outside this run.
-hubSpaceKeysTest: mkdirs
+hubSpaceKeysTest: mkdirs ${BIN_DIR}/hgConfValue
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hubSpaceKeysTester hubSpaceKeysTester.c ${MYLIBS} $L
-	./makeHgCentralRegress.sh > /dev/null
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
 	echo "include ${HOME}/.hg.conf" > output/regress.conf
 	echo "central.db=hgcentralregress" >> output/regress.conf
 	echo "login.cookieSalt=testSaltForRegressRuns" >> output/regress.conf

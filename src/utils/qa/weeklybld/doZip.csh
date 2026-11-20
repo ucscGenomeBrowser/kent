@@ -99,8 +99,8 @@ else
   # curated markdown notes if they have been generated, else GitHub's auto notes.
   # --target "$relSha" pins the tag/release to the correct commit regardless of
   # mirror timing (ignored when the tag already exists on github).
-  set notes = "$WEEKLYBLD/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
-  if ( -e "$notes" ) then
+  set notes = "$BUILDSTATE/markdownReleaseNotes/v${BRANCHNN}_markdown.txt"
+  if ( -s "$notes" ) then
    gh release create "$tag" "$zipFile" "$tgzFile" --repo ucscGenomeBrowser/kent \
      --target "$relSha" --title "v${BRANCHNN} Release" --notes-file "$notes"
   else

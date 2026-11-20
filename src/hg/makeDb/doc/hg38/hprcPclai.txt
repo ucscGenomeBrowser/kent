@@ -205,3 +205,12 @@ hgsql hg38 -N -e "select settings from trackDb_max where tableName='hprcPclaiNA1
 # will show a dense row with no clickable items until v505 gets there, roughly
 # three weeks after the push. Neither copy is in publicGenArk.txt, so no RR user
 # sees either state.
+
+##############################################################################
+# 2026-10-25: default visibility hide (hand-edit moved into the generator)
+##############################################################################
+# The composite now starts hidden: "visibility hide", with "onlyVisibility dense"
+# unchanged, so a reader who turns the track on gets dense and nothing else. It
+# was too prominent as a default-dense track. The change was first made by hand
+# in hprcPclai.ra; hprcPclaiMakeTrackDb.py now writes "visibility hide" too, so
+# regenerating the .ra does not bring "visibility dense" back.

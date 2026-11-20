@@ -650,6 +650,206 @@ var genomePos = {
  //// Creating items             /////
 /////////////////////////////////////
 var myVariants = {
+    // Built-in column names, mirrored on the server in
+    // myVariantsTrack.c:reservedFieldNames.
+    // Mirrors reservedFieldNames in myVariantsTrack.c: the columns, plus the
+    // names the details page uses for its own controls.
+    reservedFieldNames: ["bin", "chrom", "chromStart", "chromEnd", "name", "score",
+        "strand", "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
+        "chromStarts", "description", "db", "ref", "alt", "mouseover",
+        "itemType", "subType", "exonFrames", "id",
+        "delete", "cancel", "moveTo", "moveToNew", "moveSave", "moveSaveMsg", "moveWarn",
+        "projectSelect", "position"],
+
+    // The create dialog's form, stashed by createBedForm. Anything that has to
+    // reach a form field before the dialog is in the document goes through this,
+    // since getElementById cannot see a detached form. Null until the form is
+    // built, and it is never built for a user who is not logged in.
+    formEle: null,
+
+    projects: function() {
+        // The user's projects, each with its track name and its own custom
+        // field lists. A project is a track, so this is also the track list.
+        return (typeof hgTracks !== 'undefined' && hgTracks.myVariantsProjects)
+               ? hgTracks.myVariantsProjects : [];
+    },
+
+    projectForTrack: function(trackName) {
+        // The project drawn as trackName, or null when trackName is not one of
+        // the user's own projects (a shared track is not).
+        return myVariants.projects().find(function(proj) {
+            return proj.track === trackName;
+        }) || null;
+    },
+
+    projectById: function(id) {
+        // The project with this id, or null. Projects are identified by id
+        // everywhere: two of them may share a label, and a label can change.
+        return myVariants.projects().find(function(proj) {
+            return String(proj.id) === String(id);
+        }) || null;
+    },
+
+    defaultProjectLabel: function() {
+        // The label a first project gets. The server sends it so the name is
+        // defined in one place.
+        return (typeof hgTracks !== 'undefined' && hgTracks.myVariantsDefaultLabel)
+               ? hgTracks.myVariantsDefaultLabel : "My Annotations";
+    },
+
+    currentProjectId: function() {
+        // Which project a save defaults to: the one last saved into, else the
+        // one the server nominated. Empty string when the user has none yet.
+        if (typeof hgTracks === 'undefined')
+            return "";
+        let id = hgTracks.myVariantsLastProject || hgTracks.myVariantsDefaultProject || "";
+        return myVariants.projectById(id) ? String(id) : "";
+    },
+
+    positionString: function(chrom, bedStart, bedEnd) {
+        // Browser-style position string for a BED range, so the start reads one
+        // higher than the stored coordinate. Plain digits, no group separators:
+        // this string goes back into the position box, and parseBedRange only
+        // knows the comma that a US locale would have used.
+        let startNum = parseInt(bedStart, 10);
+        let endNum = parseInt(bedEnd, 10);
+        let startText = isNaN(startNum) ? bedStart : String(startNum + 1);
+        let endText = isNaN(endNum) ? bedEnd : String(endNum);
+        return chrom + ":" + startText + "-" + endText;
+    },
+
+
+    // The form's Track dropdown, stashed the way formEle is: it has to be
+    // reachable while the form is still detached from the document.
+    trackSelectEle: null,
+
+    selectedProjectId: function() {
+        // The id of the track the next save goes into. Empty string when the
+        // user has no tracks yet, which is the first save creating one.
+        let sel = myVariants.trackSelectEle;
+        if (sel)
+            return sel.value;
+        return myVariants.currentProjectId();
+    },
+
+    selectedProject: function() {
+        // The project the next save goes into, or null when it goes into a
+        // track that does not exist yet (which has no fields yet).
+        return myVariants.projectById(myVariants.selectedProjectId());
+    },
+
+    fillTrackSelect: function(wantedId, keepAdded) {
+        // Clear the Track dropdown and put back one option per track, picking
+        // wantedId, or the first track when that one is gone. A user with no
+        // tracks gets one option naming the track their first save creates.
+        // keepAdded keeps the custom field rows the user added.
+        let sel = myVariants.trackSelectEle;
+        if (!sel)
+            return;
+        while (sel.firstChild)
+            sel.removeChild(sel.firstChild);
+        let projects = myVariants.projects();
+        if (projects.length === 0) {
+            let opt = document.createElement("option");
+            opt.value = "";
+            opt.textContent = myVariants.defaultProjectLabel();
+            sel.appendChild(opt);
+        } else {
+            projects.forEach(function(proj) {
+                let opt = document.createElement("option");
+                opt.value = String(proj.id);
+                opt.textContent = proj.label;
+                sel.appendChild(opt);
+            });
+        }
+        sel.value = (wantedId === undefined || wantedId === null) ? "" : String(wantedId);
+        if (sel.selectedIndex < 0)
+            sel.selectedIndex = 0;
+        // Custom fields are columns on one project's table, so the rows are
+        // those of whichever track is now picked.
+        if (myVariants.refreshCustomFields)
+            myVariants.refreshCustomFields(keepAdded);
+    },
+
+    refreshTrackSelect: function() {
+        // Rebuild the dropdown after the track list changed, keeping the pick
+        // and anything typed into the form.
+        let sel = myVariants.trackSelectEle;
+        if (sel)
+            myVariants.fillTrackSelect(sel.value, true);
+    },
+
+    resetTrackSelect: function() {
+        // Point the dropdown back at the track last saved into, so repeat adds
+        // stay put.
+        myVariants.fillTrackSelect(myVariants.currentProjectId());
+    },
+
+    noteNewTrack: function(id) {
+        // A track just created is where the next save goes, which is what the
+        // server recorded when it made it.
+        if (typeof hgTracks !== 'undefined')
+            hgTracks.myVariantsLastProject = String(id);
+        myVariants.fillTrackSelect(String(id), true);
+    },
+
+    fieldNameProblem: function(name) {
+        // Return the reason a custom field name is unusable, or null when it is
+        // fine. Wording is aimed at someone naming a column, not a programmer.
+        if (/\s/.test(name))
+            return "Field names cannot contain spaces. Try " +
+                   name.trim().replace(/\s+/g, "_") + " instead.";
+        // A letter first also keeps out the _hidden_ prefix of hidden fields.
+        if (!/^[a-zA-Z]/.test(name))
+            return "Field names have to start with a letter.";
+        if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(name))
+            return "Field names can only hold letters, numbers and underscores.";
+        // Hiding a field renames it _hidden_<name>, which has to fit MySQL's 64.
+        // Mirrors MYVARIANTS_FIELD_NAME_MAX in myVariantsTrack.c.
+        if (name.length > 56)
+            return "Field names can be at most 56 characters long.";
+        // Column names ignore case, so ID clashes with id.
+        let lower = name.toLowerCase();
+        if (myVariants.reservedFieldNames.some(function(r) { return r.toLowerCase() === lower; }))
+            return "'" + name + "' is already the name of a built-in field.";
+        // A name the user typed is in this list too, so a clash is a second match.
+        let count = 0;
+        let other = null;
+        document.querySelectorAll("#customFieldsList .customFieldName")
+            .forEach(function(inp) {
+                let val = inp.value.trim();
+                if (val.toLowerCase() !== lower)
+                    return;
+                count++;
+                if (val !== name || other === null)
+                    other = val;
+            });
+        if (count > 1)
+            return "You already have a field called '" + other + "'.";
+        let proj = myVariants.selectedProject();
+        let hidden = proj && proj.hiddenFields ? proj.hiddenFields : [];
+        let hiddenMatch = hidden.find(function(h) { return h.toLowerCase() === lower; });
+        if (hiddenMatch)
+            return "You have a hidden field called '" + hiddenMatch +
+                   "'. Restore it below instead.";
+        return null;
+    },
+
+    validateFieldName: function(nameInput) {
+        // Show the problem next to the field being typed in. An alert() gives no
+        // way to see the name and the rule at the same time.
+        let msg = nameInput.closest(".customFieldRow")
+                           .querySelector(".customFieldError");
+        let name = nameInput.value.trim();
+        let problem = name ? myVariants.fieldNameProblem(name) : null;
+        if (msg) {
+            msg.textContent = problem ? problem : "";
+            msg.style.display = problem ? "" : "none";
+        }
+        nameInput.style.borderColor = problem ? "#a00" : "";
+        return problem === null;
+    },
+
     createBedForm: function(dialogEle) {
         // Shared top fields (visible in all manual modes)
         const commonTopFields = [
@@ -668,11 +868,11 @@ var myVariants = {
             info: "Alternate (variant) allele sequence" };
         // Position fields: shown always for Transcript; collapsible for SNV/CNV
         const positionFields = [
-            { label: "Chromosome", id: "chrom", type: "text" },
-            { label: "Start", id: "start", type: "number",
-              info: "1-based start position on the chromosome" },
-            { label: "End", id: "end", type: "number",
-              info: "1-based end position on the chromosome (inclusive)" },
+            { label: "Position", id: "positionRange", type: "text",
+              placeholder: "chr1:1000-2000, BRCA1, or NM_007294.4:c.5266dupC",
+              info: "Where this annotation goes. A position like chr1:1000-2000 "
+                  + "or a single base like chr1:1000 is used as typed; a gene "
+                  + "symbol or an HGVS term is looked up and filled in for you" },
             { label: "Score", id: "score", type: "number",
               info: "Score from 0-1000. Higher scores display darker" },
             { label: "Strand", id: "strand", type: "text",
@@ -680,10 +880,12 @@ var myVariants = {
         ];
         // Transcript-only CDS fields (displayed as CDS Start/End; stored as thickStart/thickEnd)
         const cdsFields = [
-            { label: "CDS Start", id: "thickStart", type: "number",
-              info: "Start of the coding region" },
+            { label: "CDS Start (0-based)", id: "thickStart", type: "number",
+              info: "BED thickStart: start of the coding region. Leave both CDS Start "
+                  + "and CDS End blank for a thin block." },
             { label: "CDS End", id: "thickEnd", type: "number",
-              info: "End of the coding region" },
+              info: "BED thickEnd: end of the coding region. Leave both CDS Start "
+                  + "and CDS End blank for a thin block." },
         ];
         // Shared bottom fields
         const commonBottomFields = [
@@ -691,88 +893,113 @@ var myVariants = {
               info: "Short text shown when hovering over this item. If empty, the label and alleles are displayed" },
             { label: "Description", id: "description", type: "textarea", placeholder: "Longer description/notes",
               info: "Longer notes or comments about this annotation. Displayed on the details page" },
-            { label: "Project", id: "project", type: "text", placeholder: "Optional project name",
-              info: "Group annotations by project. Projects with no annotations are automatically removed from the list" },
         ];
-        // CNV vocabulary, mirrored on the server in myVariantsTrack.c:validCnvTypes
-        const cnvTypeOptions = ["deletion", "duplication", "insertion", "inversion",
-                                "translocation", "complex", "breakend"];
+        // The annotation types, each with its label and subtypes, as the server
+        // lists them in myVariantsItemTypes and myVariantsSubTypes.
+        const itemTypes = hgTracks.myVariantsTypes || [];
+        let typeInfo = function(value) {
+            return itemTypes.find(function(t) { return t.value === value; }) ||
+                   {value: value, label: value, subTypes: []};
+        };
 
         const form = document.createElement("form");
         form.className = "myVariants-form";
         form.action = "hgTracks";
         form.method = "post";
         form.id = "myVariants-form";
-
-        // First: HGVS/position input box (primary interaction method)
-        let quickInpDiv = document.createElement("div");
-        quickInpDiv.id = "hgvsInputDiv";
-        form.appendChild(quickInpDiv);
-
-        let quickInp = document.createElement("input");
-        let quickInpLabel = document.createElement("label");
-        quickInp.type = "text";
-        quickInp.id = "hgvsInput";
-        quickInp.name = "myVariantsHgvsInput";
-        quickInp.style.width = "300px";
-        quickInpLabel.textContent = "Enter HGVS, position, or gene symbol";
-        quickInpLabel.style.display = "inline-block";
-        quickInpLabel.style.minWidth = "200px";
-        quickInpLabel.style.marginRight = "8px";
-        quickInpLabel.for = "hgvsInput";
+        // Stash it now, before any field is built: the field lookups below run
+        // while the form is still detached from the document.
+        myVariants.formEle = form;
 
         let resizeDialog = function() {
+            // One long form, so use most of the screen.
             var dialog = $("#myVariantsDialog");
-            var hgvsVisible = document.getElementById("hgvsInputDiv").style.display !== "none";
-            if (hgvsVisible) {
-                dialog.dialog("option", "width", 580);
-                dialog.dialog("option", "height", "auto");
-                dialog.dialog("option", "position", { my: "center", at: "center", of: window });
-            } else {
-                dialog.dialog("option", "width", Math.min(1000, window.innerWidth * 0.9));
-                dialog.dialog("option", "height", Math.min(800, window.innerHeight * 0.9));
-                dialog.dialog("option", "position", { my: "top+30", at: "top", of: window });
-            }
+            dialog.dialog("option", "width", window.innerWidth * 0.85);
+            dialog.dialog("option", "height", window.innerHeight * 0.85);
+            dialog.dialog("option", "position", { my: "top+30", at: "top", of: window });
         };
 
-        let updatePositionSummary = function() {
-            let summaryText = document.getElementById("positionSummaryText");
-            if (!summaryText) return;
-            let chrom = document.getElementById("chrom");
-            let start = document.getElementById("start");
-            let end = document.getElementById("end");
-            if (chrom && start && end) {
-                let startVal = parseInt(start.value);
-                let endVal = parseInt(end.value);
-                let startFmt = isNaN(startVal) ? start.value : startVal.toLocaleString();
-                let endFmt = isNaN(endVal) ? end.value : endVal.toLocaleString();
-                summaryText.textContent = chrom.value + ":" + startFmt + "-" + endFmt;
+        // Read the position box and put the range into the hidden chrom, start
+        // and end fields the server and the block editor read. Returns the
+        // parsed range, or null when the box does not hold a position.
+        let syncPositionFields = function() {
+            let posInput = form.querySelector("#positionRange");
+            if (!posInput) return null;
+            let range = parseBedRange(posInput.value);
+            posInput.style.borderColor = range ? "" : "#a00";
+            // Scope to the form: the hgTracks ideogram image also has id="chrom".
+            let chrom = form.querySelector("#chrom");
+            let start = form.querySelector("#start");
+            let end = form.querySelector("#end");
+            if (range && chrom && start && end) {
+                chrom.value = range.chrom;
+                start.value = range.start;
+                end.value = range.end;
             }
+            return range;
         };
 
-        // Switch the form into one of four modes and remember the choice so the
+        // Says where the position in the box came from. Set through this rather
+        // than by element, so it also runs while the form is being built.
+        let setPositionSource = function(text) {
+            if (posSourceNote) { posSourceNote.textContent = text; }
+        };
+
+        // Write a BED range into the position box, then push it back out to the
+        // hidden fields so every copy of the range agrees.
+        let setPositionFields = function(chrom, bedStart, bedEnd) {
+            let posInput = form.querySelector("#positionRange");
+            if (posInput)
+                posInput.value = myVariants.positionString(chrom, bedStart, bedEnd);
+            syncPositionFields();
+        };
+
+        // Switch the form to one annotation type and remember the choice so the
         // next dialog open restarts in the same place.
         let applyMode = function(mode) {
-            const isHgvs = mode === "hgvs";
             const isTranscript = mode === "transcript";
             const isSnv = mode === "snv";
             const isCnv = mode === "cnv";
+            const isPrimer = mode === "primer";
 
-            document.getElementById("hgvsInputDiv").style.display = isHgvs ? "" : "none";
-            document.getElementById("manualInputDiv").style.display = isHgvs ? "none" : "";
-            document.getElementById("hgvsManualToggle").textContent =
-                isHgvs ? "Or edit item fields manually" : "Back to quick input mode";
+            typeRadioBar.querySelectorAll("input[type=radio]").forEach(function(r) {
+                r.checked = r.value === mode;
+            });
 
-            if (!isHgvs) {
-                document.getElementById("typeTranscript").checked = isTranscript;
-                document.getElementById("typeSnv").checked = isSnv;
-                document.getElementById("typeCnv").checked = isCnv;
-            }
+            refWrapper.style.display = isSnv ? "" : "none";
+            altWrapper.style.display = (isSnv || isCnv) ? "" : "none";
+            altLabel.textContent = isCnv ? "Sequence" : "Alt";
 
-            document.getElementById("refWrapper").style.display = isSnv ? "" : "none";
-            document.getElementById("altWrapper").style.display = (isSnv || isCnv) ? "" : "none";
-            document.getElementById("altLabel").textContent = isCnv ? "Sequence" : "Alt";
-            document.getElementById("cnvTypeWrapper").style.display = isCnv ? "" : "none";
+            // The subtype menu holds the picked type's subtypes, keeping the
+            // current choice when the new type has it too.
+            let info = typeInfo(mode);
+            let keep = subTypeSelect.value;
+            subTypeSelect.textContent = "";
+            info.subTypes.forEach(function(t) {
+                let opt = document.createElement("option");
+                opt.value = t;
+                opt.textContent = t;
+                subTypeSelect.appendChild(opt);
+            });
+            if (info.subTypes.indexOf(keep) >= 0) { subTypeSelect.value = keep; }
+            subTypeLabel.textContent = info.subTypeLabel || "";
+            Object.keys(subTypeIcons).forEach(function(type) {
+                subTypeIcons[type].style.display = type === mode ? "" : "none";
+            });
+            subTypeWrapper.style.display = info.subTypes.length > 0 ? "" : "none";
+
+            // A primer pair uses the block editor for its primer sites, without
+            // exon frames.
+            const isPrimerPair = isPrimer && subTypeSelect.value === "pair";
+            blocksContainer.classList.toggle("mvNoFrames", !isTranscript);
+            blocksLabel.textContent = isPrimerPair ? "Primer sites (optional)" : "Blocks (optional)";
+            blocksHint.textContent = isPrimerPair ?
+                "One block for each primer: the forward primer at the start of the position " +
+                "range, the reverse primer at its end. The position is the whole PCR product. " +
+                "First offset must be 0; last block must reach the end of the range." :
+                "Offsets are relative to the start of the position range. " +
+                "First offset must be 0; last block must reach the end of the " +
+                "range. Leave empty for a single full-span block.";
 
             if (isTranscript) {
                 advancedDiv.style.display = "none";
@@ -781,119 +1008,285 @@ var myVariants = {
                 cdsWraps.forEach(function(w) { w.style.display = ""; });
                 blocksSection.style.display = "";
                 const order = [
-                    typeRadioBar, posSummary,
-                    posWraps[0], posWraps[1], posWraps[2],
-                    nameWrap,
-                    posWraps[3], posWraps[4],
+                    typeRadioBar,
+                    trackWrap, newTrackRow, trackDivider,
+                    posWraps[0],
+                    nameWrap, colorWrap,
                     cdsWraps[0], cdsWraps[1],
-                    colorWrap,
-                    mouseoverWrap, descriptionWrap, projectWrap,
+                    posWraps[1], posWraps[2],
+                    mouseoverWrap, descriptionWrap,
                     blocksSection,
                     advancedDiv, cdsBlocksDiv,
-                    refWrapper, cnvTypeWrapper, altWrapper,
+                    refWrapper, subTypeWrapper, altWrapper,
                     customFieldsSection
                 ];
                 order.forEach(function(el) { manualInpDiv.appendChild(el); });
             } else {
-                // Pack wrappers back into their collapsible containers.
-                posWraps.forEach(function(w) { advancedDiv.appendChild(w); });
+                // Pack wrappers back into their containers.  Position leads;
+                // score and strand follow the alleles.
+                advancedDiv.appendChild(posWraps[0]);
                 cdsWraps.forEach(function(w) { cdsBlocksDiv.appendChild(w); });
                 cdsBlocksDiv.appendChild(blocksSection);
-                advancedDiv.style.display = "none";
+                advancedDiv.style.display = "";
                 cdsBlocksDiv.style.display = "none";
                 const order = [
-                    typeRadioBar, posSummary,
+                    typeRadioBar,
+                    trackWrap, newTrackRow, trackDivider,
                     advancedDiv,
                     nameWrap, colorWrap,
-                    refWrapper, cnvTypeWrapper, altWrapper,
+                    refWrapper, subTypeWrapper, altWrapper,
+                    posWraps[1], posWraps[2],
                     cdsBlocksDiv,
-                    mouseoverWrap, descriptionWrap, projectWrap,
+                    mouseoverWrap, descriptionWrap,
                     customFieldsSection
                 ];
+                // A primer pair keeps the blocks, without the coding range.
+                if (isPrimerPair) {
+                    blocksSection.style.display = "";
+                    order.splice(order.indexOf(cdsBlocksDiv), 0, blocksSection);
+                }
                 order.forEach(function(el) { manualInpDiv.appendChild(el); });
             }
-            document.getElementById("positionSummaryDiv").style.display = isTranscript ? "none" : "";
-            if (posEditLink) posEditLink.textContent = "[edit]";
 
             try { localStorage.setItem("myVariantsLastMode", mode); } catch (e) { /* private mode */ }
             resizeDialog();
         };
 
         let currentType = function() {
-            if (document.getElementById("typeTranscript").checked) return "transcript";
-            if (document.getElementById("typeCnv").checked) return "cnv";
-            return "snv";
+            let checked = typeRadioBar.querySelector("input[type=radio]:checked");
+            return checked ? checked.value : "snv";
         };
 
-        let toggleForm = function(event) {
-            event.preventDefault();
-            const inHgvs = document.getElementById("hgvsInputDiv").style.display !== "none";
-            applyMode(inHgvs ? currentType() : "hgvs");
+        // The term the position box held before a lookup replaced it with the
+        // position that term resolved to, so the note beside the box can say
+        // where the position came from.
+        let lookedUpTerm = "";
+        // What to do once a lookup has filled the form, when something was
+        // waiting on it. A save that hits a term instead of a position sets this.
+        let lookupDone = null;
+        // The type a lookup switched the form to, and the type before it, so a
+        // typed position can put the reader's own type back.
+        let lookupType = null;
+        let typeBeforeLookup = null;
+
+        // warn() renders its message with innerHTML, so anything carrying the
+        // typed term has to go through here first.
+        let asText = function(s) {
+            let div = document.createElement("div");
+            div.textContent = s;
+            return div.innerHTML;
         };
-        let toggleContainer = document.createElement("p");
-        let toggle = document.createElement("a");
-        toggle.href = "#";
-        toggle.id = "hgvsManualToggle";
-        toggle.addEventListener("click", toggleForm);
-        toggle.textContent = "Or edit item fields manually";
-        toggleContainer.appendChild(toggle);
 
-        quickInpDiv.appendChild(quickInpLabel);
-        quickInpDiv.appendChild(quickInp);
-        form.appendChild(toggleContainer);
+        // Fill the form in from one lookup hit. An HGVS term says what kind of
+        // variant it is, so its type replaces the form's; a position or gene
+        // comes back with no type and leaves the reader's choice alone.
+        let applyMatch = function(res) {
+            if (res.itemType) {
+                if (lookupType === null) { typeBeforeLookup = currentType(); }
+                lookupType = res.itemType;
+                applyMode(res.itemType);
+                if (res.subType) { subTypeSelect.value = res.subType; }
+            }
+            setPositionFields(res.chrom, res.start, res.end);
+            let thickStartEl = form.querySelector("#thickStart");
+            let thickEndEl = form.querySelector("#thickEnd");
+            if (thickStartEl) { thickStartEl.value = res.start; }
+            if (thickEndEl) { thickEndEl.value = res.end; }
+            // The search owns the alleles, so assign them, empty values included.
+            // Otherwise a second search shows the new position under the first
+            // term's alleles.
+            let setFromSearch = function(id, value) {
+                let el = form.querySelector("#" + id);
+                if (!el) { return; }
+                el.value = value || "";
+                el.dataset.lookupValue = el.value;
+            };
+            // Label and description are the user's once they type in them. A
+            // value a lookup wrote is remembered, so the next lookup can tell it
+            // from typed text and replace it.
+            let setUnlessTyped = function(id, value) {
+                let el = form.querySelector("#" + id);
+                if (!el) { return; }
+                if (el.value.trim() !== "" && el.value !== el.dataset.lookupValue) { return; }
+                el.value = value || "";
+                el.dataset.lookupValue = el.value;
+            };
+            setUnlessTyped("name", res.name);
+            setUnlessTyped("description", res.description);
+            setFromSearch("ref", res.ref);
+            setFromSearch("alt", res.alt);
+            // The box held a term a moment ago and holds the position it
+            // resolved to now, so say where that position came from.
+            setPositionSource(lookedUpTerm ? "From " + lookedUpTerm : "From a lookup");
+            let waiting = lookupDone;
+            lookupDone = null;
+            if (waiting) { waiting(); }
+        };
 
-        // Manual input div (contains simple + advanced fields)
+        // A term can land in several places, most often a gene symbol with more
+        // than one transcript. Make the user say which one before filling the form.
+        let showMatchPicker = function(term, matches) {
+            // Build a fresh element each time; re-calling .dialog() on a closed
+            // one sets options instead of reopening it.
+            let old = document.getElementById("myVariantsMatchPicker");
+            if (old) {
+                if ($(old).hasClass("ui-dialog-content")) { $(old).dialog("destroy"); }
+                old.remove();
+            }
+            let picker = document.createElement("div");
+            picker.id = "myVariantsMatchPicker";
+            document.body.appendChild(picker);
+            let intro = document.createElement("p");
+            intro.textContent = "'" + term + "' matches " + matches.length +
+                " locations. Choose the one to annotate:";
+            picker.appendChild(intro);
+            let list = document.createElement("div");
+            list.style.cssText = "max-height:320px; overflow-y:auto;";
+            matches.forEach(function(match, i) {
+                let row = document.createElement("div");
+                row.style.cssText = "padding:5px 2px; border-bottom:1px solid #eee;";
+                let radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "myVariantsMatchChoice";
+                radio.id = "myVariantsMatch" + i;
+                radio.value = i;
+                if (i === 0) { radio.checked = true; }
+                let label = document.createElement("label");
+                label.htmlFor = radio.id;
+                label.style.marginLeft = "6px";
+                let posText = myVariants.positionString(match.chrom, match.start, match.end);
+                label.textContent = match.label ? match.label + "  " + posText : posText;
+                row.appendChild(radio);
+                row.appendChild(label);
+                let sub = [];
+                if (match.category) { sub.push(match.category); }
+                if (match.description) { sub.push(match.description); }
+                if (sub.length > 0) {
+                    let subDiv = document.createElement("div");
+                    subDiv.style.cssText = "margin-left:22px; font-size:12px; color:#666;";
+                    subDiv.textContent = sub.join(" - ");
+                    row.appendChild(subDiv);
+                }
+                list.appendChild(row);
+            });
+            picker.appendChild(list);
+            $(picker).dialog({
+                modal: true,
+                width: 560,
+                title: "Choose a location",
+                buttons: {
+                    Submit: function() {
+                        let chosen = picker.querySelector(
+                            "input[name=myVariantsMatchChoice]:checked");
+                        if (!chosen) { return; }
+                        $(this).dialog("close");
+                        applyMatch(matches[parseInt(chosen.value, 10)]);
+                    },
+                    Cancel: function() {
+                        lookupDone = null;
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        };
+
+        // Resolve whatever is in the position box on the server and fill the form
+        // in from what comes back. Only reached when the box does not already
+        // hold a plain position: a gene symbol or an HGVS term needs the lookup,
+        // and a position does not. onDone runs once the form is filled.
+        let doLookup = function(onDone) {
+            let box = document.getElementById("positionRange");
+            let term = box.value.trim();
+            if (!term) { return; }
+            lookedUpTerm = term;
+            lookupDone = onDone;
+            // The warn box accumulates, so a third lookup otherwise shows the two
+            // earlier errors stacked over the form. Start each one clean.
+            if (typeof hideWarnBox === "function") { hideWarnBox(); }
+            let btn = document.getElementById("hgvsSearchButton");
+            if (btn) { btn.disabled = true; }
+            document.body.style.cursor = "wait";
+            let url = "../cgi-bin/hgTracks?myVarResolveInput=" + encodeURIComponent(term) +
+                "&db=" + getDb() + "&hgsid=" + getHgsid();
+            fetch(url, {method: "GET", credentials: "same-origin"})
+            .then(function(resp) { return resp.json(); })
+            .then(function(res) {
+                document.body.style.cursor = "";
+                if (btn) { btn.disabled = false; }
+                if (!res || res.error) {
+                    lookupDone = null;
+                    warn(asText(res && res.error ? res.error :
+                                "Could not resolve '" + term + "'"));
+                    // The term is still in the box; put the caret back in it so a
+                    // typo in a long HGVS string can be fixed without retyping.
+                    box.focus();
+                    return;
+                }
+                // Said once per term, whichever hit is picked.
+                if (res.warning) { warn(asText(res.warning)); }
+                if (res.matches) {
+                    showMatchPicker(term, res.matches);
+                    return;
+                }
+                applyMatch(res);
+            })
+            .catch(function(err) {
+                document.body.style.cursor = "";
+                if (btn) { btn.disabled = false; }
+                lookupDone = null;
+                warn(asText("Error resolving search: " + err.message));
+                box.focus();
+            });
+        };
+        // Stash on the form so init() can wire the autocomplete select to it.
+        form.doLookup = doLookup;
+
         let manualInpDiv = document.createElement("div");
         manualInpDiv.id = "manualInputDiv";
-        manualInpDiv.style.display = "none";
 
-        let posSummary = document.createElement("div");
-        posSummary.id = "positionSummaryDiv";
-        posSummary.style.cssText = "margin-bottom:12px; padding:6px 10px; background:#f0f4f8; border:1px solid #d0d7de; border-radius:4px; font-size:13px;";
-        let posSummaryLabel = document.createElement("b");
-        posSummaryLabel.textContent = "Position: ";
-        posSummary.appendChild(posSummaryLabel);
-        let posSummaryText = document.createElement("span");
-        posSummaryText.id = "positionSummaryText";
-        posSummary.appendChild(posSummaryText);
-        let posSummarySuffix = document.createElement("span");
-        posSummarySuffix.style.color = "#888";
-        posSummarySuffix.textContent = " (from current view)";
-        posSummary.appendChild(posSummarySuffix);
-        let posEditLink = document.createElement("a");
-        posEditLink.href = "#";
-        posEditLink.textContent = "[edit]";
-        posEditLink.style.cssText = "margin-left:8px; font-size:12px;";
-        posEditLink.addEventListener("click", function(event) {
+        // A rejected submit leaves the dialog open on the input the server
+        // refused. This puts the whole form back to its just-opened state, which
+        // always describes a valid annotation over the current view.
+        let resetLink = document.createElement("a");
+        resetLink.href = "#";
+        resetLink.id = "myVariantsResetLink";
+        resetLink.textContent = "[reset form]";
+        resetLink.style.cssText = "margin-left:8px; font-size:12px;";
+        resetLink.addEventListener("click", function(event) {
             event.preventDefault();
-            let advDiv = document.getElementById("advancedFieldsDiv");
-            if (!advDiv) return;
-            if (advDiv.style.display === "none") {
-                advDiv.style.display = "";
-                posEditLink.textContent = "[hide]";
-                let chromField = document.getElementById("chrom");
-                if (chromField) {
-                    chromField.scrollIntoView({behavior: "smooth", block: "nearest"});
-                    chromField.focus();
-                }
-            } else {
-                advDiv.style.display = "none";
-                posEditLink.textContent = "[edit]";
-            }
+            // A submit error is about input that is about to be replaced. Kept out
+            // of applyDefaults, which also runs on page load.
+            if (typeof hideWarnBox === "function") { hideWarnBox(); }
+            applyDefaults();
+            // applyDefaults sets values only; applyMode is what re-lays out the rows.
+            applyMode(currentType());
         });
-        posSummary.appendChild(posEditLink);
-        manualInpDiv.appendChild(posSummary);
+
+        // Looks up a gene symbol or an HGVS term in the position box. A position
+        // needs no lookup, so the button says so rather than going to the server
+        // for an answer it already has.
+        let lookupButton = document.createElement("button");
+        lookupButton.type = "button";
+        lookupButton.id = "hgvsSearchButton";
+        lookupButton.textContent = "Look up";
+        lookupButton.title = "Look up a gene symbol or HGVS term and fill in the form";
+        lookupButton.style.marginLeft = "8px";
+        lookupButton.addEventListener("click", function() { doLookup(null); });
+
+        // Sits next to the position box and says where the position came from.
+        let posSourceNote = document.createElement("span");
+        posSourceNote.id = "positionSourceNote";
+        posSourceNote.style.cssText = "margin-left:8px; font-size:12px; color:#666;";
 
         // Helper function to create form field (uses createInfoIcon from utils.js)
         let createField = function(field, container) {
+            // mvRow puts the label in a fixed column (HGStyle.css).
             const wrapper = document.createElement("div");
-            wrapper.style.marginBottom = "8px";
+            wrapper.className = field.type === "textarea" ? "mvRow mvRowTop" : "mvRow";
 
             const label = document.createElement("label");
             label.htmlFor = field.id;
             label.textContent = field.label;
-            label.style.display = "inline-block";
-            label.style.minWidth = "140px";
 
             let input;
             if (field.type === "textarea") {
@@ -906,28 +1299,24 @@ var myVariants = {
             }
             input.id = field.id;
 
-            if (field.id === "chrom") {
-                input.value = hgTracks.chromName;
-            }
+            // Only fixed attributes are set here. Starting values come from
+            // applyDefaults, which the reset link calls again.
             if (field.type === "number") {
                 input.min = 0;
-                if (field.id === "start" || field.id === "thickStart") {
-                    input.value = hgTracks.winStart;
-                }
-                if (field.id === "end" || field.id === "thickEnd") {
-                    input.value = hgTracks.winEnd;
-                }
                 if (field.id === "score") {
-                    input.value = 0;
                     input.max = 1000;
                 }
             }
-            if (field.id === "strand") {
-                input.value = ".";
-            }
             if (field.id === "color") {
-                input.value = "#000000";
                 input.style.width = "70px";
+            }
+            // These are varchar(255) columns; the server refuses anything longer.
+            if (["name", "mouseover", "ref"].indexOf(field.id) >= 0) {
+                input.maxLength = 255;
+            }
+            if (field.id === "positionRange") {
+                // Wide enough for an HGVS term, which is the longest thing it takes.
+                input.style.width = "340px";
             }
             if (field.placeholder) {
                 input.placeholder = field.placeholder;
@@ -938,107 +1327,47 @@ var myVariants = {
             if (field.info) {
                 wrapper.appendChild(createInfoIcon(field.info));
             }
+            if (field.id === "positionRange") {
+                wrapper.appendChild(lookupButton);
+                wrapper.appendChild(posSourceNote);
+                // Enter looks the box up rather than submitting the form, unless
+                // the autocomplete menu is open and handling Enter itself.
+                input.addEventListener("keydown", function(event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        if ($(".ui-autocomplete:visible").length === 0)
+                            doLookup(null);
+                    }
+                });
+            }
             container.appendChild(wrapper);
 
             return input;
-        };
-
-        // Helper function to create project field with dropdown if projects exist
-        let createProjectField = function(container) {
-            const wrapper = document.createElement("div");
-            wrapper.style.marginBottom = "8px";
-
-            const label = document.createElement("label");
-            label.htmlFor = "project";
-            label.textContent = "Project";
-            label.style.display = "inline-block";
-            label.style.minWidth = "140px";
-            wrapper.appendChild(label);
-
-            // Check if we have existing projects from the server
-            let existingProjects = (typeof hgTracks !== 'undefined' && hgTracks.myVariantsProjects)
-                                   ? hgTracks.myVariantsProjects : [];
-
-            if (existingProjects.length > 0) {
-                // Create dropdown with existing projects
-                let select = document.createElement("select");
-                select.id = "projectSelect";
-                select.style.marginRight = "8px";
-
-                // Add empty option
-                let emptyOpt = document.createElement("option");
-                emptyOpt.value = "";
-                emptyOpt.textContent = "(none)";
-                select.appendChild(emptyOpt);
-
-                // Add existing projects
-                existingProjects.forEach(proj => {
-                    let opt = document.createElement("option");
-                    opt.value = proj;
-                    opt.textContent = proj;
-                    select.appendChild(opt);
-                });
-
-                // Add "Add new..." option
-                let newOpt = document.createElement("option");
-                newOpt.value = "__new__";
-                newOpt.textContent = "Add new...";
-                select.appendChild(newOpt);
-
-                wrapper.appendChild(select);
-
-                // Hidden text input for new project (shown when "Add new..." selected)
-                let newProjectInput = document.createElement("input");
-                newProjectInput.type = "text";
-                newProjectInput.id = "project";
-                newProjectInput.placeholder = "Enter new project name";
-                newProjectInput.style.display = "none";
-                wrapper.appendChild(newProjectInput);
-
-                // Toggle between dropdown and text input
-                select.addEventListener("change", function() {
-                    if (select.value === "__new__") {
-                        newProjectInput.style.display = "";
-                        newProjectInput.focus();
-                    } else {
-                        newProjectInput.style.display = "none";
-                        newProjectInput.value = select.value;
-                    }
-                });
-
-                // Keep text input synced with dropdown selection
-                newProjectInput.addEventListener("blur", function() {
-                    if (newProjectInput.value === "" && select.value === "__new__") {
-                        select.value = "";
-                        newProjectInput.style.display = "none";
-                    }
-                });
-            } else {
-                // No existing projects - just show text input
-                let input = document.createElement("input");
-                input.type = "text";
-                input.id = "project";
-                input.placeholder = "Optional project name";
-                wrapper.appendChild(input);
-            }
-
-            // Add info icon
-            wrapper.appendChild(createInfoIcon("Group annotations by project. Projects with no annotations are automatically removed from the list"));
-            container.appendChild(wrapper);
         };
 
         // Type radio bar: Transcript | Variant -> Short | CNV. Inserted at the very
         // top of manualInpDiv (before the existing position summary).
         let typeRadioBar = document.createElement("div");
         typeRadioBar.id = "typeRadioBar";
-        typeRadioBar.style.cssText = "margin-bottom:12px; padding:8px 10px; background:#f7f7f7; border:1px solid #ddd; border-radius:4px;";
-        typeRadioBar.innerHTML =
-            "<div style='font-weight:bold; font-size:12px; color:#555; margin-bottom:4px;'>Annotation type</div>" +
-            "<div>" +
-                "<label style='margin-right:20px;'><input type='radio' name='myVariantsType' id='typeTranscript' value='transcript'> Transcript</label>" +
-                "<label style='margin-right:20px;'><input type='radio' name='myVariantsType' id='typeSnv' value='snv' checked> Short variant (snv)</label>" +
-                "<label><input type='radio' name='myVariantsType' id='typeCnv' value='cnv'> Copy number variant (cnv)</label>" +
-            "</div>";
+        typeRadioBar.style.cssText = "margin-bottom:12px; padding:8px 10px; background:#f7f7f7; border:1px solid #ddd;";
+        let typeBarTitle = document.createElement("div");
+        typeBarTitle.style.cssText = "font-weight:bold; font-size:12px; color:#555; margin-bottom:4px;";
+        typeBarTitle.textContent = "Annotation type";
+        typeRadioBar.appendChild(typeBarTitle);
+        let typeBarRow = document.createElement("div");
+        itemTypes.forEach(function(t, ix) {
+            let label = document.createElement("label");
+            label.style.marginRight = "20px";
+            let radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "myVariantsType";
+            radio.value = t.value;
+            radio.checked = ix === 0;
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(" " + t.label));
+            typeBarRow.appendChild(label);
+        });
+        typeRadioBar.appendChild(typeBarRow);
         manualInpDiv.insertBefore(typeRadioBar, manualInpDiv.firstChild);
 
         let onTypeRadioChange = function() {
@@ -1049,7 +1378,123 @@ var myVariants = {
             r.addEventListener("change", onTypeRadioChange);
         });
 
+        // Which track the annotation goes into. The dropdown holds the user's
+        // tracks and starts on the one they saved into last; the + button makes
+        // a new one.
+        let trackWrap = document.createElement("div");
+        trackWrap.id = "trackWrapper";
+        trackWrap.className = "mvRow";
+        let trackLabel = document.createElement("label");
+        trackLabel.htmlFor = "myVarTrackSelect";
+        trackLabel.textContent = "Track";
+        let trackSelect = document.createElement("select");
+        trackSelect.id = "myVarTrackSelect";
+        trackSelect.style.maxWidth = "260px";
+        myVariants.trackSelectEle = trackSelect;
+        trackSelect.addEventListener("change", function() {
+            // The custom field rows belong to the track that is picked. A value
+            // already typed is left alone: it is the user's even when the track
+            // has no column for it yet, and the save adds the column.
+            if (myVariants.refreshCustomFields)
+                myVariants.refreshCustomFields(true);
+        });
+        let newTrackButton = document.createElement("button");
+        newTrackButton.type = "button";
+        newTrackButton.id = "myVarNewTrackButton";
+        newTrackButton.textContent = "+";
+        newTrackButton.title = "Make a new track";
+        newTrackButton.style.cssText = "margin-left:6px; padding:1px 8px; cursor:pointer;";
+        trackWrap.appendChild(trackLabel);
+        trackWrap.appendChild(trackSelect);
+        trackWrap.appendChild(newTrackButton);
+        trackWrap.appendChild(createInfoIcon("The track this annotation is saved into. " +
+            "Each track is drawn on its own, so you can show one and hide another."));
+
+        // The + button opens this row rather than a prompt(), so the name can be
+        // read back and corrected with the rest of the form still in view.
+        let newTrackRow = document.createElement("div");
+        newTrackRow.id = "myVarNewTrackRow";
+        newTrackRow.style.cssText = "display:none; margin:0 0 8px 140px;";
+        let newTrackInput = document.createElement("input");
+        newTrackInput.type = "text";
+        newTrackInput.id = "myVarNewTrackName";
+        newTrackInput.maxLength = 255;
+        newTrackInput.placeholder = "New track name";
+        newTrackInput.style.cssText = "width:200px; margin-right:6px;";
+        newTrackRow.appendChild(newTrackInput);
+        let newTrackProblem = document.createElement("div");
+        newTrackProblem.style.cssText = "display:none; color:#a00; font-size:12px; margin-top:4px;";
+
+        let hideNewTrackRow = function() {
+            newTrackRow.style.display = "none";
+            newTrackInput.value = "";
+            newTrackProblem.textContent = "";
+            newTrackProblem.style.display = "none";
+        };
+
+        let createTrack = function() {
+            let name = newTrackInput.value.trim();
+            if (name === "") {
+                newTrackProblem.textContent = "Type a name for the new track.";
+                newTrackProblem.style.display = "";
+                newTrackInput.focus();
+                return;
+            }
+            myVariants.projectApiCall("createProject", {myVarLabel: name}, function(data) {
+                // FALSE means the user already had a track with this name, so
+                // nothing was made and there is nothing to pick.
+                if (!data.created) {
+                    newTrackProblem.textContent = "You already have a track called " +
+                                                  name + ".";
+                    newTrackProblem.style.display = "";
+                    newTrackInput.focus();
+                    return;
+                }
+                hideNewTrackRow();
+                myVariants.noteNewTrack(data.id);
+            });
+        };
+
+        let createTrackButton = document.createElement("button");
+        createTrackButton.type = "button";
+        createTrackButton.textContent = "Create";
+        createTrackButton.style.marginRight = "6px";
+        createTrackButton.addEventListener("click", createTrack);
+        newTrackRow.appendChild(createTrackButton);
+
+        let cancelTrackButton = document.createElement("button");
+        cancelTrackButton.type = "button";
+        cancelTrackButton.textContent = "Cancel";
+        cancelTrackButton.addEventListener("click", hideNewTrackRow);
+        newTrackRow.appendChild(cancelTrackButton);
+        newTrackRow.appendChild(newTrackProblem);
+
+        newTrackInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                createTrack();
+            }
+        });
+        newTrackButton.addEventListener("click", function() {
+            hideNewTrackRow();
+            newTrackRow.style.display = "";
+            newTrackInput.focus();
+        });
+
+        // Sets the track apart from the annotation's own fields, the way the
+        // custom field section is set apart from the ones above it.
+        let trackDivider = document.createElement("div");
+        trackDivider.id = "trackDivider";
+        trackDivider.style.cssText = "margin:4px 0 12px; border-top:1px solid #ddd;";
+
+        manualInpDiv.appendChild(trackWrap);
+        manualInpDiv.appendChild(newTrackRow);
+        manualInpDiv.appendChild(trackDivider);
+
         let colorInput = null;
+        // Set once the Spectrum picker is mounted below. Before that the input
+        // carries the color on its own and spectrum() would throw.
+        let spectrumReady = false;
         let nameWrap, colorWrap;
         commonTopFields.forEach(function(field) {
             let input = createField(field, manualInpDiv);
@@ -1063,40 +1508,48 @@ var myVariants = {
         createField(snvOnlyFields[0], refWrapper);
         manualInpDiv.appendChild(refWrapper);
 
-        // CNV-only type select
-        let cnvTypeWrapper = document.createElement("div");
-        cnvTypeWrapper.id = "cnvTypeWrapper";
-        cnvTypeWrapper.style.marginBottom = "8px";
-        let cnvTypeLabel = document.createElement("label");
-        cnvTypeLabel.htmlFor = "cnvType";
-        cnvTypeLabel.textContent = "CNV type";
-        cnvTypeLabel.style.cssText = "display:inline-block; min-width:140px;";
-        let cnvTypeSelect = document.createElement("select");
-        cnvTypeSelect.id = "cnvType";
-        cnvTypeOptions.forEach(function(t) {
-            let opt = document.createElement("option");
-            opt.value = t;
-            opt.textContent = t;
-            cnvTypeSelect.appendChild(opt);
+        // Subtype menu, for the types that have subtypes.  applyMode fills it
+        // in with the picked type's.
+        let subTypeWrapper = document.createElement("div");
+        subTypeWrapper.id = "subTypeWrapper";
+        subTypeWrapper.className = "mvRow";
+        let subTypeLabel = document.createElement("label");
+        subTypeLabel.htmlFor = "subType";
+        let subTypeSelect = document.createElement("select");
+        subTypeSelect.id = "subType";
+        subTypeWrapper.appendChild(subTypeLabel);
+        subTypeWrapper.appendChild(subTypeSelect);
+        // One info icon per type; applyMode shows the picked type's.
+        const subTypeHelp = {
+            cnv: "CNV terms follow gnomAD.",
+            regulatory: "The kind of cis-regulatory element: a promoter, an enhancer, " +
+                "a transcription factor binding site, or a boundary element such as " +
+                "an insulator.",
+            primer: "A pair is one annotation covering the PCR product, with a block " +
+                "at each primer site.  Forward, reverse and probe are a single oligo."
+        };
+        let subTypeIcons = {};
+        Object.keys(subTypeHelp).forEach(function(type) {
+            subTypeIcons[type] = createInfoIcon(subTypeHelp[type]);
+            subTypeWrapper.appendChild(subTypeIcons[type]);
         });
-        cnvTypeWrapper.appendChild(cnvTypeLabel);
-        cnvTypeWrapper.appendChild(cnvTypeSelect);
-        cnvTypeWrapper.appendChild(createInfoIcon("CNV vocabulary follows gnomAD"));
-        manualInpDiv.appendChild(cnvTypeWrapper);
+        manualInpDiv.appendChild(subTypeWrapper);
+        // A primer pair has blocks and the other primers do not.
+        subTypeSelect.addEventListener("change", function() { applyMode(currentType()); });
 
         // Alt / Sequence input (shared between SNV and CNV; label switches in applyMode)
         let altWrapper = document.createElement("div");
         altWrapper.id = "altWrapper";
-        altWrapper.style.marginBottom = "8px";
+        altWrapper.className = "mvRow";
         let altLabel = document.createElement("label");
         altLabel.htmlFor = "alt";
         altLabel.id = "altLabel";
         altLabel.textContent = "Alt";
-        altLabel.style.cssText = "display:inline-block; min-width:140px;";
         let altInput = document.createElement("input");
         altInput.type = "text";
         altInput.id = "alt";
         altInput.placeholder = altField.placeholder;
+        altInput.maxLength = 255;
         altWrapper.appendChild(altLabel);
         altWrapper.appendChild(altInput);
         altWrapper.appendChild(createInfoIcon(altField.info));
@@ -1104,11 +1557,20 @@ var myVariants = {
 
         let advancedDiv = document.createElement("div");
         advancedDiv.id = "advancedFieldsDiv";
-        advancedDiv.style.display = "none";
         let posWraps = positionFields.map(function(field) {
             return createField(field, advancedDiv).parentNode;
         });
         manualInpDiv.appendChild(advancedDiv);
+
+        // The range travels to the server, and to the block editor, as BED
+        // chrom, start and end. The position box is what the user types in;
+        // these carry what it parsed to.
+        ["chrom", "start", "end"].forEach(function(id) {
+            let hidden = document.createElement("input");
+            hidden.type = "hidden";
+            hidden.id = id;
+            manualInpDiv.appendChild(hidden);
+        });
 
         let cdsBlocksDiv = document.createElement("div");
         cdsBlocksDiv.id = "cdsBlocksDiv";
@@ -1126,8 +1588,9 @@ var myVariants = {
         blocksSection.appendChild(blocksLabel);
         let blocksHint = document.createElement("div");
         blocksHint.style.cssText = "font-size:12px; color:#666; margin-bottom:6px;";
-        blocksHint.textContent = "Offsets are relative to Start. First offset must be 0; " +
-                                 "last block must reach End. Leave empty for a single full-span block.";
+        blocksHint.textContent = "Offsets are relative to the start of the position range. " +
+                                 "First offset must be 0; last block must reach the end of the " +
+                                 "range. Leave empty for a single full-span block.";
         blocksSection.appendChild(blocksHint);
         let blocksContainer = document.createElement("div");
         blocksContainer.id = "blocksContainer";
@@ -1135,22 +1598,19 @@ var myVariants = {
         let hCount = document.createElement("input"); hCount.type = "hidden"; hCount.id = "blockCount";
         let hSizes = document.createElement("input"); hSizes.type = "hidden"; hSizes.id = "blockSizes";
         let hStarts = document.createElement("input"); hStarts.type = "hidden"; hStarts.id = "chromStarts";
+        let hFrames = document.createElement("input"); hFrames.type = "hidden"; hFrames.id = "exonFrames";
         blocksSection.appendChild(hCount);
         blocksSection.appendChild(hSizes);
         blocksSection.appendChild(hStarts);
+        blocksSection.appendChild(hFrames);
         cdsBlocksDiv.appendChild(blocksSection);
         manualInpDiv.appendChild(cdsBlocksDiv);
 
-        let mouseoverWrap, descriptionWrap, projectWrap;
+        let mouseoverWrap, descriptionWrap;
         commonBottomFields.forEach(function(field) {
-            if (field.id === "project") {
-                createProjectField(manualInpDiv);
-                projectWrap = manualInpDiv.lastElementChild;
-            } else {
-                let input = createField(field, manualInpDiv);
-                if (field.id === "mouseover") mouseoverWrap = input.parentNode;
-                else if (field.id === "description") descriptionWrap = input.parentNode;
-            }
+            let input = createField(field, manualInpDiv);
+            if (field.id === "mouseover") mouseoverWrap = input.parentNode;
+            else if (field.id === "description") descriptionWrap = input.parentNode;
         });
 
         let customFieldsSection = document.createElement("div");
@@ -1166,57 +1626,25 @@ var myVariants = {
         customFieldsList.id = "customFieldsList";
         customFieldsSection.appendChild(customFieldsList);
 
-        let reservedNames = ["bin", "chrom", "chromStart", "chromEnd", "name", "score",
-            "strand", "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes",
-            "chromStarts", "description", "db", "ref", "alt", "project", "mouseover",
-            "itemType", "cnvType", "id"];
+        let validateFieldName = myVariants.validateFieldName;
 
-        let validateFieldName = function(nameInput) {
-            let name = nameInput.value.trim();
-            if (!name) return; // empty is ok, will be skipped on submit
-            let valid = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name);
-            if (!valid) {
-                alert("Invalid field name: '" + name + "'. Must start with a letter or underscore, " +
-                      "and contain only letters, numbers, and underscores.");
-                nameInput.focus();
-                return false;
-            }
-            if (name.startsWith("_hidden_")) {
-                alert("Field names cannot start with '_hidden_'.");
-                nameInput.focus();
-                return false;
-            }
-            if (reservedNames.indexOf(name) >= 0) {
-                alert("'" + name + "' is a reserved field name.");
-                nameInput.focus();
-                return false;
-            }
-            // Check for duplicates among all custom field name inputs
-            let allNames = document.querySelectorAll("#customFieldsList .customFieldName");
-            let count = 0;
-            allNames.forEach(function(inp) {
-                if (inp.value.trim() === name) count++;
-            });
-            if (count > 1) {
-                alert("Duplicate field name: '" + name + "'.");
-                nameInput.focus();
-                return false;
-            }
-            return true;
-        };
-
-        let addCustomFieldRow = function(existingName) {
+        let addCustomFieldRow = function(existingName, noFocus) {
             // existingName: if provided, this is a pre-populated existing field (read-only name)
+            // noFocus: a row put back rather than added by the user takes no focus
             let row = document.createElement("div");
             row.className = "customFieldRow";
-            row.style.cssText = "display:flex; align-items:center; gap:6px; margin-bottom:6px;";
+            row.style.cssText = "margin-bottom:6px;";
             if (existingName)
                 row.dataset.existing = "true";
+            // The controls sit on one line; the error message goes under them.
+            let line = document.createElement("div");
+            line.style.cssText = "display:flex; align-items:center; gap:6px;";
+            row.appendChild(line);
 
             let nameInput = document.createElement("input");
             nameInput.type = "text";
             nameInput.className = "customFieldName";
-            nameInput.placeholder = "Field name";
+            nameInput.placeholder = "Field name (no spaces)";
             nameInput.style.cssText = "width:120px;";
 
             if (existingName) {
@@ -1224,10 +1652,11 @@ var myVariants = {
                 nameInput.readOnly = true;
                 nameInput.style.cssText = "width:120px; background:#e8e8e8; color:#555;";
             } else {
-                // Add blur validation for new field names
+                nameInput.addEventListener("input", function() {
+                    validateFieldName(nameInput);
+                });
                 nameInput.addEventListener("blur", function() {
-                    if (nameInput.value.trim())
-                        validateFieldName(nameInput);
+                    validateFieldName(nameInput);
                 });
             }
 
@@ -1235,10 +1664,16 @@ var myVariants = {
             valueInput.type = "text";
             valueInput.className = "customFieldValue";
             valueInput.placeholder = "Value (optional)";
+            valueInput.maxLength = 255;
             valueInput.style.cssText = "width:180px;";
 
-            row.appendChild(nameInput);
-            row.appendChild(valueInput);
+            line.appendChild(nameInput);
+            line.appendChild(valueInput);
+
+            let errMsg = document.createElement("div");
+            errMsg.className = "customFieldError";
+            errMsg.style.cssText = "display:none; color:#a00; font-size:12px; margin-top:2px;";
+            row.appendChild(errMsg);
 
             if (existingName) {
                 // Hide button for existing fields (soft-delete via _hidden_ prefix)
@@ -1250,19 +1685,54 @@ var myVariants = {
                 hideBtn.addEventListener("click", function() {
                     if (!confirm("Hide the '" + existingName + "' field? Data will be preserved but the field will no longer appear."))
                         return;
-                    // Send ALTER TABLE CHANGE COLUMN request to rename with _hidden_ prefix
+                    // Send ALTER TABLE CHANGE COLUMN request to rename with
+                    // _hidden_ prefix.  The field is a column on one project's
+                    // table, so the request has to say which project.
+                    let hideProj = myVariants.selectedProject();
+                    let hideReq = {hideField: existingName,
+                                   projectId: hideProj ? String(hideProj.id) : ""};
                     let hideUrl = "../cgi-bin/hgTracks?hgt_doJsCommand=" +
-                        encodeURIComponent("myVariants myVariants " + JSON.stringify({hideField: existingName})) +
+                        encodeURIComponent("myVariants myVariants " + JSON.stringify(hideReq)) +
                         "&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=" + getHgsid() + "&db=" + getDb();
                     fetch(hideUrl, { method: "POST", credentials: "same-origin" })
-                    .then(function() {
-                        row.remove();
+                    .then(function(resp) { return resp.text(); })
+                    .then(function(html) {
+                        // A refused hide comes back as an error page, not an image.
+                        if (!scrapeVariable(html, "hgTracks")) {
+                            let stripped = {};
+                            stripJsEmbedded(html, false, stripped);
+                            if (!stripped.warnMsg)
+                                warn("Could not hide the field. Please try again.");
+                            return;
+                        }
+                        // Move the field to the hidden list, so the form can offer
+                        // to restore it and warns about adding it again.
+                        if (hideProj) {
+                            hideProj.customFields = (hideProj.customFields || []).filter(
+                                function(f) { return f !== existingName; });
+                            hideProj.hiddenFields = (hideProj.hiddenFields || []).concat(
+                                [existingName]);
+                        }
+                        // The rebuild empties the other fields, so carry their values over.
+                        let typed = {};
+                        customFieldsList.querySelectorAll(".customFieldRow[data-existing]")
+                            .forEach(function(r) {
+                                typed[r.querySelector(".customFieldName").value] =
+                                    r.querySelector(".customFieldValue").value;
+                            });
+                        myVariants.refreshCustomFields(true);
+                        customFieldsList.querySelectorAll(".customFieldRow[data-existing]")
+                            .forEach(function(r) {
+                                let name = r.querySelector(".customFieldName").value;
+                                if (name in typed)
+                                    r.querySelector(".customFieldValue").value = typed[name];
+                            });
                     })
                     .catch(function(err) {
                         alert("Error hiding field: " + err.message);
                     });
                 });
-                row.appendChild(hideBtn);
+                line.appendChild(hideBtn);
             } else {
                 // Remove button for newly added rows
                 let removeBtn = document.createElement("button");
@@ -1273,20 +1743,13 @@ var myVariants = {
                 removeBtn.addEventListener("click", function() {
                     row.remove();
                 });
-                row.appendChild(removeBtn);
+                line.appendChild(removeBtn);
             }
 
             customFieldsList.appendChild(row);
-            if (!existingName)
+            if (!existingName && !noFocus)
                 nameInput.focus();
         };
-
-        // Pre-populate existing custom fields from server
-        let existingCustomFields = (typeof hgTracks !== 'undefined' && hgTracks.myVariantsCustomFields)
-                                    ? hgTracks.myVariantsCustomFields : [];
-        existingCustomFields.forEach(function(fieldName) {
-            addCustomFieldRow(fieldName);
-        });
 
         let addBtn = document.createElement("button");
         addBtn.type = "button";
@@ -1299,19 +1762,54 @@ var myVariants = {
         });
         customFieldsSection.appendChild(addBtn);
 
-        // Hidden fields restore UI
-        let hiddenFields = (typeof hgTracks !== 'undefined' && hgTracks.myVariantsHiddenFields)
-                            ? hgTracks.myVariantsHiddenFields : [];
-        if (hiddenFields.length > 0) {
-            let hiddenSection = document.createElement("div");
-            hiddenSection.id = "hiddenFieldsSection";
-            hiddenSection.style.cssText = "margin-top:8px; padding:4px 8px; background:#faf8f0; border:1px solid #e0dcc8; border-radius:3px; font-size:12px;";
+        // Hidden fields restore UI.  Rebuilt with the field rows, since which
+        // fields exist and which are hidden is a property of the project.
+        let hiddenSection = document.createElement("div");
+        hiddenSection.id = "hiddenFieldsSection";
+        hiddenSection.style.cssText = "margin-top:8px; padding:4px 8px; background:#faf8f0; border:1px solid #e0dcc8; border-radius:3px; font-size:12px;";
+        customFieldsSection.appendChild(hiddenSection);
 
+        // Custom fields are columns on one project's table, so the rows shown
+        // are those of the project currently selected.  Clear and rebuild both
+        // lists rather than trying to work out what changed.
+        myVariants.refreshCustomFields = function(keepAdded) {
+            // Rows the user added are their work, not the track's, so with
+            // keepAdded they survive a change of track; the track's own rows are
+            // rebuilt either way.
+            let added = [];
+            if (keepAdded) {
+                customFieldsList.querySelectorAll(".customFieldRow").forEach(function(row) {
+                    if (row.dataset.existing) { return; }
+                    added.push({name: row.querySelector(".customFieldName").value,
+                                value: row.querySelector(".customFieldValue").value});
+                });
+            }
+            while (customFieldsList.firstChild)
+                customFieldsList.removeChild(customFieldsList.firstChild);
+            while (hiddenSection.firstChild)
+                hiddenSection.removeChild(hiddenSection.firstChild);
+
+            let proj = myVariants.selectedProject();
+            let fields = proj && proj.customFields ? proj.customFields : [];
+            fields.forEach(function(fieldName) {
+                addCustomFieldRow(fieldName);
+            });
+            added.forEach(function(f) {
+                addCustomFieldRow(null, true);
+                let rows = customFieldsList.querySelectorAll(".customFieldRow");
+                let row = rows[rows.length - 1];
+                row.querySelector(".customFieldName").value = f.name;
+                row.querySelector(".customFieldValue").value = f.value;
+            });
+
+            let hiddenFields = proj && proj.hiddenFields ? proj.hiddenFields : [];
+            hiddenSection.style.display = hiddenFields.length > 0 ? "" : "none";
+            if (hiddenFields.length === 0)
+                return;
             let hiddenLabel = document.createElement("span");
             hiddenLabel.style.cssText = "color:#888; margin-right:8px;";
             hiddenLabel.textContent = "Hidden fields:";
             hiddenSection.appendChild(hiddenLabel);
-
             hiddenFields.forEach(function(fieldName) {
                 let chip = document.createElement("span");
                 chip.style.cssText = "display:inline-block; margin:2px 4px; padding:2px 6px; background:#e8e8e8; border-radius:3px;";
@@ -1322,40 +1820,121 @@ var myVariants = {
                 restoreBtn.style.cssText = "color:#36c; font-size:11px;";
                 restoreBtn.addEventListener("click", function(event) {
                     event.preventDefault();
+                    // Column names ignore case, so Order and order are one column.
+                    let lower = fieldName.toLowerCase();
+                    let clash = Array.from(customFieldsList.querySelectorAll(".customFieldName"))
+                        .map(function(inp) { return inp.value.trim(); })
+                        .find(function(val) { return val.toLowerCase() === lower; });
+                    if (clash) {
+                        let clashMsg = hiddenSection.querySelector(".hiddenFieldError");
+                        if (!clashMsg) {
+                            clashMsg = document.createElement("div");
+                            clashMsg.className = "hiddenFieldError";
+                            clashMsg.style.cssText = "color:#a00; margin-top:2px;";
+                            hiddenSection.appendChild(clashMsg);
+                        }
+                        clashMsg.textContent = "'" + fieldName + "' can't be restored while " +
+                            "there is a field called '" + clash + "'. Field names ignore " +
+                            "upper and lower case.";
+                        return;
+                    }
                     // Add it back as a pre-populated existing field row
                     addCustomFieldRow(fieldName);
-                    // Remove the chip
                     chip.remove();
-                    // Hide the section if no more hidden fields
+                    let oldMsg = hiddenSection.querySelector(".hiddenFieldError");
+                    if (oldMsg)
+                        oldMsg.remove();
                     if (hiddenSection.querySelectorAll("span[style]").length <= 1)
                         hiddenSection.style.display = "none";
                 });
                 chip.appendChild(restoreBtn);
                 hiddenSection.appendChild(chip);
             });
-
-            customFieldsSection.appendChild(hiddenSection);
-        }
+        };
 
         manualInpDiv.appendChild(customFieldsSection);
 
-        // Keep the position summary in sync when position fields change
-        ["chrom", "start", "end"].forEach(function(id) {
-            let el = advancedDiv.querySelector("#" + id);
-            if (el) el.addEventListener("input", updatePositionSummary);
-        });
-        let chromEl = advancedDiv.querySelector("#chrom");
-        let startEl = advancedDiv.querySelector("#start");
-        let endEl = advancedDiv.querySelector("#end");
-        if (chromEl && startEl && endEl) {
-            let startVal = parseInt(startEl.value);
-            let endVal = parseInt(endEl.value);
-            let startFmt = isNaN(startVal) ? startEl.value : startVal.toLocaleString();
-            let endFmt = isNaN(endVal) ? endEl.value : endVal.toLocaleString();
-            posSummaryText.textContent = chromEl.value + ":" + startFmt + "-" + endFmt;
+        // Keep the hidden range in sync as the user types
+        let posInputEl = advancedDiv.querySelector("#positionRange");
+        if (posInputEl) {
+            posInputEl.addEventListener("input", function() {
+                syncPositionFields();
+                // A typed position did not come from the view or a lookup.
+                setPositionSource("");
+                // Text a lookup wrote describes the looked-up position. Typed
+                // text stays.
+                ["name", "description", "ref", "alt"].forEach(function(id) {
+                    let el = form.querySelector("#" + id);
+                    if (!el || el.dataset.lookupValue === undefined) { return; }
+                    if (el.value === el.dataset.lookupValue) { el.value = ""; }
+                    delete el.dataset.lookupValue;
+                });
+                // So does a type a lookup picked, unless the reader picked it since.
+                if (lookupType !== null) {
+                    if (currentType() === lookupType) { applyMode(typeBeforeLookup); }
+                    lookupType = null;
+                    typeBeforeLookup = null;
+                }
+            });
         }
 
+        // The reset link sits above the form it resets.
+        let resetRow = document.createElement("div");
+        resetRow.style.cssText = "text-align:right;";
+        resetRow.appendChild(resetLink);
+        form.appendChild(resetRow);
         form.appendChild(manualInpDiv);
+
+        // Every starting value the form has, in one place, so the reset link can
+        // put them all back. Values only, and every field is reached through the
+        // form element, so this also runs while the form is still detached.
+        let applyDefaults = function() {
+            let setField = function(id, value) {
+                let el = form.querySelector("#" + id);
+                if (el) { el.value = value; }
+            };
+            // The position starts out as whatever the browser is looking at.
+            setPositionFields(hgTracks.chromName, hgTracks.winStart, hgTracks.winEnd);
+            setField("thickStart", hgTracks.winStart);
+            setField("thickEnd", hgTracks.winEnd);
+            setField("score", 0);
+            setField("strand", ".");
+            setField("name", "");
+            setField("ref", "");
+            setField("alt", "");
+            setField("mouseover", "");
+            setField("description", "");
+            // Forget which values a lookup wrote, or the next lookup would
+            // treat leftover text as its own.
+            ["name", "description", "ref", "alt"].forEach(function(id) {
+                let el = form.querySelector("#" + id);
+                if (el) { delete el.dataset.lookupValue; }
+            });
+            lookedUpTerm = "";
+            lookupDone = null;
+            lookupType = null;
+            typeBeforeLookup = null;
+            subTypeSelect.selectedIndex = 0;
+            if (colorInput) {
+                colorInput.value = "#000000";
+                // createItem reads the color out of the picker, so the picker
+                // has to be told too.
+                if (spectrumReady) { $(colorInput).spectrum("set", "#000000"); }
+            }
+            if (form.blocksWidget) { form.blocksWidget.clear(); }
+            hideNewTrackRow();
+            // Also puts back the custom field rows, which are the picked
+            // track's own columns.
+            myVariants.resetTrackSelect();
+            setPositionSource("From current view");
+        };
+        applyDefaults();
+        // A successful save resets the form through this, so the next annotation
+        // does not start with the last one's text.
+        form.applyDefaults = function() {
+            applyDefaults();
+            applyMode(currentType());
+        };
 
         // Add hidden field to encode form values as JSON
         const hiddenInput = document.createElement('input');
@@ -1384,6 +1963,7 @@ var myVariants = {
                 preferredFormat: "hex",
                 localStorageKey: "myVariantsColors"
             });
+            spectrumReady = true;
         }
 
         // Mount the block editor; reads Start/End from the chrom range fields.
@@ -1401,12 +1981,16 @@ var myVariants = {
                 },
                 hiddenCountInput: hCount,
                 hiddenSizesInput: hSizes,
-                hiddenStartsInput: hStarts
+                hiddenStartsInput: hStarts,
+                hiddenFramesInput: hFrames
             });
         }
 
-        // Stash applyMode on the form so init() can restore last-used mode.
+        // Stash applyMode on the form so init() can restore last-used mode, and
+        // the position sync so createItem can re-read the box before it submits.
         form.applyMode = applyMode;
+        form.syncPositionFields = syncPositionFields;
+        form.setPositionFields = setPositionFields;
         return form;
     },
 
@@ -1418,32 +2002,96 @@ var myVariants = {
             dialog.id = "myVariantsDialog";
             dialog.style = "display: none";
 
-            dialogButtons = {};
+            // Move the collapsed explainer hgTracks emits (htdocs/inc/myVariantsHelp.html)
+            // to the top of the dialog, above the form and above the log in prompt.
+            let intro = document.getElementById("myVariantsHelpDiv");
+            // Show or hide the rest of the explainer text.
+            let showFullHelp = function() {};
+            if (intro) {
+                intro.style.display = "";
+                dialog.appendChild(intro);
+                let helpMore = intro.querySelector("#myAnnotationsHelpMore");
+                let helpText = intro.querySelector("#myAnnotationsHelp");
+                let helpLess = intro.querySelector("#myAnnotationsHelpLess");
+                if (helpMore && helpText && helpLess) {
+                    showFullHelp = function(show) {
+                        helpMore.style.display = show ? "none" : "";
+                        helpText.style.display = show ? "" : "none";
+                    };
+                    helpMore.addEventListener("click", function() { showFullHelp(true); });
+                    helpLess.addEventListener("click", function() { showFullHelp(false); });
+                }
+            }
+
+            // An array, not an object: only this form can give the save button
+            // the id that setSubmitEnabled turns off while a save is in flight.
+            dialogButtons = [];
             // Call the function to build the form, but only if logged in already
             if (!userIsLoggedIn) {
+                // Without a form there is nothing else to read, so show the full explainer.
+                showFullHelp(true);
                 let msg = document.createElement("div");
                 msg.id = "logInMessage";
+                msg.textContent = "Please log in to use this feature.";
+                msg.style.marginBottom = "8px";
+                // Put it above the explainer so it is the first thing read.
+                dialog.insertBefore(msg, dialog.firstChild);
                 let href = (typeof myVariantsLoginUrl !== "undefined" && myVariantsLoginUrl)
                            ? myVariantsLoginUrl : "./hgSession";
-                let link = document.createElement("a");
-                link.href = href;
-                link.textContent = "log in";
-                msg.appendChild(document.createTextNode("Please "));
-                msg.appendChild(link);
-                msg.appendChild(document.createTextNode(" to use this feature."));
-                dialog.appendChild(msg);
+                dialogButtons.push({
+                    text: "Cancel",
+                    click: function() { $(this).dialog("close"); }
+                });
+                dialogButtons.push({
+                    text: "Log in",
+                    click: function() { window.location.href = href; }
+                });
             } else {
+                // Someone with no tracks yet is new to this, so show the full explainer.
+                if (myVariants.projects().length === 0) {
+                    showFullHelp(true);
+                }
                 let form = this.createBedForm(dialog);
 
                 document.body.append(dialog);
-                dialogButtons.Submit = function() {
-                    // extract the form elements and check
-                    myVariants.createItem(form);
-                };
+                // Cancel first so it sits to the left of the save button, the
+                // way the rest of the dialogs read.
+                dialogButtons.push({
+                    text: "Cancel",
+                    click: function() { $(this).dialog("close"); }
+                });
+                // The annotation goes into the track the form's Track field
+                // names, so this asks nothing more.
+                dialogButtons.push({
+                    text: "Save",
+                    id: "myVarSaveButton",
+                    click: function() {
+                        myVariants.createItem(form);
+                    }
+                });
+                // Attach the same autocomplete the main position box uses, but fill
+                // the form on select instead of navigating the browser.
+                if (typeof suggestBox !== "undefined" &&
+                        typeof $('#positionRange').autocompletePosInput === "function") {
+                    $('#positionRange').autocompletePosInput({
+                        delay: 500,
+                        minLength: 2,
+                        source: suggestBox.ajaxGet(getDb()),
+                        appendTo: '#myVariantsDialog',
+                        select: function(event, ui) {
+                            let item = ui.item;
+                            let box = document.getElementById("positionRange");
+                            // For HGVS keep the user's typed term; for a gene use its
+                            // symbol; otherwise use the suggestion value, then resolve.
+                            if (item.type !== "hgvs") {
+                                box.value = item.geneSymbol ? item.geneSymbol : item.value;
+                            }
+                            if (form.doLookup) { form.doLookup(null); }
+                            return false;
+                        }
+                    });
+                }
             }
-            dialogButtons.Cancel = function(){
-                $(this).dialog("close");
-            };
             $(dialog).dialog({
                 title: "My Annotations",
                 resizable: false,
@@ -1454,45 +2102,48 @@ var myVariants = {
                 autoOpen: false,
                 buttons: dialogButtons,
                 open: function() {
-                    // Restore the last input mode the user picked (or default to HGVS).
-                    let form = document.getElementById("myVariants-form");
+                    // Each open starts from a clean form, also after a Cancel.
+                    // applyDefaults also points the Track field back at the track
+                    // last saved into.
+                    let form = myVariants.formEle;
+                    if (typeof hideWarnBox === "function") { hideWarnBox(); }
+                    if (form && form.applyDefaults) { form.applyDefaults(); }
+                    // Restore the annotation type the user last picked.
                     if (form && form.applyMode) {
                         let saved;
                         try { saved = localStorage.getItem("myVariantsLastMode"); } catch (e) { saved = null; }
-                        const validModes = ["hgvs", "transcript", "snv", "cnv"];
-                        form.applyMode(validModes.indexOf(saved) >= 0 ? saved : "hgvs");
+                        const validModes = (hgTracks.myVariantsTypes || []).map(
+                            function(t) { return t.value; });
+                        form.applyMode(validModes.indexOf(saved) >= 0 ? saved : "snv");
                     }
                 },
                 close: function() {
+                    // A lookup or save warning is about the form being closed.
+                    if (typeof hideWarnBox === "function") { hideWarnBox(); }
                     // Reset block rows so the next open starts clean.
-                    let form = document.getElementById("myVariants-form");
+                    let form = myVariants.formEle;
                     if (form && form.blocksWidget) {
                         form.blocksWidget.clear();
                     }
                 }
             });
         } else {
-            // Reopening after an async image update; refresh the position fields.
-            // The dialog's open callback re-applies the last-used mode.
-            let form = document.getElementById("myVariants-form");
+            // Reopening after an async image update; refresh the position fields to
+            // the current view. The dialog's open callback re-applies the
+            // last-used mode.
+            let form = myVariants.formEle;
             if (form) {
-                let start = form.elements.start;
-                let end = form.elements.end;
-                let thickStart = form.elements.thickStart;
-                let thickEnd = form.elements.thickEnd;
-                if (start) start.value = hgTracks.winStart;
-                if (end) end.value = hgTracks.winEnd;
+                let thickStart = form.querySelector("#thickStart");
+                let thickEnd = form.querySelector("#thickEnd");
                 if (thickStart) thickStart.value = hgTracks.winStart;
                 if (thickEnd) thickEnd.value = hgTracks.winEnd;
+                if (form.setPositionFields) {
+                    form.setPositionFields(hgTracks.chromName, hgTracks.winStart,
+                                           hgTracks.winEnd);
+                }
             }
-            let summaryText = document.getElementById("positionSummaryText");
-            if (summaryText) {
-                let chromEl = document.getElementById("chrom");
-                let startFmt = parseInt(hgTracks.winStart).toLocaleString();
-                let endFmt = parseInt(hgTracks.winEnd).toLocaleString();
-                summaryText.textContent =
-                    (chromEl ? chromEl.value : hgTracks.chromName) + ":" + startFmt + "-" + endFmt;
-            }
+            let noteEl = document.getElementById("positionSourceNote");
+            if (noteEl) { noteEl.textContent = "From current view"; }
         }
 
         // if we clicked outside of the pop up, close the popup:
@@ -1504,37 +2155,376 @@ var myVariants = {
             // DOM swap on the description field), e.target is now detached
             // and `.contains(e.target)` would falsely report "outside". Skip.
             if (!document.contains(e.target)) return;
-            let dialogContainer = dialogEl.parentElement;
-            // Check if click target is inside the dialog (handles native dropdowns that render outside bounds)
-            if (dialogContainer && !dialogContainer.contains(e.target)) {
-                $("#myVariantsDialog").dialog("close");
+            // The warn box, the match picker and the autocomplete menu all render
+            // outside the dialog, so a click in one of them is not a click away.
+            // Dismissing a warning must not take the form with it.
+            if (e.target.closest(".ui-dialog, .ui-autocomplete, #warnBox"))
+                return;
+            // The dialog is modal, so a click away lands on the backdrop.  That
+            // closes the form unless another dialog, like the match picker, is
+            // open on top of it and the backdrop is that one's.
+            if (e.target.closest(".ui-widget-overlay")) {
+                let formDialog = $(dialogEl).closest(".ui-dialog");
+                if ($(".ui-dialog:visible").not(formDialog).length > 0)
+                    return;
+            }
+            $("#myVariantsDialog").dialog("close");
+        });
+    },
+
+    // The list the manager is showing, and whether it changed something the
+    // page below it draws. The page is reloaded once when the manager closes
+    // rather than after every action.
+    managerProjects: [],
+    managerChanged: false,
+
+    projectApiUrl: function(action, params) {
+        // A track manager request. Every action needs db, since a count is per
+        // assembly, and hgsid, since the writes are checked against the session.
+        let url = "../cgi-bin/hgTracks?" + "myVarProjectCmd=" + encodeURIComponent(action) +
+                  "&db=" + getDb() + "&hgsid=" + getHgsid();
+        Object.keys(params).forEach(function(key) {
+            url += "&" + key + "=" + encodeURIComponent(params[key]);
+        });
+        return url;
+    },
+
+    showManagerProblem: function(message) {
+        // Say what went wrong, in the manager when it is open and in the page's
+        // warning box when it is not.
+        let box = document.getElementById("myVarManagerProblem");
+        if (!box) {
+            if (message !== "")
+                warn(htmlEncode(message));
+            return;
+        }
+        box.textContent = message;
+        box.style.display = message === "" ? "none" : "";
+    },
+
+    projectApiCall: function(action, params, onDone) {
+        // Run one track manager request and hand its answer to onDone. Every
+        // answer carries the whole project list, so the page's own copy is
+        // replaced here: it is what the form's Track dropdown reads.
+        myVariants.showManagerProblem("");
+        fetch(myVariants.projectApiUrl(action, params), {credentials: "same-origin"})
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (!data || data.error) {
+                myVariants.showManagerProblem(data && data.error ? data.error
+                                              : "The request failed.");
+                return;
+            }
+            if (data.projects && typeof hgTracks !== 'undefined') {
+                hgTracks.myVariantsProjects = data.projects;
+                myVariants.refreshTrackSelect();
+            }
+            onDone(data);
+        })
+        .catch(function(error) {
+            myVariants.showManagerProblem("Error: " + error.message);
+        });
+    },
+
+    managerActionLink: function(text, title, onClick) {
+        // One action on a track in the manager.
+        let link = document.createElement("a");
+        link.href = "#";
+        link.textContent = text;
+        link.title = title;
+        link.style.marginRight = "10px";
+        link.addEventListener("click", function(event) {
+            event.preventDefault();
+            onClick();
+        });
+        return link;
+    },
+
+    managerRow: function(container, proj) {
+        // One track's row in the manager: what it is called, how much it holds,
+        // whether it has a share link, and what can be done to it.
+        let row = document.createElement("tr");
+        let cell = function() {
+            let td = document.createElement("td");
+            td.style.cssText = "padding:5px 8px 5px 0; vertical-align:top; " +
+                "border-bottom:1px solid #eee;";
+            row.appendChild(td);
+            return td;
+        };
+
+        let nameCell = cell();
+        nameCell.textContent = proj.label;
+        cell().textContent = String(proj.itemCount);
+        cell().textContent = proj.shared ? "yes" : "no";
+        let actionCell = cell();
+
+        let startRename = function() {
+            while (nameCell.firstChild)
+                nameCell.removeChild(nameCell.firstChild);
+            let input = document.createElement("input");
+            input.type = "text";
+            input.value = proj.label;
+            input.maxLength = 255;
+            input.style.cssText = "width:150px; margin-right:6px;";
+            nameCell.appendChild(input);
+
+            let apply = function() {
+                let name = input.value.trim();
+                if (name === "" || name === proj.label) {
+                    myVariants.renderManagerList(container);
+                    return;
+                }
+                myVariants.projectApiCall("renameProject",
+                    {projectId: proj.id, myVarLabel: name}, function(data) {
+                        myVariants.managerChanged = true;
+                        myVariants.managerProjects = data.projects;
+                        myVariants.renderManagerList(container);
+                    });
+            };
+            input.addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    apply();
+                } else if (event.key === "Escape") {
+                    myVariants.renderManagerList(container);
+                }
+            });
+            nameCell.appendChild(myVariants.managerActionLink("save", "Save this name", apply));
+            nameCell.appendChild(myVariants.managerActionLink("cancel", "Keep the old name",
+                function() { myVariants.renderManagerList(container); }));
+            input.focus();
+            input.select();
+        };
+
+        actionCell.appendChild(myVariants.managerActionLink("rename",
+            "Change this track's name", startRename));
+
+        // Share links are managed on the track's own settings page, which is
+        // also where its downloads and display settings are.
+        let shareLink = document.createElement("a");
+        shareLink.href = "../cgi-bin/hgTrackUi?db=" + getDb() +
+                         "&g=" + encodeURIComponent(proj.track) + "&hgsid=" + getHgsid();
+        shareLink.target = "_blank";
+        shareLink.textContent = "share";
+        shareLink.title = "Open this track's settings page, where share links live";
+        shareLink.style.marginRight = "10px";
+        actionCell.appendChild(shareLink);
+
+        // This track on this assembly as a tab-separated file. The settings page
+        // has the other assemblies and the Excel form.
+        if (proj.itemCount > 0) {
+            let downloadLink = document.createElement("a");
+            downloadLink.href = "../cgi-bin/hgTracks?db=" + getDb() +
+                "&myVarDownload=assembly&myVarSep=tab&myVarDownloadTrack=" +
+                encodeURIComponent(proj.track);
+            downloadLink.target = "_blank";
+            downloadLink.textContent = "download";
+            downloadLink.title = "Download this track's annotations on " + getDb() +
+                                 " as a tab-separated file";
+            downloadLink.style.marginRight = "10px";
+            actionCell.appendChild(downloadLink);
+        }
+
+        actionCell.appendChild(myVariants.managerActionLink("delete",
+            "Delete this track and every annotation in it", function() {
+                // Through the project API rather than hgCustom, which only knows
+                // tracks with items on this assembly.
+                if (!confirm(myVariantsProjectDeleteMessage(proj.label, proj.itemCount)))
+                    return;
+                myVariants.projectApiCall("deleteProject", {projectId: proj.id}, function() {
+                    // The track, its controls and its group all go with a page load.
+                    window.location.reload();
+                });
+            }));
+        return row;
+    },
+
+    renderManagerList: function(container) {
+        // Draw the manager's table of tracks from the list last fetched.
+        while (container.firstChild)
+            container.removeChild(container.firstChild);
+        let projects = myVariants.managerProjects;
+        if (projects.length === 0) {
+            let none = document.createElement("div");
+            none.style.color = "#666";
+            none.textContent = "You have no annotation tracks yet.";
+            container.appendChild(none);
+            return;
+        }
+        let table = document.createElement("table");
+        table.style.cssText = "border-collapse:collapse; width:100%;";
+        let head = document.createElement("tr");
+        ["Track", "Annotations on " + getDb(), "Share link", ""].forEach(function(text) {
+            let th = document.createElement("th");
+            th.style.cssText = "text-align:left; padding:0 8px 4px 0; " +
+                "border-bottom:1px solid #ccc;";
+            th.textContent = text;
+            head.appendChild(th);
+        });
+        table.appendChild(head);
+        projects.forEach(function(proj) {
+            table.appendChild(myVariants.managerRow(container, proj));
+        });
+        container.appendChild(table);
+    },
+
+    showManager: function() {
+        // The track manager: one place to create, rename, share or delete a My
+        // Annotations track. Saving an annotation is the create dialog's job,
+        // so nothing here asks about an annotation.
+        // Two managers would mean two elements answering to the same ids, and
+        // the save menu and the nav bar can both ask for one.
+        let open = document.getElementById("myVarManager");
+        if (open) {
+            $(open).dialog("moveToTop");
+            return;
+        }
+        let content = document.createElement("div");
+        content.id = "myVarManager";
+
+        let intro = document.createElement("p");
+        intro.style.marginTop = "0";
+        intro.textContent = "Each of these is drawn as its own track. An annotation " +
+            "you save goes into the track named in the create form's Track box.";
+        content.appendChild(intro);
+
+        let problem = document.createElement("div");
+        problem.id = "myVarManagerProblem";
+        problem.style.cssText = "display:none; color:#a00; margin-bottom:8px;";
+        content.appendChild(problem);
+
+        let list = document.createElement("div");
+        list.id = "myVarManagerList";
+        list.textContent = "Loading...";
+
+        let newRow = document.createElement("div");
+        newRow.style.cssText = "margin-bottom:14px;";
+        let newLabel = document.createElement("label");
+        newLabel.htmlFor = "myVarManagerNewName";
+        newLabel.textContent = "New track ";
+        newRow.appendChild(newLabel);
+        let newInput = document.createElement("input");
+        newInput.type = "text";
+        newInput.id = "myVarManagerNewName";
+        newInput.maxLength = 255;
+        newInput.placeholder = "Track name";
+        newInput.style.marginRight = "6px";
+        newRow.appendChild(newInput);
+        let createButton = document.createElement("button");
+        createButton.type = "button";
+        createButton.textContent = "Create";
+        newRow.appendChild(createButton);
+
+        let create = function() {
+            let name = newInput.value.trim();
+            if (name === "") {
+                myVariants.showManagerProblem("Type a name for the new track.");
+                newInput.focus();
+                return;
+            }
+            myVariants.projectApiCall("createProject", {myVarLabel: name}, function(data) {
+                myVariants.managerProjects = data.projects;
+                if (!data.created) {
+                    myVariants.showManagerProblem("You already have a track called " +
+                        name + ".");
+                } else {
+                    myVariants.managerChanged = true;
+                    newInput.value = "";
+                    // A track made here is where the next annotation belongs.
+                    myVariants.noteNewTrack(data.id);
+                }
+                myVariants.renderManagerList(list);
+            });
+        };
+        createButton.addEventListener("click", create);
+        newInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                create();
             }
         });
+        content.appendChild(newRow);
+        content.appendChild(list);
+
+        $(content).dialog({
+            title: "Manage My Annotations tracks",
+            modal: true,
+            width: 640,
+            resizable: false,
+            closeOnEscape: true,
+            buttons: {
+                Close: function() { $(this).dialog("close"); }
+            },
+            close: function() {
+                // The image, the track controls and the track group all show
+                // what changed here, and only a page load brings them into line.
+                let reload = myVariants.managerChanged;
+                myVariants.managerChanged = false;
+                $(this).dialog("destroy").remove();
+                if (reload)
+                    imageV2.fullReload();
+            }
+        });
+
+        myVariants.projectApiCall("getProjects", {}, function(data) {
+            myVariants.managerProjects = data.projects;
+            myVariants.renderManagerList(list);
+        });
+    },
+
+    setSubmitEnabled: function(enabled) {
+        // The dialog stays open until the create comes back, so the save button
+        // has to be shut off meanwhile.
+        let button = document.getElementById("myVarSaveButton");
+        if (button)
+            $(button).prop("disabled", !enabled);
     },
 
     createItem: function(form) {
         // sends a post to hgTracks that adds a new item to the users custom track
         // and updates the image to include this track if it wasn't already there
-        // Block validation only matters for the transcript path; SNV/CNV don't carry blocks.
+        // The position box takes a gene symbol or an HGVS term as well as a
+        // position, so a save that finds one of those looks it up first and
+        // fills the form in. The save stops there: a term can land in more than
+        // one place, and what it resolved to is worth a look before it is saved.
+        if (form.syncPositionFields && !form.syncPositionFields()) {
+            let posInput = form.querySelector("#positionRange");
+            let typed = posInput ? posInput.value.trim() : "";
+            // Something shaped like a position but out of range is a mistake to
+            // report, not a term to look up.
+            if (typed !== "" && bedRangeParts(typed) === null && form.doLookup) {
+                form.doLookup(function() {
+                    warn("Filled in from " + htmlEncode(typed) +
+                         ". Check it over, then save.");
+                });
+                return;
+            }
+            alert(bedRangeProblem(typed));
+            if (posInput) { posInput.focus(); }
+            return;
+        }
+        // Only a transcript or a primer pair carries blocks.
         let blockResult = {ok: true, noBlocks: true};
-        const isTranscript = !!(document.getElementById("typeTranscript") &&
-                                document.getElementById("typeTranscript").checked);
-        if (isTranscript && form.blocksWidget && form.blocksWidget.getRowCount() > 0) {
+        let checkedType = form.querySelector("input[name=myVariantsType]:checked");
+        const itemType = checkedType ? checkedType.value : "snv";
+        const isTranscript = itemType === "transcript";
+        let subTypeEl = form.querySelector("#subType");
+        const keepsBlocks = isTranscript ||
+            (itemType === "primer" && subTypeEl && subTypeEl.value === "pair");
+        if (keepsBlocks && form.blocksWidget && form.blocksWidget.getRowCount() > 0) {
             blockResult = form.blocksWidget.validate();
             if (!blockResult.ok) {
                 alert("Block error: " + blockResult.msg);
                 return;
             }
         }
+        // Submit always uses the manual form; the search box only fills it in.
         const data = {};
-        if (form.elements.hgvsInput.value) {
-            data.hgvsInput = form.elements.hgvsInput.value;
-        } else {
-            const itemType = isTranscript ? "transcript"
-                : (document.getElementById("typeCnv").checked ? "cnv" : "snv");
+        {
             Array.from(form.elements).forEach( (ele) => {
-                if (ele.name === "myVariantsHgvsInput" || ele.name === "hgt_doJsCommand" ||
-                        ele.name === "myVariantsType" ||
+                if (ele.name === "hgt_doJsCommand" ||
+                        ele.name === "myVariantsType" || ele.id === "positionRange" ||
+                        ele.id === "myVarNewTrackName" ||
                         (ele.tagName !== "INPUT" && ele.tagName !== "TEXTAREA")) {return;}
                 const key = ele.id;
                 let value = ele.value;
@@ -1548,12 +2538,32 @@ var myVariants = {
                 data[key] = value;
             });
             data.itemType = itemType;
-            data.cnvType = (itemType === "cnv") ? document.getElementById("cnvType").value : "";
+            // The Track field says where this goes. A track the user already has
+            // travels as its id; a user with none yet sends the name to give the
+            // track their first save creates.
+            let projectId = myVariants.selectedProjectId();
+            data.projectId = projectId;
+            if (projectId === "")
+                data.newProject = myVariants.defaultProjectLabel();
+            // Selects are not collected above, so the subtype is read here.
+            data.subType = (subTypeEl && subTypeEl.options.length > 0) ? subTypeEl.value : "";
             if (itemType === "cnv") data.ref = "";
-            else if (itemType === "transcript") { data.ref = ""; data.alt = ""; }
-            // Collect custom fields from the dynamic rows
+            else if (itemType !== "snv") { data.ref = ""; data.alt = ""; }
+            // Collect custom fields from the dynamic rows. A bad name stops the
+            // submit here so the message stays next to the field it is about.
             let customRows = document.querySelectorAll("#customFieldsList .customFieldRow");
             if (customRows.length > 0) {
+                let firstBad = null;
+                customRows.forEach(function(row) {
+                    let nameInput = row.querySelector(".customFieldName");
+                    if (row.dataset.existing) { return; }
+                    if (!myVariants.validateFieldName(nameInput) && !firstBad)
+                        firstBad = nameInput;
+                });
+                if (firstBad) {
+                    firstBad.focus();
+                    return;
+                }
                 let customFields = [];
                 customRows.forEach(function(row) {
                     let name = row.querySelector(".customFieldName").value.trim();
@@ -1567,27 +2577,301 @@ var myVariants = {
                 }
             }
             // Convert hidden block fields from CSV strings to arrays of ints.
-            // Drop blocks entirely for SNV/CNV; server synthesizes a single full-span
-            // block. For transcript with noBlocks (rows added but every size empty),
-            // also drop and let the server synthesize.
+            // Drop blocks for a type that has none; the server synthesizes a single
+            // full-span block.  With noBlocks (rows added but every size empty),
+            // also drop and let the server synthesize.  Exon frames go with the
+            // blocks, as a comma list.
             let bc = parseInt(data.blockCount, 10);
-            if (!isTranscript || !bc || blockResult.noBlocks) {
+            if (!keepsBlocks || !bc || blockResult.noBlocks) {
                 delete data.blockCount;
                 delete data.blockSizes;
                 delete data.chromStarts;
+                delete data.exonFrames;
             } else {
+                if (!isTranscript) { delete data.exonFrames; }
                 data.blockCount = bc;
                 data.blockSizes = data.blockSizes.split(",").map(Number);
                 data.chromStarts = data.chromStarts.split(",").map(Number);
             }
+
+            // if item is a transcript, allow the cdsStart and cdsEnd not existing having
+            // the same meaning as if they are set to chromEnd and create a thin block
+            if (isTranscript) {
+                if (!data.thickStart && !data.thickEnd) {
+                    data.thickStart = data.end;
+                    data.thickEnd = data.end;
+                }
+            }
         }
 
+        // A second click before the first create returns would post the same
+        // item again. A disabled button fires no click at all, and this runs
+        // before the second click of a double-click is dispatched.
+        myVariants.setSubmitEnabled(false);
+
+        myVariants.postNewItem(form.elements.namedItem("trackName").value, data);
+    },
+
+    // What the position box autocomplete picked, which its Search button reads,
+    // since the pick leaves only coordinates in the box.
+    pickedSearchTerm: null,
+
+    // A search answered by an in-place image update, waiting for the new view
+    // to be drawn before the offer to save it goes up.
+    pendingSearchTerm: null,
+
+    // Counts calls to showSearchNote, so a slow lookup for an older search
+    // cannot put up its button after a newer search.
+    searchNoteSeq: 0,
+
+    // What to do with a search that could be saved, kept in this browser:
+    // "save" saves it without asking, "skip" does not offer. Unset asks.
+    searchSavePrefKey: "myVariants_searchSavePref",
+
+    // The last search saved without asking, so a reload of the same page does
+    // not save it again.
+    lastAutoSavedKey: "myVariants_lastAutoSaved",
+
+    removeSearchSaveBox: function() {
+        // Take down the save offer or the saved note of the last search.
+        let box = document.getElementById("hgTracks_myVariantsSearchNotenotifBox");
+        if (box) {
+            box.remove();
+            imageV2.drawHighlights();
+        }
+    },
+
+    configurePageLink: function() {
+        // HTML link to the Configure page, for mouseover text.
+        return "<a href='../cgi-bin/hgTracks?hgTracksConfigPage=configure&hgsid=" +
+               getHgsid() + "'>Configure page</a>";
+    },
+
+    showSearchSaveBox: function(content) {
+        // Put content in a notification bar under the position controls, in
+        // place of whatever the last search put there.
+        myVariants.removeSearchSaveBox();
+        let box = document.createElement("div");
+        box.id = "hgTracks_myVariantsSearchNotenotifBox";
+        box.className = "notifBox";
+        box.style.display = "none";
+        box.style.width = "90%";
+        box.style.marginLeft = "100px";
+        box.appendChild(content);
+        document.body.appendChild(box);
+        notifBoxShow("hgTracks", "myVariantsSearchNote");
+    },
+
+    showSearchSavePrompt: function(term) {
+        // Ask whether to save term, with a choice to stop asking.
+        let content = document.createElement("div");
+        content.appendChild(document.createTextNode("Save " + term + " to My Annotations? "));
+        content.appendChild(createInfoIcon(
+            "The annotation goes into the track you last saved to. To pick another " +
+            "track, use the <b>Add Annotation</b> button below the image display instead."));
+        let controls = document.createElement("div");
+        controls.style.cssText = "text-align: center; margin-top: 4px;";
+        let saveBtn = document.createElement("button");
+        saveBtn.type = "button";
+        saveBtn.textContent = "Save";
+        let skipBtn = document.createElement("button");
+        skipBtn.type = "button";
+        skipBtn.textContent = "Don't save";
+        skipBtn.style.marginLeft = "6px";
+        let label = document.createElement("label");
+        label.style.marginLeft = "12px";
+        let remember = document.createElement("input");
+        remember.type = "checkbox";
+        label.appendChild(remember);
+        label.appendChild(document.createTextNode(" Remember this choice "));
+        controls.appendChild(saveBtn);
+        controls.appendChild(skipBtn);
+        controls.appendChild(label);
+        controls.appendChild(createInfoIcon(
+            "Use this choice for later searches without asking. The choice is " +
+            "remembered in this browser, not in your account. Change it on the " +
+            myVariants.configurePageLink() + "."));
+        content.appendChild(controls);
+        let feedback = document.createElement("div");
+        feedback.style.cssText = "text-align: center; margin-top: 4px;";
+        feedback.innerHTML = "My Annotations is a new feature. Please send your " +
+            "feedback to <a href='mailto:genome-www@soe.ucsc.edu'>genome-www@soe.ucsc.edu</a>.";
+        content.appendChild(feedback);
+        let rememberChoice = function(choice) {
+            if (!remember.checked)
+                return;
+            try { localStorage.setItem(myVariants.searchSavePrefKey, choice); } catch (e) { /* private mode */ }
+        };
+        saveBtn.addEventListener("click", function() {
+            rememberChoice("save");
+            myVariants.removeSearchSaveBox();
+            myVariants.saveSearchedTerm(term);
+        });
+        skipBtn.addEventListener("click", function() {
+            rememberChoice("skip");
+            myVariants.removeSearchSaveBox();
+        });
+        myVariants.showSearchSaveBox(content);
+    },
+
+    showSearchNote: function(term) {
+        // Offer to save term, the search that just resolved to a position, or
+        // save it right away if the user chose that before. hgTracks prints the
+        // holder only for a logged-in user. A null term leaves the last offer as
+        // it is; any other term replaces it. A term the save could not resolve
+        // gets no offer.
+        let note = document.getElementById("myVarSearchNote");
+        if (!note || term === null)
+            return;
+        myVariants.removeSearchSaveBox();
+        let seq = ++myVariants.searchNoteSeq;
+        if (!term)
+            return;
+        let pref = null;
+        try { pref = localStorage.getItem(myVariants.searchSavePrefKey); } catch (e) { pref = null; }
+        if (pref === "skip")
+            return;
+        let url = "../cgi-bin/hgTracks?myVarResolveInput=" + encodeURIComponent(term) +
+                  "&db=" + getDb() + "&hgsid=" + getHgsid();
+        fetch(url, {method: "GET", credentials: "same-origin"})
+        .then(function(resp) { return resp.json(); })
+        .then(function(res) {
+            if (!res || res.error || seq !== myVariants.searchNoteSeq)
+                return;
+            if (pref !== "save") {
+                myVariants.showSearchSavePrompt(term);
+                return;
+            }
+            let saveId = getDb() + ":" + hgTracks.chromName + ":" + hgTracks.winStart + ":" + term;
+            let lastSaved = null;
+            try { lastSaved = sessionStorage.getItem(myVariants.lastAutoSavedKey); } catch (e) { lastSaved = null; }
+            if (lastSaved === saveId)
+                return;
+            try { sessionStorage.setItem(myVariants.lastAutoSavedKey, saveId); } catch (e) { /* private mode */ }
+            myVariants.saveSearchedTerm(term);
+        })
+        .catch(function(err) {
+            // The offer is optional, so log the failure rather than warn().
+            console.warn("myVariants search note lookup failed: " + err);
+        });
+    },
+
+    matchInView: function(matches) {
+        // The match the browser is showing: the one that covers exactly the
+        // current view, else the only one that overlaps it. Null when there is
+        // no such match.
+        let chrom = hgTracks.chromName;
+        let start = hgTracks.winStart;
+        let end = hgTracks.winEnd;
+        let exact = matches.find(function(m) {
+            return m.chrom === chrom && m.start === start && m.end === end;
+        });
+        if (exact)
+            return exact;
+        let overlapping = matches.filter(function(m) {
+            return m.chrom === chrom && m.start < end && m.end > start;
+        });
+        return overlapping.length === 1 ? overlapping[0] : null;
+    },
+
+    saveSearchedTerm: function(term) {
+        // Save the term the user just searched, from the offer under the
+        // position line or without asking. Resolve it the way the dialog's
+        // search box does, then create the item with the form's own defaults, in
+        // the project last saved into so it lands in the track the user is
+        // working in.
+        // warn() renders its message with innerHTML, so the typed term goes
+        // through here first.
+        let asText = function(s) {
+            let div = document.createElement("div");
+            div.textContent = s;
+            return div.innerHTML;
+        };
+        document.body.style.cursor = "wait";
+        let url = "../cgi-bin/hgTracks?myVarResolveInput=" + encodeURIComponent(term) +
+                  "&db=" + getDb() + "&hgsid=" + getHgsid();
+        fetch(url, {method: "GET", credentials: "same-origin"})
+        .then(function(resp) { return resp.json(); })
+        .then(function(res) {
+            document.body.style.cursor = "";
+            if (!res || res.error) {
+                warn(asText(res && res.error ? res.error :
+                            "Could not resolve '" + term + "'"));
+                return;
+            }
+            if (res.matches) {
+                // The search that put up this button already picked one of
+                // these: the one the browser is showing.
+                let shown = myVariants.matchInView(res.matches);
+                if (shown)
+                    res = shown;
+            }
+            if (res.matches) {
+                // The view no longer shows one of them, so let the dialog's
+                // picker ask which to annotate.
+                myVariants.showDialog();
+                let form = myVariants.formEle;
+                let box = form ? form.querySelector("#positionRange") : null;
+                if (box && form.doLookup) {
+                    box.value = term;
+                    form.doLookup(null);
+                }
+                return;
+            }
+            // The server reads start and end as strings, and rejects an empty
+            // itemType; a position or gene hit comes back without one.
+            const itemType = res.itemType ? res.itemType :
+                             ((res.ref || res.alt) ? "snv" : "other");
+            const data = {
+                chrom: res.chrom,
+                start: String(res.start),
+                end: String(res.end),
+                thickStart: String(res.start),
+                thickEnd: String(res.end),
+                name: res.name || "",
+                score: "0",
+                strand: ".",
+                color: "#000000",
+                description: res.description || "",
+                ref: res.ref || "",
+                alt: res.alt || "",
+                itemType: itemType,
+                subType: res.subType || "",
+                projectId: myVariants.currentProjectId()
+            };
+            // Say which track it went into; the dialog is where to pick another.
+            let proj = myVariants.projectById(data.projectId);
+            let trackLabel = proj ? proj.label : "My Annotations";
+            myVariants.postNewItem("myVariants", data, function() {
+                let content = document.createElement("div");
+                content.appendChild(document.createTextNode("Saved " + term + " to " +
+                    trackLabel + ". "));
+                let closeBtn = document.createElement("button");
+                closeBtn.type = "button";
+                closeBtn.textContent = "Close";
+                closeBtn.addEventListener("click", myVariants.removeSearchSaveBox);
+                content.appendChild(closeBtn);
+                myVariants.showSearchSaveBox(content);
+            });
+        })
+        .catch(function(err) {
+            document.body.style.cursor = "";
+            warn(asText("Error resolving search: " + err.message));
+        });
+    },
+
+    postNewItem: function(trackName, data, onSaved) {
+        // Post one new annotation to hgTracks and update the image with it.
+        // Shared by the create dialog, the drag-and-select dialog's Add
+        // Annotation button and the offer to save a search, so all of them get
+        // the same error handling and the same reload when the annotation goes
+        // into a track that has no entry in the track controls yet. onSaved is
+        // optional and runs once the item is in.
         // Show loading indicator
         const loadingId = showLoadingImage("imgTbl");
         document.body.style.cursor = "wait";
 
         // Build request - use fetch() instead of form.submit()
-        const trackName = form.elements.namedItem("trackName").value;
         const req = encodeURIComponent(`myVariants ${trackName} ${JSON.stringify(data)}`);
         const url = cart.addUpdatesToUrl(`../cgi-bin/hgTracks?hgt_doJsCommand=${req}&trackName=${trackName}&hgt.trackImgOnly=1&hgt.ideogramToo=1&hgsid=${getHgsid()}&db=${getDb()}`);
 
@@ -1604,11 +2888,26 @@ var myVariants = {
         .then(html => {
             hideLoadingImage(loadingId);
             document.body.style.cursor = "";
+            myVariants.setSubmitEnabled(true);
+            // A server-side abort comes back as a 200 carrying an error page rather
+            // than an image. updateImgAndMap strips it with debug on, which alerts the
+            // whole page, so strip it here to show the message alone and leave the
+            // dialog open to correct the input.
+            if (!scrapeVariable(html, "hgTracks")) {
+                let stripped = {};
+                stripJsEmbedded(html, false, stripped);
+                if (!stripped.warnMsg)
+                    warn("Could not create the annotation. Please try again.");
+                return;
+            }
             myVariants.handleCreateSuccess(html, data);
+            if (onSaved)
+                onSaved();
         })
         .catch(error => {
             hideLoadingImage(loadingId);
             document.body.style.cursor = "";
+            myVariants.setSubmitEnabled(true);
             warn("Error creating annotation: " + error.message);
             console.error("Fetch error:", error);
         });
@@ -1617,6 +2916,27 @@ var myVariants = {
     handleCreateSuccess: function(response, data) {
         // Close the create dialog
         $("#myVariantsDialog").dialog("close");
+        // Warnings from earlier attempts are about input that is now saved.
+        if (typeof hideWarnBox === "function") { hideWarnBox(); }
+
+        // hgt.trackImgOnly returns the image but none of the track controls below
+        // it, so a track this request just created can be drawn but has no entry
+        // in the controls until the page is loaded again. Note it here, before
+        // updateImgAndMap swaps in the new hgTracks object.
+        const newJson = scrapeVariable(response, "hgTracks");
+        let trackIsNew = false;
+        if (newJson && newJson.trackDb && hgTracks && hgTracks.trackDb) {
+            trackIsNew = Object.keys(newJson.trackDb).some(function(id) {
+                return !(id in hgTracks.trackDb);
+            });
+        }
+        // The next save defaults to the track this one went into, the way the
+        // server's own record of it does. A new track arrives with the reload.
+        if (data && data.projectId && typeof hgTracks !== 'undefined')
+            hgTracks.myVariantsLastProject = data.projectId;
+        // The next annotation starts from a clean form, on the track just used.
+        if (myVariants.formEle && myVariants.formEle.applyDefaults)
+            myVariants.formEle.applyDefaults();
 
         // Update the image using the existing pattern
         imageV2.updateImgAndMap.call({cmd: 'wholeImage'}, response, 'success');
@@ -1644,6 +2964,7 @@ var myVariants = {
 
         if (inCurrentWindow) {
             // Already visible - just show brief success message
+            if (trackIsNew) { imageV2.fullReload(); }
             return;
         }
 
@@ -1651,21 +2972,28 @@ var myVariants = {
         const navPref = localStorage.getItem("myVariants_navPref");
         if (navPref === "jump") {
             // Auto-navigate to variant
-            myVariants.navigateToVariant(variantChrom, variantStart, variantEnd);
+            myVariants.navigateToVariant(variantChrom, variantStart, variantEnd, trackIsNew);
             return;
         } else if (navPref === "stay") {
-            // Stay here, just show message
+            // Stay here, just show message. A reload would wipe the message out,
+            // so skip it when the new track needs one.
+            if (trackIsNew) {
+                imageV2.fullReload();
+                return;
+            }
             warn("Annotation created at " + variantChrom + ":" +
                  (variantStart+1).toLocaleString() + "-" + variantEnd.toLocaleString());
             return;
         }
 
         // No preference saved - show dialog
-        myVariants.showNavigationDialog(variantChrom, variantStart, variantEnd);
+        myVariants.showNavigationDialog(variantChrom, variantStart, variantEnd, trackIsNew);
     },
 
-    showNavigationDialog: function(chrom, start, end) {
+    showNavigationDialog: function(chrom, start, end, trackIsNew) {
         const posStr = chrom + ":" + (start+1).toLocaleString() + "-" + end.toLocaleString();
+        // Set when Go to Annotation handles the page load itself.
+        let navigating = false;
 
         // Create dialog content
         const content = document.createElement("div");
@@ -1686,8 +3014,9 @@ var myVariants = {
                     if (document.getElementById("myVariantsRememberNav").checked) {
                         localStorage.setItem("myVariants_navPref", "jump");
                     }
+                    navigating = true;
                     $(this).dialog("close");
-                    myVariants.navigateToVariant(chrom, start, end);
+                    myVariants.navigateToVariant(chrom, start, end, trackIsNew);
                 },
                 "Stay Here": function() {
                     if (document.getElementById("myVariantsRememberNav").checked) {
@@ -1695,6 +3024,12 @@ var myVariants = {
                     }
                     $(this).dialog("close");
                 }
+            },
+            close: function() {
+                // Covers the buttons and the titlebar X and Escape alike: a new
+                // track only reaches the controls below the image on a page load.
+                // Go to Annotation reloads at the item instead, so skip it there.
+                if (trackIsNew && !navigating) { imageV2.fullReload(); }
             },
             open: function() {
                 // Add checkbox to button pane, inline with buttons
@@ -1704,18 +3039,23 @@ var myVariants = {
                 checkboxSpan.style.cssText = "display: inline-block; vertical-align: middle; margin-right: 1em;";
                 checkboxSpan.innerHTML = "<label><input type='checkbox' id='myVariantsRememberNav'> Remember this choice </label>";
                 checkboxSpan.appendChild(createInfoIcon(
-                    "Save your preference. Future annotations outside the current view will automatically " +
-                    "use this choice. Reset via Configure page or cartReset."
+                    "Save your preference. Future annotations outside the current view will " +
+                    "automatically use this choice. The choice is remembered in this browser, " +
+                    "not in your account. Change it on the " + myVariants.configurePageLink() + "."
                 ));
                 // Insert before the button set
                 buttonPane.find(".ui-dialog-buttonset").before(checkboxSpan);
+                // jquery-ui.css pins the button pane to a 1em height and floats the
+                // button set, so the buttons spill past the bottom of the dialog.
+                // Let the pane grow around the float instead.
+                buttonPane.css({height: "auto", overflow: "hidden", paddingBottom: "0.4em"});
                 // Force dialog to recalculate its size
                 dialog.dialog("option", "height", "auto");
             }
         });
     },
 
-    navigateToVariant: function(chrom, start, end) {
+    navigateToVariant: function(chrom, start, end, trackIsNew) {
         // Add small padding around the variant (max 100bp)
         const padding = 100;
         const paddedStart = Math.max(0, start - padding);
@@ -1723,27 +3063,37 @@ var myVariants = {
 
         // Navigate using existing mechanism
         const pos = chrom + ":" + paddedStart + "-" + paddedEnd;
+        if (trackIsNew) {
+            // In-place navigation returns the image alone, which cannot bring a
+            // new track into the controls below it. Load the page instead.
+            imageV2.fullReload("position=" + pos);
+            return;
+        }
         imageV2.navigateInPlace("position=" + pos, null, true);
     },
 
-    showDialog: function() {
+    showDialog: function(options) {
+        // Open the create form. options.position, when given, is a browser
+        // position string the form starts on, which is how the drag-and-select
+        // dialog hands over the region the user marked.
         let dialog = document.getElementById('myVariantsDialog');
-        // Clear dynamically-added custom field rows; for existing fields, just clear the value
-        let customFieldsList = document.getElementById("customFieldsList");
-        if (customFieldsList) {
-            let rows = customFieldsList.querySelectorAll(".customFieldRow");
-            rows.forEach(function(row) {
-                if (row.dataset.existing === "true") {
-                    // Existing field - just clear the value input
-                    let valInput = row.querySelector(".customFieldValue");
-                    if (valInput) valInput.value = "";
-                } else {
-                    // Dynamically added row - remove it
-                    row.remove();
-                }
-            });
-        }
         $(dialog).dialog("open");
+        if (!options || !options.position)
+            return;
+        // After the open, which is where the form goes back to its defaults.
+        // A region the position box cannot read, a multi-region selection for
+        // one, leaves the form on the current view.
+        let form = myVariants.formEle;
+        let range = parseBedRange(options.position);
+        if (!form || !range || !form.setPositionFields)
+            return;
+        form.setPositionFields(range.chrom, range.start, range.end);
+        let thickStart = form.querySelector("#thickStart");
+        let thickEnd = form.querySelector("#thickEnd");
+        if (thickStart) { thickStart.value = range.start; }
+        if (thickEnd) { thickEnd.value = range.end; }
+        let noteEl = document.getElementById("positionSourceNote");
+        if (noteEl) { noteEl.textContent = "From the region you selected"; }
     },
 };
 
@@ -2134,6 +3484,11 @@ var dragSelect = {
         var currDb = getDb();
         if (hgTracks.highlight) {
             var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
+            // Same list the drawer used, so the index it returns indexes hgTracks.highlight
+            // too:  highlightSpace is one entry per cart entry, in cart order.  The server
+            // sends it only in a multi-region space.  refs #37788
+            if (hgTracks.highlightSpace)
+                hlArray = hgTracks.highlightSpace.split("|");
             for (var i = 0; i < hlArray.length; i++) {
                 hlString = hlArray[i];
                 pos = parsePositionWithDb(hlString);
@@ -2195,10 +3550,20 @@ var dragSelect = {
         if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
             // just set/overwrite the old highlight position, this used to be the default
             hgTracks.highlight = newHighlight;
+            if (hgTracks.highlightSpace !== undefined)
+                hgTracks.highlightSpace = newHighlight;
         }
         else {
             // add to the end of a |-separated list
             hgTracks.highlight = oldHighlight+"|"+newHighlight;
+            // In a multi-region space the drawer reads highlightSpace, one entry per cart
+            // entry.  The new entry is already in the image's coordinates, so it goes on
+            // both lists; the server maps the cart's copy back to the source on the next
+            // request.  refs #37788
+            if (hgTracks.highlightSpace)
+                hgTracks.highlightSpace = hgTracks.highlightSpace+"|"+newHighlight;
+            else if (hgTracks.highlightSpace !== undefined)
+                hgTracks.highlightSpace = newHighlight;
         }
         // we include enableHighlightingDialog because it may have been changed by the dialog
         var cartSettings = {             'highlight': hgTracks.highlight, 
@@ -2376,34 +3741,11 @@ var dragSelect = {
         };
         if (typeof doMyVariants !== 'undefined' && doMyVariants) {
             dragSelectButtons["Add Annotation"] = function() {
-                let data = {};
-                let pos = parsePosition(newPosition);
-                data.chrom = pos.chrom;
-                data.start = data.thickStart = pos.start.toString();
-                data.end = data.thickEnd = pos.end.toString();
-                data.score = "0";
-                data.strand = ".";
-                data.color = $("#hlColorInput").val();
-                data.name = "";
-                data.description = "";
-                data.ref = "";
-                data.alt = "";
-                data.trackName = "myVariants";
+                // Open the create form on the region that was marked. The type,
+                // the track and the rest of the annotation are the user's to
+                // fill in, the same as any other way into the form.
                 $(this).dialog("close");
-                let req = encodeURIComponent(`myVariants myVariants ${JSON.stringify(data)}`);
-                jQuery('body').css('cursor', 'wait');
-                $.ajax({
-                        type: "POST",
-                        url: "../cgi-bin/hgTracks",
-                        data: cart.addUpdatesToUrl(`hgt_doJsCommand=${req}&trackName=myVariants&hgsid=${getHgsid()}`),
-                        dataType: "html",
-                        trueSuccess: imageV2.updateImgAndMap,
-                        success: catchErrorOrDispatch,
-                        error: errorHandler,
-                        cmd: 'wholeImage',
-                        loadingId: showLoadingImage("imgTbl"),
-                        cache: false
-                    });
+                myVariants.showDialog({position: newPosition});
             };
         }
         dragSelectButtons.Cancel = function() {
@@ -3294,14 +4636,17 @@ jQuery.fn.panImages = function(){
 
 };
 
-function removeTrackFromVisibleGroup(track) {
+function removeTrackFromVisibleGroup(track, skipReflow) {
 /* When a track has been hidden by the user, remove its select and label from
- * the visible tracks group */
+ * the visible tracks group.  With skipReflow the caller lays the group out
+ * again itself, once for many removals.  Returns true if a cell was removed. */
     let rec = document.querySelector("[id^='visible-'] [data-track=\"" + track + "\"]");
-    if (rec) {
-        rec.parentElement.remove();
+    if (!rec)
+        return false;
+    rec.parentElement.remove();
+    if (!skipReflow)
         reflowVisibleGroup();
-    }
+    return true;
 }
 
 function reflowVisibleGroup() {
@@ -3320,6 +4665,37 @@ function reflowVisibleGroup() {
     let usedRows = Math.max(1, Math.ceil(cells.length / cols));
     for (let row of rows.slice(usedRows))
         row.remove();
+}
+
+function addTrackToVisibleGroup(track) {
+/* When a hidden track has been turned on, copy its select and label from its
+ * own group into the visible tracks group */
+    let visibleRows = document.querySelectorAll("tr[id^='visible-']");
+    if (visibleRows.length === 0)
+        return;
+    if (document.querySelector("[id^='visible-'] [data-track=\"" + track + "\"]"))
+        return;
+    let link = document.querySelector("tr:not([id^='visible-']) a.trackLink[data-track=\"" +
+                                      track + "\"]");
+    let cell = link ? link.closest("td") : null;
+    if (!cell)
+        return;
+    let copy = $(cell).clone(true)[0];  // true keeps the vis select's change handler
+    let lastRow = visibleRows[visibleRows.length - 1];
+    // the group's header spans the full width of the grid
+    let header = document.querySelector("th.visibleTracksToggleBar");
+    let columns = header ? header.colSpan : visibleRows[0].cells.length;
+    let filler = lastRow.querySelector("td:not(.trackLabelTd)");
+    if (filler) {
+        filler.replaceWith(copy);
+    } else if (lastRow.cells.length < columns) {
+        lastRow.appendChild(copy);
+    } else {
+        let newRow = lastRow.cloneNode(false);
+        newRow.id = "visible-added-" + track;
+        newRow.appendChild(copy);
+        lastRow.after(newRow);
+    }
 }
 
   ///////////////////////////////////////
@@ -3585,6 +4961,16 @@ var rightClick = {
                                 dragSelect.highlightThisRegion(newPos2, true);
                                 }
 
+                        } else if (hgTracks.inMultiRegionSpace) {
+                            // In a multi-region space the link carries the item's SOURCE
+                            // position, which is what the cart holds.  Only the server can
+                            // place it on the synthetic image, so add it to the cart with
+                            // the redraw request and let the redraw draw it.  refs #37788
+                            var srcHighlight = makeHighlightString(getDb(), chrom, chromStart,
+                                                                   chromEnd, dragSelect.loadHlColor());
+                            var hlList = hgTracks.highlight ? hgTracks.highlight + "|" + srcHighlight
+                                                            : srcHighlight;
+                            imageV2.navigateInPlace("highlight=" + encodeURIComponent(hlList), null, true);
                         } else {
                             var newChrom = hgTracks.chromName;
                             if (hgTracks.windows && hgTracks.virtualSingleChrom) {
@@ -3648,6 +5034,15 @@ var rightClick = {
                         }
                     }
                 }
+        } else if (cmd === 'itemCoordSystem') {
+            // A full page load:  the whole view changes, not just the image.  refs #37788
+            jQuery('body').css('cursor', 'wait');
+            window.location.assign("../cgi-bin/hgTracks?" +
+                cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
+                                     'virtModeType': 'singleTrans', 'singleTransId': args.name,
+                                     'singleTransTable': args.table,
+                                     'singleTransChrom': args.chrom,
+                                     'singleTransCds': args.cds }));
         } else if (cmd === 'zoomCodon' || cmd === 'zoomExon') {
             var num, ajaxCmd, msg;
             if (cmd === 'zoomCodon') {
@@ -3786,10 +5181,10 @@ var rightClick = {
         } else if (cmd === "hideOthers") {
             rightClick.hideOthers(id);
         } else if (cmd === "deleteCustomTrack") {
-            deleteCustomTrack(id);
-            // remove the track from the image in place (no page reload); hideTracks()
-            // drops its row, updates hgTracks.trackDb and redraws via afterImgChange().
-            rightClick.hideTracks([id]);
+            if (deleteCustomTrack(id))
+                // remove the track from the image in place (no page reload); hideTracks()
+                // drops its row, updates hgTracks.trackDb and redraws via afterImgChange().
+                rightClick.hideTracks([id]);
         } else if (cmd === "moveTop") {
             rightClick.moveTo(id, "top");
         } else if (cmd === "moveBottom") {
@@ -3933,6 +5328,12 @@ var rightClick = {
             var highlights = hgTracks.highlight.split("|");
             highlights.splice(rightClick.clickedHighlightIdx, 1); // splice = remove element from array
             hgTracks.highlight = highlights.join("|");
+            // the same index in the drawer's list, which lines up with the cart's.  refs #37788
+            if (hgTracks.highlightSpace) {
+                var spaceHighlights = hgTracks.highlightSpace.split("|");
+                spaceHighlights.splice(rightClick.clickedHighlightIdx, 1);
+                hgTracks.highlightSpace = spaceHighlights.join("|");
+            }
             cart.setVarsObj({'highlight' : hgTracks.highlight});
             imageV2.drawHighlights();
         } else if (cmd === 'toggleMerge') {
@@ -4548,6 +5949,8 @@ var rightClick = {
 
                         // remove special genePred exon mouseover html text
                         // CGIs now use HTML tags, e.g. "<b>Transcript:</b> ENST00000297261.7<br><b>Strand:</b>"
+                        // and hgGene needs the right item name instead of the full Transcript: XYZ,
+                        // so extract it here. Note that hgc links just use the URL below
                         title = rightClick.mouseOverToLabel(decodeURIComponent(title));
 
                         if (title.length > maxLength) {
@@ -4678,6 +6081,24 @@ var rightClick = {
                                                 return true;}
                                         };
                                     }
+                                    // Make this item's exons a multi-region space, whether or
+                                    // not the view is already in one.  refs #37788
+                                    if (hgTracks.multiRegionSpaces) {
+                                        o[rightClick.makeImgTag("magnify.png")+" Make this my coordinate system"] =
+                                        {   onclick: function(menuItemClicked, menuObject) {
+                                                rightClick.hit(menuItemClicked, menuObject,
+                                                            "itemCoordSystem",
+                                                            {name: name, table: table, 'chrom': chrom, cds: 0});
+                                                return true;}
+                                        };
+                                        o[rightClick.makeImgTag("magnify.png")+" Make this my coordinate system (coding exons only)"] =
+                                        {   onclick: function(menuItemClicked, menuObject) {
+                                                rightClick.hit(menuItemClicked, menuObject,
+                                                            "itemCoordSystem",
+                                                            {name: name, table: table, 'chrom': chrom, cds: 1});
+                                                return true;}
+                                        };
+                                    }
                                 }
                             }
                             o[rightClick.makeImgTag("dnaIcon.png")+" Get DNA for "+titleHtml] = {
@@ -4724,6 +6145,24 @@ var rightClick = {
                 }
             }
 
+            // Base Position track (ruler, also draws the sequence when zoomed in):
+            // offer the DNA download page for the current view, like View > DNA Sequence
+            if (rightClick.selectedMenuItem.id === "ruler") {
+                menu.push($.contextMenu.separator);
+                o = {};
+                o[rightClick.makeImgTag("dnaIcon.png") + " View DNA Sequence"] = {
+                    onclick: function(menuItemClicked, menuObject) {
+                        // #dnaLink in the View menu is kept current by genomePos.set()
+                        // when the view is scrolled without a page reload
+                        var dnaHref = $('#dnaLink').attr('href');
+                        if (dnaHref)
+                            window.location.href = dnaHref;
+                        else
+                            gotoGetDnaPage();
+                        return true; }
+                };
+                menu.push(o);
+            }
 
             menu.push($.contextMenu.separator);
             o = {};
@@ -4804,7 +6243,7 @@ var rightClick = {
                     && (!tdbIsCompositeSubtrack(rec) || rec.configureBy !== 'clickThrough')) {
                         // Note that subtracks never do clickThrough because
                         // parentTrack cfg is the desired clickThrough
-                        o[rightClick.makeImgTag("wrench.png")+" Configure "+rec.shortLabel] = {
+                        o[rightClick.makeImgTag("wrench.png")+" Configure "+htmlEncode(rec.shortLabel)] = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup");
                                 return true; }
@@ -4813,7 +6252,7 @@ var rightClick = {
                     }
                     if (rec.parentTrack) {
                         o[rightClick.makeImgTag("folderWrench.png")+" Configure "+
-                          rec.parentLabel + " track set..."] = {
+                          htmlEncode(rec.parentLabel) + " track set..."] = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked,menuObject,"hgTrackUi_follow");
                                 return true; }
@@ -4821,7 +6260,7 @@ var rightClick = {
                     }
                 } else {
 
-                    o[rightClick.makeImgTag("folderWrench.png")+" Configure "+rec.shortLabel +
+                    o[rightClick.makeImgTag("folderWrench.png")+" Configure "+htmlEncode(rec.shortLabel) +
                       " track set..."] = {
                         onclick: function(menuItemClicked, menuObject) {
                             rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_follow");
@@ -4831,7 +6270,7 @@ var rightClick = {
                         // A container (e.g. multiWig) nested in a composite: also offer
                         // the parent composite's configuration.
                         o[rightClick.makeImgTag("folderWrench.png")+" Configure "+
-                          rec.parentLabel + " track set..."] = {
+                          htmlEncode(rec.parentLabel) + " track set..."] = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked,menuObject,"hgTrackUi_followParent");
                                 return true; }
@@ -4862,7 +6301,7 @@ var rightClick = {
                     };
                 }
 
-		o[rightClick.makeImgTag("book.png")+" Track Description "+rec.shortLabel] = {
+		o[rightClick.makeImgTag("book.png")+" Track Description "+htmlEncode(rec.shortLabel)] = {
 		    onclick: function(menuItemClicked, menuObject) {
 			rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup_description");
 			return true; }
@@ -4920,7 +6359,7 @@ var rightClick = {
             else if ((!rec.type.startsWith("wigMaf")) &&
                 (rec.type.startsWith("bigWig") || rec.type.startsWith("multiWig") || rec.type.startsWith("wig") || rec.type.startsWith("bedGraph"))) {
                 o = {};
-                o[" Make a New Collection with \"" + rec.shortLabel + "\""] = {
+                o[" Make a New Collection with \"" + htmlEncode(rec.shortLabel) + "\""] = {
                     onclick: rightClick.makeHitCallback("newCollection")
                 };  
                 menu.push(o);
@@ -4929,7 +6368,7 @@ var rightClick = {
                     var ii;
                     for(ii=0; ii < hgTracks.collections.length; ii++) {
                         o = {};
-                        o[" Add to \"" + hgTracks.collections[ii].shortLabel + "\""] = {
+                        o[" Add to \"" + htmlEncode(hgTracks.collections[ii].shortLabel) + "\""] = {
                             onclick: rightClick.makeHitCallback("addCollection")
                         };  
                         menu.push(o);
@@ -5426,7 +6865,8 @@ var popUpHgcOrHgGene = {
         };
 
         let openIcon = "<a class='dialogNewWindowIcon' target='_blank' href='" + popUpHgcOrHgGene.href + "'><svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 512 512'><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/></svg></a>";
-        let titleText = hgTracks.trackDb[popUpHgcOrHgGene.table].shortLabel + " (Item Details)" + openIcon;
+        let titleText = htmlEncode(hgTracks.trackDb[popUpHgcOrHgGene.table].shortLabel) +
+                        " (Item Details)" + openIcon;
 
         $('#hgcDialog').dialog({
             resizable: false,
@@ -5560,15 +7000,23 @@ function addKeyboardHelpEntries() {
 // A function for the keyboard shortcut:
 // View DNA
 function gotoGetDnaPage() {
+    // hgc's l= is 0-based.  hgTracks.winStart already is; the position box and
+    // nonVirtPosition are 1-based, as a user reads them, so take one off those.
     var position = hgTracks.chromName+":"+hgTracks.winStart+"-"+hgTracks.winEnd;
-    if (hgTracks.virtualSingleChrom && (pos.chrom.search("multi") === 0)) {
+    var oneBased = false;
+    if (hgTracks.virtualSingleChrom && (hgTracks.chromName.search("multi") === 0)) {
         position = genomePos.get().replace(/,/g,'');
-    } else if (hgTracks.windows && hgTracks.nonVirtPosition) {
+        oneBased = true;
+    } else if ((hgTracks.windows || hgTracks.inMultiRegionSpace) && hgTracks.nonVirtPosition) {
+        // a multi-region space is drawn on "multi", which hgc has no sequence for, so
+        // ask for the source position the position box shows.  refs #37788
         position = hgTracks.nonVirtPosition;
+        oneBased = true;
     }
     var pos = parsePosition(position);
     if (pos) {
-        var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+pos.chrom+"&l="+pos.start+"&r="+pos.end+"&db="+getDb();
+        var start = oneBased ? pos.start - 1 : pos.start;
+        var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+pos.chrom+"&l="+start+"&r="+pos.end+"&db="+getDb();
         window.location.href = url;
     }
     return false;
@@ -5652,6 +7100,8 @@ function highlightCurrentPosition(mode) {
         dragSelect.highlightThisRegion(pos, true);
     else {
         hgTracks.highlight = "";
+        if (hgTracks.highlightSpace !== undefined)
+            hgTracks.highlightSpace = "";
         var cartSettings = {'highlight': ""};
         cart.setVarsObj(cartSettings);
         imageV2.drawHighlights();
@@ -5660,8 +7110,15 @@ function highlightCurrentPosition(mode) {
 
 function deleteCustomTrack (trackName) {
     /* Tell hgCustom to delete the given custom track. Shared by the trash icon
-     * and the right-click context menu so there is only one deletion code path. */
+     * and the right-click context menu so there is only one deletion code path.
+     * Returns false when the user was asked to confirm and declined. */
     // https://genome.ucsc.edu/cgi-bin/hgCustom?hgsid=1645697744_i0Yp2Di71NytSDdb6r0vUbupIvKO&hgct_do_delete=delete&hgct_del_ct_UserTrack_3545=on
+    // Deleting a My Annotations track drops the project's table, so name what
+    // goes first. The count is this assembly's; other assemblies go too.
+    var proj = (typeof myVariants !== 'undefined') ?
+               myVariants.projectForTrack(trackName) : null;
+    if (proj && !confirm(myVariantsProjectDeleteMessage(proj.label, proj.itemCount)))
+        return false;
     var hgsid = getHgsid();
     var url = 'hgCustom?hgsid='+hgsid+'&hgct_do_delete=delete&hgct_del_'+trackName+'=on';
     var xhttp = new XMLHttpRequest();
@@ -5670,6 +7127,7 @@ function deleteCustomTrack (trackName) {
     xhttp.open("GET", url, false);
     xhttp.send();
     removeCustomTrackCells(trackName);
+    return true;
 }
 
 function removeCustomTrackCells (trackName) {
@@ -5701,12 +7159,14 @@ function onTrackDelIconClick (ev) {
     /* delete custom track if user clicks its trash icon */
     var divEl = ev.target.closest("div"); // must use .closest(), as user can click on either the SVG or the DIV space.
     var trackName = divEl.getAttribute("data-track");
-    deleteCustomTrack(trackName);
-    // if the track is currently drawn, also remove it from the image and update
-    // hgTracks.trackDb/cart, the same cleanup the right-click delete does. hideTracks()
-    // assumes the track is in hgTracks.trackDb, so only call it when it is.
-    if (hgTracks.trackDb && hgTracks.trackDb[trackName])
-        rightClick.hideTracks([trackName]);
+    if (!deleteCustomTrack(trackName))
+        return;
+    // Reload rather than clean up in place, as deleteAllBlatTracks does. A track is
+    // listed in more than one group (its own group and Visible Tracks) and only the
+    // clicked listing is in reach here, and hideTracks() would write the track back
+    // into the cart as hidden, which outlives the track for anything that can come
+    // back under the same name.
+    window.location.reload();
 }
 
 function onQuickLiftDelIconClick (ev) {
@@ -6107,11 +7567,14 @@ var imageV2 = {
                                     }
                                     window.location.assign(item.id);
                                 } else if (item.type === "hgvs") {
+                                    // The box now holds coordinates, so remember what was picked.
+                                    myVariants.pickedSearchTerm = item.geneSymbol || item.value;
                                     let newPos = genomePos.setByCoordinates(item.chrom, item.start, item.end);
                                     dragSelect.highlightThisRegion(newPos, true, "#fcfcac");
                                     let withPadding = genomePos.setByCoordinates(item.chrom, item.start-5, item.end+5);
                                     $("#goButton").trigger("click");
                                 } else {
+                                    myVariants.pickedSearchTerm = item.geneSymbol || item.value;
                                     genomePos.set(item.id, getSizeFromCoordinates(item.id));
                                     if ($("#suggestTrack").length && $('#hgFindMatches').length) {
                                         // Set cart variables to open the hgSuggest gene track and highlight
@@ -6157,9 +7620,7 @@ var imageV2 = {
             if (id) { // The remainder is only needed for full reload
                 imageV2.markAsDirtyPage(); // vis of cfg change
                 imageV2.drawHighlights();
-                if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-                    convertTitleTagsToMouseovers();
-                }
+                convertTitleTagsToMouseovers();
                 return;
             }
         }
@@ -6181,9 +7642,7 @@ var imageV2 = {
         } else {
             imageV2.markAsDirtyPage();
         }
-        if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-            convertTitleTagsToMouseovers();
-        }
+        convertTitleTagsToMouseovers();
         if(typeof window.igvBrowser !== "undefined") {
            window.igvBrowser.search(genomePos.get());
         }
@@ -6382,16 +7841,20 @@ var imageV2 = {
         if (extraData || cart.updatesWaiting()) {
             var url = cart.addUpdatesToUrl(window.location.href);
             if (extraData) {
-                if ( url.lastIndexOf("?") === -1)
-                    url += "?" + extraData;
-                else
-                    url += '&' + extraData;
+                // The page URL can already carry a variable in extraData, such as
+                // position, and the CGI reads only one of the two, so replace it.
+                let urlObj = new URL(url, window.location.href);
+                let extra = new URLSearchParams(extraData);
+                extra.forEach(function(val, key) { urlObj.searchParams.delete(key); });
+                extra.forEach(function(val, key) { urlObj.searchParams.append(key, val); });
+                url = urlObj.toString();
             }
             window.location.assign(url);
             return false;
         }
         document.TrackHeaderForm.submit();
-        window.igv.initUcsc();
+        if (window.igv && typeof window.igv.initUcsc === "function")
+            window.igv.initUcsc();
     },
 
     updateImgAndMap: function (response, status)
@@ -6491,8 +7954,22 @@ var imageV2 = {
                         hgTracks = newJson;
                         genomePos.original = undefined;
                         genomePos.setByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd); // MOVED HERE GALT
+                        if (hgTracks.spaceSourcePosition) {
+                            // A multi-region space:  the position is a multi: one, the
+                            // reader is shown the source span.  refs #37788
+                            var srcPos = parsePosition(hgTracks.spaceSourcePosition);
+                            if (srcPos)
+                                $('#positionDisplay').text(srcPos.chrom + ":" + commify(srcPos.start) +
+                                                           "-" + commify(srcPos.end));
+                        }
                         initVars();
                         imageV2.afterReload();
+                        // A search answered in place gets its offer to save once
+                        // the new view is drawn.
+                        if (myVariants.pendingSearchTerm !== null) {
+                            myVariants.showSearchNote(myVariants.pendingSearchTerm);
+                            myVariants.pendingSearchTerm = null;
+                        }
                     }
                 } else {
                     warn("ASSERT: Attempt to update track without advanced javascript features.");
@@ -6719,6 +8196,13 @@ var imageV2 = {
 
         if (hgTracks.highlight) {
             var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
+            // In a multi-region space the cart holds SOURCE coordinates and the image is
+            // synthetic, so the server sends the same list mapped, entry for entry, as
+            // highlightSpace.  Draw from that; every edit path below still works on
+            // hgTracks.highlight, so what gets written back stays in source coordinates.
+            // refs #37788
+            if (hgTracks.highlightSpace)
+                hlArray = hgTracks.highlightSpace.split("|");
             for (var i = 0; i < hlArray.length; i++) {
                 hlString = hlArray[i];
                 pos = parsePositionWithDb(hlString);
@@ -6816,21 +8300,39 @@ var imageV2 = {
                return false;
             }
 
+            // The term this search offers to save as an annotation: what the
+            // autocomplete picked, else what was typed. Refresh is not a search.
+            var mvSearchTerm = null;
+            if (this.id === "goButton")
+                mvSearchTerm = myVariants.pickedSearchTerm || genomePos.get().trim();
+            myVariants.pickedSearchTerm = null;
+            myVariants.pendingSearchTerm = null;
+            // A new search takes down the last one's offer, so it cannot be
+            // clicked while the new view is still loading.
+            if (mvSearchTerm !== null)
+                myVariants.showSearchNote("");
+            // With many tracks an in-place update becomes a page reload, which
+            // reads the term from here instead.
+            var mvTermParam = mvSearchTerm ? "&myVarSearchTerm=" + encodeURIComponent(mvSearchTerm) : "";
+
             var newDbPos = hgTracks.lastDbPos;
             if ( ! imageV2.manyTracks() ) {
                 var newChrom = newPos.split(':')[0];
                 var oldChrom  = genomePos.getOriginalPos().split(':')[0];
                 if (newChrom === oldChrom) {
                     imageV2.markAsDirtyPage();
-                    imageV2.navigateInPlace("db=" + getDb() + "&position=" + encodeURIComponent(newPos), null, false);
+                    myVariants.pendingSearchTerm = mvSearchTerm;
+                    imageV2.navigateInPlace("db=" + getDb() + "&position=" + encodeURIComponent(newPos) + mvTermParam, null, false);
                     window.scrollTo(0,0);
                     return false;
                 }
             }
-            
+
             // If not just image update AND there are vis updates waiting...
             if (cart.updatesWaiting()) {
                 var url = "../cgi-bin/hgTracks?position=" + newPos + "&" + cart.varsToUrlData({ 'db': getDb(), 'hgsid': getHgsid() });
+                if (mvSearchTerm)
+                    url += "&myVarSearchTerm=" + encodeURIComponent(mvSearchTerm);
                 window.location.assign(url);
                 return false;
             }
@@ -6851,7 +8353,8 @@ var imageV2 = {
             function onSuccess(jqXHR, textStatus) {
                 if (jqXHR.chromName !== null) {
                     imageV2.markAsDirtyPage();
-                    imageV2.navigateInPlace("db=" + getDb() + "&position=" + encodeURIComponent(newPos), null, false);
+                    myVariants.pendingSearchTerm = mvSearchTerm;
+                    imageV2.navigateInPlace("db=" + getDb() + "&position=" + encodeURIComponent(newPos) + mvTermParam, null, false);
                     window.scrollTo(0,0);
                 } else  {
                     window.location.assign("../cgi-bin/hgSearch?search=" + term  + "&hgsid="+ getHgsid());
@@ -6915,7 +8418,18 @@ var imageV2 = {
                 newPos = newPos.replace(/<[^>]*>/g, '');
                 addRecentSearch(getDb(), newPos, {id: newPos, value: newPos, label: newPos});
             }
-                
+            // The form submit loads the page, which offers to save the term.
+            if (mvSearchTerm && this.form) {
+                let termInput = this.form.querySelector("input[name='myVarSearchTerm']");
+                if (!termInput) {
+                    termInput = document.createElement("input");
+                    termInput.type = "hidden";
+                    termInput.name = "myVarSearchTerm";
+                    this.form.appendChild(termInput);
+                }
+                termInput.value = mvSearchTerm;
+            }
+
             return true;
         });
         // Have vis box changes update cart through ajax.  This helps keep page/cart in sync.
@@ -8405,7 +9919,8 @@ var downloadCurrentTrackData = {
                 htmlStr += " data-track-type='" +
                     (track.type || "").split(" ")[0].replace(/[^A-Za-z0-9]/g, "") + "'";
                 if (trackName.startsWith("ct_") || trackName === "hgPcrResult" ||
-                        track.type === "mathWig" || !tdbIsLeaf(track)) {
+                        trackName.startsWith("myVariants") || track.type === "mathWig" ||
+                        !tdbIsLeaf(track)) {
                     showDisabledMsg = true;
                     // disabled whatever the output format is, so the format must not undo it
                     htmlStr += " data-always-disabled='1' disabled ";
@@ -8464,7 +9979,11 @@ var downloadCurrentTrackData = {
         });
         $(downloadDialog).dialog('open');
         $("[id$='Tooltip'").each(function(i, elem) {
-            addMouseover(elem, "This track must be downloaded with the Table Browser");
+            if (elem.id.startsWith("myVariants"))
+                addMouseover(elem, "This track must be downloaded with the Table Browser, " +
+                             "or from the download link in My Data > Manage My Annotations");
+            else
+                addMouseover(elem, "This track must be downloaded with the Table Browser");
         });
     }
 };
@@ -8696,20 +10215,18 @@ $(document).ready(function()
     });
 
 
-    // add a 'link' to download the current track data (under hg.conf control)
-    if (typeof showDownloadButton !== 'undefined' && showDownloadButton) {
-        newListEl = document.createElement("li");
-        newLink = document.createElement("a");
-        newLink.setAttribute("id", "hgTracksDownload");
-        newLink.setAttribute("name", "downloadTracks");
-        newLink.textContent = "Download Current Track Data";
-        newLink.href = "#";
-        newListEl.appendChild(newLink);
-        let opt = document.querySelector("#downloads > ul");
-        if (opt) {
-            opt.appendChild(newListEl);
-            $("#hgTracksDownload").on("click", downloadCurrentTrackData.showDownloadUi);
-        }
+    // add a 'link' to download the current track data
+    newListEl = document.createElement("li");
+    newLink = document.createElement("a");
+    newLink.setAttribute("id", "hgTracksDownload");
+    newLink.setAttribute("name", "downloadTracks");
+    newLink.textContent = "Download Current Track Data";
+    newLink.href = "#";
+    newListEl.appendChild(newLink);
+    let opt = document.querySelector("#downloads > ul");
+    if (opt) {
+        opt.appendChild(newListEl);
+        $("#hgTracksDownload").on("click", downloadCurrentTrackData.showDownloadUi);
     }
 
     if (typeof doMyVariants !== 'undefined' && doMyVariants) {
@@ -8719,34 +10236,141 @@ $(document).ready(function()
             e.stopPropagation();
             myVariants.showDialog();
         });
-        // Add a "My Annotations" link to the My Data menu that opens the same
-        // dialog as the Add Annotation button below the image.
+        // Add a "My Annotations" item to the My Data menu. It opens a second
+        // menu with two choices: add a new annotation, or manage the existing
+        // annotation tracks. A visitor who is not logged in gets the create
+        // dialog, which asks them to log in.
         let myDataList = document.querySelector("#myData > ul");
         if (myDataList) {
             newListEl = document.createElement("li");
+            newListEl.setAttribute("id", "myAnnotationsMenuItem");
+            // nice_menu.css draws the triangle and places the submenu.
+            newListEl.className = "submenuParent";
             newLink = document.createElement("a");
             newLink.setAttribute("id", "myAnnotationsMenuLink");
-            newLink.setAttribute("title", "Add an item to the My Annotations track");
+            newLink.setAttribute("title", "Add or manage your My Annotations tracks");
+            newLink.setAttribute("aria-expanded", "false");
             newLink.textContent = "My Annotations";
             newLink.href = "#";
             newListEl.appendChild(newLink);
+
+            let subList = document.createElement("ul");
+            subList.style.display = "none";
+            subList.style.visibility = "hidden";
+            newListEl.appendChild(subList);
+
+            let addItem = document.createElement("li");
+            let addLink = document.createElement("a");
+            addLink.setAttribute("id", "myAnnotationsAddLink");
+            addLink.setAttribute("title", "Add a new annotation");
+            addLink.textContent = "Add New Annotation";
+            addLink.href = "#";
+            addLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                myVariants.showDialog();
+            });
+            addItem.appendChild(addLink);
+            subList.appendChild(addItem);
+
+            let manageItem = document.createElement("li");
+            manageItem.className = "last";
+            let manageLink = document.createElement("a");
+            manageLink.setAttribute("id", "myAnnotationsManageLink");
+            manageLink.setAttribute("title", "Manage your My Annotations tracks");
+            manageLink.textContent = "Manage My Annotations";
+            manageLink.href = "#";
+            manageLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (userIsLoggedIn)
+                    myVariants.showManager();
+                else
+                    myVariants.showDialog();
+            });
+            manageItem.appendChild(manageLink);
+            subList.appendChild(manageItem);
+
+            // The nav bar's superfish setup has already run, and its keyboard
+            // layer only wires li.menuparent > button, so this item drives its
+            // own submenu. Hover or focus opens it, a click toggles it, and
+            // Escape closes it, which is how the rest of the bar behaves.
+            let subTimer = null;
+            // Set while focus is being moved by this code, so the focus handler
+            // does not reopen what Escape or a click just closed.
+            let suppressSubFocus = false;
+            let showSubList = function(show) {
+                clearTimeout(subTimer);
+                newListEl.classList.toggle("over", show);
+                newLink.setAttribute("aria-expanded", show ? "true" : "false");
+                subList.style.display = show ? "block" : "none";
+                subList.style.visibility = show ? "visible" : "hidden";
+            };
+            // The same wait superfish gives its own items, so a diagonal trip
+            // from the item down into the submenu does not lose it, and a Tab
+            // into the submenu's own links lands before it closes.
+            let hideSubListSoon = function() {
+                clearTimeout(subTimer);
+                let sfOptions = $.fn.superfish.op;
+                let delay = (sfOptions && sfOptions.delay) ? sfOptions.delay : 800;
+                subTimer = setTimeout(function() {
+                    if (!newListEl.contains(document.activeElement))
+                        showSubList(false);
+                }, delay);
+            };
+            newListEl.addEventListener("mouseenter", function() { showSubList(true); });
+            newListEl.addEventListener("mouseleave", hideSubListSoon);
+            newListEl.addEventListener("focusout", hideSubListSoon);
+            newLink.addEventListener("focus", function() {
+                if (suppressSubFocus) {
+                    suppressSubFocus = false;
+                    return;
+                }
+                showSubList(true);
+            });
+            // A click follows its own focus, so tell the handler above to sit
+            // this one out and let the toggle decide.
+            newLink.addEventListener("mousedown", function() {
+                suppressSubFocus = true;
+            });
+            newLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                showSubList(!newListEl.classList.contains("over"));
+            });
+            newListEl.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    e.stopPropagation();
+                    suppressSubFocus = true;
+                    showSubList(false);
+                    newLink.focus();
+                }
+            });
+
             // Place it right after Custom Tracks; fall back to the top of the menu.
             let customTracksItem = document.getElementById("customTracksMenuLink");
             if (customTracksItem && customTracksItem.parentNode.parentNode === myDataList)
                 myDataList.insertBefore(newListEl, customTracksItem.parentNode.nextSibling);
             else
                 myDataList.insertBefore(newListEl, myDataList.firstElementChild);
-            newLink.addEventListener("click", (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                myVariants.showDialog();
-            });
+        }
+        // Arriving from the hgTrackUi page of a user with no annotations yet.
+        if (typeof myVariantsOpenDialog !== 'undefined' && myVariantsOpenDialog) {
+            myVariants.showDialog();
+        }
+        // A search that loaded this page.
+        let searchNote = document.getElementById("myVarSearchNote");
+        if (searchNote && searchNote.dataset.term) {
+            myVariants.showSearchNote(searchNote.dataset.term);
+        }
+        // Arriving from the hgTrackUi page of a track with nothing on this assembly.
+        if (typeof myVariantsOpenManager !== 'undefined' && myVariantsOpenManager &&
+                userIsLoggedIn) {
+            myVariants.showManager();
         }
     }
 
-    if (typeof showMouseovers !== 'undefined' && showMouseovers) {
-        convertTitleTagsToMouseovers();
-    }
+    convertTitleTagsToMouseovers();
 
     if (typeof pngTimingSampleRate !== 'undefined' && pngTimingSampleRate > 0) {
         reportPngTiming(pngTimingSampleRate);
@@ -8872,8 +10496,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 //////////////////////////
-// Recent views dialog: the views this web browser had in the last days, opened from the note
-// after a session load or from My Data > Recent Browser Views
+// Restore Previous Session dialog: the copies of the cart made just before a session or settings
+// load replaced it, opened from the note after a load or from My Data > Restore Previous Session
 
 var sessionLoadDialog = {
 
@@ -8896,61 +10520,55 @@ var sessionLoadDialog = {
         }
     },
 
-    describe: function(s) {
-        // What a row is: the copy made just before a session load, or a view of another tab
-        if (s.prevViewOf === null || s.prevViewOf === undefined) {
-            return 'Last used ' + this.formatTimestamp(s.timestamp).toLowerCase();
-        }
-        var what = s.prevViewOf ? 'session <b>' + htmlEncode(s.prevViewOf) + '</b>'
-                                : 'settings from a file or URL';
-        return 'Before you opened ' + what + ', ' + this.formatTimestamp(s.timestamp).toLowerCase();
+    replacedBy: function(s) {
+        // What replaced the copy: a session, or settings from a file or URL
+        return s.prevViewOf ? 'Session <b>' + htmlEncode(s.prevViewOf) + '</b>'
+                            : 'Settings from a file or URL';
+    },
+
+    openUrl: function(s) {
+        // The copy opens in a new hgsid, so it stays on the list as it is
+        return '../cgi-bin/hgTracks?hgS_openCopy=' + encodeURIComponent(s.hgsid);
     },
 
     buildSessionList: function(sessions) {
-        // Build HTML for the list of recent views, the copy made before a session load first
-        var html = '<p>These are the views you had in this web browser in the last 7 days. ' +
-                'Open one in a new tab to get it back, or save it as a named session.</p>';
+        // Build HTML for the list of saved copies, newest first.  Styles are in HGStyle.css.
         if (sessions.length === 0) {
-            return html + '<p>No recently used views are available yet for this internet ' +
-                    'browser. You may want to check other internet browsers or other user ' +
-                    'accounts in these, if you think there should be more. Or ' +
-                    '<a href="../contacts.html" target="_blank">contact us</a>.</p>';
+            return '<p>There are no copies yet in this web browser. The Genome Browser keeps a ' +
+                    'copy of your tracks and settings before you open a session or load settings ' +
+                    'from a file or URL. If you think there should be copies here, check your ' +
+                    'other web browsers or <a href="../contacts.html" target="_blank">contact ' +
+                    'us</a>.</p>';
         }
+        var html = '<p>When you open a saved session, all current tracks and settings are ' +
+                'replaced, but the Genome Browser keeps copies that you can restore here. ' +
+                'These are your most recent copies in this web browser from the last 7 days. Click Open to ' +
+                'restore one in a new tab.</p>';
         var sorted = sessions.slice().sort(function(a, b) {
-            var aCopy = (a.prevViewOf !== null && a.prevViewOf !== undefined);
-            var bCopy = (b.prevViewOf !== null && b.prevViewOf !== undefined);
-            if (aCopy !== bCopy) {
-                return aCopy ? -1 : 1;
-            }
             return b.timestamp - a.timestamp;
         });
-        html += '<div style="max-height: 300px; overflow-y: auto;">';
-        html += '<table style="width: 100%; border-collapse: collapse;">';
-        html += '<thead><tr style="background: #f0f0f0;">' +
-                '<th style="padding: 8px; text-align: left;">View</th>' +
-                '<th style="padding: 8px; text-align: left;">Assembly</th>' +
-                '<th style="padding: 8px; text-align: left;">Position</th>' +
-                '<th style="padding: 8px;"></th>' +
-                '</tr></thead><tbody>';
+        html += '<table class="recentViewsTable"><thead><tr>' +
+                '<th title="The session or settings file that replaced these tracks and settings">' +
+                'Replaced by</th>' +
+                '<th title="When the copy was made">Date</th>' +
+                '<th title="Genome assembly of the copy">Assembly</th>' +
+                '<th title="Position shown in the copy">Position</th>' +
+                '<th></th></tr></thead><tbody>';
 
         for (var i = 0; i < sorted.length; i++) {
             var s = sorted[i];
-            var sid = encodeURIComponent(s.hgsid);
-            var openUrl = '../cgi-bin/hgTracks?hgsid=' + sid;
-            var saveUrl = '../cgi-bin/hgSession?hgS_doMainPage=1&hgsid=' + sid;
-            html += '<tr style="border-bottom: 1px solid #ddd;">';
-            html += '<td style="padding: 8px;">' + this.describe(s) + '</td>';
-            html += '<td style="padding: 8px;">' + htmlEncode(s.db || '(unknown)') + '</td>';
-            html += '<td style="padding: 8px;">' + htmlEncode(s.position || '(unknown)') + '</td>';
-            html += '<td style="padding: 8px; white-space: nowrap;">' +
-                    '<a href="' + openUrl + '" target="_blank">Open</a> ' +
-                    '<a href="' + saveUrl + '" target="_blank" ' +
-                    'title="Open the Sessions page with this view, to save it under a name">' +
-                    'Save</a></td>';
+            html += '<tr>';
+            html += '<td>' + this.replacedBy(s) + '</td>';
+            html += '<td class="nowrap">' + this.formatTimestamp(s.timestamp) + '</td>';
+            html += '<td>' + htmlEncode(s.db || '(unknown)') + '</td>';
+            html += '<td class="nowrap">' + htmlEncode(s.position || '(unknown)') + '</td>';
+            html += '<td><button type="button" class="recentViewOpen" data-url="' +
+                    this.openUrl(s) + '" title="Open these tracks and settings in a new tab">' +
+                    'Open</button></td>';
             html += '</tr>';
         }
 
-        html += '</tbody></table></div>';
+        html += '</tbody></table>';
         return html;
     },
 
@@ -8960,9 +10578,27 @@ var sessionLoadDialog = {
         }
         var $dialog = $('<div id="sessionLoadDialog"></div>');
         $dialog.html(this.buildSessionList(recentSessions));
+        // not larger than the window, or it is cut off in a small window
+        var dialogWidth = function() {
+            return Math.min(900, $(window).width() - 20);
+        };
+        var dialogHeight = function() {
+            // the message that there are no copies needs no room for a list
+            if (recentSessions.length === 0) {
+                return 'auto';
+            }
+            return Math.min(550, $(window).height() - 20);
+        };
+        var onResize = function() {
+            $dialog.dialog('option', 'width', dialogWidth());
+            $dialog.dialog('option', 'height', dialogHeight());
+            $dialog.dialog('option', 'position', {my: 'center', at: 'center', of: window});
+        };
+        $(window).on('resize', onResize);
         $dialog.dialog({
-            title: 'Recent Browser Views',
-            width: 650,
+            title: 'Restore Previous Session',
+            width: dialogWidth(),
+            height: dialogHeight(),
             modal: false,
             resizable: false,
             buttons: {
@@ -8971,9 +10607,29 @@ var sessionLoadDialog = {
                 }
             },
             close: function() {
+                $(window).off('resize', onResize);
                 $(this).dialog('destroy').remove();
             }
         });
+    },
+
+    showFromMenu: function() {
+        // My Data > Restore Previous Session on this page: get the list from hgSession and open
+        // the dialog, instead of reloading the whole page
+        $.getJSON('../cgi-bin/hgSession', {hgS_recentViewsJson: 1, hgsid: getHgsid()},
+            function(list) {
+                window.recentSessions = list;
+                $('#sessionLoadDialog').dialog('close');
+                sessionLoadDialog.show();
+            });
+    },
+
+    openNewest: function() {
+        // Open the copy made just before this load: the server lists the newest first
+        if (typeof recentSessions === 'undefined' || recentSessions.length === 0) {
+            return;
+        }
+        window.open(this.openUrl(recentSessions[0]), '_blank');
     }
 };
 
@@ -8981,5 +10637,23 @@ var sessionLoadDialog = {
 $(document).on('click', '#recentViewsLink', function(ev) {
     ev.preventDefault();
     sessionLoadDialog.show();
+});
+
+// My Data > Restore Previous Session.  On other pages it is a plain link to hgTracks.
+$(document).on('click', '#recentViewsMenuLink', function(ev) {
+    ev.preventDefault();
+    sessionLoadDialog.showFromMenu();
+});
+
+// The Open buttons in the dialog
+$(document).on('click', '#sessionLoadDialog .recentViewOpen', function(ev) {
+    ev.preventDefault();
+    window.open($(this).attr('data-url'), '_blank');
+});
+
+// The "Open previous session" button in the same note
+$(document).on('click', '#openPrevSessionBtn', function(ev) {
+    ev.preventDefault();
+    sessionLoadDialog.openNewest();
 });
 

@@ -25,6 +25,9 @@
  * makefile run it under each setting of quickLiftSplitRanges and quickLiftMultiChain.
  * refs #38510 */
 
+/* "quickLiftTester snap" checks quickLiftSnappedSpan, the binary search and direct block
+ * lift behind a multi-region space's intron lines, against a linear walk.  refs #38660 */
+
 /* Copyright (C) 2026 The Regents of the University of California
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
@@ -55,7 +58,10 @@ errAbort(
   "usage:\n"
   "   quickLiftTester\n"
   "   quickLiftTester intervals chain.bb items.bb\n"
+  "   quickLiftTester snap\n"
   "With no arguments, writes one block of output per case to stdout and reads nothing.\n"
+  "With snap, checks quickLiftSnappedSpan against a linear snap and the full range lift\n"
+  "on random ranges;  needs multiRegionSpaces and quickLiftMultiChain on.\n"
   "With intervals, reads the items in chrRef:0-10000 through quickLiftGetIntervals,\n"
   "under whatever quickLiftSplitRanges and quickLiftMultiChain the hg.conf sets.\n");
 }
@@ -487,11 +493,144 @@ printf("%d items\n", slCount(bbList));
 bigBedFileClose(&bbi);
 }
 
+static struct chain *manyBlockChain(char qStrand, int blockCount, unsigned seed)
+/* A chain in the shape the lift functions read, source on the target side, with blockCount
+ * blocks of random size and random gaps on both sides:  enough blocks that the lift answers
+ * from the block index, not a short walk.  Both sides ascend;  with qStrand '-' the
+ * reference side is counted from the far end, as in a chain file. */
+{
+struct chain *chain;
+AllocVar(chain);
+chain->tName = cloneString(srcChrom);
+chain->qName = cloneString(refChrom);
+chain->qStrand = qStrand;
+chain->id = 1;
+chain->score = 1000;
+srandom(seed);
+int t = 100, q = 50, i;
+struct cBlock *blockList = NULL, *b;
+for (i = 0; i < blockCount; i++)
+    {
+    AllocVar(b);
+    int size = 1 + random() % 40;
+    b->tStart = t;
+    b->tEnd = t + size;
+    b->qStart = q;
+    b->qEnd = q + size;
+    slAddHead(&blockList, b);
+    t += size + 1 + random() % 30;
+    q += size + random() % 30;          /* a gap of 0 on one side is legal */
+    }
+slReverse(&blockList);
+chain->blockList = blockList;
+chain->tStart = blockList->tStart;
+chain->tEnd = b->tEnd;
+chain->qStart = blockList->qStart;
+chain->qEnd = b->qEnd;
+chain->tSize = chain->tEnd + 100;
+chain->qSize = chain->qEnd + 100;
+return chain;
+}
+
+static int linearSnap(struct chain *chain, int pos, boolean forward)
+/* The nearest aligned coordinate to pos, by walking every block:  as a start, the first
+ * with tStart <= pos < tEnd or after;  as an end, tStart < pos <= tEnd or before. */
+{
+struct cBlock *b, *prev = NULL;
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    if (forward)
+        {
+        if ((b->tStart <= pos) && (pos < b->tEnd))
+            return pos;
+        if (b->tStart > pos)
+            return b->tStart;
+        }
+    else
+        {
+        if ((b->tStart < pos) && (pos <= b->tEnd))
+            return pos;
+        if (b->tEnd <= pos)
+            prev = b;
+        }
+    }
+return (!forward && (prev != NULL)) ? prev->tEnd : -1;
+}
+
+static int snapCompare(struct hash *chainHash, struct chain *chain, int start, int end,
+                       char strand)
+/* Compare quickLiftSnappedSpan() with the linear snap and the full range lift on one range.
+ * Return 1 if they differ, after printing both. */
+{
+char *chrom = NULL, *refChromOut = NULL;
+int s = 0, e = 0, refS = 0, refE = 0;
+char st = strand, refSt = strand;
+boolean got = quickLiftSnappedSpan(chainHash, NULL, srcChrom, start, end, strand,
+                                   &chrom, &s, &e, &st);
+int snapS = linearSnap(chain, start, TRUE), snapE = linearSnap(chain, end, FALSE);
+boolean want = (snapS >= 0) && (snapE >= 0) && (snapS < snapE)
+    && (quickLiftRemapRange(chainHash, NULL, srcChrom, snapS, snapE, strand,
+                            &refChromOut, &refS, &refE, &refSt) == NULL);
+if ((got == want) && (!got || (sameString(chrom, refChromOut) && (s == refS) && (e == refE)
+                               && (st == refSt))))
+    return 0;
+printf("MISMATCH qStrand=%c %d-%d %c:  span %d %s:%d-%d %c,  reference %d %s:%d-%d %c\n",
+       chain->qStrand, start, end, strand, got, got ? chrom : "", s, e, st,
+       want, want ? refChromOut : "", refS, refE, refSt);
+return 1;
+}
+
+static void snap()
+/* quickLiftSnappedSpan() snaps a range's ends to aligned bases by binary search over the
+ * chain's block index and lifts the snapped span through the blocks that hold its ends.
+ * Check both against a linear walk and the full range lift, quickLiftRemapRange(), over
+ * many random ranges on both chain strands, and again after a block is appended, which
+ * must rebuild the index.  Needs multiRegionSpaces and quickLiftMultiChain on.  refs #38660 */
+{
+char qStrands[] = {'+', '-'};
+int k, bad = 0, checked = 0;
+for (k = 0; k < 2; k++)
+    {
+    struct chain *chain = manyBlockChain(qStrands[k], 3000, 38660 + k);
+    struct hash *chainHash = newHash(8);
+    liftOverAddChainHash(chainHash, chain);
+    int i, span = chain->tEnd + 200;
+    for (i = 0; i < 20000; i++)
+        {
+        int a = random() % span, b = random() % span;
+        if (a == b)
+            continue;
+        bad += snapCompare(chainHash, chain, min(a, b), max(a, b), (i & 1) ? '+' : '-');
+        checked++;
+        }
+    /* Append a block past the last one:  a range ending in it must see it. */
+    struct cBlock *last = slLastEl(chain->blockList), *extra;
+    AllocVar(extra);
+    extra->tStart = last->tEnd + 10;
+    extra->tEnd = extra->tStart + 20;
+    extra->qStart = last->qEnd + 5;
+    extra->qEnd = extra->qStart + 20;
+    last->next = extra;
+    chain->tEnd = extra->tEnd;
+    chain->qEnd = extra->qEnd;
+    chain->tSize = chain->qSize = max(chain->tEnd, chain->qEnd) + 100;
+    bad += snapCompare(chainHash, chain, last->tStart, extra->tEnd - 5, '+');
+    checked++;
+    }
+printf("snap: %d mismatches\n", bad);
+verbose(1, "snap: %d ranges checked\n", checked);
+}
+
 int main(int argc, char *argv[])
 {
 if ((argc == 4) && sameString(argv[1], "intervals"))
     {
     intervals(argv[2], argv[3]);
+    return 0;
+    }
+if ((argc == 2) && sameString(argv[1], "snap"))
+    {
+    snap();
     return 0;
     }
 if (argc != 1)

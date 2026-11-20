@@ -12,6 +12,8 @@ include clinvarMapped.ra alpha
 
 include gdcCancer.ra
 
+include cancerMutations.ra alpha
+
 include cortexVelmeshev.ra
 include heartCellAtlas.ra
 include kidneyStewart.ra
@@ -178,6 +180,9 @@ searchDescription COSMIC Regions
 track cosmicMuts
 shortLabel COSMIC
 longLabel Catalogue of Somatic Mutations in Cancer V101
+tags clinical
+facet.evidence Curated
+facet.variantType SNV/indel
 type bigBed 6 + 3
 bigDataUrl /gbdb/hg38/cosmic/cosmic.bb
 group phenDis
@@ -206,8 +211,8 @@ origAssembly hg19
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 include nonCodingRNAs.ra
-include mirGeneDb.ra alpha
-include mirBase.ra alpha
+include mirGeneDbV3_0.ra alpha
+include mirBaseV22_1.ra alpha
 
 #track wgRna override 
 #dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
@@ -400,33 +405,6 @@ include trackDb.30way.ra
 include trackDb.10way.ra
 include trackDb.mito204way.ra
 
-track ucscRetroAli8
-shortLabel Retroposed Genes 8.0
-longLabel Retroposed Genes V8, Including Pseudogenes
-group genes
-type psl
-color 20,0,250
-visibility hide
-ucscRetroInfo ucscRetroInfo8
-baseColorDefault diffCodons
-baseColorUseCds table ucscRetroCds8
-baseColorUseSequence extFile ucscRetroSeq8 ucscRetroExtFile8
-indelDoubleInsert on
-indelQueryInsert on
-showDiffBasesAllScales .
-showDiffBasesMaxZoom 10000.0
-showCdsAllScales .
-showCdsMaxZoom 10000.0
-
-searchName ucscRetroInfoRefSeq8
-searchTable ucscRetroAli8
-searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable hgFixed.refLink, ucscRetroInfo8
-dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo8.name, hgFixed.refLink.name from %s where hgFixed.refLink.name like '%s%%' and refSeq = mrnaAcc 
-searchPriority 3.52
-
 track mrnaBig
 bigDataUrl http://hgwdev.gi.ucsc.edu/~braney/bigMrna.bb
 shortLabel Big $Organism mRNAs
@@ -445,30 +423,6 @@ indelQueryInsert on
 indelPolyA on
 release alpha
 
-
-searchName ucscRetroInfoMrna8
-searchTable ucscRetroAli8
-searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-searchPriority 3.55
-
-searchName ucscRetroUniProt8
-searchTable ucscRetroAli8
-searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo8
-xrefQuery select ucscRetroInfo8.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
-searchPriority 3.54
-
-searchName ucscRetroKnownGene8
-searchTable ucscRetroAli8
-searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
-query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-dontCheckXrefQueryFormat 1
-xrefTable kgXref, ucscRetroInfo8
-xrefQuery select ucscRetroInfo8.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
-searchPriority 3.53
 
 track ucscRetroAli9
 shortLabel RetroGenes V9
@@ -960,7 +914,7 @@ include imprinting.ra alpha
 
 include hprcPclai.ra alpha
 
-include episignatures.ra alpha,beta
+include episignatures.ra
 
 include transcriptionStart.ra alpha
 include transcriptionStartPublic.ra beta,public
@@ -974,3 +928,5 @@ include ../fusionGenes.ra alpha
 include gpnStar.ra alpha
 
 include allPrimatesChainNet.ra alpha
+
+include chainCompare.trackDb.ra alpha

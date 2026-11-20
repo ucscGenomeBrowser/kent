@@ -24,6 +24,9 @@
 #include "botDelay.h"
 #include "hgTables.h"
 #include "wikiTrack.h"
+#include "bbiFile.h"
+#include "bigBed.h"
+#include "chromAlias.h"
 
 
 long long basesInRegion(struct region *regionList, int limit)
@@ -252,6 +255,38 @@ else
 hPrintf("</TD></TR>\n");
 }
 
+/* Summary statistics load every item in the region into memory before counting.  For a
+ * bigBed that takes roughly 15 to 35 times the compressed bytes read from the file:
+ * mm39 jaspar2024 reads 30MB for 500kb and peaks at 1.1GB, and a 5Mb region
+ * (287MB, 31 million items) runs past the CGI's 6GB limit.  The CGI then exits
+ * with only the page header sent, so the user sees a blank page.  Above this many
+ * compressed bytes, ask for a smaller region instead. */
+#define SUM_STATS_MAX_BIGBED_BYTES (100LL*1024*1024)
+
+static long long bigBedBytesInRegions(struct sqlConnection *conn, char *table,
+	struct region *regionList, long long maxBytes)
+/* Return the compressed bytes of bigBed data blocks overlapping regionList, read from
+ * the file's index alone.  Stops adding regions once the total passes maxBytes. */
+{
+char *fileName = bigBedFileName(table, conn);
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+bbiAttachUnzoomedCir(bbi);
+long long total = 0;
+struct region *region;
+for (region = regionList; region != NULL && total <= maxBytes; region = region->next)
+    {
+    bits32 chromId;
+    struct fileOffsetSize *block, *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir,
+	    region->chrom, region->start, region->end, &chromId);
+    for (block = blockList; block != NULL; block = block->next)
+	total += block->size;
+    slFreeList(&blockList);
+    }
+bbiFileClose(&bbi);
+freeMem(fileName);
+return total;
+}
+
 void doSummaryStatsBed(struct sqlConnection *conn)
 /* Put up page showing summary stats for track that is in database
  * or that is bed-format custom. */
@@ -272,6 +307,16 @@ boolean hasScore = (hti->scoreField[0] != 0);
 int fieldCount;
 
 htmlOpen("%s (%s) Summary Statistics", curTableLabel(), curTable);
+
+if (isBigBed(database, curTable, curTrack, ctLookupName)
+    && bigBedBytesInRegions(conn, curTable, regionList, SUM_STATS_MAX_BIGBED_BYTES)
+	> SUM_STATS_MAX_BIGBED_BYTES)
+    {
+    hPrintf("This track has too much data in the selected region to compute summary "
+	    "statistics. Please go back and choose a smaller region.\n");
+    htmlClose();
+    return;
+    }
 
 for (region = regionList; region != NULL; region = region->next)
     {

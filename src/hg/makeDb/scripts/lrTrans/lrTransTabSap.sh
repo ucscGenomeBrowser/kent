@@ -16,7 +16,7 @@ sort -k1,1 -k2,2n lrTransTabSap.tmp.barChart.bed > lrTransTabSapExpr.bed
 mv lrTransTabSap.tmp.categories lrTransTabSap.categories
 rm -f lrTransTabSap.tmp.bed lrTransTabSap.tmp.barChart.bed
 
-bedToBigBed -tab -type=bed12+24 -as=$scriptDir/lrTransTabSap.as -extraIndex=name,geneSymbol \
+bedToBigBed -tab -type=bed12+26 -as=$scriptDir/lrTransTabSap.as -extraIndex=name,geneSymbol \
     lrTransTabSap.bed $sizes lrTransTabSap.bb
 bedToBigBed -tab -type=bed6+5 -as=$scriptDir/../../../lib/barChartBed.as -extraIndex=name \
     lrTransTabSapExpr.bed $sizes lrTransTabSapExpr.bb

@@ -28,9 +28,9 @@ var encodeMatrix = (function () {
             '<input type="radio" name="searchType" id="searchFiles" value=' + 
                     COOKIE_SEARCH_FILES + ' onclick="encodeMatrix.setFileSearch(true);" >files');
         if (isFile) {
-            $('#searchFiles').attr('checked', true);
+            $('#searchFiles').prop('checked', true);
         } else {
-            $('#searchTracks').attr('checked', true);
+            $('#searchTracks').prop('checked', true);
         }
         encodeMatrix.setFileSearch(isFile);
     }
@@ -196,9 +196,9 @@ var encodeMatrix = (function () {
                 header.fadeIn(100);
 
                 if (encodeMatrix.isFileSearch()) {
-                    $('#searchFiles').attr('checked', true);
+                    $('#searchFiles').prop('checked', true);
                 } else {
-                    $('#searchTracks').attr('checked', true);
+                    $('#searchTracks').prop('checked', true);
                 }
             }
         });

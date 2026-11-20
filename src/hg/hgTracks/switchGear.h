@@ -13,4 +13,7 @@
 void switchDbTssMethods(struct track *tg);
 /* Methods for switchDbTss track uses mostly linkedFeatures stuff. */
 
+void loadItemsSwitchDbTss(struct track *tg);
+/* Load switchDbTss items into a linkedFeatures list. */
+
 #endif

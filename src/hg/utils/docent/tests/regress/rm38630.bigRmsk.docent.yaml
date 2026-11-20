@@ -1,0 +1,47 @@
+# #38630 (CR, v506 Preview I) -- a lifted bigRmsk track drew its source items while the
+# quickLiftRmsk gate was off.
+#
+# A quickLift hub written while browser.quickLiftRmsk was on keeps its bigRmsk stanza,
+# because validateOneTdb() runs only when the hub is written.  With the gate turned off
+# after that, bigRmskLoadItems() in hg/hgTracks/bigRmskTrack.c fell into the native path
+# and drew hs1's repeats at their hs1 coordinates on hg38.  Now a lifted bigRmsk loads no
+# items while the gate is off.  The rmsk table half is rm38630.rmsk.
+#
+# GATE: browser.quickLiftRmsk, off by default, a cart variable as well as an hg.conf
+# setting, so the script turns it on for the convert and off for the check.
+#   grep browser.quickLiftRmsk /usr/local/apache/cgi-bin/hg.conf
+#
+# What is asserted, hs1 t2tRepeatMasker onto hg38 chr1:147,500,000-147,525,000:
+#   * gate on:  item 246265 has a map box at hg38 147500022-147500340 (as in rm37437.bigRmsk).
+#   * gate off:  that box is gone and the row has no item boxes.  Before the fix it had 35,
+#     at hs1 coordinates.  The positive check is the lifted chain row, so an empty page
+#     cannot pass.
+proof:
+  - "assertion-only 2026-11-06 -- written with the fix, on branch cr38630"
+  - "xfail 2026-11-06 -- fails on genome-test (master without the fix) at step 10: with the gate off the lifted t2tRepeatMasker row still has 35 boxes"
+  - "sandbox-ab 2026-11-06 -- park 38630 (port 48121): master hgTracks fails at step 10 like genome-test; the cr38630 build passes"
+  - "server-flip 2026-11-06 -- failed on genome-test as an xfail at step 10, passed once 8086846836e was built there with cgi-alpha (hgTracks and hgc 12:33)"
+
+target: genome-test
+db: hs1
+position: chr1:147283027-147308038
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hs1&position=chr1%3A147283027-147308038&pix=1100&browser.quickLiftRmsk=on"
+  - hide: all
+  - track: {t2tRepeatMasker: full}
+  - expect: {rows: [t2tRepeatMasker], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:147500000-147525000
+  - expect:
+      rows: [t2tRepeatMasker]
+      noText: ["Warning/Error"]
+      has: 'area[href*="o=147500022&t=147500340"][href*="i=246265"]'
+
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A147500000-147525000&pix=1100&browser.quickLiftRmsk=off"
+  - expect:
+      rows: [quickLiftChain]
+      noText: ["Warning/Error"]
+      noHas: ['area[href*="i=246265"]', 'area[href*="_t2tRepeatMasker&"]']

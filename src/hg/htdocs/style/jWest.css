@@ -136,7 +136,7 @@ div.gbHeroText {
 }
 
 div.gbHero h1 {
-    font-family: 'Lato', Arial, Helvetica, sans-serif;
+    font-family: inherit;
     font-weight: 700;
     font-size: 36px;
     line-height: 1.2;
@@ -168,6 +168,7 @@ div.gbHeroSearch input#searchBarSearchString {
     background: white;
     border: none;
     border-radius: 3px 0 0 3px;
+    font-family: inherit;
 }
 
 div.gbHeroSearch #searchBarSearchButton {
@@ -229,21 +230,21 @@ nav.gbGetStarted {
 a.gbGetStartedCard, a.gbGetStartedCard:link, a.gbGetStartedCard:visited {
     flex: 1 1 200px;
     display: block;
-    background: #f2f2f2;
-    border-top: 3px solid #006aad;
-    border-radius: 3px;
+    background: white;
+    border: 1px solid #d0d0d0;
+    box-shadow: 0 1px 2px rgba(20,40,70,.10);
     padding: 12px 14px;
-    color: #333;
     text-decoration: none;
 }
 
 a.gbGetStartedCard:hover, a.gbGetStartedCard:focus {
-    background: #e6eef5;
+    background: #f7f7f7;
+    border-color: #999;
 }
 
 span.gbGetStartedTitle {
     display: block;
-    color: #003c6c;
+    color: #003a72;
     font-weight: bold;
     font-size: 16px;
     margin-bottom: 4px;
@@ -253,6 +254,7 @@ span.gbGetStartedText {
     display: block;
     font-weight: normal;
     font-size: 14px;
+    color: black;   /* the page's text color; inside a link it would otherwise be link blue */
     line-height: 1.4;
 }
 

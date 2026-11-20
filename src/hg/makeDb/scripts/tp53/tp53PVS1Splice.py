@@ -2,10 +2,12 @@
 """
 TP53 VCEP PVS1 Splice Sites subtrack (under PVS1 Evidence composite).
 
-Parses Supplementary Table S1 (1,061 rows) from the CSpec GN009 v2.4.0
-splicing worksheet. Extracts the 120 canonical +/- 1,2 splice-site SNVs,
-forward-fills PVS1 strength assignments from the anchor variant to its
-two sibling variants at the same position, and emits bigBed 9+6.
+Parses Supplementary Table S1 (1,061 rows) from the VCEP's updated PVS1
+splicing worksheet (sent 2026-11; supersedes the CSpec GN009 v2.4.0 paper
+supplement, which differed only at c.74+1G>C: PVS1_Strong -> PVS1).
+Extracts the 120 canonical +/- 1,2 splice-site SNVs, forward-fills PVS1
+strength assignments from the anchor variant to its two sibling variants
+at the same position, and emits bigBed 9+6.
 
 Transcript: NM_000546.6 (chr17 minus strand).
 """
@@ -21,7 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import tp53FuncLib as lib
 
 DEFAULT_OUTDIR = "/hive/users/lrnassar/claude/RM37399/pvs1Splice"
-DEFAULT_SRC = "/hive/users/lrnassar/claude/RM37399/tp53_downloads/splicing_worksheet.xlsx"
+DEFAULT_SRC = "/hive/users/lrnassar/claude/RM37399/tp53_downloads/PVS1-Splicing-Worksheet_2026-11.xlsx"
 
 VAR_RE = re.compile(r'^c\.(-?\d+)([+-])([12])([ACGT])>([ACGT])$')
 
@@ -142,7 +144,7 @@ def mouseover(v, color, pts, acmg):
         "<br><b>Exon:</b> {exon} ({sign_label})"
         "<br><b>Assignment:</b> {src}"
         "<br><b>VCEP rationale:</b> {rat}"
-        "<br><b>Source:</b> CSpec GN009 v2.4.0 Supplementary Table S1"
+        "<br><b>Source:</b> TP53 VCEP PVS1 splicing worksheet (CSpec Table S1, VCEP update 2026-11)"
     ).format(
         name=v['variant'], pts=pts, acmg=acmg,
         exon=v['exon'],

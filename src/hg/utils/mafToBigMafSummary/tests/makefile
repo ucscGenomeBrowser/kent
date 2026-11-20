@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 mafToBigMafSummary = ${DESTBINDIR}/mafToBigMafSummary
 
-test: testdot testpipe testnameforms testgenarkref testdottedref clean
+test: testdot testpipe testnameforms testgenarkref testdottedref
 
 testdot: init
 	${mafToBigMafSummary} hg38 input/testDot.maf output/testDot.bed

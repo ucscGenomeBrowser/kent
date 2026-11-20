@@ -18,6 +18,12 @@
 # once as in the ticket, which adds more.  Two terms times that many windows is well over
 # 16 leaked connections on a build without the fix.
 #
+# With multiRegionSpaces on (#37788), multi-region view is a synthetic assembly, and
+# quickLift cannot carry a mathWig into it.  In exon view the row holds one grey line,
+# "mathWig tracks cannot be shown in multi-region view", and the mathWig is not loaded,
+# so the connection leak this ticket was about cannot happen there.  The checks below
+# still pass, but in a space they only show that the row and the page survive.
+#
 # Checks:
 #   * the mathWig row is drawn, in single-region view and then in exon view after the
 #     zoom (positive checks; a page that died early draws no rows);

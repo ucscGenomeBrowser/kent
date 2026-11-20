@@ -419,6 +419,16 @@ struct cirTreeFile *ctf = cirTreeFileAttach(bbi->fileName, bbi->udc);
 struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
 struct fileOffsetSize *block, *beforeGap, *afterGap;
 
+/* A block cannot overlap its own zoom level's index, so a block that runs into the index
+ * has a bad size.  bedToBigBed and bedGraphToBigWig before #38819 wrote one for the last
+ * block of the first zoom level in files over 2 GB.  Cap it at the index.  Compare by
+ * subtracting, because offset + size can wrap.  A correct file never reaches the cap. */
+for (block = blockList; block != NULL; block = block->next)
+    {
+    if (block->offset < zoom->indexOffset && block->size > zoom->indexOffset - block->offset)
+        block->size = zoom->indexOffset - block->offset;
+    }
+
 /* Set up for uncompression optionally. */
 char *uncompressBuf = NULL;
 if (bbi->uncompressBufSize > 0)

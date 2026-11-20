@@ -7,6 +7,7 @@ methaDory.html between the marker comments.
 
 import csv
 import html
+import html.entities
 import os
 import sys
 
@@ -40,6 +41,13 @@ def pubLinks(pmidField, authorYear):
     return ", ".join(out) if out else "&nbsp;"
 
 
+def namedEntities(s):
+    """The browser does not transcode UTF-8, so write every non-ASCII character
+    as its named HTML entity (Leit&atilde;o in pubAuthorYear.tsv)."""
+    return "".join(c if ord(c) < 128 else "&%s;" % html.entities.codepoint2name[ord(c)]
+                   for c in s)
+
+
 def studyAnchor(study):
     """The #fragment a study's row in the Studies table is addressed by, also
     used as the anchor's id so the Genes and loci table can link to it."""
@@ -53,13 +61,13 @@ def studyTable(fname, out):
               "<th>Disorders</th><th>Probes reported</th><th>Distinct probes</th></tr>\n")
     with open(fname) as fh:
         for r in csv.DictReader(fh, delimiter="\t"):
-            out.write('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td><td>%s</td>'
+            out.write(namedEntities('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td><td>%s</td>'
                       "<td>%s</td><td>%s</td></tr>\n"
                       % (html.escape(studyAnchor(r["study"]), quote=True),
                          html.escape(r["study"]), pubLinks(r["pmid"], authorYear),
                          r["signatures"], html.escape(r["disorders"]) or "&nbsp;",
                          "{:,}".format(int(r["probeRows"])),
-                         "{:,}".format(int(r["uniqProbes"]))))
+                         "{:,}".format(int(r["uniqProbes"])))))
     out.write("</table>\n")
 
 
@@ -80,13 +88,13 @@ def locusTable(fname, out):
               "<th>Studies</th><th>Probes reported</th><th>Distinct probes</th></tr>\n")
     with open(fname) as fh:
         for r in csv.DictReader(fh, delimiter="\t"):
-            out.write("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
+            out.write(namedEntities("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
                       "<td>%s</td><td>%s</td></tr>\n"
                       % (html.escape(r["locus"]),
                          html.escape(r["disorders"]) or "&nbsp;",
                          r["signatures"], studyLinks(r["studies"]),
                          "{:,}".format(int(r["probeRows"])),
-                         "{:,}".format(int(r["uniqProbes"]))))
+                         "{:,}".format(int(r["uniqProbes"])))))
     out.write("</table>\n")
 
 

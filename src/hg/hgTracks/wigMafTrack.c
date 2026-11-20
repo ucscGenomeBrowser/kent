@@ -25,6 +25,7 @@
 #include "bigBed.h"
 #include "hubConnect.h"
 #include "chromAlias.h"
+#include "hgConfig.h"
 
 
 #define GAP_ITEM_LABEL  "Gaps"
@@ -1987,7 +1988,33 @@ struct sqlClosure *sqlClosure = closure;
 return mafLoadInRegion2(sqlClosure->conn2, sqlClosure->conn3, sqlClosure->tableName, chrom, start, end, sqlClosure->mafFile  );
 }
 
-static void translateCodons(mafRetrieveFunc func, void *closure,
+static struct mafAli *cachedFlankSubset(struct hash *flankCache, mafRetrieveFunc func,
+                                        void *closure, char *masterChrom, int start, int end)
+/* Return the alignment of reference bases start to end, the bases of a codon that are in
+ * the next or previous exon.  Every species asks for the same few ranges, and loading one
+ * means reading and decompressing a whole block for all species, so load each range only
+ * once per draw.  The result belongs to the cache: do not free it or change its text.
+ * With no cache (browser.mafFastCodons off) every call loads the range again, as before. */
+{
+char key[64];
+if (flankCache != NULL)
+    {
+    safef(key, sizeof key, "%d-%d", start, end);
+    struct hashEl *hel = hashLookup(flankCache, key);
+    if (hel != NULL)
+        return hel->val;
+    }
+struct mafAli *ali = func(closure, chromName, start, end);
+struct mafAli *sub = NULL;
+if (ali != NULL)
+    sub = mafSubset(ali, masterChrom, start, end);
+mafAliFreeList(&ali);
+if (flankCache != NULL)
+    hashAdd(flankCache, key, sub);
+return sub;
+}
+
+static void translateCodons(mafRetrieveFunc func, void *closure, struct hash *flankCache,
                             char *compName,
                             DNA *dna, int start, int length, int frame, char strand,
                             int prevEnd, int nextStart, bool alreadyComplemented,
@@ -1999,7 +2026,8 @@ int color;
 int end = start + length;
 int x1;
 char masterChrom[128];
-struct mafAli *ali, *sub = NULL;
+char flank[3];  /* our own copy of the cached bases, so complementing them is safe */
+struct mafAli *sub = NULL;
 struct mafComp *comp = NULL;
 int mult = 1;
 char codon[4];
@@ -2057,17 +2085,15 @@ else if (frame && (prevEnd != -1))
     switch(frame)
 	{
 	case 1:
-	    ali = func(closure,  chromName, prevEnd , prevEnd + 1);
-	    if (ali != NULL)
-		{
-		sub = mafSubset(ali, masterChrom, prevEnd , prevEnd + 1  );
+	    sub = cachedFlankSubset(flankCache, func, closure, masterChrom, prevEnd, prevEnd + 1);
+	    if (sub != NULL)
 		comp = mafMayFindCompSpecies(sub, compName, '.');
-		}
 	    if (comp && comp->text && (!(ISGAPSPACEORN(comp->text[0]) ||ISGAPSPACEORN(ptr[0]) ||ISGAPSPACEORN(ptr[1]))))
 		{
+		flank[0] = comp->text[0];
 		if (strand == '-')
-		    complement(comp->text, 1);
-		codon[0] = comp->text[0];
+		    complement(flank, 1);
+		codon[0] = flank[0];
 		codon[1] = ptr[0];
 		codon[2] = ptr[1];
 		fillBox = TRUE;
@@ -2081,25 +2107,21 @@ else if (frame && (prevEnd != -1))
 	    break;
 	case 2:
 	    if (strand == '-')
-		{
-                ali = func(closure,  chromName, prevEnd , prevEnd + 2);
-		if (ali != NULL)
-		    sub = mafSubset(ali, masterChrom, prevEnd, prevEnd + 2  );
-		}
+		sub = cachedFlankSubset(flankCache, func, closure, masterChrom,
+					prevEnd, prevEnd + 2);
 	    else
-		{
-                ali = func(closure,  chromName, prevEnd - 1 , prevEnd + 1);
-		if (ali != NULL)
-		    sub = mafSubset(ali, masterChrom, prevEnd - 1, prevEnd + 1);
-		}
+		sub = cachedFlankSubset(flankCache, func, closure, masterChrom,
+					prevEnd - 1, prevEnd + 1);
 	    if (sub != NULL)
 		comp = mafMayFindCompSpecies(sub, compName, '.');
 	    if (comp && comp->text && (!(ISGAPSPACEORN(comp->text[0])||ISGAPSPACEORN(comp->text[1]) ||ISGAPSPACEORN(*ptr))))
 		{
+		flank[0] = comp->text[0];
+		flank[1] = comp->text[1];
 		if (strand == '-')
-		    reverseComplement(comp->text, 2);
-		codon[0] = comp->text[0];
-		codon[1] = comp->text[1];
+		    reverseComplement(flank, 2);
+		codon[0] = flank[0];
+		codon[1] = flank[1];
 		codon[2] = *ptr;
 		fillBox = TRUE;
 		mult = 1;
@@ -2159,18 +2181,11 @@ if (length && (nextStart != -1))
     sub = NULL;
 
     if (strand == '-')
-	{
-        ali = func(closure,  chromName, nextStart - 2 + length, nextStart + 1);
-	if (ali != NULL)
-	    sub = mafSubset(ali, masterChrom,
-		nextStart - 2 + length, nextStart + 1);
-	}
+	sub = cachedFlankSubset(flankCache, func, closure, masterChrom,
+				nextStart - 2 + length, nextStart + 1);
     else
-	{
-        ali = func(closure,  chromName, nextStart , nextStart + 2);
-	if (ali != NULL)
-	    sub = mafSubset(ali, masterChrom, nextStart , nextStart + 2);
-	}
+	sub = cachedFlankSubset(flankCache, func, closure, masterChrom,
+				nextStart, nextStart + 2);
     if (sub != NULL)
 	comp = mafMayFindCompSpecies(sub, compName, '.');
     if (sub && comp && comp->text)
@@ -2178,11 +2193,12 @@ if (length && (nextStart != -1))
 	switch(length)
 	    {
 	    case 2:
+		flank[0] = comp->text[0];
 		if (strand == '-')
-		    complement(comp->text, 1);
+		    complement(flank, 1);
 		codon[0] = *ptr;
 		codon[1] = *(1 + ptr);
-		codon[2] = *comp->text;
+		codon[2] = flank[0];
 
 		if (!(ISGAPSPACEORN(codon[0]) ||ISGAPSPACEORN(codon[1]) ||ISGAPSPACEORN(codon[2])))
 		    {
@@ -2193,11 +2209,13 @@ if (length && (nextStart != -1))
 		    }
 		break;
 	    case 1:
+		flank[0] = comp->text[0];
+		flank[1] = comp->text[1];
 		if (strand == '-')
-		    reverseComplement(comp->text, 2);
+		    reverseComplement(flank, 2);
 		codon[0] = *ptr;
-		codon[1] = comp->text[0];
-		codon[2] = comp->text[1];
+		codon[1] = flank[0];
+		codon[2] = flank[1];
 		if (!(ISGAPSPACEORN(codon[0]) ||ISGAPSPACEORN(codon[1]) ||ISGAPSPACEORN(codon[2])))
 		    {
 		    *ptr++ = lookupAndCheckCodon(codon);
@@ -2265,7 +2283,10 @@ hFreeConn(&conn);
 return mfList;
 }
 
-static struct mafFrames *getFramesFromBb(  char *framesTable, char *chromName, int seqStart, int seqEnd, char *component)
+static struct mafFrames *getFramesFromBbOneSpecies(char *framesTable, char *chromName,
+                                                   int seqStart, int seqEnd, char *component)
+/* Return the frames for one species in the window, opening the file for this one call.
+ * This is the path used when browser.mafFastCodons is off. */
 {
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  bigBedFileOpenAlias(framesTable, chromAliasFindAliases);
@@ -2289,12 +2310,51 @@ slReverse(&mfList);
 return mfList;
 }
 
+static struct hash *bbFramesBySpecies = NULL;  /* frames in the window, keyed by species */
+
+static struct mafFrames *getFramesFromBb(  char *framesTable, char *chromName, int seqStart, int seqEnd, char *component, boolean fastCodons)
+/* Return the frames for one species in the window.  With fastCodons, the first call in a
+ * draw reads every species' frames from the file at once, and later calls look them up,
+ * so the file is opened once per draw rather than once or twice per species. */
+{
+if (!fastCodons)
+    return getFramesFromBbOneSpecies(framesTable, chromName, seqStart, seqEnd, component);
+if (bbFramesBySpecies == NULL)
+    {
+    bbFramesBySpecies = hashNew(0);
+    struct lm *lm = lmInit(0);
+    struct bbiFile *bbi =  bigBedFileOpenAlias(framesTable, chromAliasFindAliases);
+    struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
+    char *bedRow[11];
+    char startBuf[16], endBuf[16];
+
+    for (bb = bbList; bb != NULL; bb = bb->next)
+        {
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        struct mafFrames *mf = mafFramesLoad( bedRow );
+        struct hashEl *hel = hashLookup(bbFramesBySpecies, mf->src);
+        if (hel == NULL)
+            hel = hashAdd(bbFramesBySpecies, mf->src, NULL);
+        slAddHead(&hel->val, mf);
+        }
+    struct hashCookie cookie = hashFirst(bbFramesBySpecies);
+    struct hashEl *hel;
+    while ((hel = hashNext(&cookie)) != NULL)
+        slReverse(&hel->val);
+
+    bbiFileClose(&bbi);
+    lmCleanup(&lm);
+    }
+return hashFindVal(bbFramesBySpecies, component);
+}
+
 static char * extraPrevious = NULL;
 
 static void resetCache()
 // reset the frames cache
 {
 extraPrevious = NULL;
+hashFreeWithVals(&bbFramesBySpecies, mafFramesFreeList);  /* mfList is fetched again after this */
 }
 
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
@@ -2313,6 +2373,10 @@ int i, x = xOff, y = yOff;
 struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
 struct hash *srcHash = newHash(0);
+/* browser.mafFastCodons: load the bases of split codons and the frames bigBed once per draw,
+ * and let a species with no frames of its own use the default species' frames.  refs #38763 */
+boolean fastCodons = cfgOptionBooleanDefault("browser.mafFastCodons", FALSE);
+struct hash *flankCache = fastCodons ? hashNew(0) : NULL;   /* see cachedFlankSubset() */
 char dbChrom[64];
 int alignLineLength = winBaseCount * 2;
         /* doubled to allow space for insert counts */
@@ -2746,8 +2810,11 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 
     /* having these static here will allow the option 'codonDefault'
      * to run rapidly through the display without extra calls to SQL
-     * for the same answer over and over.  For other codon modes, it
-     * will still need to query the Frames table repeatedly.
+     * for the same answer over and over.  For other codon modes, a SQL
+     * frames table is still queried once per species, and once more for a
+     * species with no frames when codonFrameDef retries with the default
+     * species (the goto tryagain below).  A frames bigBed is read once per
+     * draw when browser.mafFastCodons is on.
      * This was found to speed up dramatically by adding an index to
      * the table:
      * hgsql staAur2 -e 'CREATE INDEX src on multiz369wayFrames (src, bin);'
@@ -2757,10 +2824,12 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
     if (framesTable != NULL)
 	{
 	char extra[512];
+	char *framesSpecies = mi->db;  /* the species whose frames we use, as named in extra */
 
 	if (sameString("codonDefault", codonTransMode))
 	    {
 	    sqlSafef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
+	    framesSpecies = defaultCodonSpecies;
 
 	    found = TRUE;
 	    }
@@ -2783,15 +2852,20 @@ tryagain:
             {
             if (track->isBigBed)
                 {
-                char *species = mi->db;
-                if (sameString("codonDefault", codonTransMode))
-                    species = defaultCodonSpecies;
-                mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd, species);
+                char *species = framesSpecies;
+                if (!fastCodons)
+                    {
+                    /* the old lookup, which ignores the retry with the default species */
+                    species = mi->db;
+                    if (sameString("codonDefault", codonTransMode))
+                        species = defaultCodonSpecies;
+                    }
+                mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd, species, fastCodons);
                 }
             else
                 mfList = getFramesFromSql(  framesTable, chromName, seqStart, seqEnd, extra, newTableType);
+            extraPrevious = cloneString(extra);
             }
-        extraPrevious = cloneString(extra);
 
         if (mfList != NULL)
             found = TRUE;
@@ -2839,7 +2913,7 @@ tryagain:
                 sqlClosure.mafFile = mafFile;
                 sqlClosure.tableName = tableName;
                 }
-            translateCodons(func, closure, mi->db, line, start,
+            translateCodons(func, closure, flankCache, mi->db, line, start,
                             w, frame, mf->strand[0],mf->prevFramePos,mf->nextFramePos,
                             complementBases, x, y, width, mi->height,  hvg);
             }
@@ -2848,6 +2922,7 @@ tryagain:
 	    {
 	    /* try the default species */
 	    sqlSafef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
+	    framesSpecies = defaultCodonSpecies;
 
 	    found = TRUE; /* don't try again */
 	    goto tryagain;
@@ -2918,6 +2993,7 @@ freez(&lines);
 hFreeConn(&conn2);
 hFreeConn(&conn3);
 hashFree(&miHash);
+hashFreeWithVals(&flankCache, mafAliFree);
 return y;
 }
 

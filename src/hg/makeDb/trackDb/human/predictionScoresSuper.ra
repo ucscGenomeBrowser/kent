@@ -1,6 +1,8 @@
 track predictionScoresSuper
 shortLabel Deleteriousness Predictions
 longLabel Variant Deleteriousness / Variant Impact Prediction Scores
+tags pathogenicity
+facet.evidence Predicted
 superTrack on hide
 visibility hide
 group phenDis
@@ -15,3 +17,5 @@ include promoterAi.ra
 include clinPred.ra
 include eve.ra
 include popEve.ra
+include mitImpact.ra alpha
+include apogee2.ra alpha

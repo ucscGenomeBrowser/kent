@@ -2,7 +2,7 @@
 
 cd $WEEKLYBLD
 
-set table=CherryPickCommits.conf
+set table=$BUILDSTATE/CherryPickCommits.conf
 if ( ! -e $table ) then
     echo "error: $table not found."
     exit 1
@@ -126,7 +126,7 @@ while ( $#list > 0 )
     	    popd 
 	endif
 
-	if (-e pushedToRR.flag ) then
+	if (-e $BUILDSTATE/pushedToRR.flag ) then
 	    # TODO when all is working smoothly: move the beta branch to this week's branch.
 	    # maybe we can run tagBeta.csh?
 	    echo "TODO: You will need to run tagBeta.csh to update the beta branch."

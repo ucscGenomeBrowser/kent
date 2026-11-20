@@ -18,47 +18,9 @@
 #include "net.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "hubConnect.h"
+#include "recTrackSets.h"
 
-
-/* Recommended track sets are Special 'curated' sessions, created by browser team, e.g. for clinical users
- *      This is expected to be a very limited number (under 10 ?)
- *      The list references sessions in namedSessionDb table, by userName and sessionName
- *      (unfortunately not required to be unique, so depending on curator to 
- *      just make one (code willl pick the first one)
- */      
-struct recTrackSet
-    {
-    struct recTrackSet *next;
-    char *label;        // short label for display on browser and dialogs
-    char *userName;     // field in named sessions table
-    char *sessionName;  // field in named sessions table (CGI encoded)
-    char *description;  // descriptive phrase or sentence.  Display uses this
-                                // instead of description in session settings to allow
-                                // updating by other than session author (e.g. QA)
-    };
-
-#define REC_TRACK_SETS_FILE  "recTrackSets"
-#define REC_TRACK_SETS_EXT  "tab"
-#define REC_TRACK_SETS_DATA_DIR  "data/recTrackSets"
-
-char *recTrackSetsFile()
-/* Generate path to file specifying menu of recommended track sets.
- *      eg, DOCUMENT_ROOT/data/recTrackSets/recTrackSets.hg19.tab */
-{
-char *root = hDocumentRoot();
-char buf[200];
-safef(buf, sizeof buf, "%s/%s/%s.%s.%s", 
-        root, REC_TRACK_SETS_DATA_DIR, REC_TRACK_SETS_FILE, database, REC_TRACK_SETS_EXT);
-return cloneString(buf);
-}
-
-boolean recTrackSetsEnabled()
-/* Return TRUE if feature is available */
-{
-char *cfgEnabled = cfgOption("browser.recTrackSets");
-return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) &&
-        fileExists(recTrackSetsFile());
-}
 
 boolean recTrackSetsChangeDetectEnabled()
 /* Return TRUE if feature is available, in hgConf */
@@ -69,33 +31,10 @@ if (cfgChanges && (sameString(cfgChanges, "on") || sameString(cfgChanges, "true"
 return FALSE;
 }
 
-struct recTrackSet *loadRecTrackSets()
-/* Read from tab-sep file.  Return list or NULL if no track sets for this database */
-{
-struct recTrackSet *recTrackSet, *recTrackSets = NULL;
-struct lineFile *lf = lineFileOpen(recTrackSetsFile(), TRUE);
-if (!lf)
-    return NULL;
-#define cols 4
-char *row[cols];
-while (lineFileNextRowTab(lf, row, cols))
-    {
-    AllocVar(recTrackSet);
-    recTrackSet->label = cloneString(row[0]);
-    recTrackSet->userName = cloneString(row[1]);
-    recTrackSet->sessionName = cloneString(row[2]);
-    recTrackSet->description = cloneString(row[3]);
-    slAddHead(&recTrackSets, recTrackSet);
-    }
-slReverse(&recTrackSets);
-lineFileClose(&lf);
-return recTrackSets;
-}
-
 int recTrackSetsForDb()
 /* Return number of recommended track sets for this database */
 {
-return slCount(loadRecTrackSets());
+return slCount(loadRecTrackSets(database));
 }
 
 static char *recTrackSetContentsFile(char *sessionName)
@@ -109,6 +48,104 @@ safef(buf, sizeof buf, "%s/%s/%s/%s",
         hDocumentRoot(), REC_TRACK_SETS_DATA_DIR, database, encName);
 freeMem(encName);
 return cloneString(buf);
+}
+
+static unsigned loadedHubId(char *idStr, struct slPair *assumes)
+/* Return the local id of a hub that the set file names by idStr, or 0 if that hub is not
+ * loaded.  The file uses the ids of the machine it was saved on, and on another machine a
+ * different hub can have that id.  So when the file's assumesHub setting gives a url for
+ * the id, look the hub up by that url only, and use the id only when there is no url. */
+{
+unsigned id = atoi(idStr);
+char *url = slPairFindVal(assumes, idStr);
+struct hubConnectStatus *hub;
+for (hub = hubConnectGetHubs(); hub != NULL; hub = hub->next)
+    {
+    if (url != NULL)
+        {
+        if (sameString(hub->hubUrl, url))
+            return hub->id;
+        }
+    else if (hub->id == id)
+        return hub->id;
+    }
+return 0;
+}
+
+struct slName *recTrackSetConnectHubs(struct cart *cart, char *sessionName)
+/* Call this before the track hubs are added to the track list.  Copy the hub connections
+ * of a recommended track set from its htdocs file into the cart, and load the hubs again if
+ * one is new, so that the hub tracks are drawn on this page.  Hubs are otherwise only
+ * connected when the cart is loaded.  Return the track group names ("hub_<id>") of the
+ * set's hubs, or NULL if the set has no file or no hubs. */
+{
+char *file = recTrackSetContentsFile(sessionName);
+if (!fileExists(file))
+    {
+    freeMem(file);
+    return NULL;
+    }
+struct slName *idList = NULL, *idEl;
+char *assumesStr = NULL;
+struct lineFile *lf = lineFileOpen(file, TRUE);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    line = skipLeadingSpaces(line);
+    char *val = strchr(line, '=');
+    if (val == NULL)
+        continue;   // loadRecTrackSetFromFile reports the malformed line
+    *val++ = 0;
+    cgiDecode(val, val, strlen(val));
+    if (startsWith(hgHubConnectHubVarPrefix, line) && sameString(val, "1"))
+        slNameAddHead(&idList, line + strlen(hgHubConnectHubVarPrefix));
+    else if (sameString(line, "assumesHub"))
+        assumesStr = cloneString(val);
+    }
+lineFileClose(&lf);
+freeMem(file);
+if (idList == NULL)
+    {
+    freeMem(assumesStr);
+    return NULL;
+    }
+
+struct slPair *assumes = NULL;
+if (assumesStr != NULL)
+    assumes = slPairListFromString(assumesStr, FALSE);
+boolean newHub = FALSE;
+for (idEl = idList; idEl != NULL; idEl = idEl->next)
+    {
+    if (loadedHubId(idEl->name, assumes) == 0)
+        {
+        char var[256];
+        safef(var, sizeof var, "%s%s", hgHubConnectHubVarPrefix, idEl->name);
+        cartSetString(cart, var, "1");
+        newHub = TRUE;
+        }
+    }
+if (newHub)
+    {
+    if (assumesStr != NULL)
+        cartSetString(cart, "assumesHub", assumesStr);
+    hubConnectLoadHubs(cart);
+    }
+
+struct slName *groupList = NULL;
+for (idEl = idList; idEl != NULL; idEl = idEl->next)
+    {
+    unsigned id = loadedHubId(idEl->name, assumes);
+    if (id != 0)
+        {
+        char group[64];
+        safef(group, sizeof group, "hub_%u", id);
+        slNameStore(&groupList, group);
+        }
+    }
+slNameFreeList(&idList);
+slPairFreeValsAndList(&assumes);
+freeMem(assumesStr);
+return groupList;
 }
 
 boolean loadRecTrackSetFromFile(struct cart *cart, char *sessionName)
@@ -141,6 +178,9 @@ lineFileClose(&lf);
 // Same merge as a named session: existing cart values win except for hidden tracks,
 // so the set's visible tracks apply on top of the caller's hide-all.
 cartParseOverHashExt(cart, dy->string, TRUE);
+// The file names its hubs by the ids of the machine it was saved on.  Rename its hub
+// settings to this machine's ids, so they apply to the hub tracks on this page.
+hubConnectPortHubStatus(cart);
 dyStringFree(&dy);
 freeMem(file);
 return TRUE;
@@ -149,9 +189,9 @@ return TRUE;
 boolean hasRecTrackSet(struct cart *cart)
 /* Check if currently loaded session is in the recommended track set */
 {
-if (!recTrackSetsEnabled())
+if (!recTrackSetsEnabled(database))
     return FALSE;
-struct recTrackSet *ts, *recTrackSets = loadRecTrackSets();
+struct recTrackSet *ts, *recTrackSets = loadRecTrackSets(database);
 if (!recTrackSets)
     return FALSE;
 char *session = cartOptionalString(cart, hgsOtherUserSessionName);
@@ -170,9 +210,9 @@ return FALSE;
 void printRecTrackSets()
 /* Create dialog with list of recommended track sets */
 {
-if (!recTrackSetsEnabled())
+if (!recTrackSetsEnabled(database))
     return;
-struct recTrackSet *recTrackSet, *recTrackSets = loadRecTrackSets();
+struct recTrackSet *recTrackSet, *recTrackSets = loadRecTrackSets(database);
 if (!recTrackSets)
     return;
 

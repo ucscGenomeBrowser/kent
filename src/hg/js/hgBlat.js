@@ -119,10 +119,13 @@ function blatCoverageCell(hit) {
         var width = (seg[1] - seg[0]) / hit.qSize * 100;
         return `<i style="left:${left.toFixed(1)}%;width:${width.toFixed(1)}%"></i>`;
     }).join('');
-    // The query start and end are printed next to the bar, as in the classic page's START and END
-    // columns: for short queries like primers the bar alone does not show which bases matched.
-    return `<span class="blatCovWrap" title="${tip}"><span class="blatCov">${bars}</span>` +
-        `<span class="blatCovNum">${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}</span></span>`;
+    return `<span class="blatCovWrap" title="${tip}"><span class="blatCov">${bars}</span></span>`;
+}
+
+// The query start and end, as in the classic page's START and END columns: for short queries
+// like primers the coverage bar alone does not show which bases matched.
+function blatQueryPosCell(hit) {
+    return `<span class="blatCovNum">${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}</span>`;
 }
 
 // ---- summary strip + detail panel ---------------------------------------
@@ -147,11 +150,24 @@ function blatSummaryStrip(cfg, queryCount) {
     if (cfg.viewAllUrl) {
         actions += `<a class="gbPill" id="blatViewAllBtn" title="Open the Genome Browser with all these BLAT hits shown together as one custom track" href="${htmlEncode(cfg.viewAllUrl)}">View all in browser</a>`;
     }
-    // "Show Query Sequence" opens the query FASTA in a panel (with Download / Copy). Only on a fresh
-    // search, where the uploaded sequence is available (cfg.querySeqs emitted by hgBlat.c).
+    // "Show Query Sequence" opens the query FASTA in a panel (with Download / Copy). Only when
+    // hgBlat.c found the query sequence, in the search's files or in the results track (cfg.querySeqs).
     if (cfg.querySeqs && cfg.querySeqs.length) {
+        // Font Awesome Free 7 "file-lines" (fontawesome.com, free icons), inlined like the icons below.
+        var seqIcon = '<svg class="blatShareIcon" viewBox="0 0 640 640" width="16" height="16" ' +
+            'fill="currentColor" aria-hidden="true"><path d="M192 112L304 112L304 200C304 239.8 ' +
+            '336.2 272 376 272L464 272L464 512C464 520.8 456.8 528 448 528L192 528C183.2 528 176 ' +
+            '520.8 176 512L176 128C176 119.2 183.2 112 192 112zM352 131.9L444.1 224L376 224C362.7 ' +
+            '224 352 213.3 352 200L352 131.9zM192 64C156.7 64 128 92.7 128 128L128 512C128 547.3 ' +
+            '156.7 576 192 576L448 576C483.3 576 512 547.3 512 512L512 250.5C512 233.5 505.3 217.2 ' +
+            '493.3 205.2L370.7 82.7C358.7 70.7 342.5 64 325.5 64L192 64zM248 320C234.7 320 224 ' +
+            '330.7 224 344C224 357.3 234.7 368 248 368L392 368C405.3 368 416 357.3 416 344C416 ' +
+            '330.7 405.3 320 392 320L248 320zM248 416C234.7 416 224 426.7 224 440C224 453.3 234.7 ' +
+            '464 248 464L392 464C405.3 464 416 453.3 416 440C416 426.7 405.3 416 392 416L248 ' +
+            '416z"/></svg>';
         actions += '<button type="button" class="gbPill" id="blatSeqBtn" ' +
-            'title="Show the sequence you searched with, in FASTA format">Show Query Sequence</button>';
+            'title="Show the sequence you searched with, in FASTA format">' + seqIcon +
+            'Show Query Sequence</button>';
     }
     // Font Awesome 6 "file-arrow-down" (fontawesome.com, free icons, CC BY 4.0), inlined because
     // the tree's font-awesome.min.css is version 4.5, which does not have it.
@@ -163,7 +179,8 @@ function blatSummaryStrip(cfg, queryCount) {
         '24-24s24 10.7 24 24z"/></svg>';
     actions += '<button type="button" class="gbPill" id="blatTsvBtn" ' +
         'title="Download the hits in the table below, in their current order and filter, as a ' +
-        'tab-separated file that opens in Excel">' + downloadIcon + 'Download Table</button>';
+        'tab-separated file that opens in Excel. The file name and first column give the ' +
+        'assembly searched.">' + downloadIcon + 'Download Table</button>';
     // "Share a link" creates a durable, minimal snapshot session (db + results bigPsl only) and shows
     // its ?u=&s= reopen link (see blatShareLink).  Only offered when a durable bigPsl backs the
     // results (cfg.canShare = autoBigPsl); without it there is nothing for the shared link to reopen.
@@ -320,8 +337,8 @@ var BLAT_HEADER_TIPS = {
     'Score': 'BLAT score: matches minus mismatches and gap penalties. Higher is better.',
     'Identity': 'Percent identity of the aligned bases',
     'Strand': 'Genome strand the query matched (+ or -)',
-    'Query coverage': 'Which part of the query aligned (blue) across its full length, with the ' +
-        'first and last aligned query position. Click to sort by query start.',
+    'Query match': 'First and last aligned query position. Click to sort by query start.',
+    'Query coverage': 'Which part of the query aligned (blue) across its full length.',
     'Span': 'Length of the match on the genome (bp). Larger than the query length means ' +
         'the alignment crosses introns or deletions.'
 };
@@ -433,9 +450,10 @@ function blatShareLink() {
 // ---- Rename BLAT track (modal) -------------------------------------------
 // The results custom track is built (and renamed) by hgBlat.c's inline code, which exposes a small
 // window.blatRenameCt(name, description) helper (it POSTs to hgc's buildBigPsl and rebuilds the
-// track).  We reuse that helper (no new endpoint), just swapping its old inline toggle-form UI for a
-// proper modal dialog.  The current name/description come from cfg (hgBlat.c), not a global, so this
-// does not depend on any generic page-global.
+// track).  We reuse that helper, just swapping its old inline toggle-form UI for a proper modal
+// dialog.  A page reopened from the track has no such helper; there hgBlat renames the track in
+// place (blatRenameCtInPlace).  The current name/description come from cfg (hgBlat.c), not a global,
+// so this does not depend on any generic page-global.
 
 function blatRenameModalHtml(cfg) {
     // hgSession link is relative (same /cgi-bin/), carrying db + hgsid so the session page opens in
@@ -489,21 +507,64 @@ function blatWireRename() {
         var name = document.getElementById('blatRenameName').value.trim();
         var desc = document.getElementById('blatRenameDesc').value.trim();
         if (!name) { document.getElementById('blatRenameName').focus(); return; }
-        // Reuse hgBlat.c's window.blatRenameCt(name, description): rebuilds the custom track under the
-        // new name via the existing hgc buildBigPsl call.  Keep cfg in sync so a re-open of the modal
-        // shows the new values.
+        // On a page built from the search's files, reuse hgBlat.c's window.blatRenameCt(name,
+        // description): rebuilds the custom track under the new name via the existing hgc
+        // buildBigPsl call.  On a page reopened from the track (cfg.ctName) there are no such
+        // files, so hgBlat renames the track in place (doEditCt).  Keep cfg in sync so a re-open
+        // of the modal shows the new values.
+        var cfg = hgBlatData.config;
         if (typeof window.blatRenameCt === 'function') {
-            hgBlatData.config.trackName = name;
-            hgBlatData.config.trackDescription = desc;
+            cfg.trackName = name;
+            cfg.trackDescription = desc;
             window.blatRenameCt(name, desc);
+        } else if (cfg.ctName) {
+            blatRenameCtInPlace(cfg, name, desc);
         }
         blatCloseRename();
     });
 }
 
+function blatRenameCtInPlace(cfg, name, desc) {
+    // Rename the results track of a page reopened from it.  An error goes into the share box under
+    // the summary, like the errors of Delete track.
+    var box = document.getElementById('gbShareBox');
+    $.ajax({
+        type: 'POST',
+        url: 'hgBlat',
+        // blatCtDb: as for Delete track, the cart's assembly may have changed in another tab.
+        data: { hgsid: cfg.hgsid, blatCtDb: cfg.fullDb, blatRenameCt: cfg.ctName,
+                blatCtLabel: name, blatCtDescription: desc },
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            if (!data || !data.renamed) {
+                blatShowShareBox(box, null, (data && data.error) || 'The track could not be renamed.');
+                return;
+            }
+            cfg.trackName = name;
+            cfg.trackDescription = desc;
+            // A custom track's id is made from its name, so the rename changed it.  Delete track
+            // and a reload of this page (blatCt= in the address bar) need the new one.
+            if (data.ctName && data.ctName !== cfg.ctName) {
+                cfg.ctName = data.ctName;
+                try {
+                    var url = new URL(window.location.href);
+                    if (url.searchParams.has('blatCt')) {
+                        url.searchParams.set('blatCt', data.ctName);
+                        history.replaceState(null, '', url.toString());
+                    }
+                } catch (e) { /* older browsers: ignore */ }
+            }
+        },
+        error: function() {
+            blatShowShareBox(box, null, topLinks.serverUnreachableMsg);
+        }
+    });
+}
+
 // ---- Delete BLAT track ----------------------------------------------------
-// The track is removed by an hgCustom request, whose custom track parsing does the removal (the
-// variables are CT_DO_REMOVE_VAR and CT_SELECTED_TABLE_VAR in customTrack.h); its page is not used.
+// The track is removed by an hgBlat request (doEditCt in hgBlat.c), which answers with JSON.  An
+// error goes into the share box under the summary, where the Share a link messages also go.
 // The track name is cfg.ctName on a page reopened from the track (blatCt=), else the track this page
 // built (hgBlat.c's window.blatCtName).  On a page built from the trash files the table keeps
 // working without the track, so the button then turns into "Restore track", which rebuilds it
@@ -528,9 +589,19 @@ function blatWireDelete() {
     var btn = $('#blatDeleteBtn');
     var cfg = hgBlatData.config;
     var deleted = false;
+    var errorShown = false;
     btn.on('click', function() {
         if (deleted) {
-            window.blatRenameCt(cfg.trackName, cfg.trackDescription);
+            if (!window.blatRenameCt(cfg.trackName, cfg.trackDescription)) {
+                blatShowShareBox(document.getElementById('gbShareBox'), null,
+                    'The track could not be restored. Please try again.');
+                errorShown = true;
+                return;
+            }
+            if (errorShown) {
+                document.getElementById('gbShareBox').style.display = 'none';
+                errorShown = false;
+            }
             deleted = false;
             btn.find('.blatDeleteLabel').text('Delete track');
             blatSetTip(btn, blatDeleteTip(cfg));
@@ -541,16 +612,29 @@ function blatWireDelete() {
             (typeof window.blatCtName === 'function' ? window.blatCtName() : '');
         if (!ctName) { return; }
         btn.prop('disabled', true);
+        var box = document.getElementById('gbShareBox');
+        var showError = function(msg) {
+            btn.prop('disabled', false);
+            blatShowShareBox(box, null, msg);
+            errorShown = true;
+        };
         $.ajax({
             type: 'POST',
-            url: 'hgCustom',
-            // db: the cart's current assembly may have been changed in another tab, and hgCustom
-            // only looks for the track among the custom tracks of that assembly.
-            data: { hgsid: cfg.hgsid, db: cfg.fullDb, hgct_doRemoveCustomTrack: '1',
-                    hgct_table: ctName },
-            dataType: 'html',
+            url: 'hgBlat',
+            // blatCtDb: the cart's current assembly may have been changed in another tab.  hgBlat
+            // looks for the track among the custom tracks of this one and leaves the cart's alone.
+            data: { hgsid: cfg.hgsid, blatCtDb: cfg.fullDb, blatDeleteCt: ctName },
+            dataType: 'json',
             cache: false,
-            success: function() {
+            success: function(data) {
+                if (!data || !data.deleted) {
+                    showError((data && data.error) || 'The track could not be deleted.');
+                    return;
+                }
+                if (errorShown) {   // the message of an earlier try
+                    box.style.display = 'none';
+                    errorShown = false;
+                }
                 deleted = true;
                 // Without the track these would open the browser with nothing new in it, and a
                 // rename would quietly bring the track back.
@@ -564,8 +648,7 @@ function blatWireDelete() {
                 blatSetTip(btn, BLAT_RESTORE_TIP);
             },
             error: function() {
-                btn.prop('disabled', false);
-                blatSetTip(btn, 'The track could not be deleted. Please try again.');
+                showError(topLinks.serverUnreachableMsg);
             }
         });
     });
@@ -592,18 +675,19 @@ function blatDownloadText(text, fileName, mimeType) {
     setTimeout(function() { URL.revokeObjectURL(a.href); }, 0);
 }
 
-function blatHitsToTsv(hits, hasLocus) {
-    // One line per hit, with the columns of the classic results page (positions 1-based) plus the
+function blatHitsToTsv(hits, hasLocus, db) {
+    // One line per hit, with the assembly searched (so files from several assemblies can be told
+    // apart or concatenated), the columns of the classic results page (positions 1-based) plus the
     // locus and the match counts, then the PSL block lists, which are 0-based like in a .psl file and
     // are enough to rebuild the alignment.  Tabs and newlines in a query name would break the columns.
     var clean = s => String(s === undefined || s === null ? '' : s).replace(/[\t\r\n]/g, ' ');
-    var head = ['query', 'score', 'qStart', 'qEnd', 'qSize', 'identity', 'chrom', 'strand',
+    var head = ['assembly', 'query', 'score', 'qStart', 'qEnd', 'qSize', 'identity', 'chrom', 'strand',
                 'tStart', 'tEnd', 'span', 'matches', 'misMatches', 'gaps', 'blocks'];
     if (hasLocus) { head.push('locus'); }
     head.push('tSize', 'blockSizes', 'qStarts', 'tStarts');
     var lines = [head.join('\t')];
     hits.forEach(function(h) {
-        var row = [h.qName, h.score, h.qStart, h.qEnd, h.qSize, h.identity.toFixed(1), h.chrom,
+        var row = [db, h.qName, h.score, h.qStart, h.qEnd, h.qSize, h.identity.toFixed(1), h.chrom,
                    h.strand, h.tStart, h.tEnd, h.span, h.matches, h.misMatch, h.gaps, h.blocks];
         if (hasLocus) { row.push(h.locusText); }
         row.push(h.tSize, h.blockSizes, h.qStarts, h.tStarts);
@@ -688,6 +772,7 @@ function blatBuild() {
     if (cfg.multiQuery) { th.push('<th>Query</th>'); }
     th.push('<th>Open in Genome Browser</th>');
     th.push('<th>Show</th>');
+    th.push('<th>Query match</th>');
     th.push('<th>Query coverage</th>');
     if (cfg.hasLocus) { th.push('<th>Locus</th>'); }
     th.push('<th>Score</th>');
@@ -731,9 +816,13 @@ function blatBuild() {
     columns.push({ data: null, orderable: false, className: 'actionsCol',
         render: (d, type, row) => (type === 'display' ? blatActionsCell(row) : '') });
     // Sorts by query start, then query end, so the hits line up along the query.
+    columns.push({ data: null, className: 'qPosCol',
+        render: (d, type, row) => (type === 'display' ? blatQueryPosCell(row) :
+            (type === 'filter' ? row.qStart + '-' + row.qEnd : row.qStart * 1e9 + row.qEnd)) });
+    // The coverage bar sorts the same way, by query start then end.
     columns.push({ data: null, className: 'covCol',
         render: (d, type, row) => (type === 'display' ? blatCoverageCell(row) :
-            (type === 'filter' ? row.qStart + '-' + row.qEnd : row.qStart * 1e9 + row.qEnd)) });
+            (type === 'filter' ? '' : row.qStart * 1e9 + row.qEnd)) });
     if (cfg.hasLocus) {
         columns.push({ data: 'locusText',
             render: (d, type, row) => (type === 'display' ? blatLocusCell(row) : (d || '')) });
@@ -775,9 +864,11 @@ function blatBuild() {
 
     $('#blatTsvBtn').on('click', function() {
         var shown = dt.rows({ search: 'applied', order: 'applied' }).data().toArray();
-        var base = cfg.multiQuery ? 'blatResults' :
-            'blat_' + String(cfg.queryName).replace(/[^A-Za-z0-9._-]+/g, '_');
-        blatDownloadText(blatHitsToTsv(shown, cfg.hasLocus), base + '.tsv',
+        // The assembly is in the file name, so the same query BLATed against several assemblies
+        // does not give several files with the same name.
+        var safe = s => String(s).replace(/[^A-Za-z0-9._-]+/g, '_');
+        var base = 'blat_' + safe(cfg.db) + (cfg.multiQuery ? '' : '_' + safe(cfg.queryName));
+        blatDownloadText(blatHitsToTsv(shown, cfg.hasLocus, cfg.db), base + '.tsv',
             'text/tab-separated-values');
     });
 
@@ -1075,9 +1166,12 @@ function blatFormBuild() {
     // Checkbox plus the browser's standard info icon.  Same SVG and same title +
     // convertTitleTagsToMouseovers mechanism as printInfoIcon()/printInfoIconSvg() in hg/lib/hui.c,
     // so these read identically to the info icons on every other Genome Browser page.
+    // The hidden boolshad.<name> field is what cgiMakeCheckBox() adds on the other CGIs: an
+    // unticked box sends nothing, so without it the cart would keep the box's last "on" forever.
     var check = (name, on, label, tip) =>
         `<span class="blatCheck"><label><input type="checkbox" name="${name}" ` +
         `id="blat_${name}"${on ? ' checked' : ''}>${label}</label>` +
+        `<input type="hidden" name="boolshad.${name}" value="0">` +
         `<span class="blatInfo" title="${htmlEncode(tip)}">${BLAT_INFO_SVG}</span></span>`;
 
     // "Keep results" starting state.  The cart (cfg.keepResults) only remembers the choice within a

@@ -11,6 +11,7 @@
 #include "hgTracks.h"
 #include "agpFrag.h"
 #include "agpGap.h"
+#include "quickLift.h"
 
 static int cmpAgpFrag(const void *va, const void *vb)
 /* Compare two agpFrags by chromStart. */
@@ -20,9 +21,27 @@ const struct agpFrag *b = *((struct agpFrag **)vb);
 return a->chromStart - b->chromStart;
 }
 
+static void agpFragLiftAdjust(void *item, boolean flipped, int clippedStart)
+/* Turn a lifted agpFrag around if the lift did. */
+{
+struct agpFrag *frag = item;
+if (flipped)
+    frag->strand[0] = (frag->strand[0] == '-') ? '+' : '-';
+}
+
 static void goldLoad(struct track *tg)
 /* Load up golden path from database table to track items. */
 {
+if (liftedInSpace(tg))
+    {
+    tg->items = quickLiftSqlLoadItems(tg->tdb, "gold", chromName, winStart, winEnd, NULL,
+                                      (void *)agpFragLoad, agpFragLiftAdjust, FALSE);
+    slSort(&tg->items, cmpAgpFrag);
+    tg->customPt = quickLiftSqlLoadItems(tg->tdb, "gap", chromName, winStart, winEnd, NULL,
+                                         (void *)agpGapLoad, NULL, FALSE);
+    slSort(&tg->customPt, bedCmp);
+    return;
+    }
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
@@ -52,6 +71,12 @@ slReverse(&gapList);
 sqlFreeResult(&sr);
 tg->customPt = gapList;
 hFreeConn(&conn);
+}
+
+boolean goldIsLoader(void (*loadItems)(struct track *tg))
+/* Is loadItems the golden path loader?  See hgTracks.h. */
+{
+return loadItems == goldLoad;
 }
 
 static void goldFree(struct track *tg)

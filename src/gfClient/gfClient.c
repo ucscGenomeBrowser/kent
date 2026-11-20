@@ -169,7 +169,7 @@ if (errCatch->gotError)
     if (gotConnection && isDynamic)
 	{
 	long et = clock1000() - enterMainTime;
-        if (et > NET_TIMEOUT_MS)
+        if (et > NET_TIMEOUT_DYNAMIC_BLAT_MS)
 	    errAbort("the dynamic server at %s:%s is taking too long to respond,\nperhaps overloaded at this time, try again later", hostName, portName);
         else if (et < NET_QUICKEXIT_MS)
 	    errAbort("the dynamic server at %s:%s is returning an error immediately,\nperhaps overloaded at this time, try again later", hostName, portName);

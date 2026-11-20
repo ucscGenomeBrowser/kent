@@ -1,0 +1,58 @@
+# #38819 -- bigBed and bigWig files over 2 GB made by bedToBigBed or bedGraphToBigWig have
+# a wrong size for the last block of their first zoom level, and the browser cannot draw
+# a view that reads that block.
+#
+# The cause was an int holding the zoom index offset in both programs; eb6f208cdf1 made it
+# a bits64 and, more to the point for this script, made bbiSummariesInRegion() (lib/bbiRead.c)
+# cap each zoom block at the start of its zoom level's index. That is what lets the browser
+# draw the 657 files already in /gbdb with the bad size (repairing the files is #38820).
+# eb6f208cdf1 reached genome-test on 2026-11-19 before this script was written, so it was
+# never an xfail; it was watched failing on builds without the fix instead (see proof).
+#
+# WHAT THE BUG LOOKS LIKE. The row is drawn, with the right name and height, but instead
+# of the graph hgTracks paints the bigWarn bar, 240,240,180 (undefinedYellowColor,
+# hg/hgTracks/simpleTracks.c), with "needLargeMem: trying to allocate 18446744069414...
+# bytes" written in it. The message is INSIDE the png, so every text check passes on the
+# broken build. That is why the assertion is a color check, as in rm38310.
+#
+# THE FIXTURE is ours, at ~/public_html/docentFixtures/rm38819/, and deliberately damaged.
+# A native track would not do: the hg19 ENCODE signal tracks that show this on a build
+# without the fix stop showing it the day #38820 repairs their files, and the script would
+# then pass on a build without the fix. rm38819good.bw and rm38819bad.bw hold the same
+# data; the bad one is a copy with the high 32 bits set on the last zoom-1 block size,
+# made by lib/tests/input/bbiZoomCap/corrupt.py, which is what the old programs wrote in a
+# 2-4 GB file. The good track is the control: it must draw the same way on every build.
+#
+# WHY THIS WINDOW. Zoom 1 of these files has reduction 8000 and zoom 2 has 32000.
+# hgTracks asks for half the bases per pixel, so it reads zoom 1 between 16,000 and 64,000
+# bases per pixel, and only then reaches the damaged last block, which spans
+# chr21:45,970,000-46,706,000. The window is 40 Mb ending at the end of chr21, so it
+# reads zoom 1 at any image width from 854 to 2400 px, measured on hgwbeta: docent's
+# default size and a person's browser both land in it. A narrower window reads the raw
+# data and passes on the broken build. The first link given out for this used
+# chr21:25,000,000-46,709,983, which showed the error at 854 px and not at 1600 px or wider.
+#
+# The hub declares `visibility full`, so there is no `track:` step: a hub track's cart
+# name carries a per-run hub_<n>_ prefix that `track:` cannot write.
+proof:
+  - "sandbox-ab 2026-11-19 -- fails at step 4 on hgwdev-braney (built 11-17, no fix): rm38819bad 240,240,180 for 80% of the row, rm38819good 0,0,200; passes on the #38819 ticket sandbox on port 48120 (hgTracks built from eb6f208cdf1). Also fails the same way on hgwbeta v506 and passes on genome-test"
+
+target: genome-test
+db: hg38
+position: chr21:6700000-46709983
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38819/hub.txt", db: hg38}
+  - go: chr21:6700000-46709983
+
+  # Setup, not the assertion: the broken build draws both rows too.
+  - expect:
+      rows: [rm38819good, rm38819bad]
+
+  # The assertion. Both rows draw the graph in the track color, and neither is a warning
+  # bar. On a build without the fix the bad row comes out 240,240,180.
+  - expect:
+      color:
+        - {track: rm38819good, is: "0,0,200", not: "240,240,180"}
+        - {track: rm38819bad,  is: "0,0,200", not: "240,240,180"}

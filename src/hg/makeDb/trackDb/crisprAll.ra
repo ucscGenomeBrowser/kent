@@ -5,6 +5,7 @@ longLabel CRISPR/Cas9 -NGG Targets, whole genome
 group genes
 type bigBed 9 +
 html crisprAll
+tags crispr
 itemRgb on
 mouseOverField _mouseOver
 scoreLabel MIT Guide Specificity Score

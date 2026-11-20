@@ -22,7 +22,9 @@ of the isoforms of a gene across tissues. This track is off by default.</li>
 Each isoform is drawn as a transcript, with the thick part showing the open
 reading frame predicted by SQANTI3. Isoforms are labeled with the gene name
 assigned by pigeon, and the isoform ID (e.g. PB.100940.3354) can be shown as a
-second label on the track settings page. Both the gene name and the isoform ID
+second label on the track settings page, as can the Ensembl transcript that
+SQANTI3 matched to the isoform. The mouseover shows the isoform ID and, for
+isoforms that match a known transcript, the Ensembl transcript ID. Both the gene name and the isoform ID
 can be typed into the position box. The color shows the SQANTI3 structural
 category, which compares the splice junctions of the isoform to the GENCODE
 transcripts:
@@ -49,11 +51,15 @@ transcripts:
 </table>
 <p>
 The isoforms can be filtered on the track settings page by structural category,
-by the SQANTI3 filter result (isoform or likely artifact, see Methods), by coding
+by the result of the standalone SQANTI3 filter (isoform or likely artifact, see
+Methods), by coding
 potential, by predicted nonsense-mediated decay and by the number of molecules,
 cells or tissues in which the isoform was found. No filter is active by default,
-so the 162,000 isoforms that the SQANTI3 rules filter classified as likely
-artifacts are shown too. When more than 200 kbp are shown, the track switches to
+so the 162,000 isoforms that the standalone SQANTI3 rules filter classified as
+likely artifacts are shown too. All isoforms in this track already passed the
+filter of pigeon (PacBio's version of SQANTI3, based on an older release) and
+are labeled "Pigeon filter: Isoform". The standalone SQANTI3 filter uses
+different rules and flags some of them as artifacts. When more than 200 kbp are shown, the track switches to
 a coverage graph.
 </p>
 <p>

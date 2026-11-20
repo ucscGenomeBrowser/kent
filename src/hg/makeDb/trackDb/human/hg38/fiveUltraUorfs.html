@@ -33,8 +33,9 @@ to the main CDS start:
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Items are colored by Kozak context strength, using the same color scheme as all other subtracks
-in this collection:
+Items are colored by Kozak context strength based on two specific positions in the genomic
+sequence, counted relative to the A of the ATG start codon: position &minus;3 (three bases
+before the A) and position +4 (one base after the G).
 </p>
 <table class="stdTbl">
   <tr>
@@ -56,7 +57,7 @@ in this collection:
 </table>
 
 <p>
-uORFs can span multiple exons. Each uORF borrows its exon/intron structure from an overlapping
+Separately, uORFs can span multiple exons. Each uORF's exon/intron structure comes from an overlapping
 MANE Select transcript. If no MANE transcript has introns that match the uORF's endpoints, the
 GENCODE comprehensive annotation is used instead. The source transcript is recorded in the
 <b>intronsSource</b> field (<tt>none</tt> if no matching transcript was found).
@@ -66,9 +67,16 @@ GENCODE comprehensive annotation is used instead. The source transcript is recor
 The track can be filtered by:
 </p>
 <ul>
-  <li>uORF type</li>
   <li>Kozak strength</li>
+  <li>uORF type</li>
 </ul>
+
+<p>
+Item names follow the pattern <tt>GENE_N</tt>, where N matches the uORF's rank within the gene
+(for example, <tt>KCNAB2_2</tt> is the uORF with rank 2 of 3 for KCNAB2). Rank 1 is the uORF
+closest to the main CDS start. Higher ranks are progressively further upstream, toward the
+5' cap.
+</p>
 
 <p>
 <b>Mouseover</b> shows the gene symbol, uORF type, rank within the gene, Kozak strength, and the
@@ -121,18 +129,17 @@ See Chaldebas et al. 2026 for full details.
 <p>
 The uORF reference BED file was obtained from the
 <a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA GitHub repository</a>
-(installed via <tt>5ULTRA-download-data</tt>; file <tt>uORFs.MANE.hg38.bed</tt>).
+(installed via <tt>5ULTRA-download-data</tt>, file <tt>uORFs.MANE.hg38.bed</tt>).
 Colors were remapped to distinguish Kozak strength (see Display Conventions). To recover exon/intron structure
-for uORFs that span introns, each feature was projected onto an overlapping MANE Select transcript
-using the <tt>addIntrons.py</tt> script in the kent source tree; a GENCODE v49 comprehensive
+for uORFs that span introns, each uORF was projected onto an overlapping MANE Select transcript
+using the <tt>addIntrons.py</tt> script in the kent source tree. A GENCODE v49 comprehensive
 bigBed was used as fallback when no MANE candidate could provide intact boundaries at the uORF
 endpoints. Of 22,567 uORFs, 3,861 received multi-block exon structure from MANE, 9 from GENCODE
-fallback, and 45 overlapped a GENCODE transcript but had no introns within the uORF range;
-18,652 remain as single-exon features whose genomic span contains no intron from any known host.
+fallback, and 45 overlapped a GENCODE transcript but had no introns within the uORF range.
+18,652 remain as single-exon uORFs whose genomic span contains no intron from any known host.
 Build steps are recorded in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/ncOrfs.txt"
-target="_blank">makedoc</a>;
-the processing scripts are at
+target="_blank">makedoc</a>. The processing scripts are at
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/ncOrfs"
 target="_blank">src/hg/makeDb/scripts/ncOrfs/</a>.
 </p>

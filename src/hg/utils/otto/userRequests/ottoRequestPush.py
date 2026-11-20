@@ -24,10 +24,10 @@ import atexit
 
 import ottoLib
 
-scriptDir = os.path.dirname(os.path.abspath(__file__))
-# share the live cron's lock so the two scripts cannot run concurrently
-# in the same cladeAsmHub directories
-lockPath = os.path.join(scriptDir, "ottoRequestPush.lock")
+# the one lock for the clade make chain in the otto kent tree, shared with
+# ottoBuildGenArkHub.py (and so pushContrib.sh) whoever runs them, so they
+# cannot run concurrently in the same cladeAsmHub directories
+lockPath = ottoLib.buildLockPath
 
 # UCSC native .over.chain.gz files get rsync'd to both hgdownload hosts.
 pushUser = "qateam"
@@ -66,16 +66,25 @@ def pushUcscChain(targetDb, queryDb):
     """rsync the .over.chain.gz to both hgdownload hosts under
     /goldenPath/<targetDb>/liftOver/.  targetDb must be a UCSC native db
     (the goldenPath tree only exists for native dbs); queryDb may be
-    GenArk or native.  Source filename uses dot separators (e.g.
-    ce11.GCA_000180635.4.over.chain.gz), destination filename uses
-    CamelCase (ce11ToGCA_000180635.4.over.chain.gz); rsync renames in
-    flight by giving the destination as a file path, not a directory.
-    -L dereferences the lastz.<queryDb> symlink to the dated build dir.
+    GenArk or native.  The source is the installed liftOver chain
+    bed/liftOver/<targetDb>To<QueryDb>.over.chain.gz, linked there by
+    both pipelines: installLinks() in ottoRequestWatch.sh (lastz/KegAlign)
+    and doMiniMap2.pl -liftTableLoad (minimap2).  Older lastz builds that
+    were never linked there fall back to the build's own
+    lastz.<queryDb>/axtChain/<targetDb>.<queryDb>.over.chain.gz.  The
+    destination filename is always the CamelCase form
+    (ce11ToGCA_000180635.4.over.chain.gz); rsync renames in flight by
+    giving the destination as a file path, not a directory.  -L
+    dereferences the symlinks to the dated build dir.
     Pre-creates the destination directory with a separate ssh + mkdir
     -p.  Returns True on success, False on any failure."""
     QueryDb = queryDb[:1].upper() + queryDb[1:]
-    src = ("/hive/data/genomes/%s/bed/lastz.%s/axtChain/%s.%s.over.chain.gz"
-           % (targetDb, queryDb, targetDb, queryDb))
+    src = ("/hive/data/genomes/%s/bed/liftOver/%sTo%s.over.chain.gz"
+           % (targetDb, targetDb, QueryDb))
+    if not os.path.isfile(src):
+        # older lastz builds that were never linked into bed/liftOver/
+        src = ("/hive/data/genomes/%s/bed/lastz.%s/axtChain/%s.%s.over.chain.gz"
+               % (targetDb, queryDb, targetDb, queryDb))
     if not os.path.isfile(src):
         print("# ERROR: pushUcscChain: missing source %s"
               % src, file=sys.stderr)

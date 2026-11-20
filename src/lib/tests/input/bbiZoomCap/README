@@ -1,0 +1,25 @@
+Inputs for bbiZoomCapTest.  refs #38819
+
+bedToBigBed and bedGraphToBigWig once kept the offset of the first zoom index in
+an int.  In a file over 2 GB the last block of the first zoom level then got a
+wrong size.  These files are small, so the damage is made by hand: corrupt.py
+writes the bad size into a copy of a good file.
+
+  zoomCap.bb, zoomCap.bw          good files
+  zoomCapHigh.bb, zoomCapHigh.bw  size has its high 32 bits set, as in a 2-4 GB file
+  zoomCapWrap.bb, zoomCapWrap.bw  offset + size wraps to 1, which a check written
+                                  as a sum would miss
+
+Made with:
+
+  printf "chrT\t300000\n" > t.sizes
+  awk 'BEGIN{OFS="\t"; for(i=0;i<300;i++){s=i*1000+(i*37)%400; print "chrT",s,s+50+(i*13)%300}}' > t.bed
+  awk 'BEGIN{OFS="\t"; for(i=0;i<300;i++){s=i*1000; print "chrT",s,s+500,(i%17)/4}}' > t.bedGraph
+  bedToBigBed -blockSize=4 -itemsPerSlot=16 -type=bed3 t.bed t.sizes zoomCap.bb
+  bedGraphToBigWig -blockSize=4 -itemsPerSlot=16 t.bedGraph t.sizes zoomCap.bw
+  python3 corrupt.py zoomCap.bb zoomCapHigh.bb zoomCapWrap.bb
+  python3 corrupt.py zoomCap.bw zoomCapHigh.bw zoomCapWrap.bw
+
+The small block sizes give the first zoom level several blocks and a two-level
+index.  The expected totals come from the text files: the bed covers 59,850 bases
+with no overlaps, and the bedGraph covers 150,000 bases with sumData 295,875.

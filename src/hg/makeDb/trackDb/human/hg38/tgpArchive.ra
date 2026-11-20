@@ -6,6 +6,9 @@ cartVersion 2
 visibility hide
 group varRep
 html ../tgpArchive
+tags population
+facet.consortia 1000 Genomes
+facet.variantType SNV/indel
 
     track tgpPhase3
     parent tgpArchive

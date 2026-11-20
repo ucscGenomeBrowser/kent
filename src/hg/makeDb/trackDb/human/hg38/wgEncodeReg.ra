@@ -7,6 +7,7 @@ longLabel Integrated Regulation from ENCODE3
 group regulation
 priority 1
 canPack On
+facet.consortia ENCODE
 pennantIcon snowflake.png ../goldenPath/newsarch.html#072226 "Please see the ENCODE4 Regulation track for the latest data. See news archive for details."
 
 include wgEncodeRegDnase.ra

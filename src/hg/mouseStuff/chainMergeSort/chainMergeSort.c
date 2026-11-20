@@ -233,5 +233,7 @@ else
     if (sameString(inputList,inp0))
 	remove(inp0);
     }
+if (fflush(stdout) != 0 || ferror(stdout))
+    errnoAbort("chainMergeSort: error writing output");
 return 0;
 }

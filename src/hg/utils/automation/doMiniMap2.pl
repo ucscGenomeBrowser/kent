@@ -22,7 +22,8 @@ use warnings;
 use strict;
 use FindBin qw($Bin);
 use lib "$Bin";
-use File::Basename qw(basename);
+use File::Basename qw(basename dirname);
+use Cwd qw(abs_path);
 use HgAutomate;
 use HgRemoteScript;
 use HgStepManager;
@@ -45,6 +46,9 @@ use vars qw/
     $opt_minimapSecondaryRatio
     $opt_chainRam
     $opt_chainCpu
+    $opt_chainMinScore
+    $opt_chainMatrix
+    $opt_chainLinearGap
     $opt_regenerateMash
     $opt_swap
     $opt_swapDir
@@ -73,13 +77,16 @@ my $minimapCpu = 8;		# -t N threads given to each minimap2 job
 # see the same kind of overlapping candidate alignments a lastz/blastz run
 # would give them, and can use genome-scale synteny context to arbitrate
 # ambiguous/duplicated regions -- rather than trusting minimap2's own local,
-# per-query-region primary/secondary call alone.  Defaults match minimap2's
-# own -N/-p defaults; only override via -minimapSecondaryN/-Ratio if you
-# have a specific reason to.
-my $minimapSecondaryN = 5;		# -N INT to minimap2
+# per-query-region primary/secondary call alone.  -N is left undef by
+# default so the asm5/asm10/asm20 preset's own -N (50) applies -- passing
+# minimap2's global default of 5 after -x would override the preset.  -p
+# matches minimap2's default.  Only override via -minimapSecondaryN/-Ratio
+# if you have a specific reason to.
+my $minimapSecondaryN;			# -N INT to minimap2, undef: preset's own
 my $minimapSecondaryRatio = 0.8;	# -p FLOAT to minimap2
 my $chainRam = '16g';		# -chainRam=Ng argument
 my $chainCpu = 1;		# -chainCpu=N argument
+my $chainLinearGap = 'medium';	# -chainLinearGap=loose|medium|filename
 # mash distance thresholds ($mashAsm5Max/$mashAsm10Max/$mashLastzMin/
 # $mashWarnMax) used to pick a preset (or reject the pair outright) come
 # from AssemblyDivergence.pm, shared with mashDistance.pl and anything
@@ -124,7 +131,8 @@ options:
                           default: $minimapCpu
     -ram Ng               Cluster ram size for minimap2, default: -ram=$ramG
     -minimapSecondaryN N  minimap2 -N: max secondary alignments retained per
-                          primary hit, default: $minimapSecondaryN.  Secondary
+                          primary hit, default: the -minimapPreset's own
+                          -N (50 for asm5/asm10/asm20).  Secondary
                           alignments are kept (not -secondary=no) so
                           axtChain/chainNet get the same kind of overlapping
                           candidate alignments a lastz run would give them,
@@ -136,6 +144,13 @@ options:
                           $minimapSecondaryRatio
     -chainRam  Ng  Cluster ram size for chain step, default: -chainRam=$chainRam
     -chainCpu  N   Cluster CPUs number for chain step, default: -chainCpu=$chainCpu
+    -chainMinScore n      Add -minScore=n to the axtChain command
+                          (default: axtChain's own, 1000)
+    -chainMatrix file     Add -scoreScheme=file to the axtChain command, as
+                          doBlastzChainNet.pl does with BLASTZ_Q
+                          (default: axtChain's own matrix)
+    -chainLinearGap type  Add -linearGap=<loose|medium|filename> to the
+                          axtChain command (default: $chainLinearGap)
     -regenerateMash       Force the mash divergence check to re-sketch and
                           overwrite even if a cached .msh (GenArk mashSketch/
                           cache or \$buildDir/mashDistance.txt) already
@@ -252,6 +267,9 @@ sub checkOptions {
 		      'minimapSecondaryRatio=f',
 		      'chainRam=s',
 		      'chainCpu=i',
+		      'chainMinScore=i',
+		      'chainMatrix=s',
+		      'chainLinearGap=s',
 		      'regenerateMash',
 		      'swap',
 		      'swapDir=s',
@@ -264,6 +282,16 @@ sub checkOptions {
   my $err = $stepper->processOptions();
   usage(1) if ($err);
   $dbHost = $opt_dbHost if ($opt_dbHost);
+  if ($opt_chainMatrix && ! -s $opt_chainMatrix) {
+    die "-chainMatrix file '$opt_chainMatrix' does not exist or is empty\n";
+  }
+  if ($opt_chainLinearGap) {
+    if ($opt_chainLinearGap !~ /^(loose|medium)$/ && ! -s $opt_chainLinearGap) {
+      die "-chainLinearGap must be loose, medium, or an existing file " .
+	  "(got '$opt_chainLinearGap')\n";
+    }
+    $chainLinearGap = $opt_chainLinearGap;
+  }
   if ($opt_minimapPreset) {
     $minimapPreset = $opt_minimapPreset;
     if ($minimapPreset !~ /^asm(5|10|20)$/) {
@@ -349,6 +377,9 @@ sub doAlign {
 
   my ($paraHub, $tSeqScratch, $qSeqScratch) = &getClusterSeqs();
 
+  # Only pass -N when explicitly requested, so the preset's own -N applies.
+  my $minimapNArg = defined($minimapSecondaryN) ? "-N $minimapSecondaryN " : "";
+
   # Unlike blat -fastMap, minimap2 does not need the query pre-split into
   # small chunks or an .ooc repeat mask -- it indexes and aligns whole
   # sequences directly.  We only partition on the target side, one job
@@ -409,7 +440,7 @@ else
   twoBitToFa \$targetSpec target.fa
 fi
 
-minimap2 -cx $minimapPreset -N $minimapSecondaryN -p $minimapSecondaryRatio -t $minimapCpu \\
+minimap2 -cx $minimapPreset ${minimapNArg}-p $minimapSecondaryRatio -t $minimapCpu \\
     target.fa $runDir/query.fa > tmpOut.paf
 
 pafToPsl -tSizes=$tSizes -qSizes=$qSizes tmpOut.paf tmpOut.psl
@@ -454,7 +485,7 @@ else
 fi
 printf "minimap2 " >> $buildDir/version.txt
 minimap2 --version >> $buildDir/version.txt
-printf "minimap2 -cx $minimapPreset -N $minimapSecondaryN -p $minimapSecondaryRatio -t $minimapCpu target.fa query.fa > out.paf\\n" >> $buildDir/version.txt
+printf "minimap2 -cx $minimapPreset ${minimapNArg}-p $minimapSecondaryRatio -t $minimapCpu target.fa query.fa > out.paf\\n" >> $buildDir/version.txt
 
 # Convert the whole query 2bit to fasta once; every target job aligns
 # against this same file.
@@ -499,6 +530,9 @@ sub doChain {
   # so the chain job list is simply the contents of $pafDir/*.psl.
   &HgAutomate::run("ls $pafDir/*.psl | xargs -n 1 basename > $runDir/pslParts.lst");
 
+  my $matrix = $opt_chainMatrix ? "-scoreScheme=$opt_chainMatrix" : "";
+  my $minScore = $opt_chainMinScore ? "-minScore=$opt_chainMinScore" : "";
+
   # script for a single job: chain one target-sequence's PSL.
   my $fh = &HgAutomate::mustOpen(">$runDir/job.sh");
   print $fh <<_EOF_
@@ -527,10 +561,10 @@ fi
 
 tmpOut=`mktemp -p \$TMPDIR doMm2.chain.XXXXXX`
 
-axtChain -verbose=0 -linearGap=medium -psl $pafDir/\$inPsl \\
+axtChain -verbose=0 $matrix $minScore -linearGap=$chainLinearGap -psl $pafDir/\$inPsl \\
     $tSeqScratch $qSeqScratch stdout \\
-| chainBridge -linearGap=medium stdin $tSeqScratch $qSeqScratch \\
-    \$tmpOut
+| chainAntiRepeat $tSeqScratch $qSeqScratch \\
+    stdin \$tmpOut
 mv \$tmpOut \$outChain
 chmod 664 \$outChain
 _EOF_
@@ -811,15 +845,28 @@ _EOF_
     my $accessionPath = &asmIdToPath($tAccession) . "/$tAccession";
     my $accLevelDir = "$HgAutomate::clusterData/asmHubs/$accessionPath";
     my $gbdbGenarkDir = "/gbdb/genark/$accessionPath";
+    # The links inside the hub-build directory are relative, so they stay
+    # correct wherever that tree is mounted or copied.  That only works
+    # when this build sits directly in $tBuildDir/trackData/, which is
+    # always the case for the default build directory and for the -swap
+    # directory:
+    my $trackData = "$tBuildDir/trackData";
+    my $buildParent = dirname($buildDir);
+    if ((abs_path($buildParent) // $buildParent) ne
+        (abs_path($trackData) // $trackData)) {
+      die "doLoad: build directory $buildDir is not in $trackData -- " .
+	"the relative liftOver/quickLift links in $tBuildDir need it there\n";
+    }
+    my $relRunDir = "../trackData/" . basename($buildDir) . "/axtChain";
     $bossScript->add(&linkToBash());
     $bossScript->add(<<_EOF_
-# GenArk assembly: link into the hub-build directory, then the
-# accession-level convenience symlinks, then the public gbdb symlinks --
+# GenArk assembly: link into the hub-build directory (relative links), then
+# the accession-level convenience symlinks, then the public gbdb symlinks --
 # same three-tier chain installLinks() uses.
 mkdir -p $tBuildDir/liftOver $tBuildDir/quickLift
-linkTo $runDir/$liftOverChainFile $tBuildDir/liftOver/$liftOverChainFile
-linkTo $runDir/$tDb.$qDb.quick.bb $tBuildDir/quickLift/$qDb.bb
-linkTo $runDir/$tDb.$qDb.quickLink.bb $tBuildDir/quickLift/$qDb.link.bb
+linkTo $relRunDir/$liftOverChainFile $tBuildDir/liftOver/$liftOverChainFile
+linkTo $relRunDir/$tDb.$qDb.quick.bb $tBuildDir/quickLift/$qDb.bb
+linkTo $relRunDir/$tDb.$qDb.quickLink.bb $tBuildDir/quickLift/$qDb.link.bb
 
 mkdir -p $accLevelDir
 linkTo $tBuildDir/liftOver $accLevelDir/liftOver

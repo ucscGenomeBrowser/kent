@@ -26,36 +26,35 @@
 # Request pacing is what MaveDB asked us for directly (Benjamin Capodanno, 21 Aug 2026 email):
 # metadata at no more than two concurrent requests, score and variant endpoints sequential,
 # page at 100k variants, and back off rather than retry immediately on a 504, because the
-# gateway gives up while their query keeps running. fetchMaveMd.py implements all of this.
+# gateway gives up while their query keeps running. mavemdFetch.py implements all of this.
 
-mkdir -p /hive/data/outside/mavemd/2026-09-17
-mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
-
-# Download: the collection, one metadata record per score set, and one flat CSV per score set
-# from score-sets/{urn}/variants/data. The CSV joins the assay score to the post-mapped HGVS
-# terms, ClinGen allele IDs, gnomAD frequencies, the most recent ClinVar release, and every
-# calibration's functional class and ACMG call. All calibrations are requested, research-use-only
-# ones included; only the newest of the twelve available ClinVar releases is requested.
-~/kent/src/hg/makeDb/scripts/mavemd/fetchMaveMd.py /hive/data/outside/mavemd/2026-09-17
-
-#   MaveDB API 2026.2.7.2
-#   Collection MaveMD: 84 score sets, modified 2026-04-30
-#   Downloaded 242.1 MB in 257 seconds
-
-# Build both tracks: the per-variant bigBed and the per-score-set heatmap.
-~/kent/src/hg/makeDb/scripts/mavemd/runBuild.sh \
-    /hive/data/outside/mavemd/2026-09-17 \
-    /hive/data/genomes/hg38/bed/mavemd/2026-09-17
-
-# Scripts (all in ~/kent/src/hg/makeDb/scripts/mavemd/):
-#   fetchMaveMd.py         download the collection from the API
+# OTTO JOB. The track is rebuilt weekly by ~/kent/src/hg/utils/otto/mavemd/, which also
+# holds the converters; there are no build scripts under makeDb/scripts any more. The
+# job's own README.md is the reference for what makes a release, what the checks are, and
+# how to run it by hand. In outline:
 #
-#   mavemdLib.py           calibration choice and color tables; also puts
-#                          utils/otto/mavedb on sys.path for mavedbPlace
+#   mavemdOtto.py          lock, fetch, decide, build, check, move the /gbdb links
+#   mavemdFetch.py         the cache; downloads only score sets whose fingerprint changed
+#   mavemdBuild.py         runs the two converters and makes the bigBeds
+#   mavemdLib.py           calibration choice and color tables; also puts the sibling
+#                          directory ../mavedb on sys.path for mavedbPlace
 #   makeMaveMdVariants.py  per-variant bed12+35 -> mavemdVar.bb
 #   makeMaveMdHeatmap.py   per-score-set bed12+20 -> mavemdMap.bb
 #   mavemdVariants.as, mavemdHeatmap.as
-#   runBuild.sh            driver for the two converters plus bedToBigBed
+#
+# Live copy /hive/data/outside/otto/mavemd/, with cache/ releases/ logs/ under it, and
+# /gbdb/hg38/mavemd/{mavemdVar.bb,mavemdMap.bb,version.txt} linked into the newest
+# release. Installing the MaveDB job also replaces the placement code this job runs, so a
+# mavedbPlace.py change wants a MaveMD rebuild check before `make install` in mavedb/.
+#
+# To run it by hand, in the live directory:
+#   mavemdOtto.py -n                     # say what a run would do, write nothing
+#   mavemdOtto.py --force                # build a release even if nothing changed
+#   mavemdOtto.py --refetch              # download everything again
+#   mavemdOtto.py --outDir <dir> --force # development run, /gbdb links under <dir>/gbdb
+#
+# The sections below describe how the data is turned into the two tracks. They were
+# written against the 2026-09-17 hand build, which is what the counts refer to.
 
 # COORDINATES. Placement is not in this directory: it is mavedbPlace.py, in
 # ~/kent/src/hg/utils/otto/mavedb, shared with the MaveDB track (#38396) so that a variant
@@ -293,7 +292,7 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # rather than silent. This build is mixed: 79 score sets served ClinVar 2026-01 and 4 served
 # 2025-01 (57,111 and 3,555 items respectively), on gnomAD v4.1 throughout. A single release
 # per build is not something to expect;
-# fetchMaveMd.py always asks for the newest ClinVar namespace the score set offers, so the
+# mavemdFetch.py always asks for the newest ClinVar namespace the score set offers, so the
 # release moves on its own between builds and is not pinned anywhere.
 
 # LINKOUTS. The urls setting linkifies publicationUrl, scoreSet (to its MaveDB page) and
@@ -311,12 +310,12 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 #   mavemdMap.bb        84 items, 32 fields (bed12+20)
 #
 # Install: the bigDataUrl and dataVersion settings point at /gbdb, so the links have to be
-# repointed at each new dated build directory. runBuild.sh does not do this.
-mkdir -p /gbdb/hg38/mavemd
-cd /gbdb/hg38/mavemd
-ln -sf /hive/data/genomes/hg38/bed/mavemd/2026-09-17/mavemdVar.bb mavemdVar.bb
-ln -sf /hive/data/genomes/hg38/bed/mavemd/2026-09-17/mavemdMap.bb mavemdMap.bb
-ln -sf /hive/data/genomes/hg38/bed/mavemd/2026-09-17/version.txt  version.txt
+# repointed at each new build. The otto job does this itself, writing each link to a temp
+# name and renaming it, so there is no moment when a link is missing. These are the three
+# names it writes, and the only ones it touches:
+#   /gbdb/hg38/mavemd/mavemdVar.bb
+#   /gbdb/hg38/mavemd/mavemdMap.bb
+#   /gbdb/hg38/mavemd/version.txt
 
 # Load trackDb. "make DBS=hg38" writes the per-user sandbox tables (trackDb_$USER); the track
 # is gated "include mavemd.ra alpha" so "make alpha DBS=hg38" is what puts it on dev.
@@ -329,18 +328,17 @@ make DBS=hg38
 # has no usable single-substitution protein term, and 7,321 from the experiment's own
 # reference term.
 
-# Version file for the dataVersion trackDb setting.
-cd /hive/data/genomes/hg38/bed/mavemd/2026-09-17
-python3 -c "
-import json
-c=json.load(open('/hive/data/outside/mavemd/2026-09-17/collection.json'))
-api=open('/hive/data/outside/mavemd/2026-09-17/apiVersion.txt').read().split()[-1]
-open('version.txt','w').write('MaveDB collection modified %s (MaveDB API %s)\n'%(c['modificationDate'],api))
-"
+# Version file for the dataVersion trackDb setting: written by the otto job at release
+# time, as "MaveDB API <version>, data retrieved <date>, converted at UCSC".
 
 # trackDb: human/hg38/mavemd.ra, included from trackDb.ra as "include mavemd.ra alpha".
 # The filterValues blocks in that file are generated by makeMaveMdVariants.py --raFragment;
-# paste mavemdFilters.ra in rather than maintaining the value lists by hand. Paste it INSIDE
+# paste mavemdFilters.ra in rather than maintaining the value lists by hand. otto cannot do
+# this, because trackDb is in git, so each release compares the values the data now has
+# against the committed stanza and names anything missing in the cron mail
+# (mavemdBuild.filterDrift). Note that a value containing a comma is escaped by doubling
+# the comma, which the ClinVar term "Pathogenic/Likely pathogenic/Pathogenic, low
+# penetrance" relies on. Paste it INSIDE
 # the stanza with no blank lines: a blank line ends a .ra stanza, so blank separators between
 # the filter groups silently orphan every setting after the first one. hgTrackDb loads without
 # complaint and the filters just never appear in hgTrackUi. Check after a make with:

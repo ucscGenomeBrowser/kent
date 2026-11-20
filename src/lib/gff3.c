@@ -969,6 +969,8 @@ for (i = 0; i < numAnns; i++)
     if (g3aPrev != NULL)
         g3aPrev->nextPart = featAnns[i];
     featAnns[i]->prevPart = g3aPrev;
+    featAnns[i]->nextPart = NULL;
+    g3aPrev = featAnns[i];
     }
 return g3aHead;
 }

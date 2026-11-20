@@ -29,6 +29,68 @@ var geneExonExp = /^[\s]*([A-Za-z][A-Za-z0-9._-]*)[\s]+exon[\s]+([0-9]+)[\s]*$/i
 // compact exon notation: "TP53:e.5", "NM_000546:e.5+2", "BRCA2:e.10-3"
 var geneExonCoordExp = /^[\s]*([A-Za-z0-9._-]+):e\.([0-9]+)([+-][0-9]+)?[\s]*$/i;
 
+// The largest coordinate a genome position can carry: the browser stores them
+// in 32 bit signed ints, so a bigger number is not a position at all.
+var maxBedCoord = 2147483647;
+
+function bedRangeParts(spec) {
+    /* The chrom, start and end a position string names, still as text, or null
+     * when it is not shaped like a position. A single base gives start == end. */
+    if (!spec) {
+        return null;
+    }
+    var match = canonicalRangeExp.exec(spec);
+    if (match) {
+        return {chrom: match[1], start: match[2], end: match[3]};
+    }
+    match = singleBaseExp.exec(spec);
+    if (match) {
+        return {chrom: match[1], start: match[2], end: match[2]};
+    }
+    return null;
+}
+
+function bedRangeProblem(spec) {
+    /* Say why spec cannot be used as a genome position, or return null when it
+     * can. Wording is for someone typing into a position box, and names the
+     * thing that is actually wrong rather than restating the format. Whether
+     * the sequence exists is a question only the server can answer. */
+    var parts = bedRangeParts(spec);
+    var format = "Write the position as chr1:1000-2000, or chr1:1000 for a single base.";
+    if (parts === null) {
+        return format;
+    }
+    var start = parseInt(parts.start.replace(/,/g, ""), 10);
+    var end = parseInt(parts.end.replace(/,/g, ""), 10);
+    if (isNaN(start) || isNaN(end)) {
+        return format;
+    }
+    if (start > maxBedCoord || end > maxBedCoord) {
+        return "Position out of range on " + parts.chrom + ".";
+    }
+    if (start < 1) {
+        return "Positions count from base 1, so " + parts.start + " is not a start.";
+    }
+    if (end < start) {
+        return "The end has to come after the start. Swap the two numbers.";
+    }
+    return null;
+}
+
+function parseBedRange(spec) {
+    /* Read a browser position string into a BED range {chrom, start, end}, or
+     * return null when spec cannot be one. A single base is taken as a one base
+     * range, and the start comes back 0-based. bedRangeProblem says why a
+     * string was turned down. */
+    if (bedRangeProblem(spec) !== null) {
+        return null;
+    }
+    var parts = bedRangeParts(spec);
+    return {chrom: parts.chrom,
+            start: parseInt(parts.start.replace(/,/g, ""), 10) - 1,
+            end: parseInt(parts.end.replace(/,/g, ""), 10)};
+}
+
 function createInfoIcon(text) {
     /* Create an info icon (i in circle) with tooltip text.
      * Returns a span element containing the SVG icon.
@@ -1007,10 +1069,11 @@ function notifBoxSetup(cgiName, keyName, msg, skipCloseButton) {
     });
 }
 
-function notifBoxOnce(msg, id) {
+function notifBoxOnce(msg, id, firstButton) {
 /* Show a notification that is meant for this page only, e.g. to say what just happened.
  * The message is gone on the next page anyway, but it can come back on a later page
- * (the next session load), so "Don't show again" keeps it away for good in this web browser. */
+ * (the next session load), so "Don't show again" keeps it away for good in this web browser.
+ * firstButton, if given, is the HTML of a button that goes in front of Close. */
     let boxId = id + "notifBoxOnce";
     let lsKey = "notifBoxOnce_" + id;
     if (document.getElementById(boxId))
@@ -1025,7 +1088,8 @@ function notifBoxOnce(msg, id) {
     box.className = "notifBox notifBoxOnce";
     box.id = boxId;
     box.innerHTML = msg +
-        "<div style='text-align: center'><button id='" + id + "notifyOnceHide'>Close</button>&nbsp;" +
+        "<div style='text-align: center'>" + (firstButton ? firstButton + "&nbsp;" : "") +
+        "<button id='" + id + "notifyOnceHide'>Close</button>&nbsp;" +
         "<button id='" + id + "notifyOnceHideForever'>Don't show again</button></div>";
     let parentEl = document.getElementById('TrackHeaderForm');
     if (!parentEl)
@@ -1521,6 +1585,38 @@ if (db.startsWith("hub_")) {
 return retDb;
 }
 
+function dbUrlArgs(db)
+{
+// Return the URL arguments, already encoded, that open assembly db in any cart.  Use them in a link
+// that leaves the cart (no hgsid): a hub assembly's db=hub_<id>_<name> only works in a cart
+// connected to that hub, elsewhere the CGI opens the default assembly.  For the page's own hub
+// assembly, web.c's menuBar() puts the right arguments into hubDbUrlArgs, from
+// hubConnectDbUrlArgs(): db=<bare name> for a curated or GenArk assembly, else hubUrl=&genome=.
+    if (window.hubDbUrlArgs && window.hubDbUrlArgs.db === db)
+        return window.hubDbUrlArgs.args;
+    return "db=" + encodeURIComponent(db);
+}
+
+function urlWithPortableDb(url)
+{
+// Return url with its db= argument replaced by dbUrlArgs(), so the link opens the same assembly
+// in any cart.  Only that argument is touched: the others keep their order and encoding, and a
+// hubUrl= already in the url stays, since the cart connects every hubUrl it is given.
+    var m = url.match(/([?&])db=([^&#]*)/);
+    if (!m)
+        return url;
+    var db;
+    try {
+        db = decodeURIComponent(m[2].replace(/\+/g, " "));
+    } catch (e) {
+        return url;
+    }
+    var args = dbUrlArgs(db);
+    if (args === "db=" + encodeURIComponent(db))
+        return url;
+    return url.replace(m[0], m[1] + args);
+}
+
 function getDb()
 {
     var db = normed($("input[name='db']").first());
@@ -1876,7 +1972,7 @@ function gtexTransformChanged(name)
 
     // check log transform
     var logCheckbox = $("input[name='" + name + ".logTransform']");
-    var isLogChecked = logCheckbox.attr('checked');
+    var isLogChecked = logCheckbox.prop('checked');
 
     // enable/disable view limits
     var maxTextbox = $("input[name='" + name + ".maxViewLimit']");
@@ -2296,7 +2392,7 @@ function setCheckboxList(list, value)
 { // set value of all checkboxes in semicolon delimited list
     var names = list.split(";");
     for (var i=0; i < names.length; i++) {
-        $("input[name='" + names[i] + "']").attr('checked', value);
+        $("input[name='" + names[i] + "']").prop('checked', value);
     }
 }
 
@@ -3276,7 +3372,7 @@ var findTracks = {
             $(hiddenVis).val($(seenVis).val());
         else {
             var selCb = $("input#"+trackName+"_sel_id");
-            $(selCb).attr('checked',false);    // Can't set these to [] because that means default
+            $(selCb).prop('checked',false);    // Can't set these to [] because that means default
             $(seenVis).attr('disabled',true);  // setting is used. However, we're explicitly hiding!
             var needSel = (tdb.parentTrack !== undefined && tdb.parentTrack !== null);
             if (needSel) {
@@ -3310,19 +3406,21 @@ var findTracks = {
         if (shouldPack
         &&  tdb.shouldPack !== undefined && tdb.shouldPack !== null && !tdb.shouldPack)
             shouldPack = false;
-        var checked = $(selCb).attr('checked');
+        // prop, not attr: in jQuery 3 attr() reads the HTML attribute, which is the state the
+        // page was drawn with, not what the user clicked.  refs #38764
+        var checked = $(selCb).prop('checked');
 
         // First deal with seenVis control
         if (checked) {
             $(seenVis).attr('disabled', false);
-            if ($(seenVis).attr('selectedIndex') === 0) {
+            if ($(seenVis).prop('selectedIndex') === 0) {
                 if (shouldPack)
-                    $(seenVis).attr('selectedIndex',3);  // packed
+                    $(seenVis).prop('selectedIndex',3);  // packed
                 else
-                    $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
+                    $(seenVis).prop('selectedIndex',$(seenVis).prop('length') - 1);
             }
         } else {
-            $(seenVis).attr('selectedIndex',0);  // hide
+            $(seenVis).prop('selectedIndex',0);  // hide
             $(seenVis).attr('disabled', true );
         }
 
@@ -3406,7 +3504,7 @@ var findTracks = {
     _checkAll: function (check)
     {   // Checks/unchecks all found tracks.
         var selCbs = $('input.selCb');
-        $(selCbs).attr('checked',check);
+        $(selCbs).prop('checked',check);
 
         // All should have their vis enabled/disabled appropriately (false means don't update cart)
         $(selCbs).each( function(i) { findTracks.clickedOne(this,false); });
@@ -3461,7 +3559,7 @@ var findTracks = {
     {   // Clear found tracks and all input controls
         findTracks.clearFound();
         $('input[type="text"]').val(''); // This will always be found
-        $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
+        $('select.mdbVal').prop('selectedIndex',0); // Should be 'Any'
         $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
             //$(this).dropdownchecklist("refresh");  // requires v1.1
             $(this).dropdownchecklist("destroy");
@@ -3469,8 +3567,8 @@ var findTracks = {
             ddcl.setup(this,'noneIsAll');
         });
 
-        $('select.groupSearch').attr('selectedIndex',0);
-        $('select.typeSearch').attr('selectedIndex',0);
+        $('select.groupSearch').prop('selectedIndex',0);
+        $('select.typeSearch').prop('selectedIndex',0);
         //findTracks.searchButtonsEnable(false);
         return false;
     },
@@ -3552,7 +3650,7 @@ var findTracks = {
                         $(tr).after( newTr );
                         element = $(newTr).find("select.mdbVar")[0];
                         if (element)
-                            $(element).attr('selectedIndex',-1); // chrome needs this after 'after'
+                            $(element).prop('selectedIndex',-1); // chrome needs this after 'after'
                     }
                 });
                 if (table)
@@ -4019,83 +4117,81 @@ var dragReorder = {
                 // currentMapItem gets set by mapItemMapOver.   This is just backup
             }
 
-            if (typeof greyBarIcons !== 'undefined' && greyBarIcons === true) {
-                // show the gear icon over the grey bar to bring up the context menu
-                let tdBtn = document.getElementById("td_btn_" + id);
-                if (tdBtn) {
-                    let span = document.getElementById("gear_btn_" + id);
-                    if (span) {
-                        // hide any gears that may be present from dragging
-                        $(document.querySelectorAll("[id^=gear_btn]")).hide();
-                        $(span).show();
-                        if (!span.dataset.alreadySetup) {
-                            tdBtn.style.position = "relative";
-                            let tdbKey = tdBtn.id.replace("td_btn_","");
-                            let tdb = hgTracks.trackDb[tdbKey];
-                            let tooltip = " click or right click to configure... drag to reorder";
-                            if (typeof tdb.parentLabel !== 'undefined') {
-                                addMouseover(span, htmlEncode(tdb.parentLabel + tooltip + " highlighted subtracks"));
-                            } else {
-                                addMouseover(span, htmlEncode(tdb.shortLabel + tooltip));
-                            }
-                            span.addEventListener("click", (e) => {
-                                // trigger a click on the <a> of the td
-                                e.preventDefault();
-                                e.stopPropagation();
-                                e.stopImmediatePropagation();
-                                const clickEvent = new MouseEvent("click", {
-                                    bubbles: true,
-                                    cancelable: true,
-                                    view: window,
-                                    clientX: tdBtn.getBoundingClientRect().left + 15,
-                                    clientY: tdBtn.getBoundingClientRect().top,
-                                    button: 1,
-                                });
-                                tdBtn.children[0].dispatchEvent(clickEvent);
-                            });
-                            let tdp = tdBtn.querySelector("p.btn");
-                            if (tdp) {
-                                span.addEventListener("pointerenter", (e) => {
-                                    // trigger a mouseover on the actual btn
-                                    dragReorder.buttonMouseOver.call(tdp, e);
-                                });
-                                span.addEventListener("pointerleave", (e) => {
-                                    dragReorder.buttonMouseOut.call(tdp, e);
-                                });
-                            }
-                            // prevent attaching multiple events every time the tr is moused over
-                            span.dataset.alreadySetup = "true";
+            // show the gear icon over the grey bar to bring up the context menu
+            let tdBtn = document.getElementById("td_btn_" + id);
+            if (tdBtn) {
+                let span = document.getElementById("gear_btn_" + id);
+                if (span) {
+                    // hide any gears that may be present from dragging
+                    $(document.querySelectorAll("[id^=gear_btn]")).hide();
+                    $(span).show();
+                    if (!span.dataset.alreadySetup) {
+                        tdBtn.style.position = "relative";
+                        let tdbKey = tdBtn.id.replace("td_btn_","");
+                        let tdb = hgTracks.trackDb[tdbKey];
+                        let tooltip = " click or right click to configure... drag to reorder";
+                        if (typeof tdb.parentLabel !== 'undefined') {
+                            addMouseover(span, htmlEncode(tdb.parentLabel + tooltip + " highlighted subtracks"));
+                        } else {
+                            addMouseover(span, htmlEncode(tdb.shortLabel + tooltip));
                         }
+                        span.addEventListener("click", (e) => {
+                            // trigger a click on the <a> of the td
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            const clickEvent = new MouseEvent("click", {
+                                bubbles: true,
+                                cancelable: true,
+                                view: window,
+                                clientX: tdBtn.getBoundingClientRect().left + 15,
+                                clientY: tdBtn.getBoundingClientRect().top,
+                                button: 1,
+                            });
+                            tdBtn.children[0].dispatchEvent(clickEvent);
+                        });
+                        let tdp = tdBtn.querySelector("p.btn");
+                        if (tdp) {
+                            span.addEventListener("pointerenter", (e) => {
+                                // trigger a mouseover on the actual btn
+                                dragReorder.buttonMouseOver.call(tdp, e);
+                            });
+                            span.addEventListener("pointerleave", (e) => {
+                                dragReorder.buttonMouseOut.call(tdp, e);
+                            });
+                        }
+                        // prevent attaching multiple events every time the tr is moused over
+                        span.dataset.alreadySetup = "true";
                     }
                 }
+            }
 
-                // add an 'x' icon in the label area to hide the track
-                let tdSide = document.getElementById("td_side_" + id);
-                if (tdSide) {
-                    // mouseover event fires if you stop moving the mouse while still
-                    // hovering the element and then move it again, don't make
-                    // duplicate btns in that case
-                    let btn = document.getElementById("close_btn_" + id);
-                    if (btn) {
-                        // hide any shown 'x' buttons from dragging
-                        $(document.querySelectorAll("[id^=close_btn]")).hide();
-                        $(btn).show();
-                        if (!btn.dataset.alreadySetup) {
-                            addMouseover(btn, btn.title);
-                            tdSide.style.position = "relative";
-                            if (hgTracks && hgTracks.revCmplDisp) {
-                                // set up 'x' icon to the right
-                                btn.classList.add("hgTracksCloseIconRight");
-                            } else {
-                                // set up 'x' icon to the left
-                                btn.classList.add("hgTracksCloseIconLeft");
-                            }
-                            btn.addEventListener("click", (e) => {
-                               rightClick.hideTracks([id]);
-                            });
-                            // prevent attaching multiple events every time the tr is moused over
-                            btn.dataset.alreadySetup = "true";
+            // add an 'x' icon in the label area to hide the track
+            let tdSide = document.getElementById("td_side_" + id);
+            if (tdSide) {
+                // mouseover event fires if you stop moving the mouse while still
+                // hovering the element and then move it again, don't make
+                // duplicate btns in that case
+                let btn = document.getElementById("close_btn_" + id);
+                if (btn) {
+                    // hide any shown 'x' buttons from dragging
+                    $(document.querySelectorAll("[id^=close_btn]")).hide();
+                    $(btn).show();
+                    if (!btn.dataset.alreadySetup) {
+                        addMouseover(btn, btn.title);
+                        tdSide.style.position = "relative";
+                        if (hgTracks && hgTracks.revCmplDisp) {
+                            // set up 'x' icon to the right
+                            btn.classList.add("hgTracksCloseIconRight");
+                        } else {
+                            // set up 'x' icon to the left
+                            btn.classList.add("hgTracksCloseIconLeft");
                         }
+                        btn.addEventListener("click", (e) => {
+                           rightClick.hideTracks([id]);
+                        });
+                        // prevent attaching multiple events every time the tr is moused over
+                        btn.dataset.alreadySetup = "true";
                     }
                 }
             }

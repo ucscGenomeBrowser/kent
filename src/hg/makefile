@@ -18,6 +18,8 @@ ifdef LOWELAB
 endif
 
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf utils/pslToBigPsl utils/hubCheck
+# regionsToChain builds a multi-region space, refs #37788
+BROWSER_LOADERS += utils/regionsToChain
 
 # encode3/encodeDataWarehouse disabled: htslib sam_write1 now warn_unused_result,
 # breaking -Werror in edwBamFilter/edwBamRemoveChrom/edwBamStats.

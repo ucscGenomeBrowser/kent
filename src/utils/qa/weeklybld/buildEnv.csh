@@ -1,22 +1,25 @@
 # set for preview 1: move date and vNNN from REVIEWDAY to LASTREVIEWDAY
-setenv REVIEWDAY 2026-10-05                     # v505 preview
-setenv LASTREVIEWDAY 2026-09-07                     # v504 preview
+setenv REVIEWDAY 2026-11-16                     # v507 preview
+setenv LASTREVIEWDAY 2026-10-26                     # v506 preview
 setenv previewSubversion       # empty string unless mistake, otherwise .1 etc
 
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
-setenv REVIEW2DAY  2026-10-12               # v505 preview2
-setenv LASTREVIEW2DAY  2026-09-14               # v504 preview2
+setenv REVIEW2DAY  2026-11-02               # v506 preview2
+setenv LASTREVIEW2DAY  2026-10-12               # v505 preview2
 setenv preview2Subversion      # empty string unless mistake, otherwise .1 etc
 
 # set these three for final build:  increment NN and copy date from TODAY to LASTWEEK
-setenv BRANCHNN 505                    # increment for new build
-setenv TODAY 2026-10-19                     # v505 final
-setenv LASTWEEK 2026-09-21                     # v504 final
+setenv BRANCHNN 506                    # increment for new build
+setenv TODAY 2026-11-09                     # v506 final
+setenv LASTWEEK 2026-10-19                     # v505 final
 
 setenv baseSubversion                  # empty string unless mistake, otherwise .1 etc (warning: fixed for _base but not _branch)
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
+# build logs and build state live outside the kent tree, so git status stays clean
+setenv BUILDLOGS ${BUILDHOME}/logs
+setenv BUILDSTATE ${BUILDHOME}/state
 setenv REPLYTO clmfisch@ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.gi.ucsc.edu:/data/git/kent.git

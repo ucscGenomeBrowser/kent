@@ -60,6 +60,7 @@
 #include "cartTrackDb.h"
 #include "quickLift.h"
 #include "portable.h"
+#include "multiRegionSpace.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -1563,6 +1564,7 @@ if (bigDataUrl != NULL)
              startsWithWord("bigMaf", type) ||
              startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
              startsWithWord("bigLolly", type) || startsWithWord("bigRmsk",type) ||
+             (multiRegionSpacesEnabled() && startsWithWord("bigBaseView", type)) ||
              startsWithWord("bigMethyl", type))
         {
         /* Just open and close to verify file exists and is correct type. */
@@ -1853,6 +1855,12 @@ if (!inited)
 return hashLookup(vettedHash, track) != NULL;
 }
 
+boolean trackHubQuickLiftVetted(char *track)
+/* Has this track's name handler been tested with quickLift?  See trackHub.h. */
+{
+return isVetted(trackHubSkipHubName(track));
+}
+
 static bool isParentVisible(struct cart *cart, struct trackDb *tdb)
 // Are this track's parents visible?
 {
@@ -2005,14 +2013,13 @@ return startsWithNoCase("bigPsl", type) ||
        startsWithNoCase("psl ", type);
 }
 
-static boolean validateOneTdb(struct cart *cart, char *db, struct trackDb *tdb, struct trackDb **badList)
-/* Make sure the tdb is a track type we grok.  badList may be NULL to validate
- * silently (no user-facing complaint about non-liftable types). */
+boolean trackHubQuickLiftCanCarry(struct cart *cart, struct trackDb *tdb)
+/* Can quickLift carry a track of this type?  See trackHub.h. */
 {
 // trackDb types are matched without regard to case since that's how the rest of the
 // browser reads them (some trackDb stanzas say "bigbed" rather than "bigBed").
-if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
-    !( startsWithNoCase("bigBed", tdb->type) || \
+return !sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) &&
+     ( startsWithNoCase("bigBed", tdb->type) || \
        startsWithNoCase("bigWig", tdb->type) || \
        startsWithNoCase("bigDbSnp", tdb->type) || \
        startsWithNoCase("bigGenePred", tdb->type) || \
@@ -2029,7 +2036,14 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        ((sameWord("rmsk", tdb->type) || startsWithNoCase("bigRmsk", tdb->type)) &&
         quickLiftRmskEnabled(cart)) ||
        sameWord("bed", tdb->type) ||
-       startsWithNoCase("bed ", tdb->type)))
+       startsWithNoCase("bed ", tdb->type));
+}
+
+static boolean validateOneTdb(struct cart *cart, char *db, struct trackDb *tdb, struct trackDb **badList)
+/* Make sure the tdb is a track type we grok.  badList may be NULL to validate
+ * silently (no user-facing complaint about non-liftable types). */
+{
+if (!trackHubQuickLiftCanCarry(cart, tdb))
     {
     if (badList != NULL)
         slAddHead(badList, tdb);

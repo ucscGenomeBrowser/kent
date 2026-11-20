@@ -83,6 +83,11 @@
 #   Functional-worksheet.xlsx        CSpec §PS3/BS3 (Table S3; 4,193 missense)
 #   splicing_worksheet.xlsx          CSpec §PVS1   (Table S1; 1,061 splice rows
 #                                                  → 120 canonical ±1/±2 SNVs)
+#   PVS1-Splicing-Worksheet_2026-11.xlsx  VCEP's updated Table S1, from Megan
+#                                    Frone 2026-11 (RM #37399 attachment). Used
+#                                    by tp53PVS1Splice.py in place of
+#                                    splicing_worksheet.xlsx. Only change:
+#                                    c.74+1G>C PVS1_Strong -> PVS1.
 #   single_aa_bayesdel.xlsx          VCEP single-aa deletion BayesDel (415 rows)
 #
 # Per-paper functional source files (PMC + NCI):

@@ -18,7 +18,7 @@ fi
 # curl -I "${jsonDownload}"
 # ls -og "${thisJson}"
 
-export nowTsv="`pwd`/quick.orderList.tsv"
+export nowTsv="`pwd`/tsv.quick.orderList"
 
 rm -f "${nowTsv}"
 

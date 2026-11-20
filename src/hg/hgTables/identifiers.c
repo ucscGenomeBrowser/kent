@@ -17,6 +17,7 @@
 #include "web.h"
 #include "wikiTrack.h"
 #include "htmshell.h"
+#include "myVariants.h"
 
 
 
@@ -127,7 +128,8 @@ hPrintf("(The \"data format description\" button shows more information about "
 	"the fields in the data.)\n");
 
 // on a browserbox, db is on the UCSC server, so cannot select into db, even if temporary
-if (!isCustomTrack(curTable) && !hIsBrowserbox() && (conn == NULL || sqlCanCreateTemp(conn)))
+if (!isCustomTrack(curTable) && !isMyVariantsTrack(curTable) && !hIsBrowserbox()
+    && (conn == NULL || sqlCanCreateTemp(conn)))
     {
     struct slName *exampleList = NULL, *ex;
     hPrintf("Some example values:<BR>\n");
@@ -326,7 +328,8 @@ static struct hash *getAllPossibleIds(struct sqlConnection *conn,
  * so that we can check the validity of pasted/uploaded identifiers. */
 {
 // this assumes that there is a knownGene table even if the track is a bigGenePred
-if (isCustomTrack(curTable) || isLongTabixTable(curTable) || isBamTable(curTable) || isVcfTable(curTable, NULL) ||
+if (isCustomTrack(curTable) || isMyVariantsTrack(curTable) ||
+    isLongTabixTable(curTable) || isBamTable(curTable) || isVcfTable(curTable, NULL) ||
     (differentString("knownGene", curTable) && isBigBed(database, curTable, curTrack, ctLookupName)))
     return NULL;
 

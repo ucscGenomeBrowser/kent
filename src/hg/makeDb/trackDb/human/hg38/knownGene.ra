@@ -2,6 +2,7 @@ track knownGene
 table knownGene
 shortLabel GENCODE V50
 longLabel GENCODE V50
+facet.consortia GENCODE
 #parent knownGeneArchive
 priority 1
 #priority 5

@@ -13,9 +13,14 @@ resolves it:
     $OTTO_KENT_TREE  (default /hive/data/outside/genark/ottoKent/kent)
 
 Used by:
-  ottoRequestPush2.py     (lib-using rewrite of ottoRequestPush.py)
+  ottoRequestPush.py      (cron: push the status=5 liftOver requests)
   ottoBuildGenArkHub.py   (manual driver: rebuild hub files for a list
-                           of GenArk accessions)
+                           of GenArk accessions, also run by pushContrib.sh)
+
+Several users run these against the one shared otto kent tree, so
+importing this module sets umask 002 (files they leave there stay
+group-writable for the 'genecats' group), and buildLockPath is the one
+lock for the clade make chain in that tree, whoever runs it.
 """
 
 import fcntl
@@ -34,6 +39,19 @@ gcPattern = re.compile(r"^GC[AF]_")
 kentTree = os.environ.get(
     "OTTO_KENT_TREE", "/hive/data/outside/genark/ottoKent/kent")
 
+# Every script using this module writes into the shared otto kent tree
+# (git, tsv.otto, the make logs); umask 002 keeps what it leaves there
+# group-writable whatever the user's or cron's own umask is.
+os.umask(0o002)
+
+# The one lock for the clade make chain in the otto kent tree, held by
+# ottoRequestPush.py (cron) and ottoBuildGenArkHub.py, and waited on by
+# pushContrib.sh.  On local disk, as all of them run on hgwdev: flock on
+# an NFS file is emulated with POSIX locks.  Opened read-only (see
+# acquireSingletonLock()) so any user can lock a file another user
+# created.
+buildLockPath = "/dev/shm/ottoGenArkBuild.lock"
+
 
 def acquireSingletonLock(lockPath, exitOnLocked=True):
     """Ensure only one instance holding lockPath runs at a time.  Holds
@@ -42,24 +60,35 @@ def acquireSingletonLock(lockPath, exitOnLocked=True):
     cleanup is needed.  Returns the open file handle, which the caller
     must keep alive.
 
+    The lock is taken on a read-only descriptor, so it works for any
+    user whatever the lock file's owner and mode; flock does not need
+    write access.  The PID is written into the file for information
+    only, when this user can write it.
+
     exitOnLocked=True (cron-style): sys.exit(0) when the lock is held.
     exitOnLocked=False (manual-style): return None so the caller can
     print a message and exit non-zero.
     """
-    # "a+" opens read+write without truncating (and creates if missing),
-    # so a second instance that fails to lock doesn't wipe the running
-    # instance's PID from the file before exiting.
-    fh = open(lockPath, "a+")
+    if not os.path.exists(lockPath):
+        try:
+            os.close(os.open(lockPath, os.O_CREAT | os.O_WRONLY, 0o666))
+        except OSError:
+            pass    # another process created it first, or no permission
+    fh = open(lockPath, "r")
     try:
         fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
+        fh.close()
         if exitOnLocked:
             sys.exit(0)
         return None
-    fh.seek(0)
-    fh.truncate()
-    fh.write("%d\n" % os.getpid())
-    fh.flush()
+    # only after the lock is held, so a second instance that fails to
+    # lock never wipes the running instance's PID
+    try:
+        with open(lockPath, "w") as pidFh:
+            pidFh.write("%d\n" % os.getpid())
+    except OSError:
+        pass
     return fh
     ### FYI: can also see the locking process via: lsof <lockPath>
 

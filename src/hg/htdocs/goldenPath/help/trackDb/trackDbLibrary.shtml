@@ -1532,6 +1532,12 @@ There are no extra options that can appear on the type hic line.
     In larger windows, glyphs are also drawn as 1 pixel wide lines, except for the
     BarLeft/BarRight and ArrLeft/ArrRight glyphs, which already get narrower when zooming out.
     </p>
+    <p><code>decorator.default.maxDrawBases &lt;integer&gt;</code></p>
+    <p>This sets a maximum window size (in bases) above which the decorations are not drawn
+    at all, and the decorator file is not read.  Decorations on items that are only a pixel
+    or two wide are rarely worth the space they take up, and decorations in adjacent mode can
+    double or triple the height of the track.  If not set, or set to 0, there is no limit.
+    There is also a box on the track configuration page for this.</p>
     <p>The glyph of each decoration is set in the decorator bigBed file. Besides shapes like
     Circle or Star, which are drawn at the center of the decoration, the BarLeft/BarRight and
     ArrLeft/ArrRight glyphs mark the left or right end of a decorated item, e.g. a breakpoint,
@@ -1581,6 +1587,18 @@ There are no extra options that can appear on the type hic line.
     <P><B>Example:</B></P>
     <pre>   exonNumbers off</pre>
     <P>The text can be set with the options "exonText" and "intronText". It defaults to "exon" and "intron", respectively.</P>
+</DIV>
+
+<DIV class="itemTypeLabel"><span class="types genePred bigGenePred bed bigBed psl bigPsl"></span>
+<div class="format"><code>itemTypeLabel &lt;text&gt;</code></div>
+    <P>The word(s) used to label the item name in the mouseover. The default is "Transcript".
+    Use this setting when the items in the track are not transcripts.
+    genePred and bigGenePred tracks have mouseovers on by default, so they only need
+    this setting to change the label. Other track types need
+    <A onclick="jumpTo(this)" HREF="#">exonNumbers</A> set to "on" and this setting to
+    change the label.</P>
+    <P><B>Example:</B></P>
+    <pre>   itemTypeLabel ORF</pre>
 </DIV>
 
 <DIV class="Filter"><span class="types bed bigBed narrowPeak bigNarrowPeak broadPeak"></span>
@@ -2555,6 +2573,20 @@ There are no extra options that can appear on the type hic line.
     <pre>   style heatmap</pre>
 </DIV>
 
+<DIV class="heatmap_background"><span class="types bigBed"></span>
+<div class="format"><code>heatmap.background &lt;color&gt;</code></div>
+    <P>This setting is for use with the <a href="#style">heatmap style</a>
+    for bigBed tracks.  By default, the background color for a heatmap is
+    transparent and shows the page beneath.  If a color is supplied with
+    this setting (either as a hex code like #FF0A2B or as a comma-separated
+    RGB string like 255,32,120), it will be used instead.  The background color
+    is shown in every cell that has no data to display, so care should be
+    taken to avoid having the background color match actual heatmap values.</p>
+    <p><b>Example:</b></p>
+    <pre>   heatmap.background 128,0,128</pre>
+</div>
+</DIV>
+
 <DIV class="dotBracketField"><span class="types bigBed"></span>
 <div class="format"><code>dotBracketField &lt;fieldName&gt;</code></div>
     <P>Draws an RNA secondary structure over each item, taken from an extra bigBed field
@@ -2577,22 +2609,29 @@ There are no extra options that can appear on the type hic line.
     not part of the notation, and any brackets that do not balance.</P>
     <P>The structure is drawn whenever a base is wide enough to hold one character, which
     reaches well beyond the zoom at which the sequence itself appears.  At wider views, and
-    in dense and squish, where a row is too short for a character, the item is drawn as an
-    ordinary bed.  So is every item when the checkbox on the track configuration page,
-    which starts on, is turned off.  A row whose string does not match its blocks is
+    in squish, where a row is too short for a character, the blocks of the item are drawn as
+    plain boxes, without the arrows that usually show the strand, since those arrows look
+    like brackets.  In dense the item is drawn as an ordinary bed, and so is every item when
+    the checkbox on the track configuration page, which starts on, is turned off.  A row
+    whose string does not match its blocks is
     reported on the track in place of its data.</P>
     <P><B>Example:</B></P>
     <pre>   dotBracketField secStr</pre>
 </DIV>
 
 <DIV class="dotBracketColor"><span class="types bigBed"></span>
-<div class="format"><code>dotBracketColor &lt;red,green,blue&gt;</code></div>
+<div class="format"><code>dotBracketColor &lt;color&gt;</code></div>
     <P>The color to draw the secondary structure in, on a track that has
-    <a href="#dotBracketField">dotBracketField</a> set.  Written as three numbers from 0 to
-    255, the same way <a href="#color">color</a> is written.  Without this setting the
-    structure is drawn in whichever of black or white stands out against the item.</P>
-    <P><B>Example:</B></P>
+    <a href="#dotBracketField">dotBracketField</a> set.  The color can be written as red,
+    green and blue values from 0 to 255 separated by commas, as a hex code starting with #,
+    or as one of the 16 HTML color names in lowercase, such as blue or fuchsia.  Without
+    this setting the structure is drawn in whichever of black or white stands out against
+    the item.  A value that is not a color is reported on the track in place of its
+    data.</P>
+    <P><B>Examples:</B></P>
     <pre>   dotBracketColor 240,228,66</pre>
+    <pre>   dotBracketColor #f0e442</pre>
+    <pre>   dotBracketColor fuchsia</pre>
 </DIV>
 
 <DIV class="thickDrawItem"><span class="types bed bigBed"></span>

@@ -1,0 +1,37 @@
+# #38735 -- a lifted GENCODE track ignored its filters and highlights.  When GENCODE was
+# drawn through quickLift, gencodeGeneMethods() swapped GENCODE's own loader for the generic
+# genePred one.  That loader's class filter failed with "dyString is not allowed", and it
+# could not apply the Tag, Support Level or Annotation Method filters at all.  Fixed in
+# 8925a142c70, which keeps GENCODE's own query for a lifted track.
+#
+# rm20742 watches the Transcript Class filter in the same view.  This script watches the Tag
+# filter, the kind the generic loader never had.  BRCA1 plus the start of NBR2,
+# chr17:43044295-43170000, in the exon view, GENCODE Basic filtered to Tag = MANE_Select.
+# ENST00000357654.9 is the one transcript here with that tag; ENST00000352993.8 is another
+# BRCA1 coding transcript without it.
+#
+# HG.CONF GATE: the exon view lifts tracks only with multiRegionSpaces=on.  Off, the view is
+# drawn the old way, GENCODE's own loader runs, and this script passes on a build without
+# the fix.  Check with
+#     grep multiRegionSpaces /usr/local/apache/cgi-bin/hg.conf
+# The "Multi-region" button check below is pressed in both modes, so it does not tell them
+# apart.
+proof:
+  - "sandbox-ab 2026-11-10 -- failed on hgwdev-braney (hgTracks of 2026-11-09, before 8925a142c70): ENST00000357654 was not drawn; passed on genome-test with the fix"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43170000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43170000&pix=1100&hideTracks=1&knownGene=pack&wgEncodeGencodeSuper=show&wgEncodeGencodeV50=pack&wgEncodeGencodeBasicV50_sel=1&wgEncodeGencodeCompV50_sel=0&wgEncodeGencodePseudoGeneV50_sel=0&wgEncodeGencodePolyaV50_sel=0&wgEncodeGencodeV50ViewGenes.filterBy.tag=MANE_Select&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene, wgEncodeGencodeBasicV50]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'map area[href*="wgEncodeGencodeBasicV50"][href*="ENST00000357654"]'
+      noHas:
+        - 'map area[href*="wgEncodeGencodeBasicV50"][href*="ENST00000352993"]'
+        - 'map area[href*="wgEncodeGencodeBasicV50"][href*="ENST00000460115"]'

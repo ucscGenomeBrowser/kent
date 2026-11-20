@@ -8,9 +8,12 @@
 # and workflow monitoring.
 #
 # Phase 1: new requests needing alignment setup - status=1 AND buildDir=''
-#          run ottoRequestAlign.sh to set up and launch the workflow
+#          run ottoRequestAlign.sh to set up and launch the alignment,
+#          lastz in Galaxy (kegAlign) or minimap2 on the local cluster
+#          (pairMiniMap2.sh), decided there by mash distance
 # Phase 2: in-progress requests needing workflow monitoring
-#          run workflowMonitor.sh to poll Galaxy and install results
+#          lastz: run workflowMonitor.sh to poll Galaxy and install results
+#          minimap2: miniMap2Monitor checks the run's pid/exit files
 #   0 pending, 1 notified, 2 in progress, 3 galaxy done, 4 tracks complete,
 #   5 ready to push, 6 push is done, 7 problems,
 #      8 final notification has been sent == process is complete
@@ -288,6 +291,250 @@ function installLinks() {
 ##############################################################################
 
 ##############################################################################
+### asmRoot - where an assembly's pairwise builds and their dateless
+###   lastz.<other> / miniMap2.<other> links live:
+###     UCSC db: /hive/data/genomes/<db>/bed
+###     GenArk:  /hive/data/genomes/asmHubs/{genbankBuild,refseqBuild}/
+###                GCx/ddd/ddd/ddd/<acc>_<asmName>/trackData
+###   args: db
+###   prints nothing when a GenArk build directory is not found
+##############################################################################
+function asmRoot() {
+  local db="${1}"
+  case "${db}" in
+    GC[AF]_*)
+      local gcX="${db:0:3}"
+      local sub="genbankBuild"
+      if [ "${gcX}" = "GCF" ]; then
+        sub="refseqBuild"
+      fi
+      local asmDir
+      asmDir="$(ls -d /hive/data/genomes/asmHubs/${sub}/${gcX}/${db:4:3}/${db:7:3}/${db:10:3}/${db}_* 2> /dev/null | head -1 || true)"
+      if [ -n "${asmDir}" ]; then
+        printf "%s/trackData" "${asmDir}"
+      fi
+      ;;
+    *)
+      printf "/hive/data/genomes/%s/bed" "${db}"
+      ;;
+  esac
+}
+##############################################################################
+
+##############################################################################
+### doneBuild - print the finished pairwise build directory for tDb -> qDb
+###   args: tDb qDb
+###   lastz.<qDb>    link to an existing directory (lastz/KegAlign, or an
+###                  in-house doBlastzChainNet.pl build)
+###   miniMap2.<qDb> link to a directory that also has the load step's
+###                  fb.<tDb>.chain<QDb>Link.txt -- doMiniMap2.pl makes
+###                  this link before any step runs, so the link alone
+###                  does not mean the build finished
+###   prints nothing when neither is found
+##############################################################################
+function doneBuild() {
+  local tDb="${1}"
+  local qDb="${2}"
+  local root
+  root="$(asmRoot "${tDb}")"
+  if [ -z "${root}" ]; then
+    return 0
+  fi
+  local dir
+  if [ -L "${root}/lastz.${qDb}" ]; then
+    dir="$(readlink -f "${root}/lastz.${qDb}" || true)"
+    if [ -n "${dir}" ] && [ -d "${dir}" ]; then
+      printf "%s" "${dir}"
+      return 0
+    fi
+  fi
+  if [ -L "${root}/miniMap2.${qDb}" ]; then
+    dir="$(readlink -f "${root}/miniMap2.${qDb}" || true)"
+    if [ -n "${dir}" ] && [ -s "${dir}/fb.${tDb}.chain${qDb^}Link.txt" ]; then
+      printf "%s" "${dir}"
+      return 0
+    fi
+  fi
+  return 0
+}
+##############################################################################
+
+##############################################################################
+### miniMap2Monitor - phase 2 for a minimap2 request, running
+###   pairMiniMap2.sh on the local cluster from ottoMiniMap2.sh, which
+###   ottoRequestAlign.sh wrote and launched in buildDir
+###   args: reqId buildDir
+###   ottoMiniMap2.exit missing, pid alive  -> still running, nothing to do
+###   ottoMiniMap2.exit missing, pid gone   -> interrupted, status=7
+###   ottoMiniMap2.exit not 0               -> failed, status=7
+###   exit 0 and both directions' fb files  -> done, status=4
+##############################################################################
+function miniMap2Monitor() {
+  local reqId="${1}"
+  local buildDir="${2}"
+  local exitFile="${buildDir}/ottoMiniMap2.exit"
+  local pidFile="${buildDir}/ottoMiniMap2.pid"
+  local logFile="${buildDir}/ottoMiniMap2.log"
+
+  if [ ! -s "${exitFile}" ]; then
+    local pid=""
+    if [ -s "${pidFile}" ]; then
+      pid="$(cat "${pidFile}")"
+    fi
+    if [ -n "${pid}" ] && kill -0 "${pid}" 2> /dev/null; then
+      return 0
+    fi
+    printf "# request %s: minimap2 run stopped without finishing, see %s\n" \
+      "${reqId}" "${logFile}" 1>&2
+    setErrorStatus "${reqId}"
+    return 0
+  fi
+
+  local exitCode
+  exitCode="$(cat "${exitFile}")"
+  if [ "${exitCode}" != "0" ]; then
+    printf "# request %s: minimap2 run failed, exit %s, see %s\n" \
+      "${reqId}" "${exitCode}" "${logFile}" 1>&2
+    setErrorStatus "${reqId}"
+    return 0
+  fi
+
+  local targetDb="" queryDb=""
+  if [ -s "${buildDir}/ottoMiniMap2.sh" ]; then
+    source <(grep -E '^export (targetDb|queryDb)=' "${buildDir}/ottoMiniMap2.sh" || true)
+  fi
+  if [ -z "${targetDb}" ] || [ -z "${queryDb}" ]; then
+    printf "# request %s: no targetDb/queryDb in %s/ottoMiniMap2.sh\n" \
+      "${reqId}" "${buildDir}" 1>&2
+    setErrorStatus "${reqId}"
+    return 0
+  fi
+  local swapBuild
+  swapBuild="$(doneBuild "${queryDb}" "${targetDb}")"
+  if [ ! -s "${buildDir}/fb.${targetDb}.chain${queryDb^}Link.txt" ] \
+       || [ -z "${swapBuild}" ]; then
+    printf "# request %s: minimap2 run exited 0 but results are missing in %s or its swap\n" \
+      "${reqId}" "${buildDir}" 1>&2
+    setErrorStatus "${reqId}"
+    return 0
+  fi
+  /cluster/bin/x86_64/${hgSql} -N -e \
+    "UPDATE ottoRequest SET status = 4, completeTime = NOW() \
+     WHERE id = ${reqId};" ${centDb}
+}
+##############################################################################
+
+##############################################################################
+### runTrackDb - make the chain tracks for tDb -> qDb
+###   args: tDb qDb buildDir
+###   GenArk tDb:  doTrackDb.bash at the top of its hub-build directory
+###   UCSC db tDb: chainNetTrackDb.pl, run in buildDir
+###   returns 0 on success, non-zero on failure
+##############################################################################
+function runTrackDb() {
+  local tDb="${1}"
+  local qDb="${2}"
+  local dir="${3}"
+  case "${tDb}" in
+    GC[AF]_*)
+      local root
+      root="$(asmRoot "${tDb}")"
+      if [ -z "${root}" ]; then
+        printf "ERROR: can not find the GenArk build directory for %s\n" \
+          "${tDb}" 1>&2
+        return 1
+      fi
+      local doTdb
+      doTdb="$(dirname "${root}")/doTrackDb.bash"
+      if [ ! -x "${doTdb}" ]; then
+        printf "ERROR: can not find %s\n" "${doTdb}" 1>&2
+        return 1
+      fi
+      if ! "${doTdb}" >> /dev/shm/doTdb.$$.log 2>&1; then
+        printf "ERROR: %s failed\n" "${doTdb}" 1>&2
+        cat /dev/shm/doTdb.$$.log 1>&2
+        rm -f /dev/shm/doTdb.$$.log
+        return 1
+      fi
+      rm -f /dev/shm/doTdb.$$.log
+      ;;
+    *)
+      if ! ( cd "${dir}" \
+             && "${scriptDir}/chainNetTrackDb.pl" "${tDb}" "${qDb}" ); then
+        printf "ERROR: chainNetTrackDb.pl failed for %s/%s\n" \
+          "${tDb}" "${qDb}" 1>&2
+        return 1
+      fi
+      ;;
+  esac
+  return 0
+}
+##############################################################################
+
+##############################################################################
+### alignmentNotes - describe the alignment for the completion email,
+###   from the files the pipelines leave in their build directories:
+###     version.txt with a minimap2 line  - doMiniMap2.pl
+###     <t>.<q>.yaml                      - lastz in Galaxy (kegAlign)
+###     DEF                               - in-house doBlastzChainNet.pl
+###   args: build directories to look in (either direction, in any order)
+###   prints nothing when none of those is found
+##############################################################################
+function alignmentNotes() {
+  local dir
+  for dir in "$@"; do
+    if [ -z "${dir}" ] || [ ! -s "${dir}/version.txt" ]; then
+      continue
+    fi
+    if ! grep -q '^minimap2 ' "${dir}/version.txt"; then
+      continue
+    fi
+    local mm2Version preset mashDist mashNote=""
+    mm2Version="$(grep -m1 '^minimap2 [0-9]' "${dir}/version.txt" | cut -d' ' -f2 || true)"
+    preset="$(grep -o -m1 'minimapPreset=[^ ]*' "${dir}/version.txt" | cut -d= -f2 || true)"
+    mashDist="$(grep -o -m1 'mashDistance=[^ ]*' "${dir}/version.txt" | cut -d= -f2 || true)"
+    if [ -n "${mashDist}" ]; then
+      mashNote=" (mash distance ${mashDist})"
+    fi
+    printf "Alignment notes:\n"
+    printf "  aligner:   minimap2 %s, preset %s%s\n" \
+      "${mm2Version}" "${preset}" "${mashNote}"
+    printf "  chaining:  axtChain -linearGap=medium, chainBridge\n"
+    printf "  liftOver:  chainNet, netChainSubset\n"
+    printf "  the reverse direction is a chainSwap of the same alignment\n"
+    return 0
+  done
+  for dir in "$@"; do
+    if [ -z "${dir}" ] || [ ! -d "${dir}" ]; then
+      continue
+    fi
+    local yaml
+    yaml="$(ls "${dir}"/*.yaml 2> /dev/null | head -1 || true)"
+    if [ -z "${yaml}" ]; then
+      continue
+    fi
+    local minScore linearGap
+    minScore="$(grep -m1 '^axtChainMinScore:' "${yaml}" | awk '{print $2}' || true)"
+    linearGap="$(grep -o -m1 'axtChain\.[a-z]*\.txt' "${yaml}" | cut -d. -f2 || true)"
+    printf "Alignment notes:\n"
+    printf "  aligner:   lastz (KegAlign, Galaxy)\n"
+    printf "  chaining:  axtChain minScore=%s linearGap=%s\n" \
+      "${minScore}" "${linearGap}"
+    printf "  the reverse direction is a chainSwap of the same alignment\n"
+    return 0
+  done
+  for dir in "$@"; do
+    if [ -n "${dir}" ] && [ -s "${dir}/DEF" ]; then
+      printf "Alignment notes:\n"
+      printf "  aligner:   lastz (UCSC doBlastzChainNet.pl, existing alignment)\n"
+      return 0
+    fi
+  done
+  return 0
+}
+##############################################################################
+
+##############################################################################
 ### refresh Galaxy queue status snapshot for ottoRequestView.cgi
 ##############################################################################
 export galaxyStatusFile="/data/apache/trash/ottoRequestGalaxyStatus.json"
@@ -317,10 +564,10 @@ fi
 ############################################################################
 # phase 0: pre-flight existing-work detection.  If the alignment has
 #          already been built in-house (legacy lastz/chain/net or an
-#          earlier kegAlign run), the only step left is the hgdownload
-#          push.  Signals (all must hold):
-#            /hive/data/genomes/${fromDb}/bed/lastz.${toDb}  symlink exists
-#            /hive/data/genomes/${toDb}/bed/lastz.${fromDb}  symlink exists
+#          earlier kegAlign run, or a minimap2 run), the only step left is
+#          the hgdownload push.  Signals (all must hold):
+#            a finished fromDb -> toDb build, see doneBuild()
+#            a finished toDb -> fromDb build, see doneBuild()
 #            ${centDb}.liftOverChain   has both directions
 #            ${centDb}.quickLiftChain  has both directions
 #          When all four hold, fill in buildDir with the resolved
@@ -329,14 +576,9 @@ fi
 #          stays at status=1 and falls through to phase 1.
 ############################################################################
 while IFS=$'\t' read -r reqId fromDb toDb; do
-  fromSym="/hive/data/genomes/${fromDb}/bed/lastz.${toDb}"
-  toSym="/hive/data/genomes/${toDb}/bed/lastz.${fromDb}"
-  if [ ! -L "${fromSym}" ] || [ ! -L "${toSym}" ]; then
-    continue
-  fi
-  fromBuild="$(readlink -f "${fromSym}")"
-  toBuild="$(readlink -f "${toSym}")"
-  if [ ! -d "${fromBuild}" ] || [ ! -d "${toBuild}" ]; then
+  fromBuild="$(doneBuild "${fromDb}" "${toDb}")"
+  toBuild="$(doneBuild "${toDb}" "${fromDb}")"
+  if [ -z "${fromBuild}" ] || [ -z "${toBuild}" ]; then
     continue
   fi
   loCount=$(/cluster/bin/x86_64/${hgSql} -N -B -e \
@@ -381,6 +623,13 @@ while IFS=$'\t' read -r reqId buildDir; do
       "${reqId}" "${buildDir}" 1>&2
     continue
   fi
+  # minimap2 runs on the local cluster, not in galaxy
+  case "$(basename "${buildDir}")" in
+    miniMap2*)
+      miniMap2Monitor "${reqId}" "${buildDir}"
+      continue
+      ;;
+  esac
   # takes a while for the galaxy WF to start up, wait for this file to appear
   if [ ! -s "${buildDir}/pendingInvocationId.txt" ]; then
     continue
@@ -414,6 +663,41 @@ while IFS=$'\t' read -r reqId buildDir; do
       "${reqId}" "${buildDir}" 1>&2
     continue
   fi
+  # minimap2: pairMiniMap2.sh -liftTableLoad already made the miniMap2.*
+  # links, the liftOver/quickLift links and the hgcentral entries, so
+  # only the trackDb step is left, for both directions
+  case "$(basename "${buildDir}")" in
+    miniMap2*)
+      targetDb="" queryDb=""
+      if [ -s "${buildDir}/ottoMiniMap2.sh" ]; then
+        source <(grep -E '^export (targetDb|queryDb)=' "${buildDir}/ottoMiniMap2.sh" || true)
+      fi
+      if [ -z "${targetDb}" ] || [ -z "${queryDb}" ]; then
+        printf "ERROR: no targetDb/queryDb in %s/ottoMiniMap2.sh\n" \
+          "${buildDir}" 1>&2
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      swapBuild="$(doneBuild "${queryDb}" "${targetDb}")"
+      if [ -z "${swapBuild}" ]; then
+        printf "ERROR: can not find the finished %s -> %s swap build\n" \
+          "${queryDb}" "${targetDb}" 1>&2
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      if ! runTrackDb "${targetDb}" "${queryDb}" "${buildDir}"; then
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      if ! runTrackDb "${queryDb}" "${targetDb}" "${swapBuild}"; then
+        setErrorStatus "${reqId}"
+        continue
+      fi
+      /cluster/bin/x86_64/${hgSql} -N -e \
+          "UPDATE ottoRequest SET status = 5 WHERE id=${reqId};" ${centDb}
+      continue
+      ;;
+  esac
   source <(grep -E '^export (swapDir|targetDb|queryDb)=' "${buildDir}/kegAlign.sh")
   export trackData="$(dirname "${buildDir}")"
   export swapData="$(dirname "${swapDir}")"
@@ -526,28 +810,23 @@ while IFS=$'\t' read -r reqId fromDb toDb comment requestTime buildDir; do
     setErrorStatus "${reqId}"
     continue
   fi
-  # source the kegAlign.sh variables to get targetDb, queryDb, and swapDir
-  targetDb="" queryDb="" swapDir=""
-  if [[ -f "${buildDir}/kegAlign.sh" ]]; then
-    source <(grep -E '^export (swapDir|targetDb|queryDb)=' "${buildDir}/kegAlign.sh" 2>/dev/null || true)
-  fi
+  # the finished build for each direction, found through its dateless
+  # lastz.<other> or miniMap2.<other> link (see doneBuild()), the same
+  # for lastz/KegAlign, minimap2 and phase 0 (prior work) requests;
+  # buildDir is the fallback when a link is not found
+  fromDir="$(doneBuild "${fromDb}" "${toDb}")"
+  toDir="$(doneBuild "${toDb}" "${fromDb}")"
+  fromDir="${fromDir:-${buildDir}}"
+  toDir="${toDir:-${buildDir}}"
   # get featureBits coverage percentages for both directions
-  # determine which direction is which and use appropriate build directory
-  fromToPct="" toFromPct=""
-  if [[ -n "${targetDb}" && -n "${queryDb}" && -n "${swapDir}" ]]; then
-    if [[ "${fromDb}" == "${targetDb}" ]]; then
-      # fromDb -> toDb uses buildDir, toDb -> fromDb uses swapDir
-      fromToPct="$(getFeatureBitsPct "${fromDb}" "${toDb}" "${buildDir}")"
-      toFromPct="$(getFeatureBitsPct "${toDb}" "${fromDb}" "${swapDir}")"
-    else
-      # fromDb -> toDb uses swapDir, toDb -> fromDb uses buildDir
-      fromToPct="$(getFeatureBitsPct "${fromDb}" "${toDb}" "${swapDir}")"
-      toFromPct="$(getFeatureBitsPct "${toDb}" "${fromDb}" "${buildDir}")"
-    fi
-  else
-    # fallback: try both directions with buildDir only (may not find swap direction)
-    fromToPct="$(getFeatureBitsPct "${fromDb}" "${toDb}" "${buildDir}")"
-    toFromPct="$(getFeatureBitsPct "${toDb}" "${fromDb}" "${buildDir}")"
+  fromToPct="$(getFeatureBitsPct "${fromDb}" "${toDb}" "${fromDir}")"
+  toFromPct="$(getFeatureBitsPct "${toDb}" "${fromDb}" "${toDir}")"
+
+  # notes on what kind of alignment this was, at the end of the email
+  alignNotes="$(alignmentNotes "${fromDir}" "${toDir}" "${buildDir}")"
+  if [[ -n "${alignNotes}" ]]; then
+    alignNotes="
+${alignNotes}"
   fi
 
   # construct coverage info for email
@@ -560,19 +839,24 @@ Chain coverage (% of genome covered by alignments):
 "
   fi
 
+  # arg 1: reqId
+  # arg 2: subject
+  # arg 3: msgBody
   sendNotification "${reqId}" \
 "from UCSC: ${fromDb}<->${toDb} liftOverRequest complete" \
 "Your lift over request is complete:
-     From:     ${fromDb}
-       To:     ${toDb}
-  comment:     ${comment}
-submitted:     ${requestTime}
-${coverageInfo}
+
 The lift.over files are available at these links:
 
   ${fromUrl}
   ${toUrl}
-"
+${coverageInfo}
+Your request:
+     From:     ${fromDb}
+       To:     ${toDb}
+  comment:     ${comment}
+submitted:     ${requestTime}
+${alignNotes}"
 
   /cluster/bin/x86_64/${hgSql} -N -e \
       "UPDATE ottoRequest SET status=8, completeTime=now() WHERE id=${reqId};" ${centDb}

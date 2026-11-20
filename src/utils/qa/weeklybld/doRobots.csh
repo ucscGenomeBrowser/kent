@@ -14,10 +14,6 @@ endif
 
 set returnCode=0
 
-# Symlink Trick safe now
-echo "Symlink Trick. [${0}: `date`]"
-./symtrick.csh
-
 #echo "disabled doHgNearTestRobot.csh"
 ./doHgNearTestRobot.csh
 set err = $status
@@ -62,7 +58,6 @@ if ( $err ) then
 endif
 
 echo "Done running robots TrackCheck, LiftOverTest, hgNearTest, and hgTablesTest. [${0}: `date`] "
-./unsymtrick.csh
 
 exit $returnCode
 

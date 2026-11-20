@@ -34,6 +34,7 @@
 #include "heatmap.h"
 #include "cds.h"
 #include "dotBracketTrack.h"
+#include "blatShare.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -483,7 +484,7 @@ return (resultCount > bigBedMaxItems());
 }
 
 
-static void loadBigBedSummary(struct track *track)
+void loadBigBedSummary(struct track *track)
 /* Check if summary loading needed for bigBed */
 {
 if (track->subtracks)  // do tracks or subtracks but not parents.
@@ -766,7 +767,7 @@ if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
    labelTrackAsHideEmpty(track);
 
 // a BLAT results bigPsl (hgc buildBigPsl) gets a mouseover with a query coverage bar
-boolean blatResult = trackDbSettingOn(track->tdb, "blatResult")
+boolean blatResult = blatIsResultTrack(track->tdb)
                      && startsWith("bigPsl", track->tdb->type);
 
 // mouseOvers can be built constructed via trackDb settings instead
@@ -796,18 +797,28 @@ struct hash *mapPsls = NULL;     // mapping alignments quickLift reuses across i
 int lastChromId = -1;
 char otherChrom[bbi->chromBpt->keySize+1];
 char startBuf[16], endBuf[16];
+boolean inSpace = liftedInSpace(track);
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
     // an item that passed the filters but has no clean mapping through the chain was
     // dropped by the lift, not by a filter, and needs to be reported in its own words
     boolean liftFailed = FALSE;
+    boolean outsideSpace = FALSE;   // loaded by a padded query, but not in the space at all
     bedCopy = NULL;
     char *bedRow[bbi->fieldCount];
     if (sameString(track->tdb->type, "bigPsl"))
         {
         // fill out bedRow to support mouseOver pattern replacements
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        // BLAT results honor filter.match (the search's minimum score), so the track and the
+        // results table agree, and the table page can turn it off.  Other bigPsl tracks never
+        // applied their filters here, and keep doing so.
+        if (blatResult && !bigBedFilterInterval(bbi, bedRow, filters))
+            {
+            filtered++;
+            continue;
+            }
         char *seq, *cds;
         // Under quickLift the interval came out of the other assembly's file, so the
         // alignment has to carry that assembly's sequence name:  chromName is the name on
@@ -884,6 +895,27 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             {
             if (quickLiftFile)
                 {
+                /* In a multi-region space an item whose only part in view is an intron
+                 * is kept, as the old multi-region view drew it (#38660). */
+                if (inSpace)
+                    {
+                    bed = quickLiftIntervalsToBedKeepIntron(bbi, chainHash, bb, &outsideSpace);
+                    if (bed != NULL)
+                        {
+                        bedCopy = cloneBed(bed);
+                        lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
+                            scoreMin, scoreMax, useItemRgb);
+                        /* The lift widened the bed to where the item runs out of its
+                         * region;  the line is drawn to there, not to the last block. */
+                        if (bedCopy->chromStart < lf->start)
+                            lf->start = bedCopy->chromStart;
+                        if (bedCopy->chromEnd > lf->end)
+                            lf->end = bedCopy->chromEnd;
+                        }
+                    else if (!outsideSpace)
+                        liftFailed = TRUE;
+                    }
+                else
                 if ((bed = quickLiftIntervalsToBedClip(bbi, chainHash, bb)) != NULL)
                     {
                     bedCopy = cloneBed(bed);
@@ -970,6 +1002,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             }
 	}
 
+    if (outsideSpace)
+        continue;       // neither filtered nor a failed lift:  just not in view
     if (lf == NULL)
         {
         if (liftFailed)
@@ -991,6 +1025,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                 changedStrand = TRUE;
             }
         lf->original = genePredFromBedBigGenePred(chromName, bedCopy, bb, changedStrand); 
+        /* An item lifted into a space with only its intron in view has no blocks, and
+         * bedToGenePredExt() turns that into one exon over the whole span. */
+        if (inSpace && (bedCopy->blockCount == 0))
+            ((struct genePredExt *)lf->original)->exonCount = 0;
         }
 
     if (startsWith("bigBed", track->tdb->type))

@@ -4,6 +4,7 @@ track wgEncodeReg4
 superTrack on show
 shortLabel ENCODE4 Regulation
 longLabel Integrated Regulation from ENCODE 4
+facet.consortia ENCODE
 group regulation
 priority 0.9
 pennantIcon New red ../goldenPath/newsarch.html#072226 "Released Jul. 22, 2026"

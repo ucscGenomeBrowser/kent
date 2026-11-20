@@ -1,0 +1,41 @@
+# #38781 (CR of #37953) -- a subtrack hide that a request repeats is kept when the same
+# request changes its container's visibility.
+#
+# #37953's fix (91545e44710, hg/lib/cart.c cartRemoveOldFromTdbTree()) kept a subtrack
+# visibility only when the request CREATED it.  Its test compared the request's old value
+# with CART_VAR_EMPTY, which storeInOldVars() writes only when the variable was absent from
+# the cart.  So once clinvarCnv=hide was stored, the next request carrying it again saw
+# "hide" -> "hide", counted it unchanged, and removed it as a leftover whenever the same
+# request changed clinvar's visibility.  The CR fix keys on whether the request carries the
+# variable at all (hashLookup(oldVars, setting) != NULL).
+#
+# Checks: after clinvar=pack&clinvarCnv=hide, the request clinvar=full&clinvarCnv=hide still
+# draws the main ClinVar subtrack (proves the container is on) and not the CNV subtrack.
+# rm37953 covers the first request; this covers the second.
+#
+# The first step loads a plain page so the cart holds the image width (see rm37953).  Do NOT
+# add hideTracks=1 (see rm37953).
+#
+# NOT asserted: that a container change WITHOUT the subtrack variable resets it.  That is
+# the cleanup working as designed, the same on v506 and on this fix.
+proof:
+  - "assertion-only 2026-11-16 -- written from Mark Diekhans's CR #38781 note, item 1"
+  - "xfail 2026-11-16 -- fails on genome-test (master without the CR fix) at step 5 with clinvarCnv drawn"
+  - "sandbox-ab 2026-11-16 -- passes on ts park 38781 built from ~/kentCr38781 branch cr38781, fails on genome-test as above"
+  - "server-flip 2026-11-16 -- passes on genome-test after the CR fixes were pushed and made into cgi-alpha (e06fcce8ef4)"
+
+target: genome-test
+db: hg38
+position: chr7:117480025-117668665
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:117480025-117668665"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:117480025-117668665&clinvar=pack&clinvarCnv=hide"
+  - expect:
+      has: '#tr_clinvarMain'
+      noHas: '#tr_clinvarCnv'
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:117480025-117668665&clinvar=full&clinvarCnv=hide"
+  - expect:
+      has: '#tr_clinvarMain'
+      noHas: '#tr_clinvarCnv'

@@ -26,6 +26,9 @@
 #define DEFAULT_MAX_LABEL_BASECOUNT 200000
 #define MAX_LABEL_BASECOUNT_VAR "maxLabelBases"
 
+#define DEFAULT_MAX_DRAW_BASECOUNT 0  // no limit
+#define MAX_DRAW_BASECOUNT_VAR "maxDrawBases"
+
 
 struct trackDb *getTdbForDecorator(struct trackDb *tdb, char *prefix)
 /* Gin up a fake tdb structure to pretend decorator settings are for
@@ -132,6 +135,12 @@ for (struct trackDb *mockTdbForDecorator = mockTdbsForDecorators;
         mockTdbForDecorator != NULL;
         mockTdbForDecorator = mockTdbForDecorator->next)
     {
+    printf("Hide decorations when window is larger than ");
+    long currentMaxDrawBase = decoratorUiMaxDrawnBaseCount(mockTdbForDecorator, cart);
+    safef(cartVar, sizeof(cartVar), "%s.%s", mockTdbForDecorator->track, MAX_DRAW_BASECOUNT_VAR);
+    cgiMakeIntVar(cartVar, currentMaxDrawBase, 9);
+    printf("bp (0 for no limit)<br>\n");
+
     printf("<b>Block</b> decoration placement:&nbsp");
     decoratorMode currentBlockMode = decoratorDrawMode(mockTdbForDecorator, cart, DECORATION_STYLE_BLOCK);
     char *modeStr = HIDE_MODE_STR;
@@ -219,4 +228,16 @@ long maxLabelBases = (long)cartOrTdbInt(cart, tdb, MAX_LABEL_BASECOUNT_VAR, DEFA
 if (maxLabelBases < 0)
     maxLabelBases = 0;
 return maxLabelBases; 
+}
+
+long decoratorUiMaxDrawnBaseCount(struct trackDb *tdb, struct cart *cart)
+/* Return the entered (or default) number of bases.  Decorations are only drawn if
+ * the size of the global window (spanning all region windows) displays at most that
+ * many bases.  Zero means no limit.  Decorations of items that are only a pixel or
+ * two wide are rarely worth the rows they take up. */
+{
+long maxDrawBases = (long)cartOrTdbInt(cart, tdb, MAX_DRAW_BASECOUNT_VAR, DEFAULT_MAX_DRAW_BASECOUNT);
+if (maxDrawBases < 0)
+    maxDrawBases = 0;
+return maxDrawBases;
 }

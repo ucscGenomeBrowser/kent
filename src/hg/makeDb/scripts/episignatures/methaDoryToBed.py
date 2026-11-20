@@ -63,6 +63,24 @@ DISORDER_SPELLING_FIXES = {
     "Nicolaiders-Baraitser syndrome": "Nicolaides-Baraitser syndrome",
     "PURA-related disoder": "PURA-related disorder",
     "Smith-Magenis Syndrome": "Smith-Magenis syndrome",
+    # not a typo: the raw UTF-8 o-umlaut shows garbled in the browser, which does
+    # not transcode, so use the ASCII spelling OMIM uses (#301900)
+    "B\u00f6rjeson-Forssman-Lehmann syndrome": "Borjeson-Forssman-Lehmann syndrome",
+}
+
+# The four chr7q11.23del rows of the 2026-09-16 sheet give the disorder of the
+# 22q13.3 deletion; the 7q11.23 deletion is Williams-Beuren syndrome (#38371).
+# Keyed on the sheet's Signature column, and only applied while the sheet still
+# has the wrong name. Remove with META_CORRECTIONS once the authors fix it.
+WRONG_DISORDERS = {
+    "chr7q11.23del": ("Phelan-McDermid syndrome", "Williams-Beuren syndrome"),
+}
+
+# Misspelled locus in the Gene_region_exposure and Label columns of the loci
+# table and the signature column of the sheet (#38371), fixed on both sides of
+# the join
+LOCUS_SPELLING_FIXES = {
+    "RNU2-2.biallellic": "RNU2-2.biallelic",
 }
 
 # Four metadata rows of the 2026-09-16 sheet carry the StudyID, PMID and
@@ -71,7 +89,11 @@ DISORDER_SPELLING_FIXES = {
 # but have not sent a corrected sheet. Remove this table once they do. A row is
 # only changed while the sheet still has the wrong StudyID, so a fixed sheet
 # passes through untouched.
+# HNRNPU_Lee2023 has StudyID Lee2024 and PMID 38797891, an unrelated mouse
+# muscle paper by Lee EJ; the study is Lee S et al. 2023, PMID 37407733 (#38371).
 META_CORRECTIONS = {
+    "HNRNPU_Lee2023": {
+        "wrongStudy": "Lee2024", "study": "Lee2023", "pmid": "37407733"},
     "CREBBP-EP300_ArefEshghi2020": {
         "wrongStudy": "Levy2022", "study": "ArefEshghi2020",
         "pmid": "32109418", "disorder": "Rubinstein-Taybi Syndrome"},
@@ -106,11 +128,16 @@ def readMeta(fname):
         # The authors have spelled the join with an underscore in one release
         # and a space in the next, so normalise both sides the same way.
         key = vals[idx["signature"]].replace(" ", "_")
+        for bad, good in LOCUS_SPELLING_FIXES.items():
+            key = key.replace(bad, good)
         # a disorder name can contain a comma, and comma is the separator both
         # of the bigBed list fields and of trackDb filterValues, so swap it out
         disorder = vals[idx["Disorder"]].replace(",", ";")
         disorder = " ".join(disorder.split())   # "NOTCH1  Congenital ..." has two spaces
         disorder = DISORDER_SPELLING_FIXES.get(disorder, disorder)
+        wrong = WRONG_DISORDERS.get(vals[idx["Signature"]])
+        if wrong and disorder == wrong[0]:
+            disorder = wrong[1]
         meta[key] = {
             "study": vals[idx["StudyID"]],
             "pmid": vals[idx["PMID"]],
@@ -238,6 +265,9 @@ def main():
             key = label.replace(" ", "_")
             locus = rec["Gene_region_exposure"]
             study = rec["Study"]
+            for bad, good in LOCUS_SPELLING_FIXES.items():
+                locus = locus.replace(bad, good)
+                key = key.replace(bad, good)
             m = meta.get(key)
             disorder = m["disorder"] if m else ""
             if m is None:

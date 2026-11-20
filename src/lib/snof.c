@@ -279,7 +279,7 @@ char *snofNameAtIx(struct snof *snof, int ix)
 {
 fseek(snof->file, snof->headSize + ix*snof->itemSize, SEEK_SET);
 if (fread(snof->mid, snof->itemSize, 1, snof->file) != 1 && ferror(snof->file))
-    errAbort("snofNameAtIx: fread failed: %s", strerror(ferror(snof->file)));
+    errAbort("snofNameAtIx: fread failed: %s", strerror(errno));
 return snof->mid;
 }
 

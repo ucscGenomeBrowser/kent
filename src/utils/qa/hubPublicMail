@@ -140,7 +140,24 @@ def downloadUrls(urls, emails):
             except KeyboardInterrupt: # handle ctrl-c for debugging
                 sys.exit(1)
             except:
-                reqFailed = True
+                # curl --fail treats a Cloudflare bot-challenge page (e.g. dbrip.brocku.ca)
+                # the same as a real outage. Re-fetch without --fail and check for
+                # Cloudflare's challenge markers before counting the hub as down.
+                isChallenge = False
+                try:
+                    chk = run(["curl", "--user-agent", "genome.ucsc.edu/net.c",
+                             "-sikL", "--connect-timeout", "10", "--max-time", "15", url],
+                            stdout=PIPE, universal_newlines=True, timeout=20)
+                    chkOut = chk.stdout.lower()
+                    isChallenge = "cf-mitigated: challenge" in chkOut or "just a moment" in chkOut
+                except:
+                    pass
+
+                if isChallenge:
+                    logging.debug("URL %s is behind a Cloudflare challenge page, not counting as down" % url)
+                    text = ""
+                else:
+                    reqFailed = True
         else:
             # FTP
             try:

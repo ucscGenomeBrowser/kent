@@ -13,6 +13,7 @@ track strVar
 shortLabel Tandem Repeat Variation
 longLabel Tandem Repeat Variation
 group varRep
+facet.variantType Tandem repeat
 superTrack on
 visibility hide
 

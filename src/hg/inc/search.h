@@ -14,6 +14,7 @@
 #define TRACK_SEARCH_PAGER       "hgt_tsPage"
 #define TRACK_SEARCH_ADD_ROW     "hgt_tsAddRow"
 #define TRACK_SEARCH_DEL_ROW     "hgt_tsDelRow"
+#define TRACK_SEARCH_EMBED       "hgt_tsEmbed"   // Page is shown in the Find Tracks dialog
 #define TRACK_SEARCH_BUTTON      "Track search"
 #define TRACK_SEARCH_HINT        "Search for tracks in this genome assembly"
 

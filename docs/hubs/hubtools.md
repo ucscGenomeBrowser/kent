@@ -9,7 +9,7 @@ but if your hub has dozens of files in several directories, or if you rebuild it
 regularly, `hubtools up` is easier: it sends a whole directory in one command, and when
 you run it again, it only uploads the files that changed.
 
-hubtools can also write a hub.txt for a directory of bigBed and bigWig files, and create
+hubtools can also write a hub.txt for a directory of data files, and create
 a hub from an IGV session or from a UCSC Genome Browser session, which is useful when
 you move data between the two browsers or want to turn your custom tracks into a hub.
 
@@ -24,7 +24,8 @@ you move data between the two browsers or want to turn your custom tracks into a
 
 ## Quick start
 
-1. Put all your bigBed and bigWig files into one directory, here called `myHub`.
+1. Put all your bigBed, bigWig, BAM, CRAM and VCF files into one directory, here called
+   `myHub`, together with their index files (`.bai`, `.crai`, `.tbi`).
 2. Get an API key: log in to the Genome Browser, open My Data > Track Hubs >
    [Hub Development](/cgi-bin/hgHubConnect#hubDeveloper) and click "Generate key".
    Save it like this:
@@ -44,10 +45,6 @@ you move data between the two browsers or want to turn your custom tracks into a
    your data.
 4. Open the [Hub Upload](/cgi-bin/hgHubConnect#hubUpload) tab. Your hub is in the list
    there, with a link to view it in the Genome Browser.
-
-`build` only makes tracks for bigBed and bigWig files. BAM, CRAM and VCF files in the
-directory are uploaded too, but you have to add a track for each of them to the hub.txt
-yourself, see [Track Hub Basics](hubBasics.html).
 
 ## Installation
 
@@ -75,7 +72,7 @@ needed. Uploading with `hubtools up` does not need any of these tools.
 
 ## Creating a hub from a directory of files
 
-If you have a directory of bigBed and bigWig files and no hub.txt yet, `hubtools build`
+If you have a directory of data files and no hub.txt yet, `hubtools build`
 writes one for you. Give it the assembly the files are on:
 
 ```
@@ -91,8 +88,12 @@ all tracks. You can load it right away from a web server or upload the whole dir
 
 How the files become tracks:
 
-- Every bigBed (`.bb`, `.bigBed`) and bigWig (`.bw`, `.bigWig`) file in the directory
-  becomes one track. Other files are ignored.
+- Every bigBed (`.bb`, `.bigBed`), bigWig (`.bw`, `.bigWig`), BAM (`.bam`), CRAM (`.cram`)
+  and VCF (`.vcf.gz`) file in the directory becomes one track. Other files are ignored.
+- BAM, CRAM and VCF files need an index next to them: `x.bam.bai` (or `x.bai`) for a BAM,
+  `x.cram.crai` for a CRAM and `x.vcf.gz.tbi` for a VCF. Create them with `samtools index`
+  and `tabix -p vcf`. hubtools warns about every file that has no index. A VCF must be
+  compressed with `bgzip`; a plain `.vcf` file is skipped.
 - Every subdirectory becomes a composite track that contains the files in it. Deeper
   subdirectories are not used.
 - The part of the file name before the first dot names the track, so `liver.rep1.bw`
@@ -100,7 +101,8 @@ How the files become tracks:
   the tracks.tsv file described below.
 - If most files in a subdirectory come in pairs, a bigBed and a bigWig with the same name
   (e.g. `liver.peaks.bb` and `liver.signal.bw`), the composite gets two views, one for
-  the peaks and one for the signal.
+  the peaks and one for the signal. Other file types cannot go into such a composite; put
+  them into a separate directory.
 
 To set labels, colors or any other [trackDb setting](/goldenPath/help/trackDb/trackDbHub.html),
 put a file called `tracks.tsv` into the directory. The first column is the track name and

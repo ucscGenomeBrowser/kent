@@ -1,0 +1,997 @@
+track Methbase
+compositeTrack faceted
+parent dnaMethylation
+metaDataUrl /gbdb/aplCal1/methBase2/mb2_aplCal1_metadata.tsv
+colorSettingsUrl /gbdb/aplCal1/methBase2/mb2_aplCal1_colors.json
+primaryKey accession
+dataTypes hmr pmd levels reads
+maxCheckboxes 20
+shortLabel Methbase
+longLabel Methbase
+type bigBed
+visibility hide
+subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ study=https://www.ncbi.nlm.nih.gov/sra/$$ sample=https://www.ncbi.nlm.nih.gov/sra/$$
+
+track Methbase_SRX34106263_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831099/SRX34106263/SRX34106263.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106263
+color 56,113,193
+parent Methbase off
+priority 0.00001
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106263_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831099/SRX34106263/SRX34106263.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106263
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00002
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106263_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831099/SRX34106263/SRX34106263.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106263
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00003
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106264_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831100/SRX34106264/SRX34106264.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106264
+color 56,113,193
+parent Methbase off
+priority 0.00004
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106264_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831100/SRX34106264/SRX34106264.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106264
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00005
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106264_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831100/SRX34106264/SRX34106264.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106264
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00006
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106265_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831120/SRX34106265/SRX34106265.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106265
+color 56,113,193
+parent Methbase off
+priority 0.00007
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106265_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831120/SRX34106265/SRX34106265.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106265
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00008
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106265_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831120/SRX34106265/SRX34106265.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106265
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00009
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106266_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831123/SRX34106266/SRX34106266.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106266
+color 56,113,193
+parent Methbase off
+priority 0.00010
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106266_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831123/SRX34106266/SRX34106266.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106266
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00011
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106266_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831123/SRX34106266/SRX34106266.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106266
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00012
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106267_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831075/SRX34106267/SRX34106267.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106267
+color 56,113,193
+parent Methbase off
+priority 0.00013
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106267_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831075/SRX34106267/SRX34106267.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106267
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00014
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106267_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831075/SRX34106267/SRX34106267.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106267
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00015
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106268_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831077/SRX34106268/SRX34106268.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106268
+color 56,113,193
+parent Methbase off
+priority 0.00016
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106268_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831077/SRX34106268/SRX34106268.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106268
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00017
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106268_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831077/SRX34106268/SRX34106268.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106268
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00018
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106269_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831079/SRX34106269/SRX34106269.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106269
+color 56,113,193
+parent Methbase off
+priority 0.00019
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106269_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831079/SRX34106269/SRX34106269.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106269
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00020
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106269_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831079/SRX34106269/SRX34106269.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106269
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00021
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106270_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831081/SRX34106270/SRX34106270.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106270
+color 56,113,193
+parent Methbase off
+priority 0.00022
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106270_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831081/SRX34106270/SRX34106270.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106270
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00023
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106270_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831081/SRX34106270/SRX34106270.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106270
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00024
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106271_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831083/SRX34106271/SRX34106271.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106271
+color 56,113,193
+parent Methbase off
+priority 0.00025
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106271_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831083/SRX34106271/SRX34106271.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106271
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00026
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106271_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831083/SRX34106271/SRX34106271.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106271
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00027
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106272_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831086/SRX34106272/SRX34106272.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106272
+color 56,113,193
+parent Methbase off
+priority 0.00028
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106272_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831086/SRX34106272/SRX34106272.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106272
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00029
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106272_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831086/SRX34106272/SRX34106272.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106272
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00030
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106273_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831133/SRX34106273/SRX34106273.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106273
+color 56,113,193
+parent Methbase off
+priority 0.00031
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106273_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831133/SRX34106273/SRX34106273.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106273
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00032
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106273_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831133/SRX34106273/SRX34106273.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106273
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00033
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106274_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831135/SRX34106274/SRX34106274.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106274
+color 56,113,193
+parent Methbase off
+priority 0.00034
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106274_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831135/SRX34106274/SRX34106274.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106274
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00035
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106274_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831135/SRX34106274/SRX34106274.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106274
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00036
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106275_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831084/SRX34106275/SRX34106275.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106275
+color 56,113,193
+parent Methbase off
+priority 0.00037
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106275_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831084/SRX34106275/SRX34106275.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106275
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00038
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106275_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831084/SRX34106275/SRX34106275.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106275
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00039
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106276_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831137/SRX34106276/SRX34106276.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106276
+color 56,113,193
+parent Methbase off
+priority 0.00040
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106276_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831137/SRX34106276/SRX34106276.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106276
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00041
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106276_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831137/SRX34106276/SRX34106276.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106276
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00042
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106277_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831140/SRX34106277/SRX34106277.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106277
+color 56,113,193
+parent Methbase off
+priority 0.00043
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106277_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831140/SRX34106277/SRX34106277.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106277
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00044
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106277_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831140/SRX34106277/SRX34106277.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106277
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00045
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106278_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831142/SRX34106278/SRX34106278.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106278
+color 56,113,193
+parent Methbase off
+priority 0.00046
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106278_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831142/SRX34106278/SRX34106278.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106278
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00047
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106278_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831142/SRX34106278/SRX34106278.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106278
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00048
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106279_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831144/SRX34106279/SRX34106279.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106279
+color 56,113,193
+parent Methbase off
+priority 0.00049
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106279_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831144/SRX34106279/SRX34106279.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106279
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00050
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106279_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831144/SRX34106279/SRX34106279.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106279
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00051
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106280_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831095/SRX34106280/SRX34106280.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106280
+color 56,113,193
+parent Methbase off
+priority 0.00052
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106280_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831095/SRX34106280/SRX34106280.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106280
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00053
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106280_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831095/SRX34106280/SRX34106280.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106280
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00054
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106281_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831149/SRX34106281/SRX34106281.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106281
+color 56,113,193
+parent Methbase off
+priority 0.00055
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106281_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831149/SRX34106281/SRX34106281.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106281
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00056
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106281_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831149/SRX34106281/SRX34106281.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106281
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00057
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106282_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831101/SRX34106282/SRX34106282.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106282
+color 56,113,193
+parent Methbase off
+priority 0.00058
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106282_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831101/SRX34106282/SRX34106282.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106282
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00059
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106282_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831101/SRX34106282/SRX34106282.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106282
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00060
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106283_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831107/SRX34106283/SRX34106283.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106283
+color 56,113,193
+parent Methbase off
+priority 0.00061
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106283_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831107/SRX34106283/SRX34106283.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106283
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00062
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106283_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831107/SRX34106283/SRX34106283.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106283
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00063
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106284_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831112/SRX34106284/SRX34106284.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106284
+color 56,113,193
+parent Methbase off
+priority 0.00064
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106284_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831112/SRX34106284/SRX34106284.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106284
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00065
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106284_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831112/SRX34106284/SRX34106284.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106284
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00066
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106285_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831116/SRX34106285/SRX34106285.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106285
+color 56,113,193
+parent Methbase off
+priority 0.00067
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106285_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831116/SRX34106285/SRX34106285.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106285
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00068
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106285_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831116/SRX34106285/SRX34106285.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106285
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00069
+onlyVisibility full
+visibility hide
+
+track Methbase_SRX34106286_hmr
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831118/SRX34106286/SRX34106286.hmr.bb
+type bigBed
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106286
+color 56,113,193
+parent Methbase off
+priority 0.00070
+onlyVisibility dense
+visibility dense
+
+track Methbase_SRX34106286_levels
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831118/SRX34106286/SRX34106286.sym_counts.bw
+type bigWig
+shortLabel Abdominal Ganglion
+longLabel Abdominal Ganglion SRX34106286
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00071
+onlyVisibility full
+visibility full
+
+track Methbase_SRX34106286_reads
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/methbase/v3/data/SRP601854/SRS25831118/SRX34106286/SRX34106286.sym_coverage.bw
+type bigWig
+shortLabel Abdominal Ganglion Reads
+longLabel Abdominal Ganglion Reads SRX34106286
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00072
+onlyVisibility full
+visibility hide

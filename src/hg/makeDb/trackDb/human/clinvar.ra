@@ -3,6 +3,10 @@ compositeTrack on
 shortLabel ClinVar Variants
 longLabel ClinVar Variants
 group phenDis
+tags clinical
+facet.consortia ClinVar
+facet.evidence Curated
+facet.variantType SNV/indel,Structural variant
 visibility hide
 type bed 12 +
 noParentConfig on

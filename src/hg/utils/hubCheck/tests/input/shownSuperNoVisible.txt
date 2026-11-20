@@ -1,0 +1,103 @@
+hub shownSuperNoVisibleHub
+shortLabel Shown superTrack Test Hub
+longLabel Hub to test a superTrack set to show with no visible tracks
+email email@email.com
+useOneFile on
+
+genome hg19
+
+# shown, every child hidden: warn
+track allHidden
+superTrack on show
+shortLabel All Hidden
+longLabel Shown superTrack whose children are all hidden
+
+    track allHidden1
+    parent allHidden
+    visibility hide
+    shortLabel allHidden1
+    longLabel allHidden1
+    type bigBed 6
+    bigDataUrl test6field.bb
+
+    track allHidden2
+    parent allHidden hide
+    shortLabel allHidden2
+    longLabel allHidden2
+    type bigBed 6
+    bigDataUrl test6field.bb
+
+# shown, one child visible: no warning
+track oneVisible
+superTrack on show
+shortLabel One Visible
+longLabel Shown superTrack with one visible child
+
+    track oneVisible1
+    parent oneVisible
+    visibility hide
+    shortLabel oneVisible1
+    longLabel oneVisible1
+    type bigBed 6
+    bigDataUrl test6field.bb
+
+    track oneVisible2
+    parent oneVisible dense
+    shortLabel oneVisible2
+    longLabel oneVisible2
+    type bigBed 6
+    bigDataUrl test6field.bb
+
+# not shown, every child hidden: no warning
+track notShown
+superTrack on
+shortLabel Not Shown
+longLabel Hidden superTrack whose children are all hidden
+
+    track notShown1
+    parent notShown
+    visibility hide
+    shortLabel notShown1
+    longLabel notShown1
+    type bigBed 6
+    bigDataUrl test6field.bb
+
+# shown outer whose only child is a shown inner superTrack with hidden children:
+# warn for the inner one only
+track outerOk
+superTrack on show
+shortLabel Outer Ok
+longLabel Shown superTrack holding a shown superTrack
+
+    track innerAllHidden
+    superTrack on show
+    parent outerOk
+    shortLabel Inner All Hidden
+    longLabel Shown inner superTrack whose children are all hidden
+
+        track innerAllHidden1
+        parent innerAllHidden
+        visibility hide
+        shortLabel innerAllHidden1
+        longLabel innerAllHidden1
+        type bigBed 6
+        bigDataUrl test6field.bb
+
+# shown outer whose only child is an inner superTrack that is not shown: warn for the outer one
+track outerHiddenInner
+superTrack on show
+shortLabel Outer Hidden Inner
+longLabel Shown superTrack holding a hidden superTrack
+
+    track innerNotShown
+    superTrack on
+    parent outerHiddenInner
+    shortLabel Inner Not Shown
+    longLabel Inner superTrack that is not shown
+
+        track innerNotShown1
+        parent innerNotShown dense
+        shortLabel innerNotShown1
+        longLabel innerNotShown1
+        type bigBed 6
+        bigDataUrl test6field.bb

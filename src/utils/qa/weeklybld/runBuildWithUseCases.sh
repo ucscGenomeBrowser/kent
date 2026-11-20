@@ -8,11 +8,18 @@ buildmeister=${BUILDMEISTEREMAIL:-$(tcsh -c 'echo $BUILDMEISTEREMAIL' 2>/dev/nul
 buildmeister=${buildmeister:-braney@ucsc.edu}
 
 kentSrc=$HOME/kent/src
-buildLog=$HOME/kent/build.log
-testLog=$kentSrc/makeTest.log
-useLog=$kentSrc/buildWithUse.log
-# HEAD of the last night that built and tested cleanly, for the commit list
-lastClean=$HOME/kent/lastCleanNightly
+# logs and state live outside the kent tree (buildEnv.csh BUILDLOGS/BUILDSTATE)
+logDir=/hive/groups/browser/newBuild/logs/nightly
+stateDir=/hive/groups/browser/newBuild/state
+mkdir -p $logDir $stateDir
+buildLog=$logDir/build.log
+testLog=$logDir/makeTest.log
+useLog=$logDir/buildWithUse.log
+# HEAD of the last night that built and tested cleanly, for the commit list;
+# nightlyUtils.csh builds the utilities from it
+lastClean=$stateDir/lastCleanNightly
+# buildWithUseCases writes buildWithUse.log and makeTest.log here
+export NIGHTLY_LOGDIR=$logDir
 
 (cd $kentSrc && make clean > /dev/null 2>&1)
 $HOME/bin/scripts/buildWithUseCases $kentSrc alpha > $buildLog 2>&1

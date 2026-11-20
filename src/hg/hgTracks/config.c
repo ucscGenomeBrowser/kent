@@ -836,52 +836,49 @@ if (freeTypeOn())
         freeTypeTuneUi();
     }
 
-if (cfgOptionBooleanDefault("showMouseovers", FALSE))
+/* I predict most people will want the browser text size as the tooltip text size
+ * but just in case, users can change the value and it will remain independent
+ * of the font size by saving to localStorage. */
+hPrintf("<tr><td>Tooltip text size:</td>");
+hPrintf("<td style=\"text-align: right\">");
+static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
+int i;
+hPrintf("<select name='tooltipTextSize'>");
+for (i = 0; i < ArraySize(sizes); i++)
     {
-    /* I predict most people will want the browser text size as the tooltip text size
-     * but just in case, users can change the value and it will remain independent
-     * of the font size by saving to localStorage. */
-    hPrintf("<tr><td>Tooltip text size:</td>");
-    hPrintf("<td style=\"text-align: right\">");
-    static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
-    int i;
-    hPrintf("<select name='tooltipTextSize'>");
-    for (i = 0; i < ArraySize(sizes); i++)
-        {
-        hPrintf("<option ");
-        if (sameString(tl.textSize,sizes[i])) {hPrintf("selected");}
-        hPrintf(">%s</option>", sizes[i]);
-        }
-    hPrintf("</select>");
-    hPrintf("</td>");
-    hPrintf("</tr>");
-    jsInlineF(""
-        "function updateSelectedTooltipSize(newSize) {\n"
-        "    let options = document.getElementsByName('tooltipTextSize')[0];\n"
-        "    let i = 0;\n"
-        "    for (i; i < options.length; i++) {\n"
-        "        if (options[i].value === newSize) {\n"
-        "            options[i].selected = true;\n"
-        "            localStorage.setItem('tooltipTextSize', options[i].value);\n"
-        "        } else {\n"
-        "            options[i].selected = false;\n"
-        "        }\n"
-        "    }\n"
-        "}\n"
-        "\n"
-        "// set the tooltip text size based on localStorage values\n"
-        "let currTooltipSize = localStorage.getItem('tooltipTextSize');\n"
-        "let browserTextSize = document.getElementsByName('textSize')[0];\n"
-        "if (currTooltipSize === null) {\n"
-        "    localStorage.setItem('tooltipTextSize', browserTextSize.value);\n"
-        "} else {\n"
-        "    updateSelectedTooltipSize(currTooltipSize);\n"
-        "}"
-        "document.getElementsByName('tooltipTextSize')[0].addEventListener('change', function(e) {\n"
-        "    updateSelectedTooltipSize(document.getElementsByName('tooltipTextSize')[0].selectedOptions[0].value);\n"
-        "});\n"
-        );
+    hPrintf("<option ");
+    if (sameString(tl.textSize,sizes[i])) {hPrintf("selected");}
+    hPrintf(">%s</option>", sizes[i]);
     }
+hPrintf("</select>");
+hPrintf("</td>");
+hPrintf("</tr>");
+jsInlineF(""
+    "function updateSelectedTooltipSize(newSize) {\n"
+    "    let options = document.getElementsByName('tooltipTextSize')[0];\n"
+    "    let i = 0;\n"
+    "    for (i; i < options.length; i++) {\n"
+    "        if (options[i].value === newSize) {\n"
+    "            options[i].selected = true;\n"
+    "            localStorage.setItem('tooltipTextSize', options[i].value);\n"
+    "        } else {\n"
+    "            options[i].selected = false;\n"
+    "        }\n"
+    "    }\n"
+    "}\n"
+    "\n"
+    "// set the tooltip text size based on localStorage values\n"
+    "let currTooltipSize = localStorage.getItem('tooltipTextSize');\n"
+    "let browserTextSize = document.getElementsByName('textSize')[0];\n"
+    "if (currTooltipSize === null) {\n"
+    "    localStorage.setItem('tooltipTextSize', browserTextSize.value);\n"
+    "} else {\n"
+    "    updateSelectedTooltipSize(currTooltipSize);\n"
+    "}"
+    "document.getElementsByName('tooltipTextSize')[0].addEventListener('change', function(e) {\n"
+    "    updateSelectedTooltipSize(document.getElementsByName('tooltipTextSize')[0].selectedOptions[0].value);\n"
+    "});\n"
+    );
 
 hPrintf("<TR><TD>Maximum track load time: ");
 printInfoIcon("Maximum time in seconds the Genome Browser will wait for any individual track to "
@@ -956,46 +953,78 @@ hPrintf("Enable highlight with drag-and-select "
         "(if unchecked, drag-and-select always zooms to selection)");
 hPrintf("</TD></TR>\n");
 
-// check if we can do hgc pages in a pop up before putting up the user control
-if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE))
-    {
-    // put a checkbox, on by default, to control whether item clicks stay on hgTracks or
-    // go to hgTracks
-    hPrintf("<tr><td>");
-    hCheckBox("doHgcInPopUp", cartUsualBoolean(cart, "doHgcInPopUp", TRUE));
-    hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
-    }
+// put a checkbox, on by default, to control whether item clicks stay on hgTracks or
+// go to hgTracks
+hPrintf("<tr><td>");
+hCheckBox("doHgcInPopUp", cartUsualBoolean(cart, "doHgcInPopUp", TRUE));
+hPrintf("<td>Enable pop-up when clicking items</td></tr>\n");
 
-// My Variants navigation preference reset - stored in localStorage
+hTableEnd();
+
+// My Annotations preferences.  They are stored in localStorage, so the controls
+// have no name, stay out of the cart, and are read and written in the browser.
 if (cfgOptionBooleanDefault("doMyVariants", FALSE))
     {
-    hPrintf("<TR><TD>");
-    hPrintf("<input type='checkbox' id='resetMyVariantsNav' name='resetMyVariantsNav'>");
-    hPrintf("</TD><TD>");
-    hPrintf("Reset 'My Annotations' navigation preference (currently: <span id='myVariantsNavPrefDisplay'>not set</span>)");
+    hPrintf("<P><B>My Annotations</B></P>\n");
+
+    hPrintf("<TABLE style=\"border:0px; \">\n");
+    hPrintf("<TR><TD COLSPAN=2>");
+    hPrintf("<input type='checkbox' id='myVariantsDeleteAsk'> ");
+    hPrintf("Ask before deleting an annotation");
     hPrintf("</TD></TR>\n");
-    // Display current preference and clear localStorage on form submit if checkbox is checked
+
+    hPrintf("<TR><TD>After adding an annotation outside the current view:</TD>");
+    hPrintf("<TD><select id='myVariantsNavPref'>"
+            "<option value=''>Ask</option>"
+            "<option value='jump'>Go to the annotation</option>"
+            "<option value='stay'>Stay here</option>"
+            "</select></TD></TR>\n");
+
+    hPrintf("<TR><TD>After a search:</TD>");
+    hPrintf("<TD><select id='myVariantsSearchSavePref'>"
+            "<option value=''>Ask whether to save</option>"
+            "<option value='save'>Save without asking</option>"
+            "<option value='skip'>Do not save</option>"
+            "</select></TD></TR>\n");
+    hPrintf("</TABLE>\n");
+
+    // Show what each preference is set to now, and store what the controls say
+    // when the page is submitted.  An empty value means ask, the default.
     jsInlineF(
         "document.addEventListener('DOMContentLoaded', function() {"
-        "    var prefSpan = document.getElementById('myVariantsNavPrefDisplay');"
-        "    if (prefSpan) {"
-        "        var pref = localStorage.getItem('myVariants_navPref');"
-        "        prefSpan.textContent = pref ? pref : 'not set';"
-        "    }"
-        "    var form = document.forms['TrackForm'] || document.forms['TrackHeaderForm'];"
+        "    var prefs = [['myVariantsNavPref', 'myVariants_navPref'],"
+        "                 ['myVariantsSearchSavePref', 'myVariants_searchSavePref']];"
+        "    var delCb = document.getElementById('myVariantsDeleteAsk');"
+        "    if (delCb)"
+        "        delCb.checked = localStorage.getItem('myVariants_deleteNoConfirm') !== 'yes';"
+        "    prefs.forEach(function(p) {"
+        "        var sel = document.getElementById(p[0]);"
+        "        if (sel)"
+        "            sel.value = localStorage.getItem(p[1]) || '';"
+        "    });"
+        "    var form = document.forms['mainForm'];"
         "    if (form) {"
         "        form.addEventListener('submit', function() {"
-        "            var cb = document.getElementById('resetMyVariantsNav');"
-        "            if (cb && cb.checked) {"
-        "                localStorage.removeItem('myVariants_navPref');"
+        "            if (delCb) {"
+        "                if (delCb.checked)"
+        "                    localStorage.removeItem('myVariants_deleteNoConfirm');"
+        "                else"
+        "                    localStorage.setItem('myVariants_deleteNoConfirm', 'yes');"
         "            }"
+        "            prefs.forEach(function(p) {"
+        "                var sel = document.getElementById(p[0]);"
+        "                if (!sel)"
+        "                    return;"
+        "                if (sel.value)"
+        "                    localStorage.setItem(p[1], sel.value);"
+        "                else"
+        "                    localStorage.removeItem(p[1]);"
+        "            });"
         "        });"
         "    }"
         "});"
     );
     }
-
-hTableEnd();
 
 
 cgiDown(0.9);

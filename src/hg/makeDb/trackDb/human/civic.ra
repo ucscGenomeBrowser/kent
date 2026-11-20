@@ -1,6 +1,8 @@
 track civic
 shortLabel CIViC
 longLabel CIViC - Expert & crowd-sourced cancer variant interpretation
+tags clinical
+facet.evidence Curated
 type bigBed 12 +
 group phenDis
 bigDataUrl /gbdb/$D/civic/civic.bb

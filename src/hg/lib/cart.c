@@ -231,7 +231,6 @@ static char *fileNameCartVars[] =
 static char *fileNameCartVarPrefixes[] =
 {
     CT_FILE_VAR_PREFIX,                 // ctfile_<db>, ctfile_hub_<id>: custom tracks
-    MYVARIANTS_FILE_VAR_PREFIX,         // mvCtfile_<db>: myVariants custom track
     customCompositeCartName "-",        // customComposite-<db>: track collection hub
     quickLiftCartName "-",              // hubQuickLift-<db>: quickLift hub
 };
@@ -973,6 +972,7 @@ assert(hashNumEntries(hash) == 0);
 static void updateOne(struct sqlConnection *conn,
 	char *table, struct cartDb *cdb, char *contents, int contentSize);
 static void cartUpdateRecentSession(struct cart *cart, char *id);
+static struct cartDb *cartReusableCopy(struct sqlConnection *conn, struct cart *cart);
 static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean encodeNames,
                                char *skipPrefix);
 
@@ -1061,22 +1061,150 @@ for (pref = *pPrefs; pref != NULL; pref = pref->next)
 slPairFreeValsAndList(pPrefs);
 }
 
-static void cartKeepCopyBeforeLoad(struct cart *cart, char *loadedName)
-/* A full session load is about to replace the cart.  The cart keeps its hgsid, so the view the
- * user had is gone once the cart is saved.  Store a copy of it in a new sessionDb row and put that
- * on the list of recent views.  This is only needed if the hgsid existed before this request: a
- * session link without an hgsid got a new row, and the old view is still in the row of the hgsid
- * it came from, which is on the list already. */
+/* The cart as it was stored, before the variables of this request were applied to it.  cartNew
+ * sets it only for a request with hgSession variables, as only those can load a session. */
+static char *cartStateBeforeRequest = NULL;
+
+/* Variables the browser keeps for itself, which change when a page is drawn: two carts that
+ * differ only in these show the same thing. */
+static char *cartBookkeepingVars[] = {"pix", "oldPosition", "lastPosition", "cartVersion",
+    "lastVirtModeType", "lastVirtModeExtraState", "nonVirtPosition", NULL};
+static char *cartBookkeepingPrefixes[] = {hgSessionPrefix, "position.", "expOrder_", "simOrder_",
+    NULL};
+/* Variables that a page sets to its default when they are missing: they only count as different
+ * when both carts have them. */
+static char *cartDefaultedVars[] = {"clade", "org", "virtMode", "virtModeType", "trackHubs",
+    "textFont", "textSize", "textStyle", NULL};
+
+static boolean inStringArray(char *s, char **array, boolean isPrefix)
+/* Return TRUE if s is in the NULL-terminated array, or starts with one of its strings. */
 {
-if (!cartRecentSessionsEnabled() || cart->sessionInfo == NULL || cart->sessionInfo->useCount == 0)
-    return;
-struct sqlConnection *conn = cartDefaultConnector();
-boolean found;
-struct cartDb *copy = loadDb(conn, sessionDbTable(), NULL, &found);
+for (char **el = array; *el != NULL; el++)
+    if (isPrefix ? startsWith(*el, s) : sameString(*el, s))
+        return TRUE;
+return FALSE;
+}
+
+static struct hash *cartContentsToHash(char *contents)
+/* Return a hash of the variables in a CGI-encoded cart contents string, without the ones that
+ * say nothing about the tracks and settings: hgsid, the recent views list and bookkeeping. */
+{
+struct hash *hash = hashNew(10);
+char *dupe = cloneString(contents);
+char *namePt = dupe;
+while (namePt != NULL && *namePt != 0)
+    {
+    char *next = strchr(namePt, '&');
+    if (next != NULL)
+        *next++ = 0;
+    char *val = strchr(namePt, '=');
+    if (val != NULL)
+        {
+        *val++ = 0;
+        cgiDecode(val, val, strlen(val));
+        }
+    else
+        val = "";
+    cgiDecode(namePt, namePt, strlen(namePt));
+    if (!sameString(namePt, cartSessionVarName()) && !sameString(namePt, RECENT_SESSIONS_VAR)
+            && !inStringArray(namePt, cartBookkeepingVars, FALSE)
+            && !inStringArray(namePt, cartBookkeepingPrefixes, TRUE)
+            && hashLookup(hash, namePt) == NULL)
+        hashAdd(hash, namePt, cloneString(val));
+    namePt = next;
+    }
+freeMem(dupe);
+return hash;
+}
+
+static boolean hashValsInOther(struct hash *hash, struct hash *other)
+/* Return TRUE if every variable of hash has the same value in other, or is missing in other and
+ * is one that pages set to a default. */
+{
+struct hashCookie cookie = hashFirst(hash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    char *otherVal = hashFindVal(other, hel->name);
+    if (otherVal == NULL ? !inStringArray(hel->name, cartDefaultedVars, FALSE)
+                         : !sameString(otherVal, hel->val))
+        return FALSE;
+    }
+return TRUE;
+}
+
+static boolean sameCartContents(char *a, char *b)
+/* Return TRUE if two CGI-encoded cart contents strings have the same tracks and settings. */
+{
+if (a == NULL || b == NULL)
+    return FALSE;
+struct hash *aHash = cartContentsToHash(a), *bHash = cartContentsToHash(b);
+boolean same = hashValsInOther(aHash, bHash) && hashValsInOther(bHash, aHash);
+hashFreeWithVals(&aHash, freez);
+hashFreeWithVals(&bHash, freez);
+return same;
+}
+
+static struct cartDb *cartNewestCopyIfSame(struct sqlConnection *conn, struct cart *cart,
+                                           char *contents)
+/* Return the sessionDb row of the newest copy on the list of recent views if it has the same
+ * tracks and settings as contents, else NULL. */
+{
+struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+struct cartDb *newest = NULL;
+if (list != NULL && !sameString(list->name, cartSessionId(cart)))
+    {
+    newest = cartDbLoadFromId(conn, sessionDbTable(), list->name);
+    if (newest != NULL)
+        {
+        char *mark = cartContentsVal(newest->contents, hgsPrevViewOf);
+        if (mark == NULL || !sameCartContents(newest->contents, contents))
+            cartDbFree(&newest);
+        freeMem(mark);
+        }
+    }
+slPairFreeValsAndList(&list);
+return newest;
+}
+
+static boolean cartKeepCopyBeforeLoad(struct cart *cart, char *loadedName, char *loadedContents)
+/* A full session load is about to replace the cart.  Store a copy of the view the user had in a
+ * sessionDb row and put that on the list of recent views, the only way a row gets on that list.
+ * The view is the cart of the hgsid as it was before this request, or, for a request without a
+ * known hgsid (a session link, Public Sessions), the cart this web browser saved last.  The row
+ * is a new one, or the row of the oldest copy when that is about to drop off the list, so a user
+ * has at most MAX_RECENT_SESSIONS copies.  If the view is the same as the newest copy, that copy
+ * is relabeled and moved to the top instead, so opening one session twice does not list the
+ * same view twice.  If loadedContents, the session being loaded, is the same as the view,
+ * nothing would be lost: no copy is made and FALSE is returned. */
+{
+if (!cartRecentSessionsEnabled() || cart->sessionInfo == NULL)
+    return TRUE;
+// a new hgsid without a cart from userDb: nothing was there before
+if (cart->sessionInfo->useCount == 0 && cartStateBeforeRequest == NULL)
+    return TRUE;
 struct dyString *dy = dyStringNew(4096);
-// The cart already has the variables of this request, among them the hgS_ ones that ask for the
-// session load: keeping those would load the session again when the copy is opened.
-cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
+// Keep the view from before this request: the variables of a session link (position,
+// hideTracks, ...) belong to the session being loaded.  The hgS_ ones that ask for the load are
+// never kept, as they would load the session again when the copy is opened.
+if (cartStateBeforeRequest != NULL)
+    dyStringAppend(dy, cartStateBeforeRequest);
+else
+    cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
+if (sameCartContents(dy->string, loadedContents))
+    {
+    dyStringFree(&dy);
+    return FALSE;
+    }
+struct sqlConnection *conn = cartDefaultConnector();
+struct cartDb *copy = cartNewestCopyIfSame(conn, cart, dy->string);
+if (copy == NULL)
+    copy = cartReusableCopy(conn, cart);
+if (copy == NULL)
+    {
+    boolean found;
+    copy = loadDb(conn, sessionDbTable(), NULL, &found);
+    }
 char *encName = cgiEncode(loadedName);
 dyStringPrintf(dy, "%s%s=%s", (dy->stringSize > 0) ? "&" : "", hgsPrevViewOf, encName);
 // updateOne writes useCount+1.  At 2 hgcentralTidy keeps the row for 14 days if it is not
@@ -1090,6 +1218,7 @@ freeMem(encName);
 dyStringFree(&dy);
 cartDbFree(&copy);
 cartDefaultDisconnector(&conn);
+return TRUE;
 }
 
 #ifndef GBROWSE
@@ -1153,8 +1282,9 @@ if (row != NULL)
         sessionTableString = cloneString(sessionTableString);
         char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
         pubSessionsTableString = cloneString(pubSessionsTableString);
+        boolean copyKept = TRUE;
         if (!merge)
-            cartKeepCopyBeforeLoad(cart, sessionName);
+            copyKept = cartKeepCopyBeforeLoad(cart, sessionName, row[1]);
         struct slPair *userPrefs = cartSaveUserPrefs(cart);
         char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
         struct sqlConnection *conn2 = hConnectCentral();
@@ -1193,7 +1323,7 @@ if (row != NULL)
          * the current view, so it needs no note. */
         if (!merge)
             {
-            cartSetString(cart, hgsSessionJustLoaded, "on");
+            cartSetString(cart, hgsSessionJustLoaded, copyKept ? "on" : hgsNoCopyNeeded);
             cartSetString(cart, hgsOtherUserSessionName, sessionName);
             cartSetString(cart, hgsOtherUserName, sessionOwner);
             }
@@ -1774,7 +1904,7 @@ char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
 sessionTableString = cloneString(sessionTableString);
 char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
 pubSessionsTableString = cloneString(pubSessionsTableString);
-cartKeepCopyBeforeLoad(cart, "");
+cartKeepCopyBeforeLoad(cart, "", NULL);
 struct slPair *userPrefs = cartSaveUserPrefs(cart);
 char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
 cartRemoveLike(cart, "*");
@@ -2004,6 +2134,48 @@ cartRemove(cart, "db");
 return TRUE;
 }
 
+// The pages below are shown by the bare early error handler, before the page header exists,
+// so they bring their own title bar and margins.
+// The handler wraps the message in <P>, which the browser closes empty at the first <div>.
+#define EARLY_ERROR_PAGE_START \
+        "<div style='background:#003a72; padding:8px 24px'>" \
+        "<style>body {margin:0; font-family:Arial,Helvetica,sans-serif} p:empty {display:none}</style>" \
+        "<a href='../index.html' style='color:white; text-decoration:none; font-size:20px'>" \
+        "UCSC Genome Browser</a></div>" \
+        "<div style='margin:16px 24px; max-width:50em; font-size:15px; line-height:1.5'>"
+
+static void hubGenomeNotFoundAbort(char *genome, struct hubConnectStatus *hub)
+/* A hubUrl= request asked to open genome, which the hub's genomes.txt lists without a
+ * twoBitPath, so it has to be an assembly we have, and we don't have it.  Without this the
+ * browser would quietly open the default assembly instead.  refs #30832 */
+{
+char *hubUrl = (hub != NULL) ? hub->hubUrl : "";
+// a constant, passed with |none| so the HTML is not encoded
+char *hubIdNote = startsWith("hub_", genome) ?
+    "<p>A name that starts with <b>hub_</b> and a number refers to an assembly hub that is "
+    "connected on one particular Genome Browser server, and the number is different on every "
+    "server. Connect that assembly hub first. In genomes.txt, name the assembly the way the "
+    "assembly hub's own genomes.txt does, without the hub_ and the number, because that name "
+    "is the same on every server.</p>" : "";
+errAbort(EARLY_ERROR_PAGE_START
+        "<h2>Genome assembly not found</h2>"
+        "<p>The track hub <b>%s</b> lists the assembly <b>%s</b> in its genomes.txt file, "
+        "but this assembly is not available on this Genome Browser.</p>"
+        "%s|none|"
+        "<p>If you made this hub, check the genomes.txt file:</p>"
+        "<ul><li>If <b>%s</b> is your own assembly, its stanza needs a <b>twoBitPath</b> line "
+        "that points to the sequence file.</li>"
+        "<li>If it should be an assembly that we host, check the name for typing errors. UCSC "
+        "assembly names look like <b>hg38</b> or <b>mm39</b>. NCBI assembly accessions look "
+        "like <b>GCF_000001405.40</b>, including the version number after the dot.</li></ul>"
+        "<p>The <a href='../cgi-bin/hgHubConnect#hubDeveloper'>Hub Development</a> tab of the "
+        "Track Hubs page can check the whole hub for errors.</p>"
+        "<p>To look for another assembly, <a href='../cgi-bin/hgGateway'>go back to the "
+        "Genome Browser start page</a>. If you need help, "
+        "<a href='../contacts.html'>contact us</a>.</p></div>",
+        hubUrl, genome, hubIdNote, genome);
+}
+
 static void fixUpDb(struct cart *cart)
 // we want to load Genark hubs or error out if db is not available
 {
@@ -2027,14 +2199,7 @@ if (differentString(aliasDb, db))
         return;
     }
 
-// This is shown by the bare early error handler, before the page header exists, so it
-// brings its own title bar and margins.
-// The handler wraps the message in <P>, which the browser closes empty at the first <div>.
-errAbort("<div style='background:#003a72; padding:8px 24px'>"
-        "<style>body {margin:0; font-family:Arial,Helvetica,sans-serif} p:empty {display:none}</style>"
-        "<a href='../index.html' style='color:white; text-decoration:none; font-size:20px'>"
-        "UCSC Genome Browser</a></div>"
-        "<div style='margin:16px 24px; max-width:50em; font-size:15px; line-height:1.5'>"
+errAbort(EARLY_ERROR_PAGE_START
         "<h2>Genome assembly not found</h2>"
         "<p>The genome assembly <b>%s</b> is not available on this Genome Browser.</p>"
         "<p>First, check the name for typing errors. UCSC assembly names look like "
@@ -2247,7 +2412,7 @@ setUdcCacheDir();
 netSetTimeoutErrorMsg("Connection timeout: either the server is offline or any firewall between UCSC and the server blocks the connection.");
 }
 
-#define MAX_RECENT_SESSIONS 10
+#define MAX_RECENT_SESSIONS 20
 #define RECENT_SESSION_MAX_AGE (7 * 24 * 60 * 60)
 
 boolean cartRecentSessionsEnabled()
@@ -2283,6 +2448,58 @@ cgiDecode(val, val, strlen(val));
 return val;
 }
 
+char *cartRecentViewsJson(struct cart *cart, int *retCount)
+/* Return the list of recent views, the copies of the cart made just before a session load
+ * replaced it, as a JSON list of {hgsid, db, position, timestamp, prevViewOf}, newest first.
+ * Set *retCount to the number of copies.  Free the result when done. */
+{
+struct slPair *recent = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+char *currentId = cartSessionId(cart);
+struct sqlConnection *conn = cartDefaultConnector();
+struct jsonWrite *jw = jsonWriteNew();
+int count = 0;
+jsonWriteListStart(jw, NULL);
+for (struct slPair *el = recent; el != NULL; el = el->next)
+    {
+    if (sameString(el->name, currentId))
+        continue;
+    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
+    if (cdb == NULL)
+        continue;
+    // only set in a copy made just before a session load, "" if it was a file or URL.  Lists
+    // from before 2026-11 also have the hgsids of other tabs, and a copy opened by its own
+    // hgsid lost the marker: those are not shown, the list is only the views a load replaced.
+    char *prevViewOf = cartContentsVal(cdb->contents, hgsPrevViewOf);
+    if (prevViewOf == NULL)
+        {
+        cartDbFree(&cdb);
+        continue;
+        }
+    char *db = cartContentsVal(cdb->contents, "db");
+    char *position = cartContentsVal(cdb->contents, "position");
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "hgsid", el->name);
+    jsonWriteString(jw, "db", db);
+    jsonWriteString(jw, "position", position);
+    jsonWriteNumber(jw, "timestamp", sqlLongLong(el->val));
+    jsonWriteString(jw, "prevViewOf", prevViewOf);
+    jsonWriteObjectEnd(jw);
+    freeMem(db);
+    freeMem(position);
+    freeMem(prevViewOf);
+    cartDbFree(&cdb);
+    count++;
+    }
+jsonWriteListEnd(jw);
+char *json = cloneString(jw->dy->string);
+jsonWriteFree(&jw);
+cartDefaultDisconnector(&conn);
+slPairFreeValsAndList(&recent);
+if (retCount != NULL)
+    *retCount = count;
+return json;
+}
+
 static void cartUpdateRecentSession(struct cart *cart, char *currentId)
 /* Move the hgsid currentId to the front of the recent sessions list, dropping
  * entries that are too old or past MAX_RECENT_SESSIONS. */
@@ -2307,6 +2524,81 @@ cartSetString(cart, RECENT_SESSIONS_VAR, encoded);
 freeMem(encoded);
 slPairFreeValsAndList(&list);
 slPairFreeValsAndList(&newList);
+}
+
+static struct cartDb *cartReusableCopy(struct sqlConnection *conn, struct cart *cart)
+/* Return the sessionDb row of a copy made by cartKeepCopyBeforeLoad that is about to drop off the
+ * list of recent views, or NULL if there is none.  Writing the next copy into that row keeps the
+ * number of copies per user at MAX_RECENT_SESSIONS, however many sessions are loaded. */
+{
+struct cartDb *reuse = NULL;
+time_t now = time(NULL);
+struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+int kept = 0;
+for (struct slPair *el = list; el != NULL && reuse == NULL; el = el->next)
+    {
+    // cartUpdateRecentSession keeps MAX_RECENT_SESSIONS-1 entries that are not too old
+    if (now - sqlLongLong(el->val) <= RECENT_SESSION_MAX_AGE && ++kept < MAX_RECENT_SESSIONS)
+        continue;
+    if (sameString(el->name, cartSessionId(cart)))
+        continue;
+    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
+    if (cdb == NULL)
+        continue;
+    // A copy opened by its own hgsid, as before 2026-11, has lost the marker and is a cart in
+    // use: leave it alone.
+    char *mark = cartContentsVal(cdb->contents, hgsPrevViewOf);
+    if (mark != NULL)
+        reuse = cdb;
+    else
+        cartDbFree(&cdb);
+    freeMem(mark);
+    }
+slPairFreeValsAndList(&list);
+return reuse;
+}
+
+static boolean cartOpenCopy(struct cart *cart, struct hash *oldVars)
+/* Replace the cart with the tracks and settings of the copy that hgsOpenCopy names, so the
+ * copy is opened in this request's hgsid and stays on the list of recent views as it is.  Only
+ * a copy on this web browser's own list can be opened.  Return TRUE if the cart was replaced. */
+{
+char *copyId = cloneString(cartString(cart, hgsOpenCopy));
+cartRemove(cart, hgsOpenCopy);
+boolean opened = FALSE;
+struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+if (cartRecentSessionsEnabled() && slPairFind(list, copyId) != NULL
+        && differentString(copyId, cartSessionId(cart)))
+    {
+    struct sqlConnection *conn = cartDefaultConnector();
+    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), copyId);
+    cartDefaultDisconnector(&conn);
+    if (cdb != NULL)
+        {
+        char *hgsid = cloneString(cartSessionId(cart));
+        char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
+        cartRemoveLike(cart, "*");
+        cartParseOverHash(cart, cdb->contents);
+        cartRemove(cart, hgsPrevViewOf);
+        cartSetString(cart, cartSessionVarName(), hgsid);
+        if (oldVars)
+            hashEmpty(oldVars);
+        // the CGI variables of this request, e.g. what hgSession should show, still apply
+        loadCgiOverHash(cart, oldVars);
+        cartRemove(cart, hgsOpenCopy);
+        cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
+        freeMem(recentSessions);
+        freeMem(hgsid);
+        cartDbFree(&cdb);
+        opened = TRUE;
+        }
+    }
+if (!opened)
+    warn("This copy of your tracks and settings is not available anymore. Copies are kept "
+         "for 7 days, in the web browser where they were made.");
+slPairFreeValsAndList(&list);
+freeMem(copyId);
+return opened;
 }
 
 void cartSetHubDatabase(struct cart *cart, struct hash *oldVars, char *newDatabase)
@@ -2395,6 +2687,27 @@ char when[1024];
 safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
 
+// Without an hgsid, or with one that has expired, the cart came from userDb: the cart this web
+// browser saved last, so that is the view a session load is about to replace.
+if (trackRecent)
+    {
+    struct cgiVar *cv;
+    for (cv = cgiVarList(); cv != NULL; cv = cv->next)
+        if (startsWith(hgSessionPrefix, cv->name))
+            break;
+    if (cv != NULL)
+        {
+        // the list itself is only kept in userDb, it is put back below
+        cartRemove(cart, RECENT_SESSIONS_VAR);
+        struct dyString *dy = dyStringNew(4096);
+        cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
+        if (dy->stringSize > 0)
+            cartStateBeforeRequest = dyStringCannibalize(&dy);
+        else
+            dyStringFree(&dy);
+        }
+    }
+
 loadCgiOverHash(cart, oldVars);
 
 if (recentSessions)
@@ -2418,7 +2731,10 @@ cartJustify(cart, oldVars);
  * apply those to cart before we do anything else.  (If this is hgSession,
  * let it handle the settings so it can display feedback to the user.) */
 boolean didSessionLoad = FALSE;
-if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
+// Open and Save in the list of recent views open a copy in a new tab, in hgTracks or hgSession
+if (cartVarExists(cart, hgsOpenCopy))
+    didSessionLoad = cartOpenCopy(cart, oldVars);
+else if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
     {
     if (cartVarExists(cart, hgsDoOtherUser))
 	{
@@ -2480,6 +2796,17 @@ if (cartCollectionHubCopyOnWrite() && gLocalHubCopyRequested)
 
 char *newDatabase = hubConnectLoadHubs(cart);
 
+// newDatabase is only set when this request connects a hub and asks for one of its genomes.
+// It has to be an assembly of ours or one of a connected assembly hub (hDbIsActive knows both,
+// and by now hubConnectLoadHubs has loaded the hubs), or getDbAndGenome() would silently fall
+// back to the default one.  A track hub on an assembly hub names it "hub_<id>_<name>", and that
+// fails too when hub <id> is not connected here, e.g. because the id is from another server.
+// Off by default: earlier fixes for this broke other hub cases, so it stays switchable
+// with hubGenomeNotFoundError=on in hg.conf.  refs #30832
+if ((newDatabase != NULL) && cfgOptionBooleanDefault("hubGenomeNotFoundError", FALSE)
+        && !hDbIsActive(newDatabase))
+    hubGenomeNotFoundAbort(newDatabase, hubConnectNewHub());
+
 if (newDatabase != NULL)
     cartSetHubDatabase(cart, oldVars, newDatabase);
 
@@ -2496,9 +2823,6 @@ if (didSessionLoad)
     {
     cartHideDefaultTracks(cart);
     }
-if (trackRecent)
-    cartUpdateRecentSession(cart, cartSessionId(cart));
-
 return cart;
 }
 
@@ -4286,9 +4610,16 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     else
         safef(setting,sizeof(setting),"%s.%s",descendentTdb->track,suffix);
     char *newVal = cartOptionalString(newCart,setting);
+    // A visibility this request carries is the request asking for it, not a leftover,
+    // even when it is "hide", which cartValueHasChanged() counts as unchanged.
+    // So a URL that turns on a container and hides one of its subtracks keeps the hide,
+    // on the first such request and on every later one.  oldVars holds an entry for
+    // each CGI variable in this request and for nothing else (see storeInOldVars()).
+    boolean setByThisRequest = vis && hashLookup(oldVars,setting) != NULL;
     if (    newVal    != NULL
     && (   (parentVal != NULL && sameString(newVal,parentVal))
-        || (FALSE == cartValueHasChanged(newCart,oldVars,setting,TRUE,FALSE))))
+        || (!setByThisRequest
+            && FALSE == cartValueHasChanged(newCart,oldVars,setting,TRUE,FALSE))))
         removed += cartRemoveAndCount(newCart,setting);
     }
 return removed;

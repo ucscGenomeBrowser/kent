@@ -2,6 +2,8 @@ track clinvarMapped
 compositeTrack on
 shortLabel ClinVar Mapped
 longLabel ClinVar coding variants mapped to related loci by sequence homology
+tags clinical
+facet.consortia ClinVar
 group phenDis
 visibility hide
 type bigBed

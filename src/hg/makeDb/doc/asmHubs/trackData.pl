@@ -28,6 +28,7 @@ my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 my $sciNameOverrideFile = "$toolsDir/sciNameOverride.txt";
 my %sciNameOverride;	# key is accession, value is corrected scientific name
 my %taxIdOverride;	# key is accession, value is corrected taxId
+my $ncbiNames;	# key is accession, value is [ NCBI sciName, taxId ]
 			# keys for both of those can also be the asmId
 
 if ( -s "${sciNameOverrideFile}" ) {
@@ -687,6 +688,10 @@ sub tableContentsBoth() {
       }
     }
     close (FH);
+    if (defined($ncbiNames->{$accessionId})) {
+      $sciName = $ncbiNames->{$accessionId}->[0];
+    }
+    $sciName = $sciNameOverride{$accessionId} if (defined($sciNameOverride{$accessionId}));
 
     # the browser/hub links are the only thing that differ between the
     # two pages besides the columns themselves
@@ -784,6 +789,8 @@ while (my $line = <FH>) {
   ++$assemblyTotal;
 }
 close (FH);
+
+$ncbiNames = commonHtml::ncbiSciNames(@orderList);
 
 my $header = capture { startHtml() };
 my ($prodBody, $testBody, $prodCols, $testCols) = tableContentsBoth();

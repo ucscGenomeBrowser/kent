@@ -6196,6 +6196,33 @@ retroFinder/branches/version2/src/pipeline/analyseExpress.sh
 # Scripts copied ucscRetroAli9.psl, ucscRetroInfo9.bed and ucscRetroCds9.tab
 # to /hive/data/genomes/hg38/bed/retro/
 
+# clip ucscRetroInfo9 thickStart/thickEnd to the alignment (DONE 2026-11-12 markd)
+# refs #38753
+# analyseExpress.sh overwrote thickStart/thickEnd with the CDS of the expressed
+# transcript model in ucscRetroExpressed9.  That model is wider than the retro
+# alignment, so 973 of the 15491 rows had thick coordinates outside their own
+# chromStart..chromEnd and the first 12 columns would not load as BED.  The
+# unclipped ORF is still in ucscRetroExpressed9.
+cd /hive/data/genomes/hg38/bed/retro
+hgsql hg38 -N -e "select * from ucscRetroInfo9" > ucscRetroInfo9.preThickFix.bed
+awk -F'\t' 'BEGIN{OFS="\t"}
+{
+  if ($7 > $3 || $8 < $2) { $7 = $2; $8 = $2 }
+  else {
+    if ($7 < $2) $7 = $2
+    if ($8 > $3) $8 = $3
+  }
+  print
+}' ucscRetroInfo9.preThickFix.bed > ucscRetroInfo9.thickClipped.bed
+hgsql hg38 -e "create table ucscRetroInfo9New like ucscRetroInfo9"
+hgLoadSqlTab -oldTable -notOnServer hg38 ucscRetroInfo9New /dev/null ucscRetroInfo9.thickClipped.bed
+hgsql hg38 -e "rename table ucscRetroInfo9 to ucscRetroInfo9PreThickFix, ucscRetroInfo9New to ucscRetroInfo9"
+# 840 rows clipped at one end, 133 with no overlap at all set to no CDS.
+# Nothing but thickStart and thickEnd changed.  ucscRetroInfo9PreThickFix was
+# dropped once the new table was checked; ucscRetroInfo9.preThickFix.bed is the
+# copy of what was replaced.
+
+
 ##########
 # Make dbVar chrom to UCSC chrom lift file
 #  DONE braney 2/12/15
@@ -7409,4 +7436,56 @@ ln -sf /hive/data/outside/cosmic/hg38/v101/cosmic.bb
 #Updated human/hg38/trackDb.ra and human/hg38/cosmicMuts.html
 
 
+#########################################################################
+# construct liftOver to hg18 (DONE - 2026-01-24 - Hiram)
+    # it turns out it doesn't matter if the query or target 2bit files
+    # are masked.  This procedure can be done on completely unmasked sequences
+    # for both, same result masked or not masked
+    screen -S hg38	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/hg38/bed/blat.hg18.2026-01-24
+    cd /hive/data/genomes/hg38/bed/blat.hg18.2026-01-24
+    # check it with -debug first to see if it is going to work:
 
+    doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=hgwdev \
+      -dbHost=hgwdev -workhorse=hgwdev -fileServer=hgwdev -debug \
+      -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+      -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+      -query2Bit=/hive/data/genomes/hg18/hg18.2bit \
+      -querySizes=/hive/data/genomes/hg18/chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.11.ooc  hg38 hg18
+
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=hgwdev \
+      -dbHost=hgwdev -workhorse=hgwdev -fileServer=hgwdev \
+      -target2Bit=/hive/data/genomes/hg38/hg38.2bit \
+      -targetSizes=/hive/data/genomes/hg38/chrom.sizes \
+      -query2Bit=/hive/data/genomes/hg18/hg18.2bit \
+      -querySizes=/hive/data/genomes/hg18/chrom.sizes \
+        -ooc=/hive/data/genomes/hg38/hg38.p14.11.ooc  hg38 hg18) > do.log 2>&1
+
+#       -ooc=/hive/data/genomes/hg38/11.ooc  hg38 hg18
+#       -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc hg38 hg18
+
+    # the debug step doesn't actually construct enough files to run the
+    # steps manually.  The chaining has an extra procedure that is performed
+    # while not in 'debug' mode
+    # the run.blat was operated manually, then chaining:
+    time doSameSpeciesLiftOver.pl -continue=chain -stop=net -buildDir=`pwd` \
+      -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev \
+           -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc \
+             hg38 hg18 > chain.log 2>&1
+    # real    22m31.635s
+    # loading is only a few seconds:
+    doSameSpeciesLiftOver.pl -continue=load -buildDir=`pwd` \
+     -bigClusterHub=ku \
+       -dbHost=hgwdev -workhorse=hgwdev \
+          -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc \
+             hg38 hg18 > load.log 2>&1
+
+    # verify this file exists:
+    #	/gbdb/hg38/liftOver/hg38ToHg18.over.chain.gz
+    # and try out the conversion on genome-test from hg38 to hg18
+    # same file should exist for downloads:
+    #  /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/liftOver/hg38ToHg18.over.chain.gz
+
+############################################################################

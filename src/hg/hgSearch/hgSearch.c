@@ -627,6 +627,12 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
     if (!sameString(trackName, "chromInfo"))
         printf("&%s=pack", trackName);
     printf("&hgFind.matches=%s", hgp->singlePos->name);
+    /* Pass the term on so hgTracks can say what was searched for, and offer to
+     * keep it.  cgiEncode leaves only alphanumerics, '.' and '_' unescaped, so
+     * the term cannot break out of the string literal this is printed into. */
+    char *cgiSearch = cgiEncode(userSearch);
+    printf("&search=%s", cgiSearch);
+    freeMem(cgiSearch);
     if (track && track->parent)
         {
         if (tdbIsSuperTrackChild(track))

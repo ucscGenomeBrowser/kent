@@ -21,9 +21,7 @@ needed a mechanism the others do not have:
   master through QA without blocking the release train, then have its default
   flipped to TRUE once it is released, then have the flag deleted.  That last
   step is the one nobody does.  Nothing in the tree records that a flag was
-  meant to be temporary, so shipped gates accumulate: showTutorial has been
-  defaulting TRUE since v466, greyBarIcons since v492, and both are still
-  branch points in hgTracks today.
+  meant to be temporary, so shipped gates accumulate.
 
 So the registry separates two populations that look identical in the source:
 
@@ -51,7 +49,13 @@ Sunset policy, all in versions (releases are about three weeks apart):
                         it along with every branch that reads it.
   QA_GRACE        = 6   a gate still defaulting FALSE this long after it landed
                         is not being gated, it is being forgotten.  Either turn
-                        it on or delete the feature.
+                        it on or delete the feature.  The exception is a gate
+                        the RR, genome-euro, genome-asia or hgwbeta already
+                        turns on in its own hg.conf: that feature shipped by
+                        configuration, so the action is to flip the default,
+                        and it is reported as liveByConf rather than stalled.
+                        The production confs are read from the weekly copies
+                        in kent/confs.
 
 Verification status.  Rows carry verified=True only where the classification
 was confirmed by reading the code at the cited source file.  --check counts what
@@ -90,7 +94,9 @@ on, on every machine somebody had appended the flag to by hand.  What the flip
 does is make those lines pointless, and a pointless line is not harmless, since
 while it is there the flag reads on locally whatever the tree says.  So this
 mode reads the hg.conf files it can see from hgwdev, joins them against the
-catalog, and names the lines to delete.  Like --reconcile it is silent and exits
+catalog, and names the lines to delete.  That includes the weekly copies of the
+RR, genome-euro, genome-asia and hgwbeta confs in kent/confs; a line found in
+one of those is QA's to delete on the real machine, not in the copy.  Like --reconcile it is silent and exits
 0 when there is nothing to do, which is what lets the nightly cron run it and
 mail only the news.
 """
@@ -106,7 +112,16 @@ import sys
 KEEP_AFTER_FLIP = 4
 QA_GRACE = 6
 
-# The gates already known to be overdue or stalled, so --sunset-new can report
+# The weekly copies of the production hg.conf files, harvested by a cron into
+# kent/confs ("Installing updated hg.conf files from UCSC servers").  They are
+# how a run on hgwdev can tell that a gate whose code default is still FALSE is
+# on for real users anyway.  HGCONF_CONFS_DIR points a test at a fixture.
+CONFS_DIR = os.environ.get("HGCONF_CONFS_DIR") or os.path.normpath(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "confs"))
+PROD_CONFS = [("rr", "the RR"), ("euro", "genome-euro"),
+              ("asia", "genome-asia"), ("hgwbeta", "hgwbeta")]
+
+# The gates already known to be overdue, stalled or liveByConf, so --sunset-new can report
 # what changed rather than the whole standing list.  Regenerate with
 # --update-baseline and commit it; the diff is then the release-to-release
 # history of the backlog, in the git log rather than in somebody's memory.
@@ -136,11 +151,14 @@ def h(name, kind, src, default=None, note=None, public=False, verified=False,
                 line is derived data: it is recomputed for display from the
                 harvester, so an edit above a read is not a citation to fix
     default     compiled-in default if the read supplies one
-    role        for boolean flags only: "gate" (a release gate, temporary by
+    role        for boolean flags: "gate" (a release gate, temporary by
                 intent, subject to sunsetting) or "knob" (a permanent
                 deployment switch, exempt).  Every cfgOptionBooleanDefault
                 flag in the tree must be one or the other; --reconcile
-                enforces that
+                enforces that.  A setting that is not a flag can be a gate
+                too when the code it controls is temporary, such as a
+                measurement that should come out once it has run, but it
+                must then carry an explicit sunset, since it has no flip
     sunset      release by which a gate should be gone from the tree.  Omit to
                 take the default of flipped + KEEP_AFTER_FLIP; the age cache
                 supplies the flip version
@@ -290,24 +308,30 @@ RELEASE_GATES = {
                "hgTrackUi.c, which does the clearing; with it off the menu item "
                "is not offered and hgTrackUi ignores the request.  Off during "
                "QA; flip to TRUE once released."),
-        h("showMouseovers", "flag", "hg/hgTracks/config.c", default="FALSE",
-          role="gate", verified=True,
-          note="Mouseover text on track items instead of the browser's own "
-               "title tooltips.  Added v446 and still defaulting FALSE, which "
-               "makes it the oldest gate in the tree that never shipped.  Four "
-               "call sites across config.c and imageV2.c.  Either the feature "
-               "is wanted, in which case flip it, or it is not, in which case "
-               "the flag and the code behind it should go."),
+        h("urlTrackOpensContainer", "flag", "hg/hgTracks/hgTracks.c",
+          default="FALSE", role="gate", verified=True, ticket="38762",
+          note="A track turned on by a link or a form, e.g. hmc=pack on the "
+               "URL, opens its hidden supertrack and hides the supertrack's "
+               "other members, by setting the same <track>_sel mark the Track "
+               "Search checkbox sends.  Read once in getTrackList(); off, such "
+               "a link sets the track's visibility but the track stays hidden "
+               "inside its supertrack.  On for genome-test and hgwdev since "
+               "2026-11-13; flip to TRUE once released."),
         h("storeUserFiles", "flag", "hg/hgHubConnect/hgHubConnect.c",
-          default="FALSE", role="gate", verified=True,
+          default="FALSE", role="knob", verified=True,
           note="Hub space, the user file store behind hgHubConnect's upload "
                "wizard.  Added v447 and briefly defaulted TRUE around v454 "
                "before going back to FALSE, so the history shows a flip that "
-               "was reverted.  Four call sites."),
+               "was reverted.  Four call sites.  A knob, not a gate: the "
+               "feature's owner said in the v506 wrap-up reply that a mirror "
+               "cannot necessarily support the upload store, so the default "
+               "stays FALSE and mirrors opt in."),
         h("hgSession.shortLink", "flag", "hg/hgSession/hgSession.c",
-          default="FALSE", role="gate", verified=True,
-          note="Short session links.  Added v374 and never flipped, which is "
-               "the longest-running dark feature here."),
+          default="FALSE", role="knob", verified=True,
+          note="Short session links.  Added v374 and never flipped.  A knob, "
+               "not a gate: the feature's owner said in the v506 wrap-up reply "
+               "that a mirror cannot necessarily support it, so the default "
+               "stays FALSE and mirrors opt in."),
         h("showHubApiKey", "flag", "hg/hgHubConnect/hgHubConnect.c",
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
@@ -578,29 +602,13 @@ RELEASE_GATES = {
                "the dialog rework that came with the same ticket -- output "
                "format first, page-sized font and buttons, the position on "
                "its own line -- which is not GenBank-specific and lands for "
-               "everyone.  Sits behind showDownloadUi, the gate on the dialog "
-               "itself, which has defaulted TRUE since v467.  Added in the "
+               "everyone. Added in the "
                "current release, so it is doing exactly what a gate is "
                "supposed to do and has not earned a deadline yet.  On in "
                "cgi-bin-max's hg.conf for testing; not yet turned on anywhere "
                "shared."),
         # Gates whose default has flipped TRUE.  These are the deletable ones:
         # the feature is public and the flag is now only an off switch.
-        h("showTutorial", "flag", "hg/hgCustom/hgCustom.c", default="TRUE",
-          role="gate", verified=True,
-          note="The interactive tutorials.  Public since v466, five call "
-               "sites across four CGIs.  Nothing is gating any more."),
-        h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c",
-          default="TRUE", role="gate", verified=True,
-          note="The download-current-track UI.  Public since v467."),
-        h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c", default="TRUE",
-          role="gate", verified=True,
-          note="Details pages in a popup instead of a page load.  Public "
-               "since v492.  Three call sites."),
-        h("greyBarIcons", "flag", "hg/hgTracks/hgTracks.c",
-          default="TRUE", role="gate", verified=True,
-          note="The grey side-bar icons on track images.  Public since v492.  "
-               "Four call sites in hgTracks.c and imageV2.c."),
         h("newBotDelay", "flag", "hg/lib/botDelay.c", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),
@@ -620,14 +628,17 @@ RELEASE_GATES = {
                "last test in bedItemRgb is the only thing it controls, so "
                "deleting it is a two-line change."),
         h("hgHubConnect.validateHub", "flag",
-          "hg/hgHubConnect/hgHubConnect.c", default="TRUE", role="gate",
-          verified=True,
+          "hg/hgHubConnect/hgHubConnect.c", default="TRUE", role="knob",
+          public=True, verified=True,
           note="The Hub Development tab on hgHubConnect, which is where a hub "
                "author runs hubCheck from the browser.  Two call sites, the "
                "tab itself and hgHubConnectDeveloperMode below it.  Public "
                "since v427.  Described here as \"run hubCheck when a hub is "
                "attached\" until the call site was read: it gates the tab, "
-               "not attachment, so a hub is validated on attach either way."),
+               "not attachment, so a hub is validated on attach either way.  "
+               "A knob, not a gate: the feature's owner said in the v506 "
+               "wrap-up reply that a mirror cannot necessarily support it, "
+               "and product/ex.hg.conf already documents turning it off."),
         h("blatNewForm", "flag", "hg/hgBlat/hgBlat.c", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Replaces hgBlat's classic C-generated search form with the "
@@ -737,6 +748,34 @@ RELEASE_GATES = {
                "chain's whole source range is read in one piece, as before.  "
                "Sibling of quickLiftMultiChain.  hgwdev's hg.conf turns it "
                "on."),
+        h("multiRegionSpaces", "flag", "hg/lib/multiRegionSpace.c",
+          default="FALSE", role="gate", verified=True, ticket="37788",
+          note="Draw a multi-region view (exon view, gene view, custom "
+               "regions, alt haplotype) as a synthetic assembly:  "
+               "loader/regionsToChain lays the regions end to end into a "
+               "bigChain in trash/mrSpace, tracks are lifted into it with "
+               "quickLift, and the ruler is numbered in source coordinates.  "
+               "Read once, in multiRegionSpacesEnabled(), which "
+               "enterMultiRegionSpace() and the other space entry points in "
+               "hgTracks.c ask first;  every other test of the space "
+               "(multiRegionSpaceForDb(), liftedInSpace()) is FALSE until "
+               "one of them installs a space.  Off, the old virtual-"
+               "chromosome path draws the view, as before.  Needs the "
+               "hgcentral table from hg/lib/multiRegionSpaceKey.sql.  "
+               "hgwdev's hg.conf turns it on."),
+        h("multiRegionSpaceMaxRegions", "limit", "hg/lib/multiRegionSpace.c",
+          default="500000", verified=True, ticket="37788",
+          note="The most regions a multi-region space is built for.  A view "
+               "with more warns and is drawn by the old virtual-chromosome "
+               "path.  Read in multiRegionSpaceMaxRegions();  only asked "
+               "when multiRegionSpaces is on."),
+        h("multiRegionSpaceKeyName", "table", "hg/lib/multiRegionSpace.c",
+          default='"multiRegionSpaceKey"', verified=True, ticket="37788",
+          note="The hgcentral table that maps a multi-region view's "
+               "conditions to the SHA1 of its region list, so a view built "
+               "once is found again without rebuilding the list.  Read in "
+               "multiRegionSpaceKeyTable();  only asked when "
+               "multiRegionSpaces is on."),
         h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
           default="FALSE", role="gate", verified=True, ticket="38490",
           note="Let quickLift lift bigBarChart tracks.  Read in "
@@ -822,6 +861,17 @@ MIRROR_KNOBS = {
                "measurably faster to draw, so both positions have a "
                "constituency.  Its companions freeTypeDir and freeTypeFont "
                "are plain values and stay."),
+        h("freeTypeTuneUI", "flag", "hg/hgTracks/config.c", default="FALSE",
+          role="knob", ticket="38562", public=True, verified=True,
+          note="Shows a block of FreeType controls on the hgTracks configure "
+               "page: pixel size and baseline per text size, glyph gamma, the "
+               "fit-to-box multiplier, hinting and the anti-aliasing target, "
+               "with a Reset FreeType button.  The freeTypeTune.* cart "
+               "variables are read only while this is on, so a server without "
+               "it draws what it always drew.  A debugging aid for tuning "
+               "small text, not a feature waiting to ship, so it stays off by "
+               "default and is a knob.  Documented in ex.hg.conf and the "
+               "mirror manual."),
         h("trustTrackDb", "flag", "hg/lib/hdb.c", default="FALSE",
           role="knob", verified=True,
           note="Skip the per-track check that a trackDb row's table or file "
@@ -1250,8 +1300,6 @@ PATHS = {
         h("hubSpaceTusdEndpoint", "url",
           "hg/hgHubConnect/trackHubWizard.c", default="NULL",
           verified=True, family="hubSpace"),
-        h("myVariantsDataDir", "path", "hg/lib/myVariants.c",
-          verified=True, note="Goes with the doMyVariants gate."),
         h("hgPhyloPlaceServerDir", "path", "hg/hgPhyloPlace/runUsher.c",
           verified=True),
         h("browser.documentRoot", "path", "hg/lib/hui.c",
@@ -1409,6 +1457,31 @@ ABUSE = {
         h("bottleneck.except", "internal", "hg/lib/botDelay.c",
           verified=True, family="bottleneck",
           note="IPs exempt from delay."),
+        h("bottleneck.serveOnFailure", "flag", "hg/lib/botDelay.c",
+          default="FALSE", role="gate", verified=True, ticket="37738",
+          family="bottleneck",
+          note="Serve the request when the bottleneck server cannot be reached, "
+               "instead of failing the CGI.  Without it an unreachable bottleneck "
+               "server takes down every CGI that consults it, which is about fifteen "
+               "of them plus das, so one process is a single point of failure for the "
+               "whole site.  hubApi follows the same gate: with it off hubApi answers "
+               "with a JSON 500, with it on hubApi serves the request like every other "
+               "CGI.  Flip it once QA has seen a browser run with the bottleneck server "
+               "stopped."),
+        h("bottleneck.failureDelay", "limit", "hg/lib/botDelay.c",
+          default='"0"', verified=True, ticket="37738", family="bottleneck",
+          note="Milliseconds to delay each request while the bottleneck server is "
+               "unreachable and bottleneck.serveOnFailure is on.  The default of 0 "
+               "serves at full speed, on the reasoning that an outage of ours should "
+               "not slow users down.  Capped at 2000."),
+        h("bottleneck.timeoutSeconds", "limit", "hg/lib/botDelay.c",
+          default='"10"', verified=True, ticket="37738", family="bottleneck",
+          note="Timeout on the bottleneck socket.  It sets the connect, capped at the "
+               "stock 10 seconds:  a bottleneck host that drops packets instead of "
+               "refusing costs that much on every request.  With "
+               "bottleneck.serveOnFailure on it bounds the read the same way, since a "
+               "read that times out is served.  With it off the read keeps the stock "
+               "120 seconds, or this value if larger, up to 300."),
         h("hguidIpTracking.maxIps", "limit", "hg/lib/botDelay.c",
           default='"10"', verified=True, family="hguidIpTracking"),
         h("hguidIpTracking.windowSeconds", "limit", "hg/lib/botDelay.c",
@@ -1480,7 +1553,8 @@ LOGGING = {
         h("logProxy", "debug", "hg/lib/cart.c", verified=True,
           family="proxy"),
         h("pngTimingSampleRate", "debug", "hg/hgTracks/hgTracks.c",
-          default="0", verified=True, ticket="38109",
+          default="0", verified=True, ticket="38109", role="gate",
+          sunset=508,
           note="One page load in this many measures how long the track image "
                "took to reach the reader.  hgTracks writes the rate into the "
                "page as a JavaScript variable and reportPngTiming() in "
@@ -1492,7 +1566,12 @@ LOGGING = {
                "can see, because apache stops timing once the kernel has the "
                "bytes.  Zero, or the setting left out, and nothing is written "
                "into the page, so the beacon is off.  It samples rather than "
-               "reporting every load because each report is another request."),
+               "reporting every load because each report is another request.  "
+               "A gate because the measurement is done: #38109 closed on "
+               "2026-11-03 keeping zlib level 6.  At its sunset, delete the "
+               "read in hgTracks.c, reportPngTiming() in hgTracks.js and "
+               "hg/utils/pngTiming, and any pngTimingSampleRate line left in "
+               "an hg.conf."),
     ],
 }
 
@@ -1539,9 +1618,8 @@ BRANDING = {
           public=True, verified=True),
         h("mouseOverEnabled", "internal", "hg/hgTracks/hgTracks.c",
           default='"on"', verified=True,
-          note="Not the same thing as the showMouseovers gate: this one is on "
-               "by default and controls the existing tooltip behaviour.  The "
-               "near-identical names are a trap worth fixing."),
+          note="This one is on "
+               "by default and controls the wiggle tooltip behaviour."),
         h("bigWarn", "internal", "hg/hgTracks/bigWarn.c", default='"on"',
           public=True, verified=True),
         h("defaultGenome", "internal", "hg/lib/hdb.c",
@@ -1898,38 +1976,47 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("freeTypeTuneUI", "flag", "hg/hgTracks/config.c", default="FALSE",
-          ticket="38562",
+        h("trackFinder", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+          ticket="33217",
           note="Written down by --auto-register, not yet reviewed by a "
                "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/config.c.  Came in at 05d90ce7ada, hgTracks: a "
-               "block of controls on the configure page for the FreeType "
-               "rendering itself, behind hg.conf freeTypeTuneUI, so the "
-               "settings that decide whether small text is readable can be "
-               "found by looking at the browser rather than at a demo "
-               "program.  The controls are the pixel size and baseline picked "
-               "for each text size, a gamma on each glyph pixel's coverage, "
-               "the multiplier used for text drawn to fit a box, the hinting "
-               "mode, and the anti-aliasing target, which now offers Light, "
-               "Light sub pixel and the four LCD sub-pixel targets beside the "
-               "Normal one the browser has always used; a Reset FreeType "
-               "button puts them all back.  Every control starts at what the "
-               "browser draws today and the cart is read only while the "
-               "hg.conf setting is on, so a server without it draws exactly "
-               "what it drew before: checked by rendering the same images "
-               "from this build and from a build of the same tree without the "
-               "change, with the setting absent and the cart carrying a value "
-               "for every control, and comparing them byte for byte.  Two "
-               "things had to be fixed before the knobs meant anything.  The "
-               "glyph copy assumed FreeType had packed the coverage rows when "
-               "it pads each one out to pitch, which is the same for every "
-               "glyph the browser draws today but would have skewed an LCD "
-               "render.  Subpixel positioning needs the unhinted advance, "
-               "since a hinted advance is rounded to a whole pixel and leaves "
-               "the pen with no fraction to stand on, which is why that mode "
-               "first came out identical to Light.  The setting is documented "
-               "in ex.hg.conf and in the mirror manual.  refs #38562.  Needs "
-               "a description and a gate or knob call."),
+               "hg/hgTracks/hgTracks.c.  Came in at b41624f97e8, Track "
+               "finder: Find Tracks dialog in hgTracks behind the trackFinder "
+               "hg.conf setting, with the old track search as an Advanced "
+               "Search tab, recommended track set loading moved to hg/lib, "
+               "refs #33217.  Needs a description and a gate or knob call."),
+        h("browser.mafFastCodons", "flag", "hg/hgTracks/wigMafTrack.c",
+          default="FALSE", ticket="38756",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/hgTracks/wigMafTrack.c.  Came in at dc4f089aa32, hgTracks: "
+               "put the faster MAF codon display behind hg.conf "
+               "browser.mafFastCodons, refs #38756, #38763.  Needs a "
+               "description and a gate or knob call."),
+        h("hubGenomeNotFoundError", "flag", "hg/lib/cart.c", default="FALSE",
+          ticket="30832",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in hg/lib/cart.c. "
+               "Came in at 79ea85d0f5f, The hub genome error pages (no "
+               "twoBitPath, and hub_<id>_<name> from another server) are now "
+               "off by default and turned on with hubGenomeNotFoundError=on "
+               "in hg.conf, refs #30832.  Needs a description and a gate or "
+               "knob call."),
+        h("browser.quickLiftMuteTriangles", "flag", "hg/lib/quickLift.c",
+          default="FALSE", ticket="38693",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/quickLift.c.  Came in at a789fe5ac91, quickLift: fade "
+               "the difference triangles on a chain track when they overlap. "
+               "When there are more triangles than fit side by side, they "
+               "merge into one solid band of color.  The color now moves "
+               "toward white as the overlap grows: no fade while they fit, "
+               "then 90% x (1 - 1/fill), where fill is the total triangle "
+               "width over the window width.  The faded color is opaque, so "
+               "overlapping triangles do not stack back up to full color. "
+               "Gated by browser.quickLiftMuteTriangles, cart first and then "
+               "hg.conf, off by default.  refs #38693.  Needs a description "
+               "and a gate or knob call."),
     ],
 }
 
@@ -2039,6 +2126,7 @@ def gate_lifecycle(cat, ages):
     first_true = ages.get("firstTrue", {})
     cur = ages.get("current")
     hh = load_harvester()
+    live = production_on()
     out = []
     for v in gates(cat):
         name = v["name"]
@@ -2047,7 +2135,9 @@ def gate_lifecycle(cat, ages):
         tickets, ticket_from = ([], None)
         if hh and hasattr(hh, "ticket_for"):
             tickets, ticket_from = hh.ticket_for(name, ages)
-        shipped = v.get("default") == "TRUE"
+        # A gate that is not a flag has no default to flip.  Its code is
+        # already live, so it counts as shipped and waits for its sunset.
+        shipped = v.get("default") == "TRUE" or v.get("kind") != "flag"
         # A flip date with a FALSE default now means the flip was reverted, so
         # the flag is back to gating and the flip date must not drive a
         # deadline.
@@ -2062,14 +2152,18 @@ def gate_lifecycle(cat, ages):
             "current": cur,
             "age": (cur - added) if (cur and added) else None,
             "tickets": tickets, "ticketFrom": ticket_from,
+            "liveOn": live.get(name, []),
         })
     return out
 
 
 def gate_states(life, cur):
-    """name -> "overdue" or "stalled", for the gates a release can act on.
+    """name -> "overdue", "stalled" or "liveByConf", for the gates a release
+    can act on.
 
-    The two states the backlog file tracks.  A gate in neither is scheduled,
+    The states the backlog file tracks.  liveByConf is a gate that would be
+    stalled by its code default but is turned on in a production hg.conf, so
+    users already have the feature and the fix is to flip the default.  A gate in neither is scheduled,
     inside its QA grace period, or undatable, and none of those is news.  The
     precedence matches sunset_report: an overdue gate is reported as overdue
     even if it would also qualify as stalled.
@@ -2080,7 +2174,7 @@ def gate_states(life, cur):
             states[g["name"]] = "overdue"
         elif (not g["shipped"] and g["age"] is not None
               and g["age"] > QA_GRACE):
-            states[g["name"]] = "stalled"
+            states[g["name"]] = "liveByConf" if g["liveOn"] else "stalled"
     return states
 
 
@@ -2127,7 +2221,8 @@ def write_backlog(states, cur, life=None, path=None):
     with open(path, "w") as f:
         f.write("""\
 # hgConfGateBacklog.txt - the hg.conf release gates already known to be overdue
-# for deletion or stalled in QA.  Refs #37925.
+# for deletion, stalled in QA, or on in production hg.conf with the code default
+# still FALSE (liveByConf).  Refs #37925.
 #
 # hgConfCatalog.py --sunset-new reports only the gates that are not in here, so
 # this is what lets the weekly build's wrap-up say "two gates went overdue this
@@ -2141,7 +2236,7 @@ def write_backlog(states, cur, life=None, path=None):
 # being in here is not evidence that anybody reviewed it; only the ones added
 # since, which arrive a few at a time in a reviewable diff, carry that weight.
 #
-# Fields: name, state (overdue or stalled), and the release it was first
+# Fields: name, state (overdue, stalled or liveByConf), and the release it was first
 # reported at.  hgConfCatalog.py --sunset prints the full list with dates.
 """)
         for name in sorted(states):
@@ -2184,7 +2279,8 @@ def sunset_delta(cat, ages, sites=None, out=sys.stdout):
     moved = sorted(n for n in now if n in was and was[n][0] != now[n])
     gone = sorted(n for n in was if n not in now)
 
-    print("hg.conf release gates at v%s: %d newly overdue or stalled, "
+    print("hg.conf release gates at v%s: %d newly overdue, stalled or "
+          "liveByConf, "
           "%d resolved, %d in the standing backlog (%s)"
           % (cur, len(fresh) + len(moved), len(gone), len(now),
              os.path.basename(BACKLOG_FILE)), file=out)
@@ -2326,9 +2422,19 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
     for g in due:
         print(line(g), file=out)
 
-    stalled = sorted([g for g in life
-                      if not g["shipped"] and g["age"] is not None
-                      and g["age"] > QA_GRACE], key=lambda g: -g["age"])
+    old = [g for g in life if not g["shipped"] and g["age"] is not None
+           and g["age"] > QA_GRACE]
+    live = sorted([g for g in old if g["liveOn"]], key=lambda g: -g["age"])
+    stalled = sorted([g for g in old if not g["liveOn"]],
+                     key=lambda g: -g["age"])
+    print("\nON IN PRODUCTION HG.CONF (default still FALSE %d+ releases after "
+          "it landed): %d" % (QA_GRACE, len(live)), file=out)
+    print("  Users already have these.  Flip the code default to TRUE, or mark "
+          "the row\n  a knob if mirrors should leave it off.  Read from the "
+          "copies in kent/confs.", file=out)
+    for g in live:
+        print(line(g) + "  on in %s" % "/".join(g["liveOn"]), file=out)
+
     print("\nSTALLED IN QA (default still FALSE %d+ releases after it landed): "
           "%d" % (QA_GRACE, len(stalled)), file=out)
     print("  Either turn these on or delete the feature.  A flag nobody "
@@ -2366,13 +2472,16 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
 # tree says.  That is the mechanism by which a wrong default survives: the
 # people most likely to notice are on the one machine that cannot see it.
 #
-# These are the conf files readable from hgwdev.  hgwbeta, the RR and every
-# mirror keep their own, none of which can be read from here, so the report
-# covers what it can see and says what it cannot.  Those are QA's to clean up.
+# These are the conf files readable from hgwdev, then the weekly copies of the
+# production confs in kent/confs.  A line found in a copy is QA's to delete on
+# the real machine; deleting it from the copy does nothing, and the next weekly
+# harvest puts it back.  Mirrors keep their own and none of them can be read.
 MACHINE_CONFS = [
     ("/usr/local/apache/cgi-bin/hg.conf", "shared dev conf, genome-test reads it"),
     ("/usr/local/apache/cgi-bin-beta/hg.conf", "the beta CGI install on this host"),
-]
+] + [(os.path.join(CONFS_DIR, "%s.hg.conf" % c),
+      "copy of %s's conf; QA edits the real one" % label)
+     for c, label in PROD_CONFS]
 
 # The six words cfgOptionBooleanDefault accepts, lowercase only, from
 # hg/lib/hgConfig.c.  Anything else there is not a falsy value, it is an
@@ -2430,6 +2539,26 @@ def parse_conf(path):
                 out.append((n, name.strip(), val.strip()))
     except (IOError, OSError):
         return []
+    return out
+
+
+def production_on():
+    """{name: [conf, ...]}: the settings each production conf copy turns on.
+
+    Read from the kent/confs copies named in PROD_CONFS.  When a name is set
+    twice in one file the last line wins, as it does in hgConfig.c.  A missing
+    copy is skipped, so a checkout without kent/confs reads as "on nowhere"
+    and the report falls back to the code default alone.
+    """
+    out = {}
+    for conf, _ in PROD_CONFS:
+        last = {}
+        for _, name, val in parse_conf(os.path.join(CONFS_DIR,
+                                                    "%s.hg.conf" % conf)):
+            last[name] = val
+        for name, val in last.items():
+            if val in TRUE_WORDS:
+                out.setdefault(name, []).append(conf)
     return out
 
 
@@ -2523,9 +2652,10 @@ def redundant_report(cat, ages=None, verbose=False, out=sys.stdout):
               "default is installed\n  on the machine that reads the file.  "
               "Until then the line is what is turning\n  the feature on there, "
               "and removing it turns the feature off.\n"
-              "\n  hgwbeta, the RR and the mirrors keep their own hg.conf and "
-              "none of them can\n  be read from hgwdev, so a line may be "
-              "waiting there too.  Those are QA's.", file=out)
+              "\n  A line in kent/confs is a copy of a production conf.  QA "
+              "deletes it on the\n  real machine; the copy follows at the "
+              "next weekly harvest.  Mirrors keep\n  their own hg.conf and "
+              "cannot be read from here.", file=out)
 
     if found["unparsable"]:
         print("\nNOT A BOOLEAN (%d): hg.conf takes yes, no, on, off, true or "
@@ -2571,8 +2701,10 @@ def check(cat, out=sys.stderr):
             print("    %-34s %s" % (n, ", ".join(s)), file=out)
 
     for v in all_vars(cat):
-        if v.get("role") == "gate" and v.get("kind") != "flag":
-            print("gate not of kind flag: %s" % v["name"], file=out)
+        if (v.get("role") == "gate" and v.get("kind") != "flag"
+                and not v.get("sunset")):
+            print("gate not of kind flag needs a sunset=: %s" % v["name"],
+                  file=out)
             problems += 1
         if v.get("sunset") and not v.get("role") == "gate":
             print("sunset on a non-gate: %s" % v["name"], file=out)
@@ -3293,7 +3425,7 @@ def render_html(cat, ages=None, sites=None):
         cur = ages.get("current")
         overdue = [g for g in life if g["sunset"] and cur
                    and g["sunset"] <= cur]
-        stalled = [g for g in life if not g["shipped"]
+        stalled = [g for g in life if not g["shipped"] and not g["liveOn"]
                    and g["age"] is not None and g["age"] > QA_GRACE]
         sunset_html = (
             '<div class="policy"><b>Sunset status at v%s.</b> '

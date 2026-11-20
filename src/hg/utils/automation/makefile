@@ -59,6 +59,9 @@ SCRIPT_FILES = \
 	ensVersions \
 	extractNestedRepeats.pl \
 	extractGtf.pl \
+	fileServer \
+	grcIncidentDb.pl \
+	gwUploadFile \
 	kmerPairs.pl \
 	kmerCollapsePairedEnds.pl \
 	kmerPrint.pl \
@@ -68,6 +71,7 @@ SCRIPT_FILES = \
 	makeGenomeDb.pl \
 	makePushQSql.pl \
 	mashDistance.pl \
+	mergeTrf.py \
 	monthlyUpdateIgtc.csh \
 	simplePartition.pl \
 	partitionSequence.pl \

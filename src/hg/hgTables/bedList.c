@@ -226,8 +226,6 @@ char *dbTable = NULL;
 if (isCustomTrack(table) || isMyVariantsTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
-    if (isMyVariantsTrack(table) && ct->dbTableName == NULL)
-        ct->dbTableName = myVariantsResolveDbTableForCustomTrack(ct->tdb->table, cart);
     dbTable = ct->dbTableName;
     conn = hAllocConn(CUSTOM_TRASH);
     hti = hFindTableInfo(CUSTOM_TRASH, region->chrom, dbTable);

@@ -27,6 +27,9 @@
 #include "extTools.h"
 #include "botDelay.h"
 #include "hgConfig.h"
+#include "myVariants.h"
+#include "myVariantsShare.h"
+#include "cartJson.h"
 #include <sys/time.h>
 #include <sys/resource.h>
 
@@ -74,6 +77,33 @@ else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && cgiVarExists("myVarSh
     {
     cart = cartForSession(hUserCookie(), NULL, NULL);
     myVariantsShareApiHandler(cgiString("myVarShareCmd"));
+    }
+else if (cfgOptionBooleanDefault("doMyVariants", FALSE)
+         && cgiVarExists(MYVARIANTS_PROJECT_CGI_VAR))
+    {
+    cart = cartForSession(hUserCookie(), NULL, NULL);
+    myVariantsProjectApiHandler(cgiString(MYVARIANTS_PROJECT_CGI_VAR));
+    }
+else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && cgiVarExists(MYVAR_RESOLVE_CGI_VAR))
+    {
+    cart = cartForSession(hUserCookie(), NULL, NULL);
+    myVariantsResolveApiHandler(cgiString(MYVAR_RESOLVE_CGI_VAR));
+    }
+else if (cfgOptionBooleanDefault("doMyVariants", FALSE)
+         && cgiVarExists(MYVARIANTS_DOWNLOAD_CGI_VAR))
+    {
+    /* Vet the request first: building the cart with an unknown db aborts with
+     * an HTML page, and this endpoint answers in JSON. */
+    myVariantsDownloadCheckParams(cgiString(MYVARIANTS_DOWNLOAD_CGI_VAR));
+    cart = cartForSession(hUserCookie(), NULL, NULL);
+    myVariantsDownloadApiHandler(cgiString(MYVARIANTS_DOWNLOAD_CGI_VAR));
+    }
+else if (trackFinderEnabled() && cgiVarExists(CARTJSON_COMMAND))
+    {
+    // Track list for the Find Tracks dialog.  Return now so nothing follows the JSON.
+    trackFinderCartJson();
+    cgiExitTime("hgTracks", enteredMainTime);
+    return 0;
     }
 else
     {

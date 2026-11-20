@@ -287,6 +287,25 @@ sqlDisconnect(&conn);
 return size;
 }
 
+boolean tableHasNoCds(char *db, char *table)
+/* Return TRUE if table is a genePred SQL table in which no row has a CDS.
+ * Such a table, e.g. a GENCODE pseudogene or polyA subtrack, correctly
+ * gives no protein sequences.  Return FALSE when the table is not a SQL
+ * table or has no cdsStart column, so the protein check stays as strict
+ * as before for everything else. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+boolean noCds = FALSE;
+if (sqlTableExists(conn, table) && sqlColumnExists(conn, table, "cdsStart"))
+    {
+    char query[512];
+    sqlSafef(query, sizeof query, "select 1 from %s where cdsStart < cdsEnd limit 1", table);
+    noCds = (sqlQuickNum(conn, query) == 0);
+    }
+sqlDisconnect(&conn);
+return noCds;
+}
+
 void showConnectInfo(char *db)
 /* Show connection info used by this program. */
 {
@@ -728,7 +747,11 @@ if (typeVar != NULL)
 	     safef(testName, sizeof(testName), "%sSeq", type);
 	     page = quickSubmit(outPage, org, db, group, track, table,
 	        testName, hgtaDoGenePredSequence, "submit");
-	     checkFaOutput(page, expectedRows, TRUE);
+	     /* A table with no coding rows has no protein to give. */
+	     if (sameString(type, "protein") && tableHasNoCds(db, table))
+		 checkFaOutput(page, 0, FALSE);
+	     else
+		 checkFaOutput(page, expectedRows, TRUE);
 	     htmlPageFree(&page);
 	     }
          }

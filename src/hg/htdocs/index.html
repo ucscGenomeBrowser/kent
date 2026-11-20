@@ -15,7 +15,7 @@
     <input size=50 name="searchString" id="searchBarSearchString" type="text"
         aria-label="Search genes, annotations, and help docs"
         placeholder="Search genes, annotations, and help docs">
-    <button name="searchButton" id="searchBarSearchButton" type="button">Search</button>
+    <button name="searchButton" id="searchBarSearchButton" type="button" title="Search genes, annotation tracks and help pages in the current assembly">Search</button>
     <span id="searchBarStatus" class="gbVisuallyHidden" role="status" aria-live="polite"></span>
     <script>
     function searchBarBusy(busy) {
@@ -92,7 +92,7 @@
     });
     </script>
     </div>
-    <a class="gbHeroButton" href="cgi-bin/hgTracks">Launch the Genome Browser</a>
+    <a class="gbHeroButton" href="cgi-bin/hgTracks" title="Open the Genome Browser on the assembly and position you last viewed">Launch the Genome Browser</a>
   </div>
 </div>
 

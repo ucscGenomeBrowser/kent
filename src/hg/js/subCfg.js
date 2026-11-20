@@ -427,7 +427,7 @@ var subCfg = { // subtrack config module.
             if ($(this).hasClass('fauxInput')) {
                 $(this).text(capitalizeFirstLetter(visText));
             } else {
-                $(this).attr('selectedIndex',limitedVis);
+                $(this).prop('selectedIndex',limitedVis);
                 subCfg.clearChange(this);
             }
         });
@@ -470,7 +470,7 @@ var subCfg = { // subtrack config module.
                     if ($(this).hasClass('fauxInput')) {
                         $(this).text(capitalizeFirstLetter(visText));
                     } else {
-                        $(this).attr('selectedIndex',parentVis);
+                        $(this).prop('selectedIndex',parentVis);
                         subCfg.clearChange(this);
                     }
                 });
@@ -511,7 +511,7 @@ var subCfg = { // subtrack config module.
                         limitedVis = Math.min(myParents[0].selectedIndex,myParents[1].selectedIndex);
                 }
                 if (limitedVis < 9)
-                    $(childObj).attr('selectedIndex',limitedVis);
+                    $(childObj).prop('selectedIndex',limitedVis);
            }
         } else {
             var count = 0;

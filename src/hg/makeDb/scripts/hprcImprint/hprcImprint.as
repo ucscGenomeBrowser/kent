@@ -11,5 +11,6 @@ table hprcImprintDmr
     uint   thickEnd;   "End of thick part"
     uint   reserved;   "Color of the region"
     string parent;     "Higher methylation on|Haplotype with the higher methylation level"
+    string strength;   "Difference|Strong (0.15 or more) or moderate"
     float  methDiff;   "Methylation difference|Maternal minus paternal methylation level"
     )

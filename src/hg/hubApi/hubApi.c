@@ -1641,10 +1641,15 @@ if (isNotEmpty(earlyApiKey))
             "invalid '%s' provided. Make sure the apiKey is valid, or contact us.",
             argApiKey);
     }
-/* similar delay system as in DAS server */
+/* similar delay system as in DAS server.  With bottleneck.serveOnFailure off,
+ * an unreachable bottleneck server still errAborts, and the errCatch turns that
+ * into the JSON 500 the API contract promises.  With the setting on we serve the
+ * request like every other CGI, and bottleneckFailed keeps the fallback delay
+ * from being mistaken for a real bot delay. */
+boolean bottleneckFailed = FALSE;
 struct errCatch *bnErrCatch = errCatchNew();
 if (errCatchStart(bnErrCatch))
-    botDelay = hgBotDelayTimeFrac(delayFraction);
+    botDelay = hgBotDelayTimeFracWithStatus(delayFraction, &bottleneckFailed);
 errCatchEnd(bnErrCatch);
 if (bnErrCatch->gotError)
     apiErrAbort(err500, err500Msg, "bottleneck server unavailable: %s",
@@ -1652,7 +1657,7 @@ if (bnErrCatch->gotError)
 errCatchFree(&bnErrCatch);
 if (botDelay > 0)
     {
-    if (botDelay > 2000)
+    if (botDelay > 2000 && !bottleneckFailed)
         {
 	sleep1000(botDelay);
 	hogExit();

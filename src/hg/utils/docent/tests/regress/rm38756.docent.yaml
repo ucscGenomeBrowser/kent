@@ -1,0 +1,86 @@
+# #38756 (and #38763) -- MAF codon translation, with a frames bigBed that has only the
+# reference's frames, the case in Michael Hiller's 830-way report.
+#
+# Commits, on master 2026-11-15 and on genome-test the same day: 15cd288b52e (load the bases of split codons and the frames
+# bigBed once per draw), 52978391ea1 (bigMaf "otherwise use default species" falls back),
+# dc4f089aa32 (both behind hg.conf browser.mafFastCodons), be5558f42b2 (free the frames lists).
+#
+# HG.CONF GATE: browser.mafFastCodons.  Off by default.  With it off this script fails at its
+# last check, exactly as on a build without the fix.  That is a configuration answer, not a
+# regression.  Settle it with
+#     grep mafFastCodons /usr/local/apache/cgi-bin/hg.conf          (hgwdev, genome-test)
+#     grep mafFastCodons ~/kent/confs/*hg.conf                      (the other servers)
+# It was turned on in hgwdev's shared hg.conf on 2026-11-15.  It is not on the RR, so this
+# script fails there until it is.
+#
+# What it watches.  The codon mode "Use reading frames for species if available, otherwise
+# use default species" (cart value codonFrameDef) on a bigMaf whose frames bigBed holds only
+# hg38 rows.  No other species has frames, so every row should be translated with hg38's
+# frames.  Before 52978391ea1 the retry for the default species asked the bigBed for the
+# CURRENT species again, got nothing, and drew that row as plain gray bases.
+#
+# What it does not watch: the speed.  15cd288b52e draws the same pixels, only faster
+# (70-150 s down to 1.5 s on the 830-way track), so no check here can fail on it.  It was
+# pixel-compared by hand, 16 windows x modes, see #38756.  The codon rows below are drawn by
+# the new code when the gate is on, so a crash or a wrong translation in it would show.
+#
+# The fixture is ~/public_html/docentFixtures/rm38756/: 40 species of hg38 multiz100way over
+# chr7:155806300-155806700 (the SHH exon in the report), and hg38's one multiz100wayFrames
+# row there.  That row ends 155806557 with nextFramePos 155803725, so the window below
+# includes the split-codon path as well.  Two tracks, each with its own copy of the files:
+# rm38756default (codonDefault, the control) and rm38756frameDef, which the script switches
+# to codonFrameDef.  hgTrackUi needs `speciesOrder` in the stanza to draw the codon controls.
+#
+# Setting the mode.  The cart variable is <track>.codons, and for a hub track that name
+# carries the per-server hub_<n>_ prefix, so it cannot go on a URL here.  The `codons`
+# trackDb setting is not read (cartUsualStringClosestToHome reads only the cart), so the
+# script clicks the row's side button, picks the radio on hgTrackUi and submits, as a user
+# does.  udcTimeout=1 makes the server read the fixture fresh.
+#
+# The colors.  A translated row is drawn in two alternating blues, 200,220,255 and
+# 177,202,240, about 46% each, so either can come out on top.  The checks ask for the color
+# between them, 188,211,248, with a tolerance of 13 per channel, which covers both and not
+# the gray.  An untranslated row is mostly 127,127,127.
+proof:
+  - "assertion-only 2026-11-15 -- written with the fix"
+  - "xfail 2026-11-15 -- fails on genome-test at the last step (code without the fix): rm38756frameDef is drawn 127,127,127 (38%), the default row 200,220,255"
+  - "sandbox-ab 2026-11-15 -- park 38763 (port 48094, hgTracks from be5558f42b2's tree): passes with browser.mafFastCodons=on; with =off added to the park's hg.conf the last step fails, rm38756frameDef drawn 127,127,127 (38%)"
+  - "server-flip 2026-11-15 -- failed on genome-test at step 10 (rm38756frameDef 127,127,127); passed there once be5558f42b2 was built with cgi-alpha (hgTracks 13:19), with browser.mafFastCodons=on in the shared hg.conf"
+
+target: genome-test
+db: hg38
+position: chr7:155806440-155806499
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&udcTimeout=1&hubUrl=https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38756/hub.txt&position=chr7%3A155806440-155806499"
+
+  # Both rows drawn, from files that opened.  A row that failed draws a message instead of
+  # bases, and the color checks would then be about that message.
+  - expect:
+      rows: [rm38756default, rm38756frameDef]
+      noText: ["Unable to open", "missing required trackDb setting", "Warning/Error"]
+
+  # Both tracks start in the default mode, codonDefault, and both are translated.  This pins
+  # the colors: if this fails, the fixture or the codon drawing is broken, not the fallback.
+  - expect:
+      color:
+        - {track: rm38756default, is: "188,211,248", tolerance: 13}
+        - {track: rm38756frameDef, is: "188,211,248", tolerance: 13}
+
+  # Switch rm38756frameDef to "otherwise use default species" through its settings page.
+  - click: "td[id^='td_btn_'][id$='_rm38756frameDef']"
+  - wait: "input[value='codonFrameDef']"
+  - click: "input[value='codonFrameDef']"
+  - click: "#Submit"
+  - wait: "#imgTbl"
+  - expect:
+      rows: [rm38756default, rm38756frameDef]
+      noText: "Warning/Error"
+
+  # The bug.  Every species falls back to hg38's frames, so the row is still translated.
+  # Without the fix (or with browser.mafFastCodons off) it is drawn as gray bases.
+  - expect:
+      color:
+        - {track: rm38756default, is: "188,211,248", tolerance: 13}
+        - {track: rm38756frameDef, is: "188,211,248", tolerance: 13, not: "127,127,127"}

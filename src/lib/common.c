@@ -11,6 +11,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "sqlNum.h"
+#include <poll.h>
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -2838,7 +2839,7 @@ void mustWrite(FILE *file, void *buf, size_t size)
 {
 if (size != 0 && fwrite(buf, size, 1, file) != 1)
     {
-    errAbort("Error writing %lld bytes: %s\n", (long long)size, strerror(ferror(file)));
+    errAbort("Error writing %lld bytes: %s\n", (long long)size, strerror(errno));
     }
 }
 
@@ -2849,7 +2850,7 @@ void mustRead(FILE *file, void *buf, size_t size)
 if (size != 0 && fread(buf, size, 1, file) != 1)
     {
     if (ferror(file))
-	errAbort("Error reading %lld bytes: %s", (long long)size, strerror(ferror(file)));
+	errAbort("Error reading %lld bytes: %s", (long long)size, strerror(errno));
     else
 	errAbort("End of file reading %lld bytes", (long long)size);
     }
@@ -2962,7 +2963,7 @@ char *success = fgets(buf, charCount, file);
 if (success == NULL && charCount > 0)
     buf[0] = '\0';
 if (ferror(file))
-    errAbort("mustGetLine: fgets failed: %s", strerror(ferror(file)));
+    errAbort("mustGetLine: fgets failed: %s", strerror(errno));
 }
 
 
@@ -3122,6 +3123,18 @@ return chopPrefixAt(s, '.');
 
 
 
+static boolean stdoutReaderGone(FILE *f)
+/* Return TRUE if f writes to a pipe or socket whose reading end has closed. */
+{
+struct pollfd pfd;
+pfd.fd = fileno(f);
+pfd.events = POLLOUT;
+pfd.revents = 0;
+/* Linux reports a pipe with no reader as POLLERR and a socket whose peer closed as
+ * POLLHUP;  other systems report a widowed pipe as POLLHUP too. */
+return (poll(&pfd, 1, 0) == 1) && ((pfd.revents & (POLLERR | POLLHUP)) != 0);
+}
+
 boolean carefulCloseWarn(FILE **pFile)
 /* Close file if open and null out handle to it.
  * Return FALSE and print a warning message if there
@@ -3148,7 +3161,26 @@ if ((pFile != NULL) && ((f = *pFile) != NULL))
         // I/O cleanup causes the invalid memory to be written to the file,
         // possible outputting corruption data.  If would be consistent with
         // stdio behavior to have "stdout" magic name open "/dev/stdout".
-        fflush(f);
+        //
+        // A reader that has gone away (bigBedToBed ... stdout | head) is not an
+        // error:  with SIGPIPE at its default that ends the program quietly, and
+        // net.c ignores SIGPIPE for https, so the writes fail with EPIPE instead.
+        // Take errno at the failing flush, since a flush of an already-drained
+        // buffer succeeds and leaves errno holding whatever came before.
+        int flushErr = (fflush(f) != 0) ? errno : 0;
+        if (flushErr == EPIPE || stdoutReaderGone(f))
+            ;
+        else if (flushErr != 0)
+            {
+            errno = flushErr;
+            errnoWarn("error writing to stdout");
+            ok = FALSE;
+            }
+        else if (ferror(f))
+            {
+            warn("error writing to stdout");
+            ok = FALSE;
+            }
         }
     *pFile = NULL;
     }

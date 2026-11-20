@@ -12,6 +12,7 @@
 #include "hCommon.h"
 #include "cgapSage/cgapSage.h"
 #include "cgapSage/cgapSageLib.h"
+#include "quickLift.h"
 
 static int grayIxForCgap(double tpm)
 /* Return a grayIx based on the score. */
@@ -251,6 +252,31 @@ cgapSageLibFreeList(&libs);
 return libTotHash;
 }
 
+static struct slList *cgapSageLoadRelative(char **row)
+/* Load a cgapSage with thickStart counted from chromStart and thickEnd counted back from
+ * chromEnd, so that both follow the ends when only those are lifted. */
+{
+struct cgapSage *tag = cgapSageLoad(row);
+tag->thickStart -= tag->chromStart;
+tag->thickEnd = tag->chromEnd - tag->thickEnd;
+return (struct slList *)tag;
+}
+
+static void cgapSageLiftAdjust(void *item, boolean flipped, int clippedStart)
+/* Turn a lifted tag around if the lift did, and put its thick part back in place. */
+{
+struct cgapSage *tag = item;
+unsigned fromStart = tag->thickStart, fromEnd = tag->thickEnd;
+if (flipped)
+    {
+    tag->strand[0] = (tag->strand[0] == '-') ? '+' : '-';
+    fromStart = tag->thickEnd;
+    fromEnd = tag->thickStart;
+    }
+tag->thickStart = min(tag->chromStart + fromStart, tag->chromEnd);
+tag->thickEnd = max((int)tag->chromEnd - (int)fromEnd, (int)tag->thickStart);
+}
+
 void cgapSageLoadItems(struct track *tg)
 /* This function loads the beds in the current window into a linkedFeatures list. */
 /* Each bed entry may turn into multiple linkedFeatures because one is made for */
@@ -263,6 +289,26 @@ struct hash *libTotHash = getTotTagsHashFromTable(conn);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
+if (liftedInSpace(tg))
+    {
+    struct cgapSage *tag, *next, *tagList;
+    tagList = (struct cgapSage *)quickLiftSqlLoadItems(tg->tdb, tg->table, chromName,
+                       winStart, winEnd, NULL, cgapSageLoadRelative, cgapSageLiftAdjust, FALSE);
+    slSort(&tagList, bedCmp);
+    if ((winEnd - winStart) > CGAP_SAGE_DENSE_GOVERNOR)
+        tg->visibility = tvDense;
+    for (tag = tagList; tag != NULL; tag = next)
+        {
+        next = tag->next;
+        struct linkedFeatures *oneLfList = cgapSageToLinkedFeatures(tag, libHash, libTotHash,
+                                                                    tg->visibility);
+        itemList = slCat(oneLfList, itemList);
+        }
+    slReverse(&itemList);
+    hFreeConn(&conn);
+    tg->items = itemList;
+    return;
+    }
 sr = hOrderedRangeQuery(conn, tg->table, chromName, winStart, winEnd,
 			NULL, &rowOffset);
 if ((winEnd - winStart) > CGAP_SAGE_DENSE_GOVERNOR)

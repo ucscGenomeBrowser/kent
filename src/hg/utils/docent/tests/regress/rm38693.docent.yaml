@@ -1,0 +1,44 @@
+# #38693 -- fade the quickLift difference triangles when there are too many to fit.
+#
+# A quickLift chain track (quickLiftChain) marks each alignment difference with a small
+# triangle.  In a window with many differences the triangles overlap and form a solid band
+# of red, green and blue.  a789fe5ac91 (hg/hgTracks/quickLift.c, triangleMutePct) moves the
+# triangle color toward white once the triangles no longer fit side by side:  no fade while
+# they fit, then 90% x (1 - 1/fill), fill = triangle count x triangle width / image width.
+# The faded color is opaque.  Mouseovers and map boxes do not change.
+#
+# GATE:  browser.quickLiftMuteTriangles, cart first, then hg.conf, default off.
+#   grep quickLiftMuteTriangles /usr/local/apache/cgi-bin/hg.conf
+# This script sets the cart variable itself in both directions, so it does not depend on
+# the server's hg.conf.
+#
+# hg38 chr1:11000000-11010000 lifts to hs1 cleanly, so the convert starts there.  The
+# check is at hs1 chr6:32500000-32510000 (HLA), about 750 differences in 10 kb, where the
+# fade is about 80%.  The row's most common non-white color is the measure:
+#   on:   not the full red the band is drawn in, so the fade happened.
+#   off:  full red, so the off path is unchanged and the on check is not reading some
+#         other track or an empty row.
+# Not asserted:  the exact faded color, which depends on the image width and the font.
+proof:
+  - "assertion-only 2026-11-09 -- written with the fix"
+  - "release-ab 2026-11-09 -- passes on genome-test (master with a789fe5ac91; on: 254,208,208, off: 255,0,0); fails at step 6 on hgwbeta v506: quickLiftChain is drawn 255,0,0, which is the color it should not be"
+
+target: genome-test
+db: hg38
+position: chr1:11000000-11010000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A11000000-11010000&pix=1100"
+  - expect: {noText: "Warning/Error"}
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+  - goto: "/cgi-bin/hgTracks?position=chr6%3A32500000-32510000&browser.quickLiftMuteTriangles=on"
+  - expect:
+      rows: [quickLiftChain]
+      noText: "Warning/Error"
+      color: {track: quickLiftChain, not: "255,0,0", tolerance: 30}
+  - goto: "/cgi-bin/hgTracks?position=chr6%3A32500000-32510000&browser.quickLiftMuteTriangles=off"
+  - expect:
+      rows: [quickLiftChain]
+      color: {track: quickLiftChain, is: "255,0,0"}

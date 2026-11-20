@@ -34,13 +34,13 @@ if ( $?ROBOT_MAILTO ) then
     set mailto = "$ROBOT_MAILTO"
 endif
 
-rm -f ./logs/$runout
-echo "$hgTablesTest -db=hg38 https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTables ./logs/$log" > ./logs/$log
-$hgTablesTest -appendLog -db=hg38 https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTables ./logs/$log >>& ./logs/$runout
+rm -f $BUILDLOGS/weekly/$runout
+echo "$hgTablesTest -db=hg38 https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTables $BUILDLOGS/weekly/$log" > $BUILDLOGS/weekly/$log
+$hgTablesTest -appendLog -db=hg38 https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTables $BUILDLOGS/weekly/$log >>& $BUILDLOGS/weekly/$runout
 set st1 = $status
-echo "" >> ./logs/$log
-echo "$hgTablesTest -appendLog -org=Mouse -orgs=1  https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTables ./logs/$log" >> ./logs/$log
-$hgTablesTest -appendLog -org=Mouse -orgs=1  https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTables ./logs/$log >>& ./logs/$runout
+echo "" >> $BUILDLOGS/weekly/$log
+echo "$hgTablesTest -appendLog -org=Mouse -orgs=1  https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTables $BUILDLOGS/weekly/$log" >> $BUILDLOGS/weekly/$log
+$hgTablesTest -appendLog -org=Mouse -orgs=1  https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTables $BUILDLOGS/weekly/$log >>& $BUILDLOGS/weekly/$runout
 set st2 = $status
 
 # creates hgTables.log - look for unusual errors
@@ -54,10 +54,10 @@ set st2 = $status
 # success.  So now a missing Total summary, or a nonzero exit from either run,
 # is itself a hard failure.  This mirrors preview2TablesTestRobot.csh, refs #38356.
 set expectedRuns = 2
-set nTotal = `egrep -c "^[ 	]*Total:" ./logs/$log`
-set res  = `egrep "^[ 	]*Total:" ./logs/$log | egrep -v "0 soft errors,  0 hard errors"`
-set res2 = `awk '/^[ \t]*Total/ {print} /TablesTest/ {print}' ./logs/$log`
-set crash = `cat ./logs/$log ./logs/$runout | egrep "carefulAlloc|Couldn.t |needLargeMem|needMem is null|Segmentation|Out of memory|Assertion|no form produced"`
+set nTotal = `egrep -c "^[ 	]*Total:" $BUILDLOGS/weekly/$log`
+set res  = `egrep "^[ 	]*Total:" $BUILDLOGS/weekly/$log | egrep -v "0 soft errors,  0 hard errors"`
+set res2 = `awk '/^[ \t]*Total/ {print} /TablesTest/ {print}' $BUILDLOGS/weekly/$log`
+set crash = `cat $BUILDLOGS/weekly/$log $BUILDLOGS/weekly/$runout | egrep "carefulAlloc|Couldn.t |needLargeMem|needMem is null|Segmentation|Out of memory|Assertion|no form produced"`
 
 set problems = ""
 if ( "$st1" != "0" ) then
@@ -93,8 +93,8 @@ if ( "$problems" != "" ) then
       echo "summary lines:" ; \
       echo "$res2" ; \
       echo "" ; \
-      echo "report log: $WEEKLYBLD/logs/$log" ; \
-      echo "run output: $WEEKLYBLD/logs/$runout" ) \
+      echo "report log: $BUILDLOGS/weekly/$log" ; \
+      echo "run output: $BUILDLOGS/weekly/$runout" ) \
       | mail -s "Errors in hgTablesTestRobot on $HOST" $mailto
     exit 1
 endif

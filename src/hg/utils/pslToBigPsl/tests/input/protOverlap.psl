@@ -1,0 +1,7 @@
+psLayout version 3
+
+match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T        	T   	T    	T  	block	blockSizes 	qStarts	 tStarts
+     	match	match	   	count	bases	count	bases	      	name     	size	start	end	name     	size	start	end	count
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+92	34	0	0	1	470	1	-136	++	ORF1_FAM230C_Hs578T_InferredFromRead	1384	526	1122	chr22	50818468	21183558	21183800	2	60,66,	526,1056,	21183558,21183602,
+1166	21	0	0	5	192	4	362	++	ORF1_FAM230C_Hs578T_InferredFromRead	1384	0	1379	chr13	114364328	18232811	18236734	6	273,123,86,384,140,181,	0,274,398,646,1031,1198,	18232811,18233636,18234005,18234509,18235663,18236191,

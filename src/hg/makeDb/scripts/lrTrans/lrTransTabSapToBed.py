@@ -109,6 +109,12 @@ def ensLinks(s):
         parts.append(id)
     return ",".join("%s|%s" % (p.split(".")[0], p) for p in parts)
 
+def ensLabel(s):
+    " like ensLinks, but plain versioned IDs for the mouseover and the label: ENST1.2_ENST3.4 -> ENST1.2,ENST3.4 "
+    if s == "novel" or s == "":
+        return ""
+    return ",".join(p.split("|")[1] for p in ensLinks(s).split(","))
+
 def boolStr(s):
     return {"True":"yes", "False":"no", "TRUE":"yes", "FALSE":"no", "":""}[s]
 
@@ -201,6 +207,8 @@ def main():
             ensLinks(r["associated_transcript"]),
             PIGEONCATS[pigCat],
             ensLinks(pigTx),
+            ensLabel(r["associated_transcript"]),
+            "Isoform",
             r["filter_result"],
             r["coding"].replace("_", "-"),
             r["CDS_type"].replace("_", " "),

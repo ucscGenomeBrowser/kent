@@ -1,0 +1,4 @@
+##gff-version 3
+chr1	test	gene	100	900	.	+	.	ID=gene-g1;Name=g1;gene_biotype=protein_coding
+chr1	test	CDS	100	300	.	+	0	ID=cds-p1;Parent=gene-g1;Name=p1
+chr1	test	CDS	700	900	.	-	0	ID=cds-p1;Parent=gene-g1;Name=p1

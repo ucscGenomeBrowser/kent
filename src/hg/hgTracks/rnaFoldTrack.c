@@ -12,6 +12,7 @@
 #include "bed.h"
 #include "rnaSecStr.h"
 #include "rnautil.h"
+#include "quickLift.h"
 
 
 
@@ -51,9 +52,28 @@ sqlSafef(extraWhere, size, "score >= %d",optionScore);
 }
 
 
+static void rnaSecStrLiftAdjust(void *item, boolean flipped, int clippedStart)
+/* Turn a lifted rnaSecStr around if the lift did;  the fold is drawn reversed on '-'. */
+{
+struct rnaSecStr *rna = item;
+if (flipped)
+    rna->strand[0] = (rna->strand[0] == '-') ? '+' : '-';
+}
+
 void loadRnaSecStr(struct track *tg)
 /* Load up rnaSecStr from database table to track items. */
 {
+if (liftedInSpace(tg))
+    {
+    /* placed whole, as the fold is drawn across the item's whole width */
+    char liftWhere[128];
+    scoreFilterSqlClause(tg, liftWhere, sizeof(liftWhere), 0);
+    tg->items = quickLiftSqlLoadItems(tg->tdb, tg->table, chromName, winStart, winEnd,
+                                      liftWhere, (void *)rnaSecStrLoad, rnaSecStrLiftAdjust,
+                                      TRUE);
+    slSort(&tg->items, bedCmp);
+    return;
+    }
 struct sqlConnection *conn = hAllocConn(database);
 int rowOffset = 0;
 struct sqlResult *sr = NULL;

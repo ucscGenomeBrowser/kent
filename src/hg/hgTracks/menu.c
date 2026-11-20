@@ -20,6 +20,7 @@
 #include "trackVersion.h"
 #include "chromAlias.h"
 #include "exportedDataHubs.h"
+#include "recTrackSets.h"
 
 /* list of links to display in a menu */
 /* a link with an empty name is displayed as a horizontal separator line */
@@ -240,7 +241,7 @@ menuStr = replaceChars(menuStr, "<!--OPTIONAL_PROJECT_MENU_END -->", "OPTIONAL_P
 // Add Recommended Track Sets to Genome Browser menu (if any for this assembly)
 // TODO: consider splitting the recommended track sets config file into separate files by database,
 //       so we don't need to read file to see whether to add menu item
-if (recTrackSetsEnabled() && recTrackSetsForDb())
+if (recTrackSetsEnabled(database) && recTrackSetsForDb())
     {
     #define recTrackSetsMenuItemId     "recTrackSetsMenuItem"
     struct dyString *menuItemDs = dyStringCreate("<li><a href='#' id='%s'>Recommended Track Sets</a></li>",

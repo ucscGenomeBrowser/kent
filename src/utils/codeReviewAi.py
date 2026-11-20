@@ -40,9 +40,6 @@ DEFAULT_CC = "browser-code-reviews-group@ucsc.edu"
 DEFAULT_ALERT_EMAIL = "browserqa-group@ucsc.edu"
 GMAIL_TOKEN_PATH = os.path.expanduser("~/.gmail_token.json")
 GMAIL_CREDS_PATH = os.path.expanduser("~/.gmail_credentials.json")
-GMAIL_SCOPES = [
-    'https://www.googleapis.com/auth/gmail.send',
-]
 CLAUDE_CLI = os.path.expanduser('~/.local/bin/claude')
 # Daily reviews get a timeout scaled to the batch size. A flat 600s limit timed
 # out repeatedly on 8-11 commit days, and since the retry reused the same limit
@@ -1984,7 +1981,10 @@ def get_gmail_service():
 
     creds = None
     if os.path.exists(GMAIL_TOKEN_PATH):
-        creds = Credentials.from_authorized_user_file(GMAIL_TOKEN_PATH, GMAIL_SCOPES)
+        # Load with the scopes recorded in the file. This token is shared with
+        # mlqAutomate.py, which needs read/modify/calendar too; naming only
+        # gmail.send here made the refresh below write a send-only token back.
+        creds = Credentials.from_authorized_user_file(GMAIL_TOKEN_PATH)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:

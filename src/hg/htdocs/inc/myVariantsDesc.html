@@ -1,51 +1,66 @@
 <h2>Description</h2>
 <p>
-The <em>My Variants</em> track lets a signed-in user create, edit, and share a
-personal set of variant annotations directly in the Genome Browser.
+The <em>My Annotations</em> track lets you create, edit, and share your own set
+of annotations directly in the Genome Browser. You need to be signed in to your
+Genome Browser account to use it.
 </p>
 
 <p>
 <b>Important:</b> This feature is intended for exploratory, educational, and
 demonstration use only. It must <b>not</b> be used to enter, store, or share
 private patient data, identifiable clinical records, or any other protected
-health information. Items written to a <em>My Variants</em> track are stored on
-shared UCSC infrastructure and may be visible to other users when shared.
+health information. Items written to a <em>My Annotations</em> track are stored
+on shared UCSC infrastructure and may be visible to other people when shared.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each item is drawn as a standard BED rectangle using the user-selected color.
+Each annotation is drawn as a box covering its position, in the color you
+picked. A transcript annotation is drawn with its exons and introns.
 A short mouseover label and a longer free-text description may be attached to
-each item.
-When the details page is opened, any overlaps with selected reference variant
-tracks (for example, ClinVar and dbSNP common variants) are listed for context.
+each one.
 </p>
 
-<h2>Adding and Editing Variants</h2>
+<h2>Adding and Editing Annotations</h2>
 <p>
-New variants can be added in one of three ways from the entry form: by HGVS or
-item search, by a simple BED form, or by an advanced BED form that allows
-user-defined extra fields.
-A variant can also be created by drag-selecting a region on the browser image
-and choosing the create-variant option from the popup menu.
-Existing items can be edited or deleted at any time from the track's details
+Press <b>Add Annotation</b> above the browser image to open the entry form. You
+can look up a position by HGVS term, by coordinates, or by gene symbol, and the
+form fills in from what it finds. You can also type the fields in by hand, and
+add custom fields of your own.
+An annotation can also be created by drag-selecting a region on the browser
+image and choosing <b>Add Annotation</b> from the popup menu.
+Existing annotations can be edited or deleted at any time from their details
 page.
 </p>
 
 <h2>Sharing</h2>
 <p>
-A <em>My Variants</em> track can be shared read-only or with edit access, either
-with a specific signed-in user or with anyone holding the share link.
-Shared tracks are loaded automatically the next time the recipient opens the
+Each <em>My Annotations</em> track has one share link. Anyone holding that link
+can see the track; if you created the link with edit access, they can change it
+too. You can switch the link between view and edit later, which changes what
+everyone already holding it can do, and you can revoke it at any time.
+</p>
+<p>
+A shared track is loaded automatically the next time the recipient opens the
 Genome Browser, similar to a shared online document.
-The most recent write wins; there is no per-item revision history at this time.
+The most recent write wins; there is no per-annotation revision history at this
+time.
 </p>
 
 <h2>Data Access</h2>
 <p>
-<em>My Variants</em> data are stored as a per-user custom track and can be
-downloaded for the current assembly using the
-<a href="hgTables" target="_blank">Table Browser</a>.
+Each of your annotation tracks is stored as its own custom track. The download
+links, in tab-separated and Excel-ready comma-separated form, are on the
+<a href="../cgi-bin/hgTrackUi?db=$db&amp;g=$track">track settings page</a>,
+along with the sharing controls. A track's page offers that track's annotations,
+and also a single file with all of your tracks, which names each annotation's
+track in the first column.
+</p>
+<p>
+To choose a region, a subset of fields, or another output format instead, open
+the <a href="../cgi-bin/hgTables?db=$db&amp;hgta_group=myAnnotations&amp;hgta_track=$track&amp;hgta_table=$track"
+target="_blank">Table Browser</a>, which works on the assembly you are
+currently browsing.
 The data are not part of the public UCSC database and are not available through
 the public REST API or the bulk download server.
 </p>

@@ -8,32 +8,49 @@
 
 #include "common.h"
 #include "localmem.h"
+#include "hash.h"
+#include "dnaseq.h"
 #include "psl.h"
 #include "bbiFile.h"
 #include "bigBed.h"
 #include "bigPsl.h"
 #include "cart.h"
+#include "cheapcgi.h"
+#include "customTrack.h"
 #include "chromAlias.h"
 #include "hgConfig.h"
 #include "portable.h"
 #include "trashDir.h"
+#include "trackDb.h"
 #include "blatShare.h"
 
-struct psl *pslListFromBigPslFile(char *bbFileName)
+struct psl *pslListFromBigPslFile(char *bbFileName, struct dnaSeq **retQuerySeqs)
 /* Read every alignment out of a bigPsl bigBed file into a psl list, in query-display order.
- * Used to rebuild the Table view for a shared link from the durable custom track. */
+ * Used to rebuild the Table view for a shared link from the durable custom track.  If retQuerySeqs
+ * is non-NULL, also return the query sequences stored in the file, one per query name. */
 {
 struct bbiFile *bbi = bigBedFileOpenAlias(bbFileName, chromAliasFindAliases);
 struct lm *lm = lmInit(0);
 struct psl *pslList = NULL;
+struct dnaSeq *seqList = NULL;
+struct hash *seqHash = hashNew(0);
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     struct bigBedInterval *bb, *ivList = bigBedIntervalQuery(bbi, chrom->name, 0, chrom->size, 0, lm);
     for (bb = ivList; bb != NULL; bb = bb->next)
         {
-        /* pslFromBigPsl ignores its seqTypeField arg (it reads seqType from the record itself). */
-        struct psl *psl = pslFromBigPsl(chrom->name, bb, 0, NULL, NULL);
+        /* pslFromBigPsl ignores its seqTypeField arg (it reads seqType from the record itself).
+         * hgc's buildBigPsl stores the whole query, as uploaded, with every alignment of it. */
+        char *seq = NULL;
+        struct psl *psl = pslFromBigPsl(chrom->name, bb, 0, retQuerySeqs ? &seq : NULL, NULL);
+        if (seq != NULL && !hashLookup(seqHash, psl->qName))
+            {
+            hashAdd(seqHash, psl->qName, NULL);
+            slAddHead(&seqList, newDnaSeq(seq, strlen(seq), psl->qName));
+            }
+        else
+            freeMem(seq);
         /* pslFromBigPsl always yields a two-char (query,target) strand with the target normalized
          * to '+'; a DNA BLAT is shown with a single-char strand, so drop the redundant target '+'
          * for non-protein queries to match the classic/fresh result page. */
@@ -43,8 +60,12 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
         }
     }
 bbiChromInfoFreeList(&chromList);
+hashFree(&seqHash);
 lmCleanup(&lm);
 bbiFileClose(&bbi);
+slReverse(&seqList);
+if (retQuerySeqs != NULL)
+    *retQuerySeqs = seqList;
 return pslList;
 }
 
@@ -108,4 +129,37 @@ if (f == NULL)
 if (isTrashOrSessionDataPath(f))
     return cloneString(f);
 return NULL;
+}
+
+boolean blatIsResultTrack(struct trackDb *tdb)
+/* Return TRUE if tdb is a BLAT results custom track, tagged blatResult=on by hgc's buildBigPsl. */
+{
+return tdb != NULL && trackDbSettingOn(tdb, "blatResult");
+}
+
+char *blatPslSetting(char *pslName)
+/* Return the value of the blatPsl track line setting for the search whose .pslx is pslName: the
+ * file's base name, cgiEncoded.  The base name, since a search and a reopen of it (blatPslId=)
+ * spell the trash path differently. */
+{
+char dir[PATH_LEN], root[FILENAME_LEN], ext[FILEEXT_LEN], base[FILENAME_LEN + FILEEXT_LEN];
+splitPath(pslName, dir, root, ext);
+safef(base, sizeof base, "%s%s", root, ext);
+return cgiEncode(base);
+}
+
+struct customTrack *blatFindSearchCt(struct customTrack *ctList, char *pslName)
+/* Return the BLAT results track in ctList that hgc built from the search whose .pslx is pslName,
+ * or NULL.  The track is returned also when its bigBed file could not be opened (networkErrMsg
+ * set, e.g. the trash cleaner removed it while the .pslx is still there), so callers that need a
+ * working track must check networkErrMsg. */
+{
+char *pslSetting = blatPslSetting(pslName);
+struct customTrack *ct;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (blatIsResultTrack(ct->tdb) && sameOk(trackDbSetting(ct->tdb, "blatPsl"), pslSetting)
+    &&  trackDbSetting(ct->tdb, "bigDataUrl") != NULL)
+        break;
+freeMem(pslSetting);
+return ct;
 }

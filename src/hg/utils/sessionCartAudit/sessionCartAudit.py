@@ -523,7 +523,6 @@ DB_SUFFIX_VARS = [
     ("hgt.baseTitle", "title over the base position track"),
     ("hgt.revCmplDisp", "reverse-complement the whole view"),
     ("hgGenome_threshold", "Genome Graphs significance threshold"),
-    ("mvCtfile", "myVariants custom track file"),
     ("hgPcrResult", "in-cart PCR result"),
     ("hgSearch_categs", "search result categories"),
 ]

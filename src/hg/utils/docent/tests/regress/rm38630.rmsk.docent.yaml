@@ -1,0 +1,75 @@
+# #38630 (CR, v506 Preview I) -- two fixes to lifted rmsk tracks.
+#
+# A1:  a quickLift hub written while browser.quickLiftRmsk was on keeps its rmsk stanza,
+# because validateOneTdb() runs only when the hub is written.  With the gate turned off
+# after that, repeatDraw() in hg/hgTracks/rmskTrack.c fell into the native path and drew
+# hg19's repeats at their hg19 coordinates on hg38.  Now a lifted rmsk draws nothing while
+# the gate is off.
+#
+# A2:  the rmsk lifts chose their chain with liftOverRemapRange() over the whole chain hash,
+# not with the best chain for the item, as quickLiftRemapRange() does for beds since
+# 5d71281387a.  quickLiftChainHashForRange() in hg/lib/quickLift.c now picks the chain with
+# the most aligned bases, and hgTracks and hgc both use it, so an item in a segmental
+# duplication is drawn and its click finds it.
+#
+# GATES:
+#   browser.quickLiftRmsk, off by default, a cart variable, so the script sets it itself.
+#   quickLiftMultiChain, hg.conf only (no cart override).  The A2 check below fails on a
+#   build without the fix ONLY when it is off.  With it on (as on hgwdev and genome-test)
+#   each item already gets its own chain, and both builds pass:
+#     grep quickLiftMultiChain /usr/local/apache/cgi-bin/hg.conf
+#   To see A2 fail, run this against a park whose hg.conf ends with quickLiftMultiChain=off.
+#
+# What is asserted, hg19 rmsk lifted onto hg38:
+#   * gate on, SHH:  MER58B has a map box at hg38 155799158-155799480 (as in rm37437).
+#   * gate on, chr10:46,520,000-46,540,000, a segmental duplication:  (CA)n has a box at
+#     46526273-46526440, and its details page gives that place and no "No repeat" line.
+#     Without the fix and with multi-chain off the box is missing, and hgc says
+#     "No repeat (CA)n found at chr10:46526274-46526440."
+#   * gate off, SHH again:  the rmsk row has no MER58B box, and no box at all.  Before the
+#     fix it had 16 boxes, at hg19 coordinates.  The positive check is the ruler and the
+#     lifted chain row, so an empty page cannot pass.
+# Deliberately not asserted:  the number of repeats in a window.
+proof:
+  - "assertion-only 2026-11-06 -- written with the fix, on branch cr38630"
+  - "xfail 2026-11-06 -- fails on genome-test (master without the fix, quickLiftMultiChain on) at step 14: with the gate off the lifted rmsk row still has 16 boxes, MER58B among them"
+  - "sandbox-ab 2026-11-06 -- park 38630 (port 48121): master hgTracks and hgc (the frozen live sandbox) fail at step 14 like genome-test; with quickLiftMultiChain=off appended to the park hg.conf they fail at step 10, no box for (CA)n at 46526273-46526440; the cr38630 build passes both ways"
+  - "server-flip 2026-11-06 -- failed on genome-test as an xfail at step 14, passed once 8086846836e was built there with cgi-alpha (hgTracks and hgc 12:33)"
+
+target: genome-test
+db: hg19
+position: chr7:155590000-155610000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr7%3A155590000-155610000&pix=1100&browser.quickLiftRmsk=on"
+  - hide: all
+  - track: {rmsk: full}
+  - expect: {rows: [rmsk], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr7:155797306-155817306
+  - expect:
+      rows: [rmsk]
+      noText: ["Warning/Error"]
+      has: 'area[href*="o=155799158&t=155799480"][href*="i=MER58B"]'
+
+  # A2:  an item in a segmental duplication, lifted on its best chain.
+  - go: chr10:46520000-46540000
+  - expect:
+      rows: [rmsk]
+      noText: ["Warning/Error"]
+      has: 'area[href*="o=46526273&t=46526440"][href*="i=%28CA%29n"]'
+  - click: {track: rmsk, item: "(CA)n"}
+  - expect:
+      url: "hgc"
+      text: ["RepeatMasker Information", "chr10:46526274-46526440",
+             "This repeat comes from hg19 and is mapped onto hg38 by quickLift"]
+      noText: ["Warning/Error", "No repeat"]
+
+  # A1:  the same hub with the gate turned off draws no repeats.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7%3A155797306-155817306&pix=1100&browser.quickLiftRmsk=off"
+  - expect:
+      rows: [quickLiftChain]
+      noText: ["Warning/Error"]
+      noHas: ['area[href*="i=MER58B"]', 'area[href*="_rmsk&"]']

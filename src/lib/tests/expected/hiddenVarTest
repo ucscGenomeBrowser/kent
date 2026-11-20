@@ -1,0 +1,13 @@
+v0	[plain]	same
+v1	[with space]	same
+v2	[a&b]	same
+v3	[x<y>z]	same
+v4	[it's]	same
+v5	[say "hi"]	same
+v6	[a/b/c]	same
+v7	[hgTracks?db=hg38&position=chr1:1,000-2,000]	same
+v8	[ENST00000456328.2]	same
+v9	[100%20off]	same
+v10	[tab	here]	same
+v11	[]	same
+vNull	[]	same
