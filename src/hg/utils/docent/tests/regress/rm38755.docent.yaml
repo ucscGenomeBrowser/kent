@@ -28,6 +28,7 @@ proof:
   - "assertion-only 2026-11-13 -- written from braney's #38755 review note and 2ac2a7b4121"
   - "xfail 2026-11-13 -- fails on genome-test, which has 5ae0bd3c0d8 but not the follow-up: all three checks miss, track not drawn"
   - "sandbox-ab 2026-11-13 -- same script passes on hgwdev-max with the follow-up built in"
+  - "server-flip 2026-11-14 -- passes on genome-test in the nightly run (log 2026-11-14_0410.txt) once 2ac2a7b4121 and 2d48cfb8c44 were installed there, having failed there as an xfail on 2026-11-13"
 
 target: genome-test
 db: hg19
