@@ -34,6 +34,7 @@
 #include "dystring.h"
 #include "autoUpgrade.h"
 #include "hCommon.h"
+#include "jsHelper.h"
 #include "botDelay.h"
 #include "errCatch.h"
 
@@ -2317,6 +2318,18 @@ else if (sameWord(provider, "cilogon"))
 return NULL;
 }
 
+static char *socialHint(char *provider)
+/* Return the mouseover text for an info icon on a provider's button, saying which accounts
+ * it accepts, or NULL if the provider needs none. */
+{
+if (sameWord(provider, "google"))
+    return "Works with personal Gmail and with university or work Google accounts.";
+else if (sameWord(provider, "cilogon"))
+    return "Use your university or research institution login. "
+           "If your university email runs on Google, the Google button works too.";
+return NULL;
+}
+
 static void printSocialIcon(char *file)
 /* Print a small logo image at the start of a socialButton, if file is not NULL. */
 {
@@ -2332,6 +2345,9 @@ static void printSocialButtons(boolean dividerAbove, boolean dividerBelow, char 
 {
 if (!oauthAnyProviderEnabled())
     return;
+// the info icons' mouseovers (printInfoIcon) need these, which hgLogin does not load otherwise
+jsIncludeFile("jquery.js", "");
+jsIncludeFile("utils.js", "");
 hPrintf("<div class=\"socialLogin\">");
 if (dividerAbove)
     hPrintf("<div class=\"orDivider\"><span>or</span></div>");
@@ -2341,7 +2357,11 @@ for (prov = providers;  prov != NULL;  prov = prov->next)
     hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.oauthStart=1&provider=%s\">",
             hgLoginUrl, cgiEncode(prov->name));
     printSocialIcon(socialIconFile(prov->name));
-    hPrintf("%s with %s</a>", action, oauthProviderLabel(prov->name));
+    hPrintf("%s with %s", action, oauthProviderLabel(prov->name));
+    char *hint = socialHint(prov->name);
+    if (hint != NULL)
+        printInfoIcon(hint);
+    hPrintf("</a>");
     }
 if (dividerBelow)
     hPrintf("<div class=\"orDivider\"><span>or</span></div>");

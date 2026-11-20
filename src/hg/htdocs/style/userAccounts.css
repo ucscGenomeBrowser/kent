@@ -162,3 +162,20 @@ img.socialIcon {
     border: 1px solid #999;
     border-radius: 3px;
 }
+
+/* Mouseover box for the (i) icons on the sign-in buttons, drawn by addMouseover() in
+ * utils.js. Same look as the .tooltip rule in HGStyle.css, which this page does not load. */
+.tooltip {
+    background-color: rgb(238,238,238);
+    color: black;
+    text-align: left;
+    font-weight: normal;
+    z-index: 1003;
+    line-height: 1.2em;
+    padding: 3px;
+    border: 1px solid black;
+    border-radius: 2px;
+    box-shadow: 0px 1px 2px darkgrey;
+    max-width: 400px;
+    white-space: normal;
+}
