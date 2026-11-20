@@ -42,5 +42,7 @@ steps:
   - expect: {tip: "Transcript codon number: c.766-768 (p.256)"}
   # d459a7a421c (max, 2026-09-21) corrected "at this codon" to "before this codon": the indel
   # lies upstream of the shifted codon, not in it. The check carries the whole clause so a
-  # rewording shows up here rather than half-matching.
-  - expect: {tip: "extra or missing bases compared to the genome before this codon, so the genomic and transcript codon numbers differ"}
+  # rewording shows up here rather than half-matching. c0df5d55d10 (Chris, 2026-11-13,
+  # #38667) changed "transcript codon numbers" to "item codon numbers", so a server built
+  # before that commit fails this check without the bug being back.
+  - expect: {tip: "extra or missing bases compared to the genome before this codon, so the genomic and item codon numbers differ"}
