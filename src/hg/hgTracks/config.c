@@ -1121,6 +1121,18 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))  // no db conn for assembly hubs 
     conn = hAllocConn(database);
 
+// Does this assembly have MANE?
+if (maneExonsTdb() != NULL)
+    {
+    hPrintf("<TR><TD>");
+    cgiMakeRadioButton("virtModeType", "maneExons", sameWord("maneExons", virtModeType));
+    hPrintf("</TD><TD>");
+    hPrintf("Show exons of MANE transcripts. &nbsp;&nbsp; Use padding of: ");
+    hIntVar("manePadding", cartUsualInt(cart, "manePadding", manePadding), 3);
+    hPrintf(" bases.");
+    hPrintf("</TD></TR>\n");
+    }
+
 // Do we have a gene table for exonMostly?
 findBestEMGeneTable(trackList);
 if (emGeneTable)

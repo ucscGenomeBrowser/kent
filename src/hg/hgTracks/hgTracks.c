@@ -3017,7 +3017,8 @@ return FALSE;
 boolean virtualSingleChrom()
 /* Return TRUE if using virtual single chromosome mode */
 {
-return (sameString(virtModeType,"exonMostly") || sameString(virtModeType,"geneMostly"));
+return (sameString(virtModeType,"exonMostly") || sameString(virtModeType,"geneMostly") ||
+        sameString(virtModeType,"maneExons"));
 }
 
 void parseVPosition(char *position, char **pChrom, long *pStart, long *pEnd)
@@ -4510,6 +4511,117 @@ hashFree(&ktHash);
 hFreeConn(&conn);
 }
 
+struct trackDb *maneExonsTdb()
+/* The MANE track that the maneExons multi-region mode reads, or NULL if this assembly
+ * has none or the mode is switched off in hg.conf.  Kept;  the caller does not own it. */
+{
+static struct trackDb *tdb = NULL;
+static boolean asked = FALSE;
+if (asked)
+    return tdb;
+asked = TRUE;
+if (!cfgOptionBooleanDefault("multiRegionMane", FALSE) || trackHubDatabase(database))
+    return NULL;
+/* One row, not the whole trackDb. */
+struct sqlConnection *conn = hAllocConn(database);
+struct trackDb *found = hMaybeTrackInfo(conn, "mane");
+hFreeConn(&conn);
+if (found != NULL && startsWith("bigGenePred", found->type))
+    tdb = found;
+return tdb;
+}
+
+static char *maneExonsFile()
+/* The bigGenePred file behind maneExonsTdb(), or NULL.  Kept. */
+{
+static char *fileName = NULL;
+static boolean asked = FALSE;
+if (asked)
+    return fileName;
+asked = TRUE;
+struct trackDb *tdb = maneExonsTdb();
+if (tdb == NULL)
+    return NULL;
+struct sqlConnection *conn = hAllocConn(database);
+fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+hFreeConn(&conn);
+return fileName;
+}
+
+static int maneExonsPadding()
+/* manePadding as the region list uses it:  none below zero, never more than the chrom. */
+{
+return max(0, min(manePadding, hChromSize(database, chromName)));
+}
+
+static int virtRegionCmpStart(const void *va, const void *vb)
+/* Compare two regions on one chrom by start, then end. */
+{
+const struct virtRegion *a = *((struct virtRegion **)va);
+const struct virtRegion *b = *((struct virtRegion **)vb);
+if (a->start != b->start)
+    return (a->start < b->start) ? -1 : 1;
+if (a->end != b->end)
+    return (a->end < b->end) ? -1 : 1;
+return 0;
+}
+
+static boolean initVirtRegionsFromManeExons()
+/* Make the region list from the exons of the MANE transcripts on chromName, each padded
+ * by manePadding, with overlapping and touching exons merged.  Returns FALSE if there
+ * are none. */
+{
+virtRegionList = NULL;
+char *fileName = maneExonsFile();
+if (fileName == NULL)
+    return FALSE;
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+if (bbi->fieldCount < 20)
+    errAbort("%s does not have the columns of a bigGenePred", fileName);
+int chromSize = hChromSize(database, chromName);
+int padding = maneExonsPadding();
+char *chrom = cloneString(chromName);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chromName, 0, chromSize, 0, lm);
+struct virtRegion *exonList = NULL;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    struct genePred *gp = (struct genePred *)genePredFromBigGenePred(cloneString(chromName), bb);
+    int i;
+    for (i = 0;  i < gp->exonCount;  ++i)
+        {
+        struct virtRegion *v;
+        AllocVar(v);
+        v->chrom = chrom;
+        v->start = max(0, (int)gp->exonStarts[i] - padding);
+        v->end = min(chromSize, (int)gp->exonEnds[i] + padding);
+        v->strand[0] = '.';
+        slAddHead(&exonList, v);
+        }
+    genePredFree(&gp);
+    }
+lmCleanup(&lm);
+bigBedFileClose(&bbi);
+
+slSort(&exonList, virtRegionCmpStart);
+struct virtRegion *v, *last = NULL;
+while ((v = slPopHead(&exonList)) != NULL)
+    {
+    if (last != NULL && v->start <= last->end)
+        {
+        last->end = max(last->end, v->end);
+        freeMem(v);
+        }
+    else
+        {
+        slAddHead(&virtRegionList, v);
+        last = v;
+        }
+    }
+slReverse(&virtRegionList);
+return (virtRegionList != NULL);
+}
+
 
 void testRegionList()
 /* check if it is ascending non-overlapping regions.
@@ -5259,6 +5371,23 @@ if (sameString(virtModeType, "singleTrans") && isNotEmpty(itemTrack))
     return conditions;
     }
 
+if (sameString(virtModeType, "maneExons"))
+    {
+    /* Every MANE transcript on the chrom, padded:  nothing else decides the regions. */
+    char *fileName = maneExonsFile();
+    if (fileName == NULL)
+        return NULL;
+    struct dyString *dy = dyStringCreate(MULTI_REGION_CONDITIONS_VERSION);
+    addCondition(dy, "db", database);
+    addCondition(dy, "chrom", chromName);
+    addCondition(dy, "mode", virtModeType);
+    dyStringPrintf(dy, "|pad=%d", maneExonsPadding());
+    long loaded = fileExists(fileName) ? (long)fileModTime(fileName) : 0;
+    dyStringPrintf(dy, "|loaded=%ld", loaded);
+    conditions = conditionsOrNull(&dy);
+    return conditions;
+    }
+
 if (!sameString(virtModeType, "exonMostly") && !sameString(virtModeType, "geneMostly"))
     return NULL;
 if (isEmpty(emGeneTable) || emGeneTrack == NULL)
@@ -5302,7 +5431,7 @@ static boolean entersOnWholeView(char *mode)
  * of its own.  refs #37788 */
 {
 if (sameString(mode, "exonMostly") || sameString(mode, "geneMostly") ||
-    sameString(mode, "kcGenes") || sameString(mode, "singleAltHaplo") ||
+    sameString(mode, "maneExons") || sameString(mode, "kcGenes") || sameString(mode, "singleAltHaplo") ||
     sameString(mode, "default"))
     return FALSE;
 if (sameString(mode, "customUrl"))
@@ -5619,6 +5748,8 @@ lastDbPosSaveCartSetting("emGeneTable");
 if (sameString(virtModeType, "singleTrans"))
     virtModeShortDescr = cartUsualBoolean(cart, SINGLE_TRANS_CDS_VAR, FALSE) ?
                          "coding exons" : "transcript";
+else if (sameString(virtModeType, "maneExons"))
+    virtModeShortDescr = "MANE exons";
 else
     virtModeShortDescr = sameString(virtModeType, "geneMostly") ? "genes" : "exons";
 virtModeExtraState = "";
@@ -5742,6 +5873,15 @@ else if (sameString(virtModeType, "exonMostly")
     else
 	virtModeShortDescr = "exons";
     // DISGUISE makes obsolete dyStringPrintf(dy," %s %s", dy->string, knownCanonical, knownToTag);
+    }
+else if (sameString(virtModeType, "maneExons"))
+    {
+    if (!initVirtRegionsFromManeExons())
+        {
+        warn("No MANE transcripts found on chrom %s, returning to default view", chromName);
+        return FALSE;   // regionList is empty, nothing found.
+        }
+    virtModeShortDescr = "MANE exons";
     }
 else if (sameString(virtModeType, "kcGenes")) // TODO obsolete
     {
@@ -12776,6 +12916,7 @@ emAltHighlight = cartUsualBoolean(cart, "emAltHighlight", FALSE);
 revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
 emPadding = cartUsualInt(cart, "emPadding", emPadding);
 gmPadding = cartUsualInt(cart, "gmPadding", gmPadding);
+manePadding = cartUsualInt(cart, "manePadding", manePadding);
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 fullInsideX = trackOffsetX();
 fullInsideWidth = tl.picWidth-gfxBorder-fullInsideX;
@@ -13033,6 +13174,12 @@ if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMost
 	cartSetString(cart, "virtModeType", virtModeType);
 	}
     }
+/* No MANE track here, or the mode is switched off:  undo maneExons. */
+if (sameString(virtModeType, "maneExons") && maneExonsTdb() == NULL)
+    {
+    virtModeType = "default";
+    cartSetString(cart, "virtModeType", virtModeType);
+    }
 
 lastVirtModeType = cartUsualString(cart, "lastVirtModeType", lastVirtModeType);
 
@@ -13267,6 +13414,7 @@ else
 	// sets window to full genome size, which for these demos should be small except for allChroms
 	if (sameString(virtModeType, "exonMostly") || 
             sameString(virtModeType, "geneMostly") || 
+            sameString(virtModeType, "maneExons") || 
             sameString(virtModeType, "kcGenes") ||
             (sameString(virtModeType, "customUrl") && 
                     !cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE)))

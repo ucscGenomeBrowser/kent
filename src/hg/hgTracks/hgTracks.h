@@ -546,6 +546,7 @@ extern boolean virtChromChanged;     /* Has the virtChrom changed? */
 extern boolean emAltHighlight;      /* Highlight alternativing regions in virt view? */
 extern int emPadding;               /* # bases padding for exon-mostly regions */
 extern int gmPadding;               /* # bases padding for gene-mostly regions */
+extern int manePadding;             /* # bases padding for MANE exon regions */
 extern char *emGeneTable;           /* Gene table to use for exon mostly */
 extern struct track *emGeneTrack;   /* Track for gene table for exon mostly */
 extern struct rgbColor vertWindowSeparatorColor; /* color for vertical windows separator */
@@ -2059,6 +2060,10 @@ void setEMGeneTrack();
 
 void findBestEMGeneTable(struct track *trackList);
 /* Find the best gene table to use for exonMostly */
+
+struct trackDb *maneExonsTdb();
+/* The MANE track that the maneExons multi-region mode reads, or NULL if this assembly
+ * has none or the mode is switched off in hg.conf. */
 
 struct window *makeWindowListFromVirtChrom(long virtWinStart, long virtWinEnd);
 /* make list of windows from virtual position on virtualChrom */
