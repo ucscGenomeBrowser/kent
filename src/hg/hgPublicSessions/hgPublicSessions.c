@@ -21,6 +21,7 @@
 #include "jsHelper.h"
 #include "jsonParse.h"
 #include "verbose.h"
+#include "botDelay.h"
 
 struct galleryEntry
 /* Holds data for a single session in the gallery*/
@@ -42,6 +43,7 @@ struct galleryEntry
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
 struct hash *oldVars = NULL;
+static boolean issueBotWarning = FALSE;
 
 
 struct galleryEntry *galLoad(char **row)
@@ -300,6 +302,9 @@ char *excludeVars[] = {"Submit", "submit", NULL,};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgTables", 0.0, 0, 0, "html");
+
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
