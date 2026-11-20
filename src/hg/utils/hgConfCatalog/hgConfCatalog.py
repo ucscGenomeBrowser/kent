@@ -447,10 +447,10 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="The track colour picker in track UI.  On by default; the "
                "flag stays so a mirror can switch it back off."),
-        h("doMyVariants", "flag", "hg/hgCustom/hgCustom.c",
+        h("doMyVariants", "flag", "hg/hgTracks/hgTracks.c",
           default="FALSE", role="gate", verified=True,
-          note="The My Variants track and its upload path.  Thirteen call "
-               "sites across seven files, the widest gate in the tree, which "
+          note="The My Variants track and its upload path.  Twenty-one call "
+               "sites across ten files, the widest gate in the tree, which "
                "is a fair measure of what deleting a stale one costs."),
         h("hguidIpTracking.enabled", "flag", "hg/lib/botDelay.c",
           default="FALSE", role="gate", verified=True,
@@ -809,6 +809,26 @@ RELEASE_GATES = {
                "never enters a saved session.  Off, nothing is recorded and "
                "no dialog is offered.  Commented out of hgwdev's hg.conf "
                "as of 2026-10-17."),
+        h("browser.mafFastCodons", "flag", "hg/hgTracks/wigMafTrack.c",
+          default="FALSE", role="gate", verified=True, ticket="38756",
+          note="A faster codon display on a multiz track zoomed in to the "
+               "bases.  Read once per draw in wigMafDrawBases(), which then "
+               "keeps a cache for the draw: the bases of a codon split "
+               "across alignment blocks and the frames bigBed are loaded "
+               "once instead of once per block, and a species with no frames "
+               "of its own uses the default species' frames.  Off, every "
+               "block loads its range again, as before.  hgwdev's hg.conf "
+               "turns it on."),
+        h("browser.quickLiftMuteTriangles", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38693",
+          note="Fade the difference triangles on a quickLift chain track "
+               "when there are more of them than fit side by side, so they do "
+               "not merge into one solid band of color.  Read in "
+               "quickLiftMuteTrianglesEnabled() and asked by the chain "
+               "track's draw in hg/hgTracks/quickLift.c.  Off, the triangles "
+               "keep their full color, as before.  A cart variable of the "
+               "same name overrides it, like browser.quickLiftBarChart.  "
+               "hgwdev's hg.conf turns it on."),
     ],
 }
 
@@ -1628,7 +1648,7 @@ BRANDING = {
           "hg/hgIntegrator/hgIntegrator.c",
           default='"hg38,hg19,mm39,mm10..."', verified=True),
         h("geneTracks", "internal", "hg/lib/hgFind.c", verified=True),
-        h("browser.recTrackSets", "internal", "hg/hgTracks/recTrackSets.c",
+        h("browser.recTrackSets", "internal", "hg/lib/recTrackSets.c",
           verified=True, family="recTrackSets",
           note="Recommended track sets.  Loading one merges it into the "
                "current cart."),
@@ -2049,14 +2069,6 @@ AWAITING_REVIEW = {
                "hg.conf setting, with the old track search as an Advanced "
                "Search tab, recommended track set loading moved to hg/lib, "
                "refs #33217.  Needs a description and a gate or knob call."),
-        h("browser.mafFastCodons", "flag", "hg/hgTracks/wigMafTrack.c",
-          default="FALSE", ticket="38756",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/wigMafTrack.c.  Came in at dc4f089aa32, hgTracks: "
-               "put the faster MAF codon display behind hg.conf "
-               "browser.mafFastCodons, refs #38756, #38763.  Needs a "
-               "description and a gate or knob call."),
         h("hubGenomeNotFoundError", "flag", "hg/lib/cart.c", default="FALSE",
           ticket="30832",
           note="Written down by --auto-register, not yet reviewed by a "
@@ -2066,21 +2078,6 @@ AWAITING_REVIEW = {
                "off by default and turned on with hubGenomeNotFoundError=on "
                "in hg.conf, refs #30832.  Needs a description and a gate or "
                "knob call."),
-        h("browser.quickLiftMuteTriangles", "flag", "hg/lib/quickLift.c",
-          default="FALSE", ticket="38693",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/lib/quickLift.c.  Came in at a789fe5ac91, quickLift: fade "
-               "the difference triangles on a chain track when they overlap. "
-               "When there are more triangles than fit side by side, they "
-               "merge into one solid band of color.  The color now moves "
-               "toward white as the overlap grows: no fade while they fit, "
-               "then 90% x (1 - 1/fill), where fill is the total triangle "
-               "width over the window width.  The faded color is opaque, so "
-               "overlapping triangles do not stack back up to full color. "
-               "Gated by browser.quickLiftMuteTriangles, cart first and then "
-               "hg.conf, off by default.  refs #38693.  Needs a description "
-               "and a gate or knob call."),
     ],
 }
 

@@ -323,6 +323,8 @@ month                              # hg/qaPushQ/qaPushQ.c
 mrnaFilter                         # hg/altSplice/altSplice/spliceStats.c
 mrnaFilterOff                      # hg/altSplice/spliceWalk/spliceWalk.c
 mrnaWeight                         # hg/altSplice/spliceWalk/spliceWalk.c
+multiRegionSpaceChain              # hg/hgTracks/hgTracks.c
+multiRegionSpaceKey                # hg/hgTracks/hgTracks.c
 muscle                             # hg/altSplice/affySplice/spliceProbeVis.c
 namesOrIds                         # hg/hgPhyloPlace/hgPhyloPlace.c
 near.customFile                    # hg/near/hgNear/customColumn.c
