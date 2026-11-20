@@ -591,9 +591,10 @@ var genomePos = {
             var matches = /^multi:[0-9]+-([0-9]+)/.exec(position);
             var modeType = (hgTracks.virtModeType === "customUrl" ? "Custom regions on virtual chromosome" :
                             (hgTracks.virtModeType === "exonMostly" ? "Exon view of" :
+                            (hgTracks.virtModeType === "maneExons" ? "MANE exon view of" :
                             (hgTracks.virtModeType === "geneMostly" ? "Gene view of" :
                             (hgTracks.virtModeType === "singleAltHaplo" ? "Alternate haplotype as virtual chromosome" :
-                                        "Unknown mode"))));
+                                        "Unknown mode")))));
             var str = modeType + "&nbsp;" + position;
             if (matches) {
                 end = matches[1];
@@ -6654,6 +6655,8 @@ var popUpHgt = {
                              { baseUrl: 'hgSuggest?db=' + getDb() + '&type=altOrPatch&prefix=',
                                enterSelectsIdentical: true });
         // Make multi-region option inputs select their associated radio buttons
+        $('input[name="manePadding"]').on("keyup", function() {
+            $('#virtModeType[value="maneExons"]').prop('checked', true); });
         $('input[name="emPadding"]').on("keyup", function() {
             $('#virtModeType[value="exonMostly"]').prop('checked', true); });
         $('input[name="gmPadding"]').on("keyup", function() {
@@ -6670,6 +6673,8 @@ var popUpHgt = {
             var mode = "unknown";
             if (hgTracks.virtModeType === "exonMostly") {
                 msg += "exon";
+            } else if (hgTracks.virtModeType == "maneExons") {
+                msg += "MANE exon";
             } else if (hgTracks.virtModeType == "geneMostly") {
                 msg += "gene";
             } else if (hgTracks.virtModeType == "customUrl") {

@@ -1,0 +1,23 @@
+        track agb
+        shortLabel AGB 96k WES Autism
+        longLabel SNV Frequencies: Autism Gene Browser - rare coding variants, WES 62k autistic, 33k non-autistic
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/agb/agb.vcf.gz
+        visibility hide
+        dataVersion AGB 2026-10-12
+        priority 24.2
+        url https://agb.broadinstitute.org/
+        urlLabel Autism Gene Browser
+        filter.AC_AUT 0:100
+        filterByRange.AC_AUT on
+        filterLimits.AC_AUT 0:100
+        filterLabel.AC_AUT Allele count, autistic
+        filter.AC_NONAUT 0:10
+        filterByRange.AC_NONAUT on
+        filterLimits.AC_NONAUT 0:10
+        filterLabel.AC_NONAUT Allele count, non-autistic
+        filter.de_novo_ac_proband 0:10
+        filterByRange.de_novo_ac_proband on
+        filterLimits.de_novo_ac_proband 0:10
+        filterLabel.de_novo_ac_proband De novo allele count, autistic probands

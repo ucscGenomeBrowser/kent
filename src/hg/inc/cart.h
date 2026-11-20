@@ -520,6 +520,10 @@ void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
 			 char *encSessionName);
 /* Increment namedSessionDb.useCount and update lastUse for this session. */
 
+void cartSetKeepUserPrefsOnLoad(boolean keep);
+/* FALSE makes later session loads take the display preferences from the session, for code that
+ * loads a session only to save it again. */
+
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
 			 struct hash *oldVars, char *actionVar);

@@ -117,10 +117,22 @@ if (shift != 0)
     }
 
 /* chromEnd still matches the last block, which is never shortened, but the query range
- * follows the blocks that are left. */
+ * follows the blocks that are left.  oChromStarts are on the strand named by the BED strand
+ * field, while oChromStart and oChromEnd are on the forward query the way PSL qStart and qEnd
+ * are, so a minus strand needs the ends counted from the other side of the query. */
 ii = bigPsl->blockCount - 1;
-bigPsl->oChromStart = bigPsl->oChromStarts[0];
-bigPsl->oChromEnd = bigPsl->oChromStarts[ii] + bigPsl->blockSizes[ii] / mult;
+unsigned low = bigPsl->oChromStarts[0];
+unsigned high = bigPsl->oChromStarts[ii] + bigPsl->blockSizes[ii] / mult;
+if (bigPsl->strand[0] == '-')
+    {
+    bigPsl->oChromStart = bigPsl->oChromSize - high;
+    bigPsl->oChromEnd = bigPsl->oChromSize - low;
+    }
+else
+    {
+    bigPsl->oChromStart = low;
+    bigPsl->oChromEnd = high;
+    }
 }
 
 void outBigPsl(FILE *fp, struct psl *psl, struct hash *fastaHash, struct hash *cdsHash)
@@ -187,6 +199,13 @@ if (overlap > 0)
                  psl->qName, bigPsl.chrom, bigPsl.chromStart, bigPsl.chromEnd,
                  overlap - 1, overlap);
     trimOverlappingBlocks(&bigPsl, mult);
+    overlap = firstBlockOverlap(&bigPsl);
+    if (overlap > 0)
+        errAbort("%s aligned to %s:%d-%d still has target blocks %d and %d that overlap after "
+                 "trimming.  Trimming only works on blocks that ascend, so run pslCheck on the "
+                 "input and fix the rows whose target blocks are out of order.",
+                 psl->qName, bigPsl.chrom, bigPsl.chromStart, bigPsl.chromEnd,
+                 overlap - 1, overlap);
     }
 
 bigPsl.seqType = PSL_SEQTYPE_EMPTY;
@@ -221,6 +240,9 @@ if (cdsHash)
 	struct genbankCds genomeCds = genbankCdsToGenome(&mrnaCds, psl);
 	bigPsl.thickStart = genomeCds.start;
 	bigPsl.thickEnd = genomeCds.end;
+	/* trimming can drop a leading block, which moves chromStart past the start of the CDS */
+	if ((genomeCds.start >= 0) && (bigPsl.thickStart < bigPsl.chromStart))
+	    bigPsl.thickStart = bigPsl.chromStart;
 	}
     }
 

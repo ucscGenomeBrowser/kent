@@ -54,6 +54,24 @@ if (first)
 return enabled;
 }
 
+static char *defaultTextFont()
+/* The font for a cart that names none: hg.conf freeTypeFont if set, else Helvetica if
+ * FreeType is compiled in and the font file is on disk, else Bitmap.  A cart loaded from
+ * a session has no defaultCart applied, so this is what most old sessions get. */
+{
+char *font = cfgOption("freeTypeFont");
+if (font != NULL)
+    return font;
+#ifdef USE_FREETYPE
+char path[PATH_LEN];
+safef(path, sizeof path, "%s/%s",
+      cfgOptionDefault("freeTypeDir", "../htdocs/urw-fonts"), defaultVectorFontFile);
+if (fileExists(path))
+    return defaultVectorFont;
+#endif // USE_FREETYPE
+return "Bitmap";
+}
+
 void trackLayoutInit(struct trackLayout *tl, struct cart *cart)
 /* Initialize layout around small font and a picture about 600 pixels
  * wide, but this can be overridden by cart. */
@@ -64,7 +82,9 @@ if (fontExtras)
     fontType = cartUsualString(cart, "fontType", fontType);
 if (cfgOptionBooleanDefault("freeType", TRUE))
     {
-    tl->textFont = cartUsualString(cart, textFontVar, cfgOptionDefault("freeTypeFont","Bitmap"));
+    tl->textFont = cartOptionalString(cart, textFontVar);
+    if (tl->textFont == NULL)
+        tl->textFont = defaultTextFont();
     char *style =  cartUsualString(cart, textStyleVar, "Normal");
 
     if (differentString(style, "Normal"))

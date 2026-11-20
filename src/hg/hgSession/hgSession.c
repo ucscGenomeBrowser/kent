@@ -2149,6 +2149,8 @@ if (isEmpty(sessionName))
 char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 int sharingLevel = getSharingLevel(conn, encUserName, encSessionName);
+// The session is saved again, so it must keep its own font and image width.
+cartSetKeepUserPrefsOnLoad(FALSE);
 cartLoadUserSession(conn, userName, sessionName, cart, NULL, actionVar);
 // No cartCopyLocalHubsOnSessionLoad because we're not going to make any track collection changes
 hubConnectLoadHubs(cart);

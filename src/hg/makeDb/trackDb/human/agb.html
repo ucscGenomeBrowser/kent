@@ -1,0 +1,109 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection.
+It shows rare coding variants from the
+<a href="https://agb.broadinstitute.org/" target="_blank">Autism Gene Browser (AGB)</a>,
+which presents the exome sequencing results of the Autism Sequencing Consortium study by
+Satterstrom, Auwerx, Fu et al. (2026). The study combined exomes of more than 62,000 autistic
+individuals and 33,000 individuals without recorded autism from family-based and case-control
+cohorts. The track contains 7 million rare variants (maximum allele frequency 0.1%) that are
+protein-truncating, missense or synonymous.
+</p>
+<p>
+The data contains allele counts only and no allele numbers, so no allele frequencies can be
+calculated per variant. The counts are split by study design: de novo variants in autistic
+probands and in their non-autistic siblings, inherited variants that the parents transmitted or
+did not transmit to the autistic proband, and variants in autism cases and controls from
+the case-control cohorts.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each variant is drawn as a VCF item. Clicking a variant shows its details page with the
+counts from all study designs, the consequence on the canonical transcript, the HGVS
+notation, the MPC and AlphaMissense scores, the gnomAD allele frequency and the variant class
+used by the study:
+</p>
+<ul>
+<li><b>PTV</b>: protein-truncating variant (stop gained, frameshift, splice donor or acceptor,
+or a variant predicted to affect splicing elsewhere)</li>
+<li><b>Mis2</b>: missense variant with MPC &ge; 2 and AlphaMissense &ge; 0.97</li>
+<li><b>Mis1</b>: missense variant meeting one of these two thresholds</li>
+<li><b>Mis0</b>: missense variant meeting neither threshold</li>
+<li><b>synonymous</b></li>
+</ul>
+<p>
+We added four summary fields: <tt>AC_AUT</tt>, the allele count in autistic individuals
+(de novo and transmitted in probands, plus cases), <tt>AC_NONAUT</tt>, the allele count in
+non-autistic individuals (de novo in siblings, plus controls), <tt>AC</tt>, the sum of these
+two, and <tt>AC_UNTRANS</tt>, the count of parental alleles not transmitted to the proband.
+The track can be filtered on the autistic and non-autistic counts and on the de novo count in
+probands.
+</p>
+
+<h2>Methods</h2>
+<p>
+The study aggregated exome sequencing data from four family-based cohorts, the Autism
+Sequencing Consortium (ASC), the Simons Simplex Collection (SSC), SPARK and the GeneDx
+clinical testing laboratory, plus published de novo variants from autistic individuals in the
+DDD study, and from three case-control cohorts: iPSYCH, PAGES, and SPARK cases matched to
+UK Biobank controls. In total, it includes 38,680 autistic probands, 9,567 unaffected
+siblings, 23,749 cases and 23,749 controls. Data were aligned to GRCh38 and variants called
+with GATK HaplotypeCaller or taken from joint callsets, depending on the cohort, then
+harmonized with Hail. De novo variants were called with a custom caller and filtered on allele
+balance, depth and strand bias. Rare variants were defined as having a maximum allele
+frequency of 0.1% in gnomAD and within the dataset, with lower, dataset-specific thresholds
+for the case-control data. Only protein-truncating, missense and synonymous variants were
+analyzed. See the reference below for details.
+</p>
+<p>
+The variant results VCF file
+<a href="https://storage.googleapis.com/exome-results-browsers-public/downloads/2026-10-12/AGB/AGB_variant_results.vcf.bgz"
+target="_blank">AGB_variant_results.vcf.bgz</a> (release of October 12, 2026) was downloaded
+from the <a href="https://agb.broadinstitute.org/downloads" target="_blank">AGB downloads
+page</a>. It is already on GRCh38 and needed no liftover. A script added descriptions to the
+INFO fields, which were empty in the original file, replaced spaces in the consequence names
+with underscores, and added the summary counts described above. The source file has 20
+variants that occur twice with the same position and alleles, one copy classified as PTV with
+the de novo count and the other as Mis0 with the inherited counts. These were merged into one
+record each, summing the counts and listing both classes, for example <tt>PTV|Mis0</tt>.
+This leaves 7,045,130 of the 7,045,150 records. The steps are documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">makeDoc file</a>, and the script <tt>agbToVcf.py</tt> is in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">scripts directory</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Since the data can be downloaded from the AGB website, and does not seem to be under a license,
+we assume that we are allowed to redistribute it in VCF format.
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet
+or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>agb</i>.
+</p>
+<p>
+For automated download and analysis, the VCF file <tt>agb.vcf.gz</tt> and its tabix index can
+be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/agb/" target="_blank">our download
+server</a>. The original data, together with gene-level results, can be downloaded from the
+<a href="https://agb.broadinstitute.org/downloads" target="_blank">AGB downloads page</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Autism Sequencing Consortium and the AGB team at the Broad Institute for making
+the data available.
+</p>
+
+<h2>References</h2>
+<p>
+Satterstrom FK, Auwerx C, Fu JM, Zhang Z, Kuo SS, Hang E, Lu W, Morrow MM, Sealock JM, Liao C
+<em>et al.</em>
+<a href="https://www.medrxiv.org/content/10.64898/2026.08.24.26360398v1" target="_blank">
+Rare variation illuminates the distinct and pleiotropic genetic architecture of autism across
+neuropsychiatric traits</a>.
+<em>medRxiv</em>. 2026 Aug 26. doi: 10.64898/2026.08.24.26360398.
+</p>

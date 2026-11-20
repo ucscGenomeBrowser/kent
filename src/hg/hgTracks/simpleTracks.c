@@ -219,6 +219,7 @@ boolean virtChromChanged = FALSE;    /* Has the virtChrom changed? */
 boolean emAltHighlight = FALSE;     /* Highlight alternativing regions in virt view? */
 int emPadding = 6;                  /* # bases padding for exon-mostly regions */
 int gmPadding = 6;                  /* # bases padding for gene-mostly regions */
+int manePadding = 6;                /* # bases padding for MANE exon regions */
 char *emGeneTable = NULL;           /* Gene table to use for exon mostly */
 struct track *emGeneTrack = NULL;   /* Track for gene table for exon mostly */
 struct rgbColor vertWindowSeparatorColor = { 255, 220, 220, 255};  // light red
