@@ -1996,37 +1996,20 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("igvDesktop.gbdbUrl", "unreviewed", "hg/lib/hui.c", ticket="38823",
+        h("igvDesktop.gbdbUrl", "unreviewed", "hg/lib/hui.c",
+          default="https://hgdownload.soe.ucsc.edu/gbdb/", ticket="38823",
           note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionDefault in hg/lib/hui.c.  The "
-               "compiled-in default is \"https: url = catTwoStrings(base, "
-               "expanded + strlen(\"/gbdb/\")); } } freeMem(expanded); return "
-               "url; } static void igvUrlAddParam(struct dyString *igvUrl, "
-               "char *name, char *val) { char *encoded = cgiEncodeFull(val); "
-               "dyStringPrintf(igvUrl, \"&%s=%s\", name, encoded); "
-               "freeMem(encoded); } static void printIgvDesktopButton(char "
-               "*db, struct trackDb *tdb, struct cart *cart) { if "
-               "(!cfgOptionBooleanDefault(\"igvDesktopButton\", FALSE)) return; "
-               "if (!(tdbIsBigBed(tdb) || startsWithWord(\"bigWig\", tdb->type) "
-               "|| tdbIsBam(tdb) || tdbIsVcf(tdb))) return; char *bigDataUrl "
-               "= trackDbSetting(tdb, \"bigDataUrl\"); if "
-               "(startsWithWord(\"off\", trackDbSettingOrDefault(tdb, "
-               "\"tableBrowser\", \"\")) || igvDesktopGbdbPrivate(bigDataUrl)) { "
-               "puts(\"<p><i>(Track restricted by license - cannot open in IGV "
-               "Desktop)</i></p>\"); return; } char *fileUrl = "
-               "igvDesktopFileUrl(db, bigDataUrl); if (fileUrl == NULL) "
-               "return; struct dyString *igvUrl = dyStringCreate(\"http: "
-               "IGV_DESKTOP_PORT, an identifier the scan cannot resolve. "
-               "Came in at fa1ec8f7a70, New hg.conf setting "
-               "igvDesktopButton=on adds an 'Open in IGV Desktop' button to "
-               "the track settings and details pages of bigBed, bigWig, "
-               "BAM/CRAM and VCF tracks with a bigDataUrl.  It sends the "
-               "file, the assembly, the track label and the current position "
-               "to IGV Desktop's batch port 60151 on the user's own computer. "
-               "/gbdb files are linked to hgdownload, or to "
-               "igvDesktop.gbdbUrl if set.  Tracks with restricted data show "
-               "a note instead of the button.  Off by default.  refs #38823. "
-               "Needs a kind, a description, and a section to live in."),
+               "person.  Read with cfgOptionDefault in hg/lib/hui.c.  Came in "
+               "at fa1ec8f7a70, New hg.conf setting igvDesktopButton=on adds "
+               "an 'Open in IGV Desktop' button to the track settings and "
+               "details pages of bigBed, bigWig, BAM/CRAM and VCF tracks with "
+               "a bigDataUrl.  It sends the file, the assembly, the track "
+               "label and the current position to IGV Desktop's batch port "
+               "60151 on the user's own computer.  /gbdb files are linked to "
+               "hgdownload, or to igvDesktop.gbdbUrl if set.  Tracks with "
+               "restricted data show a note instead of the button.  Off by "
+               "default.  refs #38823.  Needs a kind, a description, and a "
+               "section to live in."),
         h("igvDesktopButton", "flag", "hg/lib/hui.c", default="FALSE",
           ticket="38823",
           note="Written down by --auto-register, not yet reviewed by a "

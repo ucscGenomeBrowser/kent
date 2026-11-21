@@ -393,12 +393,28 @@ def strip_comments(text):
     Newlines are kept so text.count("\\n", 0, pos) is still the line number,
     which matters because a commented-out cfgOption call would otherwise be
     harvested as a live read.
+
+    String and char literals are matched in the same pass and left alone, so
+    the "//" in a URL default such as "https://hgdownload.soe.ucsc.edu/gbdb/"
+    is not taken for a comment.  Blanking from there to end of line used to
+    eat the literal's closing quote, and the default then ran on through the
+    following functions' source until some later quote closed it.
     """
     def blank(m):
+        if m.group(0)[0] in "\"'":
+            return m.group(0)
         return re.sub(r'[^\n]', ' ', m.group(0))
-    text = re.sub(r'/\*.*?\*/', blank, text, flags=re.S)
-    text = re.sub(r'//[^\n]*', blank, text)
-    return text
+    return COMMENT_OR_LITERAL_RE.sub(blank, text)
+
+
+# A string literal, a char literal, a block comment, or a line comment,
+# whichever starts first.  Backslash escapes are honored inside the literals.
+COMMENT_OR_LITERAL_RE = re.compile(
+    r'"(?:\\.|[^"\\\n])*"'
+    r"|'(?:\\.|[^'\\\n])*'"
+    r'|/\*.*?\*/'
+    r'|//[^\n]*',
+    re.S)
 
 
 # ---------------------------------------------------------------------------
