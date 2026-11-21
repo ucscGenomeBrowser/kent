@@ -1,0 +1,8 @@
+# Two clean chains, with a gap between them on the target, so nothing to report.
+chain 1000 chrA 1000 + 0 100 chrB 1000 + 0 100 1
+40 10 10
+50
+
+chain 1000 chrA 1000 + 110 200 chrB 1000 - 0 90 2
+90
+

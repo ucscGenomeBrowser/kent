@@ -1,0 +1,61 @@
+# Each chain below has one problem, except chain 1, which is clean.
+chain 1000 chrA 1000 + 0 100 chrB 1000 + 0 100 1
+100
+
+# 2 starts where 1 ends on both assemblies
+chain 1000 chrA 1000 + 100 200 chrB 1000 + 100 200 2
+100
+
+# reuses ID 2
+chain 1000 chrA 1000 + 300 350 chrB 1000 + 300 350 2
+50
+
+# ends past the end of chrA
+chain 1000 chrA 1000 + 900 1100 chrB 1000 + 500 700 4
+200
+
+# blocks end at 490, the header says 500
+chain 1000 chrA 1000 + 400 500 chrB 1000 + 400 500 5
+40 10 10
+40
+
+# negative gap
+chain 1000 chrA 1000 + 600 700 chrB 1000 + 600 700 6
+50 -5 -5
+60
+
+# target strand is -
+chain 1000 chrA 1000 - 700 750 chrB 1000 + 700 750 7
+50
+
+# chrA size differs from the earlier chains
+chain 1000 chrA 2000 + 1500 1600 chrB 1000 + 800 900 8
+100
+
+# 11 fields
+chain 1000 chrA 1000 + 750 760 chrB 1000 + 750
+# a field that is not a number
+chain 1000 chrA 1000 + 76x 770 chrB 1000 + 760 770 10
+10
+
+# last block line has three numbers
+chain 1000 chrA 1000 + 770 780 chrB 1000 + 770 780 11
+5 0 0
+
+# a block line after the last block
+chain 1000 chrA 1000 + 780 790 chrB 1000 + 780 790 12
+10
+5
+
+# no block lines
+chain 1000 chrA 1000 + 790 800 chrB 1000 + 790 800 13
+# 20 and 21 abut on the - strand; 22 is on + where 21 ends, so it does not join
+chain 1000 chrC 1000 + 0 50 chrD 1000 - 0 50 20
+50
+
+chain 1000 chrC 1000 + 50 100 chrD 1000 - 50 100 21
+50
+
+chain 1000 chrC 1000 + 100 150 chrD 1000 + 100 150 22
+50
+
