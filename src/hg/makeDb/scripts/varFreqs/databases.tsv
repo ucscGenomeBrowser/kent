@@ -43,6 +43,14 @@ SGDP	SGDP	/gbdb/hg38/varFreqs/sgdpFreq/sgdp.freq.vcf.gz	AC	AF	0			1
 HGDP1kG	gnomAD HGDP+1kG	/gbdb/hg38/varFreqs/hgdp1kFreq/hgdp1k.freq.vcf.gz	AC	AF	0
 GREGoR	GREGoR	/gbdb/hg38/varFreqs/gregor/gregor.vcf.gz	AC	AF	1
 SCHEMA	SCHEMA	/gbdb/hg38/varFreqs/schema/SCHEMA_variant_results_withAF.vcf.gz	AC	AF	1
+# AGB: Autism Gene Browser, rare coding variants from 96k exomes. Counts only, no AN/AF,
+# so its arms are listed in the cohort/source menus but add nothing to the pooled AF.
+AGB	AGB Autism WES	/gbdb/hg38/varFreqs/agb/agb.vcf.gz	AC	.	1
+# BipEx 2.0 (bipolar), Epi25 (epilepsy), IBDseq phase 1 (IBD): Broad exome results
+# browsers like SCHEMA and AGB, with case/control AC and AN (erbToVcf.py).
+BipEx	BipEx Bipolar WES	/gbdb/hg38/varFreqs/bipex/bipex.vcf.gz	AC	AF	1
+Epi25	Epi25 Epilepsy WES	/gbdb/hg38/varFreqs/epi25/epi25.vcf.gz	AC	AF	1
+IBDseq	IBDseq IBD WES	/gbdb/hg38/varFreqs/ibdseq/ibdseq.vcf.gz	AC	AF	1
 GA4K	GA4K PacBio LR	/gbdb/hg38/varFreqs/ga4k/ga4kSnv.vcf.gz	AC	AF	1	affected
 CoLoRSdb	CoLoRSdb PacBio LR	/gbdb/hg38/varFreqs/colorsDb/colorsDbSnv.vcf.gz	AC	AF	0
 SVatalog	SVatalog 101 10XG SR	/gbdb/hg38/varFreqs/svatalog/svatalog.vcf.gz	AC	AF	0			1

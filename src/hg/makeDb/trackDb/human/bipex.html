@@ -1,0 +1,105 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection.
+It shows variants from the
+<a href="https://bipex.broadinstitute.org/" target="_blank">Bipolar Exome (BipEx) browser</a>,
+which presents the BipEx 2.0 study by Liao et al. (2026). The study combined exome sequencing
+data of more than 64,000 individuals with bipolar disorder and 168,000 controls from 88 cohorts
+in 22 countries and five continental ancestry groups. The track contains 32 million variants,
+most of them rare, in and around protein-coding genes.
+</p>
+<p>
+For every variant, the track shows the allele counts and allele numbers in bipolar disorder
+cases and in controls, so allele frequencies can be compared between the two.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each variant is drawn as a VCF item. Clicking a variant shows its details page with the
+consequence on the canonical transcript, the HGVS notation, and the missense scores used by
+the study: MPC, AlphaMissense, MisFit-S, popEVE and the percentile of their combined rank
+(<tt>misrank_percentile</tt>). The study called missense variants above the 96th percentile of
+this combined rank "damaging" (<tt>missense_passing</tt>). The field <tt>in_analysis</tt> marks
+the variants that were used in the gene burden tests.
+</p>
+<p>
+We added these fields to the original counts (<tt>ac_case</tt>, <tt>an_case</tt>,
+<tt>ac_ctrl</tt>, <tt>an_ctrl</tt>):
+</p>
+<ul>
+<li><tt>AF_CASE</tt>: allele frequency in bipolar disorder cases, with <tt>AC_CASE</tt> and
+<tt>AN_CASE</tt></li>
+<li><tt>AF_CTRL</tt>: allele frequency in controls, with <tt>AC_CTRL</tt> and
+<tt>AN_CTRL</tt></li>
+<li><tt>AC</tt>, <tt>AN</tt>, <tt>AF</tt>: cases and controls together</li>
+</ul>
+<p>
+The track can be filtered on these three frequencies.
+</p>
+
+<h2>Methods</h2>
+<p>
+BipEx 2.0 combined whole-exome (WES), whole-genome (WGS) and blended genome-exome (BGE)
+sequencing data, including the samples of BipEx 1.0. WES and WGS data were jointly called with
+gnomAD v4.0 using GATK HaplotypeCaller, and WGS data were limited to exome target intervals.
+BGE data were generated with Twist Alliance Clinical Research Exome capture on Illumina NovaSeq
+and called with GATK or DRAGEN. Genotypes were required to have DP &ge; 10, GQ &ge; 20 and, for
+heterozygotes, an allele balance &ge; 0.3; variants failing VQSR (or the DRAGEN equivalent),
+outside exome targets, in low-complexity regions or with more than six alternate alleles were
+removed. After sample QC by callset, ancestry and relatedness, 232,536 individuals (64,435 cases,
+168,101 controls) and 48,720,030 variants remained. Variants were annotated with VEP v95 on the
+Ensembl canonical transcript. Gene tests used variants with a minor allele frequency of at most
+0.01%, stratified by sequencing platform and ancestry. See the reference below for details.
+</p>
+<p>
+The variant results VCF file
+<a href="https://storage.googleapis.com/exome-results-browsers-public/downloads/2026-08-07/BipEx/BipEx_v2_variant_results.vcf.bgz"
+target="_blank">BipEx_v2_variant_results.vcf.bgz</a> (release of August 7, 2026) was
+downloaded from the <a href="https://bipex.broadinstitute.org/downloads" target="_blank">BipEx
+downloads page</a>. It is already on GRCh38 and needed no liftover. A script added
+descriptions to the INFO fields, which were empty in the original file, and added the summary
+fields described above. The source file has 48,720,030 records. 16,591,560 of them have an
+annotation but no case and control counts; these were removed, which leaves 32,128,470
+variants. The steps are documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">makeDoc file</a>, and the script <tt>erbToVcf.py</tt> is in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">scripts directory</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Since the data can be downloaded from the BipEx website, and does not seem to be under a
+license, we assume that we are allowed to redistribute it in VCF format.
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet
+or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>bipex</i>.
+</p>
+<p>
+For automated download and analysis, the VCF file <tt>bipex.vcf.gz</tt> and its tabix index can
+be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/bipex/" target="_blank">our download
+server</a>. The original data, together with gene-level results, can be downloaded from the
+<a href="https://bipex.broadinstitute.org/downloads" target="_blank">BipEx downloads page</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Bipolar Exome Sequencing consortium and the exome results browser team at the
+Broad Institute for making the data available.
+</p>
+
+<h2>References</h2>
+<p>
+Liao C, Ye R, Sealock JM, Boltz T, Ivankovic F, Finucane H, Howrigan D, Liu YC, Satterstrom FK,
+Hassan A <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/42926592" target="_blank">
+Rare coding variation implicates thirteen genes in bipolar disorder across 232,536 individuals from
+global populations</a>.
+<em>medRxiv</em>. 2026 Oct 5.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42926592" target="_blank">42926592</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13692317/" target="_blank">PMC13692317</a>
+</p>
+

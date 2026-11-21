@@ -12,14 +12,15 @@ general/unaffected background. For the full list of contributing projects, see t
 <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection page.
 </p>
 <p>
-The affected counts are drawn from the affected or case arm of six disease-study cohorts:
+The affected counts are drawn from the affected or case arm of ten disease-study cohorts:
 SFARI SPARK WES, SFARI SPARK iWGS v1.1 Pilot and SFARI SPARK 45k WGS (autism spectrum
-disorder probands), SCHEMA (schizophrenia cases), GREGoR (affected rare-disease
-participants), and GA4K (a pediatric rare-disease cohort). From SFARI SPARK 45k WGS, the 25
+disorder probands), AGB (autistic individuals), SCHEMA (schizophrenia cases), BipEx (bipolar
+disorder cases), Epi25 (epilepsy cases), IBDseq (inflammatory bowel disease cases), GREGoR
+(affected rare-disease participants), and GA4K (a pediatric rare-disease cohort). From SFARI SPARK 45k WGS, the 25
 million insertions flagged as non-human sequence (FILTER NonHumanIns, mostly oral bacteria
 DNA from the saliva samples, see the
 <a href="hgTrackUi?g=sfariSparkWgs45kAsd">subtrack's description</a>) were left out.
-For the three SPARK cohorts, SCHEMA, and GREGoR, the source data carries an
+For the three SPARK cohorts, AGB, SCHEMA, BipEx, Epi25, IBDseq and GREGoR, the source data carries an
 explicit affected/unaffected (or case/control) label, and only the affected arm feeds this
 track. GA4K reports a single cohort-wide frequency with no per-individual label; because it
 is a rare-disease cohort, it is counted as affected here, with the caveat that it enrolls
@@ -81,11 +82,11 @@ affected arms ranked by their own per-source AF, formatted as
 <code>Source (AF)</code>. This surfaces case cohorts where the variant is
 specifically enriched, even when the pooled rate across all arms is small.
 For disease cohorts that ship a phenotype split (SPARK, SFARI WGS, SCHEMA,
-GREGoR), the displayed AF is the affected-arm AF and the label includes the
+BipEx, Epi25, IBDseq, GREGoR), the displayed AF is the affected-arm AF and the label includes the
 arm (for example <code>SPARK ASD</code>, <code>SCHEMA case</code>); for
 cohorts with no split (GA4K) the label is just the cohort name and the AF
 is the whole-cohort AF. Arms that ship only AC and no AF (currently GREGoR
-per-arm) are not included in this ranking because no AF is available;
+per-arm and AGB) are not included in this ranking because no AF is available;
 they still appear in <b>affectedCohorts</b>.
 </p>
 
@@ -155,7 +156,7 @@ each source dataset.
 <h2>Credits</h2>
 <p>
 This track is only possible thanks to the data from the participants and families of the
-SFARI SPARK, SCHEMA, GREGoR and GA4K studies. Click the individual project subtracks on the
+SFARI SPARK, AGB, SCHEMA, BipEx, Epi25, IBDseq, GREGoR and GA4K studies. Click the individual project subtracks on the
 <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection page for the specific credits
 and citations of each cohort. Thanks to Alex Ioannidis, UCSC, for the inspiration for this
 track and to Andreas Lahner, MGZ, for feedback.

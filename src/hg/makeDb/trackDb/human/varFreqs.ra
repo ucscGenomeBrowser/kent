@@ -9,7 +9,7 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
 
         track varFreqsAffected
         shortLabel Disease cohorts
-        longLabel SNV Frequencies: variants in ~150,000 affected or case individuals (autism, schizophrenia, rare disease cohorts)
+        longLabel SNV Frequencies: variants in ~350,000 affected or case individuals (autism, schizophrenia, bipolar, epilepsy, IBD, rare disease)
         type bigBed 9 +
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_affected/varFreqsAffected.bb
@@ -19,10 +19,10 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         maxWindowToDraw 5000000
         priority 0.11
         mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Affected AF:</b> ${affectedAF}<br><b>Affected AC/AN:</b> ${affectedAC} / ${affectedAN}<br><b>Affected cohorts:</b> ${affectedCohorts}<br><b>Top affected by AF:</b> ${topAffectedSources}<br><b>Background AF:</b> ${backgroundAF}
-        filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
+        filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,AGB|AGB Autism WES,BipEx|BipEx Bipolar WES,Epi25|Epi25 Epilepsy WES,IBDseq|IBDseq IBD WES,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
         filterLabel.affectedCohorts Affected/case cohort
-        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
+        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,AGB|AGB Autism WES,BipEx|BipEx Bipolar WES,Epi25|Epi25 Epilepsy WES,IBDseq|IBDseq IBD WES,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
         filterType.backgroundSources multipleListOr
         filterLabel.backgroundSources Background source (population or unaffected)
         # Variant type and consequence filters
@@ -160,6 +160,22 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.SCHEMAAF SCHEMA AF
         # filter.SCHEMAAF 0:1
         # filterLimits.SCHEMAAF 0:1
+        # filterByRange.AGBAF on
+        # filterLabel.AGBAF AGB Autism WES AF
+        # filter.AGBAF 0:1
+        # filterLimits.AGBAF 0:1
+        # filterByRange.BipExAF on
+        # filterLabel.BipExAF BipEx Bipolar WES AF
+        # filter.BipExAF 0:1
+        # filterLimits.BipExAF 0:1
+        # filterByRange.Epi25AF on
+        # filterLabel.Epi25AF Epi25 Epilepsy WES AF
+        # filter.Epi25AF 0:1
+        # filterLimits.Epi25AF 0:1
+        # filterByRange.IBDseqAF on
+        # filterLabel.IBDseqAF IBDseq IBD WES AF
+        # filter.IBDseqAF 0:1
+        # filterLimits.IBDseqAF 0:1
         # filterByRange.GA4KAF on
         # filterLabel.GA4KAF GA4K PacBio LR AF
         # filter.GA4KAF 0:1
@@ -281,6 +297,22 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.SCHEMAAC SCHEMA AC
         # filter.SCHEMAAC 0:2000000
         # filterLimits.SCHEMAAC 0:2000000
+        # filterByRange.AGBAC on
+        # filterLabel.AGBAC AGB Autism WES AC
+        # filter.AGBAC 0:2000000
+        # filterLimits.AGBAC 0:2000000
+        # filterByRange.BipExAC on
+        # filterLabel.BipExAC BipEx Bipolar WES AC
+        # filter.BipExAC 0:2000000
+        # filterLimits.BipExAC 0:2000000
+        # filterByRange.Epi25AC on
+        # filterLabel.Epi25AC Epi25 Epilepsy WES AC
+        # filter.Epi25AC 0:2000000
+        # filterLimits.Epi25AC 0:2000000
+        # filterByRange.IBDseqAC on
+        # filterLabel.IBDseqAC IBDseq IBD WES AC
+        # filter.IBDseqAC 0:2000000
+        # filterLimits.IBDseqAC 0:2000000
         # filterByRange.GA4KAC on
         # filterLabel.GA4KAC GA4K PacBio LR AC
         # filter.GA4KAC 0:2000000
@@ -623,6 +655,82 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.SCHEMAAC_CTRL SCHEMA Control AC
         # filter.SCHEMAAC_CTRL 0:2000000
         # filterLimits.SCHEMAAC_CTRL 0:2000000
+        # AGB Autism WES populations
+        # filterByRange.AGBAF_AUT on
+        # filterLabel.AGBAF_AUT AGB Autism WES Autistic AF
+        # filter.AGBAF_AUT 0:1
+        # filterLimits.AGBAF_AUT 0:1
+        # filterByRange.AGBAF_NON_AUT on
+        # filterLabel.AGBAF_NON_AUT AGB Autism WES Non-autistic AF
+        # filter.AGBAF_NON_AUT 0:1
+        # filterLimits.AGBAF_NON_AUT 0:1
+        # filterByRange.AGBAF_UNTRANS on
+        # filterLabel.AGBAF_UNTRANS AGB Autism WES Untransmitted parental AF
+        # filter.AGBAF_UNTRANS 0:1
+        # filterLimits.AGBAF_UNTRANS 0:1
+        # filterByRange.AGBAC_AUT on
+        # filterLabel.AGBAC_AUT AGB Autism WES Autistic AC
+        # filter.AGBAC_AUT 0:2000000
+        # filterLimits.AGBAC_AUT 0:2000000
+        # filterByRange.AGBAC_NON_AUT on
+        # filterLabel.AGBAC_NON_AUT AGB Autism WES Non-autistic AC
+        # filter.AGBAC_NON_AUT 0:2000000
+        # filterLimits.AGBAC_NON_AUT 0:2000000
+        # filterByRange.AGBAC_UNTRANS on
+        # filterLabel.AGBAC_UNTRANS AGB Autism WES Untransmitted parental AC
+        # filter.AGBAC_UNTRANS 0:2000000
+        # filterLimits.AGBAC_UNTRANS 0:2000000
+        # BipEx Bipolar WES populations
+        # filterByRange.BipExAF_CASE on
+        # filterLabel.BipExAF_CASE BipEx Bipolar WES Bipolar disorder case AF
+        # filter.BipExAF_CASE 0:1
+        # filterLimits.BipExAF_CASE 0:1
+        # filterByRange.BipExAF_CTRL on
+        # filterLabel.BipExAF_CTRL BipEx Bipolar WES Control AF
+        # filter.BipExAF_CTRL 0:1
+        # filterLimits.BipExAF_CTRL 0:1
+        # filterByRange.BipExAC_CASE on
+        # filterLabel.BipExAC_CASE BipEx Bipolar WES Bipolar disorder case AC
+        # filter.BipExAC_CASE 0:2000000
+        # filterLimits.BipExAC_CASE 0:2000000
+        # filterByRange.BipExAC_CTRL on
+        # filterLabel.BipExAC_CTRL BipEx Bipolar WES Control AC
+        # filter.BipExAC_CTRL 0:2000000
+        # filterLimits.BipExAC_CTRL 0:2000000
+        # Epi25 Epilepsy WES populations
+        # filterByRange.Epi25AF_CASE on
+        # filterLabel.Epi25AF_CASE Epi25 Epilepsy WES Epilepsy case AF
+        # filter.Epi25AF_CASE 0:1
+        # filterLimits.Epi25AF_CASE 0:1
+        # filterByRange.Epi25AF_CTRL on
+        # filterLabel.Epi25AF_CTRL Epi25 Epilepsy WES Control AF
+        # filter.Epi25AF_CTRL 0:1
+        # filterLimits.Epi25AF_CTRL 0:1
+        # filterByRange.Epi25AC_CASE on
+        # filterLabel.Epi25AC_CASE Epi25 Epilepsy WES Epilepsy case AC
+        # filter.Epi25AC_CASE 0:2000000
+        # filterLimits.Epi25AC_CASE 0:2000000
+        # filterByRange.Epi25AC_CTRL on
+        # filterLabel.Epi25AC_CTRL Epi25 Epilepsy WES Control AC
+        # filter.Epi25AC_CTRL 0:2000000
+        # filterLimits.Epi25AC_CTRL 0:2000000
+        # IBDseq IBD WES populations
+        # filterByRange.IBDseqAF_CASE on
+        # filterLabel.IBDseqAF_CASE IBDseq IBD WES IBD case AF
+        # filter.IBDseqAF_CASE 0:1
+        # filterLimits.IBDseqAF_CASE 0:1
+        # filterByRange.IBDseqAF_CTRL on
+        # filterLabel.IBDseqAF_CTRL IBDseq IBD WES Control AF
+        # filter.IBDseqAF_CTRL 0:1
+        # filterLimits.IBDseqAF_CTRL 0:1
+        # filterByRange.IBDseqAC_CASE on
+        # filterLabel.IBDseqAC_CASE IBDseq IBD WES IBD case AC
+        # filter.IBDseqAC_CASE 0:2000000
+        # filterLimits.IBDseqAC_CASE 0:2000000
+        # filterByRange.IBDseqAC_CTRL on
+        # filterLabel.IBDseqAC_CTRL IBDseq IBD WES Control AC
+        # filter.IBDseqAC_CTRL 0:2000000
+        # filterLimits.IBDseqAC_CTRL 0:2000000
         # WBBC China populations
         # filterByRange.WBBCAF_North on
         # filterLabel.WBBCAF_North WBBC China North Han AF
@@ -660,7 +768,7 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
 
         track varFreqsBackground
         shortLabel Population reference
-        longLabel SNV Frequencies: variants in ~1.5 million individuals from population cohorts and unaffected or control arms
+        longLabel SNV Frequencies: variants in ~1.8 million individuals from population cohorts and unaffected or control arms
         type bigBed 9 +
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_background/varFreqsBackground.bb
@@ -670,10 +778,10 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         maxWindowToDraw 5000000
         priority 0.1
         mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Background AF:</b> ${backgroundAF}<br><b>Background AC/AN:</b> ${backgroundAC} / ${backgroundAN}<br><b>Sources:</b> ${backgroundSources}<br><b>Top population sources by AF:</b> ${topBackgroundSources}<br><b>Affected AF:</b> ${affectedAF}
-        filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
+        filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,AGB|AGB Autism WES,BipEx|BipEx Bipolar WES,Epi25|Epi25 Epilepsy WES,IBDseq|IBDseq IBD WES,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
         filterLabel.affectedCohorts Affected/case cohort
-        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
+        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,AGB|AGB Autism WES,BipEx|BipEx Bipolar WES,Epi25|Epi25 Epilepsy WES,IBDseq|IBDseq IBD WES,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
         filterType.backgroundSources multipleListOr
         filterLabel.backgroundSources Background source (population or unaffected)
         # Variant type and consequence filters
@@ -811,6 +919,22 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.SCHEMAAF SCHEMA AF
         # filter.SCHEMAAF 0:1
         # filterLimits.SCHEMAAF 0:1
+        # filterByRange.AGBAF on
+        # filterLabel.AGBAF AGB Autism WES AF
+        # filter.AGBAF 0:1
+        # filterLimits.AGBAF 0:1
+        # filterByRange.BipExAF on
+        # filterLabel.BipExAF BipEx Bipolar WES AF
+        # filter.BipExAF 0:1
+        # filterLimits.BipExAF 0:1
+        # filterByRange.Epi25AF on
+        # filterLabel.Epi25AF Epi25 Epilepsy WES AF
+        # filter.Epi25AF 0:1
+        # filterLimits.Epi25AF 0:1
+        # filterByRange.IBDseqAF on
+        # filterLabel.IBDseqAF IBDseq IBD WES AF
+        # filter.IBDseqAF 0:1
+        # filterLimits.IBDseqAF 0:1
         # filterByRange.GA4KAF on
         # filterLabel.GA4KAF GA4K PacBio LR AF
         # filter.GA4KAF 0:1
@@ -932,6 +1056,22 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.SCHEMAAC SCHEMA AC
         # filter.SCHEMAAC 0:2000000
         # filterLimits.SCHEMAAC 0:2000000
+        # filterByRange.AGBAC on
+        # filterLabel.AGBAC AGB Autism WES AC
+        # filter.AGBAC 0:2000000
+        # filterLimits.AGBAC 0:2000000
+        # filterByRange.BipExAC on
+        # filterLabel.BipExAC BipEx Bipolar WES AC
+        # filter.BipExAC 0:2000000
+        # filterLimits.BipExAC 0:2000000
+        # filterByRange.Epi25AC on
+        # filterLabel.Epi25AC Epi25 Epilepsy WES AC
+        # filter.Epi25AC 0:2000000
+        # filterLimits.Epi25AC 0:2000000
+        # filterByRange.IBDseqAC on
+        # filterLabel.IBDseqAC IBDseq IBD WES AC
+        # filter.IBDseqAC 0:2000000
+        # filterLimits.IBDseqAC 0:2000000
         # filterByRange.GA4KAC on
         # filterLabel.GA4KAC GA4K PacBio LR AC
         # filter.GA4KAC 0:2000000
@@ -1274,6 +1414,82 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.SCHEMAAC_CTRL SCHEMA Control AC
         # filter.SCHEMAAC_CTRL 0:2000000
         # filterLimits.SCHEMAAC_CTRL 0:2000000
+        # AGB Autism WES populations
+        # filterByRange.AGBAF_AUT on
+        # filterLabel.AGBAF_AUT AGB Autism WES Autistic AF
+        # filter.AGBAF_AUT 0:1
+        # filterLimits.AGBAF_AUT 0:1
+        # filterByRange.AGBAF_NON_AUT on
+        # filterLabel.AGBAF_NON_AUT AGB Autism WES Non-autistic AF
+        # filter.AGBAF_NON_AUT 0:1
+        # filterLimits.AGBAF_NON_AUT 0:1
+        # filterByRange.AGBAF_UNTRANS on
+        # filterLabel.AGBAF_UNTRANS AGB Autism WES Untransmitted parental AF
+        # filter.AGBAF_UNTRANS 0:1
+        # filterLimits.AGBAF_UNTRANS 0:1
+        # filterByRange.AGBAC_AUT on
+        # filterLabel.AGBAC_AUT AGB Autism WES Autistic AC
+        # filter.AGBAC_AUT 0:2000000
+        # filterLimits.AGBAC_AUT 0:2000000
+        # filterByRange.AGBAC_NON_AUT on
+        # filterLabel.AGBAC_NON_AUT AGB Autism WES Non-autistic AC
+        # filter.AGBAC_NON_AUT 0:2000000
+        # filterLimits.AGBAC_NON_AUT 0:2000000
+        # filterByRange.AGBAC_UNTRANS on
+        # filterLabel.AGBAC_UNTRANS AGB Autism WES Untransmitted parental AC
+        # filter.AGBAC_UNTRANS 0:2000000
+        # filterLimits.AGBAC_UNTRANS 0:2000000
+        # BipEx Bipolar WES populations
+        # filterByRange.BipExAF_CASE on
+        # filterLabel.BipExAF_CASE BipEx Bipolar WES Bipolar disorder case AF
+        # filter.BipExAF_CASE 0:1
+        # filterLimits.BipExAF_CASE 0:1
+        # filterByRange.BipExAF_CTRL on
+        # filterLabel.BipExAF_CTRL BipEx Bipolar WES Control AF
+        # filter.BipExAF_CTRL 0:1
+        # filterLimits.BipExAF_CTRL 0:1
+        # filterByRange.BipExAC_CASE on
+        # filterLabel.BipExAC_CASE BipEx Bipolar WES Bipolar disorder case AC
+        # filter.BipExAC_CASE 0:2000000
+        # filterLimits.BipExAC_CASE 0:2000000
+        # filterByRange.BipExAC_CTRL on
+        # filterLabel.BipExAC_CTRL BipEx Bipolar WES Control AC
+        # filter.BipExAC_CTRL 0:2000000
+        # filterLimits.BipExAC_CTRL 0:2000000
+        # Epi25 Epilepsy WES populations
+        # filterByRange.Epi25AF_CASE on
+        # filterLabel.Epi25AF_CASE Epi25 Epilepsy WES Epilepsy case AF
+        # filter.Epi25AF_CASE 0:1
+        # filterLimits.Epi25AF_CASE 0:1
+        # filterByRange.Epi25AF_CTRL on
+        # filterLabel.Epi25AF_CTRL Epi25 Epilepsy WES Control AF
+        # filter.Epi25AF_CTRL 0:1
+        # filterLimits.Epi25AF_CTRL 0:1
+        # filterByRange.Epi25AC_CASE on
+        # filterLabel.Epi25AC_CASE Epi25 Epilepsy WES Epilepsy case AC
+        # filter.Epi25AC_CASE 0:2000000
+        # filterLimits.Epi25AC_CASE 0:2000000
+        # filterByRange.Epi25AC_CTRL on
+        # filterLabel.Epi25AC_CTRL Epi25 Epilepsy WES Control AC
+        # filter.Epi25AC_CTRL 0:2000000
+        # filterLimits.Epi25AC_CTRL 0:2000000
+        # IBDseq IBD WES populations
+        # filterByRange.IBDseqAF_CASE on
+        # filterLabel.IBDseqAF_CASE IBDseq IBD WES IBD case AF
+        # filter.IBDseqAF_CASE 0:1
+        # filterLimits.IBDseqAF_CASE 0:1
+        # filterByRange.IBDseqAF_CTRL on
+        # filterLabel.IBDseqAF_CTRL IBDseq IBD WES Control AF
+        # filter.IBDseqAF_CTRL 0:1
+        # filterLimits.IBDseqAF_CTRL 0:1
+        # filterByRange.IBDseqAC_CASE on
+        # filterLabel.IBDseqAC_CASE IBDseq IBD WES IBD case AC
+        # filter.IBDseqAC_CASE 0:2000000
+        # filterLimits.IBDseqAC_CASE 0:2000000
+        # filterByRange.IBDseqAC_CTRL on
+        # filterLabel.IBDseqAC_CTRL IBDseq IBD WES Control AC
+        # filter.IBDseqAC_CTRL 0:2000000
+        # filterLimits.IBDseqAC_CTRL 0:2000000
         # WBBC China populations
         # filterByRange.WBBCAF_North on
         # filterLabel.WBBCAF_North WBBC China North Han AF
@@ -1759,3 +1975,6 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
 
 
 include agb.ra alpha
+include bipex.ra alpha
+include epi25.ra alpha
+include ibdseq.ra alpha

@@ -1,0 +1,110 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection.
+It shows coding variants from the
+<a href="https://ibdseq.broadinstitute.org/" target="_blank">IBDseq browser</a> of the
+Inflammatory Bowel Disease (IBD) Sequencing Consortium. Its phase 1 dataset contains the exomes
+of almost 29,000 individuals with Crohn's disease, 18,000 with ulcerative colitis, 3,400 with
+inflammatory bowel disease of undetermined type, and more than 97,000 controls. The track
+contains 21 million variants, most of them rare.
+</p>
+<p>
+For every variant, the track shows the allele counts and allele numbers in all IBD cases and in
+controls, so allele frequencies can be compared between the two. The cases are also split into
+Crohn's disease (CD) and ulcerative colitis (UC).
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each variant is drawn as a VCF item. Clicking a variant shows its details page with the
+consequence on the canonical transcript, the HGVS notation, the CADD, REVEL, PolyPhen-2, SIFT
+and SpliceAI scores, the gnomAD v4.1 non-Finnish European allele frequency, and the case and
+control counts. Many variants outside the coding regions have no consequence annotation.
+</p>
+<p>
+The original file lists the counts and association results per analysis group: <tt>IBD</tt>,
+all cases, <tt>CD</tt> and <tt>UC</tt>. The field <tt>groups</tt> lists the groups in which a
+variant was counted, and the fields <tt>ac_case</tt>, <tt>an_case</tt>, <tt>ac_ctrl</tt>,
+<tt>an_ctrl</tt>, the meta-analysis results <tt>P_meta</tt>, <tt>BETA_meta</tt> and
+<tt>HetP</tt>, and the results for each sequencing batch (<tt>P_Twist</tt>,
+<tt>BETA_Twist</tt> and so on) list one value per group, in the same order. To make this easier
+to read, we added these fields:
+</p>
+<ul>
+<li><tt>AC_CASE</tt>, <tt>AN_CASE</tt>, <tt>AF_CASE</tt>: allele count, allele number and
+frequency in all IBD cases (group IBD)</li>
+<li><tt>AC_CTRL</tt>, <tt>AN_CTRL</tt>, <tt>AF_CTRL</tt>: the same in controls</li>
+<li><tt>AC</tt>, <tt>AN</tt>, <tt>AF</tt>: cases and controls together</li>
+<li><tt>AC_CD</tt>, <tt>AF_CD</tt>, <tt>AC_UC</tt>, <tt>AF_UC</tt> (and the matching
+<tt>AN_</tt> fields): counts and frequencies in Crohn's disease and ulcerative colitis cases,
+if the variant was counted in that group</li>
+</ul>
+<p>
+The track can be filtered on all of these frequencies.
+</p>
+
+<h2>Methods</h2>
+<p>
+The IBD Sequencing Consortium, formed in 2014 and part of the International IBD Genetics
+Consortium, has sequenced more than 50,000 patients from 50 research cohorts worldwide together
+with the Broad Institute. Earlier analyses, such as Sazonovs et al. (2022), were mostly of European
+and Ashkenazi Jewish individuals; the current dataset adds individuals of African-American,
+Latin American and Asian ancestry. As the exomes were captured with several kits over ten
+years, the analysis was done per sequencing batch (Broad Twist, Broad Nextera, Sanger exomes,
+Sanger genomes, UK Biobank exomes and Regeneron exomes) and combined by meta-analysis. Details of
+the phase 1 dataset are not yet published; the IBDseq browser
+<a href="https://ibdseq.broadinstitute.org/about" target="_blank">About page</a> describes the
+project, and the 2022 paper below describes the methods of the earlier Crohn's disease
+analysis.
+</p>
+<p>
+The variant results VCF file
+<a href="https://storage.googleapis.com/exome-results-browsers-public/downloads/2026-10-19/IBD/IBD_variant_results.vcf.bgz"
+target="_blank">IBD_variant_results.vcf.bgz</a> (release of October 19, 2026) was downloaded
+from the <a href="https://ibdseq.broadinstitute.org/downloads" target="_blank">IBDseq downloads
+page</a>. It is already on GRCh38 and needed no liftover. A script added descriptions to the
+INFO fields, which were empty in the original file, changed the per-group fields to a variable
+number of values, as the number of groups differs between variants, and added the summary
+fields described above. The source file has 30,882,403 records. 10,007,245 of them have an annotation but no analysis group and no counts at all; these were removed, which leaves 20,875,158 variants. For 164 of them, the counts are only given for ulcerative colitis, not for all IBD cases, so they have no <tt>AC_CASE</tt>, <tt>AC_CTRL</tt> or <tt>AF</tt> fields. The steps are documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">makeDoc file</a>, and the script <tt>erbToVcf.py</tt> is in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">scripts directory</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Since the data can be downloaded from the IBDseq website, and does not seem to be under a
+license, we assume that we are allowed to redistribute it in VCF format.
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet
+or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>ibdseq</i>.
+</p>
+<p>
+For automated download and analysis, the VCF file <tt>ibdseq.vcf.gz</tt> and its tabix index can
+be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/ibdseq/" target="_blank">our download
+server</a>. The original data, together with gene-level results, can be downloaded from the
+<a href="https://ibdseq.broadinstitute.org/downloads" target="_blank">IBDseq downloads page</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the IBD Sequencing Consortium, the International IBD Genetics Consortium and the
+exome results browser team at the Broad Institute for making the data available.
+</p>
+
+<h2>References</h2>
+<p>
+Sazonovs A, Stevens CR, Venkataraman GR, Yuan K, Avila B, Abreu MT, Ahmad T, Allez M,
+Ananthakrishnan AN, Atzmon G <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/36038634" target="_blank">
+Large-scale sequencing identifies multiple genes and rare variants associated with Crohn&#x27;s
+disease susceptibility</a>.
+<em>Nat Genet</em>. 2022 Sep;54(9):1275-1283.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36038634" target="_blank">36038634</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9700438/" target="_blank">PMC9700438</a>
+</p>
+

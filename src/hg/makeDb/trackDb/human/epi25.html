@@ -1,0 +1,112 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection.
+It shows coding variants from the
+<a href="https://epi25.broadinstitute.org/" target="_blank">Epi25 browser</a> of the Epi25
+Collaborative, which presents the exome sequencing study of the Epi25 Collaborative (2024). The study
+compared the exomes of almost 21,000 individuals with epilepsy to 33,000 controls without known
+neurological or psychiatric conditions. The track contains 5.1 million variants, most of them
+rare.
+</p>
+<p>
+For every variant, the track shows the allele counts and allele numbers in all epilepsy cases
+and in controls, so allele frequencies can be compared between the two. The cases are also
+split into the three main epilepsy types of the study: developmental and epileptic
+encephalopathy (DEE), genetic generalized epilepsy (GGE) and non-acquired focal epilepsy (NAFE).
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each variant is drawn as a VCF item. Clicking a variant shows its details page with the
+consequence on the canonical transcript, the HGVS notation, the MPC and PolyPhen-2 scores, and
+the case and control counts. The consequence classes of the study are <tt>pLoF</tt>
+(predicted loss of function), <tt>damaging_missense</tt> (MPC &ge; 2),
+<tt>other_missense</tt>, <tt>synonymous</tt> and <tt>non_coding</tt>.
+</p>
+<p>
+The original file lists the counts per analysis group: <tt>EPI</tt>, all epilepsy cases, and
+the subtypes <tt>DEE</tt>, <tt>GGE</tt> and <tt>NAFE</tt>. The field <tt>groups</tt> lists the
+groups in which a variant was seen, and the fields <tt>ac_case</tt>, <tt>an_case</tt>,
+<tt>ac_ctrl</tt>, <tt>an_ctrl</tt>, <tt>estimate</tt>, <tt>p_value</tt> and the others list one
+value per group, in the same order. To make this easier to read, we added these fields:
+</p>
+<ul>
+<li><tt>AC_CASE</tt>, <tt>AN_CASE</tt>, <tt>AF_CASE</tt>: allele count, allele number and
+frequency in all epilepsy cases (group EPI)</li>
+<li><tt>AC_CTRL</tt>, <tt>AN_CTRL</tt>, <tt>AF_CTRL</tt>: the same in controls</li>
+<li><tt>AC</tt>, <tt>AN</tt>, <tt>AF</tt>: cases and controls together</li>
+<li><tt>AC_DEE</tt>, <tt>AF_DEE</tt>, <tt>AC_GGE</tt>, <tt>AF_GGE</tt>, <tt>AC_NAFE</tt>,
+<tt>AF_NAFE</tt> (and the matching <tt>AN_</tt> fields): counts and frequencies in the cases
+of each subtype, if the variant was counted in that group</li>
+</ul>
+<p>
+The track can be filtered on all of these frequencies.
+</p>
+
+<h2>Methods</h2>
+<p>
+The Epi25 Collaborative collected samples from many cohorts of individuals with epilepsy. All
+samples were exome sequenced at the Broad Institute on Illumina HiSeq X or NovaSeq 6000, after
+capture with Illumina Nextera Rapid Capture, TruSeq Rapid Exome or a Twist custom kit. Reads were
+aligned to GRCh38 and variants called jointly with the GATK best-practice pipeline, then annotated
+with VEP, LOFTEE and MPC in Hail. Genotypes had to pass GQ &ge; 20, DP &ge; 20 and an allele
+balance between 0.2 and 0.8, and variants had to pass VQSR, lie in coding regions well covered by
+both capture kits, outside low-complexity regions, and pass call rate, case-control call rate
+difference and Hardy-Weinberg filters. After sample QC, ancestry matching of cases to controls
+and removal of related samples, 20,979 individuals with epilepsy (1,938 DEE, 5,499 GGE, 9,219
+NAFE, 4,323 with other epilepsy syndromes) and 33,444 controls remained. The gene burden tests
+used ultra-rare variants, seen no more than five times in the dataset. See the reference
+below for details.
+</p>
+<p>
+The variant results VCF file
+<a href="https://storage.googleapis.com/exome-results-browsers-public/downloads/2022-12-01/Epi25/Epi25_variant_results.vcf.bgz"
+target="_blank">Epi25_variant_results.vcf.bgz</a> (release of December 1, 2022) was downloaded
+from the <a href="https://epi25.broadinstitute.org/downloads" target="_blank">Epi25 downloads
+page</a>. It is already on GRCh38 and needed no liftover. A script added descriptions to the
+INFO fields, which were empty in the original file, changed the per-group fields to a variable
+number of values, as the number of groups differs between variants, and added the summary
+fields described above. The source file has 5,181,905 records. 49,504 of them have an
+annotation but no analysis group and no counts at all; these were removed, which leaves
+5,132,401 variants. The steps are documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">makeDoc file</a>, and the script <tt>erbToVcf.py</tt> is in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs"
+target="_blank">scripts directory</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Since the data can be downloaded from the Epi25 website, and does not seem to be under a
+license, we assume that we are allowed to redistribute it in VCF format.
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet
+or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>epi25</i>.
+</p>
+<p>
+For automated download and analysis, the VCF file <tt>epi25.vcf.gz</tt> and its tabix index can
+be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/varFreqs/epi25/" target="_blank">our download
+server</a>. The original data, together with gene-level results, can be downloaded from the
+<a href="https://epi25.broadinstitute.org/downloads" target="_blank">Epi25 downloads page</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Epi25 Collaborative and the exome results browser team at the Broad Institute for
+making the data available.
+</p>
+
+<h2>References</h2>
+<p>
+Epi25 Collaborative.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/39363051" target="_blank">
+Exome sequencing of 20,979 individuals with epilepsy reveals shared and distinct ultra-rare genetic
+risk across disorder subtypes</a>.
+<em>Nat Neurosci</em>. 2024 Oct;27(10):1864-1879.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39363051" target="_blank">39363051</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11646479/" target="_blank">PMC11646479</a>
+</p>
+

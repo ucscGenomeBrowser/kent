@@ -1,0 +1,35 @@
+        track epi25
+        shortLabel Epi25 54k WES Epilepsy
+        longLabel SNV Frequencies: Epi25 Collaborative - exomes of 21k epilepsy cases, 33k controls
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/epi25/epi25.vcf.gz
+        visibility hide
+        dataVersion Epi25 (2022-12-01)
+        priority 24.4
+        url https://epi25.broadinstitute.org/
+        urlLabel Epi25 Browser
+        filter.AF 0:1
+        filterByRange.AF on
+        filterLimits.AF 0:1
+        filterLabel.AF Allele frequency, all
+        filter.AF_CASE 0:1
+        filterByRange.AF_CASE on
+        filterLimits.AF_CASE 0:1
+        filterLabel.AF_CASE Allele frequency, all epilepsy cases
+        filter.AF_CTRL 0:1
+        filterByRange.AF_CTRL on
+        filterLimits.AF_CTRL 0:1
+        filterLabel.AF_CTRL Allele frequency, controls
+        filter.AF_DEE 0:1
+        filterByRange.AF_DEE on
+        filterLimits.AF_DEE 0:1
+        filterLabel.AF_DEE Allele frequency, DEE cases
+        filter.AF_GGE 0:1
+        filterByRange.AF_GGE on
+        filterLimits.AF_GGE 0:1
+        filterLabel.AF_GGE Allele frequency, GGE cases
+        filter.AF_NAFE 0:1
+        filterByRange.AF_NAFE on
+        filterLimits.AF_NAFE 0:1
+        filterLabel.AF_NAFE Allele frequency, NAFE cases

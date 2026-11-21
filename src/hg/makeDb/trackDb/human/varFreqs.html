@@ -1,7 +1,7 @@
 <h2>Description</h2>
 <p>
 This track collection gathers variant allele frequencies from population-scale sequencing
-and genotyping projects worldwide, from a total of ~1.7 million genomes/exomes/arrays.
+and genotyping projects worldwide, from a total of ~2.2 million genomes/exomes/arrays (some controls are shared between the disease exome studies).
 Unlike gnomAD, the data was not reprocessed in a harmonized way; the variant VCFs were collected from the
 projects as-is. The goal is a single place to compare how common a variant is across
 different populations, ancestries, and cohorts, for projects that gnomAD is unlikely to
@@ -41,9 +41,9 @@ count, and per-database AF/AC).
       unaffected/control arms of the disease cohorts. Excludes the genotyping-array
       cohorts.</li>
   <li><a href="hgTrackUi?g=varFreqsAffected"><b>Disease cohorts</b></a> &mdash;
-      variants seen in the affected or case arm of five disease-study cohorts (SFARI SPARK
-      WES and WGS autism probands, SCHEMA schizophrenia cases, GREGoR affected, GA4K
-      rare-disease). Each variant also carries its background frequency, so case-enriched
+      variants seen in the affected or case arm of the disease-study cohorts (SFARI SPARK
+      WES and WGS and AGB autism, SCHEMA schizophrenia, BipEx bipolar disorder, Epi25
+      epilepsy, IBDseq inflammatory bowel disease, GREGoR and GA4K rare disease). Each variant also carries its background frequency, so case-enriched
       variants can be isolated by filtering Background AF.</li>
   <li><a href="hgTrackUi?g=varFreqsArray"><b>Genotyping Array Databases Combined</b></a>
       &mdash; 14.7 million variants from three array cohorts (TPMI Taiwan, Mexico Biobank,
@@ -111,16 +111,16 @@ records will be hidden by the consequence filter.
 <tr>
   <td><a href="hgTrackUi?g=varFreqsAffected">Disease cohorts</a></td>
   <td>Sequencing-based disease cohorts</td>
-  <td>~130k</td>
+  <td>~350k</td>
   <td>WGS/WES/long-read</td>
-  <td>Affected/case arms of SFARI SPARK WES/WGS, SCHEMA, GREGoR, GA4K</td>
+  <td>Affected/case arms of SFARI SPARK WES/WGS, AGB, SCHEMA, BipEx, Epi25, IBDseq, GREGoR, GA4K</td>
   <td>Affected/case AF and AC; background AF for contrast</td>
   <td>No</td>
 </tr>
 <tr>
   <td><a href="hgTrackUi?g=varFreqsBackground">Population reference</a></td>
   <td>Sequencing-based, population + unaffected</td>
-  <td>~1.5mil</td>
+  <td>~1.8mil</td>
   <td>WGS/WES/long-read</td>
   <td>Population cohorts + unaffected/control arms</td>
   <td>Background AF and AC; per-cohort and ancestry breakdowns</td>
@@ -243,6 +243,42 @@ records will be hidden by the consequence filter.
   <td>WES</td>
   <td>Schizophrenia: 24k cases, 97k controls (Singh 2022 primary); VCF aggregates up to ~73k/~182k</td>
   <td>&mdash;</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=agb">AGB</a></td>
+  <td>Multi-national</td>
+  <td>96k</td>
+  <td>WES</td>
+  <td>Autism: 62k autistic, 33k non-autistic; rare coding variants, allele counts only</td>
+  <td>&mdash;</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=bipex">BipEx</a></td>
+  <td>Multi-national</td>
+  <td>233k</td>
+  <td>WES, WGS, BGE</td>
+  <td>Bipolar disorder: 64k cases, 168k controls</td>
+  <td>&mdash;</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=epi25">Epi25</a></td>
+  <td>Multi-national</td>
+  <td>54k</td>
+  <td>WES</td>
+  <td>Epilepsy: 21k cases, 33k controls</td>
+  <td>DEE, GGE, NAFE</td>
+  <td>Yes</td>
+</tr>
+<tr>
+  <td><a href="hgTrackUi?g=ibdseq">IBDseq</a></td>
+  <td>Multi-national</td>
+  <td>147k</td>
+  <td>WES</td>
+  <td>Inflammatory bowel disease: 50k cases, 97k controls</td>
+  <td>Crohn's disease, ulcerative colitis</td>
   <td>Yes</td>
 </tr>
 <tr>

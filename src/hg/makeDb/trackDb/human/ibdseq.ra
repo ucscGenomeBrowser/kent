@@ -1,0 +1,31 @@
+        track ibdseq
+        shortLabel IBDseq 147k WES IBD
+        longLabel SNV Frequencies: IBD Sequencing Consortium - exomes of 50k inflammatory bowel disease cases, 97k controls
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/ibdseq/ibdseq.vcf.gz
+        visibility hide
+        dataVersion IBD phase 1 (2026-10-19)
+        priority 24.5
+        url https://ibdseq.broadinstitute.org/
+        urlLabel IBDseq Browser
+        filter.AF 0:1
+        filterByRange.AF on
+        filterLimits.AF 0:1
+        filterLabel.AF Allele frequency, all
+        filter.AF_CASE 0:1
+        filterByRange.AF_CASE on
+        filterLimits.AF_CASE 0:1
+        filterLabel.AF_CASE Allele frequency, all IBD cases
+        filter.AF_CTRL 0:1
+        filterByRange.AF_CTRL on
+        filterLimits.AF_CTRL 0:1
+        filterLabel.AF_CTRL Allele frequency, controls
+        filter.AF_CD 0:1
+        filterByRange.AF_CD on
+        filterLimits.AF_CD 0:1
+        filterLabel.AF_CD Allele frequency, Crohn's disease cases
+        filter.AF_UC 0:1
+        filterByRange.AF_UC on
+        filterLimits.AF_UC 0:1
+        filterLabel.AF_UC Allele frequency, ulcerative colitis cases

@@ -20,6 +20,19 @@ SPARK45k	NON_AUT	Non-ASD family	AC_NON_AUT	AF_NON_AUT	unaffected
 # SCHEMA schizophrenia case/control split (summed across analysis groups)
 SCHEMA	CASE	Schizophrenia case	AC_CASE	AF_CASE	affected
 SCHEMA	CTRL	Control	AC_CTRL	AF_CTRL	unaffected
+# AGB autism exomes (counts only): autistic = de novo + transmitted in probands + cases,
+# non-autistic = de novo in siblings + controls, untransmitted = parents of probands
+AGB	AUT	Autistic	AC_AUT	.	affected
+AGB	NON_AUT	Non-autistic	AC_NONAUT	.	unaffected
+AGB	UNTRANS	Untransmitted parental	AC_UNTRANS	.	unknown
+# Broad exome results browsers: cases and controls of the main analysis group
+# (the disease subtypes, e.g. Epi25 DEE, are subsets of the cases and not listed)
+BipEx	CASE	Bipolar disorder case	AC_CASE	AF_CASE	affected
+BipEx	CTRL	Control	AC_CTRL	AF_CTRL	unaffected
+Epi25	CASE	Epilepsy case	AC_CASE	AF_CASE	affected
+Epi25	CTRL	Control	AC_CTRL	AF_CTRL	unaffected
+IBDseq	CASE	IBD case	AC_CASE	AF_CASE	affected
+IBDseq	CTRL	Control	AC_CTRL	AF_CTRL	unaffected
 # GenomeAsia populations (7 groups in source VCF)
 GenomeAsia	NEA	Northeast Asian	AC_NEA	AF_NEA
 GenomeAsia	SEA	Southeast Asian	AC_SEA	AF_SEA

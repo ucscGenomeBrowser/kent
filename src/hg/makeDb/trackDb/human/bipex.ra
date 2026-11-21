@@ -1,0 +1,23 @@
+        track bipex
+        shortLabel BipEx 233k WES Bipolar
+        longLabel SNV Frequencies: Bipolar Exome (BipEx 2.0) - exomes of 64k bipolar disorder cases, 168k controls
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/bipex/bipex.vcf.gz
+        visibility hide
+        dataVersion BipEx 2.0 (2026-08-07)
+        priority 24.3
+        url https://bipex.broadinstitute.org/
+        urlLabel BipEx Browser
+        filter.AF 0:1
+        filterByRange.AF on
+        filterLimits.AF 0:1
+        filterLabel.AF Allele frequency, all
+        filter.AF_CASE 0:1
+        filterByRange.AF_CASE on
+        filterLimits.AF_CASE 0:1
+        filterLabel.AF_CASE Allele frequency, bipolar disorder cases
+        filter.AF_CTRL 0:1
+        filterByRange.AF_CTRL on
+        filterLimits.AF_CTRL 0:1
+        filterLabel.AF_CTRL Allele frequency, controls

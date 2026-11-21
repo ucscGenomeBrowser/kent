@@ -1469,3 +1469,78 @@ tabix -p vcf agb.vcf.gz
 # 40 records have a REF that does not match hg38 (e.g. chr1:12794381 C>G), left in;
 # the varFreqs merge drops them (norm --check-ref x).
 bcftools norm -c w -f /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa agb.vcf.gz -Ou > /dev/null
+
+##############################################################################
+# 2026-11-19 Claude max
+# BipEx (bipolar disorder), Epi25 (epilepsy) and IBDseq (inflammatory bowel disease):
+# three more Broad "exome results browsers", same code and file layout as AGB and
+# SCHEMA. Unlike AGB, these have per-group case and control AC and AN, so real
+# frequencies. A record lists its analysis groups in INFO/groups and all per-group
+# fields have one value per group, in that order.
+#   BipEx 2.0: Liao et al., medRxiv 2026, PMID 42926592. 64,435 cases, 168,101
+#     controls. One group, "meta". Paper: bipex/paper.txt
+#   Epi25: Epi25 Collaborative, Nat Neurosci 2024, PMID 39363051. Groups EPI (all
+#     20,979 cases), DEE, GGE, NAFE; 33,444 controls. Paper: epi25/paper.txt (PMC)
+#   IBDseq phase 1: unpublished, about page saved as ibdseq/about.html. Groups IBD
+#     (all cases), CD, UC; 28,718 CD, 17,991 UC, 3,417 IBD-U, >97k controls.
+#     Earlier CD analysis: Sazonovs et al., Nat Genet 2022, PMID 36038634.
+# The download URLs are in the JS bundle of the browser websites (the pages are a
+# JS app), base https://storage.googleapis.com/exome-results-browsers-public/downloads
+cd /hive/data/genomes/hg38/bed/varFreqs
+B=https://storage.googleapis.com/exome-results-browsers-public/downloads
+for x in bipex:2026-08-07/BipEx/BipEx_v2 epi25:2022-12-01/Epi25/Epi25 ibdseq:2026-10-19/IBD/IBD; do
+    d=${x%%:*}; u=${x#*:}; p=$(basename $u)
+    mkdir -p $d/download
+    for f in gene_results.tsv.bgz variant_results.tsv.bgz variant_results.vcf.bgz; do
+        curl -sS -o $d/download/${p}_$f $B/${u}_$f
+    done
+done
+# erbToVcf.py fills in the empty INFO descriptions, re-declares the per-group fields
+# as Number=. (the header says 3 or 4 but the length is the number of groups), adds
+# AC/AN/AF, AC_CASE/AN_CASE/AF_CASE and AC_CTRL/AN_CTRL/AF_CTRL from the main group,
+# AC_<G>/AN_<G>/AF_<G> for each subtype group, and drops records without counts.
+S=~/kent/src/hg/makeDb/scripts/varFreqs/erbToVcf.py
+cd epi25; python3 -I $S download/Epi25_variant_results.vcf.bgz epi25.vcf EPI DEE,GGE,NAFE
+# input records: 5181905, output records: 5132401, dropped without counts: 49504, kept without group EPI: 0
+cd ../bipex; python3 -I $S download/BipEx_v2_variant_results.vcf.bgz bipex.vcf meta
+# input records: 48720030, output records: 32128470, dropped without counts: 16591560, kept without group meta: 0
+cd ../ibdseq; python3 -I $S download/IBD_variant_results.vcf.bgz ibdseq.vcf IBD CD,UC
+# input records: 30882403, output records: 20875158, dropped without counts: 10007245, kept without group IBD: 164
+# (the 164 have only a UC group, so no AC/AN/AF and no CASE/CTRL fields)
+cd ..
+for d in epi25 bipex ibdseq; do
+    bgzip -@8 $d/$d.vcf; tabix -p vcf $d/$d.vcf.gz
+    bcftools norm -c w -f all/hg38.fa $d/$d.vcf.gz -Ou > /dev/null
+done
+# REF mismatches with hg38: 0 in all three
+
+##########
+# 2026-11-20 Claude max
+# Combined Disease cohorts / Background tracks rebuilt with AGB, BipEx, Epi25 and
+# IBDseq. databases.tsv: four new disease cohorts; populations.tsv: AGB AUT (affected),
+# NON_AUT (unaffected), UNTRANS (unknown), and CASE (affected) / CTRL (unaffected)
+# for BipEx, Epi25 and IBDseq (their disease subtypes are subsets of the cases and
+# are not listed). AGB has no AN, so it is listed in the cohort menus but adds
+# nothing to the pooled AF.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+rm -f merged.vcf.gz merged.vcf.gz.tbi merged.annotated.vcf.gz \
+      merged.annotated.vcf.gz.tbi normalized_files.txt
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/mergeAndAnnotate.sh > mergeAll.log 2>&1
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz --output-prefix varFreqsNew \
+    --split-affected --threads 8 --work-dir /hive/data/genomes/hg38/bed/varFreqs/all \
+    > rebuildAll.log 2>&1
+# Merged variants: 1,522,629,640 (was 1,505,737,716). varFreqsAffected 435,598,696
+# items / 43.3 GB (was 425,183,826), varFreqsBackground 1,394,990,279 items / 79.1 GB
+# (was 1,381,032,442); 217 fields (was 191).
+mv varFreqsAffected.bb varFreqsAffected.bb.preErb.bak
+mv varFreqsNewAffected.bb varFreqsAffected.bb
+mv varFreqsBackground.bb varFreqsBackground.bb.preErb.bak
+mv varFreqsNewBackground.bb varFreqsBackground.bb
+mv -f varFreqsNewAffected.as varFreqsAffected.as
+mv -f varFreqsNewBackground.as varFreqsBackground.as
+mv varFreqs.trackDb.ra varFreqs.trackDb.ra.preErb
+mv varFreqsNew.trackDb.ra varFreqs.trackDb.ra
+# varFreqs.ra: the four cohorts in the affectedCohorts/backgroundSources menus and the
+# commented per-cohort filter blocks, taken from varFreqs.trackDb.ra; longLabels now
+# say ~350,000 affected and ~1.8 million background individuals.
