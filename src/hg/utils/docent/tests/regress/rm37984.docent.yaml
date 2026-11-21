@@ -48,7 +48,9 @@ steps:
   - expect:
       has:
         - '#accountLoginForm'
-        - 'a.socialButton[href*="hgLogin.do.emailLinkPage=1"] + div.socialLogin > .orDivider:first-child'
+        # "~", not "+": since 6f9bc1cb75a hgLogin prints <script> tags for jquery.js and
+        # utils.js between the email-link button and div.socialLogin.
+        - 'a.socialButton[href*="hgLogin.do.emailLinkPage=1"] ~ div.socialLogin > .orDivider:first-child'
         - 'div.socialLogin a.socialButton[href$="hgLogin.do.oauthStart=1&provider=google"]:text-is("Sign in with Google")'
         - 'div.socialLogin a.socialButton[href$="hgLogin.do.oauthStart=1&provider=github"]:text-is("Sign in with GitHub")'
         - 'div.socialLogin a.socialButton[href*="hgLogin.do.oauthStart=1&provider=cilogon"]:has-text("Sign in with CILogon")'
