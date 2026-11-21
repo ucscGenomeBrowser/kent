@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
-issueBotWarning = earlyBotCheck(enteredMainTime, "hgTables", 0.0, 0, 0, "html");
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgPublicSessions", 0.0, 0, 0, "html");
 
 cgiSpoof(&argc, argv);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
