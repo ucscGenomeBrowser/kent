@@ -32,6 +32,7 @@ UTILS_APPLIST = \
 	binFromRange \
 	chainJoin \
 	chainToBigChain \
+	chainValidate \
 	checkDotBracketBigBed \
 	chromGraphFromBin \
 	chromGraphToBin \
@@ -111,6 +112,7 @@ TEST_DIRS = \
 	bedMergeAdjacent \
 	bedPartition \
 	chainJoin \
+	chainValidate \
 	checkDotBracketBigBed \
 	genePredFilter \
 	genePredToProt \

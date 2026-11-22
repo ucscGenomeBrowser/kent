@@ -1,0 +1,6 @@
+input/bad2.chain line 2: line before the first chain header
+input/bad2.chain line 5 chain abc: chain ID is not a number
+input/bad2.chain line 9 chain 31: query strand is 'x', expecting + or -
+input/bad2.chain line 13 chain 32: query end 1050 is past the end of chrF (size 1000)
+input/bad2.chain line 17: chain header has 14 fields, expecting 12 or 13
+input/bad2.chain line 22 chain 34: block line has a field that is not a number

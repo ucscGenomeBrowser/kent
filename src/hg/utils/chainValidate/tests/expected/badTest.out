@@ -1,0 +1,15 @@
+input/bad.chain line 10 chain 2: duplicate chain ID, first used on line 6
+input/bad.chain line 14 chain 4: target end 1100 is past the end of chrA (size 1000)
+input/bad.chain line 18 chain 5: blocks end at target 490, the header says 500
+input/bad.chain line 18 chain 5: blocks end at query 490, the header says 500
+input/bad.chain line 24 chain 6: negative gap (target -5, query -5)
+input/bad.chain line 28 chain 7: target strand is '-', expecting +
+input/bad.chain line 32 chain 8: target size of chrA is 2000, an earlier chain said 1000
+input/bad.chain line 36: chain header has 11 fields, expecting 12 or 13
+input/bad.chain line 36 chain ?: chain has no block lines
+input/bad.chain line 38 chain 10: target size, start or end is not a number
+input/bad.chain line 42 chain 11: last block line has more than one number
+input/bad.chain line 48 chain 12: block line after the last block (the one with one number)
+input/bad.chain line 51 chain 13: chain has no block lines
+input/bad.chain line 6 chain 2: starts where chain 1 (line 2) ends, at target chrA:100 and query chrB:100 (+ strand); they should be one chain
+input/bad.chain line 56 chain 21: starts where chain 20 (line 53) ends, at target chrC:50 and query chrD:50 (- strand); they should be one chain
