@@ -925,7 +925,8 @@ if (barCount <= graphWidth) // Don't create map boxes if less than one pixel per
         double expScore = bed->expScores[i];
         int height = valToClippedHeight(expScore, extras->maxMedian, extras->maxViewLimit,
                                             extras->maxHeight, extras->doLogTransform);
-        height = min(height+extraAtTop, extras->maxHeight);
+        // keep the extra pixels inside the item: the tallest bar reaches the item's top
+        height = min(height+extraAtTop, yZero - y);
         mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, barWidth, height,
                             tg->track, mapItemName, chartMapText(tg, categ, expScore));
         x1 += barWidth + extras->padding;
