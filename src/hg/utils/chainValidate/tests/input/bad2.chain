@@ -1,0 +1,23 @@
+# Problems not covered by bad.chain.  The next line is a block line before any chain header.
+5 0 0
+
+# chain ID is not a number
+chain 1000 chrE 1000 + 0 100 chrF 1000 + 0 100 abc
+100
+
+# query strand is x
+chain 1000 chrE 1000 + 100 200 chrF 1000 x 100 200 31
+100
+
+# query end 1050 is past the end of chrF
+chain 1000 chrE 1000 + 200 300 chrF 1000 + 950 1050 32
+100
+
+# 14 fields
+chain 1000 chrE 1000 + 300 400 chrF 1000 + 300 400 33 extra
+100
+
+# a block line with a field that is not a number
+chain 1000 chrE 1000 + 400 500 chrF 1000 + 400 500 34
+1x0
+

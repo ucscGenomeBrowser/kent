@@ -242,6 +242,7 @@ if (!parseSigned(row[0], &size) || (wordCount == 3 &&
     {
     problem(lf, lf->lineIx, ci, "block line has a field that is not a number");
     ci->blocksOk = FALSE;
+    ci->ended = (wordCount == 1);   // a one-field line is still the last block
     return;
     }
 if (size <= 0)
