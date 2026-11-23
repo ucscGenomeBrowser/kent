@@ -102,7 +102,7 @@ fi
 
 # the single file hub genome trackDb file:
 
-printf "rsync --delete --exclude=\"md5sum.txt\"--exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --include=\"/archive/*/*/hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest1}:${destDir}/\"\n" 1>&2
+printf "rsync --delete --exclude=\"md5sum.txt\" --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --include=\"/archive/*/*/hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest1}:${destDir}/\"\n" 1>&2
 # printf "rsync --delete --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\"  --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --include=\"/archive/*/*/hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest2}:${destDir}/\"\n" 1>&2
 printf "rsync --delete --exclude=\"md5sum.txt\" --exclude=\"alpha.hub.txt\" --exclude=\"beta.hub.txt\" --exclude=\"public.hub.txt\" --exclude=\"user.hub.txt\" --include=\"/archive/*/*/hub.txt\" --exclude=\"hub.txt\" --exclude=\"download.hub.txt\" --stats -a -L -P \"${srcDir}/\" \"qateam@${downloadDest3}:${destDir}/\"\n" 1>&2
 rsync --delete --exclude="md5sum.txt" --exclude="alpha.hub.txt" --exclude="beta.hub.txt" --exclude="public.hub.txt"   --exclude="user.hub.txt" --include="/archive/*/*/hub.txt" --exclude="hub.txt" --exclude="download.hub.txt" --stats -a -L -P "${srcDir}/" "qateam@${downloadDest1}:${destDir}/" \
