@@ -70,3 +70,19 @@ ln -s $M/maf/995c0111-d90b-4140-bee7-3845436c3b42/TCGA.BRCA.*.maf.gz brcaMaf/
 # 300 random SNVs of pancan33: reference allele matches hg38 at all 300.
 ln -s /hive/data/genomes/hg38/bed/cancerVariants/tcga/pancan33.bb /gbdb/hg38/cancerMutations/pancan33.bb
 ln -s /hive/data/genomes/hg38/bed/cancerVariants/tcga/BRCA.bb /gbdb/hg38/cancerMutations/tcgaBrca.bb
+
+##############################################################################
+# 2026-11-23 Claude/max: IntOGen driver genes (intogen), hg38 and hg19, refs #38687
+# IntOGen release 2024.09.20 (files inside are dated 2024-06-18), CC0.
+# One item per driver gene, drawn on the Ensembl transcript that IntOGen gives
+# (all 633 are in Ensembl 115, the GFF3 of the cancerHotspots build is reused).
+# hg19 is lifted from hg38. CLTCL1 and CRLF2 do not lift (exon boundary, PAR) and are
+# taken from the same transcript in Ensembl GRCh37 release 87.
+mkdir -p /hive/data/genomes/hg38/bed/cancerVariants/intogen
+cd /hive/data/genomes/hg38/bed/cancerVariants/intogen
+~/kent/src/hg/makeDb/scripts/cancerMutations/intogenBuild.sh
+# 633 genes written, 0 skipped
+# hg19: 633 genes, not lifted: CLTCL1 CRLF2
+for db in hg38 hg19; do
+    ln -s /hive/data/genomes/$db/bed/cancerVariants/intogen/intogen.bb /gbdb/$db/cancerMutations/intogen.bb
+done
