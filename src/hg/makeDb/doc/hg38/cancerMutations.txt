@@ -16,3 +16,23 @@ cd /hive/data/genomes/hg38/bed/cancerVariants/mutAtlas
 # mutAtlas (bigBed) and mutAtlasLolly (bigLolly) use the same file
 mkdir -p /gbdb/hg38/cancerMutations
 ln -s /hive/data/genomes/hg38/bed/cancerVariants/mutAtlas/mutAtlas.bb /gbdb/hg38/cancerMutations/
+
+##############################################################################
+# 2026-11-22 Claude/max: Cancer Hotspots (cancerHotspots), cancerhotspots.org, refs #38687
+# Hotspots v2 (Chang et al. 2017, PMID 29247016) + the 164 new v3 hotspots
+# (Bandlamudi et al. 2026, PMID 41895280). Data license: ODbL.
+# The script downloads hotspots_v2.xls, hotspots_v3.xlsx, the v2 MAF (only used to
+# get the Ensembl 75 transcript per gene) and the Ensembl 115 GFF3, then places each
+# hotspot residue on an Ensembl 115 transcript, checking the reference amino acid and,
+# for v2, the hg19 mutation positions from the table lifted to hg38. Needs uv.
+mkdir -p /hive/data/genomes/hg38/bed/cancerVariants/cancerHotspots
+cd /hive/data/genomes/hg38/bed/cancerVariants/cancerHotspots
+~/kent/src/hg/makeDb/scripts/cancerMutations/cancerHotspotsBuild.sh
+# hotspots in input: 1329 (v2 single residue/splice 1110, v2 indel 55, v3 164)
+# features written: 1328
+# not written: RECQL4 X766 splice, its only hg19 position does not lift to hg38
+# 9 v2 hotspots have a different residue number on the current transcript
+# (MYD88 L265 = L252 on MANE, also FGFR1 and ARID1B), see cancerHotspots.log
+# Warnings and transcript choices are in cancerHotspots.log
+
+ln -s /hive/data/genomes/hg38/bed/cancerVariants/cancerHotspots/cancerHotspots.bb /gbdb/hg38/cancerMutations/

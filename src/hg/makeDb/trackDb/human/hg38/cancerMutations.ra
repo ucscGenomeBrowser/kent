@@ -67,3 +67,28 @@ filterLabel.tissues Cancer tissue (OncoTree)
 filterValues.studies TCGA,AACR_genie,CPTAC_open,REBC,ALCHEMIST,FM,pan_origimed_2020,prad_p1000,cll_broad_2022,mds_iwg_2022,brca_metabric,dlbcl_duke_2017
 filterType.studies multipleListOr
 filterLabel.studies Study
+
+track cancerHotspots
+parent cancerMutations pack
+shortLabel Cancer Hotspots
+longLabel Cancer Hotspots (cancerhotspots.org): amino acids that are mutated in cancer more often than expected by chance
+type bigBed 12 +
+bigDataUrl /gbdb/hg38/cancerMutations/cancerHotspots.bb
+itemRgb on
+visibility pack
+priority 3
+mouseOver <b>${name}</b> ${hotspotType}, ${version}<br>${tumors} tumors, q-value ${qValue}<br>${topTissues}
+skipFields score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,tissues,topTissues
+skipEmptyFields on
+urls transcript="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$"
+filterByRange.tumors on
+filter.tumors 1:2175
+filterValues.hotspotType single residue,in-frame indel,splice site
+filterLabel.hotspotType Hotspot type
+filterValues.version v2 (Chang et al. 2017),v3 (Bandlamudi et al. 2026)
+filterLabel.version Hotspot release
+filterValues.oncoKb yes,no
+filterLabel.oncoKb In OncoKB
+filterValues.tissues Lung,Bowel,Esophagus/Stomach,Uterus,Breast,Bladder,CNS/Brain,Skin,Head and neck,Prostate,Pancreas,Unknown,Kidney,Ovary/Fallopian tube,Soft tissue,Lymphoid,Liver,Blood,Biliary tract,Cervix,Thyroid,Testis,Adrenal gland,Bone,Ampulla of Vater,Thymus,Eye,Vulva/Vagina,Penis,Pleura,Peritoneum
+filterType.tissues multipleListOr
+filterLabel.tissues Cancer tissue
