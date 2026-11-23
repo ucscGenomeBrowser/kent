@@ -52,3 +52,37 @@ ln -s /hive/data/genomes/hg19/bed/cancerVariants/cancerHotspots/cancerHotspots.b
 # 2026-11-22: the Cancer Mutations container moved to trackDb/human/cancerMutations.ra
 # (hg19 + hg38). The old TCGA composite "cancerMutations" in human/trackDb.ra (#22742)
 # was removed; its tracks pancan33 and tcgaBrca are now hg38 children of the container.
+
+##############################################################################
+# 2026-11-22 Claude/max: rebuild of the TCGA tracks pancan33 and tcgaBrca, refs #38687
+# The 2019 files (/hive/data/outside/gdc/pancan33-variants/maf/pancan33.bb,
+# /hive/data/genomes/hg38/bed/cancerVariants/BRCA.bb, #22742) came from an early version of
+# cancerMafToBigBed and had zero-length items starting at the 1-based MAF position.
+# The converter is now python3 and writes start = MAF Start_Position - 1. Same input:
+# GDC data release 10.0 MuTect2 MAFs and the clinical/exposure tables of Jan 2019.
+M=/hive/data/outside/gdc/pancan33-variants
+mkdir -p /hive/data/genomes/hg38/bed/cancerVariants/tcga/brcaMaf
+cd /hive/data/genomes/hg38/bed/cancerVariants/tcga
+ln -s $M/maf/995c0111-d90b-4140-bee7-3845436c3b42/TCGA.BRCA.*.maf.gz brcaMaf/
+~/kent/src/utils/cancerMafToBigBed brcaMaf $M/annotations/clinical.tsv $M/annotations/exposure.tsv BRCA.bb
+~/kent/src/utils/cancerMafToBigBed $M/maf $M/annotations/clinical.tsv $M/annotations/exposure.tsv pancan33.bb
+# BRCA 119684 and pancan33 2864792 variants, same counts as in 2019.
+# 300 random SNVs of pancan33: reference allele matches hg38 at all 300.
+ln -s /hive/data/genomes/hg38/bed/cancerVariants/tcga/pancan33.bb /gbdb/hg38/cancerMutations/pancan33.bb
+ln -s /hive/data/genomes/hg38/bed/cancerVariants/tcga/BRCA.bb /gbdb/hg38/cancerMutations/tcgaBrca.bb
+
+##############################################################################
+# 2026-11-23 Claude/max: IntOGen driver genes (intogen), hg38 and hg19, refs #38687
+# IntOGen release 2024.09.20 (files inside are dated 2024-06-18), CC0.
+# One item per driver gene, drawn on the Ensembl transcript that IntOGen gives
+# (all 633 are in Ensembl 115, the GFF3 of the cancerHotspots build is reused).
+# hg19 is lifted from hg38. CLTCL1 and CRLF2 do not lift (exon boundary, PAR) and are
+# taken from the same transcript in Ensembl GRCh37 release 87.
+mkdir -p /hive/data/genomes/hg38/bed/cancerVariants/intogen
+cd /hive/data/genomes/hg38/bed/cancerVariants/intogen
+~/kent/src/hg/makeDb/scripts/cancerMutations/intogenBuild.sh
+# 633 genes written, 0 skipped
+# hg19: 633 genes, not lifted: CLTCL1 CRLF2
+for db in hg38 hg19; do
+    ln -s /hive/data/genomes/$db/bed/cancerVariants/intogen/intogen.bb /gbdb/$db/cancerMutations/intogen.bb
+done

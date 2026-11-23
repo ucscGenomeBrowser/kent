@@ -1,0 +1,124 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=cancerMutations">Cancer Mutations</a>
+collection. It shows the mutational cancer driver genes of
+<a href="https://www.intogen.org" target="_blank">IntOGen</a>: genes whose somatic point
+mutations and short indels show signs of positive selection in tumors, found by running
+seven driver discovery methods on the mutations of each tumor cohort. The current
+release analyzed 271 cohorts with more than 33,000 tumors and lists 633 driver genes.
+Each gene is drawn once, on the Ensembl transcript that IntOGen used, and the details page
+lists all cohorts in which it was found to be a driver.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Genes are colored by their mode of action, the role that was most often assigned to the
+gene over all cohorts in which it is a driver:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:rgb(216,38,38);width:2em">&nbsp;</th>
+      <td>Activating (oncogene)</td></tr>
+  <tr><th style="background-color:rgb(0,0,255);width:2em">&nbsp;</th>
+      <td>Loss of function (tumor suppressor)</td></tr>
+  <tr><th style="background-color:rgb(46,0,184);width:2em">&nbsp;</th>
+      <td>Ambiguous</td></tr>
+</table>
+<p>
+The mouseover shows the mode of action, the number of cohorts and cancer types in which
+the gene is a driver, and the three cancer types with the highest fraction of mutated
+tumors. The details page has a table of all these cohorts, with the cancer type, the
+data source, the number and fraction of mutated tumors, the combined q-value, the mode of
+action and the methods that found the gene. A second table lists the regions of the
+protein where mutations cluster: significant Pfam domains, linear clusters and 3D
+clusters, with amino acid positions. Genes can be filtered by mode of action, number of
+cohorts, highest fraction of mutated tumors in a cohort and cancer type.
+</p>
+
+<h2>Methods</h2>
+<p>
+IntOGen (Martinez-Jimenez et al. 2020) collects somatic mutations from whole-exome and
+whole-genome sequencing studies, among them TCGA, PCAWG, the Hartwig Medical Foundation,
+St. Jude, CPTAC and many published cohorts of primary, metastatic and relapsed tumors.
+Before the analysis, mutations are lifted to GRCh38 and filtered for low mappability,
+multiple samples of the same donor are reduced to one, and hypermutated samples are
+removed. In each cohort, seven methods look for different signals of positive selection:
+an excess of non-synonymous mutations (dNdScv, CBaSE), a bias towards functionally
+important mutations (OncodriveFML), clustering of mutations along the protein sequence
+(OncodriveCLUSTL), in protein domains (smRegions) or in the 3D structure (HotMAPS), and a
+combination of mutation rate and clustering (MutPanning). The p-values of the methods
+are combined with a weighted Stouffer Z-score. The weight of each method is estimated per
+cohort from how well its ranking agrees with the known driver genes of the Cancer Gene
+Census. Genes with a combined q-value below 0.05 that are significant in at least two
+methods, and known cancer genes with weaker evidence, were then filtered: genes not
+expressed in the tumor type, genes that are tolerant to variation in the population,
+likely artifacts such as very long genes or olfactory receptors, genes with more than two
+mutations in one sample and genes targeted by local hypermutation were removed. The mode
+of action was inferred from the distribution of mutations of a pan-cancer dNdScv run and
+combined with the literature, as collected by the Cancer Genome Interpreter.
+</p>
+<p>
+We downloaded the driver gene catalog and the cohort table of release 2024.09.20,
+<tt>IntOGen-Drivers-20240920.zip</tt> and <tt>IntOGen-Cohorts-20240920.zip</tt>, from the
+<a href="https://www.intogen.org/download" target="_blank">IntOGen download page</a>. The
+file <tt>Compendium_Cancer_Genes.tsv</tt> has 4478 rows, one per gene and cohort, for 633
+genes in 271 cohorts. We merged the rows of each gene into one item and drew it on the
+Ensembl transcript given by IntOGen, using the gene models of Ensembl release 115. The
+mode of action of a gene on the browser is the one most often assigned in its cohorts.
+For hg19, the hg38 items were converted with liftOver. CLTCL1 and CRLF2 could not be
+converted and were drawn on the same transcript from Ensembl GRCh37 release 87. The
+scripts are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/cancerMutations"
+target="_blank">kent source tree</a>, and all steps are described in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/cancerMutations.txt"
+target="_blank">makeDoc file</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-separated tables. From scripts, the data can be accessed through
+our <a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>intogen</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in a bigBed file that
+can be downloaded from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/hg38/cancerMutations/" target="_blank">our
+download server</a> (replace hg38 with hg19 in the URL for hg19). The file for this track
+is called <tt>intogen.bb</tt>. Individual regions or the whole genome annotation can be
+obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the source code
+or downloaded as a precompiled binary for your system. Instructions for downloading
+source code and binaries can be found
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/hg38/cancerMutations/intogen.bb
+-chrom=chr12 -start=25000000 -end=26000000 stdout</tt>
+</p>
+<p>
+The original data can be downloaded from
+<a href="https://www.intogen.org/download" target="_blank">intogen.org</a>. It is
+available under the
+<a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 1.0</a>
+public domain dedication. The pipeline is described in the
+<a href="https://intogen.readthedocs.io" target="_blank">IntOGen documentation</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the Biomedical Genomics Lab of Nuria Lopez-Bigas at IRB Barcelona for making
+the IntOGen data available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Martínez-Jiménez F, Muiños F, Sentís I, Deu-Pons J, Reyes-Salazar I, Arnedo-Pac C, Mularoni L, Pich
+O, Bonet J, Kranas H <em>et al</em>.
+<a href="https://www.nature.com/articles/s41568-020-0290-x" target="_blank">
+A compendium of mutational cancer driver genes</a>.
+<em>Nat Rev Cancer</em>. 2020 Oct;20(10):555-572.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32778778" target="_blank">32778778</a>
+</p>
+

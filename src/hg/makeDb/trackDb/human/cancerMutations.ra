@@ -28,3 +28,28 @@ filterLabel.oncoKb In OncoKB
 filterValues.tissues Lung,Bowel,Esophagus/Stomach,Uterus,Breast,Bladder,CNS/Brain,Skin,Head and neck,Prostate,Pancreas,Unknown,Kidney,Ovary/Fallopian tube,Soft tissue,Lymphoid,Liver,Blood,Biliary tract,Cervix,Thyroid,Testis,Adrenal gland,Bone,Ampulla of Vater,Thymus,Eye,Vulva/Vagina,Penis,Pleura,Peritoneum
 filterType.tissues multipleListOr
 filterLabel.tissues Cancer tissue
+
+track intogen
+parent cancerMutations pack
+shortLabel IntOGen Drivers
+longLabel IntOGen: mutational cancer driver genes found in 271 tumor cohorts
+type bigBed 12 +
+bigDataUrl /gbdb/$D/cancerMutations/intogen.bb
+itemRgb on
+visibility pack
+priority 3.5
+mouseOver <b>${name}</b>: ${role}<br>Driver in ${cohortCount} cohorts, ${cancerTypeCount} cancer types<br>${topTypes}
+skipFields name,score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,cancerTypes
+detailsDynamicTable _jsonCohorts|Cohorts where the gene is a driver,_jsonRegions|Protein regions with significant mutation clusters
+urls transcript="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" gene="https://www.intogen.org/search?gene=$$"
+filterValues.role Activating,Loss of function,Ambiguous
+filterLabel.role Mode of action
+filterByRange.cohortCount on
+filter.cohortCount 1:212
+filterLabel.cohortCount Number of cohorts
+filterByRange.maxPct on
+filter.maxPct 0:100
+filterLabel.maxPct Highest % of mutated tumors in a cohort
+filterValues.cancerTypes Invasive Breast Carcinoma,Hepatocellular Carcinoma,Prostate Adenocarcinoma,Bladder Urothelial Carcinoma,Diffuse Large B-Cell Lymphoma NOS,Melanoma,Colorectal Adenocarcinoma,Lung Adenocarcinoma,Lung Squamous Cell Carcinoma,Stomach Adenocarcinoma,Esophageal Adenocarcinoma,Head and Neck Squamous Cell Carcinoma,Acute Myeloid Leukemia,Endometrial Carcinoma,Pancreatic Adenocarcinoma,Cholangiocarcinoma,Malignant Lymphoma,Non-Hodgkin Lymphoma,Ovarian Epithelial Tumor,Plasma Cell Myeloma,Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma,Medulloblastoma,Glioblastoma Multiforme,Renal Clear Cell Carcinoma,Non-Small Cell Lung Cancer,Colon Adenocarcinoma,Low-Grade Glioma NOS,Pilocytic Astrocytoma,Well-Differentiated Thyroid Cancer,Cervical Squamous Cell Carcinoma,Pleural Mesothelioma,Nasopharyngeal Carcinoma,Basal Cell Carcinoma,Acute Lymphoblastic Leukemia,Cutaneous Melanoma,Papillary Renal Cell Carcinoma,Prostate,Pancreas,Neuroblastoma,Angiosarcoma,Small Cell Lung Cancer,Burkitt Lymphoma,Uterine Carcinosarcoma/Uterine Malignant Mixed Mullerian Tumor,Renal Cell Carcinoma,Cutaneous Squamous Cell Carcinoma,Esophageal Squamous Cell Carcinoma,Upper Tract Urothelial Carcinoma,Cervical Adenocarcinoma,Esophagus/Stomach,High-Grade Glioma NOS,Adrenocortical Carcinoma,Glioblastoma,Leiomyosarcoma,Rectal Adenocarcinoma,Salivary Carcinoma,Anal Squamous Cell Carcinoma,Osteosarcoma,Bladder/Urinary Tract,Soft Tissue,Thymoma,Vulva/Vagina,Adenoid Cystic Carcinoma,Malignant Tumor,Chromophobe Renal Cell Carcinoma,Esophagogastric Adenocarcinoma,Paraganglioma,Small Intestinal Carcinoma,Gallbladder Cancer,Mixed Germ Cell Tumor,Pancreatic Neuroendocrine Tumor,Skin,Uveal Melanoma,Gastrointestinal Stromal Tumor,Neuroendocrine Tumor NOS,Lung,Wilms Tumor,Ewing Sarcoma,Liposarcoma,Lymphoid Neoplasm,Sarcoma NOS,Myelodysplastic Syndromes,Rhabdomyosarcoma,Atypical Teratoid/Rhabdoid Tumor,Ependymoma,Hepatoblastoma,Retinoblastoma
+filterType.cancerTypes multipleListOr
+filterLabel.cancerTypes Cancer type
