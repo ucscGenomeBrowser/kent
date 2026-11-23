@@ -2357,10 +2357,13 @@ struct grp *grp;
 for(grp = grpList; grp; grp = grp->next)
     hashAdd(groupHash, grp->name, grp);
 
+/* A track can name a group the assembly does not define (a curated hub's trackDb
+ * is not checked against its groups.txt).  Sort it after all the others rather
+ * than crash. */
 for(tdb = tdbList; tdb; tdb = tdb->next)
     {
     grp = hashFindVal(groupHash, tdb->grp);
-    tdb->groupPriority = grp->priority;
+    tdb->groupPriority = (grp != NULL) ? grp->priority : 1000000;
     }
 slSort(&tdbList, cmpPriority);
 

@@ -447,10 +447,10 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="The track colour picker in track UI.  On by default; the "
                "flag stays so a mirror can switch it back off."),
-        h("doMyVariants", "flag", "hg/hgCustom/hgCustom.c",
+        h("doMyVariants", "flag", "hg/hgTracks/hgTracks.c",
           default="FALSE", role="gate", verified=True,
-          note="The My Variants track and its upload path.  Thirteen call "
-               "sites across seven files, the widest gate in the tree, which "
+          note="The My Variants track and its upload path.  Twenty-one call "
+               "sites across ten files, the widest gate in the tree, which "
                "is a fair measure of what deleting a stale one costs."),
         h("hguidIpTracking.enabled", "flag", "hg/lib/botDelay.c",
           default="FALSE", role="gate", verified=True,
@@ -809,6 +809,26 @@ RELEASE_GATES = {
                "never enters a saved session.  Off, nothing is recorded and "
                "no dialog is offered.  Commented out of hgwdev's hg.conf "
                "as of 2026-10-17."),
+        h("browser.mafFastCodons", "flag", "hg/hgTracks/wigMafTrack.c",
+          default="FALSE", role="gate", verified=True, ticket="38756",
+          note="A faster codon display on a multiz track zoomed in to the "
+               "bases.  Read once per draw in wigMafDrawBases(), which then "
+               "keeps a cache for the draw: the bases of a codon split "
+               "across alignment blocks and the frames bigBed are loaded "
+               "once instead of once per block, and a species with no frames "
+               "of its own uses the default species' frames.  Off, every "
+               "block loads its range again, as before.  hgwdev's hg.conf "
+               "turns it on."),
+        h("browser.quickLiftMuteTriangles", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38693",
+          note="Fade the difference triangles on a quickLift chain track "
+               "when there are more of them than fit side by side, so they do "
+               "not merge into one solid band of color.  Read in "
+               "quickLiftMuteTrianglesEnabled() and asked by the chain "
+               "track's draw in hg/hgTracks/quickLift.c.  Off, the triangles "
+               "keep their full color, as before.  A cart variable of the "
+               "same name overrides it, like browser.quickLiftBarChart.  "
+               "hgwdev's hg.conf turns it on."),
     ],
 }
 
@@ -1628,7 +1648,7 @@ BRANDING = {
           "hg/hgIntegrator/hgIntegrator.c",
           default='"hg38,hg19,mm39,mm10..."', verified=True),
         h("geneTracks", "internal", "hg/lib/hgFind.c", verified=True),
-        h("browser.recTrackSets", "internal", "hg/hgTracks/recTrackSets.c",
+        h("browser.recTrackSets", "internal", "hg/lib/recTrackSets.c",
           verified=True, family="recTrackSets",
           note="Recommended track sets.  Loading one merges it into the "
                "current cart."),
@@ -1976,6 +1996,53 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("igvDesktop.gbdbUrl", "unreviewed", "hg/lib/hui.c",
+          default="https://hgdownload.soe.ucsc.edu/gbdb/", ticket="38823",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionDefault in hg/lib/hui.c.  Came in "
+               "at fa1ec8f7a70, New hg.conf setting igvDesktopButton=on adds "
+               "an 'Open in IGV Desktop' button to the track settings and "
+               "details pages of bigBed, bigWig, BAM/CRAM and VCF tracks with "
+               "a bigDataUrl.  It sends the file, the assembly, the track "
+               "label and the current position to IGV Desktop's batch port "
+               "60151 on the user's own computer.  /gbdb files are linked to "
+               "hgdownload, or to igvDesktop.gbdbUrl if set.  Tracks with "
+               "restricted data show a note instead of the button.  Off by "
+               "default.  refs #38823.  Needs a kind, a description, and a "
+               "section to live in."),
+        h("igvDesktopButton", "flag", "hg/lib/hui.c", default="FALSE",
+          ticket="38823",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in hg/lib/hui.c. "
+               "Came in at fa1ec8f7a70, New hg.conf setting "
+               "igvDesktopButton=on adds an 'Open in IGV Desktop' button to "
+               "the track settings and details pages of bigBed, bigWig, "
+               "BAM/CRAM and VCF tracks with a bigDataUrl.  It sends the "
+               "file, the assembly, the track label and the current position "
+               "to IGV Desktop's batch port 60151 on the user's own computer. "
+               "/gbdb files are linked to hgdownload, or to "
+               "igvDesktop.gbdbUrl if set.  Tracks with restricted data show "
+               "a note instead of the button.  Off by default.  refs #38823. "
+               "Needs a description and a gate or knob call."),
+        h("multiRegionMane", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+          ticket="38825",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/hgTracks/hgTracks.c.  Came in at 1dde6c7314e, Multi-region "
+               "view: new mode 'Show exons of MANE transcripts', listed first "
+               "in the Multi-region dialog when the assembly has a MANE "
+               "bigGenePred track.  Lays out the padded exons of the MANE "
+               "transcripts on the current chromosome, overlapping ones "
+               "merged, with its own padding box.  Behind the new hg.conf "
+               "setting multiRegionMane, off by default, refs #38825.  Needs "
+               "a description and a gate or knob call."),
+        h("sessionLoad.keepUserPrefs", "flag", "hg/lib/cart.c",
+          default="FALSE", ticket="38616",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in hg/lib/cart.c. "
+               "Came in at a59e51cdc1b, Session load keeps the user's own "
+               "display preferences and tool settings, refs #38616.  Needs a "
+               "description and a gate or knob call."),
         h("trackFinder", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
           ticket="33217",
           note="Written down by --auto-register, not yet reviewed by a "
@@ -1985,14 +2052,6 @@ AWAITING_REVIEW = {
                "hg.conf setting, with the old track search as an Advanced "
                "Search tab, recommended track set loading moved to hg/lib, "
                "refs #33217.  Needs a description and a gate or knob call."),
-        h("browser.mafFastCodons", "flag", "hg/hgTracks/wigMafTrack.c",
-          default="FALSE", ticket="38756",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/wigMafTrack.c.  Came in at dc4f089aa32, hgTracks: "
-               "put the faster MAF codon display behind hg.conf "
-               "browser.mafFastCodons, refs #38756, #38763.  Needs a "
-               "description and a gate or knob call."),
         h("hubGenomeNotFoundError", "flag", "hg/lib/cart.c", default="FALSE",
           ticket="30832",
           note="Written down by --auto-register, not yet reviewed by a "
@@ -2002,21 +2061,6 @@ AWAITING_REVIEW = {
                "off by default and turned on with hubGenomeNotFoundError=on "
                "in hg.conf, refs #30832.  Needs a description and a gate or "
                "knob call."),
-        h("browser.quickLiftMuteTriangles", "flag", "hg/lib/quickLift.c",
-          default="FALSE", ticket="38693",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/lib/quickLift.c.  Came in at a789fe5ac91, quickLift: fade "
-               "the difference triangles on a chain track when they overlap. "
-               "When there are more triangles than fit side by side, they "
-               "merge into one solid band of color.  The color now moves "
-               "toward white as the overlap grows: no fade while they fit, "
-               "then 90% x (1 - 1/fill), where fill is the total triangle "
-               "width over the window width.  The faded color is opaque, so "
-               "overlapping triangles do not stack back up to full color. "
-               "Gated by browser.quickLiftMuteTriangles, cart first and then "
-               "hg.conf, off by default.  refs #38693.  Needs a description "
-               "and a gate or knob call."),
     ],
 }
 
@@ -2430,7 +2474,7 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
     print("\nON IN PRODUCTION HG.CONF (default still FALSE %d+ releases after "
           "it landed): %d" % (QA_GRACE, len(live)), file=out)
     print("  Users already have these.  Flip the code default to TRUE, or mark "
-          "the row\n  a knob if mirrors should leave it off.  Read from the "
+          "the row\n  as a knob if mirrors should leave it off.  Read from the "
           "copies in kent/confs.", file=out)
     for g in live:
         print(line(g) + "  on in %s" % "/".join(g["liveOn"]), file=out)
@@ -3310,6 +3354,7 @@ span.gate { background: #fde9c8; color: #7a4a00; }
 span.knob { background: #d9ead9; color: #24541f; }
 span.overdue { background: #f8d3d3; color: #8a1f1f; font-weight: 600; }
 span.stalled { background: #fdf0c0; color: #6b5300; font-weight: 600; }
+span.liveByConf { background: #d6ecf3; color: #1d4f60; font-weight: 600; }
 span.dep { background: #eee; color: #777; }
 span.req { background: #dce6f8; color: #1a3a6b; }
 div.note { color: #555; margin-top: 3px; font-size: 0.95em; }
@@ -3377,8 +3422,12 @@ def var_rows(vs, life_by_name=None, tickets=None, sites=None):
                             % life["sunset"])
             if (not life.get("shipped") and life.get("age") is not None
                     and life["age"] > QA_GRACE):
-                tags.append('<span class="kind stalled">stalled %d</span>'
-                            % life["age"])
+                if life.get("liveOn"):
+                    tags.append('<span class="kind liveByConf">on in %s</span>'
+                                % esc("/".join(life["liveOn"])))
+                else:
+                    tags.append('<span class="kind stalled">stalled %d</span>'
+                                % life["age"])
         extra = ""
         if life and life.get("added"):
             extra = "added v%d" % life["added"]

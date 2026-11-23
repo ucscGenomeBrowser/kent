@@ -15,6 +15,7 @@
 #include "dnaseq.h"
 #include "dnautil.h"
 #include "hdb.h"
+#include "multiRegionSpace.h"
 #include "psl.h"
 #include "fa.h"
 #include "genePred.h"
@@ -1680,7 +1681,12 @@ else
 	    nextWord(&sourceDb);
 	    if (isEmpty(sourceDb))
 		sourceDb = seqDb;
-	    mrnaSeq = hChromSeq(sourceDb, name, 0, 0);
+	    /* A query name is a sequence of the source assembly, even in a multi-region
+	     * space whose own sequence has the same name.  refs #37788 */
+	    if (multiRegionSpaceForDb(sourceDb) != NULL)
+		mrnaSeq = multiRegionSpaceSourceDna(sourceDb, name, 0, 0);
+	    else
+		mrnaSeq = hChromSeq(sourceDb, name, 0, 0);
 	    }
 	else
 	    mrnaSeq = hGenBankGetMrna(seqDb, name, NULL);

@@ -1,0 +1,4 @@
+input/good.chain line 2 chain 1: target size of chrA is 1000, the sizes file says 999
+input/good.chain line 2 chain 1: query sequence chrB is not in the query sizes file
+input/good.chain line 6 chain 2: target size of chrA is 1000, the sizes file says 999
+input/good.chain line 6 chain 2: query sequence chrB is not in the query sizes file

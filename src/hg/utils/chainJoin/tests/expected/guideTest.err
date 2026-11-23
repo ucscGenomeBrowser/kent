@@ -1,0 +1,2 @@
+19 chains in, 16 chains out: 0 exact joins, 0 across a gap, 1 across an indel, 0 across an overlap
+guide: 5 joins, 3 chain ends cut, 0 joins refused by -maxTrim, 0 refused because a chain end had more than one partner, 3 refused because the guide returns to one of the two chains or the two overlap on the target

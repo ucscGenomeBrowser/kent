@@ -587,7 +587,7 @@ struct dnaSeq *multiRegionSpaceDna(char *chainFile, char *sourceTwoBit,
  * See multiRegionSpace.h. */
 {
 /* An empty range is an empty sequence, so callers of hChromSeq() and its family never
- * see NULL.  (hFetchSeq() on a 2bit errAborts on an empty range instead.) */
+ * see NULL.  hChromSeq() turns 0,0 into the whole sequence before it gets here. */
 if (start >= end)
     return newDnaSeq(cloneString(""), 0, chrom);
 long startMs = mrsTiming ? clock1000() : 0;
@@ -702,6 +702,22 @@ char *multiRegionSpaceSourceTwoBit(char *db)
 {
 struct displaySpace *space = spaceForDb(db);
 return (space == NULL) ? NULL : space->sourceTwoBit;
+}
+
+struct dnaSeq *multiRegionSpaceSourceDna(char *db, char *seqName, int start, int end)
+/* Mixed case sequence of the source assembly behind db.  See multiRegionSpace.h. */
+{
+char *sourceTwoBit = multiRegionSpaceSourceTwoBit(db);
+if (sourceTwoBit == NULL)
+    errAbort("multiRegionSpaceSourceDna: %s is not drawn in a multi-region space", db);
+/* The per-thread handle, not hFetchSeq()'s single static one, since worker threads
+ * read sequence here too. */
+struct twoBitFile *tbf = openTwoBitCached(sourceTwoBit);
+if (start == 0 && end == 0)
+    end = twoBitSeqSize(tbf, seqName);
+if (start >= end)
+    return newDnaSeq(cloneString(""), 0, seqName);
+return twoBitReadSeqFrag(tbf, seqName, start, end);
 }
 
 static void sourceSequenceFile(char *db, char *chrom, char retPath[HDB_MAX_PATH_STRING])

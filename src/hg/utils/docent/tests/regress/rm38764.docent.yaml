@@ -27,6 +27,7 @@ proof:
   - "assertion-only 2026-11-13 -- written with a5f4fa7b857, before it reached genome-test"
   - "xfail 2026-11-13 -- fails on genome-test at step 5, its own check: #tRNAs_id holds hide, wanted pack; input[name='tRNAs'] holds hide, wanted pack"
   - "sandbox-ab 2026-11-13 -- all steps pass on hgwdev-max with a5f4fa7b857 in its htdocs js; genome-test without it fails at step 5 as above"
+  - "server-flip 2026-11-14 -- passes on genome-test in the nightly run (log 2026-11-14_0410.txt) once a5f4fa7b857 was installed there, having failed there as an xfail on 2026-11-13"
 
 target: genome-test
 db: hg38

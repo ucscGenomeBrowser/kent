@@ -1,0 +1,2 @@
+input/good.chain line 2 chain 1: target sequence chrA is not in the target sizes file
+input/good.chain line 6 chain 2: target sequence chrA is not in the target sizes file

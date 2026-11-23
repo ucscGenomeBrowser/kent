@@ -30,7 +30,9 @@ UTILS_APPLIST = \
 	bigMafToMaf \
 	bigPslToPsl \
 	binFromRange \
+	chainJoin \
 	chainToBigChain \
+	chainValidate \
 	checkDotBracketBigBed \
 	chromGraphFromBin \
 	chromGraphToBin \
@@ -109,6 +111,8 @@ DIRS = ${buildRefresh} \
 TEST_DIRS = \
 	bedMergeAdjacent \
 	bedPartition \
+	chainJoin \
+	chainValidate \
 	checkDotBracketBigBed \
 	genePredFilter \
 	genePredToProt \

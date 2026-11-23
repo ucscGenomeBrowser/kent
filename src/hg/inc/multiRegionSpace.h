@@ -171,7 +171,9 @@ struct dnaSeq *multiRegionSpaceDna(char *chainFile, char *sourceTwoBit,
  * In a space the source and the display assembly have the same name, and that name
  * means the display coordinates;  a source read that went looking for its own
  * sequence by that name would get the synthetic answer back.
- * Never returns NULL:  an empty range gives an empty sequence.  refs #37788 */
+ * Never returns NULL:  an empty range gives an empty sequence, and that includes
+ * 0,0, which here does NOT mean the whole sequence.  hChromSeq() turns 0,0 into the
+ * whole sequence before it calls this.  refs #37788 */
 
 
 /* ---- Drawing in a space ---- */
@@ -201,5 +203,12 @@ char *multiRegionSpaceForDb(char *db);
 char *multiRegionSpaceSourceTwoBit(char *db);
 /* The source assembly's 2bit for a db in a space.  This is the only way to read
  * source sequence once a space is installed. */
+
+struct dnaSeq *multiRegionSpaceSourceDna(char *db, char *seqName, int start, int end);
+/* Mixed case sequence of the SOURCE assembly behind db, which must be in a space,
+ * read from its 2bit by this thread's cached handle.  For a sequence that is not in
+ * the space at all, such as an alt haplotype a PSL track names as its query.  start
+ * and end both 0 mean the whole sequence, as in hFetchSeq();  any other empty range
+ * gives an empty sequence. */
 
 #endif /* MULTIREGIONSPACE_H */

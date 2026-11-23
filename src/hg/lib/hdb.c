@@ -1380,6 +1380,21 @@ freez(&fileName);
 return seq;
 }
 
+static struct dnaSeq *spaceChromSeqMixed(char *spaceChain, char *db, char *chrom,
+                                         int start, int end)
+/* Mixed case DNA for db while it is drawn in a multi-region space.  A sequence of the
+ * space is read through the chain.  Any other name, such as an alt haplotype, is a
+ * sequence of the source assembly and is read straight from its 2bit.  start and end
+ * both 0 mean the whole sequence, as they do for hFetchSeq().  refs #37788 */
+{
+int size = multiRegionSpaceChromSize(spaceChain, chrom);
+if (size < 0)
+    return multiRegionSpaceSourceDna(db, chrom, start, end);
+if (start == 0 && end == 0)
+    end = size;
+return multiRegionSpaceDna(spaceChain, multiRegionSpaceSourceTwoBit(db), chrom, start, end);
+}
+
 struct dnaSeq *hChromSeqMixed(char *db, char *chrom, int start, int end)
 /* Return mixed case (repeats in lower case) DNA from chromosome. */
 {
@@ -1388,8 +1403,7 @@ struct dnaSeq *hChromSeqMixed(char *db, char *chrom, int start, int end)
  * source's own soft masking.  refs #37788 */
 char *spaceChain = multiRegionSpaceForDb(db);
 if (spaceChain != NULL)
-    return multiRegionSpaceDna(spaceChain, multiRegionSpaceSourceTwoBit(db),
-                               chrom, start, end);
+    return spaceChromSeqMixed(spaceChain, db, chrom, start, end);
 char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(db, chrom, fileName);
 return hFetchSeqMixed(fileName, chrom, start, end);
@@ -1411,8 +1425,7 @@ struct dnaSeq *hChromSeq(char *db, char *chrom, int start, int end)
 char *spaceChain = multiRegionSpaceForDb(db);
 if (spaceChain != NULL)
     {
-    struct dnaSeq *seq = multiRegionSpaceDna(spaceChain, multiRegionSpaceSourceTwoBit(db),
-                                             chrom, start, end);
+    struct dnaSeq *seq = spaceChromSeqMixed(spaceChain, db, chrom, start, end);
     tolowers(seq->dna);
     return seq;
     }
