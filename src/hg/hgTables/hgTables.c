@@ -566,6 +566,34 @@ if (sameString(region, "range"))
 return region;
 }
 
+static char *qualifyFields(char *fields, char *table)
+/* Return a copy of the comma-separated field list with each plain column name
+ * written as table.column.  A column named after a reserved word (offset, in
+ * every maf and wiggle table since MariaDB 10.6) is a syntax error on its own,
+ * but is accepted after a dot.  Leaves alone a field that already has a dot or
+ * is not a name, such as *, or the '.' and 0 placeholders bedList.c asks for.
+ * Returns NULL for a NULL list. */
+{
+if (fields == NULL)
+    return NULL;
+struct dyString *dy = dyStringNew(0);
+struct slName *el, *list = slNameListFromComma(fields);
+for (el = list; el != NULL; el = el->next)
+    {
+    char *f = trimSpaces(el->name);
+    if (isEmpty(f))
+        continue;
+    if (dy->stringSize > 0)
+        dyStringAppendC(dy, ',');
+    if ((isalpha(f[0]) || f[0] == '_') && strchr(f, '.') == NULL)
+        dyStringPrintf(dy, "%s.%s", table, f);
+    else
+        dyStringAppend(dy, f);
+    }
+slFreeList(&list);
+return dyStringCannibalize(&dy);
+}
+
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *fields, struct region *region, boolean isPositional,
 	char *extraWhere)
@@ -578,31 +606,38 @@ if (isPositional)
     /* Check for missing split tables before querying: */
     char *db = sqlGetDatabase(conn);
     struct hTableInfo *hti = hFindTableInfo(db, region->chrom, table);
+    char fullTableName[256];
     if (hti == NULL)
 	return NULL;
     else if (hti->isSplit)
 	{
-	char fullTableName[256];
 	safef(fullTableName, sizeof(fullTableName),
 	      "%s_%s", region->chrom, table);
 	if (!sqlTableExists(conn, fullTableName))
 	    return NULL;
 	}
+    else
+        safecpy(fullTableName, sizeof(fullTableName), hti->rootName);
+    // name the table exactly as hExtendedRangeQuery() puts it in the FROM clause
+    char *qualified = qualifyFields(fields, fullTableName);
     if (region->fullChrom) /* Full chromosome. */
 	{
 	sr = hExtendedChromQuery(conn, table, region->chrom,
-		extraWhere, FALSE, fields, NULL);
+		extraWhere, FALSE, qualified, NULL);
 	}
     else
 	{
 	sr = hExtendedRangeQuery(conn, table, region->chrom, region->start, region->end,
-		extraWhere, TRUE, fields, NULL);
+		extraWhere, TRUE, qualified, NULL);
 	}
+    freeMem(qualified);
     }
 else
     {
     struct dyString *query = dyStringNew(0);
-    sqlCkIl(fieldsSafe,fields)
+    char *qualified = qualifyFields(fields, table);
+    sqlCkIl(fieldsSafe,qualified)
+    freeMem(qualified);
     sqlDyStringPrintf(query, "select %-s from %s", fieldsSafe, table);
     if (extraWhere)
          {
