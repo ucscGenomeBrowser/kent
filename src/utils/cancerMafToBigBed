@@ -1,12 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # possible features:
 # - add counts per diagnosis
 
 import logging, sys, optparse, gzip
 from collections import defaultdict, namedtuple, Counter
-from os.path import join, basename, dirname, isfile, walk, splitext
-from os import system
+from os.path import join, basename, dirname, isfile, splitext
+from os import system, walk
 
 # these fields are identical for all variants at the same position. 
 # only a single value is output to the bed
@@ -89,18 +89,15 @@ def findMafs(inDir):
     " recursively find maf.gz files under inDir "
     mafFnames = []
 
-    def gotFiles(arg, dirName, fnames):
-        " callback for walk, called for every file "
+    for dirName, subDirs, fnames in walk(inDir):
         for fname in fnames:
             if fname.endswith(".maf.gz"):
                 mafFnames.append( join(dirName, fname) )
-
-    walk(inDir, gotFiles, None)
-    return mafFnames
+    return sorted(mafFnames)
 
 def openFile(fname):
     if fname.endswith(".gz"):
-        return gzip.open(fname)
+        return gzip.open(fname, "rt")
     else:
         return open(fname)
 
@@ -158,7 +155,7 @@ def mafsToBed(mafFnames, annots, outBed):
     # now summarize all variants for every chrom pos
     longFields = set()
     ofh = open(outBed, "w")
-    for (chrom, start, end, all1, all2), varList in byPosAndAllele.iteritems():
+    for (chrom, start, end, all1, all2), varList in byPosAndAllele.items():
         var1 = varList[0]._asdict()
         refAll = var1["Reference_Allele"]
         varType = var1["Variant_Type"]
@@ -174,7 +171,7 @@ def mafsToBed(mafFnames, annots, outBed):
         elif varType=="INS":
             name = "ins"+all2
         else:
-            invalidType
+            raise ValueError("unknown Variant_Type %s in %s" % (varType, var1))
 
         varSampleCount = len(varList) # score is number of variants with this nucl change
         score = min(1000, varSampleCount) # don't exceed 1000
@@ -299,7 +296,7 @@ def main():
 
     # join annots and exposures into a single dict case_id -> field_name -> value
     joinedAnnots = {}
-    for key, annot in annots.iteritems():
+    for key, annot in annots.items():
         ad = annot._asdict()
         ad.update(exposures[key]._asdict())
         joinedAnnots[key] = ad

@@ -36179,3 +36179,10 @@ cd ~/kent/src/hg/makeDb/trackDb && make DBS=hg19 FIND=find
 # build steps for both assemblies are in:
 #   ~/kent/src/hg/makeDb/doc/hg38/cancerMutations.txt
 # File: /gbdb/hg19/cancerMutations/cancerHotspots.bb
+
+##############################################################################
+# IntOGen driver genes (intogen), 2026-11-23 Claude/max, refs #38687
+# The stanza lives in trackDb/human/cancerMutations.ra (shared via $D), all
+# build steps for both assemblies are in:
+#   ~/kent/src/hg/makeDb/doc/hg38/cancerMutations.txt
+# File: /gbdb/hg19/cancerMutations/intogen.bb
