@@ -258,7 +258,7 @@ filterByRange.contexts on
 filterLimits.contexts 1:37
 filterLabel.contexts Number of cell-type maps sharing the boundary
 labelFields none
-mouseOver <b>Boundary recurrent:</b> $contexts / 37 cell-type maps<br><b>Stability percentile (0-1):</b> $percentile
+mouseOver <b>Number of cell-type maps sharing the boundary:</b> $contexts / 37<br><b>Stability percentile (0-1):</b> $percentile
 html tadsMcArthur
 
 include tads3dgb.ra

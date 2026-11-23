@@ -3,38 +3,47 @@
 This track collection shows <b>TAD domains</b> from the
 <a href="http://3dgenome.fsm.northwestern.edu/" target="_blank">3D Genome Browser</a>
 (3DGB) 2.0, across <b>30 mouse Hi-C and Micro-C datasets</b>. Each subtrack is one 3DGB
-dataset, displayed exactly as called and published by 3DGB. They are browsable with a
-<b>faceted selector</b> (organ, cell type, assay, year, study); the displayed domain
-intervals are 3DGB's own, with no UCSC re-calling, merging, or recurrence scoring.
+dataset. The displayed domain intervals are 3DGB's own, with no UCSC re-calling, merging,
+or recurrence scoring.
 </p>
 <p>
 The calls are native to mm10. On mm39 they are shown lifted from mm10 (noted in each track's
 long label). By default a small set of reference datasets is shown (mESC, CH12-LX, and mESC
-WT MicroC). Use the faceted selector to enable other datasets.
+WT MicroC). The others can be turned on from the track configuration page.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
 Each subtrack is <b>colored by organ</b>. These datasets are <b>not a cross-comparable
 consensus</b>. Each represents one dataset's own TAD calls. Because 3DGB calls TADs from
-Hi-C data analyzed in fixed-size 20 or 25 kb bins, domain edges are only accurate to roughly
-one bin, and domains do not cover the whole genome.
+Hi-C data analyzed in fixed-size 20 or 25 kb bins, domain edges are only accurate to roughly one
+bin. Domains do not cover the whole genome.
 </p>
 <p>
 The facets are <b>Organ</b>, <b>Cell type</b>, <b>Assay</b>, <b>Year</b>, and <b>Study</b>.
-(The human 3DGB track additionally offers Condition, Treatment, and Provenance facets; those
+(The human 3DGB track additionally offers Condition, Treatment, and Provenance facets. Those
 were manually curated for the human datasets and are not provided here.)
 </p>
 
+<h2>Available Organs and Tissues</h2>
+<table border="1" cellspacing="0" cellpadding="4">
+  <tr>
+    <th>Organ</th>
+    <th style="text-align:center">Datasets</th>
+  </tr>
+  <tr><td style="background-color:rgb(254,75,173)">Blood</td><td style="text-align:center">5</td></tr>
+  <tr><td style="background-color:rgb(118,158,101)">Embryo</td><td style="text-align:center">22</td></tr>
+  <tr><td style="background-color:rgb(6,218,147)">Thymus</td><td style="text-align:center">3</td></tr>
+</table>
+
 <h2>Methods</h2>
 <p>
-TAD domains were called by the 3D Genome Browser pipeline and are displayed verbatim. UCSC
-performed only a format normalization (reshaping the published per-dataset BED-like file to
-a plain four-column bigBed) and, for mm39, a <b>liftOver</b> from mm10, removing lifted
-domains that came out more than twice their mm10 size (this happens when a domain spans a gap
-or a rearranged region between the two assemblies). No re-calling was
-performed, and the mm10 coordinates are unchanged from the 3DGB files. The dataset metadata
-used for the faceted selector was copied directly from the 3D Genome Browser.
+TADs were called by the 3D Genome Browser from the cooltools insulation score, at 20 or 25 kb
+resolution. The 3DGB TAD file for each dataset was converted to a four-column bigBed
+(chromosome, start, end, dataset name). On mm10, domain coordinates were not changed. On
+mm39, domains were lifted from mm10 with the UCSC <b>liftOver</b> tool, and lifted domains
+that came out more than twice their mm10 size were removed. The dataset metadata used for the
+facets (organ, cell type, assay, year, study) was copied from the 3D Genome Browser.
 </p>
 
 <h2>Data Access</h2>

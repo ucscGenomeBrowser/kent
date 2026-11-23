@@ -6,14 +6,14 @@ self-interacting regions of the genome, typically hundreds of kilobases to about
 Their boundaries (frequently bound by CTCF and cohesin) insulate neighboring regions and
 constrain enhancer-promoter contacts.
 </p>
-<p>The set contains three complementary sources:</p>
+<p>This track set includes three tracks:</p>
 <ul>
-  <li><b>Dixon 2012 TADs</b> &ndash; the original TAD <em>domains</em> in hESC and IMR90
-      cells (lifted from hg18).</li>
-  <li><b>Schmitt 2016 boundaries</b> &ndash; TAD <em>boundaries</em> across 21 human
-      tissues and cell lines (native hg19).</li>
-  <li><b>TAD boundary stability</b> &ndash; how recurrent each boundary is across 37
-      cell-type maps (McArthur &amp; Capra 2021; native hg19).</li>
+  <li>The <b>Dixon 2012 TADs</b> track displays the original TAD <em>domains</em> in hESC
+      and IMR90 cells (lifted from hg18).</li>
+  <li>The <b>Schmitt 2016 boundaries</b> track displays TAD <em>boundaries</em> across 21
+      human tissues and cell lines (native hg19).</li>
+  <li>The <b>TAD boundary stability</b> track displays how many of 37 cell-type maps share
+      each boundary (McArthur &amp; Capra 2021, native hg19).</li>
 </ul>
 <p>
 The table below summarizes how each of these tracks' domains or boundaries were called and at
@@ -21,7 +21,7 @@ what resolution:
 </p>
 <blockquote>
 <table border=1 class='stdTbl'>
-<tr><th>Track</th><th>Feature</th><th>Calling method</th><th>Resolution</th></tr>
+<tr><th>Track</th><th>Shows</th><th>Calling method</th><th>Resolution</th></tr>
 <tr><td>Dixon 2012</td><td>Domains</td><td>Directionality-index HMM (lifted from hg18)</td><td>40 kb</td></tr>
 <tr><td>Schmitt 2016</td><td>Boundaries</td><td>Insulation score (native hg19)</td><td>40 kb</td></tr>
 <tr><td>McArthur &amp; Capra 2021</td><td>Boundaries (stability)</td><td>Boundary sharing across 37 reprocessed cell-type maps (native hg19)</td><td>100 kb windows</td></tr>
@@ -29,9 +29,9 @@ what resolution:
 </blockquote>
 <p>Two further domain sources are available on the hg38 assembly:</p>
 <ul>
-  <li><b>ENCODE TADs</b> &ndash; TAD <em>domains</em> across 117
-      ENCODE human biosamples (hg38 only).</li>
-  <li><b>3D Genome Browser</b> &ndash; TAD <em>domains</em> across 464 human
+  <li>The <b>ENCODE TADs</b> track displays TAD <em>domains</em> across 117 ENCODE human
+      biosamples (hg38 only).</li>
+  <li>The <b>3D Genome Browser</b> track displays TAD <em>domains</em> across 464 human
       Hi-C/Micro-C datasets (hg38 only).</li>
 </ul>
 
@@ -41,15 +41,14 @@ Each source is shown as a separate track because TAD calls are <b>not directly c
 across studies</b>: different algorithms (directionality index/HMM, insulation score) and
 resolutions (40&ndash;100 kb) produce different calls of the same underlying biology.
 Because TADs are called from Hi-C data analyzed in fixed-size bins, domain edges are
-uncertain to roughly the bin size, and the width of a boundary reflects this precision, not
-a measured physical width. Domains do not cover the whole genome, and the gaps between
-domains are inter-domain or unorganized regions, not display artifacts.
+only accurate to about one bin. For example, each Schmitt boundary is a single 40 kb bin. Domains do
+not cover the whole genome.
 </p>
 
 <h2>Methods</h2>
 <p>
-Each source was called independently by its original study; the calling method and resolution
-for each are summarized in the table in the Description above. See the individual subtrack
+Each source was called independently by its original study. The calling method and
+resolution for each are in the table above. See the individual subtrack
 description pages for full methods, source publications, and assembly/liftOver details for each
 dataset.
 </p>
