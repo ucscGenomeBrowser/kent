@@ -27,7 +27,7 @@ ln -s /hive/data/genomes/hg38/bed/cancerVariants/mutAtlas/mutAtlas.bb /gbdb/hg38
 # for v2, the hg19 mutation positions from the table lifted to hg38. Needs uv.
 mkdir -p /hive/data/genomes/hg38/bed/cancerVariants/cancerHotspots
 cd /hive/data/genomes/hg38/bed/cancerVariants/cancerHotspots
-~/kent/src/hg/makeDb/scripts/cancerMutations/cancerHotspotsBuild.sh
+~/kent/src/hg/makeDb/scripts/cancerMutations/cancerHotspotsBuild.sh hg38
 # hotspots in input: 1329 (v2 single residue/splice 1110, v2 indel 55, v3 164)
 # features written: 1328
 # not written: RECQL4 X766 splice, its only hg19 position does not lift to hg38
@@ -36,3 +36,19 @@ cd /hive/data/genomes/hg38/bed/cancerVariants/cancerHotspots
 # Warnings and transcript choices are in cancerHotspots.log
 
 ln -s /hive/data/genomes/hg38/bed/cancerVariants/cancerHotspots/cancerHotspots.bb /gbdb/hg38/cancerMutations/
+
+##############################################################################
+# 2026-11-22 Claude/max: Cancer Hotspots on hg19, refs #38687
+# Same script, Ensembl GRCh37 release 87 GFF3, the v2 hg19 positions are used as they are.
+# The cancerhotspots.org downloads are shared with the hg38 build.
+mkdir -p /hive/data/genomes/hg19/bed/cancerVariants/cancerHotspots/orig
+cd /hive/data/genomes/hg19/bed/cancerVariants/cancerHotspots
+for f in hotspots_v2.xls hotspots_v3.xlsx cancerhotspots.v2.maf.gz; do
+    ln -s /hive/data/genomes/hg38/bed/cancerVariants/cancerHotspots/orig/$f orig/; done
+~/kent/src/hg/makeDb/scripts/cancerMutations/cancerHotspotsBuild.sh hg19
+# hotspots in input: 1329, features written: 1329, no residue number shifts
+ln -s /hive/data/genomes/hg19/bed/cancerVariants/cancerHotspots/cancerHotspots.bb /gbdb/hg19/cancerMutations/
+
+# 2026-11-22: the Cancer Mutations container moved to trackDb/human/cancerMutations.ra
+# (hg19 + hg38). The old TCGA composite "cancerMutations" in human/trackDb.ra (#22742)
+# was removed; its tracks pancan33 and tcgaBrca are now hg38 children of the container.

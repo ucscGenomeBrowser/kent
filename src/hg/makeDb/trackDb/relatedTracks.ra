@@ -326,8 +326,8 @@ hg19 g2p omimContainer Gene and phenotype records from OMIM, the reference these
 hg19 omimContainer g2p Gene-disease pairs curated by the Gene2Phenotype project
 
 # Cancer somatic variant cross-links:
-hg38 cancerMutations gdcCancer The same TCGA somatic mutations, summarized across all 33 Pan-Cancer projects
-hg38 gdcCancer cancerMutations TCGA somatic mutations shown separately for each cancer study
+hg38 pancan33 gdcCancer The same TCGA somatic mutations, as one lollipop track per cancer project
+hg38 gdcCancer pancan33 The same TCGA somatic mutations of all 33 projects in one track, with clinical data per sample
 hg38 cosmicMuts civic Clinically interpreted cancer variants, with evidence for diagnosis, prognosis and drug response
 hg38 civic cosmicMuts A broad catalog of somatic mutations reported in cancer, without clinical interpretation
 hg38 gdcCancer cancerExpr Gene expression measured in the same 33 TCGA cancer projects

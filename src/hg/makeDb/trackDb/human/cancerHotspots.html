@@ -69,21 +69,23 @@ download page</a>, as well as the v2 mutation file
 <a href="https://cbioportal-download.s3.amazonaws.com/cancerhotspots.v2.maf.gz"
 target="_blank">cancerhotspots.v2.maf.gz</a>. The v3 file contains the 164 new
 hotspots; all other hotspots are from the v2 file. The source gives hotspots as a
-gene and an amino acid number, so we placed each one on an Ensembl 115 transcript
-and required the reference amino acid(s) of the source to match the translated
-transcript. For v2 hotspots, the source also lists the hg19 positions of the
-mutations at each hotspot. We lifted them to hg38 and picked the transcript whose
-codon(s) contain most of them. The v2 residue numbers refer to Ensembl 75
-transcripts, and for 9 hotspots in MYD88, FGFR1 and ARID1B no current
-transcript has the reference amino acid at that number. For these, the residue
-number on the current transcript is shown on the details page, e.g. MYD88 L265 is
-L252 on the current MANE transcript. For v3 hotspots, we used the transcript picked
-for the v2 hotspots of the same gene, or the Ensembl canonical transcript. Splice-site
-hotspots have no codon and are drawn at the lifted hg19 mutation positions. One of
-the 1329 hotspots is not in the track: the only hg19 position of the splice-site
-hotspot RECQL4 X766 could not be lifted to hg38. The scripts are in the
+gene and an amino acid number, so we placed each one on an Ensembl transcript
+(GRCh37 release 87 for hg19, release 115 for hg38) and required the reference amino
+acid(s) of the source to match the translated transcript. For v2 hotspots, the
+source also lists the hg19 positions of the mutations at each hotspot. We picked the
+transcript whose codon(s) contain most of them, on hg38 after lifting the positions
+with liftOver. For v3 hotspots, we used the transcript picked for the v2 hotspots of
+the same gene, or the Ensembl canonical transcript. Splice-site hotspots have no
+codon and are drawn at the mutation positions.</p>
+<p>
+On hg19, all 1329 hotspots are in the track. On hg38 there are 1328: the only hg19
+position of the splice-site hotspot RECQL4 X766 could not be lifted to hg38. The v2
+residue numbers refer to Ensembl 75 transcripts. On hg38, for 9 hotspots in MYD88,
+FGFR1 and ARID1B, no current transcript has the reference amino acid at that number.
+For these, the residue number on the current transcript is shown on the details
+page, e.g. MYD88 L265 is L252 on the current MANE transcript. The scripts are in the
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/cancerMutations"
-target="_blank">kent source tree</a>, and all steps are described in the
+target="_blank">kent source tree</a>, and all steps for both assemblies are described in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/cancerMutations.txt"
 target="_blank">makeDoc file</a>.
 </p>
@@ -101,7 +103,7 @@ track=<i>cancerHotspots</i>.
 For automated download and analysis, the annotation is stored in a bigBed file that
 can be downloaded from
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/hg38/cancerMutations/" target="_blank">our
-download server</a>. The file for this track is called <tt>cancerHotspots.bb</tt>.
+download server</a> (replace hg38 with hg19 in the URL for hg19). The file for this track is called <tt>cancerHotspots.bb</tt>.
 Individual regions or the whole genome annotation can be obtained using our tool
 <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
 precompiled binary for your system. Instructions for downloading source code and

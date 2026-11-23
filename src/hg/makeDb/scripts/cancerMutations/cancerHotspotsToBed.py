@@ -6,16 +6,16 @@
 cancerHotspots bigBed track.
 
 The tables give hotspots as gene + amino acid position, so each one is mapped
-to hg38 through an Ensembl 115 transcript: the transcript the v2 MAF used for
-the gene (Ensembl 75), if it still exists and has the right reference amino
-acid, otherwise the Ensembl canonical transcript, otherwise any protein-coding
-transcript of the gene with the right reference amino acid. For v2 hotspots,
-the mapped codon is checked against the hg19 positions of the hotspot
-mutations in the table, lifted to hg38. Splice-site hotspots (X<pos>_splice)
-have no codon; they are placed on the lifted hg19 mutation positions.
+to the genome through an Ensembl transcript (Ensembl 115 for hg38, GRCh37
+release 87 for hg19) with the right reference amino acid(s). For v2 hotspots,
+the table also has the hg19 positions of the hotspot mutations; the transcript
+and codon that contain most of them are used (on hg38 after liftOver).
+Splice-site hotspots (X<pos>_splice) have no codon; they are placed on the
+mutation positions. See pickTx() for the details.
 
 Usage: cancerHotspotsToBed.py hotspots_v2.xls hotspots_v3.xlsx mafGeneTx.tsv \
-           ensembl.gff3.gz hg38.2bit hg19ToHg38.over.chain.gz outBed
+           ensembl.gff3.gz db.2bit hg19To<Db>.over.chain.gz|none outBed
+Use "none" instead of a chain file when building on hg19.
 Writes a summary to stderr.
 """
 import sys, gzip, re, subprocess, tempfile, os, warnings
@@ -241,6 +241,11 @@ def liftPositions(posList, chain):
     """ posList: list of (key, chrom, pos1, count) on hg19 -> dict key -> list of
     (chrom, pos0, count) on hg38, and the number of positions that did not lift """
     res = defaultdict(list)
+    if chain == "none":
+        # building on hg19: the positions are already on the target assembly
+        for key, chrom, pos, n in posList:
+            res[key].append(("chr" + chrom, pos - 1, n))
+        return res, 0
     with tempfile.TemporaryDirectory() as tmp:
         inB, outB, unB = [os.path.join(tmp, x) for x in ("in.bed", "out.bed", "un.bed")]
         with open(inB, "w") as f:

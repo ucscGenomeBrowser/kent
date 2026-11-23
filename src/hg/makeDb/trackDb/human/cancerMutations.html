@@ -1,0 +1,50 @@
+<h2>Description</h2>
+<p>
+Tumors acquire somatic mutations that are not present in the germline of the
+patient. Counting how often the same mutation is found in patients with a given
+cancer type helps to separate recurrent driver mutations from rare passenger
+mutations.
+</p>
+
+<p>
+This collection contains tracks with somatic mutations found by sequencing tumor
+samples:
+</p>
+<ul>
+<li><a href="hgTrackUi?g=cancerHotspots">Cancer Hotspots</a>: more than 1300 amino
+acids, amino acid ranges and splice sites that are mutated in tumors more often than
+expected by chance, from cancerhotspots.org.</li>
+<li><a href="hgTrackUi?g=mutAtlas">Cancer Mutation Atlas</a> (hg38 only): 3.9 million
+somatic variants from 12 sequencing studies, with the number of patients carrying each
+variant and the number of patients tested, for more than 800 OncoTree cancer types.</li>
+<li><a href="hgTrackUi?g=mutAtlasLolly">CMA Lollipops</a> (hg38 only): the same data,
+drawn as a lollipop plot. The height of a lollipop is the log10 of the number of
+carriers.</li>
+<li>TCGA PanCan33 and TCGA Breast (hg38 only): somatic mutations of The Cancer Genome
+Atlas, see below.</li>
+</ul>
+
+<h2>TCGA PanCan33 and TCGA Breast</h2>
+<p>
+These two tracks show the somatic mutations of the 33 TCGA cancer projects, as called
+by MuTect2 and released in the <a href="https://portal.gdc.cancer.gov/"
+target="_blank">NCI Genomic Data Commons</a> (GDC) data release 10.0 (January 2019).
+TCGA PanCan33 contains about 2.9 million variants of all 33 projects, TCGA Breast the
+120,000 variants of the breast cancer project TCGA-BRCA. Each item is one variant,
+labeled with its reference and alternative allele. The details page shows the number
+of samples with the variant, the gene and variant class, the TCGA projects, and per
+sample the clinical data of the GDC (sex, ethnicity, smoking and alcohol history, days
+to death) with a link to the GDC case page. The MAF files were converted with the
+script <tt>cancerMafToBigBed</tt> in the kent source tree. The
+<a href="hgTrackUi?g=gdcCancer">TCGA Pan-Cancer</a> track shows the same release
+as one lollipop track per project.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The documentation pages of the individual tracks describe how to download
+the data and how to intersect it with other annotations. The TCGA tracks can be
+exported with the <a href="../cgi-bin/hgTables">Table Browser</a>; the original MAF
+files are available from the <a href="https://portal.gdc.cancer.gov/"
+target="_blank">GDC</a>.
+</p>

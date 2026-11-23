@@ -36172,3 +36172,10 @@ cd ~/kent/src/hg/makeDb/trackDb && make DBS=hg19 FIND=find
 #   ~/kent/src/hg/makeDb/doc/hg38/mei.txt
 #
 # Files: /gbdb/hg19/mei/eul1db.bb, /gbdb/hg19/mei/eul1dbRef.bb
+
+##############################################################################
+# Cancer Hotspots (cancerHotspots), 2026-11-22 Claude/max, refs #38687
+# The stanza lives in trackDb/human/cancerMutations.ra (shared via $D), all
+# build steps for both assemblies are in:
+#   ~/kent/src/hg/makeDb/doc/hg38/cancerMutations.txt
+# File: /gbdb/hg19/cancerMutations/cancerHotspots.bb
