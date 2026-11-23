@@ -22,6 +22,7 @@
 proof:
   - "assertion-only 2026-11-23 -- written from #38852 and ed0de1ab492"
   - "xfail 2026-11-23 -- fails on genome-test at the first expect: the page is 'Can't start query' and 'mySQL error 1064', with no #bin header, block start or offset value"
+  - "server-flip 2026-11-23 -- passes all four expects on genome-test after ed0de1ab492 was installed at 12:58, where it had failed at the first expect an hour earlier"
 
 target: genome-test
 db: hg38
