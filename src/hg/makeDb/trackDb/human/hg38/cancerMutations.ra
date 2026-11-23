@@ -69,7 +69,7 @@ parent cancerMutations hide
 shortLabel TCGA PanCan33
 longLabel TCGA somatic mutations from 33 cancer projects (GDC data release 10), one item per variant
 type bigBed 12 +
-bigDataUrl /gbdb/hg38/bbi/cancerMutations/pancan33.bb
+bigDataUrl /gbdb/hg38/cancerMutations/pancan33.bb
 html cancerMutations
 priority 4
 urls case_id=https://portal.gdc.cancer.gov/cases/$$
@@ -79,7 +79,7 @@ parent cancerMutations hide
 shortLabel TCGA Breast
 longLabel TCGA somatic mutations from the breast cancer project (TCGA-BRCA, GDC data release 10)
 type bigBed 12 +
-bigDataUrl /gbdb/hg38/bbi/cancerMutations/BRCA.bb
+bigDataUrl /gbdb/hg38/cancerMutations/tcgaBrca.bb
 html cancerMutations
 priority 5
 urls case_id=https://portal.gdc.cancer.gov/cases/$$
