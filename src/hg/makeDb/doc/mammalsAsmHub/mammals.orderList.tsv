@@ -283,6 +283,8 @@ GCF_012295265.1_UNSW_AlpineDingo_1.0	dingo (2020 Alpine COOINDA U.NSW)
 GCF_003254725.2_ASM325472v2	dingo (Sandy 2020 James Cook U)
 GCA_004886185.2_Basenji_breed-1.1	dog (Basenji MU ID 185726 2019)
 GCA_013276365.2_UNSW_CanFamBas_1.2	dog (Basenji UNSW-BAS-2019 2021)
+GCA_062019781.1_ROS_Cfam_2.0_alt	dog (Labrador retriever Alfie alternate hap 2026)
+GCA_062019780.1_ROS_Cfam_2.0_pri	dog (Labrador retriever Alfie primary hap 2026)
 GCA_031010765.1_BD_1.0	dog (Bernese Mountain Dog BD 2023)
 GCA_031010635.1_OD_1.0	dog (Bernese Mountain Dog OD 2023)
 GCF_000002285.3_CanFam3.1	dog (boxer Tasha 2011)
@@ -414,6 +416,7 @@ GCA_054645025.1_mRhiCli1.hap2	Geoffroy's horseshoe bat (hap2 2026)
 GCA_004026745.1_MyrTri_v1_BIUU	giant anteater
 GCA_004024605.1_PteBra_v1_BIUU	giant otter
 GCF_002007445.2_ASM200744v3	giant panda (Jingjing v3 2020)
+GCA_057428545.1_Saanen_maternal_haplotype	goat (Kiko x Saanen 2026)
 GCF_001704415.2_ARS1.2	goat (v2 San Clemente 2016 USDA)
 GCA_004027895.1_AllBul_v1_BIUU	Gobi jerboa
 GCF_017639785.1_BCM_Maur_2.0	golden hamster (Baylor 2021)
