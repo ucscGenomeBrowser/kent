@@ -42,8 +42,13 @@ if (tdb && hashLookup(tdb->settingsHash, "table"))
     return FALSE;
 if (tdb)
     return tdbIsBigBed(tdb);
-else
-    return hIsBigBed(database, table, parent, ctLookupName);
+// A table that is not a track but appears in a bigBed track's table menu through
+// all.joiner (kgXref under geneReviews) is an ordinary SQL table.  hIsBigBed() would
+// give it the parent's type and the page would then look for its bigDataUrl.
+if (parent && !sameString(table, parent->table) && !isCustomTrack(table)
+    && hTableExists(database, table))
+    return FALSE;
+return hIsBigBed(database, table, parent, ctLookupName);
 }
 
 static struct hash *asColumnHash(struct asObject *as)

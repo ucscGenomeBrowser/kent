@@ -21,7 +21,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/CH12LX.bb
     color 6,218,147
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> CH12.LX<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR097DFP
@@ -31,7 +31,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/heart.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Heart<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR639NRL
@@ -41,7 +41,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/leftcerebralcortex.bb
     color 155,155,18
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Left cerebral cortex<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR028GRK
@@ -51,7 +51,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/mouseembryonicstemcell.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Mouse embryonic stem cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR820CZQ
@@ -61,7 +61,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/adrenalgland.bb
     color 90,179,68
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Adrenal gland<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR549VZT
@@ -71,7 +71,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/CH12F3.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> CH12F3<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR051JZL
@@ -81,7 +81,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/ESE14.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> ES-E14<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR136LVP
@@ -91,7 +91,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/gastrocnemius.bb
     color 137,135,170
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Gastrocnemius<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR471ZWB
@@ -101,7 +101,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/matureBcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Mature B cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR357JYI
@@ -111,7 +111,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/mousetrophoblaststemcell.bb
     color 104,171,71
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Mouse trophoblast stem cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR080JTU
@@ -121,7 +121,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/Patski.bb
     color 92,161,153
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Patski<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR516LTA
@@ -131,7 +131,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/regulatoryTcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Regulatory T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR858EVG
@@ -141,7 +141,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/Thelper1cell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> T-helper 1 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR072ORZ
@@ -151,7 +151,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/Thelper17cell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> T-helper 17 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR407MXC
@@ -161,7 +161,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/Thelper2cell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> T-helper 2 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR799QDS
@@ -171,6 +171,6 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/vAbltransformedproBcells.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> v-Abl transformed pro-B cells<br><b>Arrowhead corner score:</b> $cornerScore
 

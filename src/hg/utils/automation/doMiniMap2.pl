@@ -285,12 +285,16 @@ sub checkOptions {
   if ($opt_chainMatrix && ! -s $opt_chainMatrix) {
     die "-chainMatrix file '$opt_chainMatrix' does not exist or is empty\n";
   }
+  # The chain cluster jobs run in axtChain/run, not here, so file
+  # arguments must be absolute paths:
+  $opt_chainMatrix = abs_path($opt_chainMatrix) if ($opt_chainMatrix);
   if ($opt_chainLinearGap) {
     if ($opt_chainLinearGap !~ /^(loose|medium)$/ && ! -s $opt_chainLinearGap) {
       die "-chainLinearGap must be loose, medium, or an existing file " .
 	  "(got '$opt_chainLinearGap')\n";
     }
-    $chainLinearGap = $opt_chainLinearGap;
+    $chainLinearGap = ($opt_chainLinearGap =~ /^(loose|medium)$/) ?
+      $opt_chainLinearGap : abs_path($opt_chainLinearGap);
   }
   if ($opt_minimapPreset) {
     $minimapPreset = $opt_minimapPreset;
@@ -1034,8 +1038,10 @@ _EOF_
   &doLoad();
 
   # Stable, dateless pointer to this swap build, in $origQDb's own root
-  # (relative target, so it stays correct if this tree gets mirrored):
-  &refreshLink(basename($swapDir), &asmRoot($origQDb) . "/miniMap2.$origTDb");
+  # (relative target when possible, see linkTargetFor()):
+  my $swapRoot = &asmRoot($origQDb);
+  &refreshLink(&linkTargetFor($swapDir, $swapRoot),
+	       "$swapRoot/miniMap2.$origTDb");
 } # doSwap
 
 
@@ -1204,6 +1210,20 @@ sub refreshLink {
   &HgAutomate::run("ln -s $target $link");
 } # refreshLink
 
+# linkTargetFor($dir, $root) -> what a symlink in $root should point at to
+#   reach $dir: just basename($dir) when $dir sits directly in $root (so the
+#   link stays correct if the tree gets mirrored), otherwise the absolute
+#   path of $dir (a -buildDir or -swapDir somewhere else), since a relative
+#   basename there would leave a dangling link.
+sub linkTargetFor {
+  my ($dir, $root) = @_;
+  my $parent = dirname($dir);
+  if ((abs_path($parent) // $parent) eq (abs_path($root) // $root)) {
+    return basename($dir);
+  }
+  return abs_path($dir) // $dir;
+} # linkTargetFor
+
 #########################################################################
 # Rerunning without -continue: each of these says a step's results are
 # already in $buildDir, using a file that the step writes last and that
@@ -1264,8 +1284,9 @@ $liftOverChainPath = "$liftOverChainDir/$liftOverChainFile";
 $chainRam = $opt_chainRam ? $opt_chainRam : $chainRam;
 $chainCpu = $opt_chainCpu ? $opt_chainCpu : $chainCpu;
 $minimapCpu = $opt_minimapCpu ? $opt_minimapCpu : $minimapCpu;
-$minimapSecondaryN = $opt_minimapSecondaryN ? $opt_minimapSecondaryN : $minimapSecondaryN;
-$minimapSecondaryRatio = $opt_minimapSecondaryRatio ? $opt_minimapSecondaryRatio : $minimapSecondaryRatio;
+# defined(), not truth: -N 0 (no secondaries) and -p 0 are legitimate values
+$minimapSecondaryN = defined($opt_minimapSecondaryN) ? $opt_minimapSecondaryN : $minimapSecondaryN;
+$minimapSecondaryRatio = defined($opt_minimapSecondaryRatio) ? $opt_minimapSecondaryRatio : $minimapSecondaryRatio;
 $ramG = $opt_ram ? $opt_ram : $ramG;
 
 my $date = `date +%Y-%m-%d`;
@@ -1312,12 +1333,12 @@ if (! -d $buildDir) {
   &HgAutomate::mustMkdir($buildDir);
 }
 
-# Stable, dateless pointer to this build (relative target, so it stays
-# correct if this tree gets mirrored).  Made before any step runs, so a
+# Stable, dateless pointer to this build (relative target when possible,
+# see linkTargetFor()).  Made before any step runs, so a
 # rerun after an interrupted build, even on a later day, finds the same
 # build directory.  pairMiniMap2.sh looks for the load step's fb.*.txt
 # files there, not just this link, to decide a build is finished.
-&refreshLink(basename($buildDir), $stableLink);
+&refreshLink(&linkTargetFor($buildDir, &asmRoot($tDb)), $stableLink);
 
 &estimateDivergence();
 

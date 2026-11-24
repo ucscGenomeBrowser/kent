@@ -1,40 +1,73 @@
 <h2>Description</h2>
 <p>
-This track collection shows <b>TAD domains</b> (&quot;contact domains&quot;) called by the ENCODE
-uniform Hi-C pipeline across <b>16 mouse biosamples</b>. Contact domains are regions that
-preferentially self-interact, called by the Arrowhead algorithm (Juicer). Each subtrack is
-one biosample, browsable with a <b>faceted selector</b> (filter by organ, biosample type,
-assay, life stage, and call type).
+This track collection shows <b>TAD domains</b> called by the ENCODE uniform Hi-C pipeline with
+the Arrowhead algorithm (Juicer) across <b>16 mouse biosamples</b> (ENCODE calls them
+&quot;contact domains&quot;). Each subtrack is one biosample.
 </p>
 <p>
-The calls are native to mm10. On mm39 they are shown lifted from mm10 (noted in each track's
-long label); the &quot;Calls&quot; facet records the native call assembly.
+The domains were called on mm10. On mm39, they are lifted from mm10, which is noted in each
+track's long label.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
 Subtracks are <b>colored by organ</b>. Mousing over a domain shows the biosample and the
-Arrowhead corner score. The details page also reports Arrowhead's upper/lower variance and
-sign scores. Scores are rounded to three decimal places. Use the faceted selector on the track configuration page to choose biosamples
-by <b>Organ</b>, <b>Biosample type</b>, <b>Assay</b> (intact or in situ Hi-C),
-<b>Life stage</b>, and <b>Calls</b>. These calls use a different algorithm and finer
-resolution (5 kb) than the Dixon domains, produce smaller domains, and are not directly
-comparable to them.
+Arrowhead corner score. A higher corner score means the spot is more likely to be a domain
+corner. The details page also reports Arrowhead's upper/lower variance and sign scores,
+rounded to three decimal places. These calls use a different algorithm and finer resolution
+(5 kb) than the Dixon domains, produce smaller domains, and are not directly comparable to
+them.
+</p>
+<p>
+Subtracks can be filtered on the track configuration page by:
+</p>
+<ul>
+  <li><b>Organ</b></li>
+  <li><b>Biosample type</b> (cell line, primary cell, tissue)</li>
+  <li><b>Assay</b> (intact or in situ Hi-C)</li>
+  <li><b>Life stage</b></li>
+</ul>
+
+<h2>Available Organs and Tissues</h2>
+<table border="1" cellspacing="0" cellpadding="4">
+  <tr>
+    <th>Organ</th>
+    <th style="text-align:center">Biosamples</th>
+  </tr>
+  <tr><td style="background-color:rgb(90,179,68)">Adrenal gland</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(254,75,173)">Blood</td><td style="text-align:center">7</td></tr>
+  <tr><td style="background-color:rgb(155,155,18)">Brain</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(118,158,101)">Embryo</td><td style="text-align:center">2</td></tr>
+  <tr><td style="background-color:rgb(116,50,165);color:white">Heart</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(92,161,153)">Kidney</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(6,218,147)">Lymphoid tissue</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(137,135,170)">Muscle</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(104,171,71)">Placenta</td><td style="text-align:center">1</td></tr>
+</table>
+<p>
+The 7 organs with a single biosample (Adrenal gland, Brain, Heart, Kidney, Lymphoid tissue,
+Muscle, and Placenta) do not appear in the Organ filter. They can be found by typing the organ
+name in the Organ column's search box in the table.
 </p>
 
 <h2>Methods</h2>
 <p>
 Contact domains were produced by the ENCODE uniform Hi-C processing pipeline (Aiden lab,
 built on Juicer), which calls domains with Arrowhead. For each biosample, one representative
-experiment was selected (preferring an untreated baseline over a perturbed experiment where
-both were available) and its contact-domain files were pooled: each Juicer/Arrowhead
-paired-anchor BEDPE record (both anchors describing the same domain interval) was reduced to a
-single domain interval, the five Arrowhead scores retained, and replicate calls whose
-endpoints fell within one 5 kb bin merged (keeping the higher corner score). For mm39, the
-mm10 domains were lifted with <b>liftOver</b>, and lifted domains that came out more than
-twice their mm10 size were removed, because this happens when a domain spans a gap or a
-rearranged region between the two assemblies. The chosen ENCODE experiment accession is given
-in each subtrack's long label and links to the ENCODE portal.
+experiment was selected, preferring an untreated baseline over a perturbed experiment where
+both were available. Its contact-domain files were then combined:
+</p>
+<ul>
+  <li>Each Juicer/Arrowhead record, which lists the same domain as a pair of anchors, was
+      reduced to a single domain interval.</li>
+  <li>The five Arrowhead scores were kept.</li>
+  <li>Replicate calls whose endpoints fell within one 5 kb bin were merged, keeping the call
+      with the higher corner score.</li>
+</ul>
+<p>
+For mm39, the mm10 domains were lifted with <b>liftOver</b>, and lifted domains that came
+out more than twice their mm10 size were removed. The chosen ENCODE experiment
+accession is given in each subtrack's long label and links to the ENCODE portal.
 </p>
 
 <h2>Data Access</h2>
@@ -46,7 +79,7 @@ track can be accessed using the Genome Browser's
 <a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
 The underlying bigBed files can be downloaded from our
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
-The complete dataset is available at the
+The original data files are also available from the
 <a href="https://www.encodeproject.org/search/?type=File&amp;output_type=contact+domains&amp;assembly=mm10" target="_blank">ENCODE portal</a>.
 </p>
 

@@ -1,0 +1,55 @@
+# #38852 -- the Table Browser's "all fields from selected table" output stopped with
+# "mySQL error 1064" on every maf and wiggle table (multiz100way, phyloP100way and 4,126
+# tables in all).  These tables have a column named offset, and MariaDB 10.6 made OFFSET a
+# reserved word.  hgTables listed the columns bare, "select bin,chrom,...,offset,score from
+# multiz100way", and the query was a syntax error.  Picking offset under "selected fields"
+# failed the same way.  Broken on genome-test, hgwbeta and the RR when the ticket was filed.
+#
+# ed0de1ab492 makes regionQuery() write each plain column as table.column
+# (multiz100way.offset), which MariaDB accepts for a reserved word.  It leaves the '.' and
+# 0 placeholders that bedList.c puts in a BED query alone; an early version of the fix
+# turned the 0 into knownGene.0 and broke BED output, so the last step guards that.
+#
+# Checks.  The failing page quotes the whole query, so it contains "chromStart", "offset"
+# and "chr7" too: none of those words proves the output worked.  Each positive check names
+# something only real output has -- the "#bin" or "#chromStart" header line, a block start
+# (155799501), an offset value (42808925197) or the .wib file name -- and every step also
+# says noText on the ticket's own error strings.
+#
+# Related: #38647 is the same reserved word on the schema page's "range" link, fixed by
+# 17fe095cdeb (backquotes in rangeHistogram.c), and #28799 fixed it in hgTracks and
+# hgLoadWiggle.
+proof:
+  - "assertion-only 2026-11-23 -- written from #38852 and ed0de1ab492"
+  - "xfail 2026-11-23 -- fails on genome-test at the first expect: the page is 'Can't start query' and 'mySQL error 1064', with no #bin header, block start or offset value"
+  - "server-flip 2026-11-23 -- passes all four expects on genome-test after ed0de1ab492 was installed at 12:58, where it had failed at the first expect an hour earlier"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # All fields of a maf table, over a small range.  This is the report in the ticket.
+  - goto: "/cgi-bin/hgTables?db=hg38&hgta_group=compGeno&hgta_track=cons100way&hgta_table=multiz100way&hgta_regionType=range&position=chr7:155799529-155800000&hgta_outputType=primaryTable&hgta_doTopSubmit=get+output"
+  - expect:
+      text: ["#bin", "155799501", "42808925197"]
+      noText: ["mySQL error", "Can't start query"]
+
+  # All fields of a wiggle table: the same column, a different table type.
+  - goto: "/cgi-bin/hgTables?db=hg38&hgta_group=compGeno&hgta_track=cons100way&hgta_table=phyloP100way&hgta_regionType=range&position=chr7:155799529-155800000&hgta_outputType=primaryTable&hgta_doTopSubmit=get+output"
+  - expect:
+      text: ["#bin", "phyloP100way.wib"]
+      noText: ["mySQL error", "Can't start query"]
+
+  # Selected fields, with offset ticked.
+  - goto: "/cgi-bin/hgTables?db=hg38&hgta_database=hg38&hgta_group=compGeno&hgta_track=cons100way&hgta_table=multiz100way&hgta_fieldSelectTable=hg38.multiz100way&hgta_regionType=range&position=chr7:155799529-155800000&hgta_fs.check.hg38.multiz100way.chromStart=on&hgta_fs.check.hg38.multiz100way.offset=on&hgta_doPrintSelectedFields=get+output"
+  - expect:
+      text: ["#chromStart", "42808925197"]
+      noText: ["mySQL error", "Can't start query"]
+
+  # The control: BED output of the same table.  Its query has a '.' name and a 0 score as
+  # placeholders, which must reach MySQL as written, not as multiz100way.0.
+  - goto: "/cgi-bin/hgTables?db=hg38&hgta_group=compGeno&hgta_track=cons100way&hgta_table=multiz100way&hgta_regionType=range&position=chr7:155799529-155800000&hgta_outputType=bed&hgta_doGetBed=get+BED"
+  - expect:
+      text: "155799501"
+      noText: ["mySQL error", "Can't start query", "Unknown column"]

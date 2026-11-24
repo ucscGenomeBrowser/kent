@@ -1,29 +1,43 @@
 <h2>Description</h2>
 <p>
 This track collection shows <b>TAD boundaries</b> across 21 human samples (7 cell lines and 14
-primary tissues) from Schmitt <em>et al.</em>, 2016. A boundary is the insulating region
-that separates two adjacent topologically associating domains. These are
-<em>boundaries</em>, not domains; for domain intervals see the Dixon 2012 TADs track.
+primary tissues) from Schmitt <em>et al.</em>, 2016. These are <em>boundaries</em>, not domains. For
+TAD domains, see the
+<a href="hgTrackUi?db=$db&amp;g=tadsDixon" target="_blank">Dixon 2012 TADs</a> track.
 </p>
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each boundary is a bin of about 40 kb, the fixed segment size used in the Hi-C analysis. The
-bin width reflects the localization precision of the analysis, not a measured physical
-width. Subtracks are grouped by sample type (cell line vs. primary tissue) and organ system,
-and colored by organ system. Because the same boundary is reported independently per sample,
-turning on multiple subtracks shows boundary conservation directly: a boundary present in
-many samples is stable across cell types, while one present in few is cell-type specific. By
-default, 5 samples are shown: GM12878, H1, IMR90, dorsolateral prefrontal cortex, and liver.
+Each boundary is a 40 kb region, the bin size used in the Hi-C analysis. Subtracks are
+grouped by sample type (cell line or primary tissue) and organ system, and colored by organ
+system. Turning on several subtracks shows which boundaries are shared across samples. By
+default, 5 samples are shown: GM12878, H1-hESC, IMR90, dorsolateral prefrontal cortex, and
+liver.
 </p>
+<h2>Available Organ Systems</h2>
+<table border="1" cellspacing="0" cellpadding="4">
+  <tr>
+    <th>Organ system</th>
+    <th>Samples</th>
+  </tr>
+  <tr><td style="background-color:rgb(106,61,154);color:white">Brain</td><td>Cortex, Hippocampus</td></tr>
+  <tr><td style="background-color:rgb(227,26,28);color:white">Cardiovascular</td><td>Aorta, Left ventricle, Right ventricle</td></tr>
+  <tr><td style="background-color:rgb(255,127,0)">Digestive</td><td>Liver, Small bowel</td></tr>
+  <tr><td style="background-color:rgb(31,120,180);color:white">Endocrine</td><td>Adrenal, Pancreas</td></tr>
+  <tr><td style="background-color:rgb(51,160,44)">Immune</td><td>GM12878, Spleen</td></tr>
+  <tr><td style="background-color:rgb(120,180,200)">Muscle</td><td>Psoas muscle</td></tr>
+  <tr><td style="background-color:rgb(177,89,40);color:white">Reproductive</td><td>Ovary</td></tr>
+  <tr><td style="background-color:rgb(178,150,40)">Respiratory</td><td>IMR90, Lung</td></tr>
+  <tr><td style="background-color:rgb(152,78,163);color:white">Stem</td><td>H1-hESC, Mesendoderm, Mesenchymal SC, Neural progenitor, Trophoblast</td></tr>
+  <tr><td style="background-color:rgb(251,154,153)">Urinary</td><td>Bladder</td></tr>
+</table>
+
 <h2>Methods</h2>
 <p>
-Boundaries were called with the insulation-score method at 40 kb resolution (1 Mb
-insulation square, 200 kb delta window) as described in Schmitt <em>et al.</em>, 2016
-(Supplementary Table S3). Per-sample boundary bins were obtained on assembly hg19; for
-this assembly they were used natively or lifted with the UCSC <b>liftOver</b> tool, with a
-small fraction of bins that did not map cleanly dropped. Lifted bins that came out more than
-twice their original size were also removed, because this happens when a bin spans a gap or a
-rearranged region between the two assemblies.
+Boundaries were called by Schmitt <em>et al.</em>, 2016 with the insulation score method at 40 kb
+resolution. On hg19, they are shown at the positions listed in Supplementary Table S3 of that
+paper. On hg38, they were lifted with the UCSC <b>liftOver</b> tool, and a small fraction of bins
+that could not be lifted were dropped. Lifted bins that came out more than twice their original
+size were also removed.
 </p>
 
 <h2>Data Access</h2>

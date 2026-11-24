@@ -21,7 +21,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/A549.bb
     color 130,163,45
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> A549<br><b>Arrowhead corner score:</b> $cornerScore
     skipFields uVarScore,lVarScore,upSign,loSign
 
@@ -32,7 +32,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/dorsolateralprefrontalcortex.bb
     color 155,155,18
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Dorsolateral prefrontal cortex<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR916MFV
@@ -42,7 +42,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM12878.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> GM12878<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR477GZK
@@ -52,7 +52,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HCT116.bb
     color 86,86,36
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> HCT116<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR324EJR
@@ -62,7 +62,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/heartleftventricle.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Heart left ventricle<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR908NSV
@@ -72,7 +72,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/heartrightventricle.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Heart right ventricle<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR888DEJ
@@ -82,7 +82,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HepG2.bb
     color 137,152,82
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> HepG2<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR683EDC
@@ -92,7 +92,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HL60S4.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> HL-60/S4<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR345VTI
@@ -102,7 +102,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/IMR90.bb
     color 130,163,45
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> IMR-90<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR479XDG
@@ -112,7 +112,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/K562.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> K562<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR305RTT
@@ -122,7 +122,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/motorneuron.bb
     color 155,155,18
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Motor neuron<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR872ZCP
@@ -132,7 +132,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ovary.bb
     color 161,126,151
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Ovary<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR408HOG
@@ -142,7 +142,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/pancreas.bb
     color 175,100,41
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Pancreas<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR258OVY
@@ -152,7 +152,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/transversecolon.bb
     color 86,86,36
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Transverse colon<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR455KLX
@@ -162,7 +162,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/A673.bb
     color 137,135,170
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> A673<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR343VKT
@@ -172,7 +172,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ACHN.bb
     color 92,161,153
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> ACHN<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR693PXD
@@ -182,7 +182,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedBcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Activated B cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR291EBI
@@ -192,7 +192,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD4positivealphabetamemoryTcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Activated CD4-positive, alpha-beta memory T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR836MWK
@@ -202,7 +202,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD4positivealphabetaTcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Activated CD4-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR351NAI
@@ -212,7 +212,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD8positivealphabetaTcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Activated CD8-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR195ETV
@@ -222,7 +222,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatednaiveCD4positivealphabetaTcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Activated naive CD4-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR902BCW
@@ -232,7 +232,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedThelper1cell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Activated T-helper 1 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR474VTW
@@ -242,7 +242,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedThelper2cell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Activated T-helper 2 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR832NED
@@ -252,7 +252,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/adrenalgland.bb
     color 90,179,68
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Adrenal gland<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR554SLA
@@ -262,7 +262,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/aorta.bb
     color 255,37,41
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Aorta<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR464RYO
@@ -272,7 +272,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ascendingaorta.bb
     color 255,37,41
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Ascending aorta<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR011GNI
@@ -282,7 +282,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/astrocyteofthecerebellum.bb
     color 155,155,18
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Astrocyte of the cerebellum<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR974LXZ
@@ -292,7 +292,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/astrocyteofthespinalcord.bb
     color 130,141,158
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Astrocyte of the spinal cord<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR847RHU
@@ -302,7 +302,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Bcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> B cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR121ALS
@@ -312,7 +312,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/bodyofpancreas.bb
     color 175,100,41
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Body of pancreas<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR507AHE
@@ -322,7 +322,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/brainmicrovascularendothelialcell.bb
     color 155,155,18
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Brain microvascular endothelial cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR326YHP
@@ -332,7 +332,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/breastepithelium.bb
     color 65,171,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Breast epithelium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR820DYU
@@ -342,7 +342,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Caco2.bb
     color 86,86,36
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Caco-2<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR401TBQ
@@ -352,7 +352,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Caki2.bb
     color 92,161,153
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Caki2<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR118AQZ
@@ -362,7 +362,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Calu3.bb
     color 130,163,45
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Calu3<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR556QHB
@@ -372,7 +372,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/cardiacseptum.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Cardiac septum<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR236EYO
@@ -382,7 +382,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD14positivemonocyte.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> CD14-positive monocyte<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR379TIE
@@ -392,7 +392,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD4positivealphabetamemoryTcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> CD4-positive, alpha-beta memory T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR609PCM
@@ -402,7 +402,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD4positivealphabetaTcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> CD4-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR558BNW
@@ -412,7 +412,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/CD8positivealphabetaTcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> CD8-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR317GNS
@@ -422,7 +422,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/chondrocyte.bb
     color 138,135,169
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Chondrocyte<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR439ILZ
@@ -432,7 +432,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/colonicmucosa.bb
     color 86,86,36
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Colonic mucosa<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR456QYU
@@ -442,7 +442,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/dendriticcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Dendritic cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR213DHH
@@ -452,7 +452,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/DLD1.bb
     color 86,86,36
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> DLD1<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR393XVI
@@ -462,7 +462,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ectodermalcell.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Ectodermal cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR233RDF
@@ -472,7 +472,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endodermalcell.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Endodermal cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR551IPY
@@ -482,7 +482,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endometrialmicrovascularendothelialcells.bb
     color 186,111,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Endometrial microvascular endothelial cells<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR982KWR
@@ -492,7 +492,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endothelialcellofhepaticsinusoid.bb
     color 137,152,82
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Endothelial cell of hepatic sinusoid<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR788FBI
@@ -502,7 +502,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endothelialcellofumbilicalvein.bb
     color 255,37,41
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Endothelial cell of umbilical vein<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR274FJN
@@ -512,7 +512,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/esophagusmuscularismucosa.bb
     color 159,131,100
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Esophagus muscularis mucosa<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR015CVF
@@ -522,7 +522,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/esophagussquamousepithelium.bb
     color 159,131,100
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Esophagus squamous epithelium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR079VIJ
@@ -532,7 +532,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/G401.bb
     color 92,161,153
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> G401<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR136MVS
@@ -542,7 +542,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/gastrocnemiusmedialis.bb
     color 137,135,170
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Gastrocnemius medialis<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR196MPD
@@ -552,7 +552,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM11168.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> GM11168<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR634FNY
@@ -562,7 +562,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM13976.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> GM13976<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR261EVH
@@ -572,7 +572,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM13977.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> GM13977<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR118FFR
@@ -582,7 +582,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM18951.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> GM18951<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR966QSW
@@ -592,7 +592,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM20431.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> GM20431<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR220MNC
@@ -602,7 +602,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/GM23248.bb
     color 127,133,209
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> GM23248<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR390HMC
@@ -612,7 +612,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HAP1.bb
     color 2,199,185
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> HAP-1<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR874HTT
@@ -622,7 +622,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/headofcaudatenucleus.bb
     color 155,155,18
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Head of caudate nucleus<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR846DUS
@@ -632,7 +632,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/hTERTRPE1.bb
     color 163,127,144
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> hTERT RPE-1<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR282WPK
@@ -642,7 +642,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/HUES64.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> HUES64<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR510GJG
@@ -652,7 +652,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Jurkat.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Jurkat<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR987EPR
@@ -662,7 +662,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/KBM7.bb
     color 2,199,185
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> KBM-7<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR869CSI
@@ -672,7 +672,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/keratinocyte.bb
     color 127,133,209
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Keratinocyte<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR044YKV
@@ -682,7 +682,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/kidney.bb
     color 92,161,153
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Kidney<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR975NRV
@@ -692,7 +692,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftcardiacatrium.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Left cardiac atrium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR298UUL
@@ -702,7 +702,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftcolon.bb
     color 86,86,36
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Left colon<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR892BZA
@@ -712,7 +712,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftlung.bb
     color 130,163,45
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Left lung<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR352EGR
@@ -722,7 +722,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftventriclemyocardiuminferior.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Left ventricle myocardium inferior<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR333BMU
@@ -732,7 +732,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftventriclemyocardiumsuperior.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Left ventricle myocardium superior<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR346DCU
@@ -742,7 +742,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/LNCaPcloneFGC.bb
     color 140,140,140
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> LNCaP clone FGC<br>TAD lifted from hg19 (no Arrowhead score)
     skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
@@ -753,7 +753,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlegskin.bb
     color 127,133,209
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Lower leg skin<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR446NJD
@@ -763,7 +763,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlobeofleftlung.bb
     color 130,163,45
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Lower lobe of left lung<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR749PID
@@ -773,7 +773,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlobeofrightlung.bb
     color 130,163,45
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Lower lobe of right lung<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR707XVJ
@@ -783,7 +783,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mammaryepithelialcell.bb
     color 65,171,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Mammary epithelial cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR370TFL
@@ -793,7 +793,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/MCF10A.bb
     color 65,171,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> MCF 10A<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR660LPJ
@@ -803,7 +803,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/MCF7.bb
     color 65,171,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> MCF-7<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR754GTX
@@ -813,7 +813,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mesodermalcell.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Mesodermal cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR944UTX
@@ -823,7 +823,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mesothelialcellofepicardium.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Mesothelial cell of epicardium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR206OUF
@@ -833,7 +833,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mucosaofdescendingcolon.bb
     color 86,86,36
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Mucosa of descending colon<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR215PTV
@@ -843,7 +843,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/naivethymusderivedCD4positivealphabetaTcell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Naive thymus-derived CD4-positive, alpha-beta T cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR971CJS
@@ -853,7 +853,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/naturalkillercell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Natural killer cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR489OCU
@@ -863,7 +863,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/NCIH460.bb
     color 130,163,45
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> NCI-H460<br>TAD lifted from hg19 (no Arrowhead score)
     skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
@@ -874,7 +874,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/OCILY7.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> OCI-LY7<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR584RBV
@@ -884,7 +884,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Panc1.bb
     color 175,100,41
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Panc1<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR038TZA
@@ -894,7 +894,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/PC3.bb
     color 140,140,140
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> PC-3<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR859DRK
@@ -904,7 +904,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/PC9.bb
     color 130,163,45
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> PC-9<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR395DZW
@@ -914,7 +914,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/placenta.bb
     color 104,171,71
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Placenta<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR169JKC
@@ -924,7 +924,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/posteriorcingulategyrus.bb
     color 155,155,18
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Posterior cingulate gyrus<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR941AMF
@@ -934,7 +934,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/posteriorvenacava.bb
     color 255,37,41
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Posterior vena cava<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR557QRO
@@ -944,7 +944,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/prostategland.bb
     color 140,140,140
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Prostate gland<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR173QPK
@@ -954,7 +954,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/psoasmuscle.bb
     color 137,135,170
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Psoas muscle<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR022TPX
@@ -964,7 +964,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Ramos.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Ramos<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR173VDQ
@@ -974,7 +974,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/rightcardiacatrium.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Right cardiac atrium<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR753CKM
@@ -984,7 +984,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/rightlobeofliver.bb
     color 137,152,82
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Right lobe of liver<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR921BHU
@@ -994,7 +994,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Rightventriclemyocardiuminferior.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Right ventricle myocardium inferior<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR476RFQ
@@ -1004,7 +1004,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Rightventriclemyocardiumsuperior.bb
     color 116,50,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Right ventricle myocardium superior<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR862OGI
@@ -1014,7 +1014,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/RPMI7951.bb
     color 127,133,209
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> RPMI7951<br>TAD lifted from hg19 (no Arrowhead score)
     skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
@@ -1025,7 +1025,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/sciaticnerve.bb
     color 160,156,0
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Sciatic nerve<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR123ZFD
@@ -1035,7 +1035,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/sigmoidcolon.bb
     color 86,86,36
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Sigmoid colon<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR998ZSP
@@ -1045,7 +1045,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SJCRH30.bb
     color 137,135,170
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> SJCRH30<br>TAD lifted from hg19 (no Arrowhead score)
     skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
@@ -1056,7 +1056,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SKMEL5.bb
     color 127,133,209
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> SK-MEL-5<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR204CGS
@@ -1066,7 +1066,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SKNDZ.bb
     color 155,155,18
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> SK-N-DZ<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR834DXR
@@ -1076,7 +1076,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/SKNMC.bb
     color 155,155,18
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> SK-N-MC<br>TAD lifted from hg19 (no Arrowhead score)
     skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
@@ -1087,7 +1087,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/spleen.bb
     color 136,157,97
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Spleen<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR569OBN
@@ -1097,7 +1097,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/stomach.bb
     color 145,144,99
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Stomach<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR949ZZD
@@ -1107,7 +1107,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Thelper1cell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> T-helper 1 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR832CKD
@@ -1117,7 +1117,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Thelper2cell.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> T-helper 2 cell<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR549MGQ
@@ -1127,7 +1127,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/T47D.bb
     color 65,171,173
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> T47D<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR870SXX
@@ -1137,7 +1137,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/testis.bb
     color 139,140,140
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Testis<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR043XTM
@@ -1147,7 +1147,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/thyroidgland.bb
     color 27,119,58
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Thyroid gland<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR601RFS
@@ -1157,7 +1157,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/tibialartery.bb
     color 255,37,41
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Tibial artery<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR673UZF
@@ -1167,7 +1167,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/upperlobeofrightlung.bb
     color 130,163,45
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Upper lobe of right lung<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR008CUR
@@ -1177,7 +1177,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/uterus.bb
     color 186,111,165
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Uterus<br><b>Arrowhead corner score:</b> $cornerScore
 
     track tadsEncode_ENCSR886JAM
@@ -1187,6 +1187,6 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/vagina.bb
     color 255,101,174
-    visibility dense
+    visibility pack
     mouseOver <b>Biosample:</b> Vagina<br><b>Arrowhead corner score:</b> $cornerScore
 

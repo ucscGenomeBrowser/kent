@@ -1,60 +1,117 @@
 <h2>Description</h2>
 <p>
-This track collection shows <b>TAD domains</b> (&quot;contact domains&quot;) from ENCODE for
-<b>117 human biosamples</b> on hg38. For 112 biosamples, the domains were called by the
-ENCODE uniform Hi-C pipeline with the Arrowhead algorithm (Juicer). The other 5 come from a
-different ENCODE pipeline (see <b>Calls</b> below). Contact domains are regions that
-preferentially self-interact. Each subtrack is one biosample, browsable with a
-<b>faceted selector</b> (filter by organ, biosample type, assay, life stage, and call type).
+This track collection shows <b>TAD domains</b> from ENCODE for <b>117 human biosamples</b>
+on hg38 (ENCODE calls them &quot;contact domains&quot;). Each subtrack is one biosample.
 </p>
 <p>
-ENCODE provides contact domains for many human biosamples across hundreds of files. This
-track shows <b>one representative experiment per biosample</b>; by default a set of 14
-reference biosamples is displayed (GM12878, K562, HepG2, HCT116, IMR-90, A549, HL-60/S4,
-heart left/right ventricle, dorsolateral prefrontal cortex, ovary, pancreas, transverse
-colon, and motor neuron), and the remaining biosamples are turned off and reached through
-the faceted selector. The complete set is available at the
-<a href="https://www.encodeproject.org/search/?type=File&amp;output_type=contact+domains&amp;assembly=GRCh38" target="_blank">ENCODE portal</a>.
+ENCODE provides domains for many human biosamples across hundreds of files. This
+track shows <b>one representative experiment per biosample</b>. By default, 14 biosamples
+are shown: GM12878, K562, HepG2, HCT116, IMR-90, A549, HL-60/S4, heart left and right
+ventricle, dorsolateral prefrontal cortex, ovary, pancreas, transverse colon, and motor neuron.
+The others can be turned on from the track configuration page.
 </p>
 <h2>Display Conventions and Configuration</h2>
 <p>
 Subtracks are <b>colored by organ</b>. Mousing over a domain shows the biosample and the
-Arrowhead corner score (the likelihood that the spot is a contact-domain corner). The
-details page also reports Arrowhead's upper/lower variance and sign scores, rounded to
-three decimal places. For A549, ENCODE provides only the corner score, so the other scores
-are not shown. The Arrowhead
-calls use a different algorithm and a finer resolution (5 kb) than the other TAD tracks,
-produce smaller domains, and are not directly comparable to them.
+Arrowhead corner score. A higher corner score means the spot is more likely to be a domain
+corner. The details page
+also reports Arrowhead's upper/lower variance and sign scores, rounded to three decimal
+places. The Arrowhead calls use a different algorithm and a finer resolution (5 or 10 kb) than the
+other TAD tracks, produce smaller domains, and are not directly comparable to them.
 </p>
 <p>
-Use the faceted selector on the track configuration page to choose biosamples by
-<b>Organ</b>, <b>Biosample type</b> (cell line, tissue, primary cell, in vitro
-differentiated), <b>Assay</b> (intact or in situ Hi-C), <b>Life stage</b>, and <b>Calls</b>.
-Where a biosample had both an untreated baseline and a perturbed (treated or genetically
-modified) experiment, the baseline was chosen; a handful of biosamples that exist only in a
-stimulated state (e.g. activated immune cells) are named accordingly. The <b>Calls</b> facet
-distinguishes the 112 biosamples with native hg38 Arrowhead calls
-(&quot;Arrowhead (hg38)&quot;) from 5 biosamples (LNCaP clone FGC, NCI-H460, RPMI7951,
-SJCRH30, SK-N-MC) for which ENCODE provides only domains lifted from hg19
-(&quot;Lifted from hg19&quot;). These 5 were produced by a different ENCODE pipeline (Dekker
-lab, on hg19) and lifted to hg38. Their domains do not overlap each other, are much larger
-(median about 760 kb), and carry no Arrowhead scores, so no scores are shown for them.
-In the downloadable files and Table Browser output, scores that are not shown on the details
-page are written as 0; treat these as missing rather than as real scores of 0.
+Subtracks can be filtered on the track configuration page by:
 </p>
+<ul>
+  <li><b>Organ</b></li>
+  <li><b>Biosample type</b> (cell line, tissue, primary cell, in vitro differentiated)</li>
+  <li><b>Assay</b> (intact or in situ Hi-C)</li>
+  <li><b>Life stage</b></li>
+  <li><b>Calls</b>: &quot;Arrowhead (hg38)&quot; for 112 biosamples, or &quot;Lifted from
+      hg19&quot; for 5 (LNCaP clone FGC, NCI-H460, RPMI7951, SJCRH30, SK-N-MC). These 5 were
+      produced by the Dekker lab on hg19 and lifted to hg38.
+      Their domains do not overlap each other, are much larger (median about 760 kb), and have no
+      Arrowhead scores.</li>
+</ul>
+<p>
+In the downloadable files and Table Browser output, scores that are not shown on the details
+page are written as 0. These are missing scores, not real scores of 0.
+</p>
+
+<h2>Available Organs and Tissues</h2>
+<table border="1" cellspacing="0" cellpadding="4">
+  <tr>
+    <th>Organ</th>
+    <th style="text-align:center">Biosamples</th>
+  </tr>
+  <tr><td style="background-color:rgb(90,179,68)">Adrenal gland</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(254,75,173)">Blood</td><td style="text-align:center">28</td></tr>
+  <tr><td style="background-color:rgb(255,37,41)">Blood vessel</td><td style="text-align:center">5</td></tr>
+  <tr><td style="background-color:rgb(2,199,185)">Bone marrow</td><td style="text-align:center">2</td></tr>
+  <tr><td style="background-color:rgb(155,155,18)">Brain</td><td style="text-align:center">8</td></tr>
+  <tr><td style="background-color:rgb(65,171,173)">Breast</td><td style="text-align:center">5</td></tr>
+  <tr><td style="background-color:rgb(86,86,36);color:white">Colon</td><td style="text-align:center">8</td></tr>
+  <tr><td style="background-color:rgb(138,135,169)">Connective tissue</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(118,158,101)">Embryo</td><td style="text-align:center">4</td></tr>
+  <tr><td style="background-color:rgb(159,131,100)">Esophagus</td><td style="text-align:center">2</td></tr>
+  <tr><td style="background-color:rgb(163,127,144)">Eye</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(116,50,165);color:white">Heart</td><td style="text-align:center">10</td></tr>
+  <tr><td style="background-color:rgb(92,161,153)">Kidney</td><td style="text-align:center">4</td></tr>
+  <tr><td style="background-color:rgb(137,152,82)">Liver</td><td style="text-align:center">3</td></tr>
+  <tr><td style="background-color:rgb(130,163,45)">Lung</td><td style="text-align:center">9</td></tr>
+  <tr><td style="background-color:rgb(137,135,170)">Muscle</td><td style="text-align:center">4</td></tr>
+  <tr><td style="background-color:rgb(160,156,0)">Nerve</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(161,126,151)">Ovary</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(175,100,41)">Pancreas</td><td style="text-align:center">3</td></tr>
+  <tr><td style="background-color:rgb(104,171,71)">Placenta</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(140,140,140)">Prostate</td><td style="text-align:center">3</td></tr>
+  <tr><td style="background-color:rgb(127,133,209)">Skin</td><td style="text-align:center">5</td></tr>
+  <tr><td style="background-color:rgb(130,141,158)">Spinal cord</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(136,157,97)">Spleen</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(145,144,99)">Stomach</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(139,140,140)">Testis</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(27,119,58);color:white">Thyroid</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(186,111,165)">Uterus</td><td style="text-align:center">2</td></tr>
+  <tr><td style="background-color:rgb(255,101,174)">Vagina</td><td style="text-align:center">1</td></tr>
+</table>
+<p>
+The 12 organs with a single biosample (Adrenal gland, Connective tissue, Eye, Nerve, Ovary,
+Placenta, Spinal cord, Spleen, Stomach, Testis, Thyroid, and Vagina) do not appear in the Organ
+filter. They can be found by typing the organ name in the Organ column's search box in the
+table.
+</p>
+
 <h2>Methods</h2>
 <p>
-For 112 biosamples, contact domains were produced by the ENCODE uniform Hi-C processing
-pipeline (developed by the Aiden lab, built on Juicer), which calls domains with Arrowhead
-on hg38. For the other 5, ENCODE provides domains produced by the Dekker lab on hg19 and
-lifted to hg38. For each biosample, one representative experiment was selected (preferring
-native hg38 Arrowhead calls, then an untreated baseline experiment over a perturbed one
-where both were available, then the deepest experiment by assay type and data volume), and
-that experiment's contact-domain files were pooled: each Juicer/Arrowhead paired-anchor
-BEDPE record (in which both anchors describe the same domain interval) was reduced to a
-single domain interval, the five Arrowhead scores were retained, and replicate calls whose
-endpoints fell within one 5 kb bin were merged, keeping the call with the higher corner
-score. The chosen ENCODE experiment accession is given in each subtrack's long label.
+For 111 biosamples, the domains were produced by the ENCODE uniform Hi-C processing pipeline,
+which is based on Juicer and calls domains with Arrowhead on hg38. A549's domains come from a
+separate Hi-C pipeline submitted to ENCODE by the Reddy lab. For the other 5, ENCODE provides
+domains produced by the Dekker lab on hg19 and lifted to hg38.
+</p>
+<p>
+For each biosample, one experiment was selected, using these preferences in order:
+</p>
+<ul>
+  <li>files with the most complete set of Arrowhead scores</li>
+  <li>an experiment that ENCODE does not mark as perturbed (treated or genetically
+      modified)</li>
+  <li>files that ENCODE marks as its preferred default</li>
+  <li>intact Hi-C, then in situ Hi-C, then dilution Hi-C</li>
+  <li>the largest total size of domain files</li>
+</ul>
+<p>
+The domains from all of the selected experiment's files were then combined:
+</p>
+<ul>
+  <li>Each record that lists the same domain as a pair of anchors was reduced to a single
+      domain interval. Records whose anchors differ (loops) were not used.</li>
+  <li>The Arrowhead scores were kept where ENCODE provides them, rounded to three decimal
+      places.</li>
+  <li>When two domains had both endpoints within 5 kb of each other, only the one with the
+      higher corner score was kept.</li>
+</ul>
+<p>
+The chosen ENCODE experiment accession is given in each subtrack's long label.
 </p>
 
 <h2>Data Access</h2>
@@ -66,6 +123,8 @@ track can be accessed using the Genome Browser's
 <a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
 The underlying bigBed files can be downloaded from our
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+The original data files are also available from the
+<a href="https://www.encodeproject.org/search/?type=File&amp;output_type=contact+domains&amp;assembly=GRCh38" target="_blank">ENCODE portal</a>.
 </p>
 
 <h2>References</h2>

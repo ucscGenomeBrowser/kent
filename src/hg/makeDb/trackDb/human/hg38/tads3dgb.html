@@ -3,89 +3,124 @@
 This track collection shows <b>TAD domains</b> from the
 <a href="http://3dgenome.fsm.northwestern.edu/" target="_blank">3D Genome Browser</a> (3DGB)
 across <b>464 human Hi-C and Micro-C datasets</b> on hg38. Each subtrack is one 3DGB
-dataset, displayed exactly as called and published by 3DGB. TAD domains are regions of the
-genome, typically hundreds of kilobases to about a megabase, that preferentially
-self-interact. Their boundaries (frequently bound by CTCF and cohesin) insulate neighboring
-regions and constrain enhancer-promoter contacts.
+dataset.
 </p>
 <p>
-The 464 datasets span a wide range of normal and cancer samples, baseline and
-perturbation conditions, organs, and cell types, drawn from many published studies and
-re-processed by 3DGB through a single TAD-calling pipeline. They are browsable with a
-<b>faceted selector</b> (see below); the displayed domain intervals are 3DGB's own, with
+The 464 datasets include normal and cancer samples, baseline and perturbation samples, and
+samples from 28 organs and many cell types. They come from public Hi-C and Micro-C data, which
+3DGB processed with its own pipeline. They can be filtered on the
+track configuration page (see below). The displayed domain intervals are 3DGB's own, with
 no UCSC re-calling, merging, lifting, or recurrence scoring.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each subtrack is <b>colored by organ</b>. By default a small set of canonical reference
-datasets is shown (GM12878, H1-ESC, IMR-90, and HMEC). All other datasets are turned off and
-can be enabled through the faceted selector. Mousing over a domain shows the dataset name,
-organ, and assay.
+Each subtrack is <b>colored by organ</b>. By default, 4 datasets are shown: GM12878, H1-ESC,
+IMR-90, and HMEC. The others can be turned on from the track configuration page. Mousing over
+a domain shows the dataset name, organ, and assay.
 </p>
 <p>
 These 464 datasets are <b>not a cross-comparable consensus</b>. Each represents one
-dataset's own TAD calls, made by different laboratories on different samples; coordinates
+dataset's own TAD calls, made by different laboratories on different samples. Coordinates
 are therefore not directly comparable across subtracks, and they are not directly comparable
 to the other TAD tracks in this set (which use different callers and resolutions). Because
 3DGB calls TADs from Hi-C data analyzed in fixed-size 20 or 25 kb bins, domain edges are
-only accurate to roughly one bin, and domains do not cover the whole genome.
+only accurate to roughly one bin. Domains do not cover the whole genome.
 </p>
 
-<h3>Faceted selector</h3>
 <p>
-Use the faceted selector on the track configuration page to choose which datasets to
-display. Datasets can be filtered by:
+Subtracks can be filtered on the track configuration page by:
 </p>
 <ul>
-  <li><b>Organ</b> &ndash; the organ of the sample (used for subtrack color).</li>
-  <li><b>Cell type</b> &ndash; the cell type, where annotated by 3DGB
+  <li><b>Organ</b>: the organ of the sample (used for subtrack color).</li>
+  <li><b>Cell type</b>: the cell type, where annotated by 3DGB
       (&quot;(unspecified)&quot; when 3DGB does not record one).</li>
-  <li><b>Assay</b> &ndash; Hi-C or Micro-C.</li>
-  <li><b>Condition</b> &ndash; whether the sample is normal or cancer.</li>
-  <li><b>Treatment</b> &ndash; baseline (untreated) or perturbation (e.g. drug treatment,
+  <li><b>Assay</b>: Hi-C or Micro-C.</li>
+  <li><b>Condition</b>: whether the sample is normal or cancer.</li>
+  <li><b>Treatment</b>: baseline (untreated) or perturbation (e.g. drug treatment,
       gene knockout, or other experimental manipulation).</li>
-  <li><b>Provenance</b> &ndash; see below.</li>
-  <li><b>Year</b> and <b>Study</b> &ndash; the publication year and the source data
+  <li><b>Provenance</b>: see below.</li>
+  <li><b>Year</b> and <b>Study</b>: the publication year and the source data
       accession (e.g. a GEO series) that 3DGB re-processed.</li>
 </ul>
 
-<h3>The &quot;Provenance&quot; facet</h3>
+<h3>Provenance facet</h3>
 <p>
-Because this track ships every 3DGB human dataset, a few of the underlying source studies
-are <b>already represented elsewhere in the UCSC Genome Browser</b>. The Provenance facet
-flags these so they can be identified or filtered out:
+The Provenance facet has two values:
 </p>
 <ul>
-  <li><b>Novel to browser</b> (422 datasets) &ndash; the source study is not otherwise
-      displayed in the UCSC Genome Browser.</li>
-  <li><b>Also in another UCSC track</b> (42 datasets) &ndash; the underlying Hi-C study is
-      already represented elsewhere in the UCSC Genome Browser, either as its own track or
-      as an input to another track in this TAD set. These include Schmitt 2016 (11 datasets,
-      also shown directly as the <b>Schmitt 2016 boundaries</b> track here), Rao 2014 (7
-      datasets; the Rao 2014 Hi-C maps are also offered in the browser), a few ENCODE
-      datasets (overlapping the <b>ENCODE TADs</b> track), and several studies
-      (e.g. Dixon 2015) that are inputs to the <b>TAD boundary stability</b> track rather
-      than displayed individually. The flag is intended to help avoid double-counting; it
-      does not imply each dataset is separately viewable elsewhere.</li>
+  <li><b>Only in this track</b> (420 datasets): the source study is not used in any other UCSC
+      track.</li>
+  <li><b>Also in another UCSC track</b> (44 datasets):
+    <ul>
+      <li>Schmitt 2016 (11 datasets): shown in the
+          <a href="hgTrackUi?db=$db&amp;g=tadsSchmitt" target="_blank">Schmitt 2016 boundaries</a> track</li>
+      <li>Rao 2014 (7 datasets): shown in the
+          <a href="hgTrackUi?db=hg19&amp;g=rao2014Hic" target="_blank">Rao 2014 Hi-C</a> track on
+          hg19, and among the studies whose maps are counted in the
+          <a href="hgTrackUi?db=$db&amp;g=tadsMcArthur" target="_blank">TAD boundary stability</a> track</li>
+      <li>Dixon 2015 (5 datasets): among the studies whose maps are counted in the
+          <a href="hgTrackUi?db=$db&amp;g=tadsMcArthur" target="_blank">TAD boundary stability</a> track</li>
+      <li>ENCODE (19 datasets): 18 of these biosamples are also in the
+          <a href="hgTrackUi?db=$db&amp;g=tadsEncode" target="_blank">ENCODE TADs</a> track</li>
+      <li>4DN Micro-C (2 datasets, H1-hESC and HFFc6): part of the
+          <a href="hgTrackUi?db=$db&amp;g=hicAndMicroC" target="_blank">Hi-C and Micro-C</a> track</li>
+    </ul>
+  </li>
 </ul>
 <p>
-To view only datasets that are new to the browser, select &quot;Novel to browser&quot; in
-the Provenance facet. Note that even the &quot;Also in another UCSC track&quot; datasets
-may differ in their displayed coordinates from the other UCSC tracks, because 3DGB
-re-processed and re-called each study through its own pipeline.
+Domains for these datasets can still differ from the other tracks, because 3DGB processed each
+study with its own pipeline.
+</p>
+
+<h2>Available Organs and Tissues</h2>
+<table border="1" cellspacing="0" cellpadding="4">
+  <tr>
+    <th>Organ</th>
+    <th style="text-align:center">Datasets</th>
+  </tr>
+  <tr><td style="background-color:rgb(90,179,68)">Adrenal gland</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(169,29,34);color:white">Bladder</td><td style="text-align:center">10</td></tr>
+  <tr><td style="background-color:rgb(254,75,173)">Blood</td><td style="text-align:center">93</td></tr>
+  <tr><td style="background-color:rgb(255,37,41)">Blood vessel</td><td style="text-align:center">3</td></tr>
+  <tr><td style="background-color:rgb(121,147,150)">Bone</td><td style="text-align:center">3</td></tr>
+  <tr><td style="background-color:rgb(155,155,18)">Brain</td><td style="text-align:center">63</td></tr>
+  <tr><td style="background-color:rgb(65,171,173)">Breast</td><td style="text-align:center">27</td></tr>
+  <tr><td style="background-color:rgb(186,111,165)">Cervix</td><td style="text-align:center">11</td></tr>
+  <tr><td style="background-color:rgb(86,86,36);color:white">Colon</td><td style="text-align:center">33</td></tr>
+  <tr><td style="background-color:rgb(138,135,169)">Connective tissue</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(118,158,101)">Embryo</td><td style="text-align:center">14</td></tr>
+  <tr><td style="background-color:rgb(159,131,100)">Esophagus</td><td style="text-align:center">2</td></tr>
+  <tr><td style="background-color:rgb(163,127,144)">Eye</td><td style="text-align:center">6</td></tr>
+  <tr><td style="background-color:rgb(116,50,165);color:white">Heart</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(92,161,153)">Kidney</td><td style="text-align:center">6</td></tr>
+  <tr><td style="background-color:rgb(137,152,82)">Liver</td><td style="text-align:center">3</td></tr>
+  <tr><td style="background-color:rgb(130,163,45)">Lung</td><td style="text-align:center">32</td></tr>
+  <tr><td style="background-color:rgb(6,218,147)">Lymphoid tissue</td><td style="text-align:center">3</td></tr>
+  <tr><td style="background-color:rgb(137,135,170)">Muscle</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(160,156,0)">Nerve</td><td style="text-align:center">7</td></tr>
+  <tr><td style="background-color:rgb(161,126,151)">Ovary</td><td style="text-align:center">3</td></tr>
+  <tr><td style="background-color:rgb(175,100,41)">Pancreas</td><td style="text-align:center">11</td></tr>
+  <tr><td style="background-color:rgb(140,140,140)">Prostate</td><td style="text-align:center">107</td></tr>
+  <tr><td style="background-color:rgb(127,133,209)">Skin</td><td style="text-align:center">8</td></tr>
+  <tr><td style="background-color:rgb(98,98,41);color:white">Small intestine</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(136,157,97)">Spleen</td><td style="text-align:center">1</td></tr>
+  <tr><td style="background-color:rgb(145,144,99)">Stomach</td><td style="text-align:center">3</td></tr>
+  <tr><td style="background-color:rgb(194,123,160)">Trachea</td><td style="text-align:center">10</td></tr>
+</table>
+<p>
+The 6 organs with a single dataset (Adrenal gland, Connective tissue, Heart, Muscle, Small
+intestine, and Spleen) do not appear in the Organ filter. They can be found by typing the organ
+name in the Organ column's search box in the table.
 </p>
 
 <h2>Methods</h2>
 <p>
-TAD domains were called by the 3D Genome Browser pipeline and are displayed verbatim.
-UCSC performed only a format normalization: each 3DGB per-dataset TAD file (a BED-like
-file with placeholder columns and an alternating two-color shading that carries no
-biological meaning) was reshaped to a plain four-column bigBed (chromosome, start, end,
-dataset name) and indexed. No domain coordinates were changed, and no re-calling, merging,
-lifting (all datasets are native hg38), or recurrence scoring was performed. The dataset
-metadata used to drive the faceted selector (organ, cell type, assay, year, study) was
-copied directly from the 3D Genome Browser.
+TADs were called by the 3D Genome Browser from the cooltools insulation score, at 20 or 25 kb
+resolution. The 3DGB TAD file for each dataset was converted to a four-column bigBed
+(chromosome, start, end, dataset name). Domain coordinates were not changed. The dataset
+metadata used for the facets (organ, cell type, assay, year, study) was copied from the 3D
+Genome Browser.
 </p>
 
 <h2>Data Access</h2>

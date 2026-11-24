@@ -1,28 +1,29 @@
 <h2>Description</h2>
 <p>
-This track shows <b>topologically associating domains (TADs)</b>, the original
-&quot;topological domains&quot; defined by Dixon <em>et al.</em> 2012, in two human
-cell types: H1 human embryonic stem cells (hESC) and IMR90 fetal lung fibroblasts. A
-domain is a contiguous region that preferentially interacts with itself in Hi-C data.
+These tracks show <b>topologically associating domains (TADs)</b>, the original
+&quot;topological domains&quot; defined by Dixon <em>et al.</em> 2012, for two human cell
+types:
 </p>
+<ul>
+  <li>H1 human embryonic stem cells (hESC)</li>
+  <li>IMR90 fetal lung fibroblasts</li>
+</ul>
 <h2>Display Conventions and Configuration</h2>
 <p>
-Domains were called from Hi-C data analyzed in fixed-size 40 kb bins, so domain edges are
-uncertain to roughly &plusmn;20 kb. Domains cover roughly 86&ndash;91% of the genome, and
-the gaps between domains are what Dixon <em>et al.</em> call &quot;topological
-boundaries&quot; (under 400 kb) or &quot;unorganized chromatin&quot; (over 400 kb). No
-per-domain confidence score is published by the authors, so none is shown. These coordinates
-are not directly comparable to the other TAD tracks.
+Domain edges are only accurate to about &plusmn;20 kb (see Methods). Domains do not cover the
+whole genome. Dixon <em>et al.</em> define the gaps between domains as either &quot;topological
+boundary regions&quot; or &quot;unorganized chromatin&quot;, depending on their size. The authors
+did not publish a confidence score for each domain. These domains are not directly comparable
+to the other TAD tracks.
 </p>
 <h2>Methods</h2>
 <p>
 Domains were identified with a directionality-index hidden Markov model on 40 kb Hi-C
 contact matrices (Dixon <em>et al.</em>, 2012). The published combined-replicate domain
-calls (Supplementary Table S3) were obtained for hESC and IMR90, originally on assembly
-hg18/NCBI36, and lifted to this assembly with the UCSC <b>liftOver</b> tool; a small
-fraction of domains that did not map cleanly were dropped. Lifted domains that came out more
-than twice their original size were also removed, because this happens when a domain spans a
-gap or a rearranged region between the two assemblies.
+calls for hESC and IMR90 (Supplementary Table S3) are on hg18. They were lifted to this
+assembly with the UCSC <b>liftOver</b> tool, and a small fraction of domains that did not
+map cleanly were dropped. Lifted domains that came out more than twice their original size
+were also removed.
 </p>
 
 <h2>Data Access</h2>

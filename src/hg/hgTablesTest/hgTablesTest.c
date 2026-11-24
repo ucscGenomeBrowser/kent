@@ -179,6 +179,26 @@ fprintf(logFile, "Caught abort testing %s (%s %s %s %s %s): %s\n",
 	naForNull(track), naForNull(table), naForNull(message));
 }
 
+static char *sqlErrorInPage(struct htmlPage *page)
+/* Return the line that names a failed query, if the CGI printed one, else NULL.
+ * On the text outputs (all fields, selected fields, BED) a failed query is a
+ * dashed block reading "Can't start query: select ..." and "mySQL error NNNN",
+ * with none of the HTML warning markers qaScanForErrorMessage() looks for.  The
+ * row-counting tests then took those lines for rows: hg38 multizMito204way
+ * passed allFields with 8 "rows" and failed only oneField, as a soft error
+ * (#38852). */
+{
+if (page == NULL || page->htmlText == NULL)
+    return NULL;
+char *s = stringIn("mySQL error", page->htmlText);
+if (s == NULL)
+    s = stringIn("Can't start query", page->htmlText);
+if (s == NULL)
+    return NULL;
+char *e = strchr(s, '\n');
+return (e == NULL) ? cloneString(s) : cloneStringZ(s, e - s);
+}
+
 struct htmlPage *quickSubmit(struct htmlPage *basePage,
 	char *org, char *db, char *group, char *track, char *table,
 	char *testName, char *button, char *buttonVal)
@@ -208,6 +228,25 @@ if (basePage != NULL)
         htmlPageSetVar(basePage, NULL, hgtaTable, table);
     qs = qaPageFromForm(basePage, basePage->forms, 
 	    button, buttonVal, &page);
+
+    char *sqlError = sqlErrorInPage(page);
+    if (sqlError != NULL)
+	{
+	/* A query that failed is a broken page, not output.  Count it as a hard
+	 * error and hand back no page, so no caller counts the message as rows. */
+	verbose(1, "SQL error (%s %s %s %s %s): %s\n",
+	    naForNull(org), naForNull(db), naForNull(group),
+	    naForNull(track), naForNull(table), sqlError);
+	fprintf(logFile, "SQL error (%s %s %s %s %s): %s\n",
+	    naForNull(org), naForNull(db), naForNull(group),
+	    naForNull(track), naForNull(table), sqlError);
+	qaStatusSoftError(qs, "%s", sqlError);
+	qs->hardError = TRUE;
+	freeMem(sqlError);
+	htmlPageFree(&page);
+	(void) tablesTestNew(qs, testName, org, db, group, track, table);
+	return NULL;
+	}
 
     if (!page)
 	{
