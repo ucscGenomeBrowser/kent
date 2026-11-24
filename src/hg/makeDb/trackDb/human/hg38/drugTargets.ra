@@ -1,0 +1,86 @@
+track drugTargets
+superTrack on
+shortLabel Drug Targets
+longLabel Drug targets and variants assessed for genetic therapies
+group phenDis
+
+    track n1cVariants
+    parent drugTargets
+    shortLabel N1C Assessed Variants
+    longLabel N1C Gene Registry: variants assessed for eligibility for antisense oligonucleotide therapy
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/drugTargets/n1cVariants.bb
+    visibility pack
+    itemRgb on
+    noScoreFilter on
+    searchIndex name,gene
+    mouseOverField _mouseOver
+    url https://generegistry.n1collaborative.org/variant_entry.html?id=$<registryId>
+    urlLabel Open this entry in the N1C Gene Registry
+    urls mondo="https://monarchinitiative.org/$$" clinvar="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/" publications="$$"
+    skipEmptyFields on
+    skipFields registryId
+    filterValues.eligibility Eligible,Likely eligible,Unlikely eligible,Not eligible,Unable to assess
+    filterLabel.eligibility Eligibility
+    filterValues.approach Exon skipping,Splice correction,Splice correction or exon skipping,Exon inclusion,Knockdown,Knockdown (allele-selective),Upregulation,Gene replacement,Unable to assess
+    filterLabel.approach Therapeutic approach
+    filterValues.assessor N=1 Collaborative,GeneSteps,UPNAT,Yu Lab
+    filterLabel.assessor Assessed by
+    filterValues.inheritance Autosomal recessive,Autosomal dominant,X-linked recessive,X-linked dominant,X-linked
+    filterLabel.inheritance Inheritance
+
+    track n1cProjects
+    parent drugTargets
+    shortLabel N1C N-of-1 Projects
+    longLabel N1C Gene Registry: N-of-1 genetic therapy development projects
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/drugTargets/n1cProjects.bb
+    visibility pack
+    itemRgb on
+    noScoreFilter on
+    searchIndex name,gene
+    mouseOverField _mouseOver
+    url https://generegistry.n1collaborative.org/entry.html?id=$<registryId>
+    urlLabel Open this entry in the N1C Gene Registry
+    urls mondo="https://monarchinitiative.org/$$" email="mailto:$$" variantPubs="$$" therapyPubs="$$"
+    skipEmptyFields on
+    skipFields registryId
+    filterValues.status Clinical Application,Developed,Under Development,Currently Not Pursued for Development,Other
+    filterLabel.status Project status
+    filterValues.approach Splice correction,Exon skipping,Exon inclusion,Knockdown,Knockdown (allele-selective),Other
+    filterLabel.approach Therapeutic approach
+    filterValues.modality Antisense oligonucleotide,Gene replacement,Gene editing,Other
+    filterLabel.modality Therapeutic modality
+    filterValues.indication Brain/Spinal cord,Eye,Muscular,Skin,Liver,Other
+    filterLabel.indication Target organ
+
+    track n1cMarketed
+    parent drugTargets
+    shortLabel N1C Marketed Therapies
+    longLabel N1C Gene Registry: marketed genetic therapies, shown on their target gene
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/drugTargets/n1cMarketed.bb
+    visibility pack
+    itemRgb on
+    noScoreFilter on
+    searchIndex name,gene
+    mouseOverField _mouseOver
+    urls drugbank="https://go.drugbank.com/drugs/$$"
+    skipEmptyFields on
+    filterValues.modality RNA therapy,Gene therapy,Cell/Gene therapy
+    filterLabel.modality Modality
+
+searchTable n1cVariants
+searchType bigBed
+searchDescription N1C Gene Registry assessed variants
+searchPriority 50
+
+searchTable n1cProjects
+searchType bigBed
+searchDescription N1C Gene Registry N-of-1 projects
+searchPriority 50
+
+searchTable n1cMarketed
+searchType bigBed
+searchDescription N1C Gene Registry marketed genetic therapies
+searchPriority 50
