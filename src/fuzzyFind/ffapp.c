@@ -18,7 +18,7 @@ int i = 1;
 while (ali->left != NULL) ali = ali->left;
 while (ali != NULL)
     {
-    htmlParagraph("%d needle %d %d haystack %d %d", i, ali->nStart-needle, ali->nEnd-needle,
+    htmlParagraph("%d needle %ld %ld haystack %ld %ld", i, ali->nStart-needle, ali->nEnd-needle,
         ali->hStart-hay, ali->hEnd-hay);
     htmlHorizontalLine();
     ali = ali->right;
