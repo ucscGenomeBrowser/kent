@@ -1,0 +1,95 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=drugTargets">Drug Targets</a> collection.
+It shows 91 N-of-1 and N-of-few therapy projects from the N-of-1 Projects section of the
+<a href="https://generegistry.n1collaborative.org/N1C_projects.html"
+target="_blank">N1C Gene Registry</a>. Each project develops a genetic therapy, almost
+always an antisense oligonucleotide (ASO), for one disease-causing variant, or for a
+gene, in a single patient or a small group of patients. The projects are in 45 genes and
+are run by 23 institutions.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item is one project, labeled with the gene and the coding DNA change. Most projects
+are shown on the variant they target. Three projects that target a region, e.g. all
+variants in one exon, are shown on that region, and two gene knockdown projects without
+a variant (C9orf72 and GRIN1) are shown on the whole gene. Items are colored by the
+status of the project:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#006B1B;width:2em">&nbsp;</th>
+      <td>Clinical Application: the therapy is given to a patient</td></tr>
+  <tr><th style="background-color:#2E00B8;width:2em">&nbsp;</th>
+      <td>Developed</td></tr>
+  <tr><th style="background-color:#00779E;width:2em">&nbsp;</th>
+      <td>Under Development</td></tr>
+  <tr><th style="background-color:#787878;width:2em">&nbsp;</th>
+      <td>Currently Not Pursued for Development, or Other</td></tr>
+</table>
+<p>
+Hover over an item to see the variant, disease, status and institution. Click it for the
+approach, modality, the contact person of the project, whether cell lines or animal
+models are available, whether an Investigational New Drug (IND) application exists,
+publications, and a link to the entry in the N1C Gene Registry. The track can be
+filtered by status, approach, modality and target organ on the track configuration page.
+</p>
+
+<h2>Methods</h2>
+<p>
+The projects are submitted to the registry by N=1 Collaborative members, collaborators
+and other organizations, and are curated by the registry team. The registry lists the
+variant on GRCh38 as genomic HGVS and as RefSeq transcript HGVS, the disease with its
+MONDO identifier, the therapeutic approach (splice correction, exon skipping, exon
+inclusion, knockdown), the modality, the target organ and the contact information of the
+lab.
+</p>
+<p>
+The data was downloaded from the N1C Gene Registry API at
+<a href="https://gene-registry.onrender.com/api/data?table=N1C_projects"
+target="_blank">https://gene-registry.onrender.com/api/data?table=N1C_projects</a>.
+All 91 projects are in the track. 86 were placed using their genomic HGVS. Their RefSeq
+transcript HGVS, mapped with our tool <tt>hgvsToVcf</tt>, agreed with the genomic HGVS
+for all 86, and the reference base of all 73 substitutions matched hg38. Three projects
+had a genomic range instead of a variant (ANKRD17, AP4M1, LNPK) and two had only a gene
+(C9orf72, GRIN1), which were placed on the gene's MANE Select transcript. The commands
+are documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/drugTargets.txt"
+target="_blank">makeDoc file</a> and the scripts are in our
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/n1cRegistry"
+target="_blank">source repository</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>n1cProjects</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in a bigBed file that can
+be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/drugTargets/" target="_blank">our
+download server</a>. The file for this track is called <tt>n1cProjects.bb</tt>.
+Individual regions or the whole annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/drugTargets/n1cProjects.bb
+-chrom=chr11 -start=0 -end=200000000 stdout</tt>
+</p>
+<p>
+The original data can be downloaded from the
+<a href="https://generegistry.n1collaborative.org/api" target="_blank">N1C Gene Registry
+API</a>. The registry data is free for nonprofit, academic and research use.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the N=1 Collaborative and to the labs that submitted their projects to the N1C
+Gene Registry.
+</p>

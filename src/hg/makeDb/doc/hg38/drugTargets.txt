@@ -1,0 +1,54 @@
+# Drug Targets collection, 2026-11-24, Claude/max, refs #38853
+
+##############################################################################
+# N1C Gene Registry: n1cVariants, n1cProjects, n1cMarketed (2026-11-24, Claude/max)
+
+# The N=1 Collaborative Gene Registry (https://generegistry.n1collaborative.org/) has
+# a JSON API documented at https://generegistry.n1collaborative.org/api. We use three
+# of its tables: assessed_variants, N1C_projects and marketed_drugs.
+# assessed_genes_diseases has no coordinates and is marked as under construction on
+# the website, published_genetic_therapies returns an error (not yet filled).
+# Scripts are in ~/kent/src/hg/makeDb/scripts/n1cRegistry
+
+mkdir -p /hive/data/genomes/hg38/bed/n1cRegistry/download/2026-11-24
+cd /hive/data/genomes/hg38/bed/n1cRegistry/download/2026-11-24
+~/kent/src/hg/makeDb/scripts/n1cRegistry/n1cRegistryDownload.sh
+# assessed_variants: 2660 rows
+# N1C_projects: 91 rows
+# marketed_drugs: 110 rows
+
+cd /hive/data/genomes/hg38/bed/n1cRegistry
+~/kent/src/hg/makeDb/scripts/n1cRegistry/n1cRegistryBuild.sh download/2026-11-24 2026-11-24
+# assessed_variants.json: 2660 rows, 515 not blank
+# variant: 507 genomic HGVS cross-checked with the transcript HGVS, 0 disagree
+# variant: 373 reference alleles checked, 0 mismatches
+# wrote 515 features to ./n1cVariants.bed
+# N1C_projects.json: 91 rows, 91 not blank
+# project: 86 genomic HGVS cross-checked with the transcript HGVS, 0 disagree
+# project: 73 reference alleles checked, 0 mismatches
+# wrote 91 features to ./n1cProjects.bed
+# marketed: Upstaza: gene DCC corrected to DDC
+# marketed: 67 rows have no target gene and were not placed
+# wrote 43 features to ./n1cMarketed.bed
+# warning: cannot parse date '4/6/0206', kept as is
+
+# Notes on the input:
+# - 2145 of the 2660 assessed_variants rows are blank spreadsheet lines.
+# - Variants are placed by their genomic HGVS. 7 variants have only a transcript HGVS
+#   and are mapped with hgvsToVcf (DYSF exon 4 deletion x2, AP4M1 x2, the CAG repeat
+#   expansions in ATN1 and ATXN7 x2, placed on the first base of the repeat).
+# - The registry's separate Chromosome / Genomic Position / Reference Allele columns
+#   disagree with the HGVS for 22 variants and 2 projects (hg19 positions, alleles on
+#   the transcript strand, typos) and are not used for variants. The HGVS agrees with
+#   the transcript HGVS everywhere.
+# - Two genomic variants are in SPDI notation (NC_:pos:del:ins, 0-based position).
+# - Projects without a variant: 3 are placed on the genomic range given in the
+#   Genomic Position column (ANKRD17, AP4M1, LNPK), 2 knockdown projects on the MANE
+#   Select transcript of their gene (C9orf72, GRIN1).
+# - Marketed drugs are placed on the MANE Select transcript of their gene, not on the
+#   registry coordinates (wrong for ADA, 1.4 Mbp, and for DDC, which had the DCC
+#   position). Upstaza is listed under DCC, which is corrected to DDC in the script
+#   while the registry still has DCC.
+# - Category spellings (eligibility, approach, pathomechanism etc.) are normalized with
+#   tables in n1cRegistryToBed.py. An unknown spelling stops the script.
+

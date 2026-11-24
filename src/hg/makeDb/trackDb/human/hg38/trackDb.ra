@@ -930,3 +930,5 @@ include gpnStar.ra alpha
 include allPrimatesChainNet.ra alpha
 
 include chainCompare.trackDb.ra alpha
+
+include drugTargets.ra alpha
