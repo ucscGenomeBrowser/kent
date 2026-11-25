@@ -110,6 +110,13 @@ struct trackDb *showTrackField(struct grp *selGroup, char *trackVar, char *event
 char *showTableField(struct trackDb *track, char *varName, boolean useJoiner);
 /* Show table control and label. */
 
+boolean searchableDropdowns();
+/* Return TRUE if hg.conf turns on the searchable group/track/table dropdowns. */
+
+void doTableListJson();
+/* Answer a searchable table dropdown: print a JSON list of the tables that
+ * match the words in hgtaDoTableListQuery, for the table var named by hgtaDoTableList. */
+
 struct slName *getDbListForGenome();
 /* Get list of selectable databases. */
 
@@ -429,6 +436,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoClearSubtrackMerge "hgta_doClearSubtrackMerge"
 #define hgtaDoSubtrackMergeSubmit "hgta_doSubtrackMergeSubmit"
 #define hgtaDoTest "hgta_doTest"
+#define hgtaDoTableList "hgta_doTableList"  /* JSON list of tables, value is the table var */
+#define hgtaDoTableListQuery "hgta_doTableListQuery" /* search words for hgtaDoTableList */
 #define hgtaDoSchemaTable "hgta_doSchemaTable"
 #define hgtaDoSchemaDb "hgta_doSchemaDb"
 #define hgtaDoValueHistogram "hgta_doValueHistogram"

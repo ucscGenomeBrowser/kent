@@ -462,13 +462,29 @@ if (trackDupe != NULL && trackDupe[0] != 0)
             {
 	    struct trackDb *subTdb = tdbRef->val;
 	    name = slNameNew(subTdb->table);
-	    slAddTail(&subList, name);
+	    slAddHead(&subList, name);
 	    hashAdd(uniqHash, subTdb->table, NULL);
             }
+        slReverse(&subList);
         pList = slCat(pList, subList);
         }
     }
 freez(&trackDupe);
+}
+
+static struct hash *joinerTableHash(struct joiner *joiner)
+/* Return a hash of every table named in a field of joiner.  joinerRelate() finds nothing
+ * for a table that is not in it. */
+{
+struct hash *hash = hashNew(0);
+struct joinerSet *js;
+for (js = joiner->jsList; js != NULL; js = js->next)
+    {
+    struct joinerField *jf;
+    for (jf = js->fieldList; jf != NULL; jf = jf->next)
+        hashStore(hash, jf->table);
+    }
+return hash;
 }
 
 struct slName *cartTrackDbTablesForTrack(char *db, struct trackDb *track, boolean useJoiner)
@@ -476,6 +492,7 @@ struct slName *cartTrackDbTablesForTrack(char *db, struct trackDb *track, boolea
  * non-positional tables that are related to track by all.joiner. */
 {
 static struct joiner *allJoiner = NULL;
+static struct hash *allJoinerTables = NULL;
 struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
 char *trackTable = track->table;
@@ -491,10 +508,16 @@ addTablesAccordingToTrackType(db, &nameList, uniqHash, track);
 if (useJoiner)
     {
     if (allJoiner == NULL)
+        {
         allJoiner = joinerRead("all.joiner");
+        allJoinerTables = joinerTableHash(allJoiner);
+        }
     struct slName *joinedList = NULL, *t;
     for (t = nameList;  t != NULL;  t = t->next)
         {
+        // joinerRelate() reads every joiner set, too slow for a collection of thousands of tracks
+        if (!hashLookup(allJoinerTables, t->name))
+            continue;
         struct joinerPair *jpList, *jp;
         jpList = joinerRelate(allJoiner, db, t->name, db);
         for (jp = jpList; jp != NULL; jp = jp->next)

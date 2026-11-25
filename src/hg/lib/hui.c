@@ -607,7 +607,8 @@ else if (startsWith("/gbdb/", expanded))
         {
         char *base = cfgOptionDefault("igvDesktop.gbdbUrl",
                                       "https://hgdownload.soe.ucsc.edu/gbdb/");
-        url = catTwoStrings(base, expanded + strlen("/gbdb/"));
+        url = catThreeStrings(base, endsWith(base, "/") ? "" : "/",
+                              expanded + strlen("/gbdb/"));
         }
     }
 freeMem(expanded);
@@ -620,6 +621,24 @@ static void igvUrlAddParam(struct dyString *igvUrl, char *name, char *val)
 char *encoded = cgiEncodeFull(val);
 dyStringPrintf(igvUrl, "&%s=%s", name, encoded);
 freeMem(encoded);
+}
+
+static char *igvDesktopGenome(char *db)
+/* Return the genome= value for IGV Desktop's load command, or NULL to load into whatever
+ * genome IGV has open: the name for a UCSC assembly or a GenArk accession, which IGV knows,
+ * else the hub.txt URL of an assembly hub, which IGV loads as a genome (HubGenomeLoader).
+ * IGV only takes the URL if it ends in hub.txt, and always opens the hub's first genome. */
+{
+char *name = trackHubSkipHubName(db);
+if (!trackHubDatabase(db) || startsWith("GCA_", name) || startsWith("GCF_", name))
+    return name;
+struct trackHubGenome *genome = trackHubGetGenome(db);
+if (genome == NULL || genome->trackHub == NULL)
+    return NULL;
+struct trackHub *hub = genome->trackHub;
+if (hub->genomeList != genome || !isRemoteUrl(hub->url) || !endsWith(hub->url, "hub.txt"))
+    return NULL;
+return hub->url;
 }
 
 static void printIgvDesktopButton(char *db, struct trackDb *tdb, struct cart *cart)
@@ -650,7 +669,9 @@ igvUrlAddParam(igvUrl, "file", fileUrl);
 char *indexUrl = igvDesktopFileUrl(db, trackDbSetting(tdb, "bigDataIndex"));
 if (indexUrl != NULL)
     igvUrlAddParam(igvUrl, "index", indexUrl);
-igvUrlAddParam(igvUrl, "genome", trackHubSkipHubName(db));
+char *genome = igvDesktopGenome(db);
+if (genome != NULL)
+    igvUrlAddParam(igvUrl, "genome", genome);
 igvUrlAddParam(igvUrl, "name", tdb->shortLabel);
 
 char *position = cartOptionalString(cart, "position");

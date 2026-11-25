@@ -1948,6 +1948,15 @@ if (sameOk(backgroundExec,"gsSendToDM"))
 
 /* Init track and group lists and figure out what page to put up. */
 initGroupsTracksTables();
+
+/* A searchable table dropdown asks for the tables matching what the user typed.
+ * Answer with JSON and do not save the cart: nothing in it changed. */
+if (searchableDropdowns() && cartVarExists(cart, hgtaDoTableList))
+    {
+    doTableListJson();
+    return;
+    }
+
 struct dyString *dyWarn = dyStringNew(0);
 boolean noShort = (cartOptionalString(cart, "noShort") != NULL); // is this the second page of results
 char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
