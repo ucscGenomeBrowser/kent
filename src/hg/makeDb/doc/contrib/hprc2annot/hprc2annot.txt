@@ -460,9 +460,12 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 #    -fullPush, so that chromAlias.bb arrives before the hub.txt that needs it.
 #    2026-11-25: live on genome.ucsc.edu. db=GCA_018852605.3 with
 #    position=HG002#1#chr18 resolves through the alias and PCLAI draws.
-#    hgdownload: still to do, it has the old chromAlias and no PCLAI:
-#      cd ~/kent/src/hg/makeDb/doc/primatesAsmHub
-#      make verifyTestDownload sendDownload verifyDownload orderList=tsv.otto
+#    hgdownload, same day, run as qateam from its own primatesAsmHub. The
+#    orderList must be an absolute path, because qateam's tree has no tsv.otto:
+#      make verifyTestDownload sendDownload verifyDownload \
+#         orderList=/cluster/home/max/kent/src/hg/makeDb/doc/primatesAsmHub/tsv.otto
+#    hgdownload.soe and hgdownload3 now serve hub.txt with hprcPclai,
+#    contrib/hprc2annot/pclai.bb and a chromAlias with the hprcV2 column.
 
 ##############################################################################
 # 6. Testing / serving
