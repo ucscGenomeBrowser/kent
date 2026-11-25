@@ -2623,8 +2623,9 @@ There are no extra options that can appear on the type hic line.
 <div class="format"><code>dotBracketColor &lt;color&gt;</code></div>
     <P>The color to draw the secondary structure in, on a track that has
     <a href="#dotBracketField">dotBracketField</a> set.  The color can be written as red,
-    green and blue values from 0 to 255 separated by commas, as a hex code starting with #,
-    or as one of the 16 HTML color names in lowercase, such as blue or fuchsia.  Without
+    green and blue values from 0 to 255 separated by commas, as a six-digit hex code
+    starting with #, such as #f0e442, or as one of the 16 HTML color names in lowercase,
+    such as blue or fuchsia.  Without
     this setting the structure is drawn in whichever of black or white stands out against
     the item.  A value that is not a color is reported on the track in place of its
     data.</P>
