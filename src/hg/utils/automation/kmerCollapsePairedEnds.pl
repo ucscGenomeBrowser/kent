@@ -46,7 +46,7 @@ sub itemOut($$$$) {
   }
 }
 
-open (FH, "zcat $bedFile | sort -k2,2n|") or die "can not zcat $bedFile";
+open (FH, "zcat $bedFile | sort -S 3G -k2,2n|") or die "can not zcat $bedFile";
 while (my $line = <FH>) {
   chomp $line;
   my ($chr, $start, $end, $name, $dupSize, $rest) = split('\s+', $line, 6);
