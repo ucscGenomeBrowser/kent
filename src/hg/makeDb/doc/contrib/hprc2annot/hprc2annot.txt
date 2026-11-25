@@ -449,19 +449,20 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 #    track names. Checked on genome-test with /h/<acc>: position HG002#1#chr18 and
 #    HG002#2#chr6 resolve through the new alias and PCLAI draws.
 #
-# 4. Release, held for QA. hprc2annot is already in publicGenArk.txt, so the
-#    nightly pushRR.sh -> quickPush.pl would send public.hub.txt to the RR that
-#    night. To hold it, the pre-change public.hub.txt was copied back (a copy
-#    with PCLAI is kept in the backup dir as public.hub.txt.withPclai).
-#    pushAccessions.sh could not run as max (no qateam ssh to hgwbeta), so
-#    hgwbeta gets beta.hub.txt, contrib/ and the new chromAlias.bb from the
-#    nightly pushRR.sh. To release, after QA:
+# 4. Release. hprc2annot is already in publicGenArk.txt, so the nightly
+#    pushRR.sh -> quickPush.pl sends a changed public.hub.txt to the RR that
+#    same night. To hold HG002 for QA, the pre-change public.hub.txt was copied
+#    back until max checked it on genome-test. pushAccessions.sh cannot run from
+#    a session without qateam ssh. After the QA OK, the same day:
 #      command cp -f .../hg002bak.2026-11-25/<asmId>/public.hub.txt.withPclai \
-#         <buildDir>/public.hub.txt      # or re-run make mkGenomes as above
+#         <buildDir>/public.hub.txt      # same content as mkGenomes wrote
 #      pushAccessions.sh -rr -fullPush GCA_018852605.3 GCA_018852615.3  # as qateam
+#    -fullPush, so that chromAlias.bb arrives before the hub.txt that needs it.
+#    2026-11-25: live on genome.ucsc.edu. db=GCA_018852605.3 with
+#    position=HG002#1#chr18 resolves through the alias and PCLAI draws.
+#    hgdownload: still to do, it has the old chromAlias and no PCLAI:
 #      cd ~/kent/src/hg/makeDb/doc/primatesAsmHub
 #      make verifyTestDownload sendDownload verifyDownload orderList=tsv.otto
-#    -fullPush so chromAlias.bb arrives before the hub.txt that needs it.
 
 ##############################################################################
 # 6. Testing / serving
