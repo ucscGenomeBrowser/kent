@@ -623,6 +623,24 @@ dyStringPrintf(igvUrl, "&%s=%s", name, encoded);
 freeMem(encoded);
 }
 
+static char *igvDesktopGenome(char *db)
+/* Return the genome= value for IGV Desktop's load command, or NULL to load into whatever
+ * genome IGV has open: the name for a UCSC assembly or a GenArk accession, which IGV knows,
+ * else the hub.txt URL of an assembly hub, which IGV loads as a genome (HubGenomeLoader).
+ * IGV only takes the URL if it ends in hub.txt, and always opens the hub's first genome. */
+{
+char *name = trackHubSkipHubName(db);
+if (!trackHubDatabase(db) || startsWith("GCA_", name) || startsWith("GCF_", name))
+    return name;
+struct trackHubGenome *genome = trackHubGetGenome(db);
+if (genome == NULL || genome->trackHub == NULL)
+    return NULL;
+struct trackHub *hub = genome->trackHub;
+if (hub->genomeList != genome || !isRemoteUrl(hub->url) || !endsWith(hub->url, "hub.txt"))
+    return NULL;
+return hub->url;
+}
+
 static void printIgvDesktopButton(char *db, struct trackDb *tdb, struct cart *cart)
 /* If hg.conf igvDesktopButton is on and the track is a single indexed file that IGV Desktop
  * can read (bigBed and relatives, bigWig, BAM/CRAM, VCF), print a button that asks a
@@ -651,10 +669,8 @@ igvUrlAddParam(igvUrl, "file", fileUrl);
 char *indexUrl = igvDesktopFileUrl(db, trackDbSetting(tdb, "bigDataIndex"));
 if (indexUrl != NULL)
     igvUrlAddParam(igvUrl, "index", indexUrl);
-// IGV knows the UCSC assembly names and the GenArk accessions, but not the name of an
-// assembly hub's genome: without a genome, it loads the file into the genome it has open.
-char *genome = trackHubSkipHubName(db);
-if (!trackHubDatabase(db) || startsWith("GCA_", genome) || startsWith("GCF_", genome))
+char *genome = igvDesktopGenome(db);
+if (genome != NULL)
     igvUrlAddParam(igvUrl, "genome", genome);
 igvUrlAddParam(igvUrl, "name", tdb->shortLabel);
 
