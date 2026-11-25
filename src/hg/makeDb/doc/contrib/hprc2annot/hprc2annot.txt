@@ -6,6 +6,8 @@
 #                          detailsScript dataUrl double-prefix bug fixed
 # 2026-09-16 Claude (max): PCLAI default visibility pack -> dense, pinned with
 #                          onlyVisibility (see section 5e)
+# 2026-11-25 Claude (max): HG002 PCLAI added via an hprcV2 chromAlias column on
+#                          its two GenArk assemblies (see section 5f)
 
 # Builds a GenArk "contributed track" hub (contribTracks.html model) that adds
 # seven annotation tracks to the ~462 HPRC Release 2 assemblies already present as
@@ -74,9 +76,9 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 #   declares the opposite haplotype for those accessions. The orchestrator
 #   hard-corrects the mapping so each file builds against the assembly whose
 #   sequences actually match (otherwise those bigBeds come out empty).
-# - Excluded samples: HG002 (hg002v1.1 uses a bespoke chr-name scheme not present
-#   in its GenArk aliases; only PCLAI exists for it) and CHM13 (= hs1, no
-#   annotation data here).
+# - Excluded sample: CHM13 (= hs1, no annotation data here). HG002 was excluded
+#   until 2026-11-25: hg002v1.1 names its sequences HG002#N#chrN, which its
+#   GenArk aliases did not have. Only PCLAI exists for it; see section 5f.
 # - HG00735 hap2 (GCA_018472765.3): the segdups source was computed on a different
 #   contig version (JAHBCG02*) than the GenArk .3 assembly, so ~40k contig-level
 #   segdup calls do not map; the chromosome-level calls (~21.6k) map fine. This is
@@ -100,7 +102,8 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 #   touch a file that is already in the converted layout. GCA_041900255.1 was
 #   damaged this way before the guard existed and was rebuilt from source.
 #
-# Final hub: 462 assemblies (HG002 excluded); 2770 bigBed files. Per-track feature
+# Final hub: 462 assemblies (HG002 excluded; 464 with 2 more PCLAI bigBeds since
+# 2026-11-25, section 5f); 2770 bigBed files. Per-track feature
 # counts for the collection are in log/summary.tsv, regenerated at the end of every
 # build run (see section 3). What is retained there covers liftoff, segdups and
 # methylation across all 462 assemblies, and PCLAI for one. Within that, liftoff
@@ -398,6 +401,67 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # collections (Tiberius on 2 assemblies) preserved, and beta additionally picked up
 # the two 2026-09-09 PCLAI fixes it had never received. genark checkContrib
 # reported no contrib problems.
+
+##############################################################################
+# 5f. 2026-11-25: HG002 PCLAI, via an hprcV2 chromAlias column
+##############################################################################
+# HG002 is hg002v1.1, GenArk GCA_018852605.3 (pat, hap1) and GCA_018852615.3
+# (mat, hap2). Only PCLAI exists for it. Its BEDs name sequences HG002#1#chrN and
+# HG002#2#chrN, not SAMPLE#HAP#<genbank> like every other sample, and the GenArk
+# chromAlias had no hprcV2 column for it, so the sample was skipped. The
+# coordinates are hg002v1.1: every row ends inside its sequence, 2-240 kb short of
+# the end, so this was naming only.
+#
+# 1. hprcV2 alias column, per Hiram's README.chromAlias.txt procedure
+#    (doc/asmHubs/README.chromAlias.txt). In each build dir's trackData/chromAlias/
+#    an hprcV2 column was appended to the existing customNames.tsv, derived from
+#    its T2T column (chr1_PATERNAL -> HG002#1#chr1, chrM -> HG002#2#chrM):
+#      pat: 23 names, HG002#1#chr1..22, chrY
+#      mat: 24 names, HG002#2#chr1..22, chrX, chrM
+#    then ./doChromAlias.bash (exit 0, counts 23/23 and 24/24). The new
+#    chromAlias.txt equals the old one with the hprcV2 column removed. Backups of
+#    the old chromAlias dirs and hub tiers:
+#      /hive/data/genomes/asmHubs/contrib/hprc2annot.build/hg002bak.2026-11-25/
+#
+# 2. Build. hprc2annotBuild.sh no longer skips HG002, and for HG002 only
+#    hprc2annotBuildOne.sh builds its PanSN chrom.sizes from the chromAlias hprcV2
+#    column. It does not prefix the genbank name for HG002. The generic path was
+#    not changed: for the three swapped samples hprcV2 names the other haplotype,
+#    so changing it would change the 460 bigBeds already built.
+#      cd /hive/data/genomes/asmHubs/contrib/hprc2annot.build
+#      ~/kent/src/hg/makeDb/scripts/hprc2annot/hprc2annotBuild.sh 20 pclai
+#    2 jobs; 25282 and 25016 windows in and out, 0 past-end, 0 unmatched.
+#
+# 3. Install. The <buildDir>/contrib/hprc2annot/ directory was made by hand. It
+#    has symlinks to pclai.bb, docs/pclai.html and pclaiRefPanel.json, plus an
+#    hprc2annot.trackDb.txt that holds only the hprcPclai stanza, copied verbatim
+#    from an installed assembly. Then the steps ottoBuildGenArkHub.py would have
+#    run. That script could not run as max: it git-fetches in the otto kent tree,
+#    and .git/FETCH_HEAD there is hiram's and mode 644. So by hand:
+#      <buildDir>/doTrackDb.bash                       # both assemblies
+#      cd ~/kent/src/hg/makeDb/doc/primatesAsmHub      # clade per hgcentraltest.genark
+#      grep -E 'GCA_018852605.3_|GCA_018852615.3_' primates.orderList.tsv > tsv.otto
+#      make symLinks orderList=tsv.otto; make mkGenomes orderList=tsv.otto
+#      make symLinks orderList=tsv.otto
+#    Side effect, from asmHubTrackDb.sh as committed, not from this work:
+#    doTrackDb.bash now gives these two assemblies gcOnFly instead of gc5Base.
+#    alpha/beta/public each got exactly one hprcPclai stanza and no duplicate
+#    track names. Checked on genome-test with /h/<acc>: position HG002#1#chr18 and
+#    HG002#2#chr6 resolve through the new alias and PCLAI draws.
+#
+# 4. Release, held for QA. hprc2annot is already in publicGenArk.txt, so the
+#    nightly pushRR.sh -> quickPush.pl would send public.hub.txt to the RR that
+#    night. To hold it, the pre-change public.hub.txt was copied back (a copy
+#    with PCLAI is kept in the backup dir as public.hub.txt.withPclai).
+#    pushAccessions.sh could not run as max (no qateam ssh to hgwbeta), so
+#    hgwbeta gets beta.hub.txt, contrib/ and the new chromAlias.bb from the
+#    nightly pushRR.sh. To release, after QA:
+#      command cp -f .../hg002bak.2026-11-25/<asmId>/public.hub.txt.withPclai \
+#         <buildDir>/public.hub.txt      # or re-run make mkGenomes as above
+#      pushAccessions.sh -rr -fullPush GCA_018852605.3 GCA_018852615.3  # as qateam
+#      cd ~/kent/src/hg/makeDb/doc/primatesAsmHub
+#      make verifyTestDownload sendDownload verifyDownload orderList=tsv.otto
+#    -fullPush so chromAlias.bb arrives before the hub.txt that needs it.
 
 ##############################################################################
 # 6. Testing / serving

@@ -34,7 +34,20 @@ trap 'rm -rf "$TMP"' EXIT
 
 # PanSN chrom.sizes: prefix every genbank name with SAMPLE#HAP#
 PANSIZES=$TMP/pansn.sizes
-awk -v p="$SAMPLE#$HAP#" 'BEGIN{OFS="\t"}{print p$1,$2}' "$GBSIZES" > "$PANSIZES"
+if [ "$SAMPLE" = HG002 ]; then
+  # hg002v1.1 PanSN names use chrN, not the genbank accession
+  # (HG002#1#chr1). Take them from the hprcV2 column that was added to
+  # its GenArk chromAlias for this, so the bigBed names are exactly the
+  # aliases the browser resolves.
+  ALIAS=$ADIR/$ACC.chromAlias.txt
+  awk -F'\t' 'BEGIN{OFS="\t"}
+    NR==FNR { if (FNR==1) { for (i=1;i<=NF;i++) if ($i=="hprcV2") c=i; next }
+              if (c) pan[$1]=$c; next }
+    ($1 in pan) { print pan[$1],$2 }' "$ALIAS" "$GBSIZES" > "$PANSIZES"
+  if [ ! -s "$PANSIZES" ]; then echo "NO_HPRCV2_ALIAS $TRACK $ACC" >&2; exit 3; fi
+else
+  awk -v p="$SAMPLE#$HAP#" 'BEGIN{OFS="\t"}{print p$1,$2}' "$GBSIZES" > "$PANSIZES"
+fi
 
 # S3 location from this track's index (join on sample_id + haplotype)
 idxfile=$IDX/idx_$TRACK.csv
