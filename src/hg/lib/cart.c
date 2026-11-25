@@ -981,7 +981,8 @@ static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean e
  * sessionLoad.keepUserPrefs=on a session load keeps the user's own values, so a link from someone
  * with a bigger screen or font, or a different BLAT query, does not change them for good.
  * Never list anything that changes what a session shows: track settings, custom tracks, the BLAT
- * and PCR result tracks (blatLastBigBed, hgPcrResult_*), db or position.  refs #38616 */
+ * and PCR result tracks (blatLastBigBed, hgPcrResult_*), the BLAT result page that goes with
+ * that track (blatPslFile, blatFaFile, blatDb), db or position.  refs #38616 */
 static char *userPrefVars[] = {
     // display: font and image width
     "textSize", "textFont", "textStyle", "fontType", "pix",
@@ -995,9 +996,9 @@ static char *userPrefVars[] = {
     "hubSearchTerms", "hubDbFilter",
     // debugging and caching
     "udcTimeout", "measureTiming",
-    // BLAT form and the last query and results; sort and autoRearr are also read by hgc
+    // BLAT form and the last query; sort and autoRearr are also read by hgc
     "userSeq", "seqFile", "type", "sort", "output", "allResults", "autoRearr",
-    "blatOrganism", "blatDb", "blatKeepResults", "blatOnlyLatest", "blatPslFile", "blatFaFile",
+    "blatOrganism", "blatKeepResults", "blatOnlyLatest",
     };
 static char *userPrefPrefixes[] = {
     "hgt_ts", "hgt_mdbVar", "hgt_mdbVal",       // track search pages and metadata search
@@ -1029,14 +1030,27 @@ if (script != NULL && endsWith(script, "hgRenderTracks"))
     return NULL;
 struct slPair *prefs = NULL;
 int i;
+// Each variable together with its multi-select shadow (multishad.<name>), which is how a
+// multi-select the user has emptied is told apart from one they never touched.
+char shadow[1024];
 for (i = 0; i < ArraySize(userPrefVars); i++)
+    {
     slPairAdd(&prefs, userPrefVars[i], cloneString(cartOptionalString(cart, userPrefVars[i])));
+    safef(shadow, sizeof shadow, "%s%s", cgiMultListShadowPrefix(), userPrefVars[i]);
+    slPairAdd(&prefs, shadow, cloneString(cartOptionalString(cart, shadow)));
+    }
 for (i = 0; i < ArraySize(userPrefPrefixes); i++)
     {
-    struct hashEl *hel, *helList = cartFindPrefix(cart, userPrefPrefixes[i]);
-    for (hel = helList; hel != NULL; hel = hel->next)
-        slPairAdd(&prefs, hel->name, cloneString(hel->val));
-    hashElFreeList(&helList);
+    safef(shadow, sizeof shadow, "%s%s", cgiMultListShadowPrefix(), userPrefPrefixes[i]);
+    char *prefixes[] = {userPrefPrefixes[i], shadow};
+    int j;
+    for (j = 0; j < ArraySize(prefixes); j++)
+        {
+        struct hashEl *hel, *helList = cartFindPrefix(cart, prefixes[j]);
+        for (hel = helList; hel != NULL; hel = hel->next)
+            slPairAdd(&prefs, hel->name, cloneString(hel->val));
+        hashElFreeList(&helList);
+        }
     }
 return prefs;
 }
@@ -1046,10 +1060,19 @@ static void cartRestoreUserPrefs(struct cart *cart, struct slPair **pPrefs)
  * user had not set, so they get the defaults and not the session's values.  Frees the list. */
 {
 int i;
+char shadow[1024];
 for (i = 0; i < ArraySize(userPrefVars); i++)
+    {
     cartRemove(cart, userPrefVars[i]);
+    safef(shadow, sizeof shadow, "%s%s", cgiMultListShadowPrefix(), userPrefVars[i]);
+    cartRemove(cart, shadow);
+    }
 for (i = 0; i < ArraySize(userPrefPrefixes); i++)
+    {
     cartRemovePrefix(cart, userPrefPrefixes[i]);
+    safef(shadow, sizeof shadow, "%s%s", cgiMultListShadowPrefix(), userPrefPrefixes[i]);
+    cartRemovePrefix(cart, shadow);
+    }
 // Add, not set: a form variable can have several values.
 slReverse(pPrefs);
 struct slPair *pref;

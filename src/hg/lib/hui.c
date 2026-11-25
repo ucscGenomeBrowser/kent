@@ -607,7 +607,8 @@ else if (startsWith("/gbdb/", expanded))
         {
         char *base = cfgOptionDefault("igvDesktop.gbdbUrl",
                                       "https://hgdownload.soe.ucsc.edu/gbdb/");
-        url = catTwoStrings(base, expanded + strlen("/gbdb/"));
+        url = catThreeStrings(base, endsWith(base, "/") ? "" : "/",
+                              expanded + strlen("/gbdb/"));
         }
     }
 freeMem(expanded);
@@ -650,7 +651,11 @@ igvUrlAddParam(igvUrl, "file", fileUrl);
 char *indexUrl = igvDesktopFileUrl(db, trackDbSetting(tdb, "bigDataIndex"));
 if (indexUrl != NULL)
     igvUrlAddParam(igvUrl, "index", indexUrl);
-igvUrlAddParam(igvUrl, "genome", trackHubSkipHubName(db));
+// IGV knows the UCSC assembly names and the GenArk accessions, but not the name of an
+// assembly hub's genome: without a genome, it loads the file into the genome it has open.
+char *genome = trackHubSkipHubName(db);
+if (!trackHubDatabase(db) || startsWith("GCA_", genome) || startsWith("GCF_", genome))
+    igvUrlAddParam(igvUrl, "genome", genome);
 igvUrlAddParam(igvUrl, "name", tdb->shortLabel);
 
 char *position = cartOptionalString(cart, "position");

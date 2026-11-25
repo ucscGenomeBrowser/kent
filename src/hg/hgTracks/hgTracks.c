@@ -4573,7 +4573,7 @@ static boolean initVirtRegionsFromManeExons()
 {
 virtRegionList = NULL;
 char *fileName = maneExonsFile();
-if (fileName == NULL)
+if (fileName == NULL || !udcExists(fileName))
     return FALSE;
 struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
 if (bbi->fieldCount < 20)

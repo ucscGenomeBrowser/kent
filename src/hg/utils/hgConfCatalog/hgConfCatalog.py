@@ -264,6 +264,27 @@ RELEASE_GATES = {
             "Temporary by intent: each should be deleted once the feature it "
             "guards is public and mirrors have had a cycle to object.",
     "vars": [
+        h("sessionLoad.keepUserPrefs", "flag", "hg/lib/cart.c", default="FALSE",
+          role="gate", verified=True, ticket="38616",
+          note="A session load keeps the user's own display preferences and tool forms "
+               "(font, image width, browser options, track and hub search, BLAT, PCR, "
+               "LiftOver, VAI, Data Integrator and Table Browser forms) instead of taking "
+               "the session's.  Nothing that changes what the session shows is kept.  The "
+               "lists are userPrefVars and userPrefPrefixes in cart.c, read in "
+               "cartSaveUserPrefs()."),
+        h("multiRegionMane", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+          role="gate", verified=True, ticket="38825",
+          note="Multi-region mode 'Show exons of MANE transcripts' (virtModeType=maneExons), "
+               "offered first in the Multi-region dialog when the assembly has a MANE "
+               "bigGenePred track.  With it off the option is not offered and the mode is "
+               "never entered."),
+        h("igvDesktopButton", "flag", "hg/lib/hui.c", default="FALSE",
+          role="gate", verified=True, ticket="38823",
+          note="'Open in IGV Desktop' button on the track settings and details pages of "
+               "bigBed, bigWig, BAM/CRAM and VCF tracks with a bigDataUrl.  It sends the "
+               "file URL, the assembly and the position to IGV Desktop's batch port 60151 "
+               "on the user's own computer.  Tracks with restricted data show a note "
+               "instead.  /gbdb files are linked via igvDesktop.gbdbUrl."),
         h("hgta.searchableDropdowns", "flag", "hg/hgTables/mainPage.c", default="FALSE",
           role="gate", verified=True, ticket="38856",
           note="Searchable group, track and table dropdowns on the Table Browser main and "
@@ -1345,6 +1366,11 @@ PATHS = {
           note="Track search index.  The $db is substituted at runtime."),
         h("downloads.server", "url", "hg/lib/hui.c",
           default='"hgdownload.soe.ucsc.edu"', public=True, verified=True),
+        h("igvDesktop.gbdbUrl", "url", "hg/lib/hui.c",
+          default='"https://hgdownload.soe.ucsc.edu/gbdb/"', verified=True, ticket="38823",
+          note="Where the IGV Desktop button (igvDesktopButton) points IGV for a /gbdb "
+               "file: the part after /gbdb/ is appended to it.  A mirror whose /gbdb is not "
+               "on hgdownload sets this to its own server."),
         h("cramRef", "path", "hg/hgTables/bam.c", public=True,
           verified=True, note="Reference sequence cache for CRAM."),
         h("grepIndex.default", "path", "hg/lib/hgFind.c", public=True,
@@ -2010,53 +2036,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("igvDesktop.gbdbUrl", "unreviewed", "hg/lib/hui.c",
-          default="https://hgdownload.soe.ucsc.edu/gbdb/", ticket="38823",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionDefault in hg/lib/hui.c.  Came in "
-               "at fa1ec8f7a70, New hg.conf setting igvDesktopButton=on adds "
-               "an 'Open in IGV Desktop' button to the track settings and "
-               "details pages of bigBed, bigWig, BAM/CRAM and VCF tracks with "
-               "a bigDataUrl.  It sends the file, the assembly, the track "
-               "label and the current position to IGV Desktop's batch port "
-               "60151 on the user's own computer.  /gbdb files are linked to "
-               "hgdownload, or to igvDesktop.gbdbUrl if set.  Tracks with "
-               "restricted data show a note instead of the button.  Off by "
-               "default.  refs #38823.  Needs a kind, a description, and a "
-               "section to live in."),
-        h("igvDesktopButton", "flag", "hg/lib/hui.c", default="FALSE",
-          ticket="38823",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in hg/lib/hui.c. "
-               "Came in at fa1ec8f7a70, New hg.conf setting "
-               "igvDesktopButton=on adds an 'Open in IGV Desktop' button to "
-               "the track settings and details pages of bigBed, bigWig, "
-               "BAM/CRAM and VCF tracks with a bigDataUrl.  It sends the "
-               "file, the assembly, the track label and the current position "
-               "to IGV Desktop's batch port 60151 on the user's own computer. "
-               "/gbdb files are linked to hgdownload, or to "
-               "igvDesktop.gbdbUrl if set.  Tracks with restricted data show "
-               "a note instead of the button.  Off by default.  refs #38823. "
-               "Needs a description and a gate or knob call."),
-        h("multiRegionMane", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
-          ticket="38825",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/hgTracks.c.  Came in at 1dde6c7314e, Multi-region "
-               "view: new mode 'Show exons of MANE transcripts', listed first "
-               "in the Multi-region dialog when the assembly has a MANE "
-               "bigGenePred track.  Lays out the padded exons of the MANE "
-               "transcripts on the current chromosome, overlapping ones "
-               "merged, with its own padding box.  Behind the new hg.conf "
-               "setting multiRegionMane, off by default, refs #38825.  Needs "
-               "a description and a gate or knob call."),
-        h("sessionLoad.keepUserPrefs", "flag", "hg/lib/cart.c",
-          default="FALSE", ticket="38616",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in hg/lib/cart.c. "
-               "Came in at a59e51cdc1b, Session load keeps the user's own "
-               "display preferences and tool settings, refs #38616.  Needs a "
-               "description and a gate or knob call."),
         h("trackFinder", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
           ticket="33217",
           note="Written down by --auto-register, not yet reviewed by a "
