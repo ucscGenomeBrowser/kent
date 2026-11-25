@@ -26,6 +26,7 @@
 #include "trackHub.h"
 #include "hgConfig.h"
 #include "myVariants.h"
+#include "jsonWrite.h"
 #include "jsHelper.h"
 
 
@@ -58,6 +59,48 @@ jsDropDownCarryOver(dy, hgtaTable);
 return jsOnChangeEnd(&dy);
 }
 
+boolean searchableDropdowns()
+/* Return TRUE if hg.conf turns on the searchable group/track/table dropdowns. */
+{
+return cfgOptionBooleanDefault("hgta.searchableDropdowns", FALSE);
+}
+
+static void includeSearchableDropdownLibs()
+/* Load the searchable dropdown library and our setup code, once per page. */
+{
+static boolean done = FALSE;
+if (done)
+    return;
+done = TRUE;
+webIncludeResourceFile("tom-select-2.6.2.default.min.css");
+jsIncludeFile("tom-select-2.6.2.complete.min.js", NULL);
+jsIncludeFile("hgTablesDropdowns.js", NULL);
+// TomSelect's wrapper gets the select's class: keep it inline with the labels and buttons around
+// it, and make it look like the page's buttons (solid grey, no gradient)
+hPrintf("<style>\n"
+        ".ts-wrapper.tbSearchable { display: inline-block; min-width: 12em; min-height: 0; "
+        "vertical-align: baseline; }\n"
+        ".ts-wrapper.tbSearchable .ts-control { padding: 2px 28px 2px 6px; min-height: 0; "
+        "background: #eee; border: 1px solid rgba(100,100,100,0.5); border-radius: 3px; "
+        "box-shadow: none; font: 13.3333px Arial, sans-serif; line-height: 17px; }\n"
+        ".ts-wrapper.tbSearchable.dropdown-active .ts-control { border-radius: 3px 3px 0 0; }\n"
+        // the search box in the opened list: no focus ring wider than the dropdown itself
+        ".ts-dropdown .dropdown-input { font: 13.3333px Arial, sans-serif; "
+        "padding: 3px 6px; box-sizing: border-box; }\n"
+        ".ts-dropdown .dropdown-input:focus { outline: none; border-color: #1C274C; }\n"
+        ".ts-dropdown { font: 13.3333px Arial, sans-serif; }\n"
+        "</style>\n");
+}
+
+static char *searchableClass()
+/* Return the class attribute that marks a select as searchable, or "" if the feature is off. */
+{
+if (!searchableDropdowns())
+    return "";
+includeSearchableDropdownLibs();
+return " class='tbSearchable'";
+}
+
 void makeRegionButtonExtraHtml(char *val, char *selVal, char *extraHtml)
 /* Make region radio button including a little Javascript to save selection state
  * and optional extra html attributes. */
@@ -86,7 +129,7 @@ if (selGroup != NULL && startsWith("QuickLift", selGroup->label))
     selGroup = findSelectedGroup(groupList, groupVar);
     }
 hPrintf("<label for='%s'><B>Group:</B></label>\n", groupVar);
-hPrintf("<SELECT NAME=%s id='%s'>\n", groupVar, groupVar);
+hPrintf("<SELECT NAME=%s id='%s'%s>\n", groupVar, groupVar, searchableClass());
 jsOnEventById(event,groupVar,groupScript);
 for (group = groupList; group != NULL; group = group->next)
     {
@@ -161,7 +204,7 @@ else
     {
     boolean allTracks = sameString(selGroup->name, "allTracks");
     hPrintf("<label for='%s'><B>Track:</B></label>\n", trackVar);
-    hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", trackVar, trackVar);
+    hPrintf("<SELECT NAME=\"%s\" id='%s'%s>\n", trackVar, trackVar, searchableClass());
     jsOnEventById(event, trackVar, trackScript);
     if (allTracks)
         {
@@ -258,16 +301,182 @@ slSort(&cookedList, slNameCmp);
 return cookedList;
 }
 
+static struct hash *descendantHash(struct trackDb *parent)
+/* Return a hash of all descendants of parent, keyed by track name.  If two have the
+ * same name, the first in subTdbFind() order is kept. */
+{
+struct hash *hash = hashNew(0);
+struct slRef *ref, *refList = trackDbListGetRefsToDescendants(parent->subtracks);
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    struct trackDb *tdb = ref->val;
+    if (!hashLookup(hash, tdb->track))
+        hashAdd(hash, tdb->track, tdb);
+    }
+slFreeList(&refList);
+return hash;
+}
+
+static struct trackDb *tdbForTableChoice(struct trackDb *track, char *table,
+                                         struct hash **pSubHash)
+/* Return the trackDb for a table in the table dropdown, or NULL.  *pSubHash caches
+ * the subtracks of a hub track between calls, so free it after the last call. */
+{
+struct trackDb *tdb = NULL;
+if (curTrack != NULL && isHubTrack(curTrack->track))
+    {
+    if (sameString(curTrack->track, table))
+        tdb = curTrack;
+    else if (curTrack->subtracks != NULL)
+        {
+        // maybe a subtrack is what we're looking for
+        if (*pSubHash == NULL)
+            *pSubHash = descendantHash(curTrack);
+        tdb = hashFindVal(*pSubHash, table);
+        }
+    }
+else
+    {
+    if (track != NULL)
+        tdb = findTdbForTable(database,track,table, ctLookupName);
+    }
+return tdb;
+}
+
+static char *tableChoiceLabel(struct trackDb *tdb, char *table)
+/* Return the text shown for a table in the dropdown, not HTML-encoded.  Free it after use. */
+{
+if (tdb != NULL && ((curTrack == NULL) || differentWord(tdb->shortLabel, curTrack->shortLabel)))
+    {
+    struct dyString *dy = dyStringCreate("%s (%s)", tdb->shortLabel, table);
+    return dyStringCannibalize(&dy);
+    }
+return cloneString(table);
+}
+
+static boolean tableChoiceNoGenome(struct trackDb *track, char *table)
+/* Return TRUE if table is a related table that can only be queried with a position range:
+ * if a non-positional table is selected then we output its entire contents. */
+{
+return cartTrackDbIsNoGenome(database, table) &&
+       (track == NULL || differentString(track->table, table));
+}
+
+static struct slName *tableNameList(struct trackDb *track, boolean useJoiner)
+/* Return the names of the tables in the table dropdown for track. */
+{
+if (track == NULL)
+    return tablesForDb(findSelDb());
+else
+    return cartTrackDbTablesForTrack(database, track, useJoiner);
+}
+
+static int tableAjaxMin()
+/* Return the number of tables above which a searchable table dropdown gets its
+ * options from the server, or 0 if it never does. */
+{
+if (!searchableDropdowns())
+    return 0;
+return sqlSigned(cfgOptionDefault("hgta.tableAjaxMin", "1000"));
+}
+
+static struct trackDb *tableListTrack(char *varName, boolean *pUseJoiner)
+/* Return the track whose tables the table dropdown varName lists, NULL for allTables,
+ * the same way the main and intersect pages pick it. */
+{
+struct grp *selGroup;
+char *trackVar;
+if (sameString(varName, hgtaNextIntersectTable))
+    {
+    *pUseJoiner = FALSE;
+    selGroup = findSelectedGroup(fullGroupList, hgtaNextIntersectGroup);
+    trackVar = hgtaNextIntersectTrack;
+    }
+else if (sameString(varName, hgtaTable))
+    {
+    *pUseJoiner = TRUE;
+    selGroup = findSelectedGroup(fullGroupList, hgtaGroup);
+    if (selGroup != NULL && startsWith("QuickLift", selGroup->label))
+        {
+        // showGroupField() drops a QuickLift group the same way
+        cartRemove(cart, hgtaGroup);
+        selGroup = findSelectedGroup(fullGroupList, hgtaGroup);
+        }
+    trackVar = hgtaTrack;
+    }
+else
+    errAbort("Unknown table variable");
+if (selGroup == NULL || sameString(selGroup->name, "allTables"))
+    return NULL;
+if (sameString(selGroup->name, "allTracks"))
+    return findSelectedTrack(fullTrackList, NULL, trackVar);
+return findSelectedTrack(fullTrackList, selGroup, trackVar);
+}
+
+static boolean allWordsInString(struct slName *wordList, char *s)
+/* Return TRUE if every word is in s, ignoring case. */
+{
+struct slName *word;
+for (word = wordList; word != NULL; word = word->next)
+    if (!containsStringNoCase(s, word->name))
+        return FALSE;
+return TRUE;
+}
+
+void doTableListJson()
+/* Answer a searchable table dropdown: print a JSON list of the tables that
+ * match the words in hgtaDoTableListQuery, for the table var named by hgtaDoTableList. */
+{
+char *varName = cartString(cart, hgtaDoTableList);
+char *query = cartUsualString(cart, hgtaDoTableListQuery, "");
+int maxItems = 200;
+boolean useJoiner = TRUE;
+struct trackDb *track = tableListTrack(varName, &useJoiner);
+if (sameString(varName, hgtaTable))
+    curTrack = track;  // the main page labels its table dropdown against its own track
+struct slName *wordList = slNameListFromString(query, ' ');
+struct slName *name, *nameList = tableNameList(track, useJoiner);
+struct hash *subHash = NULL;
+struct jsonWrite *jw = jsonWriteNew();
+int matchCount = 0;
+jsonWriteObjectStart(jw, NULL);
+jsonWriteListStart(jw, "items");
+for (name = nameList; name != NULL; name = name->next)
+    {
+    struct trackDb *tdb = tdbForTableChoice(track, name->name, &subHash);
+    char *label = tableChoiceLabel(tdb, name->name);
+    if (allWordsInString(wordList, label))
+        {
+        if (matchCount < maxItems)
+            {
+            jsonWriteObjectStart(jw, NULL);
+            jsonWriteString(jw, "value", name->name);
+            jsonWriteString(jw, "text", label);
+            if (tableChoiceNoGenome(track, name->name))
+                jsonWriteBoolean(jw, "noGenome", TRUE);
+            jsonWriteObjectEnd(jw);
+            }
+        matchCount++;
+        }
+    freeMem(label);
+    }
+jsonWriteListEnd(jw);
+jsonWriteNumber(jw, "total", matchCount);
+jsonWriteNumber(jw, "max", maxItems);
+jsonWriteObjectEnd(jw);
+cgiPrintContentType("application/json");
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+hashFree(&subHash);
+slFreeList(&nameList);
+slFreeList(&wordList);
+}
+
 char *showTableField(struct trackDb *track, char *varName, boolean useJoiner)
 /* Show table control and label. */
 {
-struct slName *name, *nameList = NULL;
+struct slName *name, *nameList = tableNameList(track, useJoiner);
 char *selTable;
-
-if (track == NULL)
-    nameList = tablesForDb(findSelDb());
-else
-    nameList = cartTrackDbTablesForTrack(database, track, useJoiner);
 
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */
@@ -275,52 +484,47 @@ selTable = cartUsualString(cart, varName, nameList->name);
 if (!slNameInListUseCase(nameList, selTable))
     selTable = nameList->name;
 
-/* Print out label and drop-down list. */
-hPrintf("<label for='%s'><B>Table: </B></label>", varName);
-hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", varName, varName);
-jsOnEventById("change", varName, onChangeTable());
+/* Print out label and drop-down list.  A very long list is searched on the
+ * server: only the selected table goes into the page. */
+int ajaxMin = tableAjaxMin();
+int tableCount = slCount(nameList);
+boolean useAjax = (ajaxMin > 0 && tableCount > ajaxMin);
+struct hash *subHash = NULL;
 struct trackDb *selTdb = NULL;
-for (name = nameList; name != NULL; name = name->next)
+hPrintf("<label for='%s'><B>Table: </B></label>", varName);
+hPrintf("<SELECT NAME=\"%s\" id='%s'%s", varName, varName, searchableClass());
+if (useAjax)
+    hPrintf(" data-ajax='1' data-count='%d'", tableCount);
+hPrintf(">\n");
+jsOnEventById("change", varName, onChangeTable());
+if (useAjax)
     {
-    struct trackDb *tdb = NULL;
-    if (curTrack != NULL && isHubTrack(curTrack->track))
-        {
-        if (sameString(curTrack->track, name->name))
-            tdb = curTrack;
-        else if (curTrack->subtracks != NULL)
-            {
-            // maybe a subtrack is what we're looking for
-            struct trackDb *sub = subTdbFind(curTrack, name->name);
-            if (sub)
-                tdb = sub;
-            }
-        }
-    else
-        {
-        if (track != NULL)
-            tdb = findTdbForTable(database,track,name->name, ctLookupName);
-        }
+    selTdb = tdbForTableChoice(track, selTable, &subHash);
+    char *label = tableChoiceLabel(selTdb, selTable);
+    hPrintf("<OPTION VALUE=\"%s\" SELECTED>%s</OPTION>\n",
+            htmlEncode(selTable), htmlEncode(label));
+    freeMem(label);
+    }
+else for (name = nameList; name != NULL; name = name->next)
+    {
+    struct trackDb *tdb = tdbForTableChoice(track, name->name, &subHash);
     hPrintf("<OPTION VALUE=\"%s\"", name->name);
     // Disable options for related tables that are noGenome -- if a non-positional table
     // is selected then we output its entire contents.
-    if (cartTrackDbIsNoGenome(database, name->name) && fullGenomeRegion() &&
-        (track == NULL || differentString(track->table, name->name)))
+    if (tableChoiceNoGenome(track, name->name) && fullGenomeRegion())
         hPrintf(" DISABLED"NO_GENOME_CLASS);
     else if (sameString(selTable, name->name))
         {
         hPrintf(" SELECTED");
         selTdb = tdb;
         }
-    if (tdb != NULL)
-	if ((curTrack == NULL) || differentWord(tdb->shortLabel, curTrack->shortLabel))
-	    hPrintf(">%s (%s)", htmlEncode(tdb->shortLabel), htmlEncode(name->name));
-	else
-	    hPrintf(">%s", htmlEncode(name->name));
-    else
-	hPrintf(">%s", htmlEncode(name->name));
+    char *label = tableChoiceLabel(tdb, name->name);
+    hPrintf(">%s", htmlEncode(label));
+    freeMem(label);
     hPrintf("</OPTION>\n");
     }
 hPrintf("</SELECT>\n");
+hashFree(&subHash);
 if (!trackHubDatabase(database))
     {
     char *restrictDate = encodeRestrictionDateDisplay(database,selTdb);
@@ -618,7 +822,7 @@ hPrintf("<span class='tbTooltipLabel'><b>%s</b>",
             stepLabels[num-1]);
 
 hPrintf("&nbsp;");
-printInfoIconSvg();
+printInfoIconSvg("#1C274C");
 hPrintf("</span>");
 
 hPrintf("<span class='tbTooltiptext'>%s <a target='_blank' href='%s'>%s</a></span>\n",
@@ -1159,6 +1363,8 @@ jsInline(
     "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome,select[name=\"hgta_table\"] option.hgtaNoGenome');\n"
     "   $noGenomeOptions.attr('disabled', regionIsGenome)\n"
     "                   .css('color', regionIsGenome ? '' : 'black');\n"
+    "   if (typeof tbDropdownsSync === 'function')\n"
+    "       tbDropdownsSync(regionIsGenome);\n"
     "}\n"
     "$(document).ready(function() {\n"
     // once when the page loads, and every time the user changes the region type:

@@ -859,7 +859,12 @@ OTHER_CGIS = {
                        "hgta_doMetaData", "hgta_doSetUserRegions",
                        "hgta_doSubmitUserRegions", "hgta_doClearUserRegions",
                        "hgta_doClearSetUserRegionsText", "hgta_doPal",
-                       "hgta_palOut", "hgta_doTest"]),
+                       "hgta_palOut", "hgta_doTest", "hgta_doTableList",
+                       "hgta_doTableListQuery"]),
+            c("hgta_group", "setting", "hg/hgTables/mainPage.c", value="<group>",
+              verified=True,
+              note="Selected group on the Table Browser main page.  allTracks and "
+                   "allTables are special values."),
             c("hgta_metaStatus", "action", "hg/hgTables/hgTables.c",
               verified=True, note="Metadata page state, removed after use."),
             c("hgta_metaVersion", "action", "hg/hgTables/hgTables.c",

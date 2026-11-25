@@ -264,6 +264,14 @@ RELEASE_GATES = {
             "Temporary by intent: each should be deleted once the feature it "
             "guards is public and mirrors have had a cycle to object.",
     "vars": [
+        h("hgta.searchableDropdowns", "flag", "hg/hgTables/mainPage.c", default="FALSE",
+          role="gate", verified=True, ticket="38856",
+          note="Searchable group, track and table dropdowns on the Table Browser main and "
+               "intersect pages, using the TomSelect library.  A table list longer than "
+               "hgta.tableAjaxMin is not written into the page; the dropdown asks "
+               "hgTables?hgta_doTableList for the tables that match what the user types.  "
+               "Read in searchableDropdowns() (mainPage.c); hgTables.c only answers "
+               "hgta_doTableList when it is on."),
         h("showTxCodonNumbers", "flag", "hg/hgTracks/cds.c", default="FALSE",
           role="gate", verified=True, ticket="38298",
           note="A second codon number in the gene-track codon mouseover, counted in the "
@@ -1356,6 +1364,12 @@ LIMITS = {
             "that decide whether a heavy request is answered slowly or "
             "refused.",
     "vars": [
+        h("hgta.tableAjaxMin", "limit", "hg/hgTables/mainPage.c", default="1000",
+          verified=True, ticket="38856",
+          note="With hgta.searchableDropdowns on, a Table Browser table dropdown with more "
+               "tables than this holds only the selected table, and gets the rest from the "
+               "server as the user types.  A big hub collection can have tens of thousands, "
+               "which made the page megabytes long.  Read in tableAjaxMin() (mainPage.c)."),
         h("maxMem", "limit", "hg/lib/hgConfig.c", public=True,
           verified=True,
           note="Address-space cap applied by cfgSetMaxMem() at CGI startup.  "
