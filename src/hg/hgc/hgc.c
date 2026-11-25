@@ -28504,7 +28504,7 @@ extraForMismatch = catTwoStrings(extraForMismatch, pslTag);
 struct dyString *trackLine = dyStringNew(4096);
 dyStringPrintf(trackLine, customTextTemplate, groupTag, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
-*retBigBedFile = bigBedFile;
+*retBigBedFile = cloneString(bigBedFile);    /* bigBedTn is on this function's stack */
 return customFactoryParse(database, trackLine->string, FALSE, NULL, NULL);
 }
 
