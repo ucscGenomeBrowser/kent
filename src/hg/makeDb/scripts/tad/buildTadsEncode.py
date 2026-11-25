@@ -10,7 +10,7 @@
 # no "chr" prefix), and 5-col hg19-lifted bed. We therefore tier the files and use
 # the best available per biosample:
 #   tier 16 : 16-col bedpe (full Arrowhead scores)            -> 111 biosamples
-#   tier 12 : 12-col bedpe (cornerScore only; others 0)       -> A549
+#   tier 12 : 12-col bedpe (all 5 scores; no name/strand cols) -> A549
 #   tier 11 : 11-col bedpe (no scores; all 0)
 #   tier  5 : hg19-lifted bed5 (no scores; all 0)             -> 5 biosamples
 # Loop files (anchors differ, x!=y) and non-hg38 chroms are dropped by the parser.
@@ -204,7 +204,8 @@ def parse_domains(path, fmt, tier, name):
                 if c[1]!=c[4] or c[2]!=c[5]: continue
                 s,e=c[1],c[2]
                 if tier==16: sc=[c[11],c[12],c[13],c[14],c[15]]
-                elif tier==12: sc=[c[11],"0","0","0","0"]
+                # 12-col: chr1 x1 x2 chr2 y1 y2 color score uVarScore lVarScore upSign loSign
+                elif tier==12: sc=[c[7],c[8],c[9],c[10],c[11]]
                 else: sc=["0","0","0","0","0"]
             else:  # bed5
                 s,e=c[1],c[2]; sc=["0","0","0","0","0"]
@@ -331,9 +332,8 @@ html tadsEncode
         for s in sorted(subtracks,key=lambda s:(s["on"]!="on", s["term"].lower())):
             short=SHORT_OVERRIDE.get(s["term"]) or scap(shortlab(s["term"],22,ENC_ABBR))
             long="ENCODE TADs in %s (%s)"%(midlab(s["term"]),s["encsr"])
-            # hide score fields the source does not have (tier 12: cornerScore only; 11/5: none)
-            skip={16:"",12:"uVarScore,lVarScore,upSign,loSign"}.get(s["tier"],
-                  "cornerScore,uVarScore,lVarScore,upSign,loSign")
+            # hide score fields the source does not have (tiers 16/12: all 5 scores; 11/5: none)
+            skip="" if s["tier"] in (16,12) else "cornerScore,uVarScore,lVarScore,upSign,loSign"
             skip="    skipFields %s\n"%skip if skip else ""
             mouse=("<b>Biosample:</b> %s<br>TAD lifted from hg19 (no Arrowhead score)"%s["dterm"] if s["lifted"]
                    else "<b>Biosample:</b> %s<br><b>Arrowhead corner score:</b> $cornerScore"%s["dterm"])
@@ -345,7 +345,7 @@ html tadsEncode
     type bigBed 4 + 5
     bigDataUrl %s/tadsEncode/%s.bb
     color %s
-    visibility dense
+    visibility pack
     mouseOver %s
 %s
 """%(s["encsr"],s["on"],short,long,GBDB,s["symbol"],s["rgb"],mouse,skip))

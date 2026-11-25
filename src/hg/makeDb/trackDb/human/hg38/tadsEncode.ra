@@ -23,7 +23,6 @@ html tadsEncode
     color 130,163,45
     visibility pack
     mouseOver <b>Biosample:</b> A549<br><b>Arrowhead corner score:</b> $cornerScore
-    skipFields uVarScore,lVarScore,upSign,loSign
 
     track tadsEncode_ENCSR165UJN
     parent tadsEncode on

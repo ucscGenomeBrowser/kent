@@ -148,7 +148,7 @@ def main():
         assay  = scap(clean(a.get("dataType"))) or "Unknown"
         cond   = {"normal": "Normal", "cancer": "Cancer"}.get(r.get("normal_cancer",""), "Unknown")
         treat  = {"baseline": "Baseline", "pert": "Perturbation"}.get(r.get("baseline_pert",""), "Unknown")
-        prov   = {"have": "Also in another UCSC track", "novel": "Novel to browser"}.get(r.get("have_novel",""), "Unknown")
+        prov   = {"have": "Also in another UCSC track", "novel": "Only in this track"}.get(r.get("have_novel",""), "Unknown")
         yr     = r.get("year") or a.get("year", "")     # classification (human) or API (mouse)
         try:
             year = str(int(float(yr))) if yr else "Unknown"

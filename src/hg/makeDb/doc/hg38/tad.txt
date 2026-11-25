@@ -104,7 +104,8 @@ make DBS=hg38 FIND=find
 # (full 5-score format), then an untreated baseline experiment over an ENCODE-flagged perturbed
 # one (encode_perturbed.json), then preferred_default, then assay priority (intact > in situ),
 # then total file size. 111 biosamples have 16-col Arrowhead files; A549 has only a 12-col bedpe
-# (cornerScore only); 5 biosamples (LNCaP clone FGC, NCI-H460, RPMI7951, SJCRH30, SK-N-MC) have
+# (all 5 scores, without the name/score/strand columns; see the 2026-11-25 fix at the end of
+# this file); 5 biosamples (LNCaP clone FGC, NCI-H460, RPMI7951, SJCRH30, SK-N-MC) have
 # only hg19-lifted 5-col bed (no Arrowhead scores, flagged "Lifted from hg19" in the Calls facet).
 # 24-col loop files are tiered out (tier 0). (The ENCODE "perturbed" flag is used only as a
 # selection tiebreaker -- it is unreliable for display, so no Treatment facet is shown.)
@@ -231,7 +232,8 @@ make DBS=hg38 FIND=find
 #   - Schmitt items are named with the full sample name instead of the sheet code; McArthur items
 #     are named by their hg19 source bin, 1-based (e.g. "hg19 chr1:600001-700000").
 #   - ENCODE scores are written to 3 decimals; per-subtrack skipFields hides the score fields that
-#     the source does not have (A549: only cornerScore; the 5 lifted-from-hg19 biosamples: none).
+#     the source does not have (the 5 lifted-from-hg19 biosamples: none). A549 was wrongly
+#     treated as cornerScore-only here; fixed 2026-11-25, see the end of this file.
 #   - 3DGB bigBeds now carry tadDomain.as; typographic hyphens/minus/spaces in the 3DGB catalog
 #     text are folded to ASCII (e.g. "PANC-1" now matches all 4 PANC-1 datasets).
 #   - The ENCODE/3DGB build scripts now write the trackDb labels and visibilities that were
@@ -325,3 +327,50 @@ cp $T/encode/build/mm39/tadsEncode.ra ~/kent/src/hg/makeDb/trackDb/mouse/mm39/
 # tadsMcArthur default filter.contexts 4:37 -> 1:37 (no default filter).
 cd ~/kent/src/hg/makeDb/trackDb
 make DBS="hg19 hg38 mm10 mm39"
+
+##############################################################################
+# ENCODE A549 scores fix + build-script sync  2026-11-25 (lou)
+##############################################################################
+# A549's file (ENCFF513HKS, 12-col bedpe from the Reddy lab) is laid out
+#   chr1 x1 x2 chr2 y1 y2 color score uVarScore lVarScore upSign loSign
+# i.e. all 5 Arrowhead scores, with "score" being the corner score. buildTadsEncode.py had read
+# column 12 (loSign) as the corner score and written the other four as 0, with skipFields hiding
+# them. It now reads columns 8-12 and A549 gets no skipFields. Only A549.bb changes (same 5,935
+# domains, new scores); the other 116 hg38 bigBeds and all mm10/mm39 files are byte-identical
+# (no mouse biosample uses a 12-col file).
+# The build scripts were also brought in line with the trackDb/metadata edits made in QA
+# (commit e284148d9e6): ENCODE subtracks are written as "visibility pack", the 3DGB Provenance
+# value "Novel to browser" is now "Only in this track", and classification.tsv marks datasets
+# 427 (H1-hESC Micro-C) and 428 (HFFc6 Micro-C) as "have" (both are in the hg38 Hi-C and
+# Micro-C track). A regenerated tadsEncode.ra/tads3dgb.ra/tads3dgb_metadata.tsv now matches
+# trackDb and the live metadata exactly, except for the A549 skipFields line.
+T=/hive/data/outside/tad
+K=~/kent/src/hg/makeDb/scripts/tad
+B=$T/backup.2026-11-25
+mkdir -p $B/encode/build/hg38 $B/encode/build/mm10 $B/encode/build/mm39
+cp -p $T/encode/build/hg38/tadsEncode/A549.bb $T/encode/build/hg38/tadsEncode.ra $B/encode/build/hg38/
+cp -p $T/encode/build/mm10/tadsEncode.ra $B/encode/build/mm10/
+cp -p $T/encode/build/mm39/tadsEncode.ra $B/encode/build/mm39/
+cp -p $T/3dgenome/source/classification.tsv $B/classification.tsv.orig
+awk -F'\t' 'BEGIN{OFS="\t"} ($2==427||$2==428) && $4=="novel" {$4="have"} {print}' \
+    $B/classification.tsv.orig > $T/3dgenome/source/classification.tsv
+# Staged rebuild, compared against live, then only the changed files copied in:
+G=/data/tmp/tadStage.2026-11-25
+mkdir -p $G/encode $G/3dgenome
+ln -s $T/organ_colors.json $G/organ_colors.json
+ln -s $T/encode/source $G/encode/source; ln -s $T/encode/mouse $G/encode/mouse
+ln -s $T/3dgenome/source $G/3dgenome/source
+python3 $K/buildTadsEncode.py hg38 $G
+python3 $K/buildTadsEncode.py mm10 $G
+python3 $K/buildTads3dgb.py hg38 $G
+# cmp of every staged bigBed vs live: only encode/build/hg38/tadsEncode/A549.bb differs;
+# both metadata TSVs identical to live.
+cp $G/encode/build/hg38/tadsEncode/A549.bb $T/encode/build/hg38/tadsEncode/
+cp $G/encode/build/hg38/tadsEncode.ra $T/encode/build/hg38/
+cp $G/encode/build/mm10/tadsEncode.ra $T/encode/build/mm10/
+sed -e 's#/gbdb/mm10/#/gbdb/mm39/#g' -e 's# (Arrowhead/Hi-C)$#, lifted from mm10#' \
+    -e '/^    longLabel ENCODE TADs in /s#)$#, lifted from mm10)#' \
+    $G/encode/build/mm10/tadsEncode.ra > $T/encode/build/mm39/tadsEncode.ra
+rm -rf $G
+cp $T/encode/build/hg38/tadsEncode.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/
+# Check: chr17:69560000-70165000 in A549 now reads cornerScore 1.574 (was 0.798, the loSign).
