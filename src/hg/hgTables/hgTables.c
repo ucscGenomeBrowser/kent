@@ -1718,10 +1718,94 @@ else
     errAbort("Don't know how to handle %s output yet", output);
 }
 
+static boolean tableIsDenied(char *db, char *table)
+/* Return TRUE if table in db, or in the database named by a "db." prefix of table,
+ * may not be used in the Table Browser. */
+{
+if (isEmpty(table) || isEmpty(db) || isCustomTrack(table))
+    return FALSE;
+char *dot = strchr(table, '.');
+if (dot != NULL && !trackHubDatabase(db) && !isHubTrack(table))
+    {
+    char *prefix = cloneStringZ(table, dot - table);
+    if (hDbExists(prefix))
+        {
+        db = prefix;
+        table = dot + 1;
+        }
+    }
+return cartTrackDbIsAccessDenied(db, table) ||
+       cartTrackDbIsAccessDenied(db, unsplitTableName(table));
+}
+
+static boolean prefixedTableIsDenied(char *varName, int prefixSize)
+/* Return TRUE if a variable named <prefix><db>.<table>.<rest> names a table that may not be
+ * used in the Table Browser. */
+{
+char *dbTable = cloneString(varName + prefixSize);
+char *table = strchr(dbTable, '.');
+if (table == NULL)
+    return FALSE;
+*table++ = 0;
+char *end = strchr(table, '.');
+if (end != NULL)
+    *end = 0;
+return hDbExists(dbTable) && tableIsDenied(dbTable, table);
+}
+
+static void checkTableAccess()
+/* errAbort if any table that this request reads may not be used in the Table Browser. */
+{
+char *tableVars[] = {hgtaTable, hgtaHistoTable, hgtaIdentifierTable, hgtaFilterTable,
+                     hgtaFieldSelectTable, hgtaMafTable, hgtaIntersectTable,
+                     hgtaNextIntersectTable, hgtaInvertTable, hgtaNextInvertTable,
+                     hgtaInvertTable2, hgtaNextInvertTable2, hgtaCorrelateTable,
+                     hgtaNextCorrelateTable};
+char *selDb = cartUsualString(cart, hgtaDatabase, database);
+int i;
+for (i = 0; i < ArraySize(tableVars); i++)
+    {
+    char *table = cartOptionalString(cart, tableVars[i]);
+    if (tableIsDenied(database, table) || tableIsDenied(selDb, table))
+        errAbort("Sorry, the table %s is not available in the Table Browser.", table);
+    }
+if (curTable != NULL && tableIsDenied(database, curTable))
+    errAbort("Sorry, the table %s is not available in the Table Browser.", curTable);
+char *schemaTable = cartOptionalString(cart, hgtaDoSchemaTable);
+if (tableIsDenied(cartUsualString(cart, hgtaDoSchemaDb, database), schemaTable))
+    errAbort("Sorry, the table %s is not available in the Table Browser.", schemaTable);
+// selected fields and filters name their tables in the variable name: <prefix><db>.<table>.
+char *prefixes[] = {hgtaFieldSelectPrefix "check.", hgtaFieldSelectPrefix "linked.",
+                    hgtaFilterVarPrefix};
+for (i = 0; i < ArraySize(prefixes); i++)
+    {
+    struct hashEl *var, *varList = cartFindPrefix(cart, prefixes[i]);
+    for (var = varList; var != NULL; var = var->next)
+        if (prefixedTableIsDenied(var->name, strlen(prefixes[i])))
+            errAbort("Sorry, a table in %s is not available in the Table Browser.", var->name);
+    hashElFreeList(&varList);
+    }
+}
+
+static boolean isTableAccessFree()
+/* Return TRUE if this request only shows the main page, which may name a restricted table
+ * but does not read from it. */
+{
+struct hashEl *var, *varList = cartFindPrefix(cart, "hgta_do");
+boolean onlyMainPage = TRUE;
+for (var = varList; var != NULL; var = var->next)
+    if (differentString(var->name, hgtaDoMainPage))
+        onlyMainPage = FALSE;
+hashElFreeList(&varList);
+return onlyMainPage;
+}
+
 void dispatch()
 /* Scan for 'do' variables and dispatch to appropriate page-generator.
  * By default head to the main page. */
 {
+if (!isTableAccessFree())
+    checkTableAccess();
 struct hashEl *varList;
 struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))

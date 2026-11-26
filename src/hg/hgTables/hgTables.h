@@ -121,6 +121,9 @@ struct slName *getDbListForGenome();
 /* Get list of selectable databases. */
 
 char *findSelDb();
+
+char *unsplitTableName(char *table);
+/* Convert chr*_name to name */
 /* Find user selected database (as opposed to genome database). */
 
 struct slName *tablesForDb(char *db);
