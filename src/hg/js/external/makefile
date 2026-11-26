@@ -21,7 +21,7 @@ JS_FILES= BackboneExtend.js \
 	shepherd.min.js \
 	reveal-5.1.0.js reveal-notes-5.1.0.js \
 	d3-3.5.17.min.js fornac-1.2.0.min.js fornac-1.2.0.css \
-	tom-select-2.6.2.complete.min.js
+	selectize-0.15.2.min.js
 
 # Don't bother jshint'ing external libs.
 jshint:

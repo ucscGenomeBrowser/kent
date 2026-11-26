@@ -288,7 +288,7 @@ RELEASE_GATES = {
         h("hgta.searchableDropdowns", "flag", "hg/hgTables/mainPage.c", default="FALSE",
           role="gate", verified=True, ticket="38856",
           note="Searchable group, track and table dropdowns on the Table Browser main and "
-               "intersect pages, using the TomSelect library.  A table list longer than "
+               "intersect pages, using the Selectize library.  A table list longer than "
                "hgta.tableAjaxMin is not written into the page; the dropdown asks "
                "hgTables?hgta_doTableList for the tables that match what the user types.  "
                "Read in searchableDropdowns() (mainPage.c); hgTables.c only answers "

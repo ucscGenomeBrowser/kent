@@ -31,7 +31,7 @@ CSS_FILES=HGStyle.css assemblySearch.css autocomplete.css blueStyle.css \
     spectrum.min.css font-awesome.min.css \
     theme-classic.css theme-dark.css theme-modern.css \
     bootstrap-3-3-7.min.css shepherd.css \
-    reveal-5.1.0.css reveal-white-5.1.0.css tom-select-2.6.2.default.min.css
+    reveal-5.1.0.css reveal-white-5.1.0.css selectize-0.15.2.default.min.css
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \

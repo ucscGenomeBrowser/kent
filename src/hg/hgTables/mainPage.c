@@ -66,29 +66,31 @@ return cfgOptionBooleanDefault("hgta.searchableDropdowns", FALSE);
 }
 
 static void includeSearchableDropdownLibs()
-/* Load the searchable dropdown library and our setup code, once per page. */
+/* Load the Selectize library (jQuery-based), our setup code and the CSS that fits it into
+ * the page, once per page. */
 {
 static boolean done = FALSE;
 if (done)
     return;
 done = TRUE;
-webIncludeResourceFile("tom-select-2.6.2.default.min.css");
-jsIncludeFile("tom-select-2.6.2.complete.min.js", NULL);
+webIncludeResourceFile("selectize-0.15.2.default.min.css");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("selectize-0.15.2.min.js", NULL);
 jsIncludeFile("hgTablesDropdowns.js", NULL);
-// TomSelect's wrapper gets the select's class: keep it inline with the labels and buttons around
-// it, and make it look like the page's buttons (solid grey, no gradient)
+// Selectize copies the select's class onto its wrapper: keep it inline with the labels and
+// buttons around it, and make it look like the page's buttons (solid grey, no gradient)
 hPrintf("<style>\n"
-        ".ts-wrapper.tbSearchable { display: inline-block; min-width: 12em; min-height: 0; "
+        ".selectize-control.tbSearchable { display: inline-block; min-width: 12em; "
         "vertical-align: baseline; }\n"
-        ".ts-wrapper.tbSearchable .ts-control { padding: 2px 28px 2px 6px; min-height: 0; "
-        "background: #eee; border: 1px solid rgba(100,100,100,0.5); border-radius: 3px; "
-        "box-shadow: none; font: 13.3333px Arial, sans-serif; line-height: 17px; }\n"
-        ".ts-wrapper.tbSearchable.dropdown-active .ts-control { border-radius: 3px 3px 0 0; }\n"
-        // the search box in the opened list: no focus ring wider than the dropdown itself
-        ".ts-dropdown .dropdown-input { font: 13.3333px Arial, sans-serif; "
-        "padding: 3px 6px; box-sizing: border-box; }\n"
-        ".ts-dropdown .dropdown-input:focus { outline: none; border-color: #1C274C; }\n"
-        ".ts-dropdown { font: 13.3333px Arial, sans-serif; }\n"
+        ".selectize-control.tbSearchable .selectize-input { padding: 2px 28px 2px 6px; "
+        "min-height: 0; background: #eee; border: 1px solid rgba(100,100,100,0.5); "
+        "border-radius: 3px; box-shadow: none; font: 13.3333px Arial, sans-serif; "
+        "line-height: 17px; }\n"
+        ".selectize-control.tbSearchable .selectize-input > input { "
+        "font: 13.3333px Arial, sans-serif; }\n"
+        ".selectize-control.tbSearchable .selectize-input.dropdown-active { "
+        "border-radius: 3px 3px 0 0; }\n"
+        ".selectize-dropdown { font: 13.3333px Arial, sans-serif; }\n"
         "</style>\n");
 }
 
