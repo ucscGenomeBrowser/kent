@@ -337,6 +337,10 @@ a.facet-more {
     color: #333;
     font-size: 0.9em;
 }
+/* Second Submit, after the grouping tabs (see makeExtraSubmit()) */
+#toolbar-submit {
+    margin-left: 0.8em;
+}
 
 /* Drag handle column for manual row ordering, shown only on the "shown in the
    browser" tab.  Narrow, muted, and grabby, so it reads as a handle and not as

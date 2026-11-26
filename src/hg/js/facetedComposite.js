@@ -710,7 +710,7 @@ $(function() {
             const groupWrapper = document.createElement("div");
             groupWrapper.id = "group-by";
             const groupLabel = document.createElement("span");
-            groupLabel.textContent = "Group tracks in the browser by:";
+            groupLabel.textContent = "Group tracks by:";
             groupWrapper.appendChild(groupLabel);
             groupWrapper.appendChild(createInfoIcon(GROUP_BY_HELP));
             const bySampleTab = Object.assign(document.createElement("button"),
@@ -740,6 +740,14 @@ $(function() {
         }
         // Read by the submit handler, which lives in a different function.
         getGroupBy = () => (hasDataTypes ? groupBy : null);
+
+        // A second Submit at the end of the toolbar, so that after picking
+        // rows the user does not have to scroll back up to the one at the top.
+        // It goes right after the grouping tabs, inside their wrapper: as a
+        // separate toolbar item, the row's space-between pushes it far away.
+        const toolbarSubmit = makeExtraSubmit();
+        toolbarSubmit.id = "toolbar-submit";
+        (document.getElementById("group-by") || lengthDiv).appendChild(toolbarSubmit);
 
         // Refresh the tab labels and the active-tab highlight. Counts are grand
         // totals (default search:'none'), independent of the facet/search
@@ -1274,8 +1282,14 @@ $(function() {
         // element rather than with :empty, which a stray newline in the markup
         // template would quietly defeat.  "Clear all" is only worth having, and
         // is only inserted, once at least one facet group exists to clear.
-        if (filtersDiv.children.length > 0)
+        if (filtersDiv.children.length > 0) {
             filtersDiv.insertBefore(clearAllBtn, filtersDiv.firstChild);
+            // and a Submit above it, the first thing in the sidebar
+            const sidebarSubmit = makeExtraSubmit();
+            sidebarSubmit.id = "sidebar-submit";
+            sidebarSubmit.value = "Submit and show on browser";
+            filtersDiv.insertBefore(sidebarSubmit, clearAllBtn);
+        }
         filtersDiv.classList.toggle("no-facets", filtersDiv.children.length === 0);
 
         // Any facet boxes put back from the last visit were ticked while the
@@ -1361,6 +1375,64 @@ $(function() {
         });
 
         container.style.display = "flex";
+    }
+
+    function makeExtraSubmit() {
+        // Another Submit button for this long page.  It only clicks the
+        // page's own #Submit, so the handler in initSubmit() stays the one
+        // place that sends the selection to the cart.  An <input>, not a
+        // <button>: the .filter-tab corners use :first/last-of-type, which a
+        // <button> next to the grouping tabs would throw off.
+        const btn = document.createElement("input");
+        btn.type = "button";
+        btn.className = "extra-submit";
+        btn.value = "Submit";
+        btn.addEventListener("click", () => {
+            document.getElementById("Submit").click();
+        });
+        return btn;
+    }
+
+    function initBackToBrowserWarning() {
+        // The selection on this page is only stored on Submit.  "Back to Genome
+        // Browser" in the menu bar looks like the way out but drops it, so once
+        // the user has touched anything in the form, ask first.
+        const backLink = document.getElementById("backToGenomeBrowser");
+        const form = document.forms.mainForm;
+        if (!backLink || !form) {
+            return;
+        }
+        let changed = false;
+        const markChanged = () => { changed = true; };
+        form.addEventListener("change", markChanged);
+        form.addEventListener("pointerdown", markChanged);
+
+        backLink.addEventListener("click", (ev) => {
+            if (!changed) {
+                return;
+            }
+            ev.preventDefault();
+            const dlg = document.createElement("div");
+            dlg.textContent = "If you leave this page now, the tracks you selected " +
+                "and the settings you changed here will be lost. Click Submit to " +
+                "apply them and go back to the Genome Browser.";
+            $(dlg).dialog({
+                title: "Leave without saving?",
+                modal: true,
+                width: 450,
+                close: function() { $(this).dialog("destroy").remove(); },
+                buttons: {
+                    "Submit": function() {
+                        $(this).dialog("close");
+                        document.getElementById("Submit").click();
+                    },
+                    "Leave without saving": function() {
+                        window.location.href = backLink.href;
+                    },
+                    "Cancel": function() { $(this).dialog("close"); },
+                },
+            });
+        });
     }
 
     function initSubmit(table, allData) {  // logic for the submit event
@@ -1615,6 +1687,7 @@ $(function() {
     }, true);
 
     generateHTML();
+    initBackToBrowserWarning();
     showLoading();  // show spinner immediately, before the metadata fetch
     loadDataAndInit();
 
