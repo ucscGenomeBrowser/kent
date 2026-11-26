@@ -308,7 +308,10 @@ int fieldCount;
 
 htmlOpen("%s (%s) Summary Statistics", curTableLabel(), curTable);
 
+/* With pasted identifiers and a genome-wide region, the bigBed loader reads only those
+ * names through the name index, so the size of the data blocks says nothing. */
 if (isBigBed(database, curTable, curTrack, ctLookupName)
+    && !(identifierFileName() != NULL && isRegionWholeGenome())
     && bigBedBytesInRegions(conn, curTable, regionList, SUM_STATS_MAX_BIGBED_BYTES)
 	> SUM_STATS_MAX_BIGBED_BYTES)
     {
