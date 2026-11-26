@@ -111,7 +111,8 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
              TRACK_SEARCH_EMBED,
-            "hgt.findTracks",
+            "hgt.findTracks", "hgt.mrTrackSearch", "hgt.mrGeneTracks", "hgt.mrTranscripts",
+            "hgt.mrPos",
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
             "sortExp", "sortSim", "hideTracks", "ignoreCookie","dumpTracks",hgsMergeCart,"ctTest",
             "myVarShare", MYVARIANTS_ADD_CGI_VAR, MYVARIANTS_MANAGE_CGI_VAR,
@@ -3018,7 +3019,7 @@ boolean virtualSingleChrom()
 /* Return TRUE if using virtual single chromosome mode */
 {
 return (sameString(virtModeType,"exonMostly") || sameString(virtModeType,"geneMostly") ||
-        sameString(virtModeType,"maneExons"));
+        isBigGeneMultiRegionMode(virtModeType) || sameString(virtModeType, "trackItems"));
 }
 
 void parseVPosition(char *position, char **pChrom, long *pStart, long *pEnd)
@@ -4511,23 +4512,66 @@ hashFree(&ktHash);
 hFreeConn(&conn);
 }
 
+boolean multiRegionNewUi()
+/* Is the new multi-region dialog and banner switched on in hg.conf?  refs #38830 */
+{
+return cfgOptionBooleanDefault("multiRegionNewUi", FALSE);
+}
+
+boolean isBigGeneMultiRegionMode(char *mode)
+/* Is mode one of the two that read a bigGenePred track, maneExons or maneGenes? */
+{
+return sameString(mode, "maneExons") || sameString(mode, "maneGenes");
+}
+
+static struct trackDb *bigGenePredTdb(char *track)
+/* The trackDb entry of track if it is a bigGenePred, else NULL.  A native track is one
+ * row of trackDb, not the whole of it;  a hub track, also on a hub assembly such as hs1,
+ * is read from its hub. */
+{
+if (isEmpty(track))
+    return NULL;
+struct trackDb *found = NULL;
+if (isHubTrack(track))
+    {
+    /* the hub may have been detached, or the track removed from it */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        found = hubConnectAddHubForTrackAndFindTdb(database, track, NULL, hashNew(0));
+    errCatchEnd(errCatch);
+    errCatchFree(&errCatch);
+    }
+else if (!trackHubDatabase(database))
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    found = hMaybeTrackInfo(conn, track);
+    hFreeConn(&conn);
+    }
+if (found != NULL && startsWith("bigGenePred", found->type))
+    return found;
+return NULL;
+}
+
 struct trackDb *maneExonsTdb()
-/* The MANE track that the maneExons multi-region mode reads, or NULL if this assembly
- * has none or the mode is switched off in hg.conf.  Kept;  the caller does not own it. */
+/* The bigGenePred track that the maneExons and maneGenes multi-region modes read, or NULL
+ * if this assembly has none or the modes are switched off in hg.conf.  This is the MANE
+ * track, or with multiRegionNewUi, the bigGenePred track named by the cart variable
+ * MULTI_REGION_BIG_GENE_TRACK if there is one.  Kept;  the caller does not own it. */
 {
 static struct trackDb *tdb = NULL;
 static boolean asked = FALSE;
 if (asked)
     return tdb;
 asked = TRUE;
-if (!cfgOptionBooleanDefault("multiRegionMane", FALSE) || trackHubDatabase(database))
+boolean newUi = multiRegionNewUi();
+if (!cfgOptionBooleanDefault("multiRegionMane", FALSE) && !newUi)
     return NULL;
-/* One row, not the whole trackDb. */
-struct sqlConnection *conn = hAllocConn(database);
-struct trackDb *found = hMaybeTrackInfo(conn, "mane");
-hFreeConn(&conn);
-if (found != NULL && startsWith("bigGenePred", found->type))
-    tdb = found;
+/* With multiRegionNewUi any bigGenePred track, native or from a hub, also on a hub
+ * assembly;  before it, and as the fallback, the native MANE track. */
+if (newUi)
+    tdb = bigGenePredTdb(cartOptionalString(cart, MULTI_REGION_BIG_GENE_TRACK));
+if (tdb == NULL && !trackHubDatabase(database))
+    tdb = bigGenePredTdb("mane");
 return tdb;
 }
 
@@ -4542,9 +4586,12 @@ asked = TRUE;
 struct trackDb *tdb = maneExonsTdb();
 if (tdb == NULL)
     return NULL;
-struct sqlConnection *conn = hAllocConn(database);
+/* a hub track names its file in bigDataUrl, and a hub assembly has no database */
+struct sqlConnection *conn = trackHubDatabase(database) ? NULL : hAllocConn(database);
 fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 hFreeConn(&conn);
+if (fileName != NULL)
+    fileName = hReplaceGbdb(fileName);
 return fileName;
 }
 
@@ -4566,10 +4613,32 @@ if (a->end != b->end)
 return 0;
 }
 
-static boolean initVirtRegionsFromManeExons()
-/* Make the region list from the exons of the MANE transcripts on chromName, each padded
- * by manePadding, with overlapping and touching exons merged.  Returns FALSE if there
- * are none. */
+static void mergeIntoVirtRegionList(struct virtRegion *list)
+/* Sort list, a list of regions on one chrom, merge the overlapping and touching ones,
+ * and make the result virtRegionList.  list is used up. */
+{
+slSort(&list, virtRegionCmpStart);
+struct virtRegion *v, *last = NULL;
+while ((v = slPopHead(&list)) != NULL)
+    {
+    if (last != NULL && v->start <= last->end)
+        {
+        last->end = max(last->end, v->end);
+        freeMem(v);
+        }
+    else
+        {
+        slAddHead(&virtRegionList, v);
+        last = v;
+        }
+    }
+slReverse(&virtRegionList);
+}
+
+static boolean initVirtRegionsFromManeExons(boolean wholeGenes)
+/* Make the region list from the exons of the transcripts of maneExonsTdb() on chromName,
+ * or with wholeGenes from the whole transcripts, each padded by manePadding, with
+ * overlapping and touching ones merged.  Returns FALSE if there are none. */
 {
 virtRegionList = NULL;
 char *fileName = maneExonsFile();
@@ -4587,6 +4656,8 @@ struct virtRegion *exonList = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct genePred *gp = (struct genePred *)genePredFromBigGenePred(cloneString(chromName), bb);
+    if (wholeGenes)
+        convertGenePredGeneToExon(gp);
     int i;
     for (i = 0;  i < gp->exonCount;  ++i)
         {
@@ -4602,23 +4673,239 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     }
 lmCleanup(&lm);
 bigBedFileClose(&bbi);
+mergeIntoVirtRegionList(exonList);
+return (virtRegionList != NULL);
+}
 
-slSort(&exonList, virtRegionCmpStart);
-struct virtRegion *v, *last = NULL;
-while ((v = slPopHead(&exonList)) != NULL)
+/* ---- trackItems:  the items of any track as regions, refs #38830 ---- */
+
+static boolean mrTrackIsBigBed(struct trackDb *tdb)
+/* Is tdb a track of the bigBed family, whose items trackItems reads from the file? */
+{
+return tdbIsBigBed(tdb);
+}
+
+static boolean mrTrackIsSqlItems(struct trackDb *tdb)
+/* Is tdb a track of a table with one item per row and a chrom, start and end column? */
+{
+static char *types[] = {"bed", "bed5FloatScore", "bedDetail", "narrowPeak", "broadPeak",
+                        "psl", "genePred", "rmsk", "factorSource", "bed6FloatScore",
+                        "peptideMapping", "gvf", "expRatio", "bedRnaElements",
+                        /* types of custom tracks loaded into customTrash */
+                        "encodePeak", "pgSnp", "barChart", "interact", "bedMethyl"};
+char *type = tdb->type;
+int i;
+for (i = 0; i < ArraySize(types); i++)
+    if (startsWithWord(types[i], type))
+        return TRUE;
+return FALSE;
+}
+
+boolean multiRegionTrackUsable(struct trackDb *tdb)
+/* Can the trackItems mode lay out the items of tdb?  bigBed family tracks, native, from a
+ * hub or custom, native tracks of a table with one item per row, and custom tracks of
+ * those types (BED, bedDetail, narrowPeak, PSL, ...), which live in customTrash. */
+{
+if (tdb == NULL || tdb->type == NULL || tdb->subtracks != NULL)
+    return FALSE;
+if (mrTrackIsBigBed(tdb))
+    return TRUE;
+if (isCustomTrack(tdb->track))
+    return mrTrackIsSqlItems(tdb);
+return !isHubTrack(tdb->track) && !trackHubDatabase(database) && mrTrackIsSqlItems(tdb);
+}
+
+static struct customTrack *mrCustomTrack = NULL;
+/* The custom track behind multiRegionTrackTdb(), if it is one */
+
+static struct customTrack *findCustomTrack(char *track)
+/* The custom track named track in this cart, or NULL. */
+{
+/* Its own list:  the global ctList is filled later, with the browser lines. */
+static struct customTrack *myCtList = NULL;
+if (myCtList == NULL)
+    myCtList = customTracksParseCart(database, cart, NULL, NULL);
+struct customTrack *ct;
+for (ct = myCtList; ct != NULL; ct = ct->next)
+    if (sameString(ct->tdb->track, track))
+        return ct;
+return NULL;
+}
+
+struct trackDb *multiRegionTrackTdb()
+/* The track whose items the trackItems mode lays out, named by the cart variable
+ * MULTI_REGION_TRACK, or NULL if there is none it can use.  Kept. */
+{
+static struct trackDb *tdb = NULL;
+static boolean asked = FALSE;
+if (asked)
+    return tdb;
+asked = TRUE;
+if (!multiRegionNewUi())
+    return NULL;
+char *track = cartOptionalString(cart, MULTI_REGION_TRACK);
+if (isEmpty(track))
+    return NULL;
+struct trackDb *found = NULL;
+if (isCustomTrack(track))
     {
-    if (last != NULL && v->start <= last->end)
-        {
-        last->end = max(last->end, v->end);
-        freeMem(v);
-        }
-    else
-        {
-        slAddHead(&virtRegionList, v);
-        last = v;
-        }
+    mrCustomTrack = findCustomTrack(track);
+    if (mrCustomTrack != NULL)
+        found = mrCustomTrack->tdb;
     }
-slReverse(&virtRegionList);
+else if (isHubTrack(track))
+    {
+    /* the hub may have been detached, or the track removed from it */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        found = hubConnectAddHubForTrackAndFindTdb(database, track, NULL, hashNew(0));
+    errCatchEnd(errCatch);
+    errCatchFree(&errCatch);
+    }
+else if (!trackHubDatabase(database))
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    found = hMaybeTrackInfo(conn, track);
+    hFreeConn(&conn);
+    }
+if (multiRegionTrackUsable(found))
+    tdb = found;
+return tdb;
+}
+
+static char *mrTrackSource()
+/* The file of a bigBed multiRegionTrackTdb(), or the table of a SQL one, or NULL.  Kept. */
+{
+static char *source = NULL;
+static boolean asked = FALSE;
+if (asked)
+    return source;
+asked = TRUE;
+struct trackDb *tdb = multiRegionTrackTdb();
+if (tdb == NULL)
+    return NULL;
+if (mrTrackIsBigBed(tdb))
+    {
+    struct sqlConnection *conn = trackHubDatabase(database) ? NULL : hAllocConn(database);
+    source = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+    hFreeConn(&conn);
+    if (source != NULL)
+        source = hReplaceGbdb(source);
+    }
+else if (mrCustomTrack != NULL)
+    /* its table in customTrash, or for one kept in memory, its name */
+    source = mrCustomTrack->dbTrack ? mrCustomTrack->dbTableName : tdb->track;
+else
+    source = tdb->table;
+return source;
+}
+
+static int mrTrackPadding()
+/* mrTrackPadding as the region list uses it:  none below zero, never more than the chrom. */
+{
+return max(0, min(trackItemsPadding, hChromSize(database, chromName)));
+}
+
+static void addPaddedRegion(struct virtRegion **pList, char *chrom, int chromSize, int start,
+                            int end, int padding)
+/* Add start-end on chrom, padded and clipped to the chrom, to *pList. */
+{
+struct virtRegion *v;
+AllocVar(v);
+v->chrom = chrom;
+v->start = max(0, start - padding);
+v->end = min(chromSize, end + padding);
+v->strand[0] = '.';
+slAddHead(pList, v);
+}
+
+static boolean initVirtRegionsFromTrackItems()
+/* Make the region list from the items of multiRegionTrackTdb() on chromName, each padded
+ * by mrTrackPadding, with overlapping and touching ones merged.  Returns FALSE, after a
+ * warning, if there are none or too many. */
+{
+virtRegionList = NULL;
+struct trackDb *tdb = multiRegionTrackTdb();
+char *source = mrTrackSource();
+if (tdb == NULL || source == NULL)
+    return FALSE;
+int chromSize = hChromSize(database, chromName);
+int padding = mrTrackPadding();
+int maxItems = multiRegionSpaceMaxRegions();
+int count = 0;
+char *chrom = cloneString(chromName);
+struct virtRegion *list = NULL;
+if (mrTrackIsBigBed(tdb))
+    {
+    if (!udcExists(source))
+        {
+        warn("Cannot open the data file of %s, returning to default view", tdb->shortLabel);
+        return FALSE;
+        }
+    struct bbiFile *bbi = bigBedFileOpenAlias(source, chromAliasFindAliases);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chromName, 0, chromSize,
+                                                             maxItems + 1, lm);
+    for (bb = bbList; bb != NULL; bb = bb->next)
+        {
+        addPaddedRegion(&list, chrom, chromSize, bb->start, bb->end, padding);
+        count++;
+        }
+    lmCleanup(&lm);
+    bigBedFileClose(&bbi);
+    }
+else if (mrCustomTrack != NULL && !mrCustomTrack->dbTrack)
+    {
+    /* a custom track kept in memory, not in customTrash */
+    struct bed *bed;
+    for (bed = mrCustomTrack->bedList; bed != NULL && count <= maxItems; bed = bed->next)
+        if (sameString(bed->chrom, chromName))
+            {
+            addPaddedRegion(&list, chrom, chromSize, bed->chromStart, bed->chromEnd, padding);
+            count++;
+            }
+    }
+else
+    {
+    /* a native table, or a custom track's table in customTrash */
+    char *db = (mrCustomTrack != NULL) ? CUSTOM_TRASH : database;
+    char table[HDB_MAX_TABLE_STRING];
+    boolean hasBin = FALSE;
+    char chromField[HDB_MAX_FIELD_STRING], startField[HDB_MAX_FIELD_STRING];
+    char endField[HDB_MAX_FIELD_STRING];
+    if (!hFindSplitTable(db, chromName, source, table, sizeof table, &hasBin) ||
+        !hFindChromStartEndFields(db, table, chromField, startField, endField))
+        {
+        warn("Cannot read the items of %s, returning to default view", tdb->shortLabel);
+        return FALSE;
+        }
+    struct sqlConnection *conn = hAllocConn(db);
+    char query[1024];
+    sqlSafef(query, sizeof query, "select %s,%s from %s where %s='%s' limit %d",
+             startField, endField, table, chromField, chromName, maxItems + 1);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        addPaddedRegion(&list, chrom, chromSize, sqlSigned(row[0]), sqlSigned(row[1]), padding);
+        count++;
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+if (count > maxItems)
+    {
+    slFreeList(&list);
+    warn("%s has more than %d items on %s, too many to show side by side. "
+         "Returning to default view.", tdb->shortLabel, maxItems, chromName);
+    return FALSE;
+    }
+if (count == 0)
+    {
+    warn("%s has no items on %s, returning to default view", tdb->shortLabel, chromName);
+    return FALSE;
+    }
+mergeIntoVirtRegionList(list);
 return (virtRegionList != NULL);
 }
 
@@ -5371,9 +5658,10 @@ if (sameString(virtModeType, "singleTrans") && isNotEmpty(itemTrack))
     return conditions;
     }
 
-if (sameString(virtModeType, "maneExons"))
+if (isBigGeneMultiRegionMode(virtModeType))
     {
-    /* Every MANE transcript on the chrom, padded:  nothing else decides the regions. */
+    /* Every transcript of the bigGenePred track on the chrom, padded:  nothing else
+     * decides the regions. */
     char *fileName = maneExonsFile();
     if (fileName == NULL)
         return NULL;
@@ -5381,8 +5669,33 @@ if (sameString(virtModeType, "maneExons"))
     addCondition(dy, "db", database);
     addCondition(dy, "chrom", chromName);
     addCondition(dy, "mode", virtModeType);
+    addCondition(dy, "file", fileName);
     dyStringPrintf(dy, "|pad=%d", maneExonsPadding());
     long loaded = fileExists(fileName) ? (long)fileModTime(fileName) : 0;
+    dyStringPrintf(dy, "|loaded=%ld", loaded);
+    conditions = conditionsOrNull(&dy);
+    return conditions;
+    }
+
+if (sameString(virtModeType, "trackItems"))
+    {
+    /* Every item of the track on the chrom, padded.  Track filters are not applied. */
+    char *source = mrTrackSource();
+    if (source == NULL)
+        return NULL;
+    struct dyString *dy = dyStringCreate(MULTI_REGION_CONDITIONS_VERSION);
+    addCondition(dy, "db", database);
+    addCondition(dy, "chrom", chromName);
+    addCondition(dy, "mode", virtModeType);
+    addCondition(dy, "track", multiRegionTrackTdb()->track);
+    addCondition(dy, "source", source);
+    dyStringPrintf(dy, "|pad=%d", mrTrackPadding());
+    /* A new custom track gets a new table, so its name is enough */
+    long loaded = 0;
+    if (startsWith("/", source) && fileExists(source))
+        loaded = (long)fileModTime(source);
+    else if (!strstr(source, "://") && mrCustomTrack == NULL)
+        loaded = geneTableLoadTime(source);
     dyStringPrintf(dy, "|loaded=%ld", loaded);
     conditions = conditionsOrNull(&dy);
     return conditions;
@@ -5431,7 +5744,8 @@ static boolean entersOnWholeView(char *mode)
  * of its own.  refs #37788 */
 {
 if (sameString(mode, "exonMostly") || sameString(mode, "geneMostly") ||
-    sameString(mode, "maneExons") || sameString(mode, "kcGenes") || sameString(mode, "singleAltHaplo") ||
+    isBigGeneMultiRegionMode(mode) || sameString(mode, "trackItems") || sameString(mode, "kcGenes") ||
+    sameString(mode, "singleAltHaplo") ||
     sameString(mode, "default"))
     return FALSE;
 if (sameString(mode, "customUrl"))
@@ -5748,8 +6062,10 @@ lastDbPosSaveCartSetting("emGeneTable");
 if (sameString(virtModeType, "singleTrans"))
     virtModeShortDescr = cartUsualBoolean(cart, SINGLE_TRANS_CDS_VAR, FALSE) ?
                          "coding exons" : "transcript";
-else if (sameString(virtModeType, "maneExons"))
-    virtModeShortDescr = "MANE exons";
+else if (isBigGeneMultiRegionMode(virtModeType))
+    virtModeShortDescr = sameString(virtModeType, "maneGenes") ? "genes" : "exons";
+else if (sameString(virtModeType, "trackItems"))
+    virtModeShortDescr = "track items";
 else
     virtModeShortDescr = sameString(virtModeType, "geneMostly") ? "genes" : "exons";
 virtModeExtraState = "";
@@ -5874,14 +6190,23 @@ else if (sameString(virtModeType, "exonMostly")
 	virtModeShortDescr = "exons";
     // DISGUISE makes obsolete dyStringPrintf(dy," %s %s", dy->string, knownCanonical, knownToTag);
     }
-else if (sameString(virtModeType, "maneExons"))
+else if (isBigGeneMultiRegionMode(virtModeType))
     {
-    if (!initVirtRegionsFromManeExons())
+    boolean wholeGenes = sameString(virtModeType, "maneGenes");
+    if (!initVirtRegionsFromManeExons(wholeGenes))
         {
-        warn("No MANE transcripts found on chrom %s, returning to default view", chromName);
+        struct trackDb *geneTdb = maneExonsTdb();
+        warn("No transcripts of %s found on chrom %s, returning to default view",
+             geneTdb ? geneTdb->shortLabel : "the gene track", chromName);
         return FALSE;   // regionList is empty, nothing found.
         }
-    virtModeShortDescr = "MANE exons";
+    virtModeShortDescr = wholeGenes ? "genes" : "exons";
+    }
+else if (sameString(virtModeType, "trackItems"))
+    {
+    if (!initVirtRegionsFromTrackItems())
+        return FALSE;   // it has warned why
+    virtModeShortDescr = "track items";
     }
 else if (sameString(virtModeType, "kcGenes")) // TODO obsolete
     {
@@ -10754,11 +11079,336 @@ if (differentString(userVirtModeType(), "default"))
     isPressed = TRUE;
 if (differentString(virtModeType, "default"))
     isPressed = TRUE;
+if (multiRegionNewUi())
+    {
+    /* Two halves of one switch:  the browser shows either one region or several.  The
+     * styles are printed by printMultiRegionBanner().  refs #38830 */
+    hPrintf("<span class='mrToggle' role='group' aria-label='Single region or multi-region view'>"
+            "<button type='button' id='mrSingleBtn' class='gbButton%s' aria-pressed='%s' "
+            "title='%s'>Single region</button>"
+            "<button type='button' id='hgTracksConfigMultiRegionPage' class='gbButton%s' "
+            "aria-pressed='%s' title='%s'>Multi-region...</button></span>",
+            isPressed ? "" : " gbButtonOn", isPressed ? "false" : "true",
+            isPressed ? "Leave multi-region view and show one region of the genome"
+                      : "The normal view: one region of the genome",
+            isPressed ? " gbButtonOn pressed" : "", isPressed ? "true" : "false",
+            isPressed ? "Change the multi-region settings"
+                      : "Show several parts of the genome side by side, e.g. only the exons");
+    if (isPressed)
+        jsOnEventByIdF("click", "mrSingleBtn", "window.location.href='%s?%s=%s&virtModeType=default';",
+                       hgTracksName(), cartSessionVarName(), cartSessionId(cart));
+    jsOnEventById("click", "hgTracksConfigMultiRegionPage",
+                  "popUpHgt.hgTracks('multi-region config'); return false;");
+    return;
+    }
 char buf[256];
-safef(buf, sizeof buf, "Configure %s multi-region display mode", 
+safef(buf, sizeof buf, "Configure %s multi-region display mode",
                         isPressed ? "or exit" : "");
 hButtonNoSubmitMaybePressed("hgTracksConfigMultiRegionPage", "Multi-region", buf,
             "popUpHgt.hgTracks('multi-region config'); return false;", isPressed);
+}
+
+static char *emGeneLabel()
+/* shortLabel of the gene track of exonMostly and geneMostly, or the table name if the
+ * track was not looked up on this request. */
+{
+if (emGeneTrack != NULL)
+    return emGeneTrack->shortLabel;
+char *table = cartOptionalString(cart, "emGeneTable");
+return isNotEmpty(table) ? table : "the gene track";
+}
+
+static void printNoteBarStyle()
+/* Once per page, the styles of the note bars above the image:  the multi-region banner
+ * and the hub refresh (udcTimeout) note. */
+{
+static boolean done = FALSE;
+if (done)
+    return;
+done = TRUE;
+hPrintf("<style>\n"
+    ".noteBar {display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; "
+        "background:#f7f0dd; border:1px solid #d9bd82; padding:8px 14px; margin:6px auto; "
+        "max-width:1100px; text-align:left;}\n"
+    ".noteBarIcon {flex:none; width:20px; height:20px; border-radius:50%%; background:#003a72; "
+        "color:#fff; font:italic bold 14px Georgia, serif; text-align:center; line-height:20px;}\n"
+    ".noteBarText {flex:1 1 300px;}\n"
+    ".noteBarLink {white-space:nowrap;}\n"
+    ".noteBarButtons {display:flex; flex-wrap:wrap; gap:8px;}\n"
+    /* All buttons look like the browser's own (#goButton, HGStyle.css), also links styled
+     * as buttons.  A picked one looks like the pressed Multi-region button. */
+    ".gbButton, a.gbButton:link, a.gbButton:visited {display:inline-block; white-space:nowrap; "
+        "border:1px solid rgba(100,100,100,.5); border-radius:3px; background:#EEE; color:#000; "
+        "font:13.3333px Arial, Helvetica, sans-serif; padding:3px 8px; margin:0; "
+        "text-decoration:none; cursor:pointer; line-height:normal;}\n"
+    ".gbButton:hover {background:#E8E8E8;}\n"
+    ".gbButton.gbButtonOn {background:#d0dcff; box-shadow:inset 0 1px 4px rgba(0,0,0,0.6);}\n"
+    "</style>\n");
+}
+
+static void printUdcTimeoutBanner()
+/* If the cart has a hub refresh (udcTimeout) setting, print a note bar above the image that
+ * says so, with buttons to clear it, to keep it and not be told again, and to close the
+ * note.  "Do not ask again" is kept in the web browser's localStorage, under the key the
+ * older notify() box used, so a browser that said "Don't show again" there stays quiet. */
+{
+if (cartOptionalString(cart, "udcTimeout") == NULL)
+    return;
+printNoteBarStyle();
+hPrintf("<div id='udcTimeoutBanner' class='noteBar' style='display:none'>"
+        "<span class='noteBarIcon'>i</span>"
+        "<div class='noteBarText'>A hub refresh (udcTimeout) setting is active. This switches "
+        "off the track hub cache. This is useful when developing hubs, but it reduces "
+        "performance.</div>"
+        "<span class='noteBarButtons'>"
+        "<a href='%s?%s=%s&amp;udcTimeout=[]' id='udcTimeoutClear' class='gbButton' "
+        "title='Remove the hub refresh setting, so that hub files are cached again'>"
+        "Clear setting, reactivate cache</a>"
+        "<button type='button' id='udcTimeoutKeep' class='gbButton' "
+        "title='Leave the hub cache switched off and do not show this note again in this "
+        "web browser'>Keep cache off and do not ask again</button>"
+        "<button type='button' id='udcTimeoutClose' class='gbButton'>"
+        "Close</button>"
+        "</span></div>\n", hgTracksName(), cartSessionVarName(), cartSessionId(cart));
+jsInline("(function() {\n"
+    "var key = 'hgTracks_udcTimeout', box = document.getElementById('udcTimeoutBanner');\n"
+    "var hidden = false;\n"
+    "try { hidden = (localStorage.getItem(key) !== null); } catch (e) {}\n"
+    "if (!hidden) box.style.display = 'flex';\n"
+    "document.getElementById('udcTimeoutClose').addEventListener('click', function() {\n"
+    "    box.remove(); });\n"
+    "document.getElementById('udcTimeoutKeep').addEventListener('click', function() {\n"
+    "    try { localStorage.setItem(key, '1'); } catch (e) {}\n"
+    "    box.remove(); });\n"
+    "})();\n");
+}
+
+static void jsonAddStr(struct jsonElement *obj, char *name, char *val)
+/* Add name:val to the JSON object obj if val is not NULL. */
+{
+if (val != NULL)
+    jsonObjectAdd(obj, name, newJsonString(val));
+}
+
+static void multiRegionDialogState()
+/* Add hgTracks.mrState for the multi-region dialog, which the page builds itself, so
+ * that it opens without asking the server:  the mode, its settings, and what this
+ * assembly offers.  The gene track menu, the track search and the transcript menu are
+ * asked when they are needed (hgt.mrGeneTracks, hgt.mrTrackSearch, hgt.mrTranscripts).
+ * refs #38830 */
+{
+struct jsonElement *st = newJsonObject(newHash(5));
+char *mode = userVirtModeType();
+jsonAddStr(st, "mode", mode);
+boolean nativeDb = !trackHubDatabase(database);
+jsonObjectAdd(st, "transcript", newJsonBoolean(multiRegionSpacesEnabled()));
+jsonObjectAdd(st, "showAll", newJsonBoolean(cfgOptionBooleanDefault(MULTI_REGION_CFG_BUTTON_TOP,
+                                                                    TRUE)));
+
+/* the gene track picked now:  B| a bigGenePred track, T| a genePred table, no prefix
+ * either kind */
+char current[1024] = "";
+if (isBigGeneMultiRegionMode(mode) && maneExonsTdb() != NULL)
+    safef(current, sizeof current, "B|%s", maneExonsTdb()->track);
+else if ((sameString(mode, "exonMostly") || sameString(mode, "geneMostly")) &&
+         isNotEmpty(cartOptionalString(cart, "emGeneTable")))
+    safef(current, sizeof current, "T|%s", cartString(cart, "emGeneTable"));
+else if (sameString(mode, "singleTrans") &&
+         isNotEmpty(cartOptionalString(cart, SINGLE_TRANS_TABLE_VAR)))
+    safef(current, sizeof current, "%s", cartString(cart, SINGLE_TRANS_TABLE_VAR));
+jsonAddStr(st, "gene", current);
+
+jsonObjectAdd(st, "emPadding", newJsonNumber(emPadding));
+jsonObjectAdd(st, "gmPadding", newJsonNumber(gmPadding));
+jsonObjectAdd(st, "manePadding", newJsonNumber(manePadding));
+jsonObjectAdd(st, "trackPadding", newJsonNumber(trackItemsPadding));
+jsonObjectAdd(st, "altHighlight", newJsonBoolean(emAltHighlight));
+
+if (sameString(mode, "trackItems") && multiRegionTrackTdb() != NULL)
+    {
+    jsonAddStr(st, "track", multiRegionTrackTdb()->track);
+    jsonAddStr(st, "trackLabel", multiRegionTrackTdb()->shortLabel);
+    }
+if (sameString(mode, "singleTrans"))
+    {
+    jsonAddStr(st, "transId", cartOptionalString(cart, "singleTransId"));
+    jsonAddStr(st, "transChrom", cartOptionalString(cart, SINGLE_TRANS_CHROM_VAR));
+    }
+jsonObjectAdd(st, "transCds", newJsonBoolean(cartUsualBoolean(cart, SINGLE_TRANS_CDS_VAR,
+                                                              FALSE)));
+
+/* own regions:  a URL, or the trash file the pasted BED went to, read back if small */
+jsonObjectAdd(st, "showAllRegions", newJsonBoolean(cartUsualBoolean(cart,
+                                                    MULTI_REGION_BED_WIN_FULL, FALSE)));
+char *bedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+if (strstr(bedUrl, "://"))
+    jsonAddStr(st, "bedText", bedUrl);
+else if (isServerUserFilePath(bedUrl) && fileExists(bedUrl) && fileSize(bedUrl) < 1000000)
+    {
+    char *text = NULL;
+    readInGulp(bedUrl, &text, NULL);
+    jsonAddStr(st, "bedText", text);
+    }
+
+/* alternate haplotypes and fix patches, if the assembly has them */
+if (nativeDb)
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    boolean altLoc = sqlTableExists(conn, "altLocations");
+    boolean fixLoc = sqlTableExists(conn, "fixLocations");
+    if (altLoc || fixLoc)
+        {
+        jsonObjectAdd(st, "altLoc", newJsonBoolean(altLoc));
+        jsonObjectAdd(st, "fixLoc", newJsonBoolean(fixLoc));
+        char *haplo = NULL;
+        if (sameString(mode, "singleAltHaplo"))
+            haplo = cartOptionalString(cart, "singleAltHaploId");
+        if (isEmpty(haplo))
+            {
+            char query[256];
+            sqlSafef(query, sizeof query, "select name from %s limit 1",
+                     altLoc ? "altLocations" : "fixLocations");
+            haplo = sqlQuickString(conn, query);
+            if (haplo != NULL)
+                chopSuffixAt(haplo, ':');
+            }
+        jsonAddStr(st, "haplo", haplo);
+        }
+    hFreeConn(&conn);
+    }
+jsonObjectAdd(jsonForClient, "mrState", st);
+}
+
+void printMultiRegionBanner()
+/* With multiRegionNewUi, in a multi-region mode, print the bar above the image that says
+ * what is shown, with links to change the settings and to leave the mode.  refs #38830 */
+{
+if (!multiRegionNewUi())
+    return;
+multiRegionDialogState();
+printNoteBarStyle();
+/* the styles of the toggle and of the dialog, which is loaded into this page */
+hPrintf("<style>\n"
+    ".mrToggle {display:inline-flex; vertical-align:middle;}\n"
+    ".mrToggle .gbButton:first-child {border-radius:3px 0 0 3px; border-right:none;}\n"
+    ".mrToggle .gbButton:last-child {border-radius:0 3px 3px 0;}\n"
+    ".mrToggle .gbButton.gbButtonOn {background:#0a2b6b; border-color:#0a2b6b; color:#fff; "
+        "box-shadow:none;}\n"
+    "#mrSingleBtn.gbButtonOn {cursor:default;}\n"
+    ".mrDialog {font-size:14px; background:#fff;}\n"
+    ".ui-dialog-content:has(#mrDialog), #pop:has(#mrDialog) {background:#fff;}\n"
+    ".mrDialog .mrIntro {margin:4px 0 10px 0;}\n"
+    ".mrDialog .mrSection {background:#4c759c; color:#fff; font-weight:bold; padding:4px 8px; "
+        "margin-top:10px;}\n"
+    ".mrDialog .mrBody {padding:8px 4px;}\n"
+    /* the choices top to bottom, one row each:  button, name, what it shows */
+    ".mrDialog .mrCards {display:flex; flex-direction:column; gap:2px; padding:8px 0;}\n"
+    ".mrDialog .mrCard {padding:4px 8px; cursor:pointer; display:grid; "
+        "grid-template-columns:auto 11em 1fr; column-gap:8px; align-items:baseline;}\n"
+    ".mrDialog .mrCardLabel {font-weight:bold;}\n"
+    /* the picked row only a light background, no border */
+    ".mrDialog .mrCardOn {background:#f7f0dd;}\n"
+    ".mrDialog .mrSelect, .mrDialog .mrPadding, .mrDialog .mrTextarea {border:1px solid #99a7b5; "
+        "border-radius:0; padding:4px; font-size:14px;}\n"
+    ".mrDialog .mrSelect {max-width:100%%;}\n"
+    ".mrDialog .mrPadding {width:6em;}\n"
+    ".mrDialog .selectize-control.mrSelect {display:inline-block; width:40em; max-width:100%%; "
+        "vertical-align:middle; border:none; padding:0;}\n"
+    ".mrDialog .selectize-control.mrSelect .selectize-input {border-radius:0; font-size:14px;}\n"
+    /* While it loads, Selectize gives the box the class loading, which HGStyle.css's
+     * div.loading (the image's loading overlay) makes an absolute block:  the line under
+     * it shrank and everything below jumped up and back. */
+    ".mrDialog div.selectize-control.loading {position:relative; display:inline-block; "
+        "opacity:1; z-index:auto; background:none;}\n"
+    /* one height whether an entry or the search box is showing, so nothing jumps */
+    ".mrDialog .selectize-control.single .selectize-input {height:32px; box-sizing:border-box; "
+        "padding:5px 28px 5px 8px; line-height:20px; overflow:hidden; white-space:nowrap;}\n"
+    ".mrDialog .selectize-control.single .selectize-input > .item, "
+    ".mrDialog .selectize-control.single .selectize-input > input "
+        "{line-height:20px; height:20px; margin:0; padding:0; vertical-align:top;}\n"
+    /* the highlighted entry in the open list, navy as elsewhere */
+    "body > .selectize-dropdown .option.active {background:#0a2b6b; color:#fff;}\n"
+    "body > .selectize-dropdown .option.active .mrOptDescr {color:#fff;}\n"
+    /* above the jQuery UI dialog;  Selectize's own z-index:10 would win over a plain class */
+    "body > .selectize-dropdown {z-index:20000; font-size:14px;}\n"
+    "body > .selectize-dropdown .selectize-dropdown-content {max-height:50vh;}\n"
+    ".mrDialog .mrQuickPicks {margin-top:6px; font-size:13px;}\n"
+    ".mrDialog .mrQuickPick.mrQuickOn {font-weight:bold; text-decoration:none; color:#000;}\n"
+    ".selectize-dropdown .mrOptDescr {font-size:13px;}\n"
+    ".mrDialog .mrError {color:#b1301f; font-weight:bold; margin:4px 0;}\n"
+    ".mrDialog .mrTextarea {width:98%%; font-family:'Roboto Mono','Courier New',monospace;}\n"
+    ".mrDialog .mrHint {margin-top:4px;}\n"
+    ".mrDialog .mrFooter {display:flex; align-items:center; border-top:1px solid #ccc; "
+        "margin-top:12px; padding-top:10px;}\n"
+    ".mrDialog .mrFooterButtons {margin-left:auto;}\n"
+
+    "</style>\n");
+char *mode = userVirtModeType();
+if (sameString(mode, "default"))
+    return;
+struct dyString *dy = dyStringNew(256);
+if (sameString(mode, "exonMostly") || sameString(mode, "maneExons"))
+    {
+    boolean isBig = sameString(mode, "maneExons");
+    struct trackDb *tdb = isBig ? maneExonsTdb() : NULL;
+    char *label = isBig ? (tdb ? tdb->shortLabel : "MANE") : emGeneLabel();
+    int pad = isBig ? manePadding : emPadding;
+    htmlDyStringPrintf(dy, "Showing the exons of the <b>%s</b> transcripts", label);
+    if (pad > 0)
+        htmlDyStringPrintf(dy, ", with %d bp of intron on each side", pad);
+    htmlDyStringPrintf(dy, ". Introns are hidden.");
+    }
+else if (sameString(mode, "geneMostly") || sameString(mode, "maneGenes"))
+    {
+    boolean isBig = sameString(mode, "maneGenes");
+    struct trackDb *tdb = isBig ? maneExonsTdb() : NULL;
+    char *label = isBig ? (tdb ? tdb->shortLabel : "MANE") : emGeneLabel();
+    int pad = isBig ? manePadding : gmPadding;
+    htmlDyStringPrintf(dy, "Showing the <b>%s</b> genes", label);
+    if (pad > 0)
+        htmlDyStringPrintf(dy, ", with %d bp on each side", pad);
+    htmlDyStringPrintf(dy, ". The space between genes is hidden.");
+    }
+else if (sameString(mode, "trackItems"))
+    {
+    struct trackDb *tdb = multiRegionTrackTdb();
+    htmlDyStringPrintf(dy, "Showing the items of <b>%s</b>", tdb ? tdb->shortLabel : "a track");
+    if (trackItemsPadding > 0)
+        htmlDyStringPrintf(dy, ", with %d bp on each side", trackItemsPadding);
+    htmlDyStringPrintf(dy, ". The space between them is hidden.");
+    }
+else if (sameString(mode, "customUrl"))
+    htmlDyStringPrintf(dy, "Showing the regions from your list side by side. "
+                       "Everything between them is hidden.");
+else if (sameString(mode, "singleAltHaplo"))
+    htmlDyStringPrintf(dy, "Showing the alternate haplotype <b>%s</b> in place on its "
+                       "chromosome.", cartUsualString(cart, "singleAltHaploId", singleAltHaploId));
+else if (sameString(mode, "singleTrans"))
+    {
+    boolean codingOnly = cartUsualBoolean(cart, SINGLE_TRANS_CDS_VAR, FALSE);
+    htmlDyStringPrintf(dy, "Showing the %s of one transcript, <b>%s</b>",
+                       codingOnly ? "coding exons" : "exons",
+                       cartUsualString(cart, "singleTransId", singleTransId));
+    char *track = cartOptionalString(cart, SINGLE_TRANS_TABLE_VAR);
+    struct trackDb *tdb = isNotEmpty(track) ? singleTransTdb(track) : NULL;
+    if (tdb != NULL)
+        htmlDyStringPrintf(dy, " of %s", tdb->shortLabel);
+    htmlDyStringPrintf(dy, ". The introns are hidden.");
+    }
+else
+    htmlDyStringPrintf(dy, "Showing several parts of the genome side by side.");
+
+hPrintf("<div id='mrBanner' class='noteBar'>"
+        "<span class='noteBarIcon'>i</span>"
+        "<div class='noteBarText'><b>Multi-region view.</b> %s</div>"
+        "<a href='#' id='mrBannerChange' class='noteBarLink'>Change settings</a>"
+        "<a href='%s?%s=%s&amp;virtModeType=default' id='mrBannerExit' class='gbButton'>"
+        "Exit multi-region view</a>"
+        "</div>\n", dyStringContents(dy), hgTracksName(), cartSessionVarName(),
+        cartSessionId(cart));
+jsOnEventById("click", "mrBannerChange",
+              "popUpHgt.hgTracks('multi-region config'); return false;");
+dyStringFree(&dy);
 }
 
 static void printTrashIcon(char *title, char *cssClass, char *dataAttrs)
@@ -12120,6 +12770,9 @@ if (!hideControls)
 	if (hgTracksNoteHtml)
             puts(hgTracksNoteHtml);
 
+        printMultiRegionBanner();
+        printUdcTimeoutBanner();
+
 	hPutc('\n');
 	}
     }
@@ -12917,6 +13570,7 @@ revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
 emPadding = cartUsualInt(cart, "emPadding", emPadding);
 gmPadding = cartUsualInt(cart, "gmPadding", gmPadding);
 manePadding = cartUsualInt(cart, "manePadding", manePadding);
+trackItemsPadding = cartUsualInt(cart, MULTI_REGION_TRACK_PADDING, trackItemsPadding);
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 fullInsideX = trackOffsetX();
 fullInsideWidth = tl.picWidth-gfxBorder-fullInsideX;
@@ -13174,8 +13828,14 @@ if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMost
 	cartSetString(cart, "virtModeType", virtModeType);
 	}
     }
-/* No MANE track here, or the mode is switched off:  undo maneExons. */
-if (sameString(virtModeType, "maneExons") && maneExonsTdb() == NULL)
+/* No MANE track here, or the mode is switched off:  undo maneExons and maneGenes. */
+if (isBigGeneMultiRegionMode(virtModeType) && maneExonsTdb() == NULL)
+    {
+    virtModeType = "default";
+    cartSetString(cart, "virtModeType", virtModeType);
+    }
+/* The track of trackItems is gone, or the mode is switched off. */
+if (sameString(virtModeType, "trackItems") && multiRegionTrackTdb() == NULL)
     {
     virtModeType = "default";
     cartSetString(cart, "virtModeType", virtModeType);
@@ -13414,7 +14074,8 @@ else
 	// sets window to full genome size, which for these demos should be small except for allChroms
 	if (sameString(virtModeType, "exonMostly") || 
             sameString(virtModeType, "geneMostly") || 
-            sameString(virtModeType, "maneExons") || 
+            isBigGeneMultiRegionMode(virtModeType) || sameString(virtModeType, "trackItems") ||
+            
             sameString(virtModeType, "kcGenes") ||
             (sameString(virtModeType, "customUrl") && 
                     !cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE)))
@@ -14693,6 +15354,13 @@ if(!trackImgOnly)
     jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
     jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
     jsIncludeFile("autocompleteCat.js", NULL);
+    if (multiRegionNewUi())
+        {
+        // searchable track menus of the multi-region dialog, refs #38830
+        webIncludeResourceFile("selectize-0.15.2.default.min.css");
+        jsIncludeFile("selectize-0.15.2.min.js", NULL);
+        jsIncludeFile("hgTablesDropdowns.js", NULL);
+        }
     jsIncludeFile("hgTracks.js", NULL);
     if (trackFinderEnabled())
         {
@@ -14941,16 +15609,6 @@ if (measureTiming && multiRegionSpacesEnabled())
     multiRegionSpaceReportTiming();
 if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");
-
-if (cartOptionalString(cart, "udcTimeout"))
-    {
-    char buf[5000];
-    safef(buf, sizeof(buf), "A hub refresh (udcTimeout) setting is active. "
-	"This is useful when developing hubs, but it reduces "
-	"performance. To clear the setting, click "
-	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
-    notify(buf, "udcTimeout");
-    }
 
 showSessionLoadNotice(recentViewCount);
 

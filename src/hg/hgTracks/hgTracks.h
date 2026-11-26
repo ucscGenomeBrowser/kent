@@ -66,6 +66,13 @@
 
 #define MULTI_REGION_CFG_BUTTON_TOP     "multiRegionButtonTop"
 
+#define MULTI_REGION_BIG_GENE_TRACK     "mrBigGeneTrack"
+/* cart variable:  the bigGenePred track maneExons and maneGenes read, refs #38830 */
+#define MULTI_REGION_TRACK              "mrTrack"
+/* cart variable:  the track whose items trackItems lays out, refs #38830 */
+#define MULTI_REGION_TRACK_PADDING      "mrTrackPadding"
+/* cart variable:  bases of padding around each item in trackItems */
+
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
 #define delayFraction   0.25
 extern long enteredMainTime;
@@ -547,6 +554,7 @@ extern boolean emAltHighlight;      /* Highlight alternativing regions in virt v
 extern int emPadding;               /* # bases padding for exon-mostly regions */
 extern int gmPadding;               /* # bases padding for gene-mostly regions */
 extern int manePadding;             /* # bases padding for MANE exon regions */
+extern int trackItemsPadding;       /* # bases padding for the trackItems regions */
 extern char *emGeneTable;           /* Gene table to use for exon mostly */
 extern struct track *emGeneTrack;   /* Track for gene table for exon mostly */
 extern struct rgbColor vertWindowSeparatorColor; /* color for vertical windows separator */
@@ -2062,8 +2070,36 @@ void findBestEMGeneTable(struct track *trackList);
 /* Find the best gene table to use for exonMostly */
 
 struct trackDb *maneExonsTdb();
-/* The MANE track that the maneExons multi-region mode reads, or NULL if this assembly
- * has none or the mode is switched off in hg.conf. */
+/* The bigGenePred track that the maneExons and maneGenes multi-region modes read (MANE,
+ * or with multiRegionNewUi the one picked in the dialog), or NULL if this assembly has
+ * none or the modes are switched off in hg.conf. */
+
+boolean multiRegionNewUi();
+/* Is the new multi-region dialog and banner switched on in hg.conf?  refs #38830 */
+
+boolean isBigGeneMultiRegionMode(char *mode);
+/* Is mode one of the two that read a bigGenePred track, maneExons or maneGenes? */
+
+boolean multiRegionTrackUsable(struct trackDb *tdb);
+/* Can the trackItems mode lay out the items of tdb?  bigBed family tracks, native or from
+ * a hub, and native tracks of a table with one item per row. */
+
+struct trackDb *multiRegionTrackTdb();
+/* The track whose items the trackItems mode lays out, or NULL.  Kept. */
+
+void multiRegionTrackSearch();
+/* Answer the multi-region dialog's track search, hgt.mrTrackSearch=<words>, with JSON. */
+
+void multiRegionGeneTrackList();
+/* Answer the multi-region dialog's gene track menu, hgt.mrGeneTracks=1, with JSON. */
+
+void multiRegionTranscriptList();
+/* Answer the multi-region dialog's transcript menu, hgt.mrTranscripts=<gene track> and
+ * hgt.mrPos=<chrom:start-end>, with JSON. */
+
+void printMultiRegionBanner();
+/* With multiRegionNewUi, in a multi-region mode, print the bar above the image that says
+ * what is shown, with links to change the settings and to leave the mode. */
 
 struct window *makeWindowListFromVirtChrom(long virtWinStart, long virtWinEnd);
 /* make list of windows from virtual position on virtualChrom */

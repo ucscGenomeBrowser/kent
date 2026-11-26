@@ -278,6 +278,16 @@ RELEASE_GATES = {
                "offered first in the Multi-region dialog when the assembly has a MANE "
                "bigGenePred track.  With it off the option is not offered and the mode is "
                "never entered."),
+        h("multiRegionNewUi", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+          role="gate", verified=True, ticket="38830",
+          note="New multi-region dialog, built in hgTracks.js (Exons, Genes, Single "
+               "transcript, Track features, My regions, Alt haplotype; any genePred or "
+               "bigGenePred track, also from hubs, as the gene source; any bigBed or item "
+               "track, also custom, for Track features), a 'Single region | Multi-region...' "
+               "switch in place of the Multi-region button, and a banner above the image in "
+               "a multi-region view with 'Change settings' and 'Exit multi-region view'.  "
+               "New modes maneGenes and trackItems; also turns on maneExons without "
+               "multiRegionMane.  Off: the old dialog and button, no banner."),
         h("igvDesktopButton", "flag", "hg/lib/hui.c", default="FALSE",
           role="gate", verified=True, ticket="38823",
           note="'Open in IGV Desktop' button on the track settings and details pages of "

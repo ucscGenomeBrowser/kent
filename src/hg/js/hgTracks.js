@@ -591,10 +591,12 @@ var genomePos = {
             var matches = /^multi:[0-9]+-([0-9]+)/.exec(position);
             var modeType = (hgTracks.virtModeType === "customUrl" ? "Custom regions on virtual chromosome" :
                             (hgTracks.virtModeType === "exonMostly" ? "Exon view of" :
-                            (hgTracks.virtModeType === "maneExons" ? "MANE exon view of" :
+                            (hgTracks.virtModeType === "maneExons" ? "Exon view of" :
+                            (hgTracks.virtModeType === "maneGenes" ? "Gene view of" :
+                            (hgTracks.virtModeType === "trackItems" ? "Track items view of" :
                             (hgTracks.virtModeType === "geneMostly" ? "Gene view of" :
                             (hgTracks.virtModeType === "singleAltHaplo" ? "Alternate haplotype as virtual chromosome" :
-                                        "Unknown mode")))));
+                                        "Unknown mode")))))));
             var str = modeType + "&nbsp;" + position;
             if (matches) {
                 end = matches[1];
@@ -6554,6 +6556,10 @@ var popUpHgt = {
 
     hgTracks: function (whichHgTracksMethod)
     {   // Launches the popup but shields the ajax with a waitOnFunction
+        if (whichHgTracksMethod === "multi-region config" && hgTracks.mrState) {
+            multiRegionDialog.open();   // hg.conf multiRegionNewUi:  built here, no request
+            return;
+        }
         waitOnFunction( popUpHgt._uiDialogRequest, whichHgTracksMethod);
     },
 
@@ -6696,6 +6702,542 @@ var popUpHgt = {
         $('input[name="Cancel"]').on("click", function() {
             $('#hgTracksDialog').dialog('close');
         });
+    }
+};
+
+var multiRegionDialog = {
+    // The multi-region dialog behind hg.conf multiRegionNewUi, refs #38830.  It is built
+    // here, from hgTracks.mrState, so that it opens without a request.  The user picks what
+    // to show (exons, genes, one transcript, the items of a track, own regions, an alt
+    // haplotype), a track and a padding; Show regions posts that to hgTracks as
+    // virtModeType and the variables of that mode.  Three lists are asked from hgTracks
+    // when they are needed:  the gene tracks (hgt.mrGeneTracks), the transcripts in view
+    // (hgt.mrTranscripts) and the track search (hgt.mrTrackSearch).
+
+    selectizes: [],     // the Selectize objects of the open dialog
+
+    // "Load example" under My regions:  the 11 exons of TP53 (NM_000546), per assembly
+    bedExamples: {
+        hg38: "chr17 7668420 7669690 TP53_exon11\nchr17 7670608 7670715 TP53_exon10\n" +
+              "chr17 7673534 7673608 TP53_exon9\nchr17 7673700 7673837 TP53_exon8\n" +
+              "chr17 7674180 7674290 TP53_exon7\nchr17 7674858 7674971 TP53_exon6\n" +
+              "chr17 7675052 7675236 TP53_exon5\nchr17 7675993 7676272 TP53_exon4\n" +
+              "chr17 7676381 7676403 TP53_exon3\nchr17 7676520 7676622 TP53_exon2\n" +
+              "chr17 7687376 7687490 TP53_exon1\n",
+        hg19: "chr17 7571738 7573008 TP53_exon11\nchr17 7573926 7574033 TP53_exon10\n" +
+              "chr17 7576852 7576926 TP53_exon9\nchr17 7577018 7577155 TP53_exon8\n" +
+              "chr17 7577498 7577608 TP53_exon7\nchr17 7578176 7578289 TP53_exon6\n" +
+              "chr17 7578370 7578554 TP53_exon5\nchr17 7579311 7579590 TP53_exon4\n" +
+              "chr17 7579699 7579721 TP53_exon3\nchr17 7579838 7579940 TP53_exon2\n" +
+              "chr17 7590694 7590808 TP53_exon1\n"
+    },
+    geneList: null,     // the answer of hgt.mrGeneTracks, kept for the next opening
+
+    st: function ()
+    {   // the state the page was drawn with
+        return hgTracks.mrState || {};
+    },
+
+    esc: function (s)
+    {
+        return htmlEncode(s === undefined || s === null ? "" : String(s));
+    },
+
+    card: function (value, label, descr, checked)
+    {   // one choice of the Show section
+        return "<label class='mrCard" + (checked ? " mrCardOn" : "") + "'>" +
+               "<input type='radio' name='mrShow' value='" + value + "'" +
+               (checked ? " checked" : "") + ">" +
+               "<span class='mrCardLabel'>" + label + "</span>" +
+               "<span class='mrCardDescr'>" + descr + "</span></label>";
+    },
+
+    section: function (cls, title, body)
+    {
+        return "<div class='" + cls + "'><div class='mrSection'>" + title + "</div>" +
+               "<div class='mrBody'>" + body + "</div></div>";
+    },
+
+    html: function ()
+    {   // the whole dialog
+        var st = multiRegionDialog.st();
+        var esc = multiRegionDialog.esc;
+        var mode = st.mode || "default";
+        var show = {geneMostly: "genes", maneGenes: "genes", customUrl: "regions",
+                    singleAltHaplo: "altHaplo", trackItems: "track",
+                    singleTrans: "transcript"}[mode] || "exons";
+        var pad = {geneMostly: st.gmPadding, maneExons: st.manePadding,
+                   maneGenes: st.manePadding, trackItems: st.trackPadding}[mode];
+        if (pad === undefined)
+            pad = st.emPadding;
+        var h = "<div id='mrDialog' class='mrDialog'>";
+        h += "<p class='mrIntro'>Show several parts of the genome side by side in one image " +
+             "and hide what lies between them, for example only the exons of the genes, " +
+             "without the introns. <a href='../goldenPath/help/multiRegionHelp.html' " +
+             "target='_blank'>Help</a></p>";
+        h += "<div class='mrSection'>Show</div><div class='mrCards'>";
+        h += multiRegionDialog.card("exons", "Exons", "Only show exons, hide all introns, " +
+                     "except the ones present in another transcript", show === "exons");
+        h += multiRegionDialog.card("genes", "Genes", "Only show genes and introns, hide " +
+                     "intergenic space", show === "genes");
+        if (st.transcript)
+            h += multiRegionDialog.card("transcript", "Single transcript",
+                     "Show the exons of a single transcript", show === "transcript");
+        h += multiRegionDialog.card("track", "Track features",
+                     "The items of any other track, e.g. ENCODE cCREs or promoters",
+                     show === "track");
+        h += multiRegionDialog.card("regions", "My regions",
+                     "A manually entered list of regions", show === "regions");
+        if (st.altLoc || st.fixLoc)
+            h += multiRegionDialog.card("altHaplo", "Alt haplotype",
+                     "One alternate haplotype" + (st.fixLoc ? " or fix patch" : "") +
+                     ", placed on its chromosome", show === "altHaplo");
+        h += "</div>";
+
+        h += multiRegionDialog.section("mrGeneOpts", "Gene track",
+             "<label for='mrGeneTrackSel'>Take the gene models from</label> " +
+             "<select id='mrGeneTrackSel' class='mrSelect'>" +
+             "<option value=''>Loading the gene tracks...</option></select>" +
+             "<div class='mrQuickPicks'></div>");
+
+        h += multiRegionDialog.section("mrTransOpts", "Transcript",
+             "<label for='mrTranscriptSel'>Show the exons of</label> " +
+             "<select id='mrTranscriptSel' class='mrTranscriptSel'>" +
+             (st.transId ? "<option value='" + esc(st.transId) + "' data-chrom='" +
+                           esc(st.transChrom) + "' selected>" + esc(st.transId) + "</option>"
+                         : "") +
+             "</select>" +
+             "<div class='mrHint'>The transcripts of the gene track above that overlap the " +
+             "current view.</div>" +
+             "<div><input type='checkbox' id='mrTransCds'" + (st.transCds ? " checked" : "") +
+             "> <label for='mrTransCds'>Coding exons only</label></div>");
+
+        h += multiRegionDialog.section("mrTrackOpts", "Track",
+             "<label for='mrTrackSel'>Take the items of</label> " +
+             "<select id='mrTrackSel' class='mrSelect'>" +
+             (st.track ? "<option value='" + esc(st.track) + "' selected>" +
+                         esc(st.trackLabel) + "</option>" : "") +
+             "</select>" +
+             "<div class='mrHint'>Type a few letters of the track name. Your custom tracks " +
+             "and the tracks of your hubs are included. Filters set on the track are not " +
+             "applied.</div>");
+
+        h += multiRegionDialog.section("mrPadOpts", "Padding",
+             "<label for='mrPadding'><span class='mrPadExons'>Keep this much intron on each " +
+             "side of every exon</span><span class='mrPadGenes'>Keep this much on each side " +
+             "of every gene</span><span class='mrPadTrack'>Keep this much on each side of " +
+             "every item</span></label> " +
+             "<input type='number' id='mrPadding' class='mrPadding' min='0' value='" +
+             esc(pad) + "'> bp" +
+             "<div class='mrHint mrPadExons'>6 bp keeps the splice sites.</div>");
+
+        h += multiRegionDialog.section("mrRegionOpts", "Regions",
+             "<label for='mrBedInput'>Paste regions as BED, one per line, or a URL to a BED " +
+             "file:</label>" +
+             (multiRegionDialog.bedExamples[getDb()] ?
+                 " <a href='#' id='mrBedExample' title='Fill in the exons of TP53 as an " +
+                 "example'>Load example</a>" : "") + "<br>" +
+             "<textarea id='mrBedInput' rows='6' class='mrTextarea' " +
+             "placeholder='chr17 7661779 7687538'>" + esc(st.bedText) + "</textarea>" +
+             (st.showAll ? "<div><input type='checkbox' id='mrShowAll'" +
+                           (st.showAllRegions ? " checked" : "") + "> <label for='mrShowAll'>" +
+                           "Zoom out to show all regions at once</label></div>" : ""));
+
+        if (st.altLoc || st.fixLoc)
+            h += multiRegionDialog.section("mrAltOpts", "Alternate haplotype",
+                 "<label for='singleAltHaploId'>Name of the alternate haplotype" +
+                 (st.fixLoc ? " or fix patch" : "") + ":</label> " +
+                 "<input type='text' id='singleAltHaploId' size='40' value='" +
+                 esc(st.haplo) + "'>");
+
+        h += multiRegionDialog.section("mrDisplayOpts", "Display",
+             "<input type='checkbox' id='mrAltHighlight'" + (st.altHighlight ? " checked" : "") +
+             "> <label for='mrAltHighlight'>Shade every other region light blue</label>");
+
+        h += "<div class='mrFooter'>";
+        if (mode !== "default")
+            h += "<button type='button' id='mrExit' class='gbButton' title='Go back to the " +
+                 "normal view of one region of the genome'>Exit multi-region view</button>";
+        h += "<span class='mrFooterButtons'>" +
+             "<button type='button' id='mrCancel'>Cancel</button> " +
+             "<button type='button' id='mrSubmit' title='Show the genome as set above'>" +
+             "Show regions</button></span></div>";
+        h += "</div>";
+        return h;
+    },
+
+    show: function ()
+    {   // which card is picked
+        return $('#mrDialog input[name="mrShow"]:checked').val();
+    },
+
+    update: function ()
+    {   // show the sections that belong to the picked card
+        var show = multiRegionDialog.show();
+        var gene = (show === "exons" || show === "genes" || show === "transcript");
+        $('#mrDialog .mrCard').each(function () {
+            $(this).toggleClass('mrCardOn', $(this).find('input').prop('checked'));
+        });
+        $('#mrDialog .mrGeneOpts').toggle(gene);
+        $('#mrDialog .mrTransOpts').toggle(show === "transcript");
+        $('#mrDialog .mrTrackOpts').toggle(show === "track");
+        $('#mrDialog .mrPadOpts').toggle(show === "exons" || show === "genes" || show === "track");
+        $('#mrDialog .mrPadExons').toggle(show === "exons");
+        $('#mrDialog .mrPadGenes').toggle(show === "genes");
+        $('#mrDialog .mrPadTrack').toggle(show === "track");
+        $('#mrDialog .mrRegionOpts').toggle(show === "regions");
+        $('#mrDialog .mrAltOpts').toggle(show === "altHaplo");
+        $('#mrDialog .mrError').remove();
+        $('#mrSubmit').text(show === "altHaplo" ? "Show haplotype" :
+                            (show === "transcript" ? "Show transcript" : "Show regions"));
+        if (show === "transcript")
+            multiRegionDialog.loadTranscripts();
+    },
+
+    error: function (where, msg)
+    {   // show msg under the element where
+        $('#mrDialog .mrError').remove();
+        $('<div class="mrError"></div>').text(msg).insertAfter(where);
+    },
+
+    padding: function ()
+    {   // the padding box as a number, 0 if empty or negative
+        var pad = parseInt($('#mrPadding').val(), 10);
+        return (isNaN(pad) || pad < 0) ? 0 : pad;
+    },
+
+    geneValue: function ()
+    {   // the gene track picked:  B|track for a bigGenePred track, T|table for a genePred one
+        return $('#mrGeneTrackSel').val() || "";
+    },
+
+    vars: function (exit)
+    {   // The variables to send to hgTracks, or null if something is missing.
+        var v = {};
+        v.emAltHighlight = $('#mrAltHighlight').prop('checked') ? 1 : 0;
+        if (exit) {
+            v.virtModeType = "default";
+            return v;
+        }
+        var show = multiRegionDialog.show();
+        var pad = multiRegionDialog.padding();
+        var gene = multiRegionDialog.geneValue();
+        var isBig = gene.startsWith("B|");
+        var geneName = gene.substring(2);
+        if ((show === "exons" || show === "genes" || show === "transcript") && gene === "") {
+            multiRegionDialog.error($('#mrGeneTrackSel').parent(), "Please pick a gene track first.");
+            return null;
+        }
+        if (show === "exons" || show === "genes") {
+            if (isBig) {
+                v.virtModeType = (show === "exons" ? "maneExons" : "maneGenes");
+                v.mrBigGeneTrack = geneName;
+                v.manePadding = pad;
+            } else {
+                v.virtModeType = (show === "exons" ? "exonMostly" : "geneMostly");
+                v.emGeneTable = geneName;
+                v[show === "exons" ? "emPadding" : "gmPadding"] = pad;
+            }
+        } else if (show === "transcript") {
+            var opt = $('#mrTranscriptSel option:selected');
+            if (opt.length === 0 || !opt.val()) {
+                multiRegionDialog.error($('#mrTranscriptSel'), "Please pick a transcript first.");
+                return null;
+            }
+            v.virtModeType = "singleTrans";
+            v.singleTransId = opt.val();
+            v.singleTransTable = geneName;
+            v.singleTransChrom = opt.attr('data-chrom');
+            v.singleTransCds = $('#mrTransCds').prop('checked') ? 1 : 0;
+        } else if (show === "track") {
+            var track = $('#mrTrackSel').val();
+            if (!track) {
+                multiRegionDialog.error($('#mrTrackSel').parent(), "Please pick a track first.");
+                return null;
+            }
+            v.virtModeType = "trackItems";
+            v.mrTrack = track;
+            v.mrTrackPadding = pad;
+        } else if (show === "regions") {
+            v.virtModeType = "customUrl";
+            v.multiRegionsBedInput = $('#mrBedInput').val();
+            if ($('#mrShowAll').length)
+                v.virtWinFull = $('#mrShowAll').prop('checked') ? 1 : 0;
+        } else if (show === "altHaplo") {
+            v.virtModeType = "singleAltHaplo";
+            v.singleAltHaploId = $('#singleAltHaploId').val();
+        }
+        return v;
+    },
+
+    submit: function (exit)
+    {   // post the dialog to hgTracks
+        var v = multiRegionDialog.vars(exit);
+        if (v === null)
+            return;
+        v.hgsid = getHgsid();
+        v.db = getDb();
+        var form = $('<form method="POST"></form>').attr('action', '../cgi-bin/hgTracks');
+        Object.keys(v).forEach(function (name) {
+            $('<input type="hidden">').attr('name', name).val(v[name]).appendTo(form);
+        });
+        form.appendTo('body').trigger('submit');
+    },
+
+    fetchJson: function (params)
+    {   // ask hgTracks for one of the dialog's lists
+        var url = '../cgi-bin/hgTracks?hgsid=' + encodeURIComponent(getHgsid()) +
+                  '&db=' + encodeURIComponent(getDb());
+        Object.keys(params).forEach(function (name) {
+            url += '&' + name + '=' + encodeURIComponent(params[name]);
+        });
+        return fetch(url, {credentials: 'same-origin'}).then(function (resp) {
+            if (!resp.ok)
+                throw new Error('HTTP ' + resp.status);
+            return resp.json();
+        });
+    },
+
+    loadGeneTracks: function ()
+    {   // fill the gene track menu and the quick picks
+        if (multiRegionDialog.geneList)
+            multiRegionDialog.fillGeneTracks(multiRegionDialog.geneList);
+        else
+            multiRegionDialog.fetchJson({'hgt.mrGeneTracks': 1})
+                .then(function (data) {
+                    if (data.error)
+                        throw new Error(data.error);
+                    multiRegionDialog.geneList = data;
+                    multiRegionDialog.fillGeneTracks(data);
+                })
+                .catch(function (err) {
+                    $('#mrGeneTrackSel').html("<option value=''>Could not load the gene tracks</option>");
+                    if (window.console)
+                        console.log("multi-region gene tracks: " + err);
+                });
+    },
+
+    fillGeneTracks: function (data)
+    {
+        if (!$('#mrDialog').length)
+            return;     // closed meanwhile
+        var esc = multiRegionDialog.esc;
+        var items = data.items || [];
+        if (items.length === 0) {
+            // no gene track here:  the gene choices go, own regions is picked
+            $('#mrDialog input[name="mrShow"]').filter('[value="exons"],[value="genes"],' +
+                '[value="transcript"]').closest('.mrCard').remove();
+            if (!multiRegionDialog.show())
+                $('#mrDialog input[name="mrShow"][value="regions"]').prop('checked', true);
+            multiRegionDialog.update();
+            return;
+        }
+        // the gene track picked now; without B| or T| either kind
+        var cur = multiRegionDialog.st().gene || "";
+        var curValue = "";
+        items.forEach(function (it) {
+            if (curValue === "" && (it.value === cur || it.value.substring(2) === cur))
+                curValue = it.value;
+        });
+        if (curValue === "")
+            curValue = items[0].value;
+        var h = "", group = null;
+        items.forEach(function (it) {
+            if (it.group !== group) {
+                h += (group === null ? "" : "</optgroup>") +
+                     "<optgroup label='" + esc(it.group) + "'>";
+                group = it.group;
+            }
+            h += "<option value='" + esc(it.value) + "'" +
+                 (it.value === curValue ? " selected" : "") + ">" + esc(it.text) + "</option>";
+        });
+        $('#mrGeneTrackSel').html(h + "</optgroup>");
+        var q = (data.quick || []).map(function (it) {
+            return "<a href='#' class='mrQuickPick' data-value='" + esc(it.value) +
+                   "' title='" + esc(it.title) + "'>" + esc(it.label) + "</a>";
+        });
+        $('#mrDialog .mrQuickPicks').html(q.length ? "Quick pick: " + q.join(" | ") : "");
+        $('#mrDialog .mrQuickPick').on('click', function (ev) {
+            ev.preventDefault();
+            var value = $(this).attr('data-value');
+            var ss = $('#mrGeneTrackSel')[0].selectize;
+            if (ss)
+                ss.setValue(value);
+            else
+                $('#mrGeneTrackSel').val(value).trigger('change');
+        });
+        $('#mrGeneTrackSel').on('change', function () {
+            multiRegionDialog.markQuickPick();
+            if (multiRegionDialog.show() === "transcript")
+                multiRegionDialog.loadTranscripts();
+        });
+        multiRegionDialog.makeSelectize($('#mrGeneTrackSel'), {
+            maxOptions: 100000,
+            respect_word_boundaries: false
+        });
+        multiRegionDialog.markQuickPick();
+        if (multiRegionDialog.show() === "transcript")
+            multiRegionDialog.loadTranscripts();
+    },
+
+    markQuickPick: function ()
+    {   // the quick pick of the gene track that is picked is bold
+        var value = multiRegionDialog.geneValue();
+        $('#mrDialog .mrQuickPick').each(function () {
+            $(this).toggleClass('mrQuickOn', $(this).attr('data-value') === value);
+        });
+    },
+
+    viewPosition: function ()
+    {   // the part of the genome in view, as chrom:start-end
+        return $('#positionDisplay').text().replace(/,/g, '').trim();
+    },
+
+    loadTranscripts: function ()
+    {   // fill the transcript menu with the transcripts of the gene track in view
+        var gene = multiRegionDialog.geneValue();
+        if (gene === "")
+            return;
+        var sel = $('#mrTranscriptSel');
+        var keep = sel.val() || multiRegionDialog.st().transId;
+        if (sel.attr('data-for') === gene)
+            return;     // already the list of this track
+        sel.attr('data-for', gene);
+        sel.html("<option value=''>Loading the transcripts...</option>");
+        multiRegionDialog.fetchJson({'hgt.mrTranscripts': gene.substring(2),
+                                     'hgt.mrPos': multiRegionDialog.viewPosition()})
+            .then(function (data) {
+                if (data.error)
+                    throw new Error(data.error);
+                var esc = multiRegionDialog.esc;
+                var items = data.items || [];
+                if (items.length === 0) {
+                    sel.html("<option value=''>No transcripts of this track in view</option>");
+                    return;
+                }
+                var h = "";
+                items.forEach(function (it) {
+                    h += "<option value='" + esc(it.value) + "' data-chrom='" + esc(it.chrom) +
+                         "'" + (it.value === keep ? " selected" : "") + ">" + esc(it.text) +
+                         "</option>";
+                });
+                if (data.more)
+                    h += "<option value='' disabled>More transcripts in view, zoom in to " +
+                         "see them</option>";
+                sel.html(h);
+            })
+            .catch(function (err) {
+                sel.html("<option value=''>Could not load the transcripts</option>");
+                if (window.console)
+                    console.log("multi-region transcripts: " + err);
+            });
+    },
+
+    trackLoader: function (query, callback)
+    {   // Selectize load function of the track menu:  ask hgTracks for the matching tracks
+        var self = this;
+        multiRegionDialog.fetchJson({'hgt.mrTrackSearch': query})
+            .then(function (data) {
+                var items = data.items || [];
+                if (data.total > items.length)
+                    items.push({value: '\u0000more', disabled: true, descr: '',
+                                text: (data.total - items.length).toLocaleString() +
+                                      ' more, type more to narrow the list'});
+                // only show this answer, but keep the selected track
+                Object.keys(self.options).forEach(function (value) {
+                    if (self.items.indexOf(value) < 0)
+                        delete self.options[value];
+                });
+                self.sifter.items = self.options;
+                self.renderCache = {};
+                self.loadedSearches = {};
+                callback(items);
+            })
+            .catch(function () {
+                callback();
+            });
+    },
+
+    makeSelectize: function (sel, config)
+    {   // make sel a Selectize dropdown, if Selectize is loaded
+        if (typeof $.fn.selectize === 'undefined' || typeof tbTypeToSearch === 'undefined')
+            return;
+        sel.selectize(tbTypeToSearch(config));
+        var ss = sel[0].selectize;
+        if (ss) {
+            multiRegionDialog.selectizes.push(ss);
+            tbDropdowns.push(ss);   // so that opening one closes the other
+        }
+    },
+
+    cleanup: function ()
+    {   // remove the Selectize dropdowns, which live in the body, and the dialog
+        multiRegionDialog.selectizes.forEach(function (ss) {
+            var i = tbDropdowns.indexOf(ss);
+            if (i >= 0)
+                tbDropdowns.splice(i, 1);
+            ss.destroy();
+        });
+        multiRegionDialog.selectizes = [];
+        $('#mrDialogBox').remove();
+    },
+
+    open: function ()
+    {   // build the dialog and show it
+        multiRegionDialog.cleanup();
+        var box = $("<div id='mrDialogBox'></div>").html(multiRegionDialog.html());
+        $('body').append(box);
+        box.dialog({
+            title: "Multi-region view",
+            modal: true,
+            resizable: false,
+            width: Math.min(Math.round($(window).width() * 0.9), $(window).width() - 40),
+            height: 'auto',
+            maxHeight: Math.round($(window).height() * 0.95),
+            closeOnEscape: true,
+            close: function () {
+                multiRegionDialog.cleanup();
+            }
+        });
+        $('#mrDialog input[name="mrShow"]').on('change', multiRegionDialog.update);
+        $('#mrDialog .mrPadding').on('keydown', function (ev) {
+            if (ev.key === "Enter") {
+                ev.preventDefault();
+                multiRegionDialog.submit(false);
+            }
+        });
+        $('#mrSubmit').on('click', function () { multiRegionDialog.submit(false); });
+        $('#mrExit').on('click', function () { multiRegionDialog.submit(true); });
+        $('#mrCancel').on('click', function () { box.dialog('close'); });
+        $('#mrBedExample').on('click', function (ev) {
+            ev.preventDefault();
+            $('#mrBedInput').val(multiRegionDialog.bedExamples[getDb()]);
+        });
+        multiRegionDialog.makeSelectize($('#mrTrackSel'), {
+            placeholder: 'Type to search all tracks',
+            valueField: 'value',
+            labelField: 'text',
+            searchField: ['text', 'descr'],
+            maxOptions: 1000,
+            preload: 'focus',
+            loadThrottle: 250,
+            load: multiRegionDialog.trackLoader,
+            // the server has matched every word already, show all it sent
+            score: function () { return function () { return 1; }; },
+            render: {
+                option: function (item, escape) {
+                    return '<div class="option"><b>' + escape(item.text) + '</b>' +
+                           (item.descr ? '<br><span class="mrOptDescr">' + escape(item.descr) +
+                                         '</span>' : '') + '</div>';
+                }
+            }
+        });
+        if ($('#singleAltHaploId').length)
+            autocompleteCat.init($('#singleAltHaploId'),
+                                 { baseUrl: 'hgSuggest?db=' + getDb() + '&type=altOrPatch&prefix=',
+                                   enterSelectsIdentical: true });
+        multiRegionDialog.update();
+        multiRegionDialog.loadGeneTracks();
     }
 };
 

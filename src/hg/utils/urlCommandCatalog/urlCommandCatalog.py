@@ -790,6 +790,36 @@ SETTINGS_ON_URL = {
         c("virtModeType", "setting", "hg/hgTracks/hgTracks.c",
           value="<mode>", persists=True, verified=True,
           note="Multi-region display mode."),
+        c("mrBigGeneTrack", "setting", "hg/hgTracks/hgTracks.c",
+          value="<track>", persists=True, verified=True,
+          note="bigGenePred track whose transcripts the multi-region modes maneExons and "
+               "maneGenes lay out, set by the new multi-region dialog (hg.conf "
+               "multiRegionNewUi).  Default and fallback: mane.  refs #38830"),
+        c("mrTrack", "setting", "hg/hgTracks/hgTracks.c",
+          value="<track>", persists=True, verified=True,
+          note="Track whose items the multi-region mode trackItems lays out: a bigBed "
+               "family track (native, hub or custom) or a table of items (native, or a "
+               "custom track in customTrash).  hg.conf multiRegionNewUi.  refs #38830"),
+        c("mrTrackPadding", "setting", "hg/hgTracks/hgTracks.c",
+          value="<bases>", persists=True, verified=True,
+          note="Bases kept on each side of every item in trackItems.  refs #38830"),
+        c("hgt.mrTrackSearch", "action", "hg/hgTracks/mainMain.c",
+          value="<words>", verified=True,
+          note="JSON track search of the multi-region dialog's track menu: the tracks "
+               "trackItems can use whose labels contain all words, at most 200.  The "
+               "cart is read, not saved.  refs #38830"),
+        c("hgt.mrGeneTracks", "action", "hg/hgTracks/mainMain.c",
+          value="1", verified=True,
+          note="JSON gene track menu of the multi-region dialog: the genePred and "
+               "bigGenePred tracks (bigGenePred also from hubs, e.g. hs1) and the quick "
+               "picks.  The cart is read, not saved.  refs #38830"),
+        c("hgt.mrTranscripts", "action", "hg/hgTracks/mainMain.c",
+          value="<track>", verified=True,
+          note="JSON transcript menu of the multi-region dialog: the transcripts of the "
+               "gene track that overlap hgt.mrPos, at most 500.  refs #38830"),
+        c("hgt.mrPos", "action", "hg/hgTracks/config.c",
+          value="<chrom:start-end>", verified=True,
+          note="Position for hgt.mrTranscripts.  refs #38830"),
         c("multiRegionsBedUrl", "setting", "hg/hgTracks/hgTracks.c",
           value="<url>", persists=True, public=True, verified=True,
           note="Multi-region definition fetched from a URL."),

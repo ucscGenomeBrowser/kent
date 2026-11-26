@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "dystring.h"
+#include "obscure.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "hdb.h"
@@ -22,6 +23,12 @@
 #include "fileUi.h"
 #include "trackHub.h"
 #include "versionInfo.h"
+#include "jsonWrite.h"
+#include "cartTrackDb.h"
+#include "errCatch.h"
+#include "bigBed.h"
+#include "chromAlias.h"
+#include "multiRegionSpace.h"
 
 static void themeMenuEntry(char *cfgName, char **retLabel, char **retValue)
 /* Split an hg.conf browser.theme.* key into the menu label and the option value.
@@ -1072,6 +1079,426 @@ void configPage()
 /* Put up configuration page. */
 {
 configPageSetTrackVis(-2);
+}
+
+struct mrGeneTrack
+/* A track the new multi-region dialog offers as the source of exons or genes. */
+    {
+    struct mrGeneTrack *next;
+    char *value;        /* table name of a genePred track, track name of a bigGenePred one */
+    char *label;        /* what the menu shows */
+    boolean isBig;      /* bigGenePred, read by maneExons/maneGenes;  else exonMostly/geneMostly */
+    char *composite;    /* name of the composite it is in, or NULL */
+    int rank;           /* sort order:  recommended tracks and their composite first */
+    };
+
+#define MR_NOT_RECOMMENDED 10000    /* rank of a track that is not among the recommended */
+
+static int mrGeneTrackCmp(const void *va, const void *vb)
+/* Recommended tracks first in their order, then the rest by label. */
+{
+const struct mrGeneTrack *a = *((struct mrGeneTrack **)va);
+const struct mrGeneTrack *b = *((struct mrGeneTrack **)vb);
+if (a->rank != b->rank)
+    return a->rank - b->rank;
+return strcasecmp(a->label, b->label);
+}
+
+static char *mrRecommended[] = {"mane", "knownGene", "catLiftOffGenesV1", "ncbiRefSeqCurated",
+                                "ncbiRefSeq", "refGene", "ensGene"};
+
+static void mrAddGeneTracks(struct trackDb *tdbList, struct hash *seen,
+                            struct mrGeneTrack **pList)
+/* Add the native genePred and bigGenePred tracks of tdbList and their subtracks. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (tdb->subtracks != NULL)
+        {
+        mrAddGeneTracks(tdb->subtracks, seen, pList);
+        continue;
+        }
+    if (tdb->type == NULL || isCustomTrack(tdb->track) || hashLookup(seen, tdb->track))
+        continue;
+    /* a bigGenePred track can also come from a hub, on any assembly (hs1:  CAT/Liftoff,
+     * NCBI RefSeq);  a genePred table only from the assembly's own database */
+    boolean isBig = startsWith("bigGenePred", tdb->type);
+    /* exonMostly reads the table by the track's name, so they must be the same */
+    boolean isSql = startsWith("genePred", tdb->type) && sameOk(tdb->track, tdb->table) &&
+                    !isHubTrack(tdb->track) && !trackHubDatabase(database);
+    if (!isBig && !isSql)
+        continue;
+    hashAdd(seen, tdb->track, NULL);
+    struct mrGeneTrack *gt;
+    AllocVar(gt);
+    gt->value = isBig ? tdb->track : tdb->table;
+    gt->isBig = isBig;
+    struct trackDb *parent = tdbGetComposite(tdb);   // above any view
+    if (parent != NULL)
+        {
+        char buf[1024];
+        safef(buf, sizeof buf, "%s - %s", parent->shortLabel, tdb->shortLabel);
+        gt->label = cloneString(buf);
+        }
+    else
+        gt->label = tdb->shortLabel;
+    gt->composite = parent ? parent->track : NULL;
+    gt->rank = MR_NOT_RECOMMENDED;
+    int i;
+    for (i = 0; i < ArraySize(mrRecommended); i++)
+        if (sameString(trackHubSkipHubName(gt->value), mrRecommended[i]))  // also hs1's tracks
+            gt->rank = 10 * i;
+    slAddHead(pList, gt);
+    }
+}
+
+static void mrRankCompositeSiblings(struct mrGeneTrack *list)
+/* Put the other tracks of a composite that has a recommended track (e.g. RefSeq HGMD
+ * beside RefSeq Curated) right after the last recommended one of that composite. */
+{
+struct hash *lastRank = hashNew(0);
+struct mrGeneTrack *gt;
+for (gt = list; gt != NULL; gt = gt->next)
+    if (gt->composite != NULL && gt->rank < MR_NOT_RECOMMENDED)
+        {
+        int old = hashIntValDefault(lastRank, gt->composite, -1);
+        if (gt->rank > old)
+            hashReplace(lastRank, gt->composite, intToPt(gt->rank));
+        }
+for (gt = list; gt != NULL; gt = gt->next)
+    if (gt->composite != NULL && gt->rank == MR_NOT_RECOMMENDED)
+        {
+        int last = hashIntValDefault(lastRank, gt->composite, -1);
+        if (last >= 0)
+            gt->rank = last + 5;
+        }
+hashFree(&lastRank);
+}
+
+static boolean mrIsGeneType(struct trackDb *tdb)
+/* Gene tracks are offered in the gene track menu, not in the track search. */
+{
+return startsWith("genePred", tdb->type) || startsWith("bigGenePred", tdb->type);
+}
+
+static char *mrTrackLabel(struct trackDb *tdb)
+/* The label the track search shows:  the composite's label in front of a subtrack's. */
+{
+struct trackDb *parent = tdbGetComposite(tdb);
+if (parent == NULL)
+    return cloneString(tdb->shortLabel);
+char buf[1024];
+safef(buf, sizeof buf, "%s - %s", parent->shortLabel, tdb->shortLabel);
+return cloneString(buf);
+}
+
+static boolean mrMatchesAll(struct slName *words, char *text)
+/* Is every word in text, ignoring case? */
+{
+struct slName *w;
+for (w = words; w != NULL; w = w->next)
+    if (!containsStringNoCase(text, w->name))
+        return FALSE;
+return TRUE;
+}
+
+struct mrFound
+/* A track the track search found. */
+    {
+    struct mrFound *next;
+    struct trackDb *tdb;
+    char *label;
+    int score;          /* 0 if the label starts with the first word, else 1 */
+    };
+
+static int mrFoundCmp(const void *va, const void *vb)
+/* Better matches first, then by label. */
+{
+const struct mrFound *a = *((struct mrFound **)va);
+const struct mrFound *b = *((struct mrFound **)vb);
+if (a->score != b->score)
+    return a->score - b->score;
+return strcasecmp(a->label, b->label);
+}
+
+static void mrSearchTracks(struct trackDb *tdbList, struct slName *words, struct hash *seen,
+                           struct mrFound **pList)
+/* Add the tracks under tdbList that trackItems can use and that match all words. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (tdb->subtracks != NULL)
+        {
+        mrSearchTracks(tdb->subtracks, words, seen, pList);
+        continue;
+        }
+    if (hashLookup(seen, tdb->track) || mrIsGeneType(tdb) || !multiRegionTrackUsable(tdb))
+        continue;
+    hashAdd(seen, tdb->track, NULL);
+    char *label = mrTrackLabel(tdb);
+    char text[4096];
+    safef(text, sizeof text, "%s %s %s", label, tdb->longLabel, tdb->track);
+    if (!mrMatchesAll(words, text))
+        {
+        freeMem(label);
+        continue;
+        }
+    struct mrFound *f;
+    AllocVar(f);
+    f->tdb = tdb;
+    f->label = label;
+    f->score = (words == NULL || startsWithNoCase(words->name, label)) ? 0 : 1;
+    slAddHead(pList, f);
+    }
+}
+
+static void mrWriteTranscript(struct jsonWrite *jw, char *name, char *gene, char *chrom,
+                              unsigned start, unsigned end, char *strand)
+/* One transcript of the transcript menu:  its name, chrom, and the text the menu shows. */
+{
+char text[1024];
+char startBuf[32], endBuf[32];
+if (sameOk(gene, name))     // some files repeat the accession as the gene name
+    gene = "";
+sprintLongWithCommas(startBuf, start + 1);
+sprintLongWithCommas(endBuf, end);
+safef(text, sizeof text, "%s%s%s%s  %s:%s-%s %s", name, isNotEmpty(gene) ? " (" : "",
+      isNotEmpty(gene) ? gene : "", isNotEmpty(gene) ? ")" : "", chrom, startBuf, endBuf,
+      strand);
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "value", name);
+jsonWriteString(jw, "chrom", chrom);
+jsonWriteString(jw, "text", text);
+jsonWriteObjectEnd(jw);
+}
+
+void multiRegionTrackSearch()
+/* Answer the multi-region dialog's track search, hgt.mrTrackSearch=<words>, with JSON:
+ * the tracks whose items trackItems can lay out (no gene tracks, those have their own
+ * menu) and whose labels or name contain all words, at most 200, and how many matched.
+ * The cart is read but never saved.  refs #38830 */
+{
+struct errCatch *errCatch = errCatchNew();
+struct jsonWrite *jw = jsonWriteNew();
+if (errCatchStart(errCatch))
+    {
+    cart = cartForSession(hUserCookie(), NULL, NULL);
+    database = cartUsualString(cart, "db", hDefaultDb());
+    struct trackDb *tdbList = NULL;
+    struct grp *grpList = NULL;
+    cartTrackDbInitForApi(cart, database, &tdbList, &grpList, FALSE);
+    char *query = cloneString(cgiUsualString("hgt.mrTrackSearch", ""));
+    struct slName *words = slNameListFromString(query, ' ');
+    struct hash *seen = hashNew(0);
+    struct mrFound *found = NULL, *f;
+    mrSearchTracks(tdbList, words, seen, &found);
+    slSort(&found, mrFoundCmp);
+    int total = slCount(found), n = 0;
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteNumber(jw, "total", total);
+    jsonWriteListStart(jw, "items");
+    for (f = found; f != NULL && n < 200; f = f->next, n++)
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "value", f->tdb->track);
+        jsonWriteString(jw, "text", f->label);
+        jsonWriteString(jw, "descr", f->tdb->longLabel);
+        jsonWriteObjectEnd(jw);
+        }
+    jsonWriteListEnd(jw);
+    jsonWriteObjectEnd(jw);
+    }
+errCatchEnd(errCatch);
+cgiPrintContentType("application/json");
+if (errCatch->gotError)
+    {
+    jsonWriteFree(&jw);
+    jw = jsonWriteNew();
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "error", errCatch->message->string);
+    jsonWriteObjectEnd(jw);
+    }
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+errCatchFree(&errCatch);
+}
+
+void multiRegionTranscriptList()
+/* Answer the multi-region dialog's transcript menu, hgt.mrTranscripts=<gene track> with
+ * hgt.mrPos=<chrom:start-end>, with JSON:  the transcripts of the track that overlap the
+ * position, at most 500, in genomic order.  Native genePred and bigGenePred tracks only,
+ * the ones the gene track menu offers.  The cart is read but never saved.  refs #38830 */
+{
+struct errCatch *errCatch = errCatchNew();
+struct jsonWrite *jw = jsonWriteNew();
+if (errCatchStart(errCatch))
+    {
+    cart = cartForSession(hUserCookie(), NULL, NULL);
+    database = cartUsualString(cart, "db", hDefaultDb());
+    char *track = cgiString("hgt.mrTranscripts");
+    char *pos = cloneString(cgiUsualString("hgt.mrPos", ""));
+    stripChar(pos, ',');
+    char *chrom = NULL;
+    int start = 0, end = 0;
+    if (!hgParseChromRange(database, pos, &chrom, &start, &end))
+        errAbort("Cannot list transcripts for position %s", pos);
+    struct sqlConnection *conn = trackHubDatabase(database) ? NULL : hAllocConn(database);
+    struct trackDb *tdb = NULL;
+    if (isHubTrack(track))
+        tdb = hubConnectAddHubForTrackAndFindTdb(database, track, NULL, hashNew(0));
+    else if (conn != NULL)
+        tdb = hMaybeTrackInfo(conn, track);
+    if (tdb == NULL)
+        errAbort("Unknown gene track %s", track);
+    int maxItems = 500, count = 0;
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteListStart(jw, "items");
+    if (startsWith("bigGenePred", tdb->type))
+        {
+        char *fileName = hReplaceGbdb(bbiNameFromSettingOrTable(tdb, conn, tdb->table));
+        struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+        /* The gene symbol column:  the files differ (MANE has it in geneName2, GENCODE in
+         * geneName), so take the name column whose description says symbol. */
+        struct asObject *as = bigBedAsOrDefault(bbi);
+        int geneIx = -1, ix = 0;
+        struct asColumn *col;
+        for (col = as->columnList; col != NULL; col = col->next, ix++)
+            if ((sameString(col->name, "geneName") || sameString(col->name, "geneName2") ||
+                 sameString(col->name, "name2")) && col->comment != NULL &&
+                containsStringNoCase(col->comment, "symbol"))
+                {
+                geneIx = ix;
+                break;
+                }
+        if (geneIx < 0)
+            geneIx = asColumnFindIx(as->columnList, "geneName");
+        struct lm *lm = lmInit(0);
+        struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end,
+                                                                 maxItems, lm);
+        for (bb = bbList; bb != NULL; bb = bb->next, count++)
+            {
+            char startBuf[16], endBuf[16];
+            char *row[bbi->fieldCount];
+            bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, bbi->fieldCount);
+            char *gene = (geneIx >= 0 && geneIx < bbi->fieldCount) ? row[geneIx] : "";
+            mrWriteTranscript(jw, row[3], gene, chrom, bb->start, bb->end, row[5]);
+            }
+        lmCleanup(&lm);
+        bigBedFileClose(&bbi);
+        }
+    else if (startsWithWord("genePred", tdb->type) && conn != NULL)
+        {
+        boolean hasName2 = (sqlFieldIndex(conn, tdb->table, "name2") >= 0);
+        char query[1024];
+        sqlSafef(query, sizeof query, "select name, %s, strand, txStart, txEnd from %s "
+                 "where chrom='%s' and txStart < %d and txEnd > %d order by txStart limit %d",
+                 hasName2 ? "name2" : "name", tdb->table, chrom, end, start, maxItems);
+        struct sqlResult *sr = sqlGetResult(conn, query);
+        char **row;
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            mrWriteTranscript(jw, row[0], hasName2 ? row[1] : "", chrom, sqlUnsigned(row[3]),
+                              sqlUnsigned(row[4]), row[2]);
+            count++;
+            }
+        sqlFreeResult(&sr);
+        }
+    else
+        errAbort("%s is not a gene track", tdb->shortLabel);
+    hFreeConn(&conn);
+    jsonWriteListEnd(jw);
+    jsonWriteBoolean(jw, "more", count >= maxItems);
+    jsonWriteObjectEnd(jw);
+    }
+errCatchEnd(errCatch);
+cgiPrintContentType("application/json");
+if (errCatch->gotError)
+    {
+    jsonWriteFree(&jw);
+    jw = jsonWriteNew();
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "error", errCatch->message->string);
+    jsonWriteObjectEnd(jw);
+    }
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+errCatchFree(&errCatch);
+}
+
+void multiRegionGeneTrackList()
+/* Answer the multi-region dialog's gene track menu, hgt.mrGeneTracks=1, with JSON:  the
+ * native genePred and bigGenePred tracks, recommended ones and their composites first,
+ * and the quick picks this assembly has.  The cart is read but never saved.  refs #38830 */
+{
+struct errCatch *errCatch = errCatchNew();
+struct jsonWrite *jw = jsonWriteNew();
+if (errCatchStart(errCatch))
+    {
+    cart = cartForSession(hUserCookie(), NULL, NULL);
+    database = cartUsualString(cart, "db", hDefaultDb());
+    struct mrGeneTrack *geneTracks = NULL, *gt;
+    struct trackDb *tdbList = NULL;
+    struct grp *grpList = NULL;
+    cartTrackDbInitForApi(cart, database, &tdbList, &grpList, FALSE);
+    mrAddGeneTracks(tdbList, hashNew(0), &geneTracks);
+    mrRankCompositeSiblings(geneTracks);
+    slSort(&geneTracks, mrGeneTrackCmp);
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteListStart(jw, "items");
+    for (gt = geneTracks; gt != NULL; gt = gt->next)
+        {
+        /* B| a bigGenePred track, T| a genePred table:  Selectize keeps only the value */
+        char value[1024];
+        safef(value, sizeof value, "%s%s", gt->isBig ? "B|" : "T|", gt->value);
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "value", value);
+        jsonWriteString(jw, "text", gt->label);
+        jsonWriteString(jw, "group", gt->rank < MR_NOT_RECOMMENDED ? "Recommended"
+                                                                   : "All gene tracks");
+        jsonWriteObjectEnd(jw);
+        }
+    jsonWriteListEnd(jw);
+    /* Quick picks for the gene tracks most people want, those this assembly has */
+    static char *quickTracks[][2] = {{"mane", "MANE"}, {"knownGene", "GENCODE"},
+        {"catLiftOffGenesV1", "CAT/Liftoff"},
+        {"ncbiRefSeqCurated", "RefSeq Curated"}, {"ncbiRefSeqSelect", "RefSeq Select"},
+        {"ncbiRefSeqHgmd", "RefSeq HGMD"}, {"refGene", "UCSC RefSeq"},
+        {"ensGene", "Ensembl"}};
+    jsonWriteListStart(jw, "quick");
+    int q;
+    for (q = 0; q < ArraySize(quickTracks); q++)
+        {
+        for (gt = geneTracks; gt != NULL; gt = gt->next)
+            if (sameString(trackHubSkipHubName(gt->value), quickTracks[q][0]))
+                break;
+        if (gt == NULL)
+            continue;
+        char value[1024];
+        safef(value, sizeof value, "%s%s", gt->isBig ? "B|" : "T|", gt->value);
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "value", value);
+        jsonWriteString(jw, "label", quickTracks[q][1]);
+        jsonWriteString(jw, "title", gt->label);
+        jsonWriteObjectEnd(jw);
+        }
+    jsonWriteListEnd(jw);
+    jsonWriteObjectEnd(jw);
+    }
+errCatchEnd(errCatch);
+cgiPrintContentType("application/json");
+if (errCatch->gotError)
+    {
+    jsonWriteFree(&jw);
+    jw = jsonWriteNew();
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "error", errCatch->message->string);
+    jsonWriteObjectEnd(jw);
+    }
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+errCatchFree(&errCatch);
 }
 
 // TODO GALT there is duplication still between config and configMultiRegionPageSetTrackVis

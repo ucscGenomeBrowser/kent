@@ -98,6 +98,27 @@ else if (cfgOptionBooleanDefault("doMyVariants", FALSE)
     cart = cartForSession(hUserCookie(), NULL, NULL);
     myVariantsDownloadApiHandler(cgiString(MYVARIANTS_DOWNLOAD_CGI_VAR));
     }
+else if (multiRegionNewUi() && cgiVarExists("hgt.mrGeneTracks"))
+    {
+    // Gene track menu of the multi-region dialog.  Return now so nothing follows the JSON.
+    multiRegionGeneTrackList();
+    cgiExitTime("hgTracks", enteredMainTime);
+    return 0;
+    }
+else if (multiRegionNewUi() && cgiVarExists("hgt.mrTranscripts"))
+    {
+    // Transcript menu of the multi-region dialog.  Return now so nothing follows the JSON.
+    multiRegionTranscriptList();
+    cgiExitTime("hgTracks", enteredMainTime);
+    return 0;
+    }
+else if (multiRegionNewUi() && cgiVarExists("hgt.mrTrackSearch"))
+    {
+    // Track search of the multi-region dialog.  Return now so nothing follows the JSON.
+    multiRegionTrackSearch();
+    cgiExitTime("hgTracks", enteredMainTime);
+    return 0;
+    }
 else if (trackFinderEnabled() && cgiVarExists(CARTJSON_COMMAND))
     {
     // Track list for the Find Tracks dialog.  Return now so nothing follows the JSON.
