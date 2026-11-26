@@ -6851,8 +6851,12 @@ var multiRegionDialog = {
                  esc(st.haplo) + "'>");
 
         h += multiRegionDialog.section("mrDisplayOpts", "Display",
-             "<input type='checkbox' id='mrAltHighlight'" + (st.altHighlight ? " checked" : "") +
-             "> <label for='mrAltHighlight'>Shade every other region light blue</label>");
+             "<div class='mrExonNumOpt'><input type='checkbox' id='mrExonNumbers'" +
+             (st.exonNumbers !== false ? " checked" : "") +
+             "> <label for='mrExonNumbers'>Number the exons above the ruler</label></div>" +
+             "<div><input type='checkbox' id='mrAltHighlight'" +
+             (st.altHighlight ? " checked" : "") +
+             "> <label for='mrAltHighlight'>Shade every other region light blue</label></div>");
 
         h += "<div class='mrFooter'>";
         if (mode !== "default")
@@ -6885,6 +6889,7 @@ var multiRegionDialog = {
         $('#mrDialog .mrPadExons').toggle(show === "exons");
         $('#mrDialog .mrPadGenes').toggle(show === "genes");
         $('#mrDialog .mrPadTrack').toggle(show === "track");
+        $('#mrDialog .mrExonNumOpt').toggle(show === "exons" || show === "transcript");
         $('#mrDialog .mrRegionOpts').toggle(show === "regions");
         $('#mrDialog .mrAltOpts').toggle(show === "altHaplo");
         $('#mrDialog .mrError').remove();
@@ -6915,6 +6920,7 @@ var multiRegionDialog = {
     {   // The variables to send to hgTracks, or null if something is missing.
         var v = {};
         v.emAltHighlight = $('#mrAltHighlight').prop('checked') ? 1 : 0;
+        v.mrExonNumbers = $('#mrExonNumbers').prop('checked') ? 1 : 0;
         if (exit) {
             v.virtModeType = "default";
             return v;

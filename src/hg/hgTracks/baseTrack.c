@@ -167,6 +167,26 @@ for (range = ranges; range != NULL; range = range->next)
     }
 }
 
+void forEachSourceRange(char *chainFile, char *chrom, int start, int end, int insideX,
+                        int width, sourceRangeFunc *func, void *context)
+/* Call func for each source range of the window:  its source sequence, its whole source
+ * span, and the pixels of its part on screen.  For labels above the ruler, e.g. exon
+ * numbers.  refs #38830 */
+{
+struct baseRange *range, *ranges = loadBaseRangesFromChain(chainFile, chrom, start, end);
+double scale = scaleForWindow(width, start, end);
+for (range = ranges; range != NULL; range = range->next)
+    {
+    int s = max((int)range->start, start);
+    int e = min((int)range->end, end);
+    if (s >= e)
+        continue;
+    int x1 = insideX + round((double)(s - start) * scale);
+    int x2 = insideX + round((double)(e - start) * scale);
+    func(range->chrom, range->qStart, range->qEnd, x1, x2 - x1, context);
+    }
+}
+
 void mapSourceRangePositions(struct imgTrack *imgTrack, char *chainFile, char *chrom,
                              int start, int end, int insideX, int width, int y1, int y2)
 /* Put a map box over the ruler for each source range in the window, whose mouseover is

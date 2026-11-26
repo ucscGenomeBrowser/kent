@@ -1359,21 +1359,7 @@ if (errCatchStart(errCatch))
         {
         char *fileName = hReplaceGbdb(bbiNameFromSettingOrTable(tdb, conn, tdb->table));
         struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
-        /* The gene symbol column:  the files differ (MANE has it in geneName2, GENCODE in
-         * geneName), so take the name column whose description says symbol. */
-        struct asObject *as = bigBedAsOrDefault(bbi);
-        int geneIx = -1, ix = 0;
-        struct asColumn *col;
-        for (col = as->columnList; col != NULL; col = col->next, ix++)
-            if ((sameString(col->name, "geneName") || sameString(col->name, "geneName2") ||
-                 sameString(col->name, "name2")) && col->comment != NULL &&
-                containsStringNoCase(col->comment, "symbol"))
-                {
-                geneIx = ix;
-                break;
-                }
-        if (geneIx < 0)
-            geneIx = asColumnFindIx(as->columnList, "geneName");
+        int geneIx = bigGenePredSymbolIx(bbi);
         struct lm *lm = lmInit(0);
         struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end,
                                                                  maxItems, lm);

@@ -43,6 +43,7 @@
 #include "ctgPos.h"
 #include "bed.h"
 #include "bigBed.h"
+#include "genePredReader.h"
 #include "bigWig.h"
 #include "bedCart.h"
 #include "udc.h"
@@ -2114,6 +2115,10 @@ if(cartUsualBoolean(cart, BASE_SHOWASM_SCALEBAR, TRUE))
     }
 }
 
+/* Exon numbers above the ruler in exon view, defined further down.  refs #38830 */
+static boolean exonNumbersShown();
+static void drawExonNumbers(struct hvGfx *hvg, int y, int height, MgFont *font);
+
 static int doDrawRuler(struct hvGfx *hvg, int *rulerClickHeight,
                        int rulerHeight, int yAfterRuler, int yAfterBases, MgFont *font,
                        int fontHeight, boolean rulerCds, int scaleBarTotalHeight, struct window *window)
@@ -2185,6 +2190,12 @@ if (baseShowScaleBar)
 	}
     y += scaleBarTotalHeight;
     *rulerClickHeight += scaleBarTotalHeight;
+    }
+if (exonNumbersShown())
+    {
+    drawExonNumbers(hvg, y, fontHeight, font);
+    y += fontHeight;
+    *rulerClickHeight += fontHeight;
     }
 if (baseShowRuler && (insideWidth >=36))
     {
@@ -4909,6 +4920,476 @@ mergeIntoVirtRegionList(list);
 return (virtRegionList != NULL);
 }
 
+/* ---- exon numbers above the ruler in exon view, refs #38830 ---- */
+
+int bigGenePredSymbolIx(struct bbiFile *bbi)
+/* The column of a bigGenePred file that holds the gene symbol, or -1.  The files differ:
+ * MANE has it in geneName2 ("Gene symbol"), GENCODE in geneName ("Gene Symbol"), hs1's
+ * CAT/Liftoff in name2 ("Gene name", its geneName is "Gene ID").  So take the name column
+ * whose autoSql description says symbol, else one that says gene name, else geneName. */
+{
+struct asObject *as = bigBedAsOrDefault(bbi);
+int ix = 0, nameIx = -1;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next, ix++)
+    {
+    if (!(sameString(col->name, "geneName") || sameString(col->name, "geneName2") ||
+          sameString(col->name, "name2")) || col->comment == NULL)
+        continue;
+    if (containsStringNoCase(col->comment, "symbol"))
+        return ix;
+    if (nameIx < 0 && containsStringNoCase(col->comment, "gene name"))
+        nameIx = ix;
+    }
+return (nameIx >= 0) ? nameIx : asColumnFindIx(as->columnList, "geneName");
+}
+
+struct exonNumGene
+/* A transcript of the gene track of an exon view, which may number the exons. */
+    {
+    struct exonNumGene *next;
+    struct genePred *gp;
+    char *gene;         /* gene symbol, or "" */
+    char *key;          /* what makes two transcripts the same gene */
+    };
+
+static char *exonViewMode()
+/* The multi-region mode the user asked for:  in a multi-region space virtModeType is
+ * "default", and spaceUserVirtModeType is the mode. */
+{
+return (spaceUserVirtModeType != NULL) ? spaceUserVirtModeType : virtModeType;
+}
+
+static boolean exonNumbersShown()
+/* Is there a row of exon numbers above the ruler?  With multiRegionNewUi, in the exon modes
+ * (exons of a gene track, or of one transcript), unless the user switched it off. */
+{
+static int shown = -1;
+if (shown < 0)
+    {
+    char *mode = exonViewMode();
+    shown = multiRegionNewUi() && cartUsualBoolean(cart, MULTI_REGION_EXON_NUMBERS, TRUE) &&
+            (sameString(mode, "maneExons") || sameString(mode, "exonMostly") ||
+             sameString(mode, "singleTrans"));
+    }
+return shown;
+}
+
+static void exonNumGeneAdd(struct exonNumGene **pList, struct genePred *gp, char *gene)
+/* Add gp, of gene (a symbol, or NULL or "" if the track has none), to *pList. */
+{
+struct exonNumGene *eg;
+AllocVar(eg);
+eg->gp = gp;
+eg->gene = (gene != NULL && differentString(gene, gp->name)) ? cloneString(gene) : "";
+slAddHead(pList, eg);
+}
+
+static struct exonNumGene *exonNumLoadBigGenePred(char *fileName, char *chrom, int start,
+                                                  int end, boolean maneSelectOnly)
+/* The transcripts of a bigGenePred file that overlap chrom:start-end.  With
+ * maneSelectOnly, of a file with a maneStat column, only the MANE Select ones. */
+{
+struct exonNumGene *list = NULL;
+if (fileName == NULL || !udcExists(fileName))
+    return NULL;
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+int symIx = bigGenePredSymbolIx(bbi);
+int statIx = maneSelectOnly ?
+             asColumnFindIx(bigBedAsOrDefault(bbi)->columnList, "maneStat") : -1;
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    char startBuf[16], endBuf[16];
+    char *row[bbi->fieldCount];
+    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, bbi->fieldCount);
+    if (statIx >= 0 && statIx < bbi->fieldCount && differentString(row[statIx], "MANE Select"))
+        continue;
+    struct genePred *gp = (struct genePred *)genePredFromBigGenePredRow(row);
+    exonNumGeneAdd(&list, gp, (symIx >= 0 && symIx < bbi->fieldCount) ? row[symIx] : NULL);
+    }
+lmCleanup(&lm);
+bigBedFileClose(&bbi);
+return list;
+}
+
+static struct exonNumGene *exonNumGenesLoad(char *chrom, int start, int end)
+/* The transcripts of the exon view's gene track that overlap chrom:start-end. */
+{
+char *mode = exonViewMode();
+struct exonNumGene *list = NULL;
+if (sameString(mode, "maneExons"))
+    list = exonNumLoadBigGenePred(maneExonsFile(), chrom, start, end, FALSE);
+else if (sameString(mode, "exonMostly"))
+    {
+    char *table = isNotEmpty(emGeneTable) ? emGeneTable : cartOptionalString(cart, "emGeneTable");
+    if (isEmpty(table) || trackHubDatabase(database) || !hTableExists(database, table))
+        return NULL;
+    struct sqlConnection *conn = hAllocConn(database);
+    struct genePredReader *gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, NULL);
+    struct genePred *gp;
+    while ((gp = genePredReaderNext(gpr)) != NULL)
+        exonNumGeneAdd(&list, gp, gp->name2);
+    genePredReaderFree(&gpr);
+    hFreeConn(&conn);
+    }
+else if (sameString(mode, "singleTrans"))
+    {
+    char *track = cartOptionalString(cart, SINGLE_TRANS_TABLE_VAR);
+    struct trackDb *tdb = isNotEmpty(track) ? singleTransTdb(track) : NULL;
+    if (tdb == NULL)
+        return NULL;
+    struct genePred *gp = genePredForTrackItem(database, tdb,
+                              cartUsualString(cart, "singleTransId", singleTransId),
+                              singleTransChrom());
+    if (gp != NULL)
+        exonNumGeneAdd(&list, gp, NULL);   // one transcript:  the number says it all
+    }
+return list;
+}
+
+static int exonNumGeneCmp(const void *va, const void *vb)
+/* By chrom, strand and start. */
+{
+const struct exonNumGene *a = *((struct exonNumGene **)va);
+const struct exonNumGene *b = *((struct exonNumGene **)vb);
+int diff = strcmp(a->gp->chrom, b->gp->chrom);
+if (diff == 0)
+    diff = a->gp->strand[0] - b->gp->strand[0];
+if (diff == 0)
+    diff = (int)a->gp->txStart - (int)b->gp->txStart;
+return diff;
+}
+
+static struct exonNumGene *exonNumChoose(struct exonNumGene *list)
+/* The transcripts that number the exons:  one per gene, the one with the most exons, so
+ * that each exon has one number however many transcripts the track has.  A gene is the
+ * transcripts with one symbol;  without symbols, the overlapping transcripts on a strand. */
+{
+slSort(&list, exonNumGeneCmp);
+struct exonNumGene *eg, *last = NULL;
+int cluster = 0, clusterEnd = 0;
+for (eg = list; eg != NULL; eg = eg->next)
+    {
+    if (last == NULL || differentString(eg->gp->chrom, last->gp->chrom) ||
+        eg->gp->strand[0] != last->gp->strand[0] || (int)eg->gp->txStart >= clusterEnd)
+        {
+        cluster++;
+        clusterEnd = eg->gp->txEnd;
+        }
+    clusterEnd = max(clusterEnd, (int)eg->gp->txEnd);
+    char key[256];
+    if (isNotEmpty(eg->gene))
+        safef(key, sizeof key, "%s", eg->gene);
+    else
+        safef(key, sizeof key, "%d", cluster);
+    eg->key = cloneString(key);
+    last = eg;
+    }
+struct hash *best = hashNew(0);
+for (eg = list; eg != NULL; eg = eg->next)
+    {
+    struct exonNumGene *cur = hashFindVal(best, eg->key);
+    if (cur == NULL || eg->gp->exonCount > cur->gp->exonCount)
+        hashReplace(best, eg->key, eg);
+    }
+struct exonNumGene *chosen = NULL, *next;
+for (eg = list; eg != NULL; eg = next)
+    {
+    next = eg->next;
+    if (hashFindVal(best, eg->key) == eg)
+        slAddHead(&chosen, eg);
+    }
+hashFree(&best);
+slReverse(&chosen);
+return chosen;
+}
+
+static char *maneSelectFile()
+/* The bigGenePred file of this assembly's native MANE track, or NULL.  Kept. */
+{
+static char *fileName = NULL;
+static boolean asked = FALSE;
+if (asked)
+    return fileName;
+asked = TRUE;
+if (trackHubDatabase(database))
+    return NULL;
+struct trackDb *tdb = bigGenePredTdb("mane");
+if (tdb == NULL)
+    return NULL;
+struct sqlConnection *conn = hAllocConn(database);
+fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+hFreeConn(&conn);
+if (fileName != NULL)
+    fileName = hReplaceGbdb(fileName);
+return fileName;
+}
+
+static boolean exonNumSameGene(struct exonNumGene *a, struct exonNumGene *b)
+/* Are a and b transcripts of one gene?  The same symbol, or without symbols, overlapping
+ * on one strand. */
+{
+if (isNotEmpty(a->gene) && isNotEmpty(b->gene))
+    return sameString(a->gene, b->gene);
+return sameString(a->gp->chrom, b->gp->chrom) && a->gp->strand[0] == b->gp->strand[0] &&
+       a->gp->txStart < b->gp->txEnd && b->gp->txStart < a->gp->txEnd;
+}
+
+static struct exonNumGene *exonNumNumbering(char *chrom, int start, int end)
+/* The transcripts that number the exons over chrom:start-end:  the MANE Select transcript
+ * of each gene that has one, when the assembly has MANE, because that is the numbering
+ * clinicians use;  for other genes, the gene track's transcript with the most exons.  A
+ * single transcript is numbered by itself. */
+{
+struct exonNumGene *chosen = exonNumChoose(exonNumGenesLoad(chrom, start, end));
+char *maneFile = maneSelectFile();
+if (maneFile == NULL || sameString(exonViewMode(), "singleTrans"))
+    return chosen;
+/* MANE over the whole of the genes in view:  a gene's MANE transcript can start or end
+ * outside the view while another of its transcripts reaches in */
+struct exonNumGene *eg, *next, *others = NULL;
+int maneStart = start, maneEnd = end;
+for (eg = chosen; eg != NULL; eg = eg->next)
+    if (sameString(eg->gp->chrom, chrom))
+        {
+        maneStart = min(maneStart, (int)eg->gp->txStart);
+        maneEnd = max(maneEnd, (int)eg->gp->txEnd);
+        }
+struct exonNumGene *mane = exonNumChoose(exonNumLoadBigGenePred(maneFile, chrom, maneStart,
+                                                                maneEnd, TRUE));
+for (eg = chosen; eg != NULL; eg = next)
+    {
+    next = eg->next;
+    struct exonNumGene *m;
+    for (m = mane; m != NULL; m = m->next)
+        if (exonNumSameGene(m, eg))
+            break;
+    if (m == NULL)
+        slAddHead(&others, eg);
+    }
+slReverse(&others);
+return slCat(mane, others);
+}
+
+static char *exonNumLabel(struct exonNumGene *chosen, char *chrom, int start, int end,
+                          int level, struct hash *named)
+/* The label of the region chrom:start-end, e.g. "TP53 ex4".  level 0 with the gene symbol
+ * and "ex", 1 without the symbol, 2 only the numbers.  A gene in the hash named already has
+ * its symbol on a label further left, so it gets none.  NULL if no exon is in the region. */
+{
+struct dyString *dy = dyStringNew(64);
+struct exonNumGene *eg;
+for (eg = chosen; eg != NULL; eg = eg->next)
+    {
+    struct genePred *gp = eg->gp;
+    if (differentString(gp->chrom, chrom) || (int)gp->txEnd <= start || (int)gp->txStart >= end)
+        continue;
+    int lo = 0, hi = 0, i;
+    for (i = 0; i < gp->exonCount; i++)
+        {
+        if ((int)gp->exonStarts[i] >= end || (int)gp->exonEnds[i] <= start)
+            continue;
+        int num = (gp->strand[0] == '-') ? gp->exonCount - i : i + 1;
+        if (lo == 0 || num < lo)
+            lo = num;
+        if (num > hi)
+            hi = num;
+        }
+    if (lo == 0)
+        continue;
+    if (dy->stringSize > 0)
+        dyStringAppend(dy, ", ");
+    if (level == 0 && isNotEmpty(eg->gene) && !hashLookup(named, eg->gene))
+        dyStringPrintf(dy, "%s ", eg->gene);
+    dyStringPrintf(dy, "%s%d", level < 2 ? "ex" : "", lo);
+    if (hi != lo)
+        dyStringPrintf(dy, "-%d", hi);
+    }
+if (dy->stringSize == 0)
+    {
+    dyStringFree(&dy);
+    return NULL;
+    }
+return dyStringCannibalize(&dy);
+}
+
+static char *exonNumTitle(struct exonNumGene *chosen, char *chrom, int start, int end)
+/* The mouseover of the region chrom:start-end, e.g. "TP53 exon 4 of 11 (NM_000546.6)",
+ * or NULL if no exon is in the region. */
+{
+struct dyString *dy = dyStringNew(64);
+struct exonNumGene *eg;
+for (eg = chosen; eg != NULL; eg = eg->next)
+    {
+    struct genePred *gp = eg->gp;
+    if (differentString(gp->chrom, chrom) || (int)gp->txEnd <= start || (int)gp->txStart >= end)
+        continue;
+    int i;
+    for (i = 0; i < gp->exonCount; i++)
+        {
+        if ((int)gp->exonStarts[i] >= end || (int)gp->exonEnds[i] <= start)
+            continue;
+        int num = (gp->strand[0] == '-') ? gp->exonCount - i : i + 1;
+        if (dy->stringSize > 0)
+            dyStringAppend(dy, "; ");
+        if (isNotEmpty(eg->gene))
+            dyStringPrintf(dy, "%s ", eg->gene);
+        dyStringPrintf(dy, "exon %d of %d (%s)", num, gp->exonCount, gp->name);
+        }
+    }
+if (dy->stringSize == 0)
+    {
+    dyStringFree(&dy);
+    return NULL;
+    }
+return dyStringCannibalize(&dy);
+}
+
+static void exonNumBoxAndMouseover(struct hvGfx *hvg, struct exonNumGene *chosen, char *chrom,
+                                   int start, int end, int x, int width, int y, int height)
+/* Draw the light grey box of an exon region, and put its mouseover on the ruler's map. */
+{
+char *title = exonNumTitle(chosen, chrom, start, end);
+if (title == NULL)
+    return;
+static struct rgbColor lightGrey = {225, 225, 225, 255};
+/* a pixel of white between neighbors, so each region is a box of its own */
+int boxX = x + 1, boxW = max(1, width - 2);
+hvGfxBox(hvg, boxX, y, boxW, height, hvGfxFindRgb(hvg, &lightGrey));
+if (theImgBox != NULL)
+    {
+    struct imgTrack *rulerImg = imgBoxTrackFind(theImgBox, NULL, RULER_TRACK_NAME);
+    if (rulerImg != NULL)
+        {
+        /* like the ruler's own map items:  the map is not mirrored with the image */
+        int mapX = revCmplDisp ? tl.picWidth - (boxX + boxW) : boxX;
+        imgTrackAddMapItem(rulerImg, "#", title, mapX, y, mapX + boxW, y + height,
+                           RULER_TRACK_NAME, NULL);
+        }
+    }
+freeMem(title);
+}
+
+static void drawExonNumberLabel(struct hvGfx *hvg, struct exonNumGene *chosen, char *chrom,
+                                int start, int end, int x, int width, int y, int height,
+                                MgFont *font)
+/* Draw the label of region chrom:start-end centered in x..x+width on a light grey box, as
+ * long as it fits, with a mouseover that names the gene, exon and transcript.  The gene
+ * symbol goes on the first label of a gene that has room for it, and only there. */
+{
+static struct hash *named = NULL;
+if (named == NULL)
+    named = hashNew(0);
+exonNumBoxAndMouseover(hvg, chosen, chrom, start, end, x, width, y, height);
+int level;
+for (level = 0; level < 3; level++)
+    {
+    char *label = exonNumLabel(chosen, chrom, start, end, level, named);
+    if (label == NULL)
+        return;
+    if (mgFontStringWidth(font, label) <= width - 2)
+        {
+        hvGfxTextCentered(hvg, x, y, width, height, MG_BLACK, font, label);
+        freeMem(label);
+        if (level == 0)
+            {
+            /* these genes have their symbol on screen now */
+            struct exonNumGene *eg;
+            for (eg = chosen; eg != NULL; eg = eg->next)
+                if (isNotEmpty(eg->gene) && sameString(eg->gp->chrom, chrom) &&
+                    (int)eg->gp->txStart < end && (int)eg->gp->txEnd > start)
+                    hashStore(named, eg->gene);
+            }
+        return;
+        }
+    freeMem(label);
+    }
+}
+
+struct exonNumDraw
+/* What the callbacks of drawExonNumbers() need. */
+    {
+    struct hvGfx *hvg;
+    int y, height;
+    MgFont *font;
+    struct exonNumGene *chosen;
+    char *chrom;            /* the source sequence on screen */
+    int start, end;         /* the source span on screen */
+    };
+
+static void exonNumSpan(char *srcChrom, int srcStart, int srcEnd, int x, int width,
+                        void *context)
+/* forEachSourceRange() callback:  widen the span to this range on the first sequence. */
+{
+struct exonNumDraw *d = context;
+if (d->chrom == NULL)
+    {
+    d->chrom = srcChrom;
+    d->start = srcStart;
+    d->end = srcEnd;
+    }
+else if (sameString(d->chrom, srcChrom))
+    {
+    d->start = min(d->start, srcStart);
+    d->end = max(d->end, srcEnd);
+    }
+}
+
+static void exonNumDrawRange(char *srcChrom, int srcStart, int srcEnd, int x, int width,
+                             void *context)
+/* forEachSourceRange() callback:  label this range. */
+{
+struct exonNumDraw *d = context;
+drawExonNumberLabel(d->hvg, d->chosen, srcChrom, srcStart, srcEnd, x, width, d->y,
+                    d->height, d->font);
+}
+
+static void drawExonNumbers(struct hvGfx *hvg, int y, int height, MgFont *font)
+/* Draw the row of exon numbers:  above each region, the numbers of the exons in it.  In a
+ * multi-region space the regions are the ranges of the chain;  in the older virtual
+ * chromosome this is called once per window, and the window is the region. */
+{
+static struct exonNumGene *chosen = NULL;
+static boolean loaded = FALSE;
+if (coordRulerUrl != NULL)
+    {
+    struct exonNumDraw d = {hvg, y, height, font, NULL, NULL, 0, 0};
+    if (!loaded)
+        {
+        /* the transcripts over the part of the source that is on screen */
+        forEachSourceRange(coordRulerUrl, chromName, winStart, winEnd, insideX, insideWidth,
+                           exonNumSpan, &d);
+        if (d.chrom != NULL)
+            chosen = exonNumNumbering(d.chrom, d.start, d.end);
+        loaded = TRUE;
+        }
+    d.chosen = chosen;
+    forEachSourceRange(coordRulerUrl, chromName, winStart, winEnd, insideX, insideWidth,
+                       exonNumDrawRange, &d);
+    }
+else if (virtMode)
+    {
+    if (!loaded)
+        {
+        /* the transcripts over all windows on this window's chrom */
+        int start = winStart, end = winEnd;
+        struct window *w;
+        for (w = windows; w != NULL; w = w->next)
+            if (sameString(w->chromName, chromName))
+                {
+                start = min(start, w->winStart);
+                end = max(end, w->winEnd);
+                }
+        chosen = exonNumNumbering(chromName, start, end);
+        loaded = TRUE;
+        }
+    drawExonNumberLabel(hvg, chosen, chromName, winStart, winEnd, insideX, insideWidth,
+                        y, height, font);
+    }
+}
+
 
 void testRegionList()
 /* check if it is ascending non-overlapping regions.
@@ -6767,6 +7248,9 @@ if (rulerMode != tvHide)
     if (baseShowScaleBar)
         basePositionHeight += scaleBarTotalHeight;
 
+    if (exonNumbersShown())
+        basePositionHeight += fontHeight;
+
     if (!baseShowRuler)
         {
         basePositionHeight -= rulerHeight;
@@ -7267,6 +7751,12 @@ if (withLeftLabels)
                            MG_BLACK, font, SCALE_BAR_LABEL);
             y += scaleBarHeight + scaleBarPad;
             }
+        if (exonNumbersShown())
+            {
+            hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, fontHeight,
+                           MG_BLACK, font, "Exons");
+            y += fontHeight;
+            }
         if (baseShowRuler)
             {
             char rulerLabel[SMALLBUF];
@@ -7494,6 +7984,17 @@ if (rulerMode != tvHide)
 
 	if (theImgBox)
 	    {
+	    /* The row of exon numbers has mouseovers of its own (drawExonNumbers()), and
+	     * the first area of a map wins, so the position mouseovers leave that row out:
+	     * one area above it and one below.  refs #38830 */
+	    int rowY = sliceOffsetY + sliceHeight, rowEnd = rowY;
+	    if (exonNumbersShown())
+		{
+		rowY = sliceOffsetY + (baseTitle ? titleHeight : 0) +
+		       ((baseShowPos||baseShowAsm) ? showPosHeight : 0) +
+		       (baseShowScaleBar ? scaleBarTotalHeight : 0);
+		rowEnd = rowY + fontHeight;
+		}
 	    // Show window positions as mouseover
 	    if (virtMode)
 		{
@@ -7503,11 +8004,19 @@ if (rulerMode != tvHide)
 		if (revCmplDisp)
 		    x = tl.picWidth - (x + window->insideWidth);
 		imgTrackAddMapItem(curImgTrack, "#", position,
-		    x, sliceOffsetY, x+window->insideWidth, sliceOffsetY+sliceHeight, RULER_TRACK_NAME, NULL);
+		    x, sliceOffsetY, x+window->insideWidth, rowY, RULER_TRACK_NAME, NULL);
+		if (rowEnd < sliceOffsetY + sliceHeight)
+		    imgTrackAddMapItem(curImgTrack, "#", position,
+			x, rowEnd, x+window->insideWidth, sliceOffsetY+sliceHeight, RULER_TRACK_NAME, NULL);
 		}
 	    else if (coordRulerUrl != NULL)
+		{
 		mapSourceRangePositions(curImgTrack, coordRulerUrl, chromName, winStart, winEnd,
-		    window->insideX, window->insideWidth, sliceOffsetY, sliceOffsetY+sliceHeight);
+		    window->insideX, window->insideWidth, sliceOffsetY, rowY);
+		if (rowEnd < sliceOffsetY + sliceHeight)
+		    mapSourceRangePositions(curImgTrack, coordRulerUrl, chromName, winStart, winEnd,
+			window->insideX, window->insideWidth, rowEnd, sliceOffsetY+sliceHeight);
+		}
 
 	    }
 
@@ -11255,6 +11764,8 @@ jsonObjectAdd(st, "gmPadding", newJsonNumber(gmPadding));
 jsonObjectAdd(st, "manePadding", newJsonNumber(manePadding));
 jsonObjectAdd(st, "trackPadding", newJsonNumber(trackItemsPadding));
 jsonObjectAdd(st, "altHighlight", newJsonBoolean(emAltHighlight));
+jsonObjectAdd(st, "exonNumbers", newJsonBoolean(cartUsualBoolean(cart, MULTI_REGION_EXON_NUMBERS,
+                                                                 TRUE)));
 
 if (sameString(mode, "trackItems") && multiRegionTrackTdb() != NULL)
     {

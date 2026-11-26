@@ -800,6 +800,11 @@ SETTINGS_ON_URL = {
           note="Track whose items the multi-region mode trackItems lays out: a bigBed "
                "family track (native, hub or custom) or a table of items (native, or a "
                "custom track in customTrash).  hg.conf multiRegionNewUi.  refs #38830"),
+        c("mrExonNumbers", "setting", "hg/hgTracks/hgTracks.c",
+          value="0|1", persists=True, verified=True,
+          note="Number the exons in a row above the ruler in the multi-region exon views "
+               "(maneExons, exonMostly, singleTrans), default on.  hg.conf "
+               "multiRegionNewUi.  refs #38830"),
         c("mrTrackPadding", "setting", "hg/hgTracks/hgTracks.c",
           value="<bases>", persists=True, verified=True,
           note="Bases kept on each side of every item in trackItems.  refs #38830"),

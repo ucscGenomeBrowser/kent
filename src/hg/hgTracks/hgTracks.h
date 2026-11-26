@@ -72,6 +72,8 @@
 /* cart variable:  the track whose items trackItems lays out, refs #38830 */
 #define MULTI_REGION_TRACK_PADDING      "mrTrackPadding"
 /* cart variable:  bases of padding around each item in trackItems */
+#define MULTI_REGION_EXON_NUMBERS       "mrExonNumbers"
+/* cart variable:  number the exons above the ruler in exon view, default on */
 
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
 #define delayFraction   0.25
@@ -1945,6 +1947,16 @@ void bigBaseViewMethods(struct track *track, struct trackDb *tdb,
 
 struct baseRange;
 
+typedef void sourceRangeFunc(char *srcChrom, int srcStart, int srcEnd, int x, int width,
+                             void *context);
+/* Called by forEachSourceRange() for each source range of a window. */
+
+void forEachSourceRange(char *chainFile, char *chrom, int start, int end, int insideX,
+                        int width, sourceRangeFunc *func, void *context);
+/* Call func for each source range of the window:  its source sequence, its whole source
+ * span, and the pixels of its part on screen.  For labels above the ruler, e.g. exon
+ * numbers.  refs #38830 */
+
 struct baseRange *loadBaseRangesFromChain(char *chainFile, char *chrom, int start, int end);
 /* Return the source-coordinate ranges overlapping [start,end), read off the chain that
  * maps this assembly back to its source.  Used to drive the main base position ruler in
@@ -2096,6 +2108,10 @@ void multiRegionGeneTrackList();
 void multiRegionTranscriptList();
 /* Answer the multi-region dialog's transcript menu, hgt.mrTranscripts=<gene track> and
  * hgt.mrPos=<chrom:start-end>, with JSON. */
+
+int bigGenePredSymbolIx(struct bbiFile *bbi);
+/* The column of a bigGenePred file that holds the gene symbol, or -1.  The files differ:
+ * MANE has it in geneName2, GENCODE in geneName.  refs #38830 */
 
 void printMultiRegionBanner();
 /* With multiRegionNewUi, in a multi-region mode, print the bar above the image that says
