@@ -23,10 +23,21 @@
 /* The data type checkboxes control what every selected sample contributes to
    the image, which is a different kind of choice from the track settings above
    them, so box them off. */
+/* A tinted band rather than a black frame, so the data type checkboxes stand
+   out from the page.  Same blue family as the table header (lightblue), only
+   paler, and enough space below to stay clear of the sidebar Submit.  The
+   border: none also overrides the blue left bar from HGStyle.css. */
 #dataTypeSelector {
-    border: 1px solid black;
-    padding: 0.4em 0.6em;
-    margin-bottom: 0.6em;
+    border: none;
+    background-color: #dcebf7;
+    padding: 0.5em 0.8em;
+    margin-bottom: 1.2em;
+}
+/* A little more room between the band and the Submit / Cancel buttons above.
+   Padding on the wrapper, not a margin on the band: that margin would merge
+   with the larger one above it and add nothing. */
+#myTag {
+    padding-top: 3px;
 }
 
 #container {
