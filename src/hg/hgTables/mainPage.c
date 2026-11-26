@@ -860,16 +860,18 @@ if (tdb != NULL)
     safef(docLink, sizeof docLink,
           "the <a href='hgTrackUi?%s&db=%s&g=%s' target='_blank'>track documentation</a>",
           cartSidUrlString(cart), cgiEncode(database), cgiEncode(tdb->track));
+char *dataAccess = "Most restricted tracks have a \"Data Access\" section in their documentation "
+                   "that explains how the data can be obtained.";
 hPrintf("<b>Note:</b> %s ", what);
 if (reason == NULL)
-    hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see %s for more details. Contact us if you are still unable to access the data. ", docLink);
+    hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see %s for more details. %s Contact us if you are still unable to access the data. ", docLink, dataAccess);
 else
     {
     if (isHubTrack(tdb->track))
         hPrintf("Reason: %s", htmlEncode(reason));
     else
         hPrintf("Reason: %s", reason);
-    hPrintf(" See %s for more details.", docLink);
+    hPrintf(" See %s for more details. %s", docLink, dataAccess);
     }
 hPrintf("</DIV>");
 }
