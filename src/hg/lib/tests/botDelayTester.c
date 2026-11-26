@@ -141,7 +141,7 @@ struct lineFile *lf = lineFileOpen(errFile, TRUE);
 char *line;
 while (lineFileNext(lf, &line, NULL))
     {
-    if (startsWith("botDelay: no answer", line))
+    if (startsWith("botDelay: failed to ", line))
         {
         char *masked = replaceChars(line, portString, ":PORT");
         printf("  log: %s\n", masked);

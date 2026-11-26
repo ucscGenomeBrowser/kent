@@ -30,6 +30,10 @@ int netConnectWithTimeout(char *hostName, int port, long msTimeout);
 * After the connection has been established, we return to blocking mode.
 * Also closes sd if error. */
 
+int netConnectWithTotalTimeout(char *hostName, int port, long msTimeout);
+/* Like netConnectWithTimeout, but msTimeout is the limit for the whole connect, across
+ * all the addresses hostName resolves to (localhost is often both IPv6 and IPv4). */
+
 int netMustConnect(char *hostName, int port);
 /* Start connection with server or die. */
 
