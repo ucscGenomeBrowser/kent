@@ -854,13 +854,23 @@ static void printRestrictionNote(struct trackDb *tdb, char *what)
 {
 hPrintf("<DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
 char *reason = tdb ? trackDbSettingClosestToHome(tdb, "noGenomeReason") : NULL;
+// link to the track's description page; the link text is what the sentence calls it
+char docLink[4096] = "the track documentation";
+if (tdb != NULL)
+    safef(docLink, sizeof docLink,
+          "the <a href='hgTrackUi?%s&db=%s&g=%s' target='_blank'>track documentation</a>",
+          cartSidUrlString(cart), cgiEncode(database), cgiEncode(tdb->track));
 hPrintf("<b>Note:</b> %s ", what);
 if (reason == NULL)
-    hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see the track documentation for more details. Contact us if you are still unable to access the data. ");
-else if (isHubTrack(tdb->track))
-    hPrintf("Reason: %s", htmlEncode(reason));
+    hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see %s for more details. Contact us if you are still unable to access the data. ", docLink);
 else
-    hPrintf("Reason: %s", reason);
+    {
+    if (isHubTrack(tdb->track))
+        hPrintf("Reason: %s", htmlEncode(reason));
+    else
+        hPrintf("Reason: %s", reason);
+    hPrintf(" See %s for more details.", docLink);
+    }
 hPrintf("</DIV>");
 }
 
