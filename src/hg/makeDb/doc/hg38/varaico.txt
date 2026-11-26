@@ -1,80 +1,77 @@
-# May 21 2025 - Johannes
-# have a look at this config file and edit paths/API keys if necessary:
-export AMELIE2_CONFIG_JSON=/hive/users/jbirgmei/amelie2/src/scripts/config.json
-
-# then run the pipeline to create hg19 and hg38 bigbeds:
-/cluster/home/jbirgmei/opt_rocky9/miniconda3/envs/amelie2/bin/amelie2 workflow final_out --partition hg19,hg38
-
-# move bigbeds to track version directory:
-mkdir /hive/users/jbirgmei/TRACK_VERSIONS/v5_20260527
-cp -r /hive/users/jbirgmei/amelie2/data/out/None/full/hg* /hive/users/jbirgmei/TRACK_VERSIONS/v5_20260527
-
-# archive the previous release (release 2, "release 2 (20251110)") to the
-# download archive before copying in the new files:
-for db in hg19 hg38; do
-    mkdir /hive/data/genomes/$db/bed/varaico.v2_20251110
-    cp /hive/data/genomes/$db/bed/varaico/varaico.bb \
-       /hive/data/genomes/$db/bed/varaico.v2_20251110/$db.varaico.v2_20251110.bb
-    cp /hive/data/genomes/$db/bed/varaico/varaicoSuppl.bb \
-       /hive/data/genomes/$db/bed/varaico.v2_20251110/$db.varaicoSuppl.v2_20251110.bb
-    mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/archive/$db/varaico/v2_20251110
-    ln -s /hive/data/genomes/$db/bed/varaico.v2_20251110/$db.varaico.v2_20251110.bb \
-          /usr/local/apache/htdocs-hgdownload/goldenPath/archive/$db/varaico/v2_20251110/$db.varaico.v2_20251110.bb
-    ln -s /hive/data/genomes/$db/bed/varaico.v2_20251110/$db.varaicoSuppl.v2_20251110.bb \
-          /usr/local/apache/htdocs-hgdownload/goldenPath/archive/$db/varaico/v2_20251110/$db.varaicoSuppl.v2_20251110.bb
-done
-
-# copy bigbeds:
-cp /hive/users/jbirgmei/TRACK_VERSIONS/v5_20260527/hg19/normalized_variants.hg19.bb /hive/data/genomes/hg19/bed/varaico/varaico.bb
-cp /hive/users/jbirgmei/TRACK_VERSIONS/v5_20260527/hg38/normalized_variants.hg38.bb /hive/data/genomes/hg38/bed/varaico/varaico.bb
-cp /hive/users/jbirgmei/TRACK_VERSIONS/v5_20260527/hg19/normalized_variants_supplements.hg19.bb /hive/data/genomes/hg19/bed/varaico/varaicoSuppl.bb
-cp /hive/users/jbirgmei/TRACK_VERSIONS/v5_20260527/hg38/normalized_variants_supplements.hg38.bb /hive/data/genomes/hg38/bed/varaico/varaicoSuppl.bb
-
-# finally, create symlinks from /gbdb/$D/bbi/varaico{Suppl,}.bb to /hive/data/genomes/$D/bed/varaico/varaico{Suppl,}.bb
+# Varaico (tracks varaico, varaicoSuppl) on hg19, hg38 and hs1 - Johannes Birgmeier
+#
+# Builds are identified by their build date. Data-only updates are installed by
+# an OTTO job (src/hg/utils/otto/varaico/, see its README) and pushed to the RR by
+# autoPush (#38546), so a new build needs no trackDb change and no push request.
+# dataVersion reads /gbdb/$D/bbi/varaicoVersion.txt, which the OTTO job writes.
 
 ##############################################################################
-# Oct 13 2026 - Johannes: release 4 (20261006), adds hs1
-# From this release on, dataVersion is read from /gbdb/$D/bbi/varaicoVersion.txt
-# (written below), so future data-only updates also update the version shown.
-export AMELIE2_CONFIG_JSON=/hive/users/jbirgmei/amelie2/src/scripts/config.json
+# Building and releasing a new build
 
-# build hg19, hg38 and hs1. hs1 maps raw-coordinate variants from papers with the
-# UCSC hg19ToHs1/hg38ToHs1 chains (amelie2 asset orig_hs1_liftover_chains):
+# 1. build the bigBeds for all three assemblies with the amelie2 pipeline. hs1
+# maps variants that papers report only as raw coordinates with the UCSC
+# hg19ToHs1/hg38ToHs1 chains (amelie2 asset orig_hs1_liftover_chains):
+export AMELIE2_CONFIG_JSON=/hive/users/jbirgmei/amelie2/src/scripts/config.json
 /cluster/home/jbirgmei/opt_rocky9/miniconda3/envs/amelie2/bin/amelie2 workflow final_out --partition hg19,hg38,hs1
 
-# stage the release (per-assembly subdirs; the .sqlite3 files are for varaico.com):
-mkdir /hive/users/jbirgmei/TRACK_VERSIONS/v6_20261006
-cp -al /hive/users/jbirgmei/amelie2/data/out/None/full/{hg19,hg38,hs1} /hive/users/jbirgmei/TRACK_VERSIONS/v6_20261006/
+# 2. stage the build under its date (per-assembly subdirs; the .sqlite3 and
+# .vcf.gz files there are for varaico.com, only the .bb files go to the browser):
+DATE=$(date +%Y%m%d)
+mkdir /hive/users/jbirgmei/TRACK_VERSIONS/$DATE
+cp -al /hive/users/jbirgmei/amelie2/data/out/None/full/{hg19,hg38,hs1} /hive/users/jbirgmei/TRACK_VERSIONS/$DATE/
 
-# archive the previous release (release 3, "release 3 (20260527)"); hs1 had no
-# public release, so only hg19 and hg38:
-for db in hg19 hg38; do
-    mkdir /hive/data/genomes/$db/bed/varaico.v5_20260527
-    cp /hive/data/genomes/$db/bed/varaico/varaico.bb \
-       /hive/data/genomes/$db/bed/varaico.v5_20260527/$db.varaico.v5_20260527.bb
-    cp /hive/data/genomes/$db/bed/varaico/varaicoSuppl.bb \
-       /hive/data/genomes/$db/bed/varaico.v5_20260527/$db.varaicoSuppl.v5_20260527.bb
-    mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/archive/$db/varaico/v5_20260527
-    ln -s /hive/data/genomes/$db/bed/varaico.v5_20260527/$db.varaico.v5_20260527.bb \
-          /usr/local/apache/htdocs-hgdownload/goldenPath/archive/$db/varaico/v5_20260527/$db.varaico.v5_20260527.bb
-    ln -s /hive/data/genomes/$db/bed/varaico.v5_20260527/$db.varaicoSuppl.v5_20260527.bb \
-          /usr/local/apache/htdocs-hgdownload/goldenPath/archive/$db/varaico/v5_20260527/$db.varaicoSuppl.v5_20260527.bb
-done
+# 3. mark it ready, last. READY holds the version shown on the track page:
+echo "$DATE" > /hive/users/jbirgmei/TRACK_VERSIONS/$DATE/READY
 
-# copy the bigBeds and write the version file:
+# 4. the OTTO job (daily, /hive/data/outside/otto/varaico/doUpdate.sh) then
+#   - checks every bigBed (opens, item count within +-20% of the installed file,
+#     chroms in chrom.sizes) and refuses the whole build if one fails;
+#   - archives the installed build under its date:
+#       /hive/data/genomes/$db/bed/varaico.<date>/$db.varaico{,Suppl}.<date>.bb,
+#       linked from /usr/local/apache/htdocs-hgdownload/goldenPath/archive/$db/varaico/<date>/
+#   - installs the new files as /hive/data/genomes/$db/bed/varaico/varaico{,Suppl}.bb,
+#     writes varaicoVersion.txt there, and points /gbdb/$db/bbi/ at all three.
+# Preview the checks without changing anything:
+#   /hive/data/outside/otto/varaico/doUpdate.sh --dry-run
+# autoPush then copies /gbdb/{hg19,hg38,hs1}/bbi/varaico{,Suppl}.bb and
+# varaicoVersion.txt to the RR.
+
+# If the OTTO job refuses an intended big change (item count off by more than
+# 20%), install by hand with the same steps:
+CUR=20261019   # date of the installed build (see currentRelease.txt in the OTTO dir)
+NEW=$DATE
 for db in hg19 hg38 hs1; do
-    mkdir -p /hive/data/genomes/$db/bed/varaico
-    cp /hive/users/jbirgmei/TRACK_VERSIONS/v6_20261006/$db/normalized_variants.$db.bb \
-       /hive/data/genomes/$db/bed/varaico/varaico.bb
-    cp /hive/users/jbirgmei/TRACK_VERSIONS/v6_20261006/$db/normalized_variants_supplements.$db.bb \
-       /hive/data/genomes/$db/bed/varaico/varaicoSuppl.bb
-    echo "release 4 (20261006)" > /hive/data/genomes/$db/bed/varaico/varaicoVersion.txt
-done
-
-# finally, (re)point the /gbdb symlinks; hs1's used to point at the
-# normalized_variants*.hs1.bb names, now it matches hg19/hg38:
-for db in hg19 hg38 hs1; do
+    bed=/hive/data/genomes/$db/bed/varaico
+    mkdir -p /hive/data/genomes/$db/bed/varaico.$CUR \
+             /usr/local/apache/htdocs-hgdownload/goldenPath/archive/$db/varaico/$CUR
+    for t in varaico varaicoSuppl; do
+        cp -p $bed/$t.bb /hive/data/genomes/$db/bed/varaico.$CUR/$db.$t.$CUR.bb
+        ln -sfn /hive/data/genomes/$db/bed/varaico.$CUR/$db.$t.$CUR.bb \
+                /usr/local/apache/htdocs-hgdownload/goldenPath/archive/$db/varaico/$CUR/$db.$t.$CUR.bb
+    done
+    cp /hive/users/jbirgmei/TRACK_VERSIONS/$NEW/$db/normalized_variants.$db.bb $bed/.varaico.bb.tmp
+    cp /hive/users/jbirgmei/TRACK_VERSIONS/$NEW/$db/normalized_variants_supplements.$db.bb $bed/.varaicoSuppl.bb.tmp
+    mv -f $bed/.varaico.bb.tmp $bed/varaico.bb
+    mv -f $bed/.varaicoSuppl.bb.tmp $bed/varaicoSuppl.bb
+    echo "$NEW" > $bed/varaicoVersion.txt
     for f in varaico.bb varaicoSuppl.bb varaicoVersion.txt; do
-        ln -sfn /hive/data/genomes/$db/bed/varaico/$f /gbdb/$db/bbi/$f
+        ln -sfn $bed/$f /gbdb/$db/bbi/$f
     done
 done
+echo "$NEW" > /hive/data/outside/otto/varaico/currentRelease.txt
+
+##############################################################################
+# History (download archive: goldenPath/archive/$db/varaico/<date>/)
+#
+# 20250514  release 1, hg19 and hg38 (manual).
+# 20251110  release 2 (manual).
+# 20260527  release 3 (manual).
+# 20261006  first release 4 build: adds hs1, extracts variants that papers report
+#           only as raw genomic coordinates, dataVersion read from
+#           varaicoVersion.txt. Installed by hand on hgwdev, then replaced by
+#           20261019 before it went to the RR. Redmine #38543.
+# 20261019  release 4 (version shown: "release 4 (20261019)"), the first build
+#           installed by the OTTO job. Redmine #38543, #38546.
+# From here on, builds are named by date only and installed by the OTTO job.
+# Until 2026-11 the staging and archive dirs were named v<N>_<date>
+# (v1, v2, v5, v6, v7); they were renamed to the date alone.

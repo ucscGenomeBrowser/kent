@@ -1,10 +1,12 @@
 #!/bin/bash
 # OTTO update for the Varaico tracks (varaico, varaicoSuppl) on hg19, hg38 and hs1.
 #
-# Installs the newest release staged under /hive/users/jbirgmei/TRACK_VERSIONS/
-# that carries a READY marker. READY holds the public version string, e.g.
-# "release 5 (20270301)", which becomes /gbdb/$db/bbi/varaicoVersion.txt.
-# Exits quietly when that release is already installed (currentRelease.txt).
+# Installs the newest build staged under /hive/users/jbirgmei/TRACK_VERSIONS/
+# that carries a READY marker. A build dir is named by its build date,
+# <YYYYMMDD> (older dirs: v<N>_<YYYYMMDD>). READY holds the version string
+# shown on the track page, e.g. "20270301", which becomes
+# /gbdb/$db/bbi/varaicoVersion.txt. The replaced build is archived under its
+# date. Exits quietly when that build is already installed (currentRelease.txt).
 #
 # Usage: ./doUpdate.sh [--dry-run]   (--dry-run: run the checks, change nothing)
 # See README for the staging layout. Redmine #38543.
@@ -44,17 +46,39 @@ declare -A SRC_OF=(
     [varaicoSuppl]=normalized_variants_supplements
 )
 
+# build date of a staged dir name: "20270301" or the older "v7_20261019"
+build_date() {
+    local d=${1##*_}
+    if [[ $d =~ ^20[0-9]{6}$ ]]; then echo "$d"; fi
+}
+
 current=$(cat currentRelease.txt)
+current_date=$(build_date "$current")
+if [ -z "$current_date" ]; then
+    echo "currentRelease.txt holds '$current', which has no build date"
+    false
+fi
 newest=""
-for d in $(ls -d "$STAGE"/v*_* 2>/dev/null | sort -V); do
-    if [ -s "$d/READY" ]; then newest=$(basename "$d"); fi
+newest_date=""
+for d in "$STAGE"/*/; do
+    name=$(basename "$d")
+    date=$(build_date "$name")
+    if [ -z "$date" ] || [ ! -s "$d/READY" ]; then continue; fi
+    if [[ $date > $newest_date || ( $date == "$newest_date" && $name > $newest ) ]]; then
+        newest=$name
+        newest_date=$date
+    fi
 done
 if [ -z "$newest" ] || [ "$newest" = "$current" ]; then
-    echo "nothing new: newest READY release '${newest:-none}', installed '$current'"
+    echo "nothing new: newest READY build '${newest:-none}', installed '$current'"
     exit 0
 fi
+if [[ ! $newest_date > $current_date ]]; then
+    echo "newest READY build $newest is not newer than the installed $current; refusing"
+    false
+fi
 new_version=$(head -1 "$STAGE/$newest/READY")
-echo "new release $newest ('$new_version'), replacing $current"
+echo "new build $newest ('$new_version'), replacing $current"
 
 # --- sanity checks on every file before anything is touched
 for db in "${DBS[@]}"; do
@@ -82,15 +106,19 @@ if $dry_run; then
     exit 0
 fi
 
-# --- archive the current release, then install the new one
+# --- archive the current build under its date, then install the new one
 for db in "${DBS[@]}"; do
     bed=$GENOMES/$db/bed/varaico
-    mkdir -p "$GENOMES/$db/bed/varaico.$current" "$ARCHIVE/$db/varaico/$current"
+    mkdir -p "$GENOMES/$db/bed/varaico.$current_date" "$ARCHIVE/$db/varaico/$current_date"
     for t in varaico varaicoSuppl; do
-        arch=$GENOMES/$db/bed/varaico.$current/$db.$t.$current.bb
+        arch=$GENOMES/$db/bed/varaico.$current_date/$db.$t.$current_date.bb
+        if [ -e "$arch" ] && ! cmp -s "$bed/$t.bb" "$arch"; then
+            echo "$arch already exists and differs from the installed $t.bb; refusing"
+            false
+        fi
         cp -p "$bed/$t.bb" "$arch"
         cmp "$bed/$t.bb" "$arch"
-        ln -sfn "$arch" "$ARCHIVE/$db/varaico/$current/$db.$t.$current.bb"
+        ln -sfn "$arch" "$ARCHIVE/$db/varaico/$current_date/$db.$t.$current_date.bb"
     done
     for t in varaico varaicoSuppl; do
         src=$STAGE/$newest/$db/${SRC_OF[$t]}.$db.bb
@@ -105,7 +133,7 @@ for db in "${DBS[@]}"; do
     for f in varaico.bb varaicoSuppl.bb varaicoVersion.txt; do
         ln -sfn "$bed/$f" "$GBDB/$db/bbi/$f"
     done
-    echo "$db: installed $newest, archived $current"
+    echo "$db: installed $newest, archived $current as $current_date"
 done
 echo "$newest" > currentRelease.txt
 mail -s "varaico OTTO update: installed $newest ($new_version) - $(date +%F)" "$MAILTO" < "$LOG"
