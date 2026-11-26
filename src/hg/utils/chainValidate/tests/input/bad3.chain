@@ -1,0 +1,25 @@
+# Problems added after the v507 code review.
+# score is not a number
+chain x1 chrE 1000 + 0 100 chrF 1000 + 0 100 40
+100
+
+# 20 fields
+chain 1000 chrE 1000 + 100 200 chrF 1000 + 100 200 41 a b c d e f g
+100
+
+# the last block line has 2 fields; report it once
+chain 1000 chrE 1000 + 200 300 chrF 1000 + 200 300 42
+50 10
+
+# a target size above 2147483647
+chain 1000 chrBig 3000000000 + 2999999000 2999999100 chrF 1000 + 300 400 43
+100
+
+# a gap above 2147483647
+chain 1000 chrE 1000 + 400 500 chrF 1000 + 400 500 44
+50 3000000000 0
+50
+
+# a chain ID above 2147483647
+chain 1000 chrE 1000 + 600 700 chrF 1000 + 600 700 3000000000
+100

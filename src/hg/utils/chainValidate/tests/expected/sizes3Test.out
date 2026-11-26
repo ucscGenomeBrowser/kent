@@ -1,0 +1,2 @@
+input/good.chain line 2 chain 1: target size of chrA is 1000, the sizes file says 3000000000
+input/good.chain line 6 chain 2: target size of chrA is 1000, the sizes file says 3000000000

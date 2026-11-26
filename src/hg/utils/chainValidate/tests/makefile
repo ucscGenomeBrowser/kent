@@ -5,7 +5,7 @@ chainValidate = ${DESTBINDIR}/chainValidate
 
 all:: test
 
-test:: goodTest badTest sizesTest bad2Test sizes2Test
+test:: goodTest badTest sizesTest bad2Test sizes2Test bad3Test sizes3Test
 
 # A clean file: no output and exit status 0.
 goodTest: mkout
@@ -34,6 +34,18 @@ bad2Test: mkout
 # A target sequence that is missing from the sizes file.
 sizes2Test: mkout
 	if ${chainValidate} -tSizes=input/q.sizes input/good.chain > output/$@.out; then exit 1; fi
+	diff expected/$@.out output/$@.out
+
+# A score that is not a number, a header with 20 fields, a last block line with two fields
+# (reported once), and numbers above 2147483647 (sizes, a gap, a chain ID), which other
+# chain readers cannot hold.
+bad3Test: mkout
+	if ${chainValidate} input/bad3.chain > output/$@.out; then exit 1; fi
+	diff expected/$@.out output/$@.out
+
+# A sizes file with a sequence longer than 2147483647 bases.
+sizes3Test: mkout
+	if ${chainValidate} -tSizes=input/big.sizes input/good.chain > output/$@.out; then exit 1; fi
 	diff expected/$@.out output/$@.out
 
 mkout:

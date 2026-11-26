@@ -3,6 +3,7 @@
 /* Copyright (C) 2026 The Regents of the University of California
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
+#include <limits.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -21,6 +22,8 @@ errAbort(
 "The exit status is 1 if any problem was found, 0 otherwise.\n"
 "Problems reported:\n"
 "   - a chain header with the wrong number of fields or a field that is not a number\n"
+"   - a chain ID, size, position, block size or gap above 2147483647, which other tools\n"
+"     cannot read\n"
 "   - a target strand other than + or a query strand other than + or -\n"
 "   - a start that is not before the end, or an end past the sequence size\n"
 "   - a sequence size that differs between chains, or from a chrom.sizes file\n"
@@ -56,6 +59,7 @@ struct chainInfo
     int blockCount;             /* Number of block lines read. */
     boolean blocksOk;           /* FALSE if any block line was bad. */
     boolean ended;              /* TRUE after the one-number last block line. */
+    boolean lastLineBad;        /* TRUE if the last block line read had the wrong field count. */
     };
 
 static int problemCount = 0;
@@ -101,6 +105,46 @@ if (!isAllDigits(digits) || strlen(digits) > 15)
 return TRUE;
 }
 
+static boolean checkMax(struct lineFile *lf, int line, struct chainInfo *ci, char *what,
+    long long val)
+/* Report a number other chain readers cannot hold, since they keep it in an int.
+ * Return FALSE if it is too large. */
+{
+if (val > INT_MAX)
+    {
+    problem(lf, line, ci, "%s %lld is above %d, the largest number other tools can read",
+        what, val, INT_MAX);
+    return FALSE;
+    }
+return TRUE;
+}
+
+static boolean isNumber(char *s)
+/* Return TRUE if all of s is a number, as a chain score is written. */
+{
+char *end;
+strtod(s, &end);
+return end != s && *end == 0;
+}
+
+static struct hash *readSizes(char *fileName)
+/* Read a chrom.sizes file into a hash of long long values keyed by sequence name. */
+{
+struct hash *hash = hashNew(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+while (lineFileRow(lf, row))
+    {
+    long long *size;
+    lmAllocVar(hash->lm, size);
+    if (!parseCount(row[1], size))
+        errAbort("%s line %d: size '%s' is not a number", fileName, lf->lineIx, row[1]);
+    hashAdd(hash, row[0], size);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
 static void checkSize(struct lineFile *lf, struct chainInfo *ci, char *side, char *name,
     long long size, struct hash *sizesFromFile, struct hash *sizesSeen, struct lm *lm)
 /* Check one sequence size against the chrom.sizes file, if given, and against the
@@ -108,13 +152,13 @@ static void checkSize(struct lineFile *lf, struct chainInfo *ci, char *side, cha
 {
 if (sizesFromFile != NULL)
     {
-    struct hashEl *hel = hashLookup(sizesFromFile, name);
-    if (hel == NULL)
+    long long *fileSize = hashFindVal(sizesFromFile, name);
+    if (fileSize == NULL)
         problem(lf, ci->line, ci, "%s sequence %s is not in the %s sizes file",
             side, name, side);
-    else if (ptToInt(hel->val) != size)
-        problem(lf, ci->line, ci, "%s size of %s is %lld, the sizes file says %d",
-            side, name, size, ptToInt(hel->val));
+    else if (*fileSize != size)
+        problem(lf, ci->line, ci, "%s size of %s is %lld, the sizes file says %lld",
+            side, name, size, *fileSize);
     }
 long long *seen = hashFindVal(sizesSeen, name);
 if (seen == NULL)
@@ -155,11 +199,18 @@ if (wordCount == 13)
         problem(lf, ci->line, ci, "chain ID is not a number");
         ok = FALSE;
         }
+    else if (!checkMax(lf, ci->line, ci, "chain ID", id))
+        ok = FALSE;
     int firstLine = hashIntValDefault(idHash, ci->id, 0);
     if (firstLine != 0)
         problem(lf, ci->line, ci, "duplicate chain ID, first used on line %d", firstLine);
     else
         hashAddInt(idHash, ci->id, ci->line);
+    }
+if (!isNumber(row[1]))
+    {
+    problem(lf, ci->line, ci, "score '%s' is not a number", row[1]);
+    ok = FALSE;
     }
 if (!parseCount(row[3], &ci->tSize) || !parseCount(row[5], &ci->tStart)
     || !parseCount(row[6], &ci->tEnd))
@@ -184,6 +235,9 @@ if (!sameString(row[9], "+") && !sameString(row[9], "-"))
     ok = FALSE;
     }
 if (!ok)
+    return ci;
+if (!checkMax(lf, ci->line, ci, "target size", ci->tSize)
+    || !checkMax(lf, ci->line, ci, "query size", ci->qSize))
     return ci;
 ci->tName = lmCloneString(lm, row[2]);
 ci->qName = lmCloneString(lm, row[7]);
@@ -234,8 +288,10 @@ if (wordCount != 1 && wordCount != 3)
     {
     problem(lf, lf->lineIx, ci, "block line has %d fields, expecting 1 or 3", wordCount);
     ci->blocksOk = FALSE;
+    ci->lastLineBad = TRUE;
     return;
     }
+ci->lastLineBad = FALSE;
 long long size, dt = 0, dq = 0;
 if (!parseSigned(row[0], &size) || (wordCount == 3 &&
     (!parseSigned(row[1], &dt) || !parseSigned(row[2], &dq))))
@@ -255,6 +311,10 @@ if (dt < 0 || dq < 0)
     problem(lf, lf->lineIx, ci, "negative gap (target %lld, query %lld)", dt, dq);
     ci->blocksOk = FALSE;
     }
+if (!checkMax(lf, lf->lineIx, ci, "block size", size)
+    || !checkMax(lf, lf->lineIx, ci, "target gap", dt)
+    || !checkMax(lf, lf->lineIx, ci, "query gap", dq))
+    ci->blocksOk = FALSE;
 ci->tSum += size + dt;
 ci->qSum += size + dq;
 if (wordCount == 1)
@@ -270,7 +330,7 @@ if (ci->blockCount == 0)
     problem(lf, ci->line, ci, "chain has no block lines");
     return;
     }
-if (!ci->ended)
+if (!ci->ended && !ci->lastLineBad)
     {
     problem(lf, ci->line, ci, "last block line has more than one number");
     ci->blocksOk = FALSE;
@@ -329,8 +389,8 @@ hashFree(&endHash);
 void chainValidate(char *inFile, char *tSizesFile, char *qSizesFile)
 /* chainValidate - report obvious problems in a chain file. */
 {
-struct hash *tSizes = (tSizesFile != NULL) ? hashNameIntFile(tSizesFile) : NULL;
-struct hash *qSizes = (qSizesFile != NULL) ? hashNameIntFile(qSizesFile) : NULL;
+struct hash *tSizes = (tSizesFile != NULL) ? readSizes(tSizesFile) : NULL;
+struct hash *qSizes = (qSizesFile != NULL) ? readSizes(qSizesFile) : NULL;
 struct hash *tSeen = hashNew(0);
 struct hash *qSeen = hashNew(0);
 struct hash *idHash = hashNew(20);
@@ -342,7 +402,9 @@ char *line;
 char *row[14];
 while (lineFileNextReal(lf, &line))
     {
-    int wordCount = chopByWhite(line, row, ArraySize(row));
+    // Count all the fields first: row only holds the first few.
+    int wordCount = chopByWhite(line, NULL, 0);
+    chopByWhite(line, row, ArraySize(row));
     if (sameString(row[0], "chain"))
         {
         if (ci != NULL)
