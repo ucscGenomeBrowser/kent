@@ -11173,6 +11173,9 @@ var sessionLoadDialog = {
                 window.recentSessions = list;
                 $('#sessionLoadDialog').dialog('close');
                 sessionLoadDialog.show();
+            })
+            .fail(function() {
+                warn("The list of previous sessions could not be loaded. Please try again later.");
             });
     },
 

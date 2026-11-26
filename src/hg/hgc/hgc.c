@@ -28518,6 +28518,9 @@ char *trackName = cartString(cart, "trackName");
 char *trackDescription = cartString(cart, "trackDescription");
 char *pslName, *faName, *qName;
 parseSs(fileNames, &pslName, &faName, &qName);
+/* hgBlat writes both files into trash, and a saved session can have moved them to session data. */
+if (!isTrashOrSessionDataPath(pslName) || !isTrashOrSessionDataPath(faName))
+    errAbort("These BLAT results are no longer available.");
 
 /* getCtList has already dropped a track the request removes (CT_DO_REMOVE_VAR): a rename sends
  * the old name, so a rename always builds a new track. */

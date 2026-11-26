@@ -9380,6 +9380,34 @@ for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
 return FALSE;
 }
 
+static boolean requestHasTrackSettings(char *trackName)
+/* Return TRUE if a CGI variable on this request is a setting of trackName, <track>.<setting>,
+ * also as a checkbox's boolshad. variable, as the track's configuration page submits them. */
+{
+char prefix[1024], booPrefix[1024];
+safef(prefix, sizeof prefix, "%s.", trackName);
+safef(booPrefix, sizeof booPrefix, "%s%s.", cgiBooleanShadowPrefix(), trackName);
+struct cgiVar *var;
+for (var = cgiVarList(); var != NULL; var = var->next)
+    if (startsWith(prefix, var->name) || startsWith(booPrefix, var->name))
+        return TRUE;
+return FALSE;
+}
+
+static boolean isSettingsSubmit(struct track *track, char *varName, char *vis)
+/* Return TRUE if this request is the track's configuration page submitted with the visibility
+ * the track already had: the page always sends the visibility with the settings, so a Submit
+ * that only changed a setting names the track too.  Its previous visibility is the cart's, else
+ * the trackDb default, which is what that page's menu shows. */
+{
+if (!requestHasTrackSettings(varName))
+    return FALSE;
+char *oldVis = (oldVars != NULL) ? hashFindVal(oldVars, varName) : NULL;
+if (oldVis == NULL || sameString(oldVis, CART_VAR_EMPTY))
+    oldVis = hStringFromTv(track->tdb->visibility);
+return sameString(oldVis, vis);
+}
+
 static void requestOpensSuperTrack(struct track *track)
 /* A link, a search result or the track search page turns on a member of a supertrack by
  * naming it on the request.  If its supertrack is hidden, the member would stay hidden, so
@@ -9390,15 +9418,19 @@ static void requestOpensSuperTrack(struct track *track)
  * configuration page submits its own setting together with that of every member.
  * refs #38762 */
 {
-char *vis = cgiOptionalString(track->track);
+char *varName = track->track;
+char *vis = cgiOptionalString(varName);
 if (vis == NULL && startsWith("hub_", track->track))
     {
     // the bare name is the native track's if the assembly has one by that name
-    vis = cgiOptionalString(trackHubSkipHubName(track->track));
+    varName = trackHubSkipHubName(track->track);
+    vis = cgiOptionalString(varName);
     if (vis != NULL && !hubTrackOwnsBareName(database, track->track))
         vis = NULL;
     }
 if (vis == NULL || sameString(vis, "hide"))
+    return;
+if (isSettingsSubmit(track, varName, vis))
     return;
 // what the request asked for may have been overruled, e.g. by a _hideKids
 char *cartVis = cartOptionalString(cart, track->track);

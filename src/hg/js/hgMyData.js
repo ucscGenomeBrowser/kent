@@ -1372,6 +1372,7 @@ var hubCreate = (function() {
         maxQuota: 0,
         userQuota: 0,
         userFiles: {}, // same as uiData.userFiles on page load
+        genomeUrlArgs: {}, // hub_<id>_ genome -> URL arguments that open it in any cart
         // Object.create(null) because a hub may be named 'constructor' or 'toString'
         filesHash: Object.create(null), // for each file, userFiles.fullPath is the key, and then the userFiles.fileList data as the value, with an extra key for the child fullPaths if the file is a directory
     };
@@ -1914,12 +1915,17 @@ var hubCreate = (function() {
         let hubUrl = uiState.userUrl + cgiEncode(hubTxtPathForHub(hubName));
         let dbParam = isAssemblyHub(hubName) ? "genome" : "db";
         let genome = dirRow.genome || findHubGenome(hubName) || "";
-        // A hub_<id>_ name means nothing in another cart.  For the page's own assembly
-        // dbUrlArgs() knows what to send instead, also the URL of a user assembly hub; for
-        // a GenArk or curated assembly stored under its cart name the bare name does it.
+        // A hub_<id>_ name means nothing in another cart.  The server sends, for each such
+        // genome of the user's files, what to send instead (genomeUrlArgs): the bare name of
+        // a GenArk or curated assembly, or hubUrl=&genome= of a user assembly hub.  A genome
+        // uploaded since the page loaded is not in that list; dbUrlArgs() knows the page's own.
         let dbArgs = dbParam + "=" + encodeURIComponent(trackHubSkipHubName(genome));
-        if (dbParam === "db" && genome.startsWith("hub_") && !dbUrlArgs(genome).startsWith("db=hub_"))
-            dbArgs = dbUrlArgs(genome);
+        if (dbParam === "db" && genome.startsWith("hub_")) {
+            let portable = Object.prototype.hasOwnProperty.call(uiState.genomeUrlArgs, genome) ?
+                uiState.genomeUrlArgs[genome] : dbUrlArgs(genome);
+            if (!portable.startsWith("db=hub_"))
+                dbArgs = portable;
+        }
         return window.location.origin + "/cgi-bin/hgTracks?" + dbArgs +
             "&hubUrl=" + encodeURIComponent(hubUrl);
     }

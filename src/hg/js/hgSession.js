@@ -266,8 +266,9 @@ function sessActionsHtml(row) {
 }
 
 function sessNameCellHtml(row) {
-    var html = '<a href="' + sessEnc(row.shareUrl) + '" ' +
-        'title="Load this session in the Genome Browser">' + sessEnc(row.name) + '</a>';
+    var html = '<a class="sessNameLink" data-key="' + sessEnc(row.uid) + '" href="' +
+        sessEnc(row.shareUrl) + '" title="Load this session in the Genome Browser">' +
+        sessEnc(row.name) + '</a>';
     if (row.description) {
         // No title attribute here: the description is the user's own text and the tooltip machinery
         // in utils.js inserts its text with innerHTML, so a title would have markup in a description
@@ -1055,6 +1056,19 @@ function sessBuildTable() {
 
     // Every redraw brings rows the tooltip conversion has not seen yet.
     $('#sessionAppTable').on('draw.dt', sessApplyTooltips);
+
+    // The name link has no hgsid, so it can be copied and shared.  A plain click loads the session
+    // into this tab's hgsid, so the copy of the view that the load replaces is this tab's, not that
+    // of the cart another tab saved last.  As on the classic list.
+    $('#sessionAppTable tbody').on('click', 'a.sessNameLink', function(ev) {
+        if (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.button !== 0) { return true; }
+        var row = sessByKey(this.getAttribute('data-key'));
+        if (!row || row.remote) { return true; }   // another server's session, our hgsid is no use
+        ev.preventDefault();
+        window.location.href = row.shareUrl + '&' + encodeURIComponent(sessData.config.cartVar) +
+            '=' + encodeURIComponent(sessData.config.hgsid);
+        return false;
+    });
 
     // Delegate the row action buttons.
     $('#sessionAppTable tbody').on('click', 'button[data-act]', function() {

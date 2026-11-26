@@ -2166,10 +2166,12 @@ return;
 }
 
 boolean usingNewPassword(struct sqlConnection *conn, char *userName, char *password)
-/* The user is using  requested new password */
+/* The user is using  requested new password, and it has not expired yet. The forgot-password
+ * mail says it is valid for 7 days. */
 {
 char query[256];
-sqlSafef(query,sizeof(query), "SELECT passwordChangeRequired FROM gbMembers WHERE userName='%s'", userName);
+sqlSafef(query,sizeof(query), "SELECT passwordChangeRequired FROM gbMembers WHERE userName='%s' "
+    "AND newPasswordExpire > NOW()", userName);
 char *change = sqlQuickString(conn, query);
 sqlSafef(query,sizeof(query), "SELECT newPassword FROM gbMembers WHERE userName='%s'", userName);
 char *newPassword = sqlQuickString(conn, query);

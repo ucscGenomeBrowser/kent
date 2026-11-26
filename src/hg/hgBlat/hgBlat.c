@@ -3249,7 +3249,9 @@ static char *cleanCtLabel(char *s, int maxLen)
 /* Return a clone of a track name or description from the request, cut to maxLen characters, with
  * tabs and line breaks turned into spaces so it cannot break the custom track file's track line.
  * Quotes are dropped here, as saveTdbLine() would drop them when it writes the file, so the track
- * id made from the name now is the one the track gets when the file is read back. */
+ * id made from the name now is the one the track gets when the file is read back.  Backslashes are
+ * dropped too: the track line reader takes one as an escape, so a name ending in one would run into
+ * the next setting. */
 {
 char *label = cloneString(s);
 subChar(label, '\t', ' ');
@@ -3257,6 +3259,7 @@ subChar(label, '\n', ' ');
 subChar(label, '\r', ' ');
 stripChar(label, '"');
 stripChar(label, '\'');
+stripChar(label, '\\');
 char *trimmed = cloneString(trimSpaces(label));
 freeMem(label);
 if (strlen(trimmed) > maxLen)
@@ -3320,7 +3323,12 @@ if (err == NULL)
                     customTracksSaveCart(database, cart, ctList);
                     if (differentString(newCtName, ctName))
                         {
-                        /* the track's visibility (ct_x) and its settings (ct_x.*) */
+                        /* the track's visibility (ct_x) and its settings (ct_x.*).  Values left
+                         * in the cart under the new id by an older track of that name go first. */
+                        char newPrefix[256];
+                        safef(newPrefix, sizeof newPrefix, "%s.", newCtName);
+                        cartRemove(cart, newCtName);
+                        cartRemovePrefix(cart, newPrefix);
                         char *vis = cartOptionalString(cart, ctName);
                         if (vis != NULL)
                             cartSetString(cart, newCtName, vis);

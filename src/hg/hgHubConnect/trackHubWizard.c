@@ -162,7 +162,22 @@ if (userName)
     {
     // the url for this user:
     jsonWriteString(jw, "userUrl", webDataDir(userName));
-    hubSpaceWriteFileList(jw, userName, listFilesForUser(userName));
+    struct hubSpace *file, *fileList = listFilesForUser(userName);
+    hubSpaceWriteFileList(jw, userName, fileList);
+    /* The share link of a track hub on an assembly hub needs that hub's URL, which the page only
+     * knows for its own assembly: the URL arguments that open each hub_<id>_ genome anywhere. */
+    struct hash *seen = hashNew(0);
+    jsonWriteObjectStart(jw, "genomeUrlArgs");
+    for (file = fileList; file != NULL; file = file->next)
+        if (file->db != NULL && startsWith("hub_", file->db) && !hashLookup(seen, file->db))
+            {
+            hashAdd(seen, file->db, NULL);
+            char *args = hubConnectDbUrlArgs(file->db);
+            jsonWriteString(jw, file->db, args);
+            freeMem(args);
+            }
+    jsonWriteObjectEnd(jw);
+    hashFree(&seen);
     }
 jsonWriteBoolean(jw, "isLoggedIn", getUserName() ? TRUE : FALSE);
 jsonWriteString(jw, "hubNameDefault", defaultHubNameForUser(getUserName()));

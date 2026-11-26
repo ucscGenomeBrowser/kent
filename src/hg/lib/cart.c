@@ -2444,6 +2444,13 @@ boolean cartRecentSessionsEnabled()
 return cfgOptionBooleanDefault("recentSessions.enable", FALSE);
 }
 
+static boolean recentSessionTooOld(struct slPair *el, time_t now)
+/* Return TRUE if the recent sessions list entry el is older than RECENT_SESSION_MAX_AGE.  The list
+ * is pruned only when a new copy is made, so it can hold such entries. */
+{
+return now - sqlLongLong(el->val) > RECENT_SESSION_MAX_AGE;
+}
+
 char *cartContentsVal(char *contents, char *var)
 /* Return the CGI-decoded value of var from a CGI-encoded cart contents string,
  * or NULL if not present.  Free the result when done. */
@@ -2481,10 +2488,11 @@ char *currentId = cartSessionId(cart);
 struct sqlConnection *conn = cartDefaultConnector();
 struct jsonWrite *jw = jsonWriteNew();
 int count = 0;
+time_t now = time(NULL);
 jsonWriteListStart(jw, NULL);
 for (struct slPair *el = recent; el != NULL; el = el->next)
     {
-    if (sameString(el->name, currentId))
+    if (sameString(el->name, currentId) || recentSessionTooOld(el, now))
         continue;
     struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
     if (cdb == NULL)
@@ -2590,7 +2598,8 @@ char *copyId = cloneString(cartString(cart, hgsOpenCopy));
 cartRemove(cart, hgsOpenCopy);
 boolean opened = FALSE;
 struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
-if (cartRecentSessionsEnabled() && slPairFind(list, copyId) != NULL
+struct slPair *el = slPairFind(list, copyId);
+if (cartRecentSessionsEnabled() && el != NULL && !recentSessionTooOld(el, time(NULL))
         && differentString(copyId, cartSessionId(cart)))
     {
     struct sqlConnection *conn = cartDefaultConnector();
