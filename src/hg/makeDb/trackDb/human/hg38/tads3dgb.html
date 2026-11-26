@@ -61,7 +61,7 @@ The Provenance facet has two values:
           <a href="hgTrackUi?db=$db&amp;g=tadsMcArthur" target="_blank">TAD boundary stability</a> track</li>
       <li>Dixon 2015 (5 datasets): among the studies whose maps are counted in the
           <a href="hgTrackUi?db=$db&amp;g=tadsMcArthur" target="_blank">TAD boundary stability</a> track</li>
-      <li>ENCODE (19 datasets): 18 of these biosamples are also in the
+      <li>ENCODE (19 datasets): 18 of these datasets are from biosamples that are also in the
           <a href="hgTrackUi?db=$db&amp;g=tadsEncode" target="_blank">ENCODE TADs</a> track</li>
       <li>4DN Micro-C (2 datasets, H1-hESC and HFFc6): part of the
           <a href="hgTrackUi?db=$db&amp;g=hicAndMicroC" target="_blank">Hi-C and Micro-C</a> track</li>
@@ -119,8 +119,10 @@ name in the Organ column's search box in the table.
 TADs were called by the 3D Genome Browser from the cooltools insulation score, at 20 or 25 kb
 resolution. The 3DGB TAD file for each dataset was converted to a four-column bigBed
 (chromosome, start, end, dataset name). Domain coordinates were not changed. The dataset
-metadata used for the facets (organ, cell type, assay, year, study) was copied from the 3D
-Genome Browser.
+metadata used for the Organ, Cell type, Assay, Year, and Study facets was copied from the 3D
+Genome Browser. The Condition and Treatment values were assigned by UCSC from the 3D Genome
+Browser's dataset descriptions, and the Provenance values were assigned by UCSC as described
+above.
 </p>
 
 <h2>Data Access</h2>

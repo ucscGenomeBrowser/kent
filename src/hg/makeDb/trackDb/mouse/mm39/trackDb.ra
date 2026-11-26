@@ -62,7 +62,7 @@ html gencodePfam
 
 include vgp577way.trackDb.ra alpha
 
-include tad.ra alpha
+include tad.ra alpha,beta
 
 track dnaMethylation
 superTrack on

@@ -277,7 +277,7 @@ html gencodePfam
 track jaspar2024 override
 parent jaspar on
 
-include tad.ra alpha
+include tad.ra alpha,beta
 
 include ../nonCodingRNAs.ra alpha
 include ../mirGeneDbV3_0.ra alpha

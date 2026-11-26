@@ -246,8 +246,8 @@ sub doCollapsePairedEnds {
   my $bossScript = newBash HgRemoteScript("$runDir/runCollapsePairedEnds.bash",
 		$paraHub, $runDir, $whatItDoes);
 
-  # trying 48G ram to see if jobs will not fail
-  my $paraRun = "para make -ram=48g jobList
+  # reduced to 4g ram after adding the sort -S 3G setting and TMPDIR
+  my $paraRun = "para make -ram=4g jobList
 para check
 para time > run.time
 cat run.time\n";
@@ -257,6 +257,17 @@ ln -s $prevRunDir/part.list .
 printf '#!/bin/bash
 
 set -beEu -o pipefail
+
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/dev/shm" ]; then
+  export TMPDIR="/dev/shm"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+else
+  export TMPDIR="/tmp"
+fi
 
 export chrName=\$1
 export result=\$2
@@ -296,12 +307,24 @@ sub doLoad {
 		$workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
+
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/dev/shm" ]; then
+  export TMPDIR="/dev/shm"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+else
+  export TMPDIR="/tmp"
+fi
+
 for F in collapsePairedEnds/tmp/*.bed.gz
 do
   zcat \$F | awk '\$5 > $kmersMinus1'
-done | sort -k1,1 -k2,2n | gzip -c > $db.tandemDups.bed.gz
-twoBitInfo $twoBit stdout | sort -k2nr > $db.chrom.sizes
-export maxScore=`zcat $db.tandemDups.bed.gz | cut -f5 | sort -k1,1nr | head -1`
+done | sort -S 3G -k1,1 -k2,2n | gzip -c > $db.tandemDups.bed.gz
+twoBitInfo $twoBit stdout | sort -S 3G -k2nr > $db.chrom.sizes
+export maxScore=`zcat $db.tandemDups.bed.gz | cut -f5 | sort -S 3G -k1,1nr | head -1`
 zcat $db.tandemDups.bed.gz | awk -vmax=\$maxScore '{score=\$5; newScore=int(1000*score/max); printf "%s\\t%s\\t%s\\t%s\\t", \$1, \$2, \$3, \$4; printf "%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\n", newScore, \$6, \$7, \$8, \$9, \$10, \$11, \$12, score}' > $db.reScore.bed
 bedToBigBed -type=bed12+1 $db.reScore.bed $db.chrom.sizes $db.tandemDups.bb
 bedToExons $db.tandemDups.bed.gz stdout | bedSingleCover.pl stdin > $db.exons.bed
