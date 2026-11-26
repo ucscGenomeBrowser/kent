@@ -1,0 +1,9 @@
+## input/overflow.bed -countBlocks
+Coordinate out of allowed range [0,1000) for chrT: item chrT:100-2147483700 on line 1 of input/overflow.bed
+exit 255
+## input/allPast.bed
+Coordinate out of allowed range [0,1000) for chrT: item chrT:2000-3000 on line 1 of input/allPast.bed
+exit 255
+## input/empty.bed
+0 bases of 1000 (0.000%) in intersection
+exit 0

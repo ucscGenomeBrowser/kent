@@ -22,7 +22,7 @@ FB = ${featureBits} test -countGaps -chromSize=input/chrom.sizes
 
 all:
 
-test: rangeTest
+test: rangeTest messageTest
 
 rangeTest: mkdirs
 	${bedToBigBed} -verbose=0 input/inRangeBlocks.bed input/bigBed.sizes output/inRange.bb
@@ -44,6 +44,19 @@ rangeTest: mkdirs
 	    echo "## $$c" >> output/$@ ; \
 	    ${FB} $$c > output/out.txt 2>&1 ; echo "exit $$?" > output/exit.txt ; \
 	    tail -1 output/out.txt | sed "s/: item .*//" >> output/$@ ; cat output/exit.txt >> output/$@ ; \
+	done
+	diff -u expected/$@ output/$@
+
+# The full error line: the item's real coordinates (not clamped to INT_MAX) and its line
+# number.  An empty BED file counts nothing and is not an error.
+messageTest: mkdirs
+	rm -f output/$@
+	@for c in "input/overflow.bed -countBlocks" \
+	          "input/allPast.bed" \
+	          "input/empty.bed" ; do \
+	    echo "## $$c" >> output/$@ ; \
+	    ${FB} $$c > output/out.txt 2>&1 ; echo "exit $$?" > output/exit.txt ; \
+	    tail -1 output/out.txt >> output/$@ ; cat output/exit.txt >> output/$@ ; \
 	done
 	diff -u expected/$@ output/$@
 
