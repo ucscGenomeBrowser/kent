@@ -188,7 +188,6 @@ hgSeq.padding5                     # hg/cgilib/hgSeq.c
 hgSeq.promoter                     # hg/cgilib/hgSeq.c
 hgSeq.promoterSize                 # hg/cgilib/hgSeq.c
 hgSeq.repMasking                   # hg/cgilib/hgSeq.c
-hgSeq.revComp                      # hg/cgilib/hgSeq.c
 hgSeq.splitCDSUTR                  # hg/cgilib/hgSeq.c
 hgSeq.utrExon3                     # hg/cgilib/hgSeq.c
 hgSeq.utrExon5                     # hg/cgilib/hgSeq.c

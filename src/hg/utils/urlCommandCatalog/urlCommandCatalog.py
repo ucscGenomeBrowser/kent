@@ -961,6 +961,11 @@ OTHER_CGIS = {
                    "so QA could compare. Retirement candidate."),
             c("hgSeq.maskRepeats", "action", "hg/hgc/hgc.c", verified=False, leaks=True,
               note="Mask repeats in retrieved sequence."),
+            c("hgSeq.revComp", "setting", "hg/hgc/hgc.c", value="on|off",
+              persists=True, verified=True,
+              note="Get DNA shows the reverse complement. hgTracks.js View DNA "
+                   "sets it in a multi-region space, from the strand the region "
+                   "is drawn on."),
         ],
     },
     "hgTrackUi": {
