@@ -2338,7 +2338,9 @@ if (startOffset > 0)
     {
     int gcCount = 0, validBases = 0;
     int i;
-    for (i = 0; i < startOffset; i++)
+    /* A window shorter than the partial window ends inside it. */
+    int leadEnd = min(startOffset, seqLen);
+    for (i = 0; i < leadEnd; i++)
         {
         char b = seq->dna[i];
         if (b == 'g' || b == 'c')  { gcCount++;  validBases++; }
