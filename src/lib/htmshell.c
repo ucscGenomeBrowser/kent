@@ -354,15 +354,10 @@ htmlEncodeTextExtended(s, out, size+1);
 return out;
 }
 
-int nonAlphaNumericHexEncodeText(char *s, char *out, int outSize, 
-   char *prefix, char *postfix)
-/* For html tag attributes, it replaces non-alphanumeric characters
- * with <prefix>HH<postfix> hex codes to fight XSS.
- * out result must be large enough to receive the encoded string.
- * Returns size of encoded string or -1 if output larger than outSize. 
- * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
- * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
- */
+static int hexEncodeText(char *s, char *out, int outSize, char *prefix, char *postfix,
+	boolean keepHighBytes)
+/* Replace non-alphanumeric characters with <prefix>HH<postfix> hex codes.  If keepHighBytes,
+ * bytes 0x80 and above are copied unchanged, so a UTF-8 character stays one character. */
 {
 if (s == NULL)
     {
@@ -377,7 +372,7 @@ do
     {
     c=*s++;
     int size = 1;
-    if (!isalnum(c)) // alpha-numeric
+    if (!isalnum(c) && !(keepHighBytes && (unsigned char)c >= 0x80)) // alpha-numeric
 	{
 	size = encodedSize;
 	}
@@ -411,6 +406,19 @@ do
     total += size;
     } while (c != 0);
 return total - 1; // do not count terminating 0
+}
+
+int nonAlphaNumericHexEncodeText(char *s, char *out, int outSize,
+   char *prefix, char *postfix)
+/* For html tag attributes, it replaces non-alphanumeric characters
+ * with <prefix>HH<postfix> hex codes to fight XSS.
+ * out result must be large enough to receive the encoded string.
+ * Returns size of encoded string or -1 if output larger than outSize.
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize.
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize.
+ */
+{
+return hexEncodeText(s, out, outSize, prefix, postfix, FALSE);
 }
 
 static boolean decodeOneHexChar(char c, char *h)
@@ -476,7 +484,9 @@ int attrEncodeTextExtended(char *s, char *out, int outSize)
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-return nonAlphaNumericHexEncodeText(s, out, outSize, "&#x", ";");
+// Bytes 0x80 and above are left alone: none of them can end an attribute, and encoding
+// each byte of a UTF-8 character on its own would turn it into several Latin-1 characters.
+return hexEncodeText(s, out, outSize, "&#x", ";", TRUE);
 }
 
 int attrEncodeTextSize(char *s)

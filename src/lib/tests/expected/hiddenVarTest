@@ -9,5 +9,7 @@ v7	[hgTracks?db=hg38&position=chr1:1,000-2,000]	same
 v8	[ENST00000456328.2]	same
 v9	[100%20off]	same
 v10	[tab	here]	same
-v11	[]	same
+v11	[café]	same
+v12	[]	same
 vNull	[]	same
+utf8Raw	[café]	same
