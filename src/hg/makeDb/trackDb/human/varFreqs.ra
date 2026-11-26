@@ -1572,11 +1572,14 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
 
         track allofus
         shortLabel AllOfUs v7 245k WGS
-        longLabel SNV Frequencies: AllOfUs v7 - 245k WGS, local-ancestry-stratified, AC>=20
+        longLabel SNV Frequencies: AllOfUs v7 - 245k WGS, overall and local-ancestry-stratified, AC>=20
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_allofus/allOfUs.locAncFreq.vcf.gz
-        dataVersion V7
+        dataVersion V7, Ioannidis lab release 2026-11-14
+        filter.AF_all 0:1
+        filterByRange.AF_all on
+        filterLabel.AF_all Overall allele frequency
         visibility hide
         tableBrowser off
         priority 2

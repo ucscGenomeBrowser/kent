@@ -11,12 +11,23 @@ analysis.
 
 <p>
 This track shows allele frequencies from the v7 short-read whole-genome sequencing (srWGS)
-release of 245,388 participants. A minimum allele count filter of &ge;20 was applied.
-Frequencies are provided both overall and broken down by genetic ancestry using local ancestry
-inference: European (EUR), East Asian (EAS), African (AFR), Indigenous American (AMR),
-Oceanian (OCE), and South Asian (SAS). Some variants are flagged with an &quot;NW&quot; tag
-(not in window) when the variant was not within a genomic window covered by the ancestry
-reference files; in these cases the closest available position was used for ancestry assignment.
+release of 245,388 participants. Only variants with an overall allele count (AC_all) and allele
+number (AN_all) of at least 20 are included.
+Frequencies are provided both overall (AF_all, AC_all, AN_all) and broken down by genetic
+ancestry using local ancestry inference: European (EUR), East Asian (EAS), African (AFR),
+Indigenous American (AMR), Oceanian (OCE), and South Asian (SAS). The field W is 0 when the
+variant was not within a genomic window covered by the ancestry reference files; in these cases
+the closest available position was used for ancestry assignment.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Click a variant to see its frequencies. The All of Us data use policy does not allow counts
+below 20 to be shown. For this reason, when the allele count or allele number of an ancestry
+group is below 20, both are shown as &quot;.&quot; and the field R20 for that group is 0.
+The allele frequency of the group is still shown, but when the allele number is below 20 it
+is based on very few haplotypes and is imprecise. When an ancestry group has no AC, AN and AF
+fields at all and its R20 field is &quot;.&quot;, that ancestry was not observed at the variant.
 </p>
 
 <h2>Data Access</h2>

@@ -1544,3 +1544,36 @@ mv varFreqsNew.trackDb.ra varFreqs.trackDb.ra
 # varFreqs.ra: the four cohorts in the affectedCohorts/backgroundSources menus and the
 # commented per-cohort filter blocks, taken from varFreqs.trackDb.ra; longLabels now
 # say ~350,000 affected and ~1.8 million background individuals.
+
+##########
+# 2026-11-26 Claude max
+# All of Us (allofus subtrack): new release of the local-ancestry frequencies from
+# the Ioannidis lab (Qudsi Aljabiri), uploaded to Google Drive 2026-11-14,
+# refs #38821. Still the AoU v7 ACAF callset (max AN_all 490,788 = 245,394 people).
+# Changes from the Dec 2025 files:
+#  - new overall fields AF_all/AC_all/AN_all (PLINK2 --freq on the whole callset);
+#    only variants with AC_all >= 20 and AN_all >= 20 are kept
+#  - All of Us "rule of 20": when AC_<pop> or AN_<pop> was below 20, both are now
+#    "." and R20_<pop>=0; AF_<pop> is kept. A population with no AC/AN/AF fields
+#    and R20_<pop>="." was not observed at that variant. The old files showed
+#    these small counts (chr21: 569k of 841k records had an AC_ or AN_ below 20).
+#  - the NW flag is replaced by W=0/1 (variant inside an MSP ancestry window)
+cd /hive/data/genomes/hg38/bed/varFreqs/allofus
+mkdir old-2025-12
+mv allOfUs.locAncFreq.vcf.gz allOfUs.locAncFreq.vcf.gz.tbi clean test.vcf log.txt contigs.txt old-2025-12/
+# download the 22 allele_freq_chrN.joined.vcf.gz (+ .tbi) from the shared Drive folder
+mkdir joined-2026-11 && cd joined-2026-11
+rclone copy --drive-root-folder-id 1ap_eRQ4glFFdCIwW3We5jLC2seE-E_y0 mhaeussldrive: .
+cd ..
+# concat, add the chr prefix to the data lines (header already has chr contigs), tabix
+~/kent/src/hg/makeDb/scripts/varFreqs/allOfUsToVcf.sh joined-2026-11 allOfUs.locAncFreq.vcf.gz > build.log 2>&1
+# 54,159,317 records (old file: 67,559,758; the drop is the new AC_all/AN_all >= 20
+# filter). No records were dropped by the script. Per-population states, from build.log:
+#   pop  AC/AN shown  rule of 20 (.)  not observed
+#   AFR  36,906,141    6,504,793     10,748,383
+#   AMR  10,641,825   10,326,669     33,190,823
+#   EAS  12,844,353    8,089,803     33,225,161
+#   EUR  31,224,386   12,394,098     10,540,833
+#   OCE      13,738    3,088,832     51,056,747
+#   SAS  10,676,746    7,768,028     35,714,543
+# The /gbdb/hg38/varFreqs/_allofus symlinks point at the same file name, unchanged.
