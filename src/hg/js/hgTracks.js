@@ -5440,7 +5440,12 @@ var rightClick = {
             "<input type='text' id='trackColorText' size='8' />" +
             "&nbsp;<input id='trackColorPicker' />" +
             "<br><br><label><input type='checkbox' id='trackColorOn' /> " +
-            "Enable color override</label>");
+            "Use this color</label>");
+        $dlg.find("label").after(createInfoIcon(
+            "When checked, the whole track is drawn in the color above, instead of the " +
+            "colors that the track normally uses, including any per-item colors. " +
+            "Uncheck to go back to the track's own colors; the color you picked is " +
+            "kept for next time."));
         $dlg.find("p b").text(rec.shortLabel);
         $dlg.find("#trackColorText").val(currentColor);
         $dlg.find("#trackColorOn").prop("checked", !!rec.colorOverrideOn);
@@ -5492,7 +5497,7 @@ var rightClick = {
             minWidth: 400,
             buttons: {
                 "Apply": function() { applyColor(); },
-                "Ok": function() {
+                "OK": function() {
                     if (applyColor())
                         $(this).dialog("close");
                 }
@@ -5734,7 +5739,7 @@ var rightClick = {
             minWidth: 400,
             buttons: {
                 "Apply": function() { applyColor(); },
-                "Ok": function() {
+                "OK": function() {
                     if (applyColor())
                         $(this).dialog("close");
                 }
