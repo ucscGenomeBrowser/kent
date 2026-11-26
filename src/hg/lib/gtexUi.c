@@ -4,6 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "cart.h"
 #include "hui.h"
 #include "trackDb.h"
@@ -176,8 +177,8 @@ char *sortOrder = cartCgiUsualString(cart, orderVar, "tissue=+ samples=+ organ=+
 puts("\n<thead class='sortable'>");
 puts("\n<tr class='sortable'>");
 char *sortableClass = isPopup ? "notSortable" : "sortable";
-printf("\n<th>&nbsp;<input type=hidden name='%s' class='sortOrder' value='%s'></th>\n",
-        orderVar, sortOrder);
+htmlPrintf("\n<th>&nbsp;<input type=hidden name='%s|attr|' class='sortOrder' value='%s|attr|'>"
+           "</th>\n", orderVar, sortOrder);
 puts("<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>");
 printf("<th id='tissue' class='%s sort1' %s align='left'>&nbsp;Tissue</th>", 
                sortableClass, onClick);

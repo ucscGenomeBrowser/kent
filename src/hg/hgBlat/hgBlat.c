@@ -950,6 +950,15 @@ printf("<div class=\"blatBanner\">"
        "<a href=\"hgBlat?blatNewPage=1&blatReopen=1&%s\">Try the new page</a>.</div>\n", uiState);
 }
 
+static char *customTrackFormMethod()
+/* Return the method for the custom track rename form: GET if the cart asks for it,
+ * otherwise POST. */
+{
+if (sameWord(cartUsualString(cart, "formMethod", "POST"), "GET"))
+    return "GET";
+return "POST";
+}
+
 void showAliPlaces(char *pslName, char *faName, char *customText, char *database,
            enum gfType qType, enum gfType tType, 
            char *organism, boolean feelingLucky)
@@ -1104,7 +1113,7 @@ else  // hyperlink
 
 	    printf("<div id=renameForm style='display: none'>\n");
 	    char *hgcUrl = hgcName();
-	    printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
+	    printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl, customTrackFormMethod());
 
 	    printf("<TABLE><TR><TD>Custom track name: ");
 	    cgiMakeTextVar( "trackName", "FAKETRACKNAME", 30); 
@@ -1254,7 +1263,7 @@ else  // hyperlink
         char *trackDescription = NULL;
         getCustomName(database, cart, pslList, pslName, &trackName, &trackDescription);
         psl = pslList;
-        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl,cartUsualString(cart, "formMethod", "POST"));
+        printf( "<DIV STYLE=\"display:block;\"><FORM ACTION=\"%s\"  METHOD=\"%s\" NAME=\"customTrackForm\">\n", hgcUrl, customTrackFormMethod());
         printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
         printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
         printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
