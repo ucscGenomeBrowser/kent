@@ -143,7 +143,7 @@ if (diagonal(first) != diagonal(last))
     return FALSE;
 if (first->tStart < last->tStart)
     return FALSE;
-if (first->tEnd < last->tEnd)
+if (first->tEnd <= last->tEnd)
     return FALSE;
 return TRUE;
 }
@@ -207,7 +207,7 @@ int i;
 for (i = firstAtOrAfter(group, a->lastBlock->tStart); i < group->count; ++i)
     {
     struct joinChain *b = group->array[i];
-    if (b->chain->tStart > a->chain->tEnd + clMaxGap)
+    if (b->chain->tStart > (long long)a->chain->tEnd + clMaxGap)
         break;
     if (b == a || b->absorbed || !canFollow(a, b))
         continue;
