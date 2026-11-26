@@ -4,6 +4,12 @@
 #include "trackDb.h"
 #include "grp.h"
 
+void cartTrackDbShowDenied(boolean show);
+/* If show, cartTrackDbInit keeps tracks with 'tableBrowser off' in the track list and
+ * cartTrackDbTablesForTrack keeps related tables that are denied, so that a menu can list
+ * them.  cartTrackDbIsAccessDenied still says they are denied: the caller must check it
+ * before it reads any data. */
+
 void cartTrackDbInit(struct cart *cart, struct trackDb **retFullTrackList,
                      struct grp **retFullGroupList, boolean useAccessControl);
 /* Get lists of all tracks and of groups that actually have tracks in them.

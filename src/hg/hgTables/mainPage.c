@@ -274,13 +274,15 @@ struct hash *uniqHash = newHash(0);
 hFreeConn(&conn);
 for (raw = rawList; raw != NULL; raw = raw->next)
     {
-    if (cartTrackDbIsAccessDenied(db, raw->name))
+    // with searchable dropdowns, restricted tables are listed and get a note when selected
+    boolean showDenied = searchableDropdowns();
+    if (!showDenied && cartTrackDbIsAccessDenied(db, raw->name))
         continue;
     if (isGenomeDb)
 	{
 	/* Deal with tables split across chromosomes. */
 	char *root = unsplitTableName(raw->name);
-	if (cartTrackDbIsAccessDenied(db, root))
+	if (!showDenied && cartTrackDbIsAccessDenied(db, root))
 	    continue;
 	if (!hashLookup(uniqHash, root))
 	    {
@@ -369,9 +371,10 @@ return cloneString(table);
 
 static boolean tableChoiceNoGenome(struct trackDb *track, char *table)
 /* Return TRUE if table is a related table that can only be queried with a position range:
- * if a non-positional table is selected then we output its entire contents. */
+ * if a non-positional table is selected then we output its entire contents.  A table that
+ * cannot be queried at all stays selectable, the main page then says why. */
 {
-return cartTrackDbIsNoGenome(database, table) &&
+return cartTrackDbIsNoGenome(database, table) && !cartTrackDbIsAccessDenied(database, table) &&
        (track == NULL || differentString(track->table, table));
 }
 
@@ -845,16 +848,53 @@ hPrintf("</td></tr>");
 hPrintf("<tr height='6px'><td></td></tr>");
 }
 
-void printNoGenomeWarning(struct trackDb *curTrack) {
-    /* print a message box that explains why a track is not downloadable */
-    hPrintf("<DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
-    char *noGenomeNote = trackDbSettingClosestToHome(curTrack, "noGenomeReason");
-    hPrintf("<b>Note:</b> This track is unavailable for genome-wide download. ");
-    if (noGenomeNote)
-        hPrintf("Reason: %s", noGenomeNote);
-    else
-        hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see the track documentation for more details. Contact us if you are still unable to access the data. ");
-    hPrintf("</DIV>");
+static void printRestrictionNote(struct trackDb *tdb, char *what)
+/* Print a message box that starts with what and explains with the trackDb setting
+ * noGenomeReason of tdb (may be NULL) why the data cannot be downloaded. */
+{
+hPrintf("<DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
+char *reason = tdb ? trackDbSettingClosestToHome(tdb, "noGenomeReason") : NULL;
+hPrintf("<b>Note:</b> %s ", what);
+if (reason == NULL)
+    hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see the track documentation for more details. Contact us if you are still unable to access the data. ");
+else if (isHubTrack(tdb->track))
+    hPrintf("Reason: %s", htmlEncode(reason));
+else
+    hPrintf("Reason: %s", reason);
+hPrintf("</DIV>");
+}
+
+void printNoGenomeWarning(struct trackDb *curTrack)
+/* print a message box that explains why a track is not downloadable */
+{
+printRestrictionNote(curTrack, "This track is unavailable for genome-wide download.");
+}
+
+static struct trackDb *findRestrictingTrack(struct trackDb *tdbList, char *table)
+/* Return the track whose 'tableBrowser off' setting covers table, or NULL. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char *setting = trackDbSetting(tdb, "tableBrowser");
+    if (setting != NULL && startsWithWord("off", setting))
+        {
+        if (sameOk(tdb->table, table))
+            return tdb;
+        char *dupe = cloneString(setting), *s = dupe, *word;
+        nextWord(&s);
+        boolean found = FALSE;
+        while (!found && (word = nextWord(&s)) != NULL)
+            found = sameString(word, table);
+        freeMem(dupe);
+        if (found)
+            return tdb;
+        }
+    struct trackDb *sub = findRestrictingTrack(tdb->subtracks, table);
+    if (sub != NULL)
+        return sub;
+    }
+return NULL;
 }
 
 void showMainControlTable(struct sqlConnection *conn)
@@ -864,6 +904,7 @@ struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
         isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE, isHalSnake = FALSE,
         isLongTabix = FALSE, isHic = FALSE;
+boolean tableDenied = FALSE;
 //boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -949,8 +990,22 @@ printStep(stepNumber++);
         {
         isChromGraphCt = isChromGraph(tdb);
         }
-    cgiMakeButton(hgtaDoSchema, "Data format description");
+    tableDenied = tableIsDenied(database, curTable);
+    if (!tableDenied)
+        cgiMakeButton(hgtaDoSchema, "Data format description");
     hPrintf("</DIV></TD></TR>\n");
+    }
+
+/* A restricted table: say why, and keep the rest of the form out of sight.  It is still
+ * printed, so the page's scripts find their elements, but nothing can be queried. */
+if (tableDenied)
+    {
+    struct trackDb *restrictTdb = findRestrictingTrack(fullTrackList, unsplitTableName(curTable));
+    hPrintf("<TR><TD>");
+    printRestrictionNote(restrictTdb ? restrictTdb : curTrack,
+                         "This table cannot be downloaded from the Table Browser.");
+    hPrintf("</TD></TR>\n");
+    hPrintf("<TBODY style='display:none'>\n");
     }
 
 if (curTrack == NULL)
@@ -1241,7 +1296,7 @@ hPrintf("</TABLE>\n");
 
 /* Submit buttons. */
     {
-    hPrintf("<BR><DIV ID=\"submit-select\">\n");
+    hPrintf("<BR><DIV ID=\"submit-select\"%s>\n", tableDenied ? " style='display:none'" : "");
     if (isWig || isBam || isVcf || isLongTabix || isHic)
 	{
 	char *name;

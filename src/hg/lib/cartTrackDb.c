@@ -17,6 +17,7 @@
 
 /* Static globals */
 static boolean useAC = FALSE;
+static boolean showDenied = FALSE;  // keep denied tracks and tables in the lists
 static struct slRef *accessControlTrackRefList = NULL;
 
 /* Caches used for searching */
@@ -59,7 +60,7 @@ for (tdb = list;  tdb != NULL;  tdb = nextTdb)
         (startsWithWord("off", tbOff) || startsWithWord("noGenome", tbOff) || startsWithWord("tbNoGenome", tbOff)))
         {
         slAddHead(&accessControlTrackRefList, slRefNew(tdb));
-        if (! startsWithWord("off", tbOff))
+        if (showDenied || ! startsWithWord("off", tbOff))
             slAddHead(&newList, tdb);
         }
     else
@@ -201,6 +202,15 @@ if (allTablesOk)
 hashFree(&groupsInTrackList);
 hashFree(&groupsInDatabase);
 return groupList;
+}
+
+void cartTrackDbShowDenied(boolean show)
+/* If show, cartTrackDbInit keeps tracks with 'tableBrowser off' in the track list and
+ * cartTrackDbTablesForTrack keeps related tables that are denied, so that a menu can list
+ * them.  cartTrackDbIsAccessDenied still says they are denied: the caller must check it
+ * before it reads any data. */
+{
+showDenied = show;
 }
 
 void cartTrackDbInit(struct cart *cart, struct trackDb **retFullTrackList,
@@ -527,7 +537,8 @@ if (useJoiner)
             // we can't have a valid tableBrowser setting to deny the table
             // anyways (because we have no tracks for that database), so don't
             // bother checking unless the joined tables have the same database
-            if (sameString(dtf->database, db) && cartTrackDbIsAccessDenied(dtf->database, dtf->table))
+            if (!showDenied && sameString(dtf->database, db) &&
+                cartTrackDbIsAccessDenied(dtf->database, dtf->table))
                 continue;
             char buf[256];
             char *s;

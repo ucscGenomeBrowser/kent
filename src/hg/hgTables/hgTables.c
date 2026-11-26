@@ -1718,7 +1718,7 @@ else
     errAbort("Don't know how to handle %s output yet", output);
 }
 
-static boolean tableIsDenied(char *db, char *table)
+boolean tableIsDenied(char *db, char *table)
 /* Return TRUE if table in db, or in the database named by a "db." prefix of table,
  * may not be used in the Table Browser. */
 {
@@ -1949,6 +1949,8 @@ void initGroupsTracksTables()
  * containing all tracks and all tables. Set global variables that correspond
  * to the group, track, and table specified in the cart. */
 {
+// with searchable dropdowns, restricted tracks are listed and get a note when selected
+cartTrackDbShowDenied(searchableDropdowns());
 cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
 fullTableToTdbHash = hashNew(0);
 rAddTablesToHash(fullTrackList, fullTableToTdbHash);

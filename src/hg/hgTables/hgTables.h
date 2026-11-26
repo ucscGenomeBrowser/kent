@@ -124,6 +124,10 @@ char *findSelDb();
 
 char *unsplitTableName(char *table);
 /* Convert chr*_name to name */
+
+boolean tableIsDenied(char *db, char *table);
+/* Return TRUE if table in db, or in the database named by a "db." prefix of table,
+ * may not be used in the Table Browser. */
 /* Find user selected database (as opposed to genome database). */
 
 struct slName *tablesForDb(char *db);
