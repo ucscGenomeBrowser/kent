@@ -320,7 +320,8 @@ return hash;
 static struct trackDb *tdbForTableChoice(struct trackDb *track, char *table,
                                          struct hash **pSubHash)
 /* Return the trackDb for a table in the table dropdown, or NULL.  *pSubHash caches
- * the subtracks of a hub track between calls, so free it after the last call. */
+ * the subtracks of curTrack (hub) or track (native) between calls, so free it after the
+ * last call. */
 {
 struct trackDb *tdb = NULL;
 if (curTrack != NULL && isHubTrack(curTrack->track))
@@ -335,9 +336,19 @@ if (curTrack != NULL && isHubTrack(curTrack->track))
         tdb = hashFindVal(*pSubHash, table);
         }
     }
-else
+else if (track != NULL)
     {
-    if (track != NULL)
+    // A subtrack whose table is its own name is what findTdbForTable would find, but
+    // that searches the whole container for each table: slow for 20,000 subtracks.
+    if (track->subtracks != NULL)
+        {
+        if (*pSubHash == NULL)
+            *pSubHash = descendantHash(track);
+        tdb = hashFindVal(*pSubHash, table);
+        if (tdb != NULL && differentString(tdb->table, table))
+            tdb = NULL;
+        }
+    if (tdb == NULL)
         tdb = findTdbForTable(database,track,table, ctLookupName);
     }
 return tdb;
