@@ -3,6 +3,7 @@ superTrack on
 group genes
 shortLabel Non-coding RNA
 longLabel RNA sequences that do not code for a protein
+pennantIcon Updated red ../goldenPath/newsarch.html#113026 "Updated Nov. 30, 2026"
 
     track tRNAs
     superTrack nonCodingRNAs pack

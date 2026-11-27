@@ -64,6 +64,78 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="113026"></a>
+<h2>Nov. 30, 2026 &nbsp;&nbsp; MirGeneDB 3.0 and miRBase 22.1: microRNA genes with their arms and
+predicted structures (hg38, mm39, mm10)</h2>
+<p>
+We are pleased to announce two new microRNA tracks,
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mirGeneDbV3_0&position=default" target="_blank"><b>MirGeneDB
+3.0</b></a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mirBaseV22_1&position=default" target="_blank"><b>miRBase
+22.1</b></a>, on the human
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=nonCodingRNAs&position=default" target="_blank">GRCh38/hg38</a>
+and mouse
+<a href="/cgi-bin/hgTrackUi?db=mm39&g=nonCodingRNAs&position=default" target="_blank">GRCm39/mm39</a> and
+<a href="/cgi-bin/hgTrackUi?db=mm10&g=nonCodingRNAs&position=default" target="_blank">GRCm38/mm10</a>
+assemblies. MicroRNAs are RNAs of about 22 nucleotides, cut from hairpins in longer transcripts;
+either arm of the hairpin, 5p or 3p, can become the mature microRNA. Both tracks are in the
+<b>Non-coding RNA</b> track collection, and show the arms of each hairpin as colored blocks
+below the item, 5p in <b style="color:#E69F00">orange</b> and 3p in
+<b style="color:#56B4E9">sky blue</b>:
+</p>
+
+<ul>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=mirGeneDbV3_0&position=default#TRACK_HTML" target="_blank"><b>MirGeneDB
+      3.0</b></a> is a manually curated set of microRNA genes, each accepted only if the reads
+      on both arms of its hairpin show it is processed as a microRNA. It has 514 human genes
+      (573 including processing variants) and 404 mouse genes (457 including variants).</li>
+  <li><a href="/cgi-bin/hgTrackUi?db=hg38&g=mirBaseV22_1&position=default#TRACK_HTML" target="_blank"><b>miRBase
+      22.1</b></a> shows the precursors of the reference registry that assigns microRNA names,
+      with their mature microRNAs: 1,918 precursors in human and 1,227 in mouse. It includes many
+      microRNAs that are not in MirGeneDB.</li>
+</ul>
+
+<div class="text-center">
+  <a href="https://genome.ucsc.edu/s/Lou/miRNA" target="_blank">
+  <img src="../images/newsArchImages/miRNAtracks.png"
+       alt="The MirGeneDB 3.0 and miRBase 22.1 tracks at the miR-17~92 cluster in MIR17HG on
+       chr13, with six hairpins, their 5p arms in orange and 3p arms in blue, and vertebrate
+       conservation peaking over each hairpin."
+       width='95%'></a>
+  <p class="gbsCaption"><em>The miR-17~92 cluster, often called oncomiR-1, in the
+  <a href="https://genome.ucsc.edu/s/Lou/miRNA" target="_blank">MIR17HG</a> gene
+  (chr13). Both tracks show its six hairpins with their arms below them. MirGeneDB names
+  the genes by family, so miR-17, miR-18a and miR-20a are Mir-17-P1a, -P2a and -P4a.
+  Conservation across 100 vertebrates (phyloP) peaks over each hairpin.</em></p>
+</div>
+
+<p>
+For each item, the secondary structure of the hairpin was predicted with RNAfold from the
+<a href="https://www.tbi.univie.ac.at/RNA/" target="_blank">ViennaRNA package</a>. When zoomed
+in, the structure is drawn over the item in dot-bracket notation, and the details page shows an
+interactive drawing of the hairpin with the arms in the same colors. The arms show in windows of
+up to 3,000 bases, a limit you can change on the track configuration page.
+</p>
+
+<div class="text-center">
+  <img src="../images/newsArchImages/miRNAtracksZoom.png"
+       alt="Zoomed in on miR-17: the predicted secondary structure is drawn over the miRBase and
+       MirGeneDB items in dot-bracket notation, above the orange 5p and blue 3p arms."
+       width='95%'>
+  <p class="gbsCaption"><em>Zoomed in on miR-17, the predicted structure is drawn over each
+  item. The 5p and 3p arms pair with each other in the stem of the hairpin. The MirGeneDB item
+  is longer because it includes 30 bases of flanking sequence on each side.</em></p>
+</div>
+
+<p>
+We would like to thank Andrea Tanzer at the University of Vienna for creating these tracks,
+and Mark Diekhans for the dot-bracket display of RNA secondary structures. We also thank Bastian Fromm,
+Kevin Peterson and the <a href="https://mirgenedb.org/" target="_blank">MirGeneDB</a> team, and
+Sam Griffiths-Jones and the <a href="https://mirbase.org/" target="_blank">miRBase</a> team,
+for making their annotations available. We would also like to thank Jairo Navarro and Lou
+Nassar for their efforts on this release.
+</p>
+
 <a name="111826"></a>
 <h2>Nov. 18, 2026 &nbsp;&nbsp; Non-canonical ORFs: PeptideAtlas evidence for GENCODE ncORFs (Phase I) and 5ULTRA uORFs (hg38)</h2>
 <p>

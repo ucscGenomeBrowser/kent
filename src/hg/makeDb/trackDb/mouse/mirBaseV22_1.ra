@@ -2,6 +2,7 @@ track mirBaseV22_1
 superTrack nonCodingRNAs pack
 shortLabel miRBase 22.1
 longLabel miRBase 22.1 microRNA precursors with mature miRNAs and predicted structure
+pennantIcon New red ../goldenPath/newsarch.html#113026 "Released Nov. 30, 2026"
 visibility hide
 type bigBed 6 + 16
 color 0,100,0

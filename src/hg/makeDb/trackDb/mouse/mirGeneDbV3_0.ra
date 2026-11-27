@@ -2,6 +2,7 @@ track mirGeneDbV3_0
 superTrack nonCodingRNAs pack
 shortLabel MirGeneDB 3.0
 longLabel MirGeneDB 3.0 curated microRNA genes with arms and predicted structure
+pennantIcon New red ../goldenPath/newsarch.html#113026 "Released Nov. 30, 2026"
 visibility hide
 type bigBed 6 + 18
 color 0,100,0
