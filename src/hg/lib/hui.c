@@ -5367,7 +5367,8 @@ else
 // Add column headers which are sort button links
 if (sortOrder != NULL)
     {
-    printf("<TH>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE='%s'></TH>\n",
+    htmlPrintf("<TH>&nbsp;<INPUT TYPE=HIDDEN NAME='%s|attr|' class='sortOrder' "
+               "VALUE='%s|attr|'></TH>\n",
 	   sortOrder->htmlId, sortOrder->sortOrder); // keeing track of sortOrder
     columnCount++;
     if (!tdbIsMultiTrack(parentTdb))  // An extra column for subVis/wrench so dragAndDrop works

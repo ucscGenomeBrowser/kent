@@ -1980,7 +1980,8 @@ char *sourceSpanPosition(char *chainFile, char *chrom, int start, int end);
  * maps back to more than one source sequence.  The counterpart of
  * windowsSpanPosition() for a synthetic assembly. */
 
-char *sourceFirstSeqPosition(char *chainFile, char *chrom, int start, int end);
+char *sourceFirstSeqPosition(char *chainFile, char *chrom, int start, int end,
+	char *retStrand);
 /* The source-coordinate span of this window on the first source sequence it shows, or
  * NULL when it shows none.  The counterpart of nonVirtPositionFromWindows(). */
 

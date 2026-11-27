@@ -5,7 +5,7 @@ chainJoin = ${DESTBINDIR}/chainJoin
 
 all:: test
 
-test:: joinTest noGapTest bigGapTest guideTest guideTrimTest
+test:: joinTest noGapTest bigGapTest guideTest guideTrimTest sameEndTest maxGapTest
 
 # Exact joins, a gap on the diagonal, indels (gaps that differ, one of them zero), overlaps
 # inside the two blocks, the minus strand, a chain of three, and the cases that must not
@@ -45,6 +45,19 @@ guideTest: mkout
 # With -maxTrim=20, the joins that cut 39 bp from 36225 and 135 bp from 18813 are refused.
 guideTrimTest: mkout
 	${chainJoin} -guide=input/guide.chain -maxTrim=20 input/guideIn.chain output/$@.chain 2> output/$@.err
+	diff expected/$@.chain output/$@.chain
+	diff expected/$@.err output/$@.err
+
+# An exact duplicate, and a chain inside the last block of another that ends at the same
+# base, must not be joined: neither reaches past the end of the chain before it.
+sameEndTest: mkout
+	${chainJoin} input/sameEnd.chain output/$@.chain 2> output/$@.err
+	diff expected/$@.chain output/$@.chain
+	diff expected/$@.err output/$@.err
+
+# The largest -maxGap must not overflow and stop every join.
+maxGapTest: mkout
+	${chainJoin} -maxGap=2147483647 input/join.chain output/$@.chain 2> output/$@.err
 	diff expected/$@.chain output/$@.chain
 	diff expected/$@.err output/$@.err
 

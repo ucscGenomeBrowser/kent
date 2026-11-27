@@ -85,7 +85,9 @@ if (!cfgOptionBooleanDefault("bottleneck.serveOnFailure", FALSE))
 int delay = -1;
 pushWarnHandler(botDelayLogWarn);
 bottleneckFailStep = "connect to";
-int sd = netConnectWithTimeout(host, port, (long)connectTimeout * 1000);
+/* The limit covers the whole connect: a name such as localhost can resolve to an IPv6
+ * and an IPv4 address, and each would otherwise get the full time. */
+int sd = netConnectWithTotalTimeout(host, port, (long)connectTimeout * 1000);
 if (sd >= 0)
     {
     setReadWriteTimeouts(sd, readTimeout);
@@ -415,8 +417,9 @@ if (delay < 0)
     delay = 0;
 if (delay > maxFailureDelayMs)
     delay = maxFailureDelayMs;
-fprintf(stderr, "botDelay: no answer from bottleneck server %s:%s, "
-    "serving this request with a delay of %d milliseconds\n", host, port, delay);
+fprintf(stderr, "botDelay: failed to %s bottleneck server %s:%s, "
+    "serving this request with a delay of %d milliseconds\n",
+    bottleneckFailStep, host, port, delay);
 return delay;
 }
 

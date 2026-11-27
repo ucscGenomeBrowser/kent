@@ -1,0 +1,6 @@
+input/bad3.chain line 3 chain 40: score 'x1' is not a number
+input/bad3.chain line 7: chain header has 20 fields, expecting 12 or 13
+input/bad3.chain line 12 chain 42: block line has 2 fields, expecting 1 or 3
+input/bad3.chain line 15 chain 43: target size 3000000000 is above 2147483647, the largest number other tools can read
+input/bad3.chain line 20 chain 44: target gap 3000000000 is above 2147483647, the largest number other tools can read
+input/bad3.chain line 24 chain 3000000000: chain ID 3000000000 is above 2147483647, the largest number other tools can read

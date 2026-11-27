@@ -550,11 +550,14 @@ else
 return TRUE;
 }
 
-static char *sourceSpan(char *chainFile, char *chrom, int start, int end, boolean firstSeqOnly)
+static char *sourceSpan(char *chainFile, char *chrom, int start, int end, boolean firstSeqOnly,
+	char *retStrand)
 /* The source-coordinate span of this window, "chrom:start+1-end".  A window that maps
  * back to more than one source sequence gives NULL, or with firstSeqOnly the span on
- * the first of them.  NULL when it maps back to none. */
+ * the first of them.  NULL when it maps back to none.  If retStrand is not NULL it is
+ * set to '-' when every piece of the span is laid down reversed, else '+'. */
 {
+boolean allReversed = TRUE;
 struct baseRange *range, *ranges = loadBaseRangesFromChain(chainFile, chrom, start, end);
 if (ranges == NULL)
     return NULL;
@@ -578,6 +581,8 @@ for (range = ranges; range != NULL; range = range->next)
         continue;
     unsigned lo, hi;
     rangeSynToSrc(range, s, e, &lo, &hi);
+    if (range->strand != '-')
+        allReversed = FALSE;
     if (!gotOne)
         {
         qStart = lo;
@@ -594,6 +599,8 @@ for (range = ranges; range != NULL; range = range->next)
     }
 if (!gotOne)
     return NULL;
+if (retStrand != NULL)
+    *retStrand = (allReversed ? '-' : '+');
 char buf[HDB_MAX_CHROM_STRING + 32];   /* a hub's sequence names can be this long */
 safef(buf, sizeof buf, "%s:%u-%u", name, qStart + 1, qEnd);
 return cloneString(buf);
@@ -609,16 +616,18 @@ char *sourceSpanPosition(char *chainFile, char *chrom, int start, int end)
  * coordinates.  The base count printed beside it stays the number of bases actually
  * drawn, exactly as multi-region view prints virtWinEnd - virtWinStart. */
 {
-return sourceSpan(chainFile, chrom, start, end, FALSE);
+return sourceSpan(chainFile, chrom, start, end, FALSE, NULL);
 }
 
-char *sourceFirstSeqPosition(char *chainFile, char *chrom, int start, int end)
+char *sourceFirstSeqPosition(char *chainFile, char *chrom, int start, int end,
+	char *retStrand)
 /* The source-coordinate span of this window on the first source sequence it shows,
  * or NULL when it shows none.  The synthetic-assembly counterpart of
  * nonVirtPositionFromWindows(), which is where the virtual-chromosome path goes back
- * to when the user leaves multi-region view. */
+ * to when the user leaves multi-region view.  If retStrand is not NULL it is set to
+ * '-' when that span is drawn reverse-complemented, else '+'. */
 {
-return sourceSpan(chainFile, chrom, start, end, TRUE);
+return sourceSpan(chainFile, chrom, start, end, TRUE, retStrand);
 }
 
 void drawSourceCoordRuler(struct hvGfx *hvg, struct baseRange *rangeList,

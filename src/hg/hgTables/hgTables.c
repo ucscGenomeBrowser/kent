@@ -504,10 +504,7 @@ return hgp;
 boolean isRegionWholeGenome()
 /* Return TRUE if the current region is the whole genome. */
 {
-char *regionType = cartString(cart, hgtaRegionType);
-
-if (regionType == NULL)
-    return TRUE;
+char *regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeGenome);
 
 if (sameString(regionType, hgtaRegionTypeGenome))
     return TRUE;

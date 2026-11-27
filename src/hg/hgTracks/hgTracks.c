@@ -136,6 +136,7 @@ char *spaceUserVirtModeType = NULL;
                                 * user's own choice is kept here and written back to the
                                 * cart, so the next request enters the space again.
                                 * refs #37788 */
+static char spaceNonVirtStrand = '+';  /* Strand of nonVirtPosition in a space. */
 char *coordRulerUrl = NULL;    /* If set (by installMultiRegionSpace()), url of the
                                 * quickLift chain that maps this synthetic assembly back to
                                 * its source.  Makes the main ruler number in source
@@ -13000,7 +13001,12 @@ else if (spaceUserVirtModeType != NULL)
     jsonObjectAdd(jsonForClient, "inMultiRegionSpace", newJsonBoolean(TRUE));
     char *spaceNonVirtPos = cartOptionalString(cart, "nonVirtPosition");
     if (spaceNonVirtPos != NULL)
+        {
         jsonObjectAdd(jsonForClient, "nonVirtPosition", newJsonString(spaceNonVirtPos));
+        /* A reversed region is drawn reverse-complemented, so View DNA asks for that. */
+        jsonObjectAdd(jsonForClient, "nonVirtReversed",
+            newJsonBoolean(spaceNonVirtStrand == '-'));
+        }
     }
 
 /* Offer "Make this my coordinate system" on gene items.  refs #37788 */
@@ -14881,7 +14887,8 @@ lastVirtModeExtraState = cartString(cart, "lastVirtModeExtraState"); // refresh
  * both paths ask hChromSize() about a NULL chromosome.  refs #37788 */
 char *spaceNonVirtPos = NULL;
 if (!virtMode && (spaceUserVirtModeType != NULL) && (coordRulerUrl != NULL))
-    spaceNonVirtPos = sourceFirstSeqPosition(coordRulerUrl, chromName, winStart, winEnd);
+    spaceNonVirtPos = sourceFirstSeqPosition(coordRulerUrl, chromName, winStart, winEnd,
+	&spaceNonVirtStrand);
 if (virtMode)
     cartSetString(cart, "nonVirtPosition", nonVirtPositionFromWindows());
 else if (spaceNonVirtPos != NULL)

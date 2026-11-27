@@ -20,6 +20,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 #include "errCatch.h"
+#include "portable.h"
 
 char *timeoutErrorMessage = "";
 
@@ -122,7 +123,7 @@ if (res < 0)
 	gettimeofday(&startTime, NULL);
 	struct timeval remainingTime;
 	remainingTime.tv_sec = (long) (msTimeout/1000);
-	remainingTime.tv_usec = (long) (((msTimeout/1000)-remainingTime.tv_sec)*1000000);
+	remainingTime.tv_usec = (long) ((msTimeout % 1000) * 1000);
 	while (1) 
 	    {
 	    fd_set mySet, exceptSet;
@@ -191,13 +192,12 @@ return 0; // OK
 }
 
 
-int netConnectWithTimeout(char *hostName, int port, long msTimeout)
-/* In order to avoid a very long default timeout (several minutes) for hosts that will
-* not answer the port, we are forced to connect non-blocking.
-* After the connection has been established, we return to blocking mode.
-* Also closes sd if error. */
+static int connectWithTimeout(char *hostName, int port, long msTimeout, boolean totalBudget)
+/* Connect to hostName non-blocking, trying each address it resolves to.  Each address
+ * gets msTimeout, or with totalBudget, msTimeout is shared by all of them. */
 {
 int sd;
+long startTime = clock1000();
 struct addrinfo *addressList=NULL, *address;
 char portStr[8];
 safef(portStr, sizeof portStr, "%d", port);
@@ -213,10 +213,20 @@ if (!internetGetAddrInfo6n4(hostName, portStr, &addressList))
 struct dyString *errMsg = dyStringNew(256);
 for (address = addressList; address; address = address->ai_next)
     {
+    long addrTimeout = msTimeout;
+    if (totalBudget)
+	{
+	addrTimeout = msTimeout - (clock1000() - startTime);
+	if (addrTimeout <= 0)
+	    {
+	    address = NULL;
+	    break;
+	    }
+	}
     if ((sd = netStreamSocketFromAddrInfo(address)) < 0)
 	continue;
 
-    if (netConnectWithTimeoutOneAddr(sd, address, msTimeout, hostName, port, errMsg) == 0)
+    if (netConnectWithTimeoutOneAddr(sd, address, addrTimeout, hostName, port, errMsg) == 0)
 	break;
 
     close(sd);
@@ -252,6 +262,22 @@ return sd;
 
 }
 
+
+int netConnectWithTimeout(char *hostName, int port, long msTimeout)
+/* In order to avoid a very long default timeout (several minutes) for hosts that will
+* not answer the port, we are forced to connect non-blocking.
+* After the connection has been established, we return to blocking mode.
+* Also closes sd if error.  Each address hostName resolves to gets msTimeout. */
+{
+return connectWithTimeout(hostName, port, msTimeout, FALSE);
+}
+
+int netConnectWithTotalTimeout(char *hostName, int port, long msTimeout)
+/* Like netConnectWithTimeout, but msTimeout is the limit for the whole connect, across
+ * all the addresses hostName resolves to (localhost is often both IPv6 and IPv4). */
+{
+return connectWithTimeout(hostName, port, msTimeout, TRUE);
+}
 
 int netConnect(char *hostName, int port)
 /* Start connection with a server. */

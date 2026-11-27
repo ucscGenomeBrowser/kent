@@ -20,8 +20,13 @@ static char *values[] = {
     "ENST00000456328.2",
     "100%20off",
     "tab\there",
+    "caf\xc3\xa9",
     "",
 };
+
+/* A UTF-8 value must reach the page as the same bytes, not as one entity per byte. The
+ * parser decodes entities a byte at a time, so the comparison alone cannot see that. */
+static char *utf8Value = "caf\xc3\xa9";
 
 void usage()
 /* Explain usage and exit */
@@ -74,6 +79,7 @@ for (i = 0; i < ArraySize(values); ++i)
     checkVar(page->forms, name, values[i]);
     }
 checkVar(page->forms, "vNull", "");
+printf("utf8Raw\t[%s]\t%s\n", utf8Value, strstr(html, utf8Value) ? "same" : "DIFFERENT");
 }
 
 int main(int argc, char *argv[])

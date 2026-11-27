@@ -7575,6 +7575,9 @@ function gotoGetDnaPage() {
     if (pos) {
         var start = oneBased ? pos.start - 1 : pos.start;
         var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+pos.chrom+"&l="+start+"&r="+pos.end+"&db="+getDb();
+        // A reversed region of a space is drawn reverse-complemented; show that strand.
+        if (hgTracks.inMultiRegionSpace && hgTracks.nonVirtPosition)
+            url += "&hgSeq.revComp=" + (hgTracks.nonVirtReversed ? "on" : "off");
         window.location.href = url;
     }
     return false;

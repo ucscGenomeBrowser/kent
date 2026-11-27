@@ -340,6 +340,7 @@ struct fbChromRanges
     int chromSize;		/* Size of chromosome, or -1 if it will not be processed. */
     int errLineIx;		/* Line of the first range out of [0,chromSize), or 0. */
     int errTSize;		/* Target size of the psl on that line. */
+    long long errStart, errEnd;	/* That range, before it was clamped to fit in an int. */
     };
 
 struct fbFileRanges
@@ -347,7 +348,6 @@ struct fbFileRanges
     {
     struct hash *chromHash;	/* fbChromRanges keyed by chromosome name. */
     char *errMessage;		/* Error that stopped the read of the file, or NULL. */
-    boolean checkRanges;	/* Note the first range out of range on each chromosome. */
     struct fbChromRanges *lastRanges;	/* Ranges of the last chromosome added to. */
     char *lastChrom;		/* Name of that chromosome, owned by chromHash. */
     };
@@ -356,7 +356,8 @@ static struct hash *fileRangesHash = NULL;	/* fbFileRanges keyed by file name. *
 static struct hash *chromSizeHash = NULL;	/* chromInfo keyed by chromosome name. */
 
 static int processedChromSize(char *chrom)
-/* Return the size of chrom if it is in the list of chromosomes processed, else -1. */
+/* Return the size of chrom if it is in the list of chromosomes processed, else -1.
+ * A chromosome left out by -noRandom, -noHap or -primaryChroms is not processed. */
 {
 if (chromSizeHash == NULL)
     {
@@ -366,12 +367,20 @@ if (chromSizeHash == NULL)
 	hashAdd(chromSizeHash, ci->chrom, ci);
     }
 struct chromInfo *ci = hashFindVal(chromSizeHash, chrom);
-return (ci == NULL ? -1 : ci->size);
+return ((ci == NULL || !inclChrom(chrom)) ? -1 : ci->size);
 }
 
-static void addRange(struct fbFileRanges *fr, char *chrom, int start, int end,
+static int clampToInt(long long x)
+/* Return x, or INT_MAX if it is larger, so that a coordinate past the end of any
+ * chromosome stays past the end instead of wrapping around. */
+{
+return x > INT_MAX ? INT_MAX : x;
+}
+
+static void addRange(struct fbFileRanges *fr, char *chrom, long long start, long long end,
 	int lineIx, int tSize)
-/* Add a range to the end of the list for chrom. */
+/* Add a range to the end of the list for chrom.  The first range on each chromosome
+ * that does not fit on it is noted, with its line, so the caller can report it. */
 {
 struct fbChromRanges *cr = fr->lastRanges;
 if (cr == NULL || differentString(chrom, fr->lastChrom))
@@ -398,14 +407,15 @@ if (cr->count >= cr->alloc)
     cr->alloc = newAlloc;
     }
 struct fbRange *r = &cr->ranges[cr->count++];
-r->start = start;
-r->end = end;
+r->start = clampToInt(start);
+r->end = clampToInt(end);
 /* The old reader stopped at the first such range in file order, so keep only that one. */
-if (fr->checkRanges && cr->errLineIx == 0
-    && (start < 0 || end > cr->chromSize))
+if (cr->errLineIx == 0 && (start < 0 || end > cr->chromSize))
     {
     cr->errLineIx = lineIx;
     cr->errTSize = tSize;
+    cr->errStart = start;
+    cr->errEnd = end;
     }
 }
 
@@ -464,18 +474,16 @@ lineFileClose(&lf);
 return numFields;
 }
 
-static int clampToInt(long long x)
-/* Return x, or INT_MAX if it is larger, so that a coordinate past the end of any
- * chromosome stays past the end instead of wrapping around. */
-{
-return x > INT_MAX ? INT_MAX : x;
-}
-
 static void readBedRanges(struct fbFileRanges *fr, char *fileName)
 /* Add the extent of every bed in the file, or its blocks with -countBlocks.  Each bed
  * is parsed as bedLoadNAllChrom() would, but freed at once instead of kept in a list. */
 {
 unsigned numFields = howManyFields(fileName);
+if (numFields == 0)
+    return;	/* An empty file has no ranges. */
+if (numFields < 3)
+    errAbort("%s: the first line has %u fields, a BED file needs at least 3",
+	fileName, numFields);
 if (numFields > 12)
     numFields = 12;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -489,11 +497,11 @@ while (lineFileRow(lf, row))
 	for (ii=0; ii < bed->blockCount; ii++)
 	    {
 	    long long s = (long long)bed->chromStart + bed->chromStarts[ii];
-	    addRange(fr, bed->chrom, clampToInt(s), clampToInt(s + bed->blockSizes[ii]), 0, 0);
+	    addRange(fr, bed->chrom, s, s + bed->blockSizes[ii], lf->lineIx, 0);
 	    }
 	}
     else if (bed->chromEnd > bed->chromStart)	/* An empty item sets no bits and is not checked. */
-	addRange(fr, bed->chrom, clampToInt(bed->chromStart), clampToInt(bed->chromEnd), 0, 0);
+	addRange(fr, bed->chrom, bed->chromStart, bed->chromEnd, lf->lineIx, 0);
     bedFree(&bed);
     }
 lineFileClose(&lf);
@@ -514,7 +522,6 @@ if (fr == NULL)
     {
     AllocVar(fr);
     fr->chromHash = hashNew(0);
-    fr->checkRanges = catchErrors;
     if (catchErrors)
 	{
 	struct errCatch *errCatch = errCatchNew();
@@ -602,9 +609,10 @@ struct fbFileRanges *fr = fileRangesFor(fileName, readBedRanges, FALSE);
 struct fbChromRanges *cr = chromRanges(fr, chrom);
 if (cr != NULL)
     {
-    int i;
-    for (i = 0; i < cr->count; ++i)
-	checkFileRange(fileName, chrom, chromSize, cr->ranges[i].start, cr->ranges[i].end);
+    if (cr->errLineIx != 0)
+	errAbort("Coordinate out of allowed range [%d,%d) for %s: item %s:%lld-%lld "
+	    "on line %d of %s", 0, chromSize, chrom, chrom, cr->errStart, cr->errEnd,
+	    cr->errLineIx, fileName);
     orRanges(acc, cr);
     }
 }
