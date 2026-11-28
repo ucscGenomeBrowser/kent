@@ -223,15 +223,15 @@ MAILTO=cells@ucsc.edu
 
 # DE worker: Cell Browser differential expression (RM #24912). Keeps deWorker.py
 # alive (reads the job queue); restarts if down / on reboot.
-#
-# MOVED (2026-08-22): the DE worker now runs from the otto crontab ON
-# hgcompute-08, not here. The compute host reads exprMatrix.bin from a /hive
-# cache it fetches over HTTP (deCache.py), so it no longer needs the web host's
-# local docroot, and DE compute is off hgwdev. These two lines are left commented
-# for history; the live copy is in otto's crontab on hgcompute-08, and like the
-# cbAnnotServer lines above it runs from /cluster/home/otto/cellsServer (RM #38664).
-#* * * * * umask 027; DE_ENV_FILE=/cluster/home/otto/cellsServer/etc/de.env /cluster/home/otto/cellsServer/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /cluster/home/otto/cellsServer/logs/deWorker-watchdog.log 2>&1
-#@reboot   umask 027; DE_ENV_FILE=/cluster/home/otto/cellsServer/etc/de.env /cluster/home/otto/cellsServer/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /cluster/home/otto/cellsServer/logs/deWorker-watchdog.log 2>&1
+# Back on hgwdev since 2026-11-19 (it ran on hgcompute-08 from 2026-08-22): the
+# worker reads the local docroot, like the web service, and runs from
+# /cluster/home/otto/cellsServer (RM #38664).
+* * * * * umask 027; DE_ENV_FILE=/cluster/home/otto/cellsServer/etc/de.env /cluster/home/otto/cellsServer/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /cluster/home/otto/cellsServer/logs/deWorker-watchdog.log 2>&1
+@reboot   umask 027; DE_ENV_FILE=/cluster/home/otto/cellsServer/etc/de.env /cluster/home/otto/cellsServer/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /cluster/home/otto/cellsServer/logs/deWorker-watchdog.log 2>&1
+# Second DE worker that takes only quick comparisons (the "fast" lane), so they
+# don't wait behind a long one (RM #38664). Same code, its own settings file.
+* * * * * umask 027; DE_ENV_FILE=/cluster/home/otto/cellsServer/etc/de-fast.env /cluster/home/otto/cellsServer/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /cluster/home/otto/cellsServer/logs/deWorker-fast-watchdog.log 2>&1
+@reboot   umask 027; DE_ENV_FILE=/cluster/home/otto/cellsServer/etc/de-fast.env /cluster/home/otto/cellsServer/cbAnnotServer/de/deploy/deWorkerWatchdog.sh >> /cluster/home/otto/cellsServer/logs/deWorker-fast-watchdog.log 2>&1
 
 # Malacards update. Not done monthly, but running monthly anyways, as they don't have a fixed schedule
 
